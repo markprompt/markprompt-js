@@ -13,13 +13,13 @@ const npmCode = `
 npm install markprompt
 `.trim();
 
-const reactCode = (teamSlug: string, projectSlug: string) =>
+const reactCode = (publicApiKey: string) =>
   `
 // Use on whitelisted domain
 import { Markprompt } from "markprompt"
 
 <Markprompt
-  project="${teamSlug}/${projectSlug}" />
+  projectKey="${publicApiKey}" />
 `.trim();
 
 type QueryProps = {
@@ -95,13 +95,13 @@ const Query: FC<QueryProps> = ({ goBack, didCompleteFirstQuery, isReady }) => {
                 <div className="relative flex">
                   <Code
                     language="jsx"
-                    code={reactCode(team.slug, project.slug)}
+                    code={reactCode(project.public_api_key)}
                   />
                   <div className="absolute right-2 top-9">
                     <div
                       className="cursor-pointer rounded p-2 transition dark:hover:bg-neutral-900"
                       onClick={() => {
-                        copyToClipboard(reactCode(team.slug, project.slug));
+                        copyToClipboard(reactCode(project.public_api_key));
                         toast.success('Copied!');
                       }}
                     >
