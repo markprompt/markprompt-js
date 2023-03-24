@@ -30,6 +30,7 @@ const AuthPage: FC<AuthPageProps> = ({ type }) => {
             <Auth
               view={type === 'signup' ? 'sign_up' : 'sign_in'}
               redirectTo={getOrigin() + '/'}
+              onlyThirdPartyProviders
               socialLayout="vertical"
               providers={['github', 'google']}
               supabaseClient={supabase}
