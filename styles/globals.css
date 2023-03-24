@@ -1,0 +1,508 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'prism.css';
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  @apply bg-neutral-1100 antialiased selection:bg-sky-300/20 selection:text-sky-300;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input,
+textarea {
+  @apply caret-sky-500;
+}
+
+.input-base {
+  @apply flex appearance-none rounded-md border border-neutral-800  bg-neutral-900 text-neutral-100 transition duration-200 placeholder:text-neutral-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-white/50;
+}
+
+.gradient-heading {
+  @apply bg-gradient-to-bl from-white to-neutral-100/50 bg-clip-text font-bold text-transparent;
+}
+
+.shadow-box {
+  box-shadow: 0 0 50px -12px rgba(232, 121, 249, 0.3);
+}
+
+.button-glow {
+  box-shadow: -8px 0px 20px rgba(232, 121, 249, 0.3),
+    0px 0px 20px rgba(34, 211, 238, 0.3), 8px 0px 20px rgba(244, 63, 94, 0.3);
+}
+
+.button-glow-color {
+  box-shadow: -4px 0px 20px rgba(217, 70, 239, 0.2),
+    0px 0px 6px rgba(217, 70, 239, 0.3), 8px 0px 20px rgba(217, 70, 239, 0.2) !important;
+}
+
+.input-glow-color {
+  box-shadow: -4px 0px 20px rgba(217, 70, 239, 0.2),
+    0px 0px 6px rgba(217, 70, 239, 0.3), 8px 0px 20px rgba(217, 70, 239, 0.2) !important;
+  @apply border border-fuchsia-600 !important;
+}
+
+.supabase-auth-ui_ui-button {
+  @apply rounded-md border-0 px-4 py-2 text-sm font-semibold transition !important;
+}
+
+button[type='submit'].supabase-auth-ui_ui-button {
+  @apply bg-white text-neutral-900 hover:bg-neutral-300 !important;
+}
+
+button:not([type='submit']).supabase-auth-ui_ui-button {
+  @apply bg-neutral-800 text-neutral-100 hover:bg-neutral-700 !important;
+}
+
+.supabase-auth-ui_ui-input {
+  @apply flex appearance-none rounded-md border border-neutral-800 bg-neutral-900 px-2 py-1.5 text-neutral-100 transition duration-200 placeholder:text-neutral-500 focus:border-transparent focus:outline-none focus:ring-1 focus:ring-neutral-700 !important;
+}
+
+.supabase-auth-ui_ui-label {
+  @apply mb-1.5 text-sm text-neutral-300 !important;
+}
+
+.supabase-auth-ui_ui-divider {
+  @apply bg-neutral-800 !important;
+}
+
+.supabase-auth-ui_ui-anchor {
+  @apply text-sm text-neutral-500 no-underline transition hover:text-neutral-300 !important;
+}
+
+.supabase-auth-ui_ui-message[color='danger'] {
+  @apply text-sm text-rose-600;
+}
+
+.dropdown-menu-content {
+  @apply z-40 overflow-hidden rounded-md border border-neutral-800 bg-neutral-900;
+}
+
+.dropdown-menu-item {
+  @apply relative cursor-pointer border-0 py-2 text-sm text-neutral-300 outline-none transition hover:bg-neutral-800;
+}
+
+.dropdown-menu-item-noindent {
+  @apply px-4;
+}
+
+.dropdown-menu-item-indent {
+  @apply pl-7 pr-4;
+}
+
+.dropdown-menu-item-indicator {
+  @apply absolute top-0 bottom-0 left-0 flex items-center justify-center pl-1.5;
+}
+
+.dropdown-menu-separator {
+  @apply h-[1px] bg-neutral-800;
+}
+
+.dropdown-menu-button {
+  @apply text-sm text-neutral-300 outline-none transition hover:text-neutral-400;
+}
+
+.dialog-overlay {
+  @apply fixed inset-0 bg-black/50;
+}
+
+.dialog-content {
+  @apply fixed top-[50%] left-[50%] z-40 translate-x-[-50%] translate-y-[-50%] rounded-lg border border-neutral-900 bg-neutral-1000 shadow-2xl;
+}
+
+.dialog-title {
+  @apply mb-4 mt-4 px-4 text-base font-medium text-neutral-300;
+}
+
+.dialog-description {
+  @apply px-4 text-sm  text-neutral-400;
+}
+
+.subtle-underline {
+  @apply border-b border-dotted border-neutral-700;
+}
+
+.doc p {
+  @apply mb-4 text-neutral-500;
+}
+
+.doc h2,
+.doc h3,
+.doc h4 {
+  @apply font-bold text-neutral-300;
+}
+
+.doc h2 {
+  @apply mb-4 text-xl;
+}
+
+.doc h3 {
+  @apply mb-3 text-lg;
+}
+
+.doc h4 {
+  @apply text-base;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.toast {
+  @apply pointer-events-none flex select-none items-center rounded-md border border-neutral-900 bg-black/50 px-3 py-1 text-center text-sm text-white backdrop-blur !important;
+}
+
+.loading-dots {
+  @apply inline-flex items-center text-center leading-7;
+}
+
+.loading-dots > span {
+  @apply h-[5px] w-[5px] rounded-full;
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  margin: 0 2px;
+}
+
+.loading-dots > span:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots > span:nth-of-type(3) {
+  animation-delay: 0.4s;
+}
+
+.flip {
+  perspective: 5000px;
+}
+
+.flip-content {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s;
+  transform-style: preserve-3d;
+}
+
+.flip.flipped .flip-content {
+  transform: rotateY(180deg);
+  transition: transform 0.7s;
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+.prompt-answer-done .caret {
+  @apply hidden;
+}
+
+.prompt-answer-loading :not(:last-child) .caret {
+  @apply hidden;
+}
+
+.prompt-answer-loading :last-child .caret {
+  @apply visible;
+}
+
+.prompt-answer pre {
+  @apply rounded border border-neutral-800 bg-neutral-900 !important;
+}
+
+.animate-menu-up {
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+  animation-fill-mode: both;
+}
+
+.animate-menu-up[data-state='open'] {
+  animation-duration: 150ms;
+  animation-name: menu-slide-up;
+}
+
+.animate-menu-up[data-state='closed'] {
+  animation-duration: 300ms;
+  animation-name: menu-slide-up-reverse;
+}
+
+.animate-overlay-appear {
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+  animation-fill-mode: both;
+}
+
+.animate-overlay-appear[data-state='open'] {
+  animation-duration: 300ms;
+  animation-name: opacity;
+}
+
+.animate-overlay-appear[data-state='closed'] {
+  animation-duration: 300ms;
+  animation-name: opacity-reverse;
+}
+
+.animate-dialog-slide-in {
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+  animation-fill-mode: both;
+}
+
+.animate-dialog-slide-in[data-state='open'] {
+  animation-duration: 300ms;
+  animation-name: dialog-slide-in;
+}
+
+.animate-dialog-slide-in[data-state='closed'] {
+  animation-duration: 300ms;
+  animation-name: dialog-slide-in-reverse;
+}
+
+.animate-prompt-window {
+  animation-name: slide-up-scale;
+  animation-duration: 300ms;
+  animation-fill-mode: both;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+}
+
+.animate-chat-window {
+  animation-name: slide-up-scale;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+}
+
+.animate-chat-window[data-state='open'] {
+  animation-name: slide-up-scale;
+  animation-duration: 300ms;
+}
+.animate-chat-window[data-state='closed'] {
+  animation-name: slide-up-scale-reverse;
+  animation-duration: 300ms;
+}
+
+.animate-slide-down-delayed {
+  animation-delay: 100ms;
+  animation-name: slide-down;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  transition-timing-function: ease-in-out;
+  /* transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4); */
+}
+
+.animate-slide-up {
+  animation-name: slide-up;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  transition-timing-function: ease-in-out;
+}
+.animate-slide-up-delayed {
+  animation-name: slide-up;
+  animation-duration: 1s;
+  animation-delay: 500ms;
+  animation-fill-mode: both;
+  transition-timing-function: ease-in-out;
+}
+
+.animate-menu-slide-up {
+  animation-name: menu-slide-up;
+  animation-duration: 150ms;
+  animation-fill-mode: both;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+}
+
+.animate-menu-slide-down {
+  animation-name: menu-slide-down;
+  animation-duration: 150ms;
+  animation-fill-mode: both;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+}
+
+.animate-caret {
+  animation-name: caret;
+  animation-duration: 1000ms;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialog-slide-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes dialog-slide-in-reverse {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.99);
+  }
+}
+
+@keyframes menu-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menu-slide-up-reverse {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes menu-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up-scale {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slide-up-scale-reverse {
+  0% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@keyframes toast-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes opacity-reverse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes caret {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
