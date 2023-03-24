@@ -57,16 +57,19 @@ The Markprompt component is styled using [Tailwind CSS](https://tailwindcss.com/
 
 You can pass the following props to the component:
 
-| Prop               | Default value                            | Description                                                     |
-| ------------------ | ---------------------------------------- | --------------------------------------------------------------- |
-| `iDontKnowMessage` | Sorry, I am not sure how to answer that. | Fallback message in can no answer is found.                     |
-| `placeholder`      | 'Ask me anything...'                     | Message to show in the input box when no text has been entered. |
+| Prop               | Default value                            | Description                                                                                                                                                                                                                                                                            |
+| ------------------ | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `projectKey`       |                                          | Your project&apos;s public API key, found in the project                                                                                                                                                                                                                               |
+| `model`            | `gpt-3.5-turbo`                          | The OpenAI completions model to use. Supported values: `gpt-4`, `gpt-4-0314`, `gpt-4-32k`, `gpt-4-32k-0314`, `gpt-3.5-turbo`, `gpt-3.5-turbo-0301`, `text-davinci-003`, `text-davinci-002`, `text-curie-001`, `text-babbage-001`, `text-ada-001`, `davinci`, `curie`, `babbage`, `ada` |
+| settings.          |
+| `iDontKnowMessage` | Sorry, I am not sure how to answer that. | Fallback message in can no answer is found.                                                                                                                                                                                                                                            |
+| `placeholder`      | 'Ask me anything...'                     | Message to show in the input box when no text has been entered.                                                                                                                                                                                                                        |
 
 Example:
 
 ```jsx
 <Markprompt
-  project="..."
+  projectKey="..."
   model="..."
   iDontKnowMessage="Sorry, I don't know!"
   placeholder="Ask Acme docs..."

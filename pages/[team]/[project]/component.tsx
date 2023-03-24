@@ -84,6 +84,14 @@ console.info("References:", parts[0])
 
 const npmCode = `npm install markprompt`.trim();
 
+export const C = ({ v }: { v: string }) => {
+  return (
+    <code className="whitespace-nowrap rounded bg-neutral-900 px-1 py-0.5 text-xs font-normal text-neutral-400">
+      {v}
+    </code>
+  );
+};
+
 const DocsCode = ({ code, language }: { code: string; language: Language }) => {
   return (
     <div className="not-prose relative mb-6 w-full rounded-lg border border-neutral-900 bg-neutral-1000 p-4 text-sm">
@@ -252,12 +260,56 @@ const ComponentPage = () => {
         <table className="prose prose-invert">
           <thead>
             <tr>
-              <th className="text-left text-neutral-300">Prop</th>
-              <th className="text-left text-neutral-300">Default value</th>
-              <th className="text-left text-neutral-300">Description</th>
+              <th className="whitespace-nowrap text-left text-neutral-300">
+                Prop
+              </th>
+              <th className="whitespace-nowrap text-left text-neutral-300">
+                Default value
+              </th>
+              <th className="whitespace-nowrap text-left text-neutral-300">
+                Description
+              </th>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td className="text-neutral-500">
+                <code className="font-normal text-cyan-400">projectKey</code>
+              </td>
+              <td className="text-neutral-500"></td>
+              <td className="text-neutral-500">
+                Your project&apos;s public API key, found in the project
+                settings.
+              </td>
+            </tr>
+            <tr>
+              <td className="text-neutral-500">
+                <code className="font-normal text-cyan-400">model</code>
+              </td>
+              <td className="text-neutral-500">
+                <code className="font-normal text-cyan-400">gpt-3.5-turbo</code>
+              </td>
+              <td className="text-neutral-500">
+                The OpenAI completions model to use. Supported values:
+                <div className="flex flex-row flex-wrap gap-1">
+                  <C v="gpt-4" />
+                  <C v="gpt-4-0314" />
+                  <C v="gpt-4-32k" />
+                  <C v="gpt-4-32k-0314" />
+                  <C v="gpt-3.5-turbo" />
+                  <C v="gpt-3.5-turbo-0301" />
+                  <C v="text-davinci-003" />
+                  <C v="text-davinci-002" />
+                  <C v="text-curie-001" />
+                  <C v="text-babbage-001" />
+                  <C v="text-ada-001" />
+                  <C v="davinci" />
+                  <C v="curie" />
+                  <C v="babbage" />
+                  <C v="ada" />
+                </div>
+              </td>
+            </tr>
             <tr>
               <td className="text-neutral-500">
                 <code className="font-normal text-cyan-400">
