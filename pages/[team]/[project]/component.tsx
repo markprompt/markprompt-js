@@ -327,7 +327,7 @@ const ComponentPage = () => {
               <td className="text-neutral-500">
                 <code className="font-normal text-cyan-400">placeholder</code>
               </td>
-              <td className="text-neutral-500">&#39;Ask me anything...&#39;</td>
+              <td className="text-neutral-500">Ask me anything...</td>
               <td className="text-neutral-500">
                 Message to show in the input box when no text has been entered.
               </td>
