@@ -147,7 +147,7 @@ export const TIERS: Record<Tier, TierDetails> = {
     items: [
       'Everything in Free, plus:',
       'Private GitHub repos (soon)',
-      'Teams',
+      'Teams (soon)',
     ],
     prices: [
       {
@@ -253,8 +253,8 @@ export const TIERS: Record<Tier, TierDetails> = {
     description: 'For large projects',
     items: [
       'Everything in Standard, plus:',
-      'Insights',
-      'Integrations',
+      'Insights (soon)',
+      'Integrations (soon)',
       'Priority support',
     ],
     prices: [
