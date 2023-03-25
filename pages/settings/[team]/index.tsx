@@ -16,20 +16,29 @@ import {
   FormikErrors,
   FormikValues,
 } from 'formik';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import ConfirmDialog from '@/components/dialogs/Confirm';
 import useTeams from '@/lib/hooks/use-teams';
 import { toast } from 'react-hot-toast';
-import { isTeamSlugAvailable, updateTeam } from '@/lib/api';
+import {
+  cancelSubscription,
+  deleteTeamAndMemberships,
+  deleteUserAndMembershipsAndTeams,
+  isTeamSlugAvailable,
+  updateTeam,
+} from '@/lib/api';
+import useUser from '@/lib/hooks/use-user';
 
 const TeamSettingsPage = () => {
   const router = useRouter();
+  const { user, mutate: mutateUser, signOut } = useUser();
   const { teams, mutate: mutateTeams } = useTeams();
   const { team, mutate: mutateTeam } = useTeam();
+  const [loading, setLoading] = useState(false);
 
-  if (!teams || !team) {
+  if (!teams || !team || !user) {
     return <TeamSettingsLayout title="Settings" width="sm" />;
   }
 
@@ -122,7 +131,9 @@ const TeamSettingsPage = () => {
             )}
           </Formik>
         </SettingsCard>
-        <SettingsCard title="Delete team">
+        <SettingsCard
+          title={team.is_personal ? 'Delete account' : 'Delete team'}
+        >
           <DescriptionLabel>
             All projects and associated data will be deleted.
           </DescriptionLabel>
@@ -134,13 +145,51 @@ const TeamSettingsPage = () => {
                 </Button>
               </Dialog.Trigger>
               <ConfirmDialog
-                title={`Delete ${team.name}?`}
+                title={`Delete ${team.is_personal ? 'account' : team.name}?`}
                 description="All projects and associated data will be deleted."
                 cta="Delete"
                 variant="danger"
+                loading={loading}
                 onCTAClick={async () => {
-                  // TODO
-                  toast.success('Coming soon!');
+                  if (!team) {
+                    return;
+                  }
+                  setLoading(true);
+                  if (team?.stripe_price_id) {
+                    const res = await cancelSubscription(team.id);
+                    if (res.status !== 200) {
+                      toast.error(
+                        `Could not cancel active subscription. Please contact ${
+                          process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'us'
+                        } to sort it out.`,
+                      );
+                      setLoading(false);
+                      return;
+                    }
+                  }
+
+                  const name = team.name;
+
+                  // Deleting a personal account amounts to deleting a user
+                  const isPersonalAccount = team.is_personal;
+                  if (isPersonalAccount) {
+                    await deleteUserAndMembershipsAndTeams();
+                  } else {
+                    await deleteTeamAndMemberships(team.id);
+                  }
+                  await mutateTeams(teams.filter((t) => t.id !== team.id));
+                  await mutateTeam();
+                  await mutateUser();
+                  if (isPersonalAccount) {
+                    toast.success(`Account has been deleted.`);
+                  } else {
+                    toast.success(`Team ${name} has been deleted.`);
+                  }
+                  setLoading(false);
+                  if (isPersonalAccount) {
+                    signOut();
+                  }
+                  Router.replace('/');
                 }}
               />
             </Dialog.Root>

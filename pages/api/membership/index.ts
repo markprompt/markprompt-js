@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import { DbUser } from '@/types/types';
-import { createClient } from '@supabase/supabase-js';
 
 type Data =
   | {
@@ -12,11 +11,6 @@ type Data =
   | DbUser;
 
 const allowedMethods = ['GET', 'POST', 'PATCH', 'DELETE'];
-
-const supabaseAdmin = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-);
 
 export default async function handler(
   req: NextApiRequest,
@@ -71,47 +65,21 @@ export default async function handler(
 
     return res.status(200).json({ status: 'ok' });
   } else if (req.method === 'DELETE') {
-    // Firt, delete all memberships, with the service role key
-    const { data, error: membershipError } = await supabase
-      .from('memberships')
-      .delete()
-      .eq('user_id', session.user.id)
-      .select('team_id');
-
-    if (membershipError) {
-      console.error('Error DELETE memberships:', membershipError.message);
-      return res.status(400).json({ error: membershipError.message });
-    }
-
-    // TODO: right now, teams can only hold a single user. So here,
-    // when deleting a user, we also delete all associated teams
-    const teamIds = (data || []).map((d) => d.team_id);
-    const { error: teamsError } = await supabase
-      .from('teams')
-      .delete()
-      .in('id', teamIds);
-
-    if (teamsError) {
-      console.error('Error DELETE teams:', teamsError.message);
-      return res.status(400).json({ error: teamsError.message });
-    }
-
-    const { error: userError } = await supabase
+    const { error } = await supabase
       .from('users')
       .delete()
       .eq('id', session.user.id);
-
-    if (userError) {
-      console.error('Error DELETE user:', userError.message);
-      return res.status(400).json({ error: userError.message });
+    if (error) {
+      console.error('Error DELETE:', error.message);
+      return res.status(400).json({ error: error.message });
     }
 
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(
+    const { error: authError } = await supabase.auth.admin.deleteUser(
       session.user.id,
     );
 
     if (authError) {
-      console.error('Error DELETE auth:', authError.message);
+      console.error('Error DELETE:', authError.message);
       return res.status(400).json({ error: authError.message });
     }
 

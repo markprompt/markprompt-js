@@ -21,6 +21,7 @@ import { formatNumQueries } from '@/lib/utils';
 import { Flashing } from '@/components/ui/Flashing';
 import { getStripe } from '@/lib/stripe/client';
 import { toast } from 'react-hot-toast';
+import { cancelSubscription } from '@/lib/api';
 
 const env =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'production' : 'test';
@@ -222,14 +223,7 @@ const PricingCard = ({
               setLoading(true);
 
               if (isFree) {
-                const res = await fetch('/api/subscriptions/cancel', {
-                  method: 'POST',
-                  body: JSON.stringify({ teamId: team.id }),
-                  headers: {
-                    'Content-Type': 'application/json',
-                    accept: 'application/json',
-                  },
-                });
+                const res = await cancelSubscription(team.id);
                 if (res.status === 200) {
                   await mutateTeam();
                   toast.success('Downgraded to free.');

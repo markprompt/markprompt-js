@@ -3,6 +3,7 @@ import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import { getAvailableTeamSlug } from '../slug/generate-team-slug';
+import { createClient } from '@supabase/supabase-js';
 
 type Data =
   | {
@@ -13,6 +14,11 @@ type Data =
   | Team;
 
 const allowedMethods = ['GET', 'POST'];
+
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(
   req: NextApiRequest,
@@ -39,7 +45,7 @@ export default async function handler(
       .match({ user_id: session.user.id });
 
     if (error) {
-      console.error('Error', error.message);
+      console.error('Error getting team:', error.message);
       return res.status(400).json({ error: error.message });
     }
 
@@ -48,7 +54,11 @@ export default async function handler(
   } else if (req.method === 'POST') {
     const { candidateSlug, isPersonal, ...rest } = req.body;
     const slug = await getAvailableTeamSlug(supabase, candidateSlug);
-    let { data, error } = await supabase
+
+    // We must use the admin database here, because RLS prevents a
+    // user from selecting a team before they have been added as
+    // members.
+    let { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         { ...rest, is_personal: isPersonal, slug, created_by: session.user.id },
@@ -58,6 +68,7 @@ export default async function handler(
       .maybeSingle();
 
     if (error) {
+      console.error('Error creating team:', error.message);
       return res.status(400).json({ error: error.message });
     }
 

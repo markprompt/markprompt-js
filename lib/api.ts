@@ -11,10 +11,21 @@ import {
 import { getResponseOrThrow, slugFromName } from '@/lib/utils';
 
 export const updateUser = async (values: Partial<DbUser>): Promise<DbUser> => {
-  const res = await fetch(`/api/user`, {
+  const res = await fetch('/api/user', {
     method: 'PATCH',
     body: JSON.stringify(values),
     headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+  });
+  return getResponseOrThrow(res);
+};
+
+export const deleteUserAndMembershipsAndTeams = async () => {
+  const res = await fetch('/api/user', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+    },
   });
   return getResponseOrThrow(res);
 };
@@ -142,6 +153,16 @@ export const updateTeam = async (
   return getResponseOrThrow<Team>(res);
 };
 
+export const deleteTeamAndMemberships = async (
+  id: Team['id'],
+): Promise<any> => {
+  const res = await fetch(`/api/team/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+  });
+  return getResponseOrThrow<any>(res);
+};
+
 export const createProject = async (
   teamId: Team['id'],
   name: string,
@@ -238,5 +259,16 @@ export const deleteToken = async (
     method: 'DELETE',
     body: JSON.stringify({ id }),
     headers: { 'Content-Type': 'application/json' },
+  });
+};
+
+export const cancelSubscription = (teamId: Team['id']) => {
+  return fetch('/api/subscriptions/cancel', {
+    method: 'POST',
+    body: JSON.stringify({ teamId }),
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+    },
   });
 };

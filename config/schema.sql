@@ -9,17 +9,118 @@ create table users (
 );
 
 -- RLS
+
+-- Users
+
 alter table users
   enable row level security;
 
-create policy "Public users are viewable by everyone." on users
-  for select using (true);
+create policy "Users can only see themselves." on users
+  for select using (auth.uid() = id);
 
 create policy "Users can insert their own user." on users
   for insert with check (auth.uid() = id);
 
 create policy "Users can update own user." on users
   for update using (auth.uid() = id);
+
+-- Memberships
+
+alter table memberships
+  enable row level security;
+
+create policy "Users can only see their own memberships." on public.memberships
+  for select using (auth.uid() = user_id);
+
+create policy "Users can insert memberships they belong to." on public.memberships
+  for insert with check (auth.uid() = user_id);
+
+create policy "Users can update their own memberships." on public.memberships
+  for update using (auth.uid() = user_id);
+
+create policy "Users can delete their own memberships." on public.memberships
+  for delete using (auth.uid() = user_id);
+
+-- Teams
+
+alter table teams
+  enable row level security;
+
+create policy "Users can only see teams they are members of." on public.teams
+  for select using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = teams.id
+    )
+  )
+
+-- Note: when a user creates a team, they are not yet members. So they should
+-- just be able to create teams with no limitations
+create policy "Users can insert teams." on public.teams
+  for insert with check (true)
+
+create policy "Users can update teams they are members of." on public.teams
+  for update using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = teams.id
+    )
+  )
+
+create policy "Users can delete teams they are members of." on public.teams
+  for delete using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = teams.id
+    )
+  )
+
+
+-- Projects
+
+alter table projects
+  enable row level security;
+
+create policy "Users can only see projects associated to teams they are members of." on public.projects
+  for select using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = projects.team_id
+    )
+  )
+
+create policy "Users can insert projects associated to teams they are members of." on public.projects
+  for insert with check (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = projects.team_id
+    )
+  )
+
+create policy "Users can update projects associated to teams they are members of." on public.projects
+  for update using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = projects.team_id
+    )
+  )
+
+create policy "Users can delete projects associated to teams they are members of." on public.projects
+  for delete using (
+    exists (
+      select 1 from memberships
+      where memberships.user_id = auth.uid()
+      and memberships.team_id = projects.team_id
+    )
+  )
+
+-- Triggers
 
 -- This trigger automatically creates a user entry when a new user signs up
 -- via Supabase Auth.for more details.

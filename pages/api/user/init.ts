@@ -5,6 +5,7 @@ import slugify from '@sindresorhus/slugify';
 import { generateKey, generateRandomSlug, slugFromEmail } from '@/lib/utils';
 import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 import { Project, Team } from '@/types/types';
+import { createClient } from '@supabase/supabase-js';
 
 type Data =
   | {
@@ -14,6 +15,11 @@ type Data =
   | { team: Team; project: Project };
 
 const allowedMethods = ['POST'];
+
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,7 +61,11 @@ export default async function handler(
     }
 
     const slug = await getAvailableTeamSlug(supabase, candidateSlug);
-    let { data, error } = await supabase
+
+    // We must use the admin database here, because RLS prevents a
+    // user from selecting a team before they have been added as
+    // members.
+    let { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         {

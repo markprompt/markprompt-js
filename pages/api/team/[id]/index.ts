@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
+import { createClient } from '@supabase/supabase-js';
 
 type Data =
   | {
@@ -10,7 +11,12 @@ type Data =
     }
   | Team;
 
-const allowedMethods = ['GET', 'PATCH'];
+const allowedMethods = ['GET', 'PATCH', 'DELETE'];
+
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(
   req: NextApiRequest,
@@ -39,7 +45,7 @@ export default async function handler(
       .maybeSingle();
 
     if (error) {
-      console.error('api/team/[]', error);
+      console.error('GET team', error);
       return res.status(400).json({ error: error.message });
     }
 
@@ -57,7 +63,7 @@ export default async function handler(
       .maybeSingle();
 
     if (error) {
-      console.error('api/team/[]', error);
+      console.error('PATCH team', error);
       return res.status(400).json({ error: error.message });
     }
 
@@ -66,6 +72,34 @@ export default async function handler(
     }
 
     return res.status(200).json(team);
+  } else if (req.method === 'DELETE') {
+    // Deletes a team an associated memberships
+    const { error: membershipsError } = await supabase
+      .from('memberships')
+      .delete()
+      .eq('team_id', req.query.id);
+
+    if (membershipsError) {
+      console.error('DELETE memberships', membershipsError);
+      return res.status(400).json({ error: membershipsError.message });
+    }
+
+    // We must use the admin database here, because RLS prevents a
+    // user from deleting a team they are not a member of, but in the
+    // previous steps, we just deleted their membership.
+    const { error: teamError } = await supabaseAdmin
+      .from('teams')
+      .delete()
+      .eq('id', req.query.id);
+
+    if (teamError) {
+      console.error('DELETE team', teamError);
+      return res.status(400).json({ error: teamError.message });
+    }
+
+    console.log('All good deleting team', req.query.id);
+
+    return res.status(200).json({ status: 'ok' });
   }
 
   return res.status(400).end();
