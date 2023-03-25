@@ -63,17 +63,17 @@ Markprompt React is a headless React component for building a prompt interface, 
 
 Currently, the Markprompt API has basic protection against misuse when making requests from public websites, such as rate limiting, IP blacklisting, allowed origins, and prompt moderation. These are not strong guarantees against misuse though, and it is always safer to expose an API like Markprompt's to authenticated users, and/or in non-public systems using private access tokens. We do plan to offer more extensive tooling on that front (hard limits, spike protection, notifications, query analysis, flagging).
 
-## Community
-
-- [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
-- [Discord](https://discord.gg/MBMh4apz6X)
-
 ## Data retention
 
 OpenAI keeps training data for 30 days. Read more: [OpenAI API data usage policies](https://openai.com/policies/api-data-usage-policies).
 
 Markprompt keeps the data as long as you need to query it. If you remove a file or delete a project, all associated data will be deleted immediately.
+
+## Community
+
+- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter @motifland](https://twitter.com/motifland)
+- [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
