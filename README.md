@@ -69,6 +69,12 @@ Currently, the Markprompt API has basic protection against misuse when making re
 - [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
+## Data retention
+
+OpenAI keeps training data for 30 days. Read more: [OpenAI API data usage policies](https://openai.com/policies/api-data-usage-policies).
+
+Markprompt keeps the data as long as you need to query it. If you remove a file or delete a project, all associated data will be deleted immediately.
+
 ## Authors
 
 Created by the team behind [Motif](https://motif.land)
