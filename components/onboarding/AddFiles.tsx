@@ -82,9 +82,9 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
             >
               <ClipboardIcon className="h-4 w-4 text-neutral-500" />
             </div>
-            <div className="hidden-scrollbar w-full overflow-x-auto px-8">
+            <div className="hidden-scrollbar w-full overflow-x-auto px-4">
               <Code
-                className="hidden-scrollbar mx-auto w-[480px] overflow-x-auto py-2 text-sm"
+                className="hidden-scrollbar mx-auto w-[540px] overflow-x-auto py-2 text-sm"
                 language="bash"
                 code={curlCode}
               />

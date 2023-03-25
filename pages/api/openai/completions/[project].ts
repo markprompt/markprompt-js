@@ -96,12 +96,12 @@ export default async function handler(req: NextRequest) {
   }
 
   if (!projectIdParam) {
-    console.log(`[COMPLETIONS] [${pathname}] No project found`);
+    console.error(`[COMPLETIONS] [${pathname}] No project found`);
     return new Response('No project found', { status: 400 });
   }
 
   if (!prompt) {
-    console.log(`[COMPLETIONS] [${projectIdParam}] No prompt provided`);
+    console.error(`[COMPLETIONS] [${projectIdParam}] No prompt provided`);
     return new Response('No prompt provided', { status: 400 });
   }
 

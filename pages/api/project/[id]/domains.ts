@@ -61,12 +61,19 @@ export default async function handler(
       .maybeSingle();
 
     if (error) {
+      console.error('[DOMAINS]', error.message);
       throw error;
     }
 
     if (!data) {
+      console.error(
+        '[DOMAINS] No data returned when adding domain',
+        projectId,
+        req.body.name,
+      );
       return res.status(400).json({ error: 'Error adding domain.' });
     }
+
     return res.status(200).json(data);
   } else if (req.method === 'DELETE') {
     const { error } = await supabase

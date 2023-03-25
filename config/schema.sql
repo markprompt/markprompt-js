@@ -259,8 +259,6 @@ create table public.file_sections (
   embedding   vector(1536)
 );
 
-create index idx_project_id on projects(id);
-
 create or replace function match_file_sections(project_id uuid, embedding vector(1536), match_threshold float, match_count int, min_content_length int)
 returns table (path text, content text, token_count int, similarity float)
 language plpgsql
@@ -295,3 +293,6 @@ begin
   limit match_count;
 end;
 $$;
+
+create index idx_project_id on files(project_id);
+create index idx_file_id on file_sections(file_id);
