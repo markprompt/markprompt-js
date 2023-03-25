@@ -31,7 +31,7 @@ Markprompt is built on top of the following stack:
 - [Supabase](https://planetscale.com/) - database and auth
 - [Stripe](https://stripe.com/) - payments
 - [Plain](https://plain.com/) - support chat
-- [Fathom](https://plain.com/) - analytics
+- [Fathom](https://usefathom.com/) - analytics
 
 ### Supabase
 
