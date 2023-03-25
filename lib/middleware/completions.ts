@@ -1,4 +1,5 @@
-import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { Database } from '@/types/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
 import {
@@ -12,6 +13,12 @@ import {
   noProjectForTokenResponse,
   noTokenResponse,
 } from './common';
+
+// Admin access to Supabase, bypassing RLS.
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function CompletionsMiddleware(req: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
@@ -61,11 +68,10 @@ export default async function CompletionsMiddleware(req: NextRequest) {
       // the project id in the path: /completions/[project]
       projectId = path.split('/').slice(-1)[0];
     } else {
-      const res = NextResponse.next();
       const projectKey = req.nextUrl.searchParams.get('projectKey');
-      const supabase = createMiddlewareSupabaseClient({ req, res });
 
-      let { data } = await supabase
+      // Admin supabase needed here, as the projects table is subject to RLS
+      let { data } = await supabaseAdmin
         .from('projects')
         .select('id')
         .match({ public_api_key: projectKey })
@@ -74,6 +80,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
         .maybeSingle();
 
       if (!data?.id) {
+        console.error('Project not found', truncateMiddle(projectKey || ''));
         return new Response('Project not found', { status: 404 });
       }
 
@@ -81,8 +88,8 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
       // Now that we have a project id, we need to check that the
       // the project has whitelisted the domain the request comes from.
-
-      let { count } = await supabase
+      // Admin supabase needed here, as the projects table is subject to RLS
+      let { count } = await supabaseAdmin
         .from('domains')
         .select('id', { count: 'exact' })
         .eq('project_id', projectId);
@@ -118,7 +125,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     }
 
     const res = NextResponse.next();
-    const projectId = await getProjectIdFromToken(req, res, token);
+    projectId = await getProjectIdFromToken(req, res, token);
 
     if (!projectId) {
       return noProjectForTokenResponse;

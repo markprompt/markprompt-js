@@ -119,6 +119,51 @@ create policy "Users can delete projects associated to teams they are members of
     )
   )
 
+-- Files
+
+alter table files
+  enable row level security;
+
+create policy "Users can only see files associated to projects they have access to." on public.files
+  for select using (
+    files.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can insert files associated to projects they have access to." on public.files
+  for insert with check (
+    files.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can update files associated to projects they have access to." on public.files
+  for update using (
+    files.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can delete files associated to projects they have access to." on public.files
+  for delete using (
+    files.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
 -- Triggers
 
 -- This trigger automatically creates a user entry when a new user signs up

@@ -4,7 +4,6 @@ import { Readable } from 'node:stream';
 import { stripe } from '@/lib/stripe/server';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
-import { truncateMiddle } from '@/lib/utils';
 
 export const config = {
   api: {

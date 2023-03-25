@@ -228,20 +228,36 @@ export interface Database {
         }
         Returns: unknown
       }
-      match_file_sections: {
-        Args: {
-          embedding: unknown
-          match_threshold: number
-          match_count: number
-          min_content_length: number
-        }
-        Returns: {
-          path: string
-          content: string
-          token_count: number
-          similarity: number
-        }[]
-      }
+      match_file_sections:
+        | {
+            Args: {
+              embedding: unknown
+              match_threshold: number
+              match_count: number
+              min_content_length: number
+            }
+            Returns: {
+              path: string
+              content: string
+              token_count: number
+              similarity: number
+            }[]
+          }
+        | {
+            Args: {
+              project_id: string
+              embedding: unknown
+              match_threshold: number
+              match_count: number
+              min_content_length: number
+            }
+            Returns: {
+              path: string
+              content: string
+              token_count: number
+              similarity: number
+            }[]
+          }
       vector_avg: {
         Args: {
           "": number[]

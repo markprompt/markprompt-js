@@ -18,6 +18,7 @@ import {
 import GPT3Tokenizer from 'gpt3-tokenizer';
 import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
+import { Database } from '@/types/supabase';
 
 const CONTEXT_TOKENS_CUTOFF = 800;
 
@@ -59,6 +60,12 @@ const getChunkText = (response: any, model: OpenAIModel) => {
     }
   }
 };
+
+// Admin access to Supabase, bypassing RLS.
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(req: NextRequest) {
   // Preflight check
@@ -140,11 +147,9 @@ export default async function handler(req: NextRequest) {
     });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
-
+  // We need to use the service_role admin supabase as these
+  // requests come without auth, but the tables being queried
+  // are subject to RLS.
   const {
     error,
     data: fileSections,
@@ -158,7 +163,7 @@ export default async function handler(req: NextRequest) {
           similarity: number;
         }[]
       | null;
-  } = await supabase.rpc('match_file_sections', {
+  } = await supabaseAdmin.rpc('match_file_sections', {
     project_id: projectId,
     embedding: promptEmbedding,
     match_threshold: 0.78,
