@@ -87,7 +87,7 @@ export default async function handler(req: NextRequest) {
   const lastPathComponent = pathname.split('/').slice(-1)[0];
   let projectIdParam = undefined;
   // TODO: need to investigate the difference between a request
-  // from the dashboard (2nd case here) vs a request from
+  // from the dashboard (2nd case here) and a request from
   // an external origin (1st case here).
   if (lastPathComponent === 'completions') {
     projectIdParam = searchParams.get('project');
@@ -96,10 +96,12 @@ export default async function handler(req: NextRequest) {
   }
 
   if (!projectIdParam) {
+    console.log(`[COMPLETIONS] [${pathname}] No project found`);
     return new Response('No project found', { status: 400 });
   }
 
   if (!prompt) {
+    console.log(`[COMPLETIONS] [${projectIdParam}] No prompt provided`);
     return new Response('No prompt provided', { status: 400 });
   }
 
@@ -112,7 +114,7 @@ export default async function handler(req: NextRequest) {
   });
 
   if (!rateLimitResult.result.success) {
-    console.error(`[TRAIN] [RATE-LIMIT] IP: ${req.ip}, project ${projectId}`);
+    console.error(`[COMPLETIONS] [RATE-LIMIT] [${projectId}] IP: ${req.ip}`);
     return new Response('Too many requests', { status: 429 });
   }
 
@@ -133,6 +135,9 @@ export default async function handler(req: NextRequest) {
       numOfAttempts: 10,
     });
   } catch (error) {
+    console.error(
+      `[COMPLETIONS] [CREATE-EMBEDDING] [${projectId}] - Error creating embedding for prompt '${prompt}': ${error}`,
+    );
     return new Response(
       `Error creating embedding for prompt '${prompt}': ${error}`,
       { status: 400 },
@@ -172,12 +177,18 @@ export default async function handler(req: NextRequest) {
   });
 
   if (error) {
+    console.error(
+      `[COMPLETIONS] [LOAD-EMBEDDINGS] [${projectId}] - Error loading embeddings: ${error.message}`,
+    );
     return new Response(`Error loading embeddings: ${error.message}`, {
       status: 400,
     });
   }
 
   if (!fileSections || fileSections?.length === 0) {
+    console.error(
+      `[COMPLETIONS] [LOAD-EMBEDDINGS] [${projectId}] - No relevant sections found`,
+    );
     return new Response('No relevant sections found', {
       status: 400,
     });
@@ -232,6 +243,10 @@ Answer (including related code snippets if available):`;
   // count.
   let allText = fullPrompt;
   let didSendHeader = false;
+
+  console.error(
+    `[COMPLETIONS] [LOAD-EMBEDDINGS] [${projectId}] - No relevant sections found`,
+  );
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {

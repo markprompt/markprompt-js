@@ -108,7 +108,7 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
         project.id,
       );
 
-      for (let i = 0; i < numFiles; i++) {
+      for (let i = 0; i < Math.min(numFiles, 20); i++) {
         if (stopFlag.current) {
           stopFlag.current = false;
           break;
