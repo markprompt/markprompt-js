@@ -13,6 +13,10 @@ export const config = {
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const hostname = req.headers.get('host');
 
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { status: 200 });
+  }
+
   if (hostname === getHost()) {
     return AppMiddleware(req);
   }

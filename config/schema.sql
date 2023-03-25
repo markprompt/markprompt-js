@@ -130,7 +130,7 @@ begin
   join files
     on file_sections.file_id = files.id
 
-  where files.project_id == project_id
+  where files.project_id = project_id
 
   -- We only care about sections that have a useful amount of content
   and length(file_sections.content) >= min_content_length

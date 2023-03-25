@@ -16,7 +16,7 @@ import {
   ReconnectInterval,
 } from 'eventsource-parser';
 import GPT3Tokenizer from 'gpt3-tokenizer';
-import { getOrigin, stringToModel } from '@/lib/utils';
+import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 
 const CONTEXT_TOKENS_CUTOFF = 800;
@@ -24,8 +24,6 @@ const CONTEXT_TOKENS_CUTOFF = 800;
 export const config = {
   runtime: 'edge',
 };
-
-// const MODEL: OpenAIModel = { type: 'chat_completions', value: 'gpt-3.5-turbo' };
 
 const getPayload = (prompt: string, model: OpenAIModel) => {
   const payload = {
@@ -77,9 +75,18 @@ export default async function handler(req: NextRequest) {
   const prompt = (params.prompt as string).substring(0, MAX_PROMPT_LENGTH);
   const iDontKnowMessage = (params.iDontKnowMessage as string) || I_DONT_KNOW;
 
-  const { pathname } = new URL(req.url);
+  const { pathname, searchParams } = new URL(req.url);
 
-  const projectIdParam = pathname.split('/').slice(-1)[0];
+  const lastPathComponent = pathname.split('/').slice(-1)[0];
+  let projectIdParam = undefined;
+  // TODO: need to investigate the difference between a request
+  // from the dashboard (2nd case here) vs a request from
+  // an external origin (1st case here).
+  if (lastPathComponent === 'completions') {
+    projectIdParam = searchParams.get('project');
+  } else {
+    projectIdParam = pathname.split('/').slice(-1)[0];
+  }
 
   if (!projectIdParam) {
     return new Response('No project found', { status: 400 });
