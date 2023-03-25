@@ -78,7 +78,6 @@ create policy "Users can delete teams they are members of." on public.teams
     )
   )
 
-
 -- Projects
 
 alter table projects

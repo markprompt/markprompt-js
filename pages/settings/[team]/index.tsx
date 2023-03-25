@@ -59,9 +59,11 @@ const TeamSettingsPage = () => {
               } else if (!values.slug) {
                 errors.slug = 'Required';
               } else {
-                const isAvailable = await isTeamSlugAvailable(values.slug);
-                if (!isAvailable) {
-                  errors.slug = 'Slug is not available';
+                if (values.slug !== team.slug) {
+                  const isAvailable = await isTeamSlugAvailable(values.slug);
+                  if (!isAvailable) {
+                    errors.slug = 'Slug is not available';
+                  }
                 }
               }
               return errors;

@@ -22,6 +22,7 @@ import {
   deleteDomain,
   deleteProject,
   deleteToken,
+  isProjectSlugAvailable,
   updateProject,
 } from '@/lib/api';
 import Router, { useRouter } from 'next/router';
@@ -110,12 +111,22 @@ const ProjectSettingsPage = () => {
               slug: project.slug,
             }}
             validateOnMount
-            validate={(values) => {
+            validate={async (values) => {
               let errors: FormikErrors<FormikValues> = {};
               if (!values.name) {
                 errors.name = 'Required';
               } else if (!values.slug) {
                 errors.slug = 'Required';
+              } else {
+                if (values.slug !== project.slug) {
+                  const isAvailable = await isProjectSlugAvailable(
+                    team.id,
+                    values.slug,
+                  );
+                  if (!isAvailable) {
+                    errors.slug = 'Slug is not available';
+                  }
+                }
               }
               return errors;
             }}

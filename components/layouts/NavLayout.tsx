@@ -9,6 +9,11 @@ type NavLayoutProps = {
 export const NavLayout: FC<NavLayoutProps> = ({ animated, children }) => {
   return (
     <div className="relative min-h-screen w-full">
+      <div className="fixed inset-x-0 top-0 z-50 flex h-8 w-full items-center justify-center overflow-x-auto truncate whitespace-nowrap bg-fuchsia-900/30 px-4 text-center text-xs text-fuchsia-600">
+        Heads up! Due to excessive demand, we are hitting some rate limits. We
+        are working on lifting these, but you may temporarily experience some
+        occasional empty prompt results.
+      </div>
       <AppNavbar animated={animated} />
       <div className="pb-12">{children}</div>
     </div>

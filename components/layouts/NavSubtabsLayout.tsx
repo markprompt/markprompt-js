@@ -37,23 +37,20 @@ export const NavSubtabsLayout: FC<NavSubtabsLayoutProps> = ({
       <NavLayout>
         {!!user?.has_completed_onboarding && !loadingUser && (
           <>
-            <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-14">
+            {/* <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-14"> */}
+            <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-[88px]">
               {subTabItems && <SubTabs items={subTabItems} />}
             </div>
-            <div className="absolute inset-x-0 top-0 mt-24 w-full bg-fuchsia-900/30 px-8 py-1 text-center text-xs text-fuchsia-600">
-              Heads up! Due to excessive demand, we are hitting some rate
-              limits. We are working on lifting these, but you may experience
-              some occasional empty prompt results.
-            </div>
-
             <div
               className={cn('relative mx-auto px-4 md:px-8', {
                 'max-w-screen-lg': width === 'lg',
                 'max-w-screen-md': width === 'md',
                 'max-w-screen-sm': width === 'sm',
                 'max-w-md': width === 'xs',
-                'pt-32': noHeading,
-                'pt-24': !noHeading,
+                // 'pt-32': noHeading,
+                'pt-40': noHeading,
+                // 'pt-24': !noHeading,
+                'pt-32': !noHeading,
               })}
             >
               {!noHeading && (

@@ -97,8 +97,6 @@ export default async function handler(
       return res.status(400).json({ error: teamError.message });
     }
 
-    console.log('All good deleting team', req.query.id);
-
     return res.status(200).json({ status: 'ok' });
   }
 
