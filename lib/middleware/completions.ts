@@ -23,7 +23,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     });
 
     if (!rateLimitIPResult.result.success) {
-      console.error(`[TRAIN] [RATE-LIMIT] IP ${req.ip}`);
+      console.error(`[COMPLETIONS] [RATE-LIMIT] IP ${req.ip}`);
       return new Response('Too many requests', { status: 429 });
     }
   }
@@ -42,7 +42,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
     if (!rateLimitHostnameResult.result.success) {
       console.error(
-        `[TRAIN] [RATE-LIMIT] Origin ${requesterHost}, IP: ${req.ip}`,
+        `[COMPLETIONS] [RATE-LIMIT] Origin ${requesterHost}, IP: ${req.ip}`,
       );
       return new Response('Too many requests', { status: 429 });
     }

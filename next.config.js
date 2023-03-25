@@ -22,7 +22,8 @@ const nextConfig = {
   async headers() {
     return [
       { source: '/api/openai/completions/(.*)', headers: corsHeaders },
-      { source: '/completions/(.*)', headers: corsHeaders },
+      { source: '/completions', headers: corsHeaders },
+      { source: '/(.*)', headers: corsHeaders },
     ];
   },
 };
