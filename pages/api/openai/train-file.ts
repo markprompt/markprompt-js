@@ -61,7 +61,7 @@ export default async function handler(
   res.setHeader('X-RateLimit-Remaining', rateLimitResult.result.remaining);
 
   if (!rateLimitResult.result.success) {
-    console.error('[TRAIN] [RATE-LIMIT]');
+    console.error(`[TRAIN] [RATE-LIMIT] Project: ${projectId}`);
     return res.status(429).json({
       status: getEmbeddingsRateLimitResponse(
         rateLimitResult.hours,

@@ -67,8 +67,8 @@ const WithCaret: FC<WithCaretProps> = ({ Component, children, ...rest }) => {
 };
 
 type MarkpromptProps = {
-  model: OpenAIModel;
   projectKey: string;
+  model?: OpenAIModel;
   iDontKnowMessage?: string;
   placeholder?: string;
   autoScrollDisabled?: boolean;

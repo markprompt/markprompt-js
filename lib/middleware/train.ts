@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
-import { getAuthorizationToken, getHost, removeSchema } from '../utils';
+import {
+  getAuthorizationToken,
+  getHost,
+  removeSchema,
+  truncateMiddle,
+} from '../utils';
 import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
@@ -32,7 +37,13 @@ export default async function TrainMiddleware(req: NextRequest) {
   });
 
   if (!rateLimitIPResult.result.success) {
-    console.error(`[TRAIN] [RATE-LIMIT] IP ${req.ip}`);
+    console.error(
+      `[TRAIN] [RATE-LIMIT] IP ${req.ip}, token: ${truncateMiddle(
+        token,
+        2,
+        2,
+      )}`,
+    );
     return new Response('Too many requests', { status: 429 });
   }
 
@@ -44,7 +55,13 @@ export default async function TrainMiddleware(req: NextRequest) {
   });
 
   if (!rateLimitResult.result.success) {
-    console.error(`[TRAIN] [RATE-LIMIT] Token ${token}, IP: ${req.ip}`);
+    console.error(
+      `[TRAIN] [RATE-LIMIT] IP: ${req.ip}, token ${truncateMiddle(
+        token,
+        2,
+        2,
+      )}`,
+    );
     return new Response('Too many requests', { status: 429 });
   }
 

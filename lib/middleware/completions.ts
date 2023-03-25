@@ -1,7 +1,12 @@
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
-import { getAuthorizationToken, getHost, removeSchema } from '../utils';
+import {
+  getAuthorizationToken,
+  getHost,
+  removeSchema,
+  truncateMiddle,
+} from '../utils';
 import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
@@ -23,7 +28,11 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     });
 
     if (!rateLimitIPResult.result.success) {
-      console.error(`[COMPLETIONS] [RATE-LIMIT] IP ${req.ip}`);
+      console.error(
+        `[COMPLETIONS] [RATE-LIMIT] IP ${req.ip}, origin: ${req.headers.get(
+          'origin',
+        )}`,
+      );
       return new Response('Too many requests', { status: 429 });
     }
   }
@@ -42,7 +51,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
     if (!rateLimitHostnameResult.result.success) {
       console.error(
-        `[COMPLETIONS] [RATE-LIMIT] Origin ${requesterHost}, IP: ${req.ip}`,
+        `[COMPLETIONS] [RATE-LIMIT] IP: ${req.ip}, origin: ${requesterOrigin}`,
       );
       return new Response('Too many requests', { status: 429 });
     }
@@ -100,7 +109,11 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     });
 
     if (!rateLimitResult.result.success) {
-      console.error(`[TRAIN] [RATE-LIMIT] Token ${token}, IP: ${req.ip}`);
+      console.error(
+        `[COMPLETIONS] [RATE-LIMIT] IP: ${
+          req.ip
+        }, token ${token}, token: ${truncateMiddle(token, 2, 2)}`,
+      );
       return new Response('Too many requests', { status: 429 });
     }
 

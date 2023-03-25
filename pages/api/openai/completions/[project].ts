@@ -98,7 +98,7 @@ export default async function handler(req: NextRequest) {
   });
 
   if (!rateLimitResult.result.success) {
-    console.error(`[TRAIN] [RATE-LIMIT] Project ${projectId}, IP: ${req.ip}`);
+    console.error(`[TRAIN] [RATE-LIMIT] IP: ${req.ip}, project ${projectId}`);
     return new Response('Too many requests', { status: 429 });
   }
 
@@ -152,6 +152,7 @@ export default async function handler(req: NextRequest) {
         }[]
       | null;
   } = await supabase.rpc('match_file_sections', {
+    project_id: projectId,
     embedding: promptEmbedding,
     match_threshold: 0.78,
     match_count: 10,

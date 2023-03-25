@@ -114,7 +114,7 @@ create table public.file_sections (
   embedding   vector(1536)
 );
 
-create or replace function match_file_sections(embedding vector(1536), match_threshold float, match_count int, min_content_length int)
+create or replace function match_file_sections(project_id uuid, embedding vector(1536), match_threshold float, match_count int, min_content_length int)
 returns table (path text, content text, token_count int, similarity float)
 language plpgsql
 as $$
@@ -130,8 +130,10 @@ begin
   join files
     on file_sections.file_id = files.id
 
+  where files.project_id == project_id
+
   -- We only care about sections that have a useful amount of content
-  where length(file_sections.content) >= min_content_length
+  and length(file_sections.content) >= min_content_length
 
   -- The dot product is negative because of a Postgres limitation, so we negate it
   and (file_sections.embedding <#> embedding) * -1 > match_threshold
