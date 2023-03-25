@@ -40,6 +40,11 @@ export const NavSubtabsLayout: FC<NavSubtabsLayoutProps> = ({
             <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-14">
               {subTabItems && <SubTabs items={subTabItems} />}
             </div>
+            <div className="absolute inset-x-0 top-0 mt-24 w-full bg-fuchsia-900/30 px-8 py-1 text-center text-xs text-fuchsia-600">
+              Heads up! Due to excessive demand, we are hitting some rate
+              limits. We are working on lifting these, but you may experience
+              some occasional empty prompt results.
+            </div>
 
             <div
               className={cn('relative mx-auto px-4 md:px-8', {
