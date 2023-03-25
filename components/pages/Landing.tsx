@@ -264,14 +264,14 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
         <Pattern />
         <LandingNavbar />
         <div className="animate-slide-up">
-          <a
+          {/* <a
             href="https://twitter.com/markprompt"
             className="mx-auto mt-20 flex w-min flex-row items-center gap-2 whitespace-nowrap rounded-full bg-primary-900/20 px-4 py-1 text-sm font-medium text-primary-400 transition hover:bg-primary-900/30"
           >
             <TwitterIcon className="h-4 w-4" />
             Introducing Markprompt
-          </a>
-          <h1 className="gradient-heading mt-4 text-center text-5xl leading-[48px] tracking-[-0.6px] sm:text-6xl sm:leading-[64px]">
+          </a> */}
+          <h1 className="gradient-heading mt-28 mt-4 text-center text-5xl leading-[48px] tracking-[-0.6px] sm:text-6xl sm:leading-[64px]">
             <Balancer>
               Build a delightful GPT-4 prompt for your Markdown docs
             </Balancer>
