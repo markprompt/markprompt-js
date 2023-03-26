@@ -14,6 +14,8 @@ A headless React component for building a prompt interface, based on the [Markpr
 
 ## Installation
 
+Check out the starter template for a fully working example: [Markprompt starter template](href="https://github.com/motifland/markprompt-starter-template).
+
 In [Motif](https://motif.land), paste the following import statement in an MDX, JSX or TSX file:
 
 ```jsx
