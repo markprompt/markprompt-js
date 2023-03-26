@@ -88,8 +88,9 @@ const StatusMessage: FC<StatusMessageProps> = ({
 }) => {
   return (
     <p
-      className={cn('whitespace-nowrap text-sm text-neutral-500', {
-        'animate-pulse rounded-full bg-primary-900/20 px-3 py-1 font-medium text-primary-400':
+      className={cn('whitespace-nowrap text-sm', {
+        'text-neutral-500': trainingState.state !== 'loading',
+        'animate-pulse rounded-full px-3 py-1 font-medium text-primary-400':
           trainingState.state === 'loading',
       })}
     >

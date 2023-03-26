@@ -236,6 +236,12 @@ const ProjectSettingsPage = () => {
           description="Add your whitelisted domains here. Requests from these domains will be allowed to access your project's completions."
         >
           <div className="flex w-full flex-col divide-y divide-neutral-900 px-2 py-2">
+            {!domains ||
+              (domains.length === 0 && (
+                <p className="px-4 text-sm text-neutral-600">
+                  No domains have been whitelisted for this project.
+                </p>
+              ))}
             {domains?.map((domain) => {
               return (
                 <div
@@ -370,7 +376,7 @@ const ProjectSettingsPage = () => {
           <div className="flex w-full flex-col divide-y divide-neutral-900 py-2">
             {!tokens ||
               (tokens.length === 0 && (
-                <p className="px-2 text-sm text-neutral-500">
+                <p className="px-4 text-sm text-neutral-600">
                   No tokens are currently associated to this project.
                 </p>
               ))}
@@ -414,10 +420,15 @@ const ProjectSettingsPage = () => {
               type="submit"
               onClick={async () => {
                 setIsGeneratingToken(true);
-                const newToken = await addToken(project.id);
-                await mutateTokens([...(tokens || []), newToken]);
-                setIsGeneratingToken(false);
-                toast.success('New token generated.');
+                try {
+                  const newToken = await addToken(project.id);
+                  await mutateTokens([...(tokens || []), newToken]);
+                  toast.success('New token generated.');
+                } catch (e) {
+                  toast.error(`${e}`);
+                } finally {
+                  setIsGeneratingToken(false);
+                }
               }}
             >
               Generate new token
@@ -527,13 +538,19 @@ const ProjectSettingsPage = () => {
               return;
             }
             setLoading(true);
-            await deleteToken(project.id, tokenToRemove.id);
-            setLoading(false);
-            await mutateTokens([
-              ...(tokens || []).filter((d) => d.id !== tokenToRemove.id),
-            ]);
-            setTokenToRemove(undefined);
-            toast.success('Token deleted.');
+            try {
+              await deleteToken(project.id, tokenToRemove.id);
+              await mutateTokens([
+                ...(tokens || []).filter((d) => d.id !== tokenToRemove.id),
+              ]);
+              setTokenToRemove(undefined);
+              toast.success('Token deleted.');
+            } catch (e) {
+              console.error(e);
+              toast.success('Error deleting token.');
+            } finally {
+              setLoading(false);
+            }
           }}
         />
       </Dialog.Root>

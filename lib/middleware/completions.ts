@@ -125,7 +125,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     }
 
     const res = NextResponse.next();
-    projectId = await getProjectIdFromToken(req, res, token);
+    projectId = await getProjectIdFromToken(req, res, supabaseAdmin, token);
 
     if (!projectId) {
       return noProjectForTokenResponse;

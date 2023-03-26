@@ -9,12 +9,19 @@ import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
+import { createClient } from '@supabase/supabase-js';
 
 type Data = {
   status?: string;
   error?: string;
   errors?: any[];
 };
+
+// Admin access to Supabase, bypassing RLS.
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,6 +32,7 @@ export default async function handler(
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 
+  // Admin supabase does not have sesesion data.
   const supabase = createServerSupabaseClient<Database>({ req, res });
   const {
     data: { session },
@@ -70,7 +78,7 @@ export default async function handler(
     });
   }
 
-  const errors = await generateFileEmbeddings(supabase, projectId, file);
+  const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
 
   return res.status(200).json({ status: 'ok', errors });
 }

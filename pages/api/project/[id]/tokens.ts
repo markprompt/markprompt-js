@@ -69,7 +69,7 @@ export default async function handler(
       .maybeSingle();
 
     if (error) {
-      throw error;
+      return res.status(400).json({ error: error.message });
     }
 
     if (!data) {
@@ -84,8 +84,9 @@ export default async function handler(
     if (error) {
       return res.status(400).json({ error: error.message });
     }
-    res.status(200).end();
+
+    return res.status(200).json({ status: 'ok' });
   }
 
-  return res.status(400).end();
+  return res.status(400).json({ error: 'unknown' });
 }

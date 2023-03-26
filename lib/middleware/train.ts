@@ -1,16 +1,20 @@
+import { Database } from '@/types/supabase';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
-import {
-  getAuthorizationToken,
-  getHost,
-  removeSchema,
-  truncateMiddle,
-} from '../utils';
+import { getAuthorizationToken, truncateMiddle } from '../utils';
 import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
   noTokenResponse,
 } from './common';
+
+// Admin access to Supabase, bypassing RLS.
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function TrainMiddleware(req: NextRequest) {
   // Requests to api.markprompt.com/train come exclusively from external
@@ -67,7 +71,7 @@ export default async function TrainMiddleware(req: NextRequest) {
 
   const res = NextResponse.next();
 
-  const projectId = await getProjectIdFromToken(req, res, token);
+  const projectId = await getProjectIdFromToken(req, res, supabaseAdmin, token);
 
   if (!projectId) {
     return noProjectForTokenResponse;

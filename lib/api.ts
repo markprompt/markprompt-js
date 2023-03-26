@@ -255,11 +255,12 @@ export const deleteToken = async (
   projectId: Project['id'],
   id: Token['id'],
 ) => {
-  fetch(`/api/project/${projectId}/tokens`, {
+  const res = await fetch(`/api/project/${projectId}/tokens`, {
     method: 'DELETE',
     body: JSON.stringify({ id }),
     headers: { 'Content-Type': 'application/json' },
   });
+  return getResponseOrThrow<any>(res);
 };
 
 export const cancelSubscription = (teamId: Team['id']) => {

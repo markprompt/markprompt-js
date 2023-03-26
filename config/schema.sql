@@ -164,6 +164,86 @@ create policy "Users can delete files associated to projects they have access to
     )
   )
 
+-- Tokens
+
+alter table tokens
+  enable row level security;
+
+create policy "Users can only see tokens associated to projects they have access to." on public.tokens
+  for select using (
+    tokens.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can insert tokens associated to projects they have access to." on public.tokens
+  for insert with check (
+    tokens.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can delete tokens associated to projects they have access to." on public.tokens
+  for delete using (
+    tokens.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+
+-- Domains
+
+alter table domains
+  enable row level security;
+
+create policy "Users can only see domains associated to projects they have access to." on public.domains
+  for select using (
+    domains.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can insert domains associated to projects they have access to." on public.domains
+  for insert with check (
+    domains.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+create policy "Users can delete domains associated to projects they have access to." on public.domains
+  for delete using (
+    domains.project_id in (
+      select projects.id from projects
+      left join memberships
+      on projects.team_id = memberships.team_id
+      where memberships.user_id = auth.uid()
+    )
+  )
+
+
+-- File sections
+
+alter table file_sections
+  enable row level security;
+
+-- No policies for file_sections: they are inaccessible to the client,
+-- and only edited on the server with service_role access.
+
 -- Triggers
 
 -- This trigger automatically creates a user entry when a new user signs up

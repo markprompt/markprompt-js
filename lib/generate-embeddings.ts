@@ -137,7 +137,7 @@ const processFile = (file: FileData): FileSectionData => {
 };
 
 export const generateFileEmbeddings = async (
-  supabase: SupabaseClient,
+  supabaseAdmin: SupabaseClient,
   projectId: Project['id'],
   file: FileData,
 ) => {
@@ -146,17 +146,17 @@ export const generateFileEmbeddings = async (
 
   const { meta, sections } = processFile(file);
 
-  let fileId = await getFileAtPath(supabase, projectId, file.path);
+  let fileId = await getFileAtPath(supabaseAdmin, projectId, file.path);
 
   // Delete previous file section data
   if (fileId) {
-    await supabase
+    await supabaseAdmin
       .from('file_sections')
       .delete()
       .filter('file_id', 'eq', fileId);
-    await supabase.from('files').update({ meta }).eq('id', fileId);
+    await supabaseAdmin.from('files').update({ meta }).eq('id', fileId);
   } else {
-    fileId = await createFile(supabase, projectId, file.path, meta);
+    fileId = await createFile(supabaseAdmin, projectId, file.path, meta);
   }
 
   if (!fileId) {
@@ -207,12 +207,14 @@ export const generateFileEmbeddings = async (
     }
   }
 
-  const { error } = await supabase.from('file_sections').insert(embeddingsData);
+  const { error } = await supabaseAdmin
+    .from('file_sections')
+    .insert(embeddingsData);
   if (error) {
     console.error('Error storing embeddings:', error);
     // Too large? Attempt one embedding at a time.
     for (const data of embeddingsData) {
-      await supabase.from('file_sections').insert([data]);
+      await supabaseAdmin.from('file_sections').insert([data]);
     }
   }
 

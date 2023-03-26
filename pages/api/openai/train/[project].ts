@@ -5,7 +5,6 @@ import unzip from 'unzipper';
 import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import { ProjectChecksums, FileData, Project } from '@/types/types';
 import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import { createHash } from 'crypto';
 import {
@@ -13,6 +12,7 @@ import {
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
 import { pluralize } from '@/lib/utils';
+import { createClient } from '@supabase/supabase-js';
 
 type Data = {
   status?: string;
@@ -27,6 +27,12 @@ export const config = {
     bodyParser: false,
   },
 };
+
+// Admin access to Supabase, bypassing RLS.
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+);
 
 export default async function handler(
   req: NextApiRequest,
@@ -142,9 +148,7 @@ export default async function handler(
       continue;
     }
 
-    const supabase = createServerSupabaseClient<Database>({ req, res });
-
-    const errors = await generateFileEmbeddings(supabase, projectId, file);
+    const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
     updatedChecksums[file.path] = contentChecksum;
     if (!errors) {
       numFilesSuccess++;
