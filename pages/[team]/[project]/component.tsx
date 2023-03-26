@@ -95,8 +95,10 @@ export const C = ({ v }: { v: string }) => {
 const DocsCode = ({ code, language }: { code: string; language: Language }) => {
   return (
     <div className="not-prose relative mb-6 w-full rounded-lg border border-neutral-900 bg-neutral-1000 p-4 text-sm">
-      <Code language={language} code={code} />
-      <div className="absolute right-[12px] top-[12px]">
+      <div className="overflow-x-auto">
+        <Code language={language} code={code} />
+      </div>
+      <div className="absolute right-[12px] top-[12px] bg-neutral-1000/80 backdrop-blur">
         <div
           className="cursor-pointer rounded p-2 transition dark:hover:bg-neutral-900"
           onClick={() => {
@@ -156,6 +158,16 @@ const ComponentPage = () => {
           </div>
         </div>
         <h2>Installation and usage</h2>
+        <div className="mb-6 rounded-md border border-sky-900/50 bg-sky-900/30 p-4 text-sm text-sky-600">
+          Check out the starter template for a fully working example:{' '}
+          <a
+            className="font-medium underline"
+            href="https://github.com/motifland/markprompt-starter-template"
+          >
+            Markprompt starter template
+          </a>
+          .
+        </div>
         <h3>Motif</h3>
         <p>
           In{' '}
