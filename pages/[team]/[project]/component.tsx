@@ -47,7 +47,7 @@ curl -L \\
 `.trim();
 
 const streamingCode = `
-const res = await fetch('https://api.markprompt.com/completions', {
+const res = await fetch('https://api.markprompt.com/completions?projectKey=<projectKey>', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
