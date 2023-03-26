@@ -83,6 +83,7 @@ const NewProject = () => {
                     name="name"
                     as={NoAutoInput}
                     disabled={isSubmitting}
+                    autoFocus
                   />
                   <ErrorMessage name="name" component={ErrorLabel} />
                   <p className="mb-1 mt-4 text-xs font-medium text-neutral-300">

@@ -44,7 +44,6 @@ export type State = {
       index: number,
     ) => Pick<FileData, 'name' | 'path'> & { checksum: string },
     getFileContent: (index: number) => Promise<string>,
-    append: boolean,
     forceRetrain?: boolean,
   ) => Promise<void>;
   stopGeneratingEmbeddings: () => void;
@@ -89,7 +88,6 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
         index: number,
       ) => Pick<FileData, 'name' | 'path'> & { checksum: string },
       getFileContent: (index: number) => Promise<string>,
-      append: boolean,
       forceRetrain = false,
     ) => {
       if (!project?.id) {
@@ -98,17 +96,11 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
 
       setErrors([]);
 
-      if (!append) {
-        await deleteAllFiles(project.id);
-      }
-
-      let updatedChecksums: ProjectChecksums = {};
-
       const checksums: { [key: FileData['path']]: string } = await getChecksums(
         project.id,
       );
 
-      for (let i = 0; i < Math.min(numFiles, 20); i++) {
+      for (let i = 0; i < numFiles; i++) {
         if (stopFlag.current) {
           stopFlag.current = false;
           break;
@@ -128,7 +120,6 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
 
         // Check the checksum (or SHA if GitHub file), and skip if equals.
         if (!forceRetrain && checksums[fileMeta.path] === fileMeta.checksum) {
-          updatedChecksums[fileMeta.path] = fileMeta.checksum;
           console.info('Skipping', fileMeta.path);
           continue;
         }
@@ -140,7 +131,12 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
 
         try {
           await processFile(project.id, file, forceRetrain);
-          updatedChecksums[file.path] = fileMeta.checksum;
+
+          // Right after a file has been processed, update the
+          // project checksums, so that they are not lost if the
+          // operation is aborted.
+          checksums[file.path] = fileMeta.checksum;
+          await setChecksums(project.id, checksums);
         } catch (e) {
           console.error('Error', e);
           setErrors((errors) => [
@@ -149,16 +145,6 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
           ]);
         }
       }
-
-      if (append) {
-        // Keep the old checksums if this is an 'append' training.
-        updatedChecksums = {
-          ...checksums,
-          ...updatedChecksums,
-        };
-      }
-
-      await setChecksums(project.id, updatedChecksums);
 
       setState({ state: 'idle' });
     },

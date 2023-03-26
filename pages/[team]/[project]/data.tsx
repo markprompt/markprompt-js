@@ -30,7 +30,7 @@ import {
   useTrainingContext,
 } from '@/lib/context/training';
 import {
-  getContent,
+  getContentWithBackoff,
   getOwnerRepoString,
   getRepositoryMDFilesInfo,
 } from '@/lib/github';
@@ -87,22 +87,26 @@ const StatusMessage: FC<StatusMessageProps> = ({
   playgroundPath,
 }) => {
   return (
-    <p
+    <div
       className={cn('whitespace-nowrap text-sm', {
         'text-neutral-500': trainingState.state !== 'loading',
-        'animate-pulse rounded-full px-3 py-1 font-medium text-primary-400':
+        'rounded-full bg-fuchsia-900/50 px-3 py-1 font-medium text-fuchsia-400':
           trainingState.state === 'loading',
       })}
     >
-      {getStatusMessage(trainingState, isDeleting, numSelected, numFiles)}
-      {trainingState.state === 'idle' && numSelected === 0 && numFiles > 0 && (
-        <Link href={playgroundPath}>
-          <span className="subtle-underline ml-3 whitespace-nowrap transition hover:text-neutral-300">
-            Query in playground
-          </span>
-        </Link>
-      )}
-    </p>
+      <p className={cn({ 'animate-pulse': trainingState.state === 'loading' })}>
+        {getStatusMessage(trainingState, isDeleting, numSelected, numFiles)}
+        {trainingState.state === 'idle' &&
+          numSelected === 0 &&
+          numFiles > 0 && (
+            <Link href={playgroundPath}>
+              <span className="subtle-underline ml-3 whitespace-nowrap transition hover:text-neutral-300">
+                Query in playground
+              </span>
+            </Link>
+          )}
+      </p>
+    </div>
   );
 };
 
@@ -110,7 +114,11 @@ const Data = () => {
   const { team } = useTeam();
   const { project } = useProject();
   const { files, mutate: mutateFiles, loading: loadingFiles } = useFiles();
-  const { generateEmbeddings, state: trainingState } = useTrainingContext();
+  const {
+    generateEmbeddings,
+    stopGeneratingEmbeddings,
+    state: trainingState,
+  } = useTrainingContext();
   const [rowSelection, setRowSelection] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
@@ -213,6 +221,19 @@ const Data = () => {
             numSelected={numSelected}
             playgroundPath={`/${team?.slug}/${project?.slug}/playground`}
           />
+          {trainingState.state !== 'idle' && (
+            <p
+              className={cn('text-sm text-neutral-500', {
+                'subtle-underline cursor-pointer':
+                  trainingState.state !== 'cancel_requested',
+              })}
+              onClick={stopGeneratingEmbeddings}
+            >
+              {trainingState.state === 'cancel_requested'
+                ? 'Cancelling...'
+                : 'Stop training'}
+            </p>
+          )}
           {numSelected > 0 && (
             <Dialog.Root>
               <Dialog.Trigger asChild>
@@ -286,8 +307,7 @@ const Data = () => {
                           checksum: info.sha,
                         };
                       },
-                      async (i) => getContent(mdFilesInfo[i].url),
-                      true,
+                      async (i) => getContentWithBackoff(mdFilesInfo[i].url),
                     );
                     await mutateFiles();
                     toast.success('Processing complete');

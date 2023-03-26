@@ -1,3 +1,4 @@
+import { backOff } from 'exponential-backoff';
 import { Octokit } from 'octokit';
 import { isPresent } from 'ts-is-present';
 
@@ -106,9 +107,20 @@ export const getRepositoryMDFilesInfo = async (
   return mdFileUrls;
 };
 
-export const getContent = async (url: string): Promise<string> => {
+const getContent = async (url: string): Promise<string> => {
   const res = await fetch(url, {
     headers: { accept: 'application/json' },
   }).then((res) => res.json());
   return Buffer.from(res.content, 'base64').toString('utf8');
+};
+
+export const getContentWithBackoff = async (url: string): Promise<string> => {
+  return backOff(() => getContent(url), {
+    startingDelay: 1000,
+    numOfAttempts: 10,
+    retry: (e, n) => {
+      console.warn(`Retrying to fetch (${n})`, url, e);
+      return true;
+    },
+  });
 };

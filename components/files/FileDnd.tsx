@@ -79,7 +79,6 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
         };
       },
       async (i) => pickedFiles[i].content,
-      true,
     );
     setIsTrainingInitiatedByFileDnd(false);
     setPickedFiles([]);

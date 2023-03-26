@@ -5,7 +5,7 @@ import Input from '../ui/Input';
 import { pluralize } from '@/lib/utils';
 import { useDebouncedCallback } from 'use-debounce';
 import {
-  getContent,
+  getContentWithBackoff,
   getRepositoryMDFilesInfo,
   isGitHubRepoAccessible,
 } from '@/lib/github';
@@ -190,8 +190,7 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
                     checksum: info.sha,
                   };
                 },
-                async (i) => getContent(mdFilesInfo[i].url),
-                true,
+                async (i) => getContentWithBackoff(mdFilesInfo[i].url),
               );
               await mutateFiles();
               setIsTrainingInitiatedByGitHub(false);
