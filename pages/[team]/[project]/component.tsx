@@ -12,6 +12,7 @@ import Button from '@/components/ui/Button';
 import { useRouter } from 'next/router';
 import useTeam from '@/lib/hooks/use-team';
 import useProject from '@/lib/hooks/use-project';
+import { SUPPORTED_MODELS } from '@/types/types';
 
 const motifCode = `
 import { Markprompt } from "https://esm.sh/markprompt"
@@ -304,21 +305,12 @@ const ComponentPage = () => {
               <td className="text-neutral-500">
                 The OpenAI completions model to use. Supported values:
                 <div className="flex flex-row flex-wrap gap-1">
-                  <C v="gpt-4" />
-                  <C v="gpt-4-0314" />
-                  <C v="gpt-4-32k" />
-                  <C v="gpt-4-32k-0314" />
-                  <C v="gpt-3.5-turbo" />
-                  <C v="gpt-3.5-turbo-0301" />
-                  <C v="text-davinci-003" />
-                  <C v="text-davinci-002" />
-                  <C v="text-curie-001" />
-                  <C v="text-babbage-001" />
-                  <C v="text-ada-001" />
-                  <C v="davinci" />
-                  <C v="curie" />
-                  <C v="babbage" />
-                  <C v="ada" />
+                  {SUPPORTED_MODELS.chat_completions.map((m) => {
+                    return <C key={m} v={m} />;
+                  })}
+                  {SUPPORTED_MODELS.completions.map((m) => {
+                    return <C key={m} v={m} />;
+                  })}
                 </div>
               </td>
             </tr>

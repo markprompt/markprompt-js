@@ -13,6 +13,7 @@ import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 import useProject from '@/lib/hooks/use-project';
 import { getOrigin, timeout } from '@/lib/utils';
+import { OpenAIModelId } from '@/types/types';
 
 const Caret = () => {
   return (
@@ -57,6 +58,7 @@ type PlaygroundProps = {
   demoResponse?: string;
   demoReferences?: string[];
   iDontKnowMessage?: string;
+  model?: OpenAIModelId;
 };
 
 export const Playground: FC<PlaygroundProps> = ({
@@ -69,6 +71,7 @@ export const Playground: FC<PlaygroundProps> = ({
   demoResponse,
   demoReferences,
   iDontKnowMessage,
+  model,
 }) => {
   const { project } = useProject();
   const [prompt, setPrompt] = useState<string | undefined>(undefined);
@@ -147,6 +150,7 @@ export const Playground: FC<PlaygroundProps> = ({
             body: JSON.stringify({
               prompt,
               iDontKnowMessage: _iDontKnowMessage,
+              model,
             }),
           },
         );

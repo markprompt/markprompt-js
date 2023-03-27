@@ -14,9 +14,9 @@ import ReactMarkdown from 'react-markdown';
 const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/completions';
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
-type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel;
+type OpenAIModelId = OpenAIChatCompletionsModelId | OpenAICompletionsModelId;
 
-type OpenAIChatCompletionsModel =
+type OpenAIChatCompletionsModelId =
   | 'gpt-4'
   | 'gpt-4-0314'
   | 'gpt-4-32k'
@@ -24,7 +24,7 @@ type OpenAIChatCompletionsModel =
   | 'gpt-3.5-turbo'
   | 'gpt-3.5-turbo-0301';
 
-type OpenAICompletionsModel =
+type OpenAICompletionsModelId =
   | 'text-davinci-003'
   | 'text-davinci-002'
   | 'text-curie-001'
@@ -35,7 +35,7 @@ type OpenAICompletionsModel =
   | 'babbage'
   | 'ada';
 
-const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo';
+const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
 
 const Caret = () => {
   return (
@@ -68,7 +68,7 @@ const WithCaret: FC<WithCaretProps> = ({ Component, children, ...rest }) => {
 
 type MarkpromptProps = {
   projectKey: string;
-  model?: OpenAIModel;
+  model?: OpenAIModelId;
   iDontKnowMessage?: string;
   placeholder?: string;
   autoScrollDisabled?: boolean;

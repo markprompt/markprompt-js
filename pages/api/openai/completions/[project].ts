@@ -5,7 +5,7 @@ import {
   MAX_PROMPT_LENGTH,
   STREAM_SEPARATOR,
 } from '@/lib/constants';
-import { DbFile, OpenAIModel, Project } from '@/types/types';
+import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
 import { createClient } from '@supabase/supabase-js';
 import { backOff } from 'exponential-backoff';
 import { CreateEmbeddingResponse } from 'openai';
@@ -26,7 +26,7 @@ export const config = {
   runtime: 'edge',
 };
 
-const getPayload = (prompt: string, model: OpenAIModel) => {
+const getPayload = (prompt: string, model: OpenAIModelIdWithType) => {
   const payload = {
     model: model.value,
     temperature: 0.1,
@@ -50,7 +50,7 @@ const getPayload = (prompt: string, model: OpenAIModel) => {
   }
 };
 
-const getChunkText = (response: any, model: OpenAIModel) => {
+const getChunkText = (response: any, model: OpenAIModelIdWithType) => {
   switch (model.type) {
     case 'chat_completions': {
       return response.choices[0].delta.content;

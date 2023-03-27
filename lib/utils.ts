@@ -1,4 +1,8 @@
-import { HistogramStat, OpenAIModel, TimeInterval } from '@/types/types';
+import {
+  HistogramStat,
+  OpenAIModelIdWithType,
+  TimeInterval,
+} from '@/types/types';
 import slugify from '@sindresorhus/slugify';
 import type { Config } from 'unique-names-generator';
 import {
@@ -9,7 +13,6 @@ import {
 } from 'unique-names-generator';
 import confetti from 'canvas-confetti';
 import tailwindColors from 'tailwindcss/colors';
-import { NextRequest } from 'next/server';
 import { customAlphabet } from 'nanoid';
 import { createHash } from 'crypto';
 
@@ -350,7 +353,7 @@ export const generateKey = customAlphabet(
   32,
 );
 
-export const stringToModel = (param?: string): OpenAIModel => {
+export const stringToModel = (param?: string): OpenAIModelIdWithType => {
   switch (param) {
     case 'gpt-4':
     case 'gpt-4-0314':
