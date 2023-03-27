@@ -39,4 +39,5 @@ export type DbFile = Database['public']['Tables']['files']['Row'];
 export type FileSections = Database['public']['Tables']['file_sections']['Row'];
 
 export type FileData = { path: string; name: string; content: string };
+export type PathContentData = Pick<FileData, 'path' | 'content'>;
 export type ProjectChecksums = Record<FileData['path'], string>;

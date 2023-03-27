@@ -1,5 +1,5 @@
 import { FileData } from '@/types/types';
-import { readTextFileAsync } from '@/lib/utils';
+import { createChecksum, readTextFileAsync } from '@/lib/utils';
 import cn from 'classnames';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -75,7 +75,7 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
         return {
           name: file.name,
           path: file.path,
-          checksum: createHash('sha256').update(content).digest('base64'),
+          checksum: createChecksum(content),
         };
       },
       async (i) => pickedFiles[i].content,

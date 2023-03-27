@@ -1,6 +1,10 @@
 import { backOff } from 'exponential-backoff';
 import { Octokit } from 'octokit';
 import { isPresent } from 'ts-is-present';
+import { FileData, PathContentData } from '@/types/types';
+import { decompress, getNameFromPath, isSupportedExtension } from './utils';
+
+const JSZip = require('jszip');
 
 const octokit = new Octokit();
 
@@ -85,7 +89,7 @@ export const getRepositoryMDFilesInfo = async (
 
   const mdFileUrls = tree
     .map((f) => {
-      if (f.url && f.path && /\.md(x|oc)?$/.test(f.path)) {
+      if (f.url && f.path && isSupportedExtension(f.path)) {
         let path = f.path;
         if (path.startsWith('.')) {
           // Ignore files in dot folders, like .github
@@ -95,7 +99,7 @@ export const getRepositoryMDFilesInfo = async (
           path = '/' + path;
         }
         return {
-          name: f.path.split('/').slice(-1)[0],
+          name: getNameFromPath(f.path),
           path,
           url: f.url,
           sha: f.sha || '',
@@ -107,20 +111,37 @@ export const getRepositoryMDFilesInfo = async (
   return mdFileUrls;
 };
 
-const getContent = async (url: string): Promise<string> => {
-  const res = await fetch(url, {
-    headers: { accept: 'application/json' },
-  }).then((res) => res.json());
-  return Buffer.from(res.content, 'base64').toString('utf8');
+const paginatedFetchRepo = async (
+  owner: string,
+  repo: string,
+  offset: number = 0,
+): Promise<{ files: PathContentData[]; capped?: boolean }> => {
+  const res = await fetch('/api/github/fetch', {
+    method: 'POST',
+    body: JSON.stringify({ owner, repo, offset }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const ab = await res.arrayBuffer();
+  return JSON.parse(decompress(Buffer.from(ab)));
 };
 
-export const getContentWithBackoff = async (url: string): Promise<string> => {
-  return backOff(() => getContent(url), {
-    startingDelay: 1000,
-    numOfAttempts: 10,
-    retry: (e, n) => {
-      console.warn(`Retrying to fetch (${n})`, url, e);
-      return true;
-    },
+export const getGitHubMDFiles = async (url: string): Promise<FileData[]> => {
+  const info = parseGitHubURL(url);
+  if (!info?.owner && !info?.repo) {
+    return [];
+  }
+
+  let data = await paginatedFetchRepo(info.owner, info.repo);
+  let allFilesData = data.files;
+  while (data.capped) {
+    data = await paginatedFetchRepo(info.owner, info.repo, allFilesData.length);
+    allFilesData = [...allFilesData, ...data.files];
+  }
+
+  return allFilesData.map((fileData) => {
+    return {
+      ...fileData,
+      name: getNameFromPath(fileData.path),
+    };
   });
 };

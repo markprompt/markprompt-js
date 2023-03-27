@@ -11,6 +11,7 @@ import confetti from 'canvas-confetti';
 import tailwindColors from 'tailwindcss/colors';
 import { NextRequest } from 'next/server';
 import { customAlphabet } from 'nanoid';
+import { createHash } from 'crypto';
 
 const pako = require('pako');
 
@@ -371,4 +372,16 @@ export const stringToModel = (param?: string): OpenAIModel => {
     default:
       return { type: 'chat_completions', value: 'gpt-3.5-turbo' };
   }
+};
+
+export const isSupportedExtension = (path: string) => {
+  return /\.(md|mdx|mdoc|txt)$/.test(path);
+};
+
+export const getNameFromPath = (path: string) => {
+  return path.split('/').slice(-1)[0];
+};
+
+export const createChecksum = (content: string) => {
+  return createHash('sha256').update(content).digest('base64');
 };

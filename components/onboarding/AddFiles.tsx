@@ -43,7 +43,7 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
 
   const curlCode = `
   curl -d @docs.zip \\
-    https://api.${getHost()}/generate-embeddings \\
+    https://api.${getHost()}/train \\
     -H "Authorization: Bearer ${tokens?.[0]?.value || '<TOKEN>'}"
   `.trim();
 

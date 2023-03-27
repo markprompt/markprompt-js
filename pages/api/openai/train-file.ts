@@ -10,6 +10,7 @@ import {
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
 import { createClient } from '@supabase/supabase-js';
+import { createChecksum } from '@/lib/utils';
 
 type Data = {
   status?: string;
@@ -51,9 +52,7 @@ export default async function handler(
       {},
     );
     const previousChecksum = checksums[file.path];
-    const currentChecksum = createHash('sha256')
-      .update(file.content)
-      .digest('base64');
+    const currentChecksum = createChecksum(file.content);
     if (previousChecksum === currentChecksum) {
       return res.status(200).json({ status: 'Already processed' });
     }

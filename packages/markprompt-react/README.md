@@ -94,6 +94,10 @@ You can obtain this token in the project settings. This token is tied to a speci
 
 **Important:** Make sure to keep this token private, and never publish code that exposes it. If your token has been compromised, you can generate a new one in the settings.
 
+## Starter Template
+
+For a fully working setup based on Next.js + Tailwind, check out the [Markprompt starter template](https://github.com/motifland/markprompt-starter-template).
+
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)

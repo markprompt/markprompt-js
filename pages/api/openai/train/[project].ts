@@ -11,7 +11,7 @@ import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
-import { pluralize } from '@/lib/utils';
+import { createChecksum, pluralize } from '@/lib/utils';
 import { createClient } from '@supabase/supabase-js';
 
 type Data = {
@@ -99,7 +99,7 @@ export default async function handler(
     await new Promise((resolve, reject) => {
       fs.createReadStream(path)
         .pipe(unzip.Parse())
-        .on('entry', async (entry) => {
+        .on('entry', async (entry: any) => {
           if (
             entry.type !== 'File' ||
             entry.path.startsWith('.') ||
@@ -138,9 +138,7 @@ export default async function handler(
   let allFileErrors: { path: string; message: string }[] = [];
   for (const file of filesWithPath) {
     // Check the checksum, and skip if equals
-    const contentChecksum = createHash('sha256')
-      .update(file.content)
-      .digest('base64');
+    const contentChecksum = createChecksum(file.content);
 
     if (checksums[file.path] === contentChecksum) {
       updatedChecksums[file.path] = contentChecksum;

@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import { FC, useMemo, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { FileDnd } from '@/components/files/FileDnd';
-import { pluralize } from '@/lib/utils';
+import { createChecksum, pluralize } from '@/lib/utils';
 import { toast } from 'react-hot-toast';
 import ConfirmDialog from '@/components/dialogs/Confirm';
 import Link from 'next/link';
@@ -29,16 +29,13 @@ import {
   TrainingState,
   useTrainingContext,
 } from '@/lib/context/training';
-import {
-  getContentWithBackoff,
-  getOwnerRepoString,
-  getRepositoryMDFilesInfo,
-} from '@/lib/github';
+import { getGitHubMDFiles, getOwnerRepoString } from '@/lib/github';
 
 // Cf. https://github.com/iamkun/dayjs/issues/297#issuecomment-1202327426
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { GitHubIcon } from '@/components/icons/GitHub';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
+import { createHash } from 'crypto';
 dayjs.extend(relativeTime);
 
 const getBasePath = (pathWithFile: string) => {
@@ -294,20 +291,19 @@ const Data = () => {
                     if (!project.github_repo) {
                       return;
                     }
-                    const mdFilesInfo = await getRepositoryMDFilesInfo(
-                      project.github_repo,
-                    );
+                    const mdFiles = await getGitHubMDFiles(project.github_repo);
                     await generateEmbeddings(
-                      mdFilesInfo.length,
+                      mdFiles.length,
                       (i) => {
-                        const info = mdFilesInfo[i];
+                        const file = mdFiles[i];
+                        const content = file.content;
                         return {
-                          name: info.name,
-                          path: info.path,
-                          checksum: info.sha,
+                          name: file.name,
+                          path: file.path,
+                          checksum: createChecksum(content),
                         };
                       },
-                      async (i) => getContentWithBackoff(mdFilesInfo[i].url),
+                      async (i) => mdFiles[i].content,
                     );
                     await mutateFiles();
                     toast.success('Processing complete');

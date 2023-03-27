@@ -2,10 +2,10 @@ import cn from 'classnames';
 import { FC, useState } from 'react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
-import { pluralize } from '@/lib/utils';
+import { createChecksum, pluralize } from '@/lib/utils';
 import { useDebouncedCallback } from 'use-debounce';
 import {
-  getContentWithBackoff,
+  getGitHubMDFiles,
   getRepositoryMDFilesInfo,
   isGitHubRepoAccessible,
 } from '@/lib/github';
@@ -19,6 +19,7 @@ import useProjects from '@/lib/hooks/use-projects';
 import useProject from '@/lib/hooks/use-project';
 import { updateProject } from '@/lib/api';
 import useFiles from '@/lib/hooks/use-files';
+import { createHash } from 'crypto';
 
 type GitHubProps = {
   onTrainingComplete: () => void;
@@ -179,18 +180,19 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
                 ...projects.filter((p) => p.id !== updatedProject.id),
                 updatedProject,
               ]);
-              const mdFilesInfo = await getRepositoryMDFilesInfo(githubUrl);
+              const mdFiles = await getGitHubMDFiles(githubUrl);
               await generateEmbeddings(
-                mdFilesInfo.length,
+                mdFiles.length,
                 (i) => {
-                  const info = mdFilesInfo[i];
+                  const file = mdFiles[i];
+                  const content = file.content;
                   return {
-                    name: info.name,
-                    path: info.path,
-                    checksum: info.sha,
+                    name: file.name,
+                    path: file.path,
+                    checksum: createChecksum(content),
                   };
                 },
-                async (i) => getContentWithBackoff(mdFilesInfo[i].url),
+                async (i) => mdFiles[i].content,
               );
               await mutateFiles();
               setIsTrainingInitiatedByGitHub(false);

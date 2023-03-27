@@ -59,6 +59,8 @@ A sample file containing required environment variables can be found in [example
 
 Markprompt React is a headless React component for building a prompt interface, based on the Markprompt API. With a single line of code, you can provide a prompt interface to your React application. Follow the steps in the [Markprompt React README](https://github.com/motifland/markprompt/blob/main/packages/markprompt-react/README.md) to get started using it.
 
+Also, check out the [Markprompt starter template](https://github.com/motifland/markprompt-starter-template) for a fully working Next.js + Tailwind project.
+
 ## Usage
 
 Currently, the Markprompt API has basic protection against misuse when making requests from public websites, such as rate limiting, IP blacklisting, allowed origins, and prompt moderation. These are not strong guarantees against misuse though, and it is always safer to expose an API like Markprompt's to authenticated users, and/or in non-public systems using private access tokens. We do plan to offer more extensive tooling on that front (hard limits, spike protection, notifications, query analysis, flagging).
