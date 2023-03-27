@@ -37,8 +37,7 @@ export const NavSubtabsLayout: FC<NavSubtabsLayoutProps> = ({
       <NavLayout>
         {!!user?.has_completed_onboarding && !loadingUser && (
           <>
-            {/* <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-14"> */}
-            <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-[88px]">
+            <div className="fixed inset-x-0 z-10 bg-neutral-1100 pt-14">
               {subTabItems && <SubTabs items={subTabItems} />}
             </div>
             <div
@@ -47,10 +46,8 @@ export const NavSubtabsLayout: FC<NavSubtabsLayoutProps> = ({
                 'max-w-screen-md': width === 'md',
                 'max-w-screen-sm': width === 'sm',
                 'max-w-md': width === 'xs',
-                // 'pt-32': noHeading,
-                'pt-40': noHeading,
-                // 'pt-24': !noHeading,
-                'pt-32': !noHeading,
+                'pt-32': noHeading,
+                'pt-24': !noHeading,
               })}
             >
               {!noHeading && (

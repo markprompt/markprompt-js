@@ -14,7 +14,7 @@ export const AppNavbar: FC<AppNavbarProps> = ({ animated }) => {
     <div
       className={cn(
         animated && 'animate-slide-down-delayed',
-        'fixed inset-x-0 top-8 z-20 flex h-14 flex-none flex-row items-center gap-4 border-b border-neutral-900 bg-neutral-1100 px-4 dark:border-neutral-900',
+        'fixed inset-x-0 top-0 z-20 flex h-14 flex-none flex-row items-center gap-4 border-b border-neutral-900 bg-neutral-1100 px-4 dark:border-neutral-900',
       )}
     >
       <div className="flex-none">
