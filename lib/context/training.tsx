@@ -44,6 +44,7 @@ export type State = {
       index: number,
     ) => Pick<FileData, 'name' | 'path'> & { checksum: string },
     getFileContent: (index: number) => Promise<string>,
+    onFileProcessed?: () => void,
     forceRetrain?: boolean,
   ) => Promise<void>;
   stopGeneratingEmbeddings: () => void;
@@ -88,6 +89,7 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
         index: number,
       ) => Pick<FileData, 'name' | 'path'> & { checksum: string },
       getFileContent: (index: number) => Promise<string>,
+      onFileProcessed?: () => void,
       forceRetrain = false,
     ) => {
       if (!project?.id) {
@@ -137,6 +139,7 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
           // operation is aborted.
           checksums[file.path] = fileMeta.checksum;
           await setChecksums(project.id, checksums);
+          onFileProcessed?.();
         } catch (e) {
           console.error('Error', e);
           setErrors((errors) => [

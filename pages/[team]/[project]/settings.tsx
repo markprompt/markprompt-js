@@ -207,7 +207,6 @@ const ProjectSettingsPage = () => {
                     Public repository URL
                   </p>
                   <Field
-                    value={undefined}
                     type="text"
                     name="github_repo"
                     inputSize="sm"

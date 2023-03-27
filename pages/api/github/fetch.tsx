@@ -42,7 +42,7 @@ const extractFromZip = async (
       continue;
     }
     let path = relativePath;
-    if (path.startsWith('.')) {
+    if (path.startsWith('.') || path.includes('/.')) {
       // Ignore files in dot folders, like .github
       continue;
     }
@@ -110,6 +110,7 @@ export default async function handler(
   // If we're below the limit, which we will be most of the time,
   // we send it as is.
   let compressed = Buffer.from(compress(JSON.stringify({ files })));
+
   if (compressed.length < PAYLOAD_MAX_SIZE_BYTES) {
     return res.status(200).send(compressed);
   }
