@@ -61,7 +61,7 @@ You can pass the following props to the component:
 
 | Prop               | Default value                              | Description                                                                                                                                                                                                                                                                            |
 | ------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `projectKey`       |                                            | Your project&apos;s public API key, found in the project settings.                                                                                                                                                                                                                     |
+| `projectKey`       |                                            | Your project&apos;s API key, found in the project settings.                                                                                                                                                                                                                            |
 | `model`            | `gpt-3.5-turbo`                            | The OpenAI completions model to use. Supported values: `gpt-4`, `gpt-4-0314`, `gpt-4-32k`, `gpt-4-32k-0314`, `gpt-3.5-turbo`, `gpt-3.5-turbo-0301`, `text-davinci-003`, `text-davinci-002`, `text-curie-001`, `text-babbage-001`, `text-ada-001`, `davinci`, `curie`, `babbage`, `ada` |
 | settings.          |
 | `iDontKnowMessage` | _Sorry, I am not sure how to answer that._ | Fallback message in can no answer is found.                                                                                                                                                                                                                                            |
@@ -80,19 +80,11 @@ Example:
 
 ## Whitelisting your domain
 
-Usage of the [Markprompt API](https://markprompt.com) is subject to quotas, depending on the plan you have subscribed to. Markprompt has systems in place to detect abuse and excessive usage, but we nevertheless recommend being cautious when offering a prompt interface on a public website. In any case, the prompt will **only work on domains you have whitelisted** through the [Markprompt dashboard](https://markprompt.com).
+Usage of the [Markprompt API](https://markprompt.com) is subject to quotas, depending on the plan you have subscribed to. Markprompt has systems in place to detect abuse and excessive usage, but we nevertheless recommend being cautious when offering a prompt interface on a public website. In any case, when using the production project key, the prompt will **only work on domains you have whitelisted** through the [Markprompt dashboard](https://markprompt.com).
 
-## Passing an authorization token
+### Local development
 
-If you cannot use a whitelisted domain, for instance when developing on localhost, you can alternatively pass an authorization token:
-
-```jsx
-<Markprompt model="..." token="<PROJECT_ACCESS_TOKEN>" />
-```
-
-You can obtain this token in the project settings. This token is tied to a specific project, so adding the `project` prop will not have any effect.
-
-**Important:** Make sure to keep this token private, and never publish code that exposes it. If your token has been compromised, you can generate a new one in the settings.
+When developing locally, for instance on localhost, use the development test key instead. This allows you to access the API from a non-whitelisted domain. For that reason, **make sure to keep this key private**.
 
 ## Starter Template
 

@@ -14,7 +14,7 @@ export const DescriptionLabel: FC<PropsWithChildren> = ({ children }) => {
 
 type SettingsCardProps = {
   title: string | ReactNode;
-  description?: string;
+  description?: string | ReactNode;
   children?: ReactNode;
 };
 

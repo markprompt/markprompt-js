@@ -353,6 +353,16 @@ export const generateKey = customAlphabet(
   32,
 );
 
+const SK_TEST_PREFIX = 'sk_test_';
+
+export const generateSKTestKey = () => {
+  return SK_TEST_PREFIX + generateKey();
+};
+
+export const isSKTestKey = (key: string | null) => {
+  return key?.startsWith(SK_TEST_PREFIX);
+};
+
 export const stringToModel = (param?: string): OpenAIModelIdWithType => {
   switch (param) {
     case 'gpt-4':

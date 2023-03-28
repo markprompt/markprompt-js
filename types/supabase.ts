@@ -106,6 +106,7 @@ export interface Database {
           inserted_at: string
           is_starter: boolean
           name: string
+          private_dev_api_key: string
           public_api_key: string
           slug: string
           team_id: string
@@ -117,6 +118,7 @@ export interface Database {
           inserted_at?: string
           is_starter?: boolean
           name: string
+          private_dev_api_key: string
           public_api_key: string
           slug: string
           team_id: string
@@ -128,6 +130,7 @@ export interface Database {
           inserted_at?: string
           is_starter?: boolean
           name?: string
+          private_dev_api_key?: string
           public_api_key?: string
           slug?: string
           team_id?: string

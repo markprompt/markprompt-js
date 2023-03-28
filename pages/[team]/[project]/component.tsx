@@ -34,7 +34,8 @@ const tokenCode = `
 
 const propsExample = `
 <Markprompt
-  projectKey="<project-key>"
+  projectKey="xxx...xxxx"
+  model="gpt-4"
   iDontKnowMessage="Sorry, I don't know!"
   placeholder="Ask Acme docs..."
 />
@@ -188,8 +189,8 @@ const ComponentPage = () => {
           <code className="text-sm font-normal text-lime-400">
             &lt;project-key&gt;
           </code>{' '}
-          is the public key associated to your project. It can be obtained in
-          the project settings under &quot;Public API key&quot;.
+          with the key associated to your project. It can be obtained in the
+          project settings under &quot;Project key&quot;.
         </p>
         <h3>Node</h3>
         <p>In Node, install Markprompt via NPM:</p>
@@ -204,21 +205,22 @@ const ComponentPage = () => {
           <code className="text-sm font-normal text-lime-400">
             &lt;project-key&gt;
           </code>{' '}
-          is the public key associated to your project. It can be obtained in
-          the project settings under &quot;Public API key&quot;.
+          with the key associated to your project. It can be obtained in the
+          project settings under &quot;Project key&quot;.
         </p>
-        <h3>Whitelisting your domain</h3>
+        <h3>Development setup</h3>
         <p>
-          Then, head over to the project settings and{' '}
-          <Link
-            className="subtle-underline"
-            href={`/${router.query?.team}/${router.query?.project}/settings`}
-          >
-            add a whitelisted domain
-          </Link>{' '}
-          where your site will be hosted. This will allow the component to speak
-          to the Markprompt API endpoint for completions, and prevent misuse
-          from other origins.
+          When testing in a local development environment, for instance on
+          localhost, use the <em>Development</em> project key. This is a private
+          key that can be used from any host, bypassing domain whitelisting. For
+          that reason, make sure to keep it private.
+        </p>
+        <h3>Production setup</h3>
+        <p>
+          When going live, the <em>Production</em> project key needs to be used.
+          This is a public key that can safely be shared, and can only access
+          the API from whitelisted domains. Whitelisting a domain is likewise
+          done in the project settings.
         </p>
         <div className="mb-8">
           <div className="flex justify-start">
@@ -231,28 +233,6 @@ const ComponentPage = () => {
               Add whitelisted domain →
             </Button>
           </div>
-        </div>
-        <h3>Alternative: using an authorization token</h3>
-        <p>
-          If you cannot use a whitelisted domain, for instance when developing
-          on localhost, you can alternatively pass an authorization token:
-        </p>
-        <DocsCode code={tokenCode} language="jsx" />
-        <p>
-          You can obtain this token in the{' '}
-          <Link
-            className="subtle-underline"
-            href={`/${router.query?.team}/${router.query?.project}/settings`}
-          >
-            project settings
-          </Link>
-          . This token is tied to a specific project, so adding the `project`
-          prop will not have any effect.
-        </p>
-        <div className="mb-6 rounded-md border border-orange-900/50 bg-orange-900/10 p-4 text-sm text-orange-700">
-          Make sure to keep this token private, and never publish code that
-          exposes it. If your token has been compromised, you can generate a new
-          one in the settings.
         </div>
         <h3>Styling</h3>
         <p className="mb-8">
