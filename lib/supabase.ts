@@ -37,3 +37,18 @@ export const createFile = async (
   }
   return data?.id as DbFile['id'];
 };
+
+export const getOpenAIKey = async (
+  supabaseAdmin: SupabaseClient,
+  projectId: Project['id'],
+) => {
+  const { data: openAIKeyData } = await supabaseAdmin
+    .from('projects')
+    .select('openai_key')
+    .eq('id', projectId)
+    .limit(1)
+    .select()
+    .maybeSingle();
+
+  return openAIKeyData?.openai_key || undefined;
+};

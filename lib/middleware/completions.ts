@@ -1,5 +1,6 @@
 import { Database } from '@/types/supabase';
-import { createClient } from '@supabase/supabase-js';
+import { Project } from '@/types/types';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
 import {
@@ -50,6 +51,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
   let projectId;
   if (requesterOrigin) {
+    // Browser requests
     const requesterHost = removeSchema(requesterOrigin);
 
     const rateLimitHostnameResult = await checkCompletionsRateLimits({
@@ -90,7 +92,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
         return new Response('Project not found', { status: 404 });
       }
 
-      projectId = data?.id;
+      projectId = data.id;
 
       // Now that we have a project id, we need to check that the
       // the project has whitelisted the domain the request comes from.

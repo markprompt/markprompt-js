@@ -4,13 +4,13 @@ import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import { getProjectChecksumsKey, safeGetObject } from '@/lib/redis';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
-import { createHash } from 'crypto';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
 import { createClient } from '@supabase/supabase-js';
 import { createChecksum } from '@/lib/utils';
+import { getOpenAIKey } from '@/lib/supabase';
 
 type Data = {
   status?: string;
@@ -77,7 +77,14 @@ export default async function handler(
     });
   }
 
-  const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
+  const openAIKey = await getOpenAIKey(supabaseAdmin, projectId);
+
+  const errors = await generateFileEmbeddings(
+    supabaseAdmin,
+    projectId,
+    file,
+    openAIKey,
+  );
 
   return res.status(200).json({ status: 'ok', errors });
 }

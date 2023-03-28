@@ -6,13 +6,13 @@ import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import { ProjectChecksums, FileData, Project } from '@/types/types';
 import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
 import { Database } from '@/types/supabase';
-import { createHash } from 'crypto';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
 import { createChecksum, pluralize } from '@/lib/utils';
 import { createClient } from '@supabase/supabase-js';
+import { getOpenAIKey } from '@/lib/supabase';
 
 type Data = {
   status?: string;
@@ -134,6 +134,8 @@ export default async function handler(
     {},
   );
 
+  const openAIKey = await getOpenAIKey(supabaseAdmin, projectId);
+
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
   for (const file of filesWithPath) {
@@ -146,7 +148,12 @@ export default async function handler(
       continue;
     }
 
-    const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
+    const errors = await generateFileEmbeddings(
+      supabaseAdmin,
+      projectId,
+      file,
+      openAIKey,
+    );
     updatedChecksums[file.path] = contentChecksum;
     if (!errors) {
       numFilesSuccess++;

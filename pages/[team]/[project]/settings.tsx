@@ -543,6 +543,48 @@ const ProjectSettingsPage = () => {
             />
           </Dialog.Root>
         </SettingsCard>
+        <SettingsCard
+          title={<>OpenAI API Key</>}
+          description="Use your own OpenAI API key for increased quotas. Note that depending on your key, some models may not yet be accessible."
+        >
+          <Formik
+            initialValues={{
+              openai_key: project.openai_key,
+            }}
+            validateOnMount
+            onSubmit={async (values, { setSubmitting }) => {
+              _updateProject(values, setSubmitting);
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="flex flex-col gap-1 p-4">
+                  <p className="mb-1 text-xs font-medium text-neutral-300">
+                    OpenAI API key
+                  </p>
+                  <Field
+                    type="text"
+                    name="openai_key"
+                    inputSize="sm"
+                    as={NoAutoInput}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage name="openai_key" component={ErrorLabel} />
+                </div>
+                <CTABar>
+                  <Button
+                    loading={isSubmitting}
+                    variant="plain"
+                    buttonSize="sm"
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+                </CTABar>
+              </Form>
+            )}
+          </Formik>
+        </SettingsCard>
         <SettingsCard title="Delete project">
           <DescriptionLabel>
             The project will be permanently deleted, including all associated

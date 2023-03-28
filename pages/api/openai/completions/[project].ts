@@ -19,6 +19,7 @@ import GPT3Tokenizer from 'gpt3-tokenizer';
 import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
+import { getOpenAIKey } from '@/lib/supabase';
 
 const CONTEXT_TOKENS_CUTOFF = 800;
 
@@ -118,10 +119,12 @@ export default async function handler(req: NextRequest) {
     return new Response('Too many requests', { status: 429 });
   }
 
+  const openAIKey = await getOpenAIKey(supabaseAdmin, projectId);
+
   const sanitizedQuery = prompt.trim().replaceAll('\n', ' ');
 
   // Moderate the content
-  const moderationResponse = await createModeration(sanitizedQuery);
+  const moderationResponse = await createModeration(sanitizedQuery, openAIKey);
   if (moderationResponse?.results?.[0]?.flagged) {
     throw new Error('Flagged content');
   }
@@ -130,10 +133,13 @@ export default async function handler(req: NextRequest) {
   try {
     // Retry with exponential backoff in case of error. Typical cause is
     // too_many_requests.
-    embeddingResult = await backOff(() => createEmbedding(sanitizedQuery), {
-      startingDelay: 10000,
-      numOfAttempts: 10,
-    });
+    embeddingResult = await backOff(
+      () => createEmbedding(sanitizedQuery, openAIKey),
+      {
+        startingDelay: 10000,
+        numOfAttempts: 10,
+      },
+    );
   } catch (error) {
     console.error(
       `[COMPLETIONS] [CREATE-EMBEDDING] [${projectId}] - Error creating embedding for prompt '${prompt}': ${error}`,
@@ -251,7 +257,9 @@ Answer (including related code snippets if available):`;
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY ?? ''}`,
+      Authorization: `Bearer ${
+        (openAIKey || process.env.OPENAI_API_KEY) ?? ''
+      }`,
     },
     method: 'POST',
     body: JSON.stringify(payload),

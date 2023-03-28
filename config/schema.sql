@@ -282,6 +282,7 @@ create table public.projects (
   name                text not null,
   public_api_key      text not null unique,
   private_dev_api_key text not null unique,
+  openai_key          text,
   github_repo         text,
   team_id             uuid references public.teams on delete cascade not null,
   is_starter          boolean not null default false,

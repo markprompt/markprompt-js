@@ -300,6 +300,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
               Icon={GitHubIcon}
             >
               Star on GitHub
+              <span className="ml-2 text-neutral-600">{stars}</span>
             </Button>
           </div>
           <p className="pt-20 text-center text-neutral-700">Live with</p>
