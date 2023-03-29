@@ -41,7 +41,7 @@ import Component2 from "/path/to/component2
 
 export {
   Component1,
-  Compoment2,
+  Component2,
   // ...
 }
 \`\`\`
