@@ -140,7 +140,7 @@ export const generateFileEmbeddings = async (
   supabaseAdmin: SupabaseClient,
   projectId: Project['id'],
   file: FileData,
-  openAIKey: string | undefined,
+  byoOpenAIKey: string | undefined,
 ) => {
   let embeddingsTokenCount = 0;
   let errors: { path: string; message: string }[] = [];
@@ -185,7 +185,7 @@ export const generateFileEmbeddings = async (
       // Retry with exponential backoff in case of error. Typical cause is
       // too_many_requests.
       const embeddingResult = await backOff(
-        () => createEmbedding(input, openAIKey),
+        () => createEmbedding(input, byoOpenAIKey),
         {
           startingDelay: 10000,
           numOfAttempts: 10,

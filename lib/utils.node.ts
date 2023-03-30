@@ -1,8 +1,11 @@
 // Node-dependent utilities. Cannot run on edge runtimes.
+import fs, { promises as promisesFs } from 'fs';
+import unzip from 'unzipper';
 import grayMatter from 'gray-matter';
 import yaml from 'js-yaml';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
+import { FileData } from '@/types/types';
 
 export const extractFrontmatter = (
   source: string,
@@ -49,4 +52,36 @@ export const useDebouncedState = <T>(
   }, [newValue]);
 
   return [currentValue, setNewValue];
+};
+
+export const extractFileDataEntriesFromZip = async (
+  path: string,
+): Promise<FileData[]> => {
+  const filesWithPath: FileData[] = [];
+
+  await new Promise((resolve, reject) => {
+    fs.createReadStream(path)
+      .pipe(unzip.Parse())
+      .on('entry', async (entry: any) => {
+        if (
+          entry.type !== 'File' ||
+          entry.path.startsWith('.') ||
+          entry.path.includes('/.')
+        ) {
+          // Ignore dotfiles, e.g. '.DS_Store'
+          return;
+        }
+        const content = await entry.buffer();
+        filesWithPath.push({
+          path: entry.path,
+          name: entry.path.split('/').slice(-1)[0],
+          content: content.toString(),
+        });
+        entry.autodrain();
+      })
+      .on('error', reject)
+      .on('finish', resolve);
+  });
+
+  return filesWithPath;
 };

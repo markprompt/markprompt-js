@@ -23,7 +23,7 @@ export default async function TrainMiddleware(req: NextRequest) {
   // when comparing requester hosts. So only requests with a valid
   // authorization bearer token will be accepted here.
 
-  if (!req.ip) {
+  if (process.env.NODE_ENV === 'production' && !req.ip) {
     return new Response('Forbidden', { status: 403 });
   }
 
@@ -33,24 +33,25 @@ export default async function TrainMiddleware(req: NextRequest) {
     return noTokenResponse;
   }
 
-  // Apply rate limiting here already based on IP. After that, apply rate
-  // limiting on requester token.
-  const rateLimitIPResult = await checkCompletionsRateLimits({
-    value: req.ip,
-    type: 'ip',
-  });
+  if (process.env.NODE_ENV === 'production' && req.ip) {
+    // Apply rate limiting here already based on IP. After that, apply rate
+    // limiting on requester token.
+    const rateLimitIPResult = await checkCompletionsRateLimits({
+      value: req.ip,
+      type: 'ip',
+    });
 
-  if (!rateLimitIPResult.result.success) {
-    console.error(
-      `[TRAIN] [RATE-LIMIT] IP ${req.ip}, token: ${truncateMiddle(
-        token,
-        2,
-        2,
-      )}`,
-    );
-    return new Response('Too many requests', { status: 429 });
+    if (!rateLimitIPResult.result.success) {
+      console.error(
+        `[TRAIN] [RATE-LIMIT] IP ${req.ip}, token: ${truncateMiddle(
+          token,
+          2,
+          2,
+        )}`,
+      );
+      return new Response('Too many requests', { status: 429 });
+    }
   }
-
   // Apply rate-limit here already, before looking up the project id,
   // which requires a database lookup.
   const rateLimitResult = await checkCompletionsRateLimits({

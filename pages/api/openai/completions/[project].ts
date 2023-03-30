@@ -19,7 +19,7 @@ import GPT3Tokenizer from 'gpt3-tokenizer';
 import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
-import { getOpenAIKey } from '@/lib/supabase';
+import { getBYOOpenAIKey } from '@/lib/supabase';
 
 const CONTEXT_TOKENS_CUTOFF = 800;
 
@@ -119,12 +119,15 @@ export default async function handler(req: NextRequest) {
     return new Response('Too many requests', { status: 429 });
   }
 
-  const openAIKey = await getOpenAIKey(supabaseAdmin, projectId);
+  const byoOpenAIKey = await getBYOOpenAIKey(supabaseAdmin, projectId);
 
   const sanitizedQuery = prompt.trim().replaceAll('\n', ' ');
 
   // Moderate the content
-  const moderationResponse = await createModeration(sanitizedQuery, openAIKey);
+  const moderationResponse = await createModeration(
+    sanitizedQuery,
+    byoOpenAIKey,
+  );
   if (moderationResponse?.results?.[0]?.flagged) {
     throw new Error('Flagged content');
   }
@@ -134,7 +137,7 @@ export default async function handler(req: NextRequest) {
     // Retry with exponential backoff in case of error. Typical cause is
     // too_many_requests.
     embeddingResult = await backOff(
-      () => createEmbedding(sanitizedQuery, openAIKey),
+      () => createEmbedding(sanitizedQuery, byoOpenAIKey),
       {
         startingDelay: 10000,
         numOfAttempts: 10,
@@ -258,7 +261,7 @@ Answer (including related code snippets if available):`;
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${
-        (openAIKey || process.env.OPENAI_API_KEY) ?? ''
+        (byoOpenAIKey || process.env.OPENAI_API_KEY) ?? ''
       }`,
     },
     method: 'POST',

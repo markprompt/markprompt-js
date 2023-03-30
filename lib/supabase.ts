@@ -38,7 +38,7 @@ export const createFile = async (
   return data?.id as DbFile['id'];
 };
 
-export const getOpenAIKey = async (
+export const getBYOOpenAIKey = async (
   supabaseAdmin: SupabaseClient,
   projectId: Project['id'],
 ) => {
