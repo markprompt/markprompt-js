@@ -3,6 +3,7 @@ import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const UNAUTHED_PATHS = [
   '/',
+  '/docs',
   '/login',
   '/signup',
   '/legal/terms',

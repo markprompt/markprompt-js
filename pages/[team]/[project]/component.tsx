@@ -323,7 +323,7 @@ const ComponentPage = () => {
         <h2>API access</h2>
         <p>
           If you want to build your own custom component, or use completions in
-          another way, you can make an POST request to the following endpoint,
+          another way, you can make an POST request to the Markprompt API,
           passing in an authorization token that you can obtain in the{' '}
           <Link
             className="subtle-underline"
@@ -331,34 +331,20 @@ const ComponentPage = () => {
           >
             project settings
           </Link>
-          :
+          .
         </p>
-        <DocsCode code={curlCode} language="bash" />
         <p>
-          This will return a{' '}
+          Please refer to the{' '}
           <a
             className="subtle-underline"
-            href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream"
             target="_blank"
             rel="noreferrer"
+            href="/docs#api"
           >
-            ReadableSteam
+            in-depth API docs
           </a>{' '}
-          serving completions in streaming chunks. Supported parameters are:
+          for more details.
         </p>
-        <div className="prose prose-invert py-4">
-          <ul className="prose prose-invert">
-            <li>
-              <code>prompt</code>: The prompt to generate the completions for.
-            </li>
-            <li>
-              <code>iDontKnowMessage</code>: (optional) The fallback message in
-              case no completions were returned.
-            </li>
-          </ul>
-        </div>
-        <p>Here is an example in JavaScript:</p>
-        <DocsCode code={streamingCode} language="typescript" />
       </div>
     </ProjectSettingsLayout>
   );

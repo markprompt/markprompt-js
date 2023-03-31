@@ -76,7 +76,6 @@ export default async function handler(
 
   const byoOpenAIKey = await getBYOOpenAIKey(supabaseAdmin, projectId);
 
-  console.log('filesWithPath', JSON.stringify(filesWithPath, null, 2));
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
   for (const file of filesWithPath) {

@@ -4,6 +4,10 @@
 
 @import 'prism.css';
 
+:root {
+  --scroll-margin-top: 120px;
+}
+
 html,
 body {
   max-width: 100vw;
@@ -17,6 +21,19 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.prose a:not(.not-prose) {
+  @apply border-b border-dotted border-neutral-700 font-medium no-underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  scroll-margin-top: var(--scroll-margin-top) !important;
 }
 
 input,

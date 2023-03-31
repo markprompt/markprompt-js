@@ -4,12 +4,21 @@ import { MotifIcon } from '../icons/Motif';
 import { Slash } from '../ui/Slash';
 import { GitHubIcon } from '../icons/GitHub';
 import { DiscordIcon } from '../icons/Discord';
+import cn from 'classnames';
 
-export default function LandingNavbar() {
+export default function LandingNavbar({
+  noAnimation,
+}: {
+  noAnimation?: boolean;
+}) {
   const session = useSession();
 
   return (
-    <div className="animate-slide-down-delayed flex flex-row items-center gap-6 py-8">
+    <div
+      className={cn('flex h-24 flex-row items-center gap-6 py-8', {
+        'animate-slide-down-delayed': !noAnimation,
+      })}
+    >
       <div className="flex flex-none flex-row items-center gap-2 text-white">
         <a href="https://motif.land">
           <MotifIcon className="h-8 w-8 select-none text-neutral-100" />
@@ -23,12 +32,18 @@ export default function LandingNavbar() {
         </Link>
       </div>
       <div className="flex-grow" />
-      <a
+      <Link
         className="hidden transform text-sm font-medium text-white opacity-60 hover:opacity-100 sm:block"
-        href="#pricing"
+        href="/#pricing"
       >
         Pricing
-      </a>
+      </Link>
+      <Link
+        className="hidden transform text-sm font-medium text-white opacity-60 hover:opacity-100 sm:block"
+        href="/docs"
+      >
+        Docs
+      </Link>
       {session ? (
         <Link
           className="button-glow flex flex-row items-center gap-3 rounded-md px-4 py-2 text-sm font-semibold transition dark:bg-white dark:text-neutral-900 hover:dark:bg-neutral-300"

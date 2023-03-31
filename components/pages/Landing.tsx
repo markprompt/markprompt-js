@@ -28,8 +28,9 @@ import { formatNumQueries } from '@/lib/utils';
 import { Flashing } from '../ui/Flashing';
 import { AnalyticsExample } from '../examples/analytics';
 import { Playground } from '../files/Playground';
+import { SharedHead } from './SharedHead';
 
-const demoPrompt = `How do I publish a component?`;
+const demoPrompt = 'How do I publish a component?';
 
 const demoResponse = `To publish a component on Acme, follow these steps:
 
@@ -226,40 +227,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
 
   return (
     <>
-      <Head>
-        <title>Markprompt | Open Source GPT-4 platform for Markdown</title>
-        <meta property="og:title" content="Markprompt" />
-        <meta
-          name="description"
-          content="Open-source GPT-4 platform for Markdown, Markdoc and MDX with built-in analytics"
-          key="desc"
-        />
-        <meta
-          property="og:description"
-          content="Open-source GPT-4 platform for Markdown, Markdoc and MDX with built-in analytics"
-        />
-
-        <meta property="og:url" content="https://markprompt.com/" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Markprompt" />
-        <meta
-          property="og:image"
-          content="https://markprompt.com/static/cover.png"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content="markprompt.com" />
-        <meta property="twitter:url" content="https://markprompt.com/" />
-        <meta name="twitter:title" content="Markprompt" />
-        <meta
-          name="twitter:description"
-          content="Open-source GPT-4 platform for Markdown, Markdoc and MDX with built-in analytics"
-        />
-        <meta
-          name="twitter:image"
-          content="https://markprompt.com/static/cover.png"
-        />
-      </Head>
+      <SharedHead title="Markprompt | Open Source GPT-4 platform for Markdown" />
       <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
         <Pattern />
         <LandingNavbar />
