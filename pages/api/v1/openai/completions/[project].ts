@@ -81,7 +81,10 @@ export default async function handler(req: NextRequest) {
   const params = await req.json();
   const model = stringToModel(params.model);
   const prompt = (params.prompt as string).substring(0, MAX_PROMPT_LENGTH);
-  const iDontKnowMessage = (params.iDontKnowMessage as string) || I_DONT_KNOW;
+  const iDontKnowMessage =
+    (params.i_dont_know_message as string) || // v1
+    (params.iDontKnowMessage as string) || // v0
+    I_DONT_KNOW;
 
   const { pathname, searchParams } = new URL(req.url);
 

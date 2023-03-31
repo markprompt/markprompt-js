@@ -69,7 +69,7 @@ export const processFile = async (
   fileData: FileData,
   forceRetrain: boolean,
 ) => {
-  await fetch('/api/openai/train-file', {
+  await fetch('/api/v1/openai/train-file', {
     method: 'POST',
     body: JSON.stringify({
       file: fileData,

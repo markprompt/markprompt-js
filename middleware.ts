@@ -24,9 +24,12 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (hostname === 'api.markprompt.com' || hostname === 'api.localhost:3000') {
     const path = req.nextUrl.pathname;
 
-    if (path?.startsWith('/completions')) {
+    if (
+      path?.startsWith('/completions') ||
+      path?.startsWith('/v1/completions')
+    ) {
       return CompletionsMiddleware(req);
-    } else if (path?.startsWith('/train')) {
+    } else if (path?.startsWith('/train') || path?.startsWith('/v1/train')) {
       return TrainMiddleware(req);
     }
   }

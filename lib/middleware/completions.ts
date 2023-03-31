@@ -1,5 +1,4 @@
 import { Database } from '@/types/supabase';
-import { Project } from '@/types/types';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
@@ -144,6 +143,6 @@ export default async function CompletionsMiddleware(req: NextRequest) {
   }
 
   return NextResponse.rewrite(
-    new URL(`/api/openai/completions/${projectId}`, req.url),
+    new URL(`/api/v1/openai/completions/${projectId}`, req.url),
   );
 }

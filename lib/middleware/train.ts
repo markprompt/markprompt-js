@@ -19,7 +19,7 @@ const supabaseAdmin = createClient<Database>(
 export default async function TrainMiddleware(req: NextRequest) {
   // Requests to api.markprompt.com/train come exclusively from external
   // sources. Indeed, in the Markprompt dashboard, the internal
-  // route /api/openai/train-file is used, and it will be cauche
+  // route /api/v1/openai/train-file is used, and it will be cauche
   // when comparing requester hosts. So only requests with a valid
   // authorization bearer token will be accepted here.
 
@@ -79,6 +79,6 @@ export default async function TrainMiddleware(req: NextRequest) {
   }
 
   return NextResponse.rewrite(
-    new URL(`/api/openai/train/${projectId}`, req.url),
+    new URL(`/api/v1/openai/train/${projectId}`, req.url),
   );
 }
