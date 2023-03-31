@@ -3,7 +3,7 @@ import { Project, Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import { getAvailableProjectSlug } from '../../slug/generate-project-slug';
-import { generateKey } from '@/lib/utils';
+import { generateKey, generateSKTestKey } from '@/lib/utils';
 
 type Data =
   | {
@@ -51,6 +51,7 @@ export default async function handler(
     const { name, candidateSlug, githubRepo } = req.body;
     const slug = await getAvailableProjectSlug(supabase, teamId, candidateSlug);
     const public_api_key = generateKey();
+    const private_dev_api_key = generateSKTestKey();
     let { data, error } = await supabase
       .from('projects')
       .insert([
@@ -61,6 +62,7 @@ export default async function handler(
           github_repo: githubRepo,
           created_by: session.user.id,
           public_api_key,
+          private_dev_api_key,
         },
       ])
       .select('*')

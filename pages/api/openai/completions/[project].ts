@@ -5,7 +5,7 @@ import {
   MAX_PROMPT_LENGTH,
   STREAM_SEPARATOR,
 } from '@/lib/constants';
-import { DbFile, OpenAIModel, Project } from '@/types/types';
+import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
 import { createClient } from '@supabase/supabase-js';
 import { backOff } from 'exponential-backoff';
 import { CreateEmbeddingResponse } from 'openai';
@@ -19,6 +19,7 @@ import GPT3Tokenizer from 'gpt3-tokenizer';
 import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
+import { getBYOOpenAIKey } from '@/lib/supabase';
 
 const CONTEXT_TOKENS_CUTOFF = 800;
 
@@ -26,7 +27,7 @@ export const config = {
   runtime: 'edge',
 };
 
-const getPayload = (prompt: string, model: OpenAIModel) => {
+const getPayload = (prompt: string, model: OpenAIModelIdWithType) => {
   const payload = {
     model: model.value,
     temperature: 0.1,
@@ -50,7 +51,7 @@ const getPayload = (prompt: string, model: OpenAIModel) => {
   }
 };
 
-const getChunkText = (response: any, model: OpenAIModel) => {
+const getChunkText = (response: any, model: OpenAIModelIdWithType) => {
   switch (model.type) {
     case 'chat_completions': {
       return response.choices[0].delta.content;
@@ -118,10 +119,15 @@ export default async function handler(req: NextRequest) {
     return new Response('Too many requests', { status: 429 });
   }
 
+  const byoOpenAIKey = await getBYOOpenAIKey(supabaseAdmin, projectId);
+
   const sanitizedQuery = prompt.trim().replaceAll('\n', ' ');
 
   // Moderate the content
-  const moderationResponse = await createModeration(sanitizedQuery);
+  const moderationResponse = await createModeration(
+    sanitizedQuery,
+    byoOpenAIKey,
+  );
   if (moderationResponse?.results?.[0]?.flagged) {
     throw new Error('Flagged content');
   }
@@ -130,10 +136,13 @@ export default async function handler(req: NextRequest) {
   try {
     // Retry with exponential backoff in case of error. Typical cause is
     // too_many_requests.
-    embeddingResult = await backOff(() => createEmbedding(sanitizedQuery), {
-      startingDelay: 10000,
-      numOfAttempts: 10,
-    });
+    embeddingResult = await backOff(
+      () => createEmbedding(sanitizedQuery, byoOpenAIKey),
+      {
+        startingDelay: 10000,
+        numOfAttempts: 10,
+      },
+    );
   } catch (error) {
     console.error(
       `[COMPLETIONS] [CREATE-EMBEDDING] [${projectId}] - Error creating embedding for prompt '${prompt}': ${error}`,
@@ -251,7 +260,9 @@ Answer (including related code snippets if available):`;
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY ?? ''}`,
+      Authorization: `Bearer ${
+        (byoOpenAIKey || process.env.OPENAI_API_KEY) ?? ''
+      }`,
     },
     method: 'POST',
     body: JSON.stringify(payload),

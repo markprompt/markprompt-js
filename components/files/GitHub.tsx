@@ -193,6 +193,9 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
                   };
                 },
                 async (i) => mdFiles[i].content,
+                () => {
+                  mutateFiles();
+                },
               );
               await mutateFiles();
               setIsTrainingInitiatedByGitHub(false);

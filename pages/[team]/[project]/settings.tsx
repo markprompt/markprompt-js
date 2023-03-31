@@ -35,15 +35,26 @@ import { useCallback, useState } from 'react';
 import { Domain, Project, Token } from '@/types/types';
 import { isGitHubRepoAccessible } from '@/lib/github';
 import useDomains from '@/lib/hooks/use-domains';
-import { CopyIcon, Cross2Icon, TrashIcon } from '@radix-ui/react-icons';
+import {
+  CopyIcon,
+  Cross2Icon,
+  SymbolIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import {
   copyToClipboard,
+  generateKey,
+  generateSKTestKey,
   isValidDomain,
   removeSchema,
   truncateMiddle,
 } from '@/lib/utils';
 import useTokens from '@/lib/hooks/use-tokens';
 import { Tag } from '@/components/ui/Tag';
+import Link from 'next/link';
+import cn from 'classnames';
+import { createClient } from '@supabase/supabase-js';
+import { Database } from '@/types/supabase';
 
 const ProjectSettingsPage = () => {
   const router = useRouter();
@@ -53,6 +64,8 @@ const ProjectSettingsPage = () => {
   const { domains, mutate: mutateDomains } = useDomains();
   const { tokens, mutate: mutateTokens } = useTokens();
   const [loading, setLoading] = useState(false);
+  const [isRefreshingDevProjectKey, setIsRefreshingDevProjectKey] =
+    useState(false);
   const [domainToRemove, setDomainToRemove] = useState<Domain | undefined>(
     undefined,
   );
@@ -64,7 +77,7 @@ const ProjectSettingsPage = () => {
   const _updateProject = useCallback(
     async (
       values: Partial<Project>,
-      setSubmitting: (submitting: boolean) => void,
+      setSubmitting?: (submitting: boolean) => void,
     ) => {
       if (!project || !projects || !team) {
         return;
@@ -80,7 +93,7 @@ const ProjectSettingsPage = () => {
         ...projects.filter((p) => p.id !== updatedProject.id),
         updatedProject,
       ]);
-      setSubmitting(false);
+      setSubmitting?.(false);
       toast.success('Project settings saved.');
       if (values.slug && router.query.project !== values.slug) {
         // Redirect if slug has changed
@@ -207,7 +220,6 @@ const ProjectSettingsPage = () => {
                     Public repository URL
                   </p>
                   <Field
-                    value={undefined}
                     type="text"
                     name="github_repo"
                     inputSize="sm"
@@ -341,23 +353,94 @@ const ProjectSettingsPage = () => {
           </CTABar>
         </SettingsCard>
         <SettingsCard
-          title="Public API key"
-          description="This key can safely be used publicly to make requests to the completions endpoint from a whitelisted domain, for instance with the Markprompt React component."
-        >
-          <div className="group flex flex-row items-center gap-2 pt-1 pb-3">
-            <div className="group flex w-full flex-row items-center gap-2 rounded-md px-4 py-1">
-              <div className="truncate py-0.5 font-mono text-sm text-neutral-300">
-                {project.public_api_key}
-              </div>
-              <div className="flex-grow" />
-              <div
-                className="flex-none cursor-pointer rounded-md p-1 text-neutral-300 transition hover:bg-neutral-800"
-                onClick={() => {
-                  copyToClipboard(project.public_api_key);
-                  toast.success('Project API key copied to clipboard.');
-                }}
+          title={<>Project key</>}
+          description={
+            <>
+              The project key can be used to make requests to the completions
+              endpoint, for instance via the{' '}
+              <Link
+                className="subtle-underline"
+                href={`/${team.slug}/${project.slug}/component`}
               >
-                <CopyIcon className="h-4 w-4" />
+                Markprompt React component
+              </Link>
+              .
+            </>
+          }
+        >
+          <div className="flex flex-col gap-2 px-4 py-2">
+            <h3 className="text-sm font-bold">
+              Production{' '}
+              <Tag className="ml-1" size="sm" color="green">
+                Public
+              </Tag>
+            </h3>
+            <p className="text-sm text-neutral-500">
+              This key can be used on public sites, but only from whitelisted
+              domains.
+            </p>
+            <div className="group flex flex-row items-center gap-2 pt-1">
+              <div className="group flex w-full flex-row items-center gap-2 rounded-md py-1">
+                <div className="truncate py-0.5 font-mono text-sm text-neutral-300">
+                  {project.public_api_key}
+                </div>
+                <div className="flex-grow" />
+                <div
+                  className="flex-none cursor-pointer rounded-md p-1 text-neutral-300 transition hover:bg-neutral-800"
+                  onClick={() => {
+                    copyToClipboard(project.public_api_key);
+                    toast.success('Project API key copied to clipboard.');
+                  }}
+                >
+                  <CopyIcon className="h-4 w-4" />
+                </div>
+              </div>
+            </div>
+            <div className="my-4 h-1 w-full border-b border-neutral-900" />
+            <h3 className="text-sm font-bold">
+              Development{' '}
+              <Tag className="ml-1" size="sm" color="orange">
+                Private
+              </Tag>
+            </h3>
+            <p className="text-sm text-neutral-500">
+              This key can be used for local development (e.g. from localhost)
+              and bypasses domain whitelist verification. For that reason, do
+              not use it publicly.
+            </p>
+            <div className="group flex flex-row items-center gap-2 pt-1 pb-3">
+              <div className="group flex w-full flex-row items-center gap-2 rounded-md py-1">
+                <div className="select-none truncate py-0.5 font-mono text-sm text-neutral-300">
+                  {truncateMiddle(project.private_dev_api_key, 10, 4, '***')}
+                </div>
+                <div className="flex-grow" />
+                <div
+                  className="flex-none cursor-pointer rounded-md p-1 text-neutral-300 transition hover:bg-neutral-800"
+                  onClick={() => {
+                    copyToClipboard(project.private_dev_api_key);
+                    toast.success('Project API key copied to clipboard.');
+                  }}
+                >
+                  <CopyIcon className="h-4 w-4" />
+                </div>
+                <div
+                  className={cn(
+                    'flex-none cursor-pointer rounded-md p-1 text-neutral-300 transition',
+                    {
+                      'animate-spin': isRefreshingDevProjectKey,
+                      ' hover:bg-neutral-800': !isRefreshingDevProjectKey,
+                    },
+                  )}
+                  onClick={async () => {
+                    setIsRefreshingDevProjectKey(true);
+                    _updateProject({
+                      private_dev_api_key: generateSKTestKey(),
+                    });
+                    setIsRefreshingDevProjectKey(false);
+                  }}
+                >
+                  <SymbolIcon className="h-4 w-4" />
+                </div>
               </div>
             </div>
           </div>
@@ -386,7 +469,7 @@ const ProjectSettingsPage = () => {
                   className="group flex w-full flex-row items-center gap-2 rounded-md px-4 py-1"
                   key={`domain-${token.value}`}
                 >
-                  <div className="truncate py-0.5 font-mono text-sm text-neutral-300">
+                  <div className="text-neutral-300, select-none truncate py-0.5 font-mono text-sm">
                     {truncateMiddle(token.value, 2, 4, '***')}
                   </div>
                   <div className="flex-grow" />
@@ -459,6 +542,48 @@ const ProjectSettingsPage = () => {
               }}
             />
           </Dialog.Root>
+        </SettingsCard>
+        <SettingsCard
+          title={<>OpenAI API Key</>}
+          description="Use your own OpenAI API key for increased quotas. Note that depending on your key, some models may not yet be accessible."
+        >
+          <Formik
+            initialValues={{
+              openai_key: project.openai_key,
+            }}
+            validateOnMount
+            onSubmit={async (values, { setSubmitting }) => {
+              _updateProject(values, setSubmitting);
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="flex flex-col gap-1 p-4">
+                  <p className="mb-1 text-xs font-medium text-neutral-300">
+                    OpenAI API key
+                  </p>
+                  <Field
+                    type="text"
+                    name="openai_key"
+                    inputSize="sm"
+                    as={NoAutoInput}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage name="openai_key" component={ErrorLabel} />
+                </div>
+                <CTABar>
+                  <Button
+                    loading={isSubmitting}
+                    variant="plain"
+                    buttonSize="sm"
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+                </CTABar>
+              </Form>
+            )}
+          </Formik>
         </SettingsCard>
         <SettingsCard title="Delete project">
           <DescriptionLabel>

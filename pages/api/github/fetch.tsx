@@ -41,8 +41,12 @@ const extractFromZip = async (
     if (!isSupportedExtension(relativePath)) {
       continue;
     }
-    let path = relativePath;
-    if (path.startsWith('.')) {
+
+    // In a GitHub archive, the file tree is contained in a top-level
+    // parent folder named `<repo>-<branch>`. We don't want to have
+    // references to this folder in the exposed file tree.
+    let path = relativePath.split('/').slice(1).join('/');
+    if (path.startsWith('.') || path.includes('/.')) {
       // Ignore files in dot folders, like .github
       continue;
     }
@@ -74,6 +78,12 @@ const getCompressedPayloadUntilLimit = (files: PathContentData[]) => {
   return Buffer.from(compress(JSON.stringify({ files: filesToSend })));
 };
 
+const fetchRepo = async (owner: string, repo: string, branch: string) => {
+  return fetch(
+    `https://github.com/${owner}/${repo}/archive/refs/heads/${branch}.zip`,
+  );
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
@@ -92,9 +102,20 @@ export default async function handler(
     return res.status(403).json({ error: 'Forbidden' });
   }
 
-  const githubRes = await fetch(
-    `https://github.com/${req.body.owner}/${req.body.repo}/archive/refs/heads/main.zip`,
-  );
+  // Fetch main branch
+  let githubRes = await fetchRepo(req.body.owner, req.body.repo, 'main');
+
+  if (githubRes.status !== 200) {
+    // If main branch doesn't exist, fallback to master
+    githubRes = await fetchRepo(req.body.owner, req.body.repo, 'master');
+  }
+
+  if (githubRes.status !== 200) {
+    return res.status(404).json({
+      error:
+        'Failed to download repository. Make sure the main or master branch is accessible.',
+    });
+  }
 
   const ab = await githubRes.arrayBuffer();
   const jsZip = new JSZip();
@@ -110,6 +131,7 @@ export default async function handler(
   // If we're below the limit, which we will be most of the time,
   // we send it as is.
   let compressed = Buffer.from(compress(JSON.stringify({ files })));
+
   if (compressed.length < PAYLOAD_MAX_SIZE_BYTES) {
     return res.status(200).send(compressed);
   }

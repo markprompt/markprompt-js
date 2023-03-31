@@ -4,13 +4,13 @@ import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import { getProjectChecksumsKey, safeGetObject } from '@/lib/redis';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
-import { createHash } from 'crypto';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
 import { createClient } from '@supabase/supabase-js';
 import { createChecksum } from '@/lib/utils';
+import { getBYOOpenAIKey } from '@/lib/supabase';
 
 type Data = {
   status?: string;
@@ -24,12 +24,14 @@ const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 );
 
+const allowedMethods = ['POST'];
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
+  if (!req.method || !allowedMethods.includes(req.method)) {
+    res.setHeader('Allow', allowedMethods);
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 
@@ -77,7 +79,14 @@ export default async function handler(
     });
   }
 
-  const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
+  const byoOpenAIKey = await getBYOOpenAIKey(supabaseAdmin, projectId);
+
+  const errors = await generateFileEmbeddings(
+    supabaseAdmin,
+    projectId,
+    file,
+    byoOpenAIKey,
+  );
 
   return res.status(200).json({ status: 'ok', errors });
 }

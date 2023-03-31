@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import { FC, useMemo, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { FileDnd } from '@/components/files/FileDnd';
-import { createChecksum, pluralize } from '@/lib/utils';
+import { createChecksum, pluralize, truncate } from '@/lib/utils';
 import { toast } from 'react-hot-toast';
 import ConfirmDialog from '@/components/dialogs/Confirm';
 import Link from 'next/link';
@@ -85,24 +85,25 @@ const StatusMessage: FC<StatusMessageProps> = ({
 }) => {
   return (
     <div
-      className={cn('whitespace-nowrap text-sm', {
+      className={cn('flex flex-row items-center whitespace-nowrap text-xs', {
         'text-neutral-500': trainingState.state !== 'loading',
-        'rounded-full bg-fuchsia-900/50 px-3 py-1 font-medium text-fuchsia-400':
-          trainingState.state === 'loading',
+        'text-fuchsia-600': trainingState.state === 'loading',
       })}
     >
       <p className={cn({ 'animate-pulse': trainingState.state === 'loading' })}>
-        {getStatusMessage(trainingState, isDeleting, numSelected, numFiles)}
-        {trainingState.state === 'idle' &&
-          numSelected === 0 &&
-          numFiles > 0 && (
-            <Link href={playgroundPath}>
-              <span className="subtle-underline ml-3 whitespace-nowrap transition hover:text-neutral-300">
-                Query in playground
-              </span>
-            </Link>
-          )}
+        {truncate(
+          getStatusMessage(trainingState, isDeleting, numSelected, numFiles) ||
+            '',
+          80,
+        )}
       </p>
+      {trainingState.state === 'idle' && numSelected === 0 && numFiles > 0 && (
+        <Link href={playgroundPath}>
+          <span className="subtle-underline ml-3 whitespace-nowrap transition hover:text-neutral-300">
+            Query in playground
+          </span>
+        </Link>
+      )}
     </div>
   );
 };
@@ -118,6 +119,7 @@ const Data = () => {
   } = useTrainingContext();
   const [rowSelection, setRowSelection] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDownloadingRepo, setIsDownloadingRepo] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -220,7 +222,7 @@ const Data = () => {
           />
           {trainingState.state !== 'idle' && (
             <p
-              className={cn('text-sm text-neutral-500', {
+              className={cn('text-xs text-neutral-500', {
                 'subtle-underline cursor-pointer':
                   trainingState.state !== 'cancel_requested',
               })}
@@ -284,14 +286,18 @@ const Data = () => {
               )}
               {project?.github_repo && (
                 <Button
-                  loading={trainingState.state === 'loading'}
+                  loading={
+                    trainingState.state === 'loading' || isDownloadingRepo
+                  }
                   variant="cta"
                   buttonSize="sm"
                   onClick={async () => {
                     if (!project.github_repo) {
                       return;
                     }
+                    setIsDownloadingRepo(true);
                     const mdFiles = await getGitHubMDFiles(project.github_repo);
+                    setIsDownloadingRepo(false);
                     await generateEmbeddings(
                       mdFiles.length,
                       (i) => {
@@ -304,6 +310,9 @@ const Data = () => {
                         };
                       },
                       async (i) => mdFiles[i].content,
+                      () => {
+                        mutateFiles();
+                      },
                     );
                     await mutateFiles();
                     toast.success('Processing complete');

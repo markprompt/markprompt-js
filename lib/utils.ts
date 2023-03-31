@@ -1,4 +1,8 @@
-import { HistogramStat, OpenAIModel, TimeInterval } from '@/types/types';
+import {
+  HistogramStat,
+  OpenAIModelIdWithType,
+  TimeInterval,
+} from '@/types/types';
 import slugify from '@sindresorhus/slugify';
 import confetti from 'canvas-confetti';
 import { createHash } from 'crypto';
@@ -351,7 +355,17 @@ export const generateKey = customAlphabet(
   32,
 );
 
-export const stringToModel = (param?: string): OpenAIModel => {
+const SK_TEST_PREFIX = 'sk_test_';
+
+export const generateSKTestKey = () => {
+  return SK_TEST_PREFIX + generateKey();
+};
+
+export const isSKTestKey = (key: string | null) => {
+  return key?.startsWith(SK_TEST_PREFIX);
+};
+
+export const stringToModel = (param?: string): OpenAIModelIdWithType => {
   switch (param) {
     case 'gpt-4':
     case 'gpt-4-0314':

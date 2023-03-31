@@ -17,11 +17,12 @@ export interface OpenAIStreamPayload {
 
 export const createModeration = async (
   input: string,
+  byoOpenAIKey: string | undefined,
 ): Promise<CreateModerationResponse> => {
   return fetch('https://api.openai.com/v1/moderations', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY!}`,
+      Authorization: `Bearer ${byoOpenAIKey || process.env.OPENAI_API_KEY!}`,
     },
     method: 'POST',
     body: JSON.stringify({ input }),
@@ -30,11 +31,12 @@ export const createModeration = async (
 
 export const createEmbedding = async (
   input: string,
+  byoOpenAIKey: string | undefined,
 ): Promise<CreateEmbeddingResponse> => {
   return await fetch('https://api.openai.com/v1/embeddings', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY!}`,
+      Authorization: `Bearer ${byoOpenAIKey || process.env.OPENAI_API_KEY!}`,
     },
     method: 'POST',
     body: JSON.stringify({

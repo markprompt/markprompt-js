@@ -1,10 +1,12 @@
 import { Database } from '@/types/supabase';
-import { createClient } from '@supabase/supabase-js';
+import { Project } from '@/types/types';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
 import {
   getAuthorizationToken,
   getHost,
+  isSKTestKey,
   removeSchema,
   truncateMiddle,
 } from '../utils';
@@ -49,6 +51,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
   let projectId;
   if (requesterOrigin) {
+    // Browser requests
     const requesterHost = removeSchema(requesterOrigin);
 
     const rateLimitHostnameResult = await checkCompletionsRateLimits({
@@ -69,12 +72,17 @@ export default async function CompletionsMiddleware(req: NextRequest) {
       projectId = path.split('/').slice(-1)[0];
     } else {
       const projectKey = req.nextUrl.searchParams.get('projectKey');
+      const _isSKTestKey = isSKTestKey(projectKey);
 
       // Admin supabase needed here, as the projects table is subject to RLS
       let { data } = await supabaseAdmin
         .from('projects')
         .select('id')
-        .match({ public_api_key: projectKey })
+        .match(
+          _isSKTestKey
+            ? { private_dev_api_key: projectKey }
+            : { public_api_key: projectKey },
+        )
         .limit(1)
         .select()
         .maybeSingle();
@@ -84,21 +92,24 @@ export default async function CompletionsMiddleware(req: NextRequest) {
         return new Response('Project not found', { status: 404 });
       }
 
-      projectId = data?.id;
+      projectId = data.id;
 
       // Now that we have a project id, we need to check that the
       // the project has whitelisted the domain the request comes from.
-      // Admin supabase needed here, as the projects table is subject to RLS
-      let { count } = await supabaseAdmin
-        .from('domains')
-        .select('id', { count: 'exact' })
-        .eq('project_id', projectId);
+      // Admin supabase needed here, as the projects table is subject to RLS.
+      // We bypass this check if the key is a test key.
+      if (!_isSKTestKey) {
+        let { count } = await supabaseAdmin
+          .from('domains')
+          .select('id', { count: 'exact' })
+          .eq('project_id', projectId);
 
-      if (count === 0) {
-        return new Response(
-          'This domain is not allowed to access completions for this project',
-          { status: 401 },
-        );
+        if (count === 0) {
+          return new Response(
+            'This domain is not allowed to access completions for this project',
+            { status: 401 },
+          );
+        }
       }
     }
   } else {

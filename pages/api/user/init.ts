@@ -2,7 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import slugify from '@sindresorhus/slugify';
-import { generateKey, generateRandomSlug, slugFromEmail } from '@/lib/utils';
+import {
+  generateKey,
+  generateRandomSlug,
+  generateSKTestKey,
+  slugFromEmail,
+} from '@/lib/utils';
 import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 import { Project, Team } from '@/types/types';
 import { createClient } from '@supabase/supabase-js';
@@ -118,6 +123,7 @@ export default async function handler(
   if (!project) {
     // Create a starter project
     const public_api_key = generateKey();
+    const private_dev_api_key = generateSKTestKey();
     const { data, error: projectError } = await supabase
       .from('projects')
       .insert([
@@ -128,6 +134,7 @@ export default async function handler(
           created_by: session.user.id,
           team_id: team.id,
           public_api_key,
+          private_dev_api_key,
         },
       ])
       .select('*')

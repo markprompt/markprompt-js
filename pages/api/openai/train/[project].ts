@@ -1,18 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { IncomingForm } from 'formidable';
-import fs, { promises as promisesFs } from 'fs';
-import unzip from 'unzipper';
 import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import { ProjectChecksums, FileData, Project } from '@/types/types';
 import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
 import { Database } from '@/types/supabase';
-import { createHash } from 'crypto';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
-import { createChecksum, pluralize } from '@/lib/utils';
+import { createChecksum, getNameFromPath, pluralize } from '@/lib/utils';
 import { createClient } from '@supabase/supabase-js';
+import { getBYOOpenAIKey } from '@/lib/supabase';
 
 type Data = {
   status?: string;
@@ -22,24 +19,20 @@ type Data = {
 const MAX_FILE_SIZE = 9_000_000;
 const ACCEPTED_MIME_TYPES = ['text/plain', 'application/octet-stream'];
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 // Admin access to Supabase, bypassing RLS.
 const supabaseAdmin = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 );
 
+const allowedMethods = ['POST'];
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
+  if (!req.method || !allowedMethods.includes(req.method)) {
+    res.setHeader('Allow', allowedMethods);
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 
@@ -67,66 +60,13 @@ export default async function handler(
     });
   }
 
-  const data: any = await new Promise((resolve, reject) => {
-    const form = new IncomingForm();
-    form.parse(req, (err, fields, files) => {
-      if (err) return reject(err);
-      resolve({ fields, files });
-    });
+  const filesWithPath: FileData[] = Object.keys(req.body).map((path) => {
+    return {
+      path,
+      name: getNameFromPath(path),
+      content: req.body[path],
+    };
   });
-
-  const file = data?.files?.file;
-
-  if (!file) {
-    return res.status(400).json({ error: 'Missing file.' });
-  }
-
-  if (file.size > MAX_FILE_SIZE) {
-    return res.status(413).json({ error: 'Payload too large.' });
-  }
-
-  if (!ACCEPTED_MIME_TYPES.includes(file.mimetype)) {
-    return res.status(415).json({
-      error: 'Unsupported file type. Only text and zip files are supported.',
-    });
-  }
-
-  const filesWithPath: FileData[] = [];
-
-  const path = file?.filepath;
-
-  if (file.mimetype === 'application/octet-stream') {
-    await new Promise((resolve, reject) => {
-      fs.createReadStream(path)
-        .pipe(unzip.Parse())
-        .on('entry', async (entry: any) => {
-          if (
-            entry.type !== 'File' ||
-            entry.path.startsWith('.') ||
-            entry.path.includes('/.')
-          ) {
-            // Ignore dotfiles, e.g. '.DS_Store'
-            return;
-          }
-          const content = await entry.buffer();
-          filesWithPath.push({
-            path: entry.path,
-            name: entry.path.split('/').slice(-1)[0],
-            content: content.toString(),
-          });
-          entry.autodrain();
-        })
-        .on('error', reject)
-        .on('finish', resolve);
-    });
-  } else {
-    const content = await promisesFs.readFile(path, { encoding: 'utf8' });
-    filesWithPath.push({
-      path: file.originalFilename,
-      name: file.originalFilename,
-      content,
-    });
-  }
 
   let updatedChecksums: ProjectChecksums = {};
   const checksums: ProjectChecksums = await safeGetObject(
@@ -134,6 +74,9 @@ export default async function handler(
     {},
   );
 
+  const byoOpenAIKey = await getBYOOpenAIKey(supabaseAdmin, projectId);
+
+  console.log('filesWithPath', JSON.stringify(filesWithPath, null, 2));
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
   for (const file of filesWithPath) {
@@ -146,12 +89,18 @@ export default async function handler(
       continue;
     }
 
-    const errors = await generateFileEmbeddings(supabaseAdmin, projectId, file);
+    const errors = await generateFileEmbeddings(
+      supabaseAdmin,
+      projectId,
+      file,
+      byoOpenAIKey,
+    );
+
     updatedChecksums[file.path] = contentChecksum;
-    if (!errors) {
-      numFilesSuccess++;
-    } else {
+    if (errors && errors.length > 0) {
       allFileErrors = [...allFileErrors, ...errors];
+    } else {
+      numFilesSuccess++;
     }
   }
 

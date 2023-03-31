@@ -276,15 +276,17 @@ comment on table public.teams is 'Teams data.';
 
 -- Projects
 create table public.projects (
-  id            uuid primary key default uuid_generate_v4(),
-  inserted_at   timestamp with time zone default timezone('utc'::text, now()) not null,
-  slug           text not null,
-  name           text not null,
-  public_api_key text not null unique,
-  github_repo    text,
-  team_id        uuid references public.teams on delete cascade not null,
-  is_starter     boolean not null default false,
-  created_by     uuid references public.users not null
+  id                   uuid primary key default uuid_generate_v4(),
+  inserted_at         timestamp with time zone default timezone('utc'::text, now()) not null,
+  slug                text not null,
+  name                text not null,
+  public_api_key      text not null unique,
+  private_dev_api_key text not null unique,
+  openai_key          text,
+  github_repo         text,
+  team_id             uuid references public.teams on delete cascade not null,
+  is_starter          boolean not null default false,
+  created_by          uuid references public.users not null
 );
 comment on table public.projects is 'Projects within a team.';
 
