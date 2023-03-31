@@ -390,7 +390,7 @@ export const stringToModel = (param?: string): OpenAIModelIdWithType => {
 };
 
 export const isSupportedExtension = (path: string) => {
-  return /\.(md|mdx|mdoc|txt)$/.test(path);
+  return /\.(md|mdx|mdoc|html|txt)$/.test(path);
 };
 
 export const getNameFromPath = (path: string) => {

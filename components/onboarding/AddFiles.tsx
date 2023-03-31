@@ -61,6 +61,9 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
             .mdx
           </Tag>
           <Tag variant="fuchsia" className="ml-1.5">
+            .html
+          </Tag>
+          <Tag variant="fuchsia" className="ml-1.5">
             .txt
           </Tag>
         </p>
