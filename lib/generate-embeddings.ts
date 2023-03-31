@@ -156,7 +156,7 @@ export const generateFileEmbeddings = async (
 
   let fileId = await getFileAtPath(supabaseAdmin, projectId, file.path);
 
-  // Delete previous file section data
+  // Delete previous file section data, and update current file
   if (fileId) {
     await supabaseAdmin
       .from('file_sections')

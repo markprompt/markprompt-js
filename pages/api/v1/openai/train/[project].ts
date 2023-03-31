@@ -78,6 +78,7 @@ export default async function handler(
 
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
+
   for (const file of filesWithPath) {
     // Check the checksum, and skip if equals
     const contentChecksum = createChecksum(file.content);
