@@ -1,4 +1,5 @@
 import Markdoc from '@markdoc/markdoc';
+import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { backOff } from 'exponential-backoff';
 import type { Content, Root } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
@@ -8,18 +9,17 @@ import { mdxjs } from 'micromark-extension-mdxjs';
 import TurndownService from 'turndown';
 import { u } from 'unist-builder';
 import { filter } from 'unist-util-filter';
-import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 
-import { DbFile, Project, FileData } from '@/types/types';
-import { getFileType } from '@/lib/utils';
-import { extractFrontmatter } from '@/lib/utils.node';
-import { createFile, getFileAtPath } from '@/lib/supabase';
+import { MIN_CONTENT_LENGTH } from '@/lib/constants';
+import { createEmbedding } from '@/lib/openai.edge';
 import {
   getProjectEmbeddingsMonthTokenCountKey,
   getRedisClient,
 } from '@/lib/redis';
-import { MIN_CONTENT_LENGTH } from '@/lib/constants';
-import { createEmbedding } from '@/lib/openai.edge';
+import { createFile, getFileAtPath } from '@/lib/supabase';
+import { getFileType } from '@/lib/utils';
+import { extractFrontmatter } from '@/lib/utils.node';
+import { DbFile, FileData, Project } from '@/types/types';
 
 type FileSectionData = {
   sections: string[];
@@ -117,12 +117,19 @@ const splitMarkdocIntoSections = (content: string): string[] => {
   return splitMarkdownIntoSections(md, false);
 };
 
+const splitHtmlIntoSections = (content: string): string[] => {
+  const md = turndown.turndown(content);
+  return splitMarkdownIntoSections(md, false);
+};
+
 const processFile = (file: FileData): FileSectionData => {
   let sections: string[] = [];
   const meta = extractFrontmatter(file.content);
   const fileType = getFileType(file.name);
   if (fileType === 'mdoc') {
     sections = splitMarkdocIntoSections(file.content);
+  } else if (fileType === 'html') {
+    sections = splitHtmlIntoSections(file.content);
   } else {
     try {
       sections = splitMarkdownIntoSections(file.content, true);

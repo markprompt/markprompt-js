@@ -4,17 +4,17 @@ import {
   TimeInterval,
 } from '@/types/types';
 import slugify from '@sindresorhus/slugify';
+import confetti from 'canvas-confetti';
+import { createHash } from 'crypto';
+import { customAlphabet } from 'nanoid';
+import tailwindColors from 'tailwindcss/colors';
 import type { Config } from 'unique-names-generator';
 import {
-  uniqueNamesGenerator,
   adjectives,
-  colors,
   animals,
+  colors,
+  uniqueNamesGenerator,
 } from 'unique-names-generator';
-import confetti from 'canvas-confetti';
-import tailwindColors from 'tailwindcss/colors';
-import { customAlphabet } from 'nanoid';
-import { createHash } from 'crypto';
 
 const pako = require('pako');
 
@@ -201,7 +201,7 @@ export const decompress = (compressedString: Buffer): string => {
   return pako.inflate(compressedString, { to: 'string' });
 };
 
-export type FileType = 'mdx' | 'mdoc' | 'md' | 'txt';
+export type FileType = 'mdx' | 'mdoc' | 'md' | 'html' | 'txt';
 
 export const getFileType = (name: string): FileType => {
   const extension = name.match(/\.(\w*)$/)?.[1];
@@ -212,6 +212,8 @@ export const getFileType = (name: string): FileType => {
       return 'mdx';
     case 'md':
       return 'md';
+    case 'html':
+      return 'html';
     default:
       return 'txt';
   }
