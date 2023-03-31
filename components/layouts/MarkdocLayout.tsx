@@ -354,9 +354,20 @@ export const MarkdocLayout: FC<MarkdocLayoutProps> = ({
         </div>
         <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
           <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-38rem))] right-auto z-20 hidden w-72 overflow-y-auto pb-10 lg:block">
-            <div className="mt-[84px] flex flex-col gap-1">
+            <div className="mt-[84px] flex flex-col gap-1 pb-12">
               <TableOfContents toc={toc} currentSection={currentSection} />
             </div>
+            <p className="fixed bottom-4 -ml-4 rounded-full bg-black/20 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition hover:text-neutral-300">
+              Powered by{' '}
+              <a
+                href="https://motif.land"
+                className="subtle-underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Motif
+              </a>
+            </p>
           </div>
           <div className="relative w-full max-w-full overflow-hidden sm:pl-72">
             <div className="prose prose-invert max-w-screen-md px-8 pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400">
