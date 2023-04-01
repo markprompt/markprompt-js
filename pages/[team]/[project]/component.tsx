@@ -45,11 +45,11 @@ const curlCode = `
 curl -L \\
   -H "Authorization: Bearer <TOKEN>" \\
   -d '{"prompt":"How do I self-host a database?"}'
-  https://api.markprompt.com/completions
+  https://api.markprompt.com/v1/completions
 `.trim();
 
 const streamingCode = `
-const res = await fetch('https://api.markprompt.com/completions?projectKey=<projectKey>', {
+const res = await fetch('https://api.markprompt.com/v1/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -57,6 +57,7 @@ const res = await fetch('https://api.markprompt.com/completions?projectKey=<proj
   body: JSON.stringify({
     prompt: "How do I self-host a database?",
     iDontKnowMessage: "I don't know",
+    projectKey: <projectKey>
   }),
 });
 
@@ -156,7 +157,7 @@ const ComponentPage = () => {
               },
             )}
           >
-            <Playground />
+            <Playground projectKey={project.private_dev_api_key} />
           </div>
         </div>
         <h2>Installation and usage</h2>

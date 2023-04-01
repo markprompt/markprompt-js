@@ -10,6 +10,7 @@ import { FC, forwardRef, ReactNode } from 'react';
 import cn from 'classnames';
 import { useLocalStorage } from '@/lib/hooks/utils/use-localstorage';
 import { OpenAIModelId, SUPPORTED_MODELS } from '@/types/types';
+import useProject from '@/lib/hooks/use-project';
 
 type SelectItemProps = {
   className?: string;
@@ -39,6 +40,7 @@ const SelectItem: FC<SelectItemProps> = forwardRef(
 SelectItem.displayName = 'SelectItem';
 
 const PlaygroundPage = () => {
+  const { project } = useProject();
   const [model, setModel] = useLocalStorage<OpenAIModelId>(
     'playground-model',
     'gpt-4',
@@ -47,7 +49,9 @@ const PlaygroundPage = () => {
   return (
     <ProjectSettingsLayout title="Playground" noHeading>
       <div className="panel-glow-color relative mx-auto h-[calc(100vh-240px)] max-w-screen-md rounded-lg border border-neutral-900 bg-neutral-1000 px-8 py-6">
-        <Playground model={model} />
+        {project && (
+          <Playground projectKey={project.private_dev_api_key} model={model} />
+        )}
         <div className="absolute bottom-4 right-4 z-20 flex flex-row items-center gap-1 text-xs text-neutral-500">
           Model:
           <Select.Root onValueChange={setModel} value={model}>

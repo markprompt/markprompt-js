@@ -1,4 +1,5 @@
 import { Database } from '@/types/supabase';
+import { ApiError, Project } from '@/types/types';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
@@ -12,6 +13,7 @@ import {
 import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
+  noTokenOrProjectKeyResponse,
   noTokenResponse,
 } from './common';
 
@@ -23,12 +25,10 @@ const supabaseAdmin = createClient<Database>(
 
 export default async function CompletionsMiddleware(req: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
+    // Check that IP is present and not rate limited
     if (!req.ip) {
       return new Response('Forbidden', { status: 403 });
     }
-
-    // Apply rate limiting here already based on IP. After that, apply rate
-    // limiting on requester origin and token.
 
     const rateLimitIPResult = await checkCompletionsRateLimits({
       value: req.ip,
@@ -45,13 +45,11 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     }
   }
 
-  const path = req.nextUrl.pathname;
   const requesterOrigin = req.headers.get('origin');
+  const requesterHost = requesterOrigin && removeSchema(requesterOrigin);
 
-  let projectId;
-  if (requesterOrigin) {
-    // Browser requests
-    const requesterHost = removeSchema(requesterOrigin);
+  if (requesterHost) {
+    // Browser requests. Check that origin is not rate-limited.
 
     const rateLimitHostnameResult = await checkCompletionsRateLimits({
       value: requesterHost,
@@ -64,62 +62,23 @@ export default async function CompletionsMiddleware(req: NextRequest) {
       );
       return new Response('Too many requests', { status: 429 });
     }
+  }
 
-    if (requesterHost === getHost()) {
-      // Requests from the Markprompt dashboard explicitly specify
-      // the project id in the path: /completions/[project]
-      projectId = path.split('/').slice(-1)[0];
-    } else {
-      const projectKey = req.nextUrl.searchParams.get('projectKey');
-      const _isSKTestKey = isSKTestKey(projectKey);
+  const body = await req.json();
 
-      // Admin supabase needed here, as the projects table is subject to RLS
-      let { data } = await supabaseAdmin
-        .from('projects')
-        .select('id')
-        .match(
-          _isSKTestKey
-            ? { private_dev_api_key: projectKey }
-            : { public_api_key: projectKey },
-        )
-        .limit(1)
-        .select()
-        .maybeSingle();
+  const token = getAuthorizationToken(req.headers.get('Authorization'));
+  // In v0, we support projectKey query parameters
+  const projectKey =
+    body.projectKey || req.nextUrl.searchParams.get('projectKey');
 
-      if (!data?.id) {
-        console.error('Project not found', truncateMiddle(projectKey || ''));
-        return new Response('Project not found', { status: 404 });
-      }
+  if (!token && !projectKey) {
+    return noTokenOrProjectKeyResponse;
+  }
 
-      projectId = data.id;
+  let projectId: Project['id'] | undefined = undefined;
 
-      // Now that we have a project id, we need to check that the
-      // the project has whitelisted the domain the request comes from.
-      // Admin supabase needed here, as the projects table is subject to RLS.
-      // We bypass this check if the key is a test key.
-      if (!_isSKTestKey) {
-        let { count } = await supabaseAdmin
-          .from('domains')
-          .select('id', { count: 'exact' })
-          .eq('project_id', projectId);
-
-        if (count === 0) {
-          return new Response(
-            'This domain is not allowed to access completions for this project',
-            { status: 401 },
-          );
-        }
-      }
-    }
-  } else {
-    // Non-browser requests expect an authorization token.
-    const token = getAuthorizationToken(req.headers.get('Authorization'));
-    if (!token) {
-      return noTokenResponse;
-    }
-
-    // Apply rate-limit here already, before looking up the project id,
-    // which requires a database lookup.
+  if (token) {
+    // If authorization token is present, use this to find the project id
     const rateLimitResult = await checkCompletionsRateLimits({
       value: token,
       type: 'token',
@@ -127,9 +86,11 @@ export default async function CompletionsMiddleware(req: NextRequest) {
 
     if (!rateLimitResult.result.success) {
       console.error(
-        `[COMPLETIONS] [RATE-LIMIT] IP: ${
-          req.ip
-        }, token ${token}, token: ${truncateMiddle(token, 2, 2)}`,
+        `[COMPLETIONS] [RATE-LIMIT] IP: ${req.ip}, token: ${truncateMiddle(
+          token,
+          2,
+          2,
+        )}`,
       );
       return new Response('Too many requests', { status: 429 });
     }
@@ -140,6 +101,62 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     if (!projectId) {
       return noProjectForTokenResponse;
     }
+  }
+
+  if (projectKey) {
+    const _isSKTestKey = isSKTestKey(projectKey);
+
+    // Admin supabase needed here, as the projects table is subject to RLS
+    let { data } = await supabaseAdmin
+      .from('projects')
+      .select('id')
+      .match(
+        _isSKTestKey
+          ? { private_dev_api_key: projectKey }
+          : { public_api_key: projectKey },
+      )
+      .limit(1)
+      .select()
+      .maybeSingle();
+
+    if (!data?.id) {
+      console.error('Project not found', truncateMiddle(projectKey || ''));
+      return new Response(
+        `No project with projectKey ${truncateMiddle(
+          projectKey,
+        )} was found. Please provide a valid project key. You can obtain your project key in the Markprompt dashboard, under project settings.`,
+        { status: 404 },
+      );
+    }
+
+    projectId = data.id;
+
+    // Now that we have a project id, we need to check that the
+    // the project has whitelisted the domain the request comes from.
+    // Admin supabase needed here, as the projects table is subject to RLS.
+    // We bypass this check if the key is a test key.
+    if (!_isSKTestKey) {
+      let { count } = await supabaseAdmin
+        .from('domains')
+        .select('id', { count: 'exact' })
+        .match({ project_id: projectId, name: requesterHost });
+
+      if (count === 0) {
+        return new Response(
+          `The domain ${requesterHost} is not allowed to access completions for the project with key ${truncateMiddle(
+            projectKey,
+          )}. If you need to access completions from a non-whitelisted domain, such as localhost, use a test project key instead.`,
+          { status: 401 },
+        );
+      }
+    }
+  }
+
+  if (!projectId) {
+    return new Response(
+      'No project found matching the provided key or authorization token.',
+      { status: 401 },
+    );
   }
 
   return NextResponse.rewrite(

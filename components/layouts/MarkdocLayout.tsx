@@ -17,7 +17,7 @@ import Markdoc, {
   SchemaAttribute,
   Tag,
 } from '@markdoc/markdoc';
-import { Code, CodePanel } from '../ui/Code';
+import { CodePanel } from '../ui/Code';
 import { Heading } from '../ui/Heading';
 import { Note } from '../ui/Note';
 import { Language } from 'prism-react-renderer';
@@ -25,6 +25,12 @@ import { SharedHead } from '../pages/SharedHead';
 import { Pattern } from '../ui/Pattern';
 import LandingNavbar from './LandingNavbar';
 import { Playground } from '../files/Playground';
+import * as Popover from '@radix-ui/react-popover';
+import {
+  ChatBubbleIcon,
+  Cross2Icon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 
 export const MarkdocContext = createContext<any>(undefined);
 
@@ -193,9 +199,55 @@ export const DocsPlayground = () => {
           },
         )}
       >
-        <Playground />
+        <Playground
+          forceUseProdAPI
+          projectKey={
+            process.env.NODE_ENV === 'production'
+              ? process.env.NEXT_PUBLIC_MARKPROMPT_WEBSITE_DOCS_PROJECT_KEY
+              : process.env.NEXT_PUBLIC_MARKPROMPT_WEBSITE_DOCS_PROJECT_KEY_TEST
+          }
+        />
       </div>
     </div>
+  );
+};
+
+export const DocsSearch = () => {
+  const [promptOpen, setPromptOpen] = useState(false);
+
+  return (
+    <Popover.Root open={promptOpen} onOpenChange={setPromptOpen}>
+      <Popover.Trigger asChild>
+        <button
+          className="flex w-full transform flex-row items-center gap-2 rounded-md border border-neutral-900 p-2 text-left text-sm text-neutral-500 outline-none transition duration-300 hover:bg-neutral-1000"
+          aria-label="Ask docs"
+        >
+          <MagnifyingGlassIcon className="h-4 w-4 flex-none text-neutral-500" />
+          <div className="flex-grow truncate">Ask docs...</div>
+        </button>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content className="animate-chat-window z-20 mr-4 mb-4 w-[calc(100vw-32px)] sm:w-full">
+          <div className="relative mt-4 h-[calc(100vh-240px)] max-h-[560px] w-full overflow-hidden rounded-lg border border-neutral-900 bg-neutral-1000 p-4 shadow-2xl sm:w-[400px]">
+            <Playground
+              forceUseProdAPI
+              projectKey={
+                process.env.NODE_ENV === 'production'
+                  ? process.env.NEXT_PUBLIC_MARKPROMPT_WEBSITE_DOCS_PROJECT_KEY
+                  : process.env
+                      .NEXT_PUBLIC_MARKPROMPT_WEBSITE_DOCS_PROJECT_KEY_TEST
+              }
+            />
+            <Popover.Close
+              className="absolute top-3 right-3 z-20 rounded p-1 outline-none backdrop-blur transition hover:bg-neutral-900"
+              aria-label="Close"
+            >
+              <Cross2Icon className="h-4 w-4 text-neutral-300" />
+            </Popover.Close>
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 };
 
@@ -343,46 +395,52 @@ export const MarkdocLayout: FC<MarkdocLayoutProps> = ({
     useTableOfContents(toc);
 
   return (
-    <div className="mx-auto w-screen">
-      <Pattern />
-      <MarkdocContext.Provider value={{ registerHeading, unregisterHeading }}>
-        <SharedHead title="Markprompt Docs" />
-        <div className="fixed top-0 left-0 right-0 z-30 h-24 bg-black/30 backdrop-blur">
-          <div className="mx-auto max-w-screen-xl px-6 sm:px-8">
-            <LandingNavbar noAnimation />
-          </div>
-        </div>
-        <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
-          <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-38rem))] right-auto z-20 hidden w-72 overflow-y-auto pb-10 lg:block">
-            <div className="mt-[84px] flex flex-col gap-1 pb-12">
-              <TableOfContents toc={toc} currentSection={currentSection} />
-            </div>
-            <p className="fixed bottom-4 -ml-4 rounded-full bg-black/20 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition hover:text-neutral-300">
-              Powered by{' '}
-              <a
-                href="https://motif.land"
-                className="subtle-underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Motif
-              </a>
-            </p>
-          </div>
-          <div className="relative w-full max-w-full overflow-hidden sm:pl-72">
-            <div className="prose prose-invert max-w-screen-md px-8 pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400">
-              {Markdoc.renderers.react(content, React, {
-                components: {
-                  Fence,
-                  Heading,
-                  Note,
-                  Playground: DocsPlayground,
-                },
-              })}
+    <>
+      <SharedHead title="Markprompt Docs" />
+      <div className="mx-auto w-screen">
+        <Pattern />
+        <MarkdocContext.Provider value={{ registerHeading, unregisterHeading }}>
+          <div className="fixed top-0 left-0 right-0 z-30 h-24 bg-black/30 backdrop-blur">
+            <div className="mx-auto max-w-screen-xl px-6 sm:px-8">
+              <LandingNavbar noAnimation />
             </div>
           </div>
-        </div>
-      </MarkdocContext.Provider>
-    </div>
+          <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
+            <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-40rem))] right-auto z-20 hidden w-72 overflow-y-auto px-6 pb-10 sm:px-8 md:block">
+              {/* <div className="mt-[84px] flex flex-col gap-1 pb-12"> */}
+              <div className="mt-[26px] flex flex-col gap-1 pb-12">
+                <div className="mb-4 w-full">
+                  <DocsSearch />
+                </div>
+                <TableOfContents toc={toc} currentSection={currentSection} />
+              </div>
+              <p className="fixed bottom-4 -ml-4 rounded-full bg-black/20 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition hover:text-neutral-300">
+                Powered by{' '}
+                <a
+                  href="https://motif.land"
+                  className="subtle-underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Motif
+                </a>
+              </p>
+            </div>
+            <div className="relative w-full max-w-full overflow-hidden md:pl-72">
+              <div className="prose prose-invert max-w-screen-md px-8 pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-strong:text-neutral-300 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400 prose-thead:border-neutral-800 prose-tr:border-neutral-900">
+                {Markdoc.renderers.react(content, React, {
+                  components: {
+                    Fence,
+                    Heading,
+                    Note,
+                    Playground: DocsPlayground,
+                  },
+                })}
+              </div>
+            </div>
+          </div>
+        </MarkdocContext.Provider>
+      </div>
+    </>
   );
 };

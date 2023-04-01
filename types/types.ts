@@ -70,3 +70,12 @@ export type FileSections = Database['public']['Tables']['file_sections']['Row'];
 export type FileData = { path: string; name: string; content: string };
 export type PathContentData = Pick<FileData, 'path' | 'content'>;
 export type ProjectChecksums = Record<FileData['path'], string>;
+
+export class ApiError extends Error {
+  readonly code: number;
+
+  constructor(code: number, message?: string | null) {
+    super(message || 'API Error');
+    this.code = code;
+  }
+}

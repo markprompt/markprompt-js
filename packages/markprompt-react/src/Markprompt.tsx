@@ -11,7 +11,7 @@ import cn from 'classnames';
 import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 
-const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/completions';
+const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions';
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
 type OpenAIModelId = OpenAIChatCompletionsModelId | OpenAICompletionsModelId;
@@ -113,9 +113,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
 
       try {
         const res = await fetch(
-          `${
-            completionsUrl || MARKPROMPT_COMPLETIONS_URL
-          }?projectKey=${projectKey}`,
+          `${completionsUrl || MARKPROMPT_COMPLETIONS_URL}`,
           {
             method: 'POST',
             headers: {
@@ -125,6 +123,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
               prompt,
               model: model || DEFAULT_MODEL,
               iDontKnowMessage,
+              projectKey,
             }),
           },
         );

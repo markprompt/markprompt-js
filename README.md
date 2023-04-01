@@ -19,6 +19,10 @@ Markprompt is a platform for building GPT-powered prompts. It scans Markdown, Ma
   </a>
 </p>
 
+## Documentation
+
+To use the Markprompt platform as is, please refer to the [Markprompt documentation](https://markprompt.com/docs).
+
 ## Self-hosting
 
 Markprompt is built on top of the following stack:

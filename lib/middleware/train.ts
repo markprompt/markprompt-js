@@ -17,7 +17,7 @@ const supabaseAdmin = createClient<Database>(
 );
 
 export default async function TrainMiddleware(req: NextRequest) {
-  // Requests to api.markprompt.com/train come exclusively from external
+  // Requests to api.markprompt.com/v1/train come exclusively from external
   // sources. Indeed, in the Markprompt dashboard, the internal
   // route /api/v1/openai/train-file is used, and it will be cauche
   // when comparing requester hosts. So only requests with a valid

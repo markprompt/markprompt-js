@@ -13,6 +13,15 @@ export const noTokenResponse = new NextResponse(
   { status: 401, headers: { 'content-type': 'application/json' } },
 );
 
+export const noTokenOrProjectKeyResponse = new NextResponse(
+  JSON.stringify({
+    success: false,
+    message:
+      'An authorization token or a project key needs to be provided. Head over to the Markprompt dashboard and get one under the project settings. Read more on https://markprompt.com/docs.',
+  }),
+  { status: 401, headers: { 'content-type': 'application/json' } },
+);
+
 export const noProjectForTokenResponse = new NextResponse(
   JSON.stringify({
     success: false,

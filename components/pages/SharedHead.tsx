@@ -40,6 +40,7 @@ export const SharedHead: FC<SharedHeadProps> = ({ title }) => {
         name="twitter:image"
         content="https://markprompt.com/static/cover.png"
       />
+      <meta name="viewport" content="width=device-width, user-scalable=no" />
     </Head>
   );
 };

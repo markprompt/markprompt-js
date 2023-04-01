@@ -376,7 +376,7 @@ const ProjectSettingsPage = () => {
               </Tag>
             </h3>
             <p className="text-sm text-neutral-500">
-              This key can be used on public sites, but only from whitelisted
+              Use production keys on public sites, but only from whitelisted
               domains.
             </p>
             <div className="group flex flex-row items-center gap-2 pt-1">
@@ -404,9 +404,9 @@ const ProjectSettingsPage = () => {
               </Tag>
             </h3>
             <p className="text-sm text-neutral-500">
-              This key can be used for local development (e.g. from localhost)
-              and bypasses domain whitelist verification. For that reason, do
-              not use it publicly.
+              Use development keys for local development (e.g. on localhost),
+              bypassing domain whitelist verification. For that reason, do not
+              use a development key publicly.
             </p>
             <div className="group flex flex-row items-center gap-2 pt-1 pb-3">
               <div className="group flex w-full flex-row items-center gap-2 rounded-md py-1">

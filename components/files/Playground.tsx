@@ -13,7 +13,7 @@ import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 import useProject from '@/lib/hooks/use-project';
 import { getOrigin, timeout } from '@/lib/utils';
-import { OpenAIModelId } from '@/types/types';
+import { OpenAIModelId, Project } from '@/types/types';
 
 const Caret = () => {
   return (
@@ -49,6 +49,8 @@ const WithCaret: FC<WithCaretProps> = ({ Component, children, ...rest }) => {
 };
 
 type PlaygroundProps = {
+  projectKey?: string;
+  forceUseProdAPI?: boolean;
   didCompleteFirstQuery?: () => void;
   onDark?: boolean;
   autoScrollDisabled?: boolean;
@@ -61,7 +63,13 @@ type PlaygroundProps = {
   model?: OpenAIModelId;
 };
 
+// The playground is used in three scenarios:
+// - In demo mode for the landing page - it's not referring to any project
+// - In the dashboard, to try out a model. It's using the current active project
+// - In the docs, where it's referring to an external docs project on Markprompt
 export const Playground: FC<PlaygroundProps> = ({
+  projectKey,
+  forceUseProdAPI,
   didCompleteFirstQuery,
   onDark,
   autoScrollDisabled,
@@ -73,8 +81,7 @@ export const Playground: FC<PlaygroundProps> = ({
   iDontKnowMessage,
   model,
 }) => {
-  const { project } = useProject();
-  const [prompt, setPrompt] = useState<string | undefined>(undefined);
+  const [prompt, setPrompt] = useState<string | undefined>('');
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -131,7 +138,11 @@ export const Playground: FC<PlaygroundProps> = ({
     async (e: SyntheticEvent<EventTarget>) => {
       e.preventDefault();
 
-      if (!prompt || !project?.id || isDemoMode) {
+      if (!prompt || isDemoMode) {
+        return;
+      }
+
+      if (!projectKey) {
         return;
       }
 
@@ -141,7 +152,7 @@ export const Playground: FC<PlaygroundProps> = ({
 
       try {
         const res = await fetch(
-          `${getOrigin('api')}/completions/${project.id}`,
+          `${getOrigin('api', !!forceUseProdAPI)}/v1/completions`,
           {
             method: 'POST',
             headers: {
@@ -151,6 +162,7 @@ export const Playground: FC<PlaygroundProps> = ({
               prompt,
               iDontKnowMessage: _iDontKnowMessage,
               model,
+              projectKey,
             }),
           },
         );
@@ -195,7 +207,15 @@ export const Playground: FC<PlaygroundProps> = ({
       }
       setLoading(false);
     },
-    [prompt, project?.id, isDemoMode, _iDontKnowMessage, setAnswerAnimated],
+    [
+      prompt,
+      isDemoMode,
+      projectKey,
+      forceUseProdAPI,
+      _iDontKnowMessage,
+      model,
+      setAnswerAnimated,
+    ],
   );
 
   useEffect(() => {

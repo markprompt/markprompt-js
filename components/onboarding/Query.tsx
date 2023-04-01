@@ -66,6 +66,7 @@ const Query: FC<QueryProps> = ({ goBack, didCompleteFirstQuery, isReady }) => {
                 }}
               >
                 <Playground
+                  projectKey={project.private_dev_api_key}
                   didCompleteFirstQuery={didCompleteFirstQuery}
                   autoScrollDisabled={!isReady}
                   iDontKnowMessage={

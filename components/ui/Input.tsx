@@ -31,6 +31,7 @@ const Input: FC<InputProps> = ({
   return (
     <input
       {...props}
+      value={props.value || undefined}
       className={cn(className, 'input-base', {
         'px-2 py-2 text-sm': inputSize === 'base',
         'px-2 py-1.5 text-sm': inputSize === 'sm',
