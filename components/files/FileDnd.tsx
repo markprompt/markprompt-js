@@ -9,7 +9,6 @@ import {
   getTrainingStateMessage,
   useTrainingContext,
 } from '@/lib/context/training';
-import { createHash } from 'crypto';
 import { ToggleMessage } from '../ui/ToggleMessage';
 import { toast } from 'react-hot-toast';
 
