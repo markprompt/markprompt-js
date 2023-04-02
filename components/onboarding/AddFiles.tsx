@@ -43,8 +43,8 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
 
   const curlCode = `
   curl https://api.${getHost()}/v1/train \\
-    -d '{"/index.mdoc":"...","/docs/intro.mdoc":"..."}' \\
-    -H "Content-Type: application/json" \\
+  --data-binary @content.zip \\
+    -H "Content-Type: application/zip" \\
     -H "Authorization: Bearer ${tokens?.[0]?.value || '<TOKEN>'}"
   `.trim();
 
