@@ -17,8 +17,8 @@ import { createClient } from '@supabase/supabase-js';
 import { getBYOOpenAIKey } from '@/lib/supabase';
 import JSZip from 'jszip';
 import { getBufferFromReadable } from '@/lib/utils.node';
-import fs, { promises as promisesFs } from 'fs';
 import { isPresent } from 'ts-is-present';
+import pLimit from 'p-limit';
 
 type Data = {
   status?: string;
@@ -160,14 +160,14 @@ export default async function handler(
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
 
-  for (const file of filesWithPath) {
+  const processFile = async (file: FileData) => {
     // Check the checksum, and skip if equals
     const contentChecksum = createChecksum(file.content);
 
     if (checksums[file.path] === contentChecksum) {
       updatedChecksums[file.path] = contentChecksum;
       numFilesSuccess++;
-      continue;
+      return;
     }
 
     const errors = await generateFileEmbeddings(
@@ -183,7 +183,17 @@ export default async function handler(
     } else {
       numFilesSuccess++;
     }
-  }
+  };
+
+  // TODO: check how much we can do concurrently without hitting
+  // rate limitations.
+  const limit = pLimit(5);
+
+  await Promise.all(
+    filesWithPath.map((fileWithPath) => {
+      return limit(() => processFile(fileWithPath));
+    }),
+  );
 
   await set(
     getProjectChecksumsKey(projectId),
