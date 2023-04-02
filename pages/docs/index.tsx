@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: { content: JSON.stringify(content), toc },
-    revalidate: 600,
+    revalidate: 60,
   };
 };
 
