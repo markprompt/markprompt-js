@@ -117,6 +117,7 @@ export default async function handler(
         )
       ).filter(isPresent);
     } catch (e) {
+      console.error('Error loading zip:', e);
       return res.status(400).json({ status: `Invalid data: ${e}` });
     }
   } else if (contentType === 'application/json') {
