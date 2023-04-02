@@ -6,6 +6,8 @@ import yaml from 'js-yaml';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import { FileData } from '@/types/types';
+import type { Readable } from 'node:stream';
+import { shouldIncludeFileWithPath } from './utils';
 
 export const extractFrontmatter = (
   source: string,
@@ -63,11 +65,7 @@ export const extractFileDataEntriesFromZip = async (
     fs.createReadStream(path)
       .pipe(unzip.Parse())
       .on('entry', async (entry: any) => {
-        if (
-          entry.type !== 'File' ||
-          entry.path.startsWith('.') ||
-          entry.path.includes('/.')
-        ) {
+        if (entry.type !== 'File' || !shouldIncludeFileWithPath(entry.path)) {
           // Ignore dotfiles, e.g. '.DS_Store'
           return;
         }
@@ -84,4 +82,12 @@ export const extractFileDataEntriesFromZip = async (
   });
 
   return filesWithPath;
+};
+
+export const getBufferFromReadable = async (readable: Readable) => {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
 };

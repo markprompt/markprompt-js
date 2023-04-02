@@ -1,8 +1,11 @@
-import { backOff } from 'exponential-backoff';
 import { Octokit } from 'octokit';
 import { isPresent } from 'ts-is-present';
 import { FileData, PathContentData } from '@/types/types';
-import { decompress, getNameFromPath, isSupportedExtension } from './utils';
+import {
+  decompress,
+  getNameFromPath,
+  shouldIncludeFileWithPath,
+} from './utils';
 
 const JSZip = require('jszip');
 
@@ -89,12 +92,8 @@ export const getRepositoryMDFilesInfo = async (
 
   const mdFileUrls = tree
     .map((f) => {
-      if (f.url && f.path && isSupportedExtension(f.path)) {
+      if (f.url && f.path && shouldIncludeFileWithPath(f.path)) {
         let path = f.path;
-        if (path.startsWith('.')) {
-          // Ignore files in dot folders, like .github
-          return undefined;
-        }
         if (!path.startsWith('/')) {
           path = '/' + path;
         }

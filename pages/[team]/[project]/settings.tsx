@@ -43,7 +43,6 @@ import {
 } from '@radix-ui/react-icons';
 import {
   copyToClipboard,
-  generateKey,
   generateSKTestKey,
   isValidDomain,
   removeSchema,
@@ -53,8 +52,6 @@ import useTokens from '@/lib/hooks/use-tokens';
 import { Tag } from '@/components/ui/Tag';
 import Link from 'next/link';
 import cn from 'classnames';
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
 
 const ProjectSettingsPage = () => {
   const router = useRouter();

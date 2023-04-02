@@ -7,17 +7,37 @@ import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
-import { createChecksum, getNameFromPath, pluralize } from '@/lib/utils';
+import {
+  createChecksum,
+  getNameFromPath,
+  groupInChunks,
+  pluralize,
+  shouldIncludeFileWithPath,
+} from '@/lib/utils';
 import { createClient } from '@supabase/supabase-js';
 import { getBYOOpenAIKey } from '@/lib/supabase';
+import JSZip from 'jszip';
+import { getBufferFromReadable } from '@/lib/utils.node';
+import fs, { promises as promisesFs } from 'fs';
+import { isPresent } from 'ts-is-present';
 
 type Data = {
   status?: string;
   error?: string;
 };
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 const MAX_FILE_SIZE = 9_000_000;
-const ACCEPTED_MIME_TYPES = ['text/plain', 'application/octet-stream'];
+const ACCEPTED_CONTENT_TYPES = [
+  'application/json',
+  'application/octet-stream',
+  'application/zip',
+];
 
 // Admin access to Supabase, bypassing RLS.
 const supabaseAdmin = createClient<Database>(
@@ -60,13 +80,75 @@ export default async function handler(
     });
   }
 
-  const filesWithPath: FileData[] = Object.keys(req.body).map((path) => {
-    return {
-      path,
-      name: getNameFromPath(path),
-      content: req.body[path],
-    };
-  });
+  let filesWithPath: FileData[] = [];
+
+  const buffer = await getBufferFromReadable(req);
+  const contentType = req.headers['content-type'];
+
+  if (!contentType || !ACCEPTED_CONTENT_TYPES.includes(contentType)) {
+    return res.status(400).json({
+      status: `Please specify a content type. Currently supported values are: ${ACCEPTED_CONTENT_TYPES.join(
+        ', ',
+      )}.`,
+    });
+  }
+
+  if (
+    contentType === 'application/zip' ||
+    contentType === 'application/octet-stream'
+  ) {
+    // A zip file is uploaded
+    try {
+      const zip = await JSZip.loadAsync(buffer);
+      filesWithPath = (
+        await Promise.all(
+          Object.keys(zip.files).map(async (k) => {
+            if (!shouldIncludeFileWithPath(k)) {
+              return undefined;
+            }
+            try {
+              const content = await zip.files[k].async('string');
+              const path = k.startsWith('/') ? k : '/' + k;
+              return { path, name: getNameFromPath(k), content };
+            } catch (e) {
+              console.error('Error extracting file:', e);
+              return undefined;
+            }
+          }),
+        )
+      ).filter(isPresent);
+    } catch (e) {
+      return res.status(400).json({ status: `Invalid data: ${e}` });
+    }
+  } else if (contentType === 'application/json') {
+    // Try if this is a raw JSON payload
+    try {
+      const rawBody = buffer.toString('utf8');
+      const body = JSON.parse(rawBody);
+      if (body?.files && Array.isArray(body.files)) {
+        // v1
+        filesWithPath = body.files.map((f: any) => {
+          return {
+            path: f.id,
+            name: getNameFromPath(f.id),
+            content: f.content,
+          };
+        });
+      } else {
+        // v0
+        filesWithPath = Object.keys(body).map((path) => {
+          return {
+            path,
+            name: getNameFromPath(path),
+            content: body[path],
+          };
+        });
+      }
+    } catch (e) {
+      console.error('Error extracting payload', e);
+      return res.status(400).json({ status: `Invalid data: ${e}` });
+    }
+  }
 
   let updatedChecksums: ProjectChecksums = {};
   const checksums: ProjectChecksums = await safeGetObject(

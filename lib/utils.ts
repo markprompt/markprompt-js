@@ -391,8 +391,14 @@ export const stringToModel = (param?: string): OpenAIModelIdWithType => {
   }
 };
 
-export const isSupportedExtension = (path: string) => {
+const isSupportedExtension = (path: string) => {
   return /\.(md|mdx|mdoc|html|txt)$/.test(path);
+};
+
+export const shouldIncludeFileWithPath = (path: string) => {
+  return (
+    !path.startsWith('.') && !path.includes('/.') && isSupportedExtension(path)
+  );
 };
 
 export const getNameFromPath = (path: string) => {

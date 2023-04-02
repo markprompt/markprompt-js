@@ -133,7 +133,6 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
 
         try {
           await processFile(project.id, file, forceRetrain);
-
           // Right after a file has been processed, update the
           // project checksums, so that they are not lost if the
           // operation is aborted.
