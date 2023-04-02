@@ -30,20 +30,23 @@ import {
   useTrainingContext,
 } from '@/lib/context/training';
 import { getGitHubMDFiles, getOwnerRepoString } from '@/lib/github';
+import { GitHubIcon } from '@/components/icons/GitHub';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 // Cf. https://github.com/iamkun/dayjs/issues/297#issuecomment-1202327426
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { GitHubIcon } from '@/components/icons/GitHub';
-import { ExternalLinkIcon } from '@radix-ui/react-icons';
-import { createHash } from 'crypto';
 dayjs.extend(relativeTime);
 
 const getBasePath = (pathWithFile: string) => {
+  if (!pathWithFile.includes('/')) {
+    return '/';
+  }
+
   const parts = pathWithFile.split('/');
-  if (parts.length <= 2) {
+  if (parts.length <= 2 && pathWithFile.startsWith('/')) {
     return '/';
   } else {
-    return parts.slice(1, -1).join('/');
+    return parts.slice(0, -1).join('/').replace(/^\//, '');
   }
 };
 

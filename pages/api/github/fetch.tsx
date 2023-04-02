@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/types/supabase';
 import { PathContentData } from '@/types/types';
-import { compress, isSupportedExtension } from '@/lib/utils';
+import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
 
 const JSZip = require('jszip');
 
@@ -32,24 +32,16 @@ const extractFromZip = async (
     .filter((p) => {
       // Ignore files with unsupported extensions and files in dot
       // folders, like .github.
-      return isSupportedExtension(p) && !p.startsWith('.');
+      return shouldIncludeFileWithPath(p);
     });
 
   for (let i = offset; i < relativePaths.length; i++) {
     const relativePath = relativePaths[i];
 
-    if (!isSupportedExtension(relativePath)) {
-      continue;
-    }
-
     // In a GitHub archive, the file tree is contained in a top-level
     // parent folder named `<repo>-<branch>`. We don't want to have
     // references to this folder in the exposed file tree.
     let path = relativePath.split('/').slice(1).join('/');
-    if (path.startsWith('.') || path.includes('/.')) {
-      // Ignore files in dot folders, like .github
-      continue;
-    }
     if (!path.startsWith('/')) {
       path = '/' + path;
     }
