@@ -1,5 +1,5 @@
 import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
-import { Code } from '@/components/ui/Code';
+import { Code, CodePanel } from '@/components/ui/Code';
 import { copyToClipboard } from '@/lib/utils';
 import { ClipboardIcon } from '@radix-ui/react-icons';
 import { Language } from 'prism-react-renderer';
@@ -95,27 +95,6 @@ export const C = ({ v }: { v: string }) => {
   );
 };
 
-const DocsCode = ({ code, language }: { code: string; language: Language }) => {
-  return (
-    <div className="not-prose relative mb-6 w-full rounded-lg border border-neutral-900 bg-neutral-1000 p-4 text-sm">
-      <div className="overflow-x-auto">
-        <Code language={language} code={code} />
-      </div>
-      <div className="absolute right-[12px] top-[12px] bg-neutral-1000/80 backdrop-blur">
-        <div
-          className="cursor-pointer rounded p-2 transition dark:hover:bg-neutral-900"
-          onClick={() => {
-            copyToClipboard(code);
-            toast.success('Copied!');
-          }}
-        >
-          <ClipboardIcon className="h-4 w-4 text-neutral-500" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ComponentPage = () => {
   const { team } = useTeam();
   const { project } = useProject();
@@ -184,7 +163,7 @@ const ComponentPage = () => {
           </a>
           , paste the following in an MDX, JSX or TSX file:
         </p>
-        <DocsCode code={motifCode} language="jsx" />
+        <CodePanel code={motifCode} language="jsx" />
         <p>
           replacing{' '}
           <code className="text-sm font-normal text-lime-400">
@@ -195,12 +174,12 @@ const ComponentPage = () => {
         </p>
         <h3>Node</h3>
         <p>In Node, install Markprompt via NPM:</p>
-        <DocsCode code={npmCode} language="bash" />
+        <CodePanel code={npmCode} language="bash" />
         <p>
           In your React application, paste the following in an MDX, JSX or TSX
           file:
         </p>
-        <DocsCode code={jsxCode} language="jsx" />
+        <CodePanel code={jsxCode} language="jsx" />
         <p>
           replacing{' '}
           <code className="text-sm font-normal text-lime-400">
@@ -320,7 +299,7 @@ const ComponentPage = () => {
           </tbody>
         </table>
         <p>Example:</p>
-        <DocsCode code={propsExample} language="jsx" />
+        <CodePanel code={propsExample} language="jsx" />
         <h2>API access</h2>
         <p>
           If you want to build your own custom component, or use completions in

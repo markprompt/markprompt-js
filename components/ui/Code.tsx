@@ -39,16 +39,14 @@ export const CodePanel: FC<CodeProps> = ({ code, language, className }) => {
       <div className="overflow-x-auto">
         <Code language={language} code={code} className={className} />
       </div>
-      <div className="absolute right-[12px] top-[12px] bg-neutral-1000/80 backdrop-blur">
-        <div
-          className="cursor-pointer rounded p-2 transition dark:hover:bg-neutral-900"
-          onClick={() => {
-            copyToClipboard(code);
-            toast.success('Copied!');
-          }}
-        >
-          <ClipboardIcon className="h-4 w-4 text-neutral-500" />
-        </div>
+      <div
+        className="absolute right-[12px] top-[12px] cursor-pointer rounded bg-neutral-1000/80 p-2 backdrop-blur transition dark:hover:bg-neutral-900"
+        onClick={() => {
+          copyToClipboard(code);
+          toast.success('Copied!');
+        }}
+      >
+        <ClipboardIcon className="h-4 w-4 text-neutral-500" />
       </div>
     </div>
   );

@@ -166,9 +166,7 @@ const Fence = (props: MarkdocCodeFenceProps) => {
     code = children.join('\\n').trim();
   }
 
-  return (
-    <CodePanel code={code} language={language} className="code-small-md" />
-  );
+  return <CodePanel code={code} language={language} />;
 };
 
 export const DocsPlayground = () => {
