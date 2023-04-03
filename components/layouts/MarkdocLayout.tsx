@@ -21,16 +21,11 @@ import { CodePanel } from '../ui/Code';
 import { Heading } from '../ui/Heading';
 import { Note } from '../ui/Note';
 import { Language } from 'prism-react-renderer';
-import { SharedHead } from '../pages/SharedHead';
 import { Pattern } from '../ui/Pattern';
 import LandingNavbar from './LandingNavbar';
 import { Playground } from '../files/Playground';
 import * as Popover from '@radix-ui/react-popover';
-import {
-  ChatBubbleIcon,
-  Cross2Icon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons';
+import { Cross2Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 export const MarkdocContext = createContext<any>(undefined);
 
@@ -394,50 +389,50 @@ export const MarkdocLayout: FC<MarkdocLayoutProps> = ({
 
   return (
     <>
-      {/* <div className="mx-auto w-screen"> */}
-      <Pattern />
-      <MarkdocContext.Provider value={{ registerHeading, unregisterHeading }}>
-        <div className="fixed top-0 left-0 right-0 z-30 h-24 bg-black/30 backdrop-blur">
-          <div className="mx-auto max-w-screen-xl px-6 sm:px-8">
-            <LandingNavbar noAnimation />
+      <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
+        {/* <div className="mx-auto w-screen"> */}
+        <Pattern />
+        <MarkdocContext.Provider value={{ registerHeading, unregisterHeading }}>
+          <div className="fixed top-0 left-0 right-0 z-30 h-24 bg-black/30 backdrop-blur">
+            <div className="mx-auto max-w-screen-xl px-6 sm:px-8">
+              <LandingNavbar noAnimation />
+            </div>
           </div>
-        </div>
-        <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 sm:px-8">
-          <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-40rem))] right-auto z-20 hidden w-72 overflow-y-auto px-6 pb-10 sm:px-8 md:block">
-            {/* <div className="mt-[84px] flex flex-col gap-1 pb-12"> */}
-            <div className="mt-[26px] flex flex-col gap-1 pb-12">
-              <div className="mb-4 w-full">
-                <DocsSearch />
+          <div className="relative mx-auto min-h-screen max-w-screen-xl">
+            <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-40rem))] right-auto z-20 hidden w-72 overflow-y-auto px-6 pb-10 sm:px-8 md:block">
+              <div className="mt-[26px] flex flex-col gap-1 pb-12">
+                <div className="mb-4 w-full">
+                  <DocsSearch />
+                </div>
+                <TableOfContents toc={toc} currentSection={currentSection} />
               </div>
-              <TableOfContents toc={toc} currentSection={currentSection} />
+              <p className="fixed bottom-4 -ml-4 rounded-full bg-black/20 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition hover:text-neutral-300">
+                Powered by{' '}
+                <a
+                  href="https://motif.land"
+                  className="subtle-underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Motif
+                </a>
+              </p>
             </div>
-            <p className="fixed bottom-4 -ml-4 rounded-full bg-black/20 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition hover:text-neutral-300">
-              Powered by{' '}
-              <a
-                href="https://motif.land"
-                className="subtle-underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Motif
-              </a>
-            </p>
-          </div>
-          <div className="relative w-full max-w-full overflow-hidden md:pl-72">
-            <div className="prose prose-invert max-w-screen-md px-8 pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-strong:text-neutral-300 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400 prose-thead:border-neutral-800 prose-tr:border-neutral-900">
-              {Markdoc.renderers.react(content, React, {
-                components: {
-                  Fence,
-                  Heading,
-                  Note,
-                  Playground: DocsPlayground,
-                },
-              })}
+            <div className="relative w-full max-w-full overflow-hidden md:pl-72">
+              <div className="prose prose-invert max-w-full pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-strong:text-neutral-300 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400 prose-thead:border-neutral-800 prose-tr:border-neutral-900 sm:max-w-screen-md md:px-8">
+                {Markdoc.renderers.react(content, React, {
+                  components: {
+                    Fence,
+                    Heading,
+                    Note,
+                    Playground: DocsPlayground,
+                  },
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      </MarkdocContext.Provider>
-      {/* </div> */}
+        </MarkdocContext.Provider>
+      </div>
     </>
   );
 };
