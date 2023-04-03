@@ -44,7 +44,10 @@ const DocsPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }) => {
   return (
     <>
-      <SharedHead title="Markprompt | Open Source GPT-4 platform for Markdown" />
+      <SharedHead
+        title="Markprompt | Open Source GPT-4 platform for Markdown"
+        coverUrl="https://markprompt.com/static/cover-docs.png"
+      />
       <MarkdocLayout content={JSON.parse(content)} toc={toc} />
     </>
   );
