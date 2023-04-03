@@ -10,6 +10,7 @@ import {
   noteTag,
   playgroundTag,
 } from '@/components/layouts/MarkdocLayout';
+import { SharedHead } from '@/components/pages/SharedHead';
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const res = await fetch(
@@ -41,7 +42,12 @@ const DocsPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   content,
   toc,
 }) => {
-  return <MarkdocLayout content={JSON.parse(content)} toc={toc} />;
+  return (
+    <>
+      <SharedHead title="Markprompt | Open Source GPT-4 platform for Markdown" />
+      <MarkdocLayout content={JSON.parse(content)} toc={toc} />
+    </>
+  );
 };
 
 export default DocsPage;
