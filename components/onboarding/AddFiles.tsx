@@ -1,6 +1,6 @@
 import { FileDnd } from '@/components/files/FileDnd';
 import { Code } from '@/components/ui/Code';
-import { ClipboardIcon } from '@radix-ui/react-icons';
+import { ClipboardIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 import { copyToClipboard, getHost, getOrigin, pluralize } from '@/lib/utils';
 import { toast } from 'react-hot-toast';
 import { FC, ReactNode } from 'react';
@@ -99,7 +99,7 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
               'mt-4 transform cursor-pointer text-center text-sm text-neutral-600 transition duration-500 hover:text-neutral-400',
               {
                 'translate-y-2 opacity-0': files?.length === 0,
-                'translate-y-0 opacity-100': !files || files?.length > 0,
+                'translate-y-0 opacity-100': !files || files.length > 0,
               },
             )}
             onClick={() => onNext()}
@@ -107,6 +107,25 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
             {pluralize(files?.length || 0, 'file', 'files')} ready. Go to
             playground →
           </p>
+          <div
+            className={cn(
+              '-mt-8 flex transform cursor-pointer flex-row items-center justify-center gap-2 text-center  text-sm text-neutral-600 transition duration-500 hover:text-neutral-400',
+              {
+                'translate-y-0': files?.length === 0,
+                'translate-y-8': !files || files.length > 0,
+              },
+            )}
+          >
+            <InfoCircledIcon className="h-4 w-4" />
+            <a
+              className="subtle-underline"
+              target="_blank"
+              rel="noreferrer"
+              href="https://markprompt.com/docs#data-retention"
+            >
+              How is my data stored?
+            </a>
+          </div>
         </div>
       </div>
     </div>
