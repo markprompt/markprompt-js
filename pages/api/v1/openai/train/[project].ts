@@ -161,11 +161,13 @@ export default async function handler(
   let numFilesSuccess = 0;
   let allFileErrors: { path: string; message: string }[] = [];
 
+  const forceRetrain = req.headers['x-markprompt-force-retrain'] === 'true';
+
   const processFile = async (file: FileData) => {
     // Check the checksum, and skip if equals
     const contentChecksum = createChecksum(file.content);
 
-    if (checksums[file.path] === contentChecksum) {
+    if (!forceRetrain && checksums[file.path] === contentChecksum) {
       updatedChecksums[file.path] = contentChecksum;
       numFilesSuccess++;
       return;

@@ -181,7 +181,9 @@ export const generateFileEmbeddings = async (
   }[] = [];
 
   for (const section of sections) {
-    const input = section.replace(/\n/g, ' ');
+    const input = section
+      .replace(/\n/g, ' ')
+      .replace(/!\[(.*?)\]\((.*?)\)/gi, '![$1]()');
 
     // Ignore content shorter than `MIN_CONTENT_LENGTH` characters.
     if (input.length < MIN_CONTENT_LENGTH) {
@@ -221,6 +223,10 @@ export const generateFileEmbeddings = async (
     .insert(embeddingsData);
   if (error) {
     console.error('Error storing embeddings:', error);
+    errors.push({
+      path: file.path,
+      message: `Error storing embeddings: ${error.message}`,
+    });
     // Too large? Attempt one embedding at a time.
     for (const data of embeddingsData) {
       await supabaseAdmin.from('file_sections').insert([data]);

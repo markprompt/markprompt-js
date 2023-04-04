@@ -21,7 +21,7 @@ import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
 import { getBYOOpenAIKey } from '@/lib/supabase';
 
-const CONTEXT_TOKENS_CUTOFF = 800;
+const CONTEXT_TOKENS_CUTOFF = 3000;
 
 export const config = {
   runtime: 'edge',
@@ -255,10 +255,6 @@ Answer (including related code snippets if available):`;
   // count.
   let allText = fullPrompt;
   let didSendHeader = false;
-
-  console.error(
-    `[COMPLETIONS] [LOAD-EMBEDDINGS] [${projectId}] - No relevant sections found`,
-  );
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {
