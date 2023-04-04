@@ -3,6 +3,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Markdoc from '@markdoc/markdoc';
 import React from 'react';
 import {
+  collapseGroupTag,
+  collapseTag,
   createTOC,
   fenceNode,
   headingNode,
@@ -26,6 +28,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     tags: {
       playground: playgroundTag,
       note: noteTag,
+      collapsegroup: collapseGroupTag,
+      collapse: collapseTag,
     },
   };
 

@@ -26,6 +26,7 @@ import LandingNavbar from './LandingNavbar';
 import { Playground } from '../files/Playground';
 import * as Popover from '@radix-ui/react-popover';
 import { Cross2Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Collapse, CollapseGroup } from '../ui/Collapse';
 
 export const MarkdocContext = createContext<any>(undefined);
 
@@ -141,6 +142,21 @@ export const noteTag = {
       type: String,
       default: 'info',
       matches: ['info', 'warning', 'error'],
+    },
+  },
+};
+
+export const collapseGroupTag = {
+  render: 'CollapseGroup',
+  children: ['paragraph', 'tag', 'list'],
+};
+
+export const collapseTag = {
+  render: 'Collapse',
+  children: ['paragraph', 'tag', 'list'],
+  attributes: {
+    title: {
+      type: String,
     },
   },
 };
@@ -422,6 +438,8 @@ export const MarkdocLayout: FC<MarkdocLayoutProps> = ({
               <div className="prose prose-invert max-w-full pt-32 pb-[600px] prose-headings:text-neutral-300 prose-h1:mt-12 prose-p:text-neutral-400 prose-a:text-neutral-400 prose-strong:text-neutral-300 prose-code:rounded prose-code:border prose-code:border-neutral-900 prose-code:bg-neutral-1000 prose-code:px-1 prose-code:py-0.5 prose-code:text-neutral-400 prose-li:text-neutral-400 prose-thead:border-neutral-800 prose-tr:border-neutral-900 sm:max-w-screen-md md:px-8">
                 {Markdoc.renderers.react(content, React, {
                   components: {
+                    Collapse,
+                    CollapseGroup,
                     Fence,
                     Heading,
                     Note,

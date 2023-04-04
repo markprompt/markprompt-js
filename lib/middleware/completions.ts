@@ -1,11 +1,10 @@
 import { Database } from '@/types/supabase';
-import { ApiError, Project } from '@/types/types';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { Project } from '@/types/types';
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkCompletionsRateLimits } from '../rate-limits';
 import {
   getAuthorizationToken,
-  getHost,
   isSKTestKey,
   removeSchema,
   truncateMiddle,

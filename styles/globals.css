@@ -249,6 +249,10 @@ button:not([type='submit']).supabase-auth-ui_ui-button {
   @apply rounded border border-neutral-800 bg-neutral-900 !important;
 }
 
+.collapse-trigger[data-state='open'] > .collapse-chevron {
+  @apply rotate-0;
+}
+
 .animate-menu-up {
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
   animation-fill-mode: both;

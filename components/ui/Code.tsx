@@ -35,7 +35,7 @@ export const Code: FC<CodeProps> = ({ code, language, className }) => {
 
 export const CodePanel: FC<CodeProps> = ({ code, language, className }) => {
   return (
-    <div className="not-prose relative mb-6 w-full rounded-lg border border-neutral-900 bg-neutral-1000 p-4 text-sm">
+    <div className="not-prose relative my-6 w-full rounded-lg border border-neutral-900 bg-neutral-1000 p-4 text-sm">
       <div className="overflow-x-auto">
         <Code language={language} code={code} className={className} />
       </div>
