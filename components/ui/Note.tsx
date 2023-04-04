@@ -1,6 +1,9 @@
 import { ReactNode, FC } from 'react';
 import cn from 'classnames';
-import { InfoCircledIcon } from '@radix-ui/react-icons';
+import {
+  ExclamationTriangleIcon,
+  InfoCircledIcon,
+} from '@radix-ui/react-icons';
 
 type NoteType = 'info' | 'warning' | 'error';
 
@@ -16,6 +19,10 @@ type NoteProps = {
 
 const Icon: FC<IconProps> = ({ type, className }) => {
   switch (type) {
+    case 'warning':
+      return (
+        <ExclamationTriangleIcon className={cn(className, 'text-orange-500')} />
+      );
     default:
       return <InfoCircledIcon className={cn(className, 'text-sky-500')} />;
   }
