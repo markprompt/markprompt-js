@@ -204,7 +204,7 @@ export const generateFileEmbeddings = async (
       embeddingsTokenCount += embeddingResult.usage?.total_tokens ?? 0;
       embeddingsData.push({
         file_id: fileId,
-        content: section,
+        content: input,
         embedding: embeddingResult.data[0].embedding,
         token_count: embeddingResult.usage.total_tokens ?? 0,
       });
