@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { createEmbedding, createModeration } from '@/lib/openai.edge';
 import {
+  CONTEXT_TOKENS_CUTOFF,
   I_DONT_KNOW,
   MAX_PROMPT_LENGTH,
   STREAM_SEPARATOR,
@@ -20,8 +21,6 @@ import { stringToModel } from '@/lib/utils';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
 import { getBYOOpenAIKey } from '@/lib/supabase';
-
-const CONTEXT_TOKENS_CUTOFF = 10000;
 
 export const config = {
   runtime: 'edge',

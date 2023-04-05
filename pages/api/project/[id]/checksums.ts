@@ -60,7 +60,6 @@ export default async function handler(
   } else if (req.method === 'GET') {
     try {
       const checksums = await serverGetChecksums(projectId);
-      console.error('[Checksums] All good');
       return res.status(200).json({ checksums });
     } catch (e) {
       return res.status(400).json({ error: `${e}` });

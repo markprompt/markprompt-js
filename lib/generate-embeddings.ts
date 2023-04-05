@@ -9,8 +9,9 @@ import { mdxjs } from 'micromark-extension-mdxjs';
 import TurndownService from 'turndown';
 import { u } from 'unist-builder';
 import { filter } from 'unist-util-filter';
+import GPT3Tokenizer from 'gpt3-tokenizer';
 
-import { MIN_CONTENT_LENGTH } from '@/lib/constants';
+import { CONTEXT_TOKENS_CUTOFF, MIN_CONTENT_LENGTH } from '@/lib/constants';
 import { createEmbedding } from '@/lib/openai.edge';
 import {
   getProjectEmbeddingsMonthTokenCountKey,
@@ -122,6 +123,41 @@ const splitHtmlIntoSections = (content: string): string[] => {
   return splitMarkdownIntoSections(md, false);
 };
 
+const TOKEN_CUTOFF_ADJUSTED = CONTEXT_TOKENS_CUTOFF * 0.8;
+
+const splitWithinTokenCutoff = (section: string): string[] => {
+  // GPT3Tokenizer is slow, especially on large text. Use the approximated
+  // value instead (1 token ~= 4 characters), and add a little extra
+  // buffer.
+  if (section.length / 4 < TOKEN_CUTOFF_ADJUSTED) {
+    return [section];
+  }
+
+  const subSections: string[] = [];
+  const lines = section.split('\n');
+  let accTokenCounter = 0;
+  let accLines = '';
+
+  let i = 0;
+  for (const line of lines) {
+    const lineTokenCount = line.length / 4;
+    if (accTokenCounter + lineTokenCount < TOKEN_CUTOFF_ADJUSTED) {
+      accLines = accLines + '\n' + line;
+      accTokenCounter = accTokenCounter + lineTokenCount;
+    } else {
+      subSections.push(accLines);
+      accLines = line;
+      accTokenCounter = 0;
+    }
+  }
+
+  if (!!accLines) {
+    subSections.push(accLines);
+  }
+
+  return subSections;
+};
+
 const processFile = (file: FileData): FileSectionData => {
   let sections: string[] = [];
   const meta = extractFrontmatter(file.content);
@@ -140,7 +176,16 @@ const processFile = (file: FileData): FileSectionData => {
       sections = splitMarkdocIntoSections(file.content);
     }
   }
-  return { sections, meta };
+
+  // Now that we have sections, break them up further to stay within
+  // the token limit. This is especially important for plain text files
+  // with no heading separators, or Markdown files with very
+  // large sections. We don't want these to be ignored.
+  const trimmedSections = sections.reduce((acc: string[], value: string) => {
+    const subsections = splitWithinTokenCutoff(value);
+    return [...acc, ...subsections];
+  }, [] as string[]);
+  return { sections: trimmedSections, meta };
 };
 
 export const generateFileEmbeddings = async (
@@ -181,9 +226,7 @@ export const generateFileEmbeddings = async (
   }[] = [];
 
   for (const section of sections) {
-    const input = section
-      .replace(/\n/g, ' ')
-      .replace(/!\[(.*?)\]\((.*?)\)/gi, '![$1]()');
+    const input = section.replace(/\n/g, ' ');
 
     // Ignore content shorter than `MIN_CONTENT_LENGTH` characters.
     if (input.length < MIN_CONTENT_LENGTH) {

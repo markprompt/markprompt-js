@@ -239,7 +239,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
             <TwitterIcon className="h-4 w-4" />
             Introducing Markprompt
           </a> */}
-          <h1 className="gradient-heading mt-28 mt-4 text-center text-5xl leading-[48px] tracking-[-0.6px] sm:text-6xl sm:leading-[64px]">
+          <h1 className="gradient-heading mt-28 text-center text-5xl leading-[48px] tracking-[-0.6px] sm:text-6xl sm:leading-[64px]">
             <Balancer>
               Build a delightful GPT-4 prompt for your Markdown docs
             </Balancer>

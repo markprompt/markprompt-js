@@ -35,7 +35,7 @@ export default async function handler(
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 
-  // Admin supabase does not have sesesion data.
+  // Admin Supabase does not have session data.
   const supabase = createServerSupabaseClient<Database>({ req, res });
   const {
     data: { session },
