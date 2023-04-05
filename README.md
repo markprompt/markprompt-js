@@ -32,7 +32,7 @@ Markprompt is built on top of the following stack:
 - [Typescript](https://www.typescriptlang.org/) - language
 - [Tailwind](https://tailwindcss.com/) - CSS
 - [Upstash](https://upstash.com/) - Redis and rate limiting
-- [Supabase](https://planetscale.com/) - database and auth
+- [Supabase](https://supabase.com/) - database and auth
 - [Stripe](https://stripe.com/) - payments
 - [Plain](https://plain.com/) - support chat
 - [Fathom](https://usefathom.com/) - analytics
