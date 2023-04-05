@@ -60,7 +60,7 @@ const AppContextProvider = (props: PropsWithChildren) => {
   ]);
 
   useEffect(() => {
-    if (!user || user.has_completed_onboarding) {
+    if (!user || user.has_completed_onboarding || router.pathname === '/docs') {
       return;
     }
 

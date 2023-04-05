@@ -39,7 +39,7 @@ const AccordionTrigger = forwardRef(
     <Accordion.Header className="flex w-full">
       <Accordion.Trigger
         className={cn(
-          'collapse-trigger flex w-full flex-row items-center gap-4 py-3 text-base',
+          'collapse-trigger flex w-full flex-row items-center gap-4 py-3 text-base outline-none transition hover:opacity-80',
           className,
         )}
         {...props}
