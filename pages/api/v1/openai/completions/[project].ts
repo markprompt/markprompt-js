@@ -21,7 +21,7 @@ import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { Database } from '@/types/supabase';
 import { getBYOOpenAIKey } from '@/lib/supabase';
 
-const CONTEXT_TOKENS_CUTOFF = 3000;
+const CONTEXT_TOKENS_CUTOFF = 10000;
 
 export const config = {
   runtime: 'edge',
