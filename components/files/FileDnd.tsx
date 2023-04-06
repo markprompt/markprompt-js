@@ -34,8 +34,8 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
     disabled: trainingState.state !== 'idle',
     noClick: true,
     noKeyboard: true,
-    maxFiles: 500,
-    maxSize: 900_000,
+    maxFiles: 1000,
+    maxSize: 4_000_000,
     accept: { 'text/*': ['.md', '.mdoc', '.mdx', '.html', '.txt'] },
     onDragEnter: () => {
       setDragging(true);
@@ -125,7 +125,7 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
                         },
                       )}
                     >
-                      A folder also works
+                      A folder also works. Max size: 4MB.
                     </span>
                   </>
                 }
