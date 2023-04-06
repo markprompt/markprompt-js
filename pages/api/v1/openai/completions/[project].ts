@@ -182,9 +182,9 @@ export default async function handler(req: NextRequest) {
   } = await supabaseAdmin.rpc('match_file_sections', {
     project_id: projectId,
     embedding: promptEmbedding,
-    match_threshold: 0.78,
+    match_threshold: 0.5,
     match_count: 10,
-    min_content_length: 50,
+    min_content_length: 30,
   });
 
   if (error) {
