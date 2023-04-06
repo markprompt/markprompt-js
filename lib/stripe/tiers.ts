@@ -295,7 +295,7 @@ export const TIERS: Record<Tier, TierDetails> = {
       {
         name: 'Scale 3',
         quota: {
-          'gpt-4': 25_000_000,
+          'gpt-4': 2_500_000,
           'gpt-3.5-turbo': 25_000_000,
           byo: 50_000_000,
         },
@@ -312,7 +312,7 @@ export const TIERS: Record<Tier, TierDetails> = {
       {
         name: 'Scale 4',
         quota: {
-          'gpt-4': 50_000_000,
+          'gpt-4': 5_000_000,
           'gpt-3.5-turbo': 50_000_000,
           byo: 100_000_000,
         },
