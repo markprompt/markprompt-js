@@ -107,7 +107,7 @@ export const TeamProjectPicker = () => {
   const { teams, mutate: mutateTeams, loading: loadingTeams } = useTeams();
   const { team } = useTeam();
   const { project, loading: loadingProject } = useProject();
-  const [isNewProjectDialogOpen, setNewProjectDialogOpen] = useState(false);
+  const [isNewTeamDialogOpen, setNewTeamDialogOpen] = useState(false);
 
   if (loadingTeams || !teams || !team) {
     return <></>;
@@ -129,7 +129,7 @@ export const TeamProjectPicker = () => {
         )}
         {user?.has_completed_onboarding && (
           <div className="-ml-2 -mr-2">
-            <TeamPicker onNewTeamClick={() => setNewProjectDialogOpen(true)} />
+            <TeamPicker onNewTeamClick={() => setNewTeamDialogOpen(true)} />
           </div>
         )}
         {!loadingProject && team && project && (
@@ -152,8 +152,8 @@ export const TeamProjectPicker = () => {
         )}
       </div>
       <Dialog.Root
-        open={isNewProjectDialogOpen}
-        onOpenChange={setNewProjectDialogOpen}
+        open={isNewTeamDialogOpen}
+        onOpenChange={setNewTeamDialogOpen}
       >
         <Dialog.Portal>
           <Dialog.Overlay className="animate-overlay-appear dialog-overlay" />
@@ -176,15 +176,13 @@ export const TeamProjectPicker = () => {
                 return errors;
               }}
               onSubmit={async (values, { setSubmitting }) => {
-                if (!team) {
-                  return;
-                }
+                console.log('In here');
                 setSubmitting(true);
                 const newTeam = await createTeam(values.name);
                 await mutateTeams([...(teams || []), newTeam]);
                 setSubmitting(false);
                 toast.success('Team created.');
-                setNewProjectDialogOpen(false);
+                setNewTeamDialogOpen(false);
                 setTimeout(() => {
                   router.replace({
                     pathname: '/[team]',
