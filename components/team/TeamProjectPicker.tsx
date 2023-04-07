@@ -176,7 +176,6 @@ export const TeamProjectPicker = () => {
                 return errors;
               }}
               onSubmit={async (values, { setSubmitting }) => {
-                console.log('In here');
                 setSubmitting(true);
                 const newTeam = await createTeam(values.name);
                 await mutateTeams([...(teams || []), newTeam]);

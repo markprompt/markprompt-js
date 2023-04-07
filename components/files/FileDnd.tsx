@@ -11,6 +11,7 @@ import {
 } from '@/lib/context/training';
 import { ToggleMessage } from '../ui/ToggleMessage';
 import { toast } from 'react-hot-toast';
+import useProject from '@/lib/hooks/use-project';
 
 type FileDndProps = {
   onTrainingComplete: () => void;
@@ -22,6 +23,7 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
   const [trainingComplete, setTrainingComplete] = useState(false);
   const [dragging, setDragging] = useState(false);
   const { mutate: mutateFiles } = useFiles();
+  const { project } = useProject();
   const {
     generateEmbeddings,
     state: trainingState,
@@ -114,9 +116,14 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
                 showMessage1={!hasFiles}
                 message1={
                   <>
-                    {trainingComplete
-                      ? 'Processing complete'
-                      : 'Drop your files here'}
+                    {trainingComplete ? (
+                      'Processing complete'
+                    ) : (
+                      <>
+                        Drop your files here
+                        {project?.github_repo ? ' or sync repo' : ''}
+                      </>
+                    )}
                     <span
                       className={cn(
                         'block text-center text-xs text-neutral-600',
