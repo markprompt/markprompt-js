@@ -96,7 +96,7 @@ const AddFiles: FC<AddFilesProps> = ({ onTrainingComplete, onNext }) => {
           </div>
           <p
             className={cn(
-              'mt-4 transform cursor-pointer text-center text-sm text-neutral-600 transition duration-500 hover:text-neutral-400',
+              'mt-4 transform cursor-pointer text-center text-sm text-sky-600 transition duration-500 hover:text-sky-400',
               {
                 'translate-y-2 opacity-0': files?.length === 0,
                 'translate-y-0 opacity-100': !files || files.length > 0,
