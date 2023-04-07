@@ -25,7 +25,7 @@ type CollapseProps = {
 export const Collapse: FC<CollapseProps> = ({ title, children }) => {
   return (
     <Accordion.Item
-      className="overflow-hidden border-b first:rounded-tl-md first:rounded-tr-md first:border-neutral-800 last:rounded-bl-md last:rounded-br-md last:border-none"
+      className="overflow-hidden border-b border-neutral-800 first:rounded-tl-md first:rounded-tr-md last:rounded-bl-md last:rounded-br-md last:border-none"
       value={title}
     >
       <AccordionTrigger>{title}</AccordionTrigger>
