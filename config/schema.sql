@@ -1,11 +1,12 @@
 -- Users
 create table users (
-  id                       uuid references auth.users on delete cascade not null primary key,
-  updated_at               timestamp with time zone,
-  full_name                text,
-  email                    text unique not null,
-  avatar_url               text,
-  has_completed_onboarding boolean not null default false
+  id                           uuid references auth.users on delete cascade not null primary key,
+  updated_at                   timestamp with time zone,
+  full_name                    text,
+  email                        text unique not null,
+  avatar_url                   text,
+  has_completed_onboarding     boolean not null default false
+  subscribe_to_product_updates boolean not null default false
 );
 
 -- RLS
