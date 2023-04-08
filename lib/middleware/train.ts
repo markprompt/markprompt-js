@@ -1,13 +1,15 @@
-import { Database } from '@/types/supabase';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { checkCompletionsRateLimits } from '../rate-limits';
-import { getAuthorizationToken, truncateMiddle } from '../utils';
+
+import { Database } from '@/types/supabase';
+
 import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
   noTokenResponse,
 } from './common';
+import { checkCompletionsRateLimits } from '../rate-limits';
+import { getAuthorizationToken, truncateMiddle } from '../utils';
 
 // Admin access to Supabase, bypassing RLS.
 const supabaseAdmin = createClient<Database>(

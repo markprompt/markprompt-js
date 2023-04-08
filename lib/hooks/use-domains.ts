@@ -1,7 +1,9 @@
-import { Domain } from '@/types/types';
 import useSWR from 'swr';
-import { fetcher } from '../utils';
+
+import { Domain } from '@/types/types';
+
 import useProject from './use-project';
+import { fetcher } from '../utils';
 
 export default function useDomains() {
   const { project } = useProject();

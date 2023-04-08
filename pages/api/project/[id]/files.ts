@@ -1,7 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { DbFile, Project, ProjectChecksums } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { Database } from '@/types/supabase';
+import { DbFile, Project, ProjectChecksums } from '@/types/types';
+
 import { serverGetChecksums, serverSetChecksums } from './checksums';
 
 type Data =

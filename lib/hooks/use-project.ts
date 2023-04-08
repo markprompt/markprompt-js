@@ -1,10 +1,12 @@
-import { Project } from '@/types/types';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import useSWR from 'swr';
+
+import { Project } from '@/types/types';
+
+import useProjects from './use-projects';
 import { fetcher } from '../utils';
 import { getMarkpromptConfigOrDefault } from '../utils.browser';
-import useProjects from './use-projects';
 
 export default function useProject() {
   const router = useRouter();

@@ -1,8 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { Database } from '@/types/supabase';
 import { DbUser } from '@/types/types';
-import { createClient } from '@supabase/supabase-js';
+
 
 type Data =
   | {

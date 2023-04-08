@@ -1,8 +1,10 @@
-import { Project } from '@/types/types';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { fetcher } from '../utils';
+
+import { Project } from '@/types/types';
+
 import useTeams from './use-teams';
+import { fetcher } from '../utils';
 
 export default function useProjects() {
   const router = useRouter();

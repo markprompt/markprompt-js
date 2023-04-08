@@ -1,14 +1,7 @@
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Dialog from '@radix-ui/react-dialog';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { CheckIcon, CaretSortIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
-import { Slash } from '../ui/Slash';
-import useTeams from '@/lib/hooks/use-teams';
-import useProject from '@/lib/hooks/use-project';
-import useTeam from '@/lib/hooks/use-team';
-import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
-import Button from '../ui/Button';
+import { Session, useSession } from '@supabase/auth-helpers-react';
 import {
   ErrorMessage,
   Field,
@@ -17,13 +10,22 @@ import {
   FormikErrors,
   FormikValues,
 } from 'formik';
-import { NoAutoInput } from '../ui/Input';
-import { ErrorLabel } from '../ui/Forms';
-import { CTABar } from '../ui/SettingsCard';
-import { Session, useSession } from '@supabase/auth-helpers-react';
-import { createTeam } from '@/lib/api';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FC, useState } from 'react';
 import { toast } from 'react-hot-toast';
+
+import { createTeam } from '@/lib/api';
+import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+import useTeams from '@/lib/hooks/use-teams';
 import useUser from '@/lib/hooks/use-user';
+
+import Button from '../ui/Button';
+import { ErrorLabel } from '../ui/Forms';
+import { NoAutoInput } from '../ui/Input';
+import { CTABar } from '../ui/SettingsCard';
+import { Slash } from '../ui/Slash';
 
 const generateTeamName = (session: Session | null) => {
   if (session?.user) {

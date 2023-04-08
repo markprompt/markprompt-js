@@ -1,5 +1,6 @@
-import { Project } from '@/types/types';
 import { Redis } from '@upstash/redis';
+
+import { Project } from '@/types/types';
 
 let redis: Redis | undefined = undefined;
 

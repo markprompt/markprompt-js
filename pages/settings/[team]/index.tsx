@@ -1,13 +1,4 @@
-import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
-import Button from '@/components/ui/Button';
-import { ErrorLabel } from '@/components/ui/Forms';
-import { NoAutoInput } from '@/components/ui/Input';
-import {
-  CTABar,
-  DescriptionLabel,
-  SettingsCard,
-} from '@/components/ui/SettingsCard';
-import useTeam from '@/lib/hooks/use-team';
+import * as Dialog from '@radix-ui/react-dialog';
 import {
   ErrorMessage,
   Field,
@@ -18,10 +9,18 @@ import {
 } from 'formik';
 import Router, { useRouter } from 'next/router';
 import { useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
-import ConfirmDialog from '@/components/dialogs/Confirm';
-import useTeams from '@/lib/hooks/use-teams';
 import { toast } from 'react-hot-toast';
+
+import ConfirmDialog from '@/components/dialogs/Confirm';
+import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
+import Button from '@/components/ui/Button';
+import { ErrorLabel } from '@/components/ui/Forms';
+import { NoAutoInput } from '@/components/ui/Input';
+import {
+  CTABar,
+  DescriptionLabel,
+  SettingsCard,
+} from '@/components/ui/SettingsCard';
 import {
   cancelSubscription,
   deleteTeamAndMemberships,
@@ -29,6 +28,8 @@ import {
   isTeamSlugAvailable,
   updateTeam,
 } from '@/lib/api';
+import useTeam from '@/lib/hooks/use-team';
+import useTeams from '@/lib/hooks/use-teams';
 import useUser from '@/lib/hooks/use-user';
 
 const TeamSettingsPage = () => {

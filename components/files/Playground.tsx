@@ -1,6 +1,3 @@
-import { I_DONT_KNOW, STREAM_SEPARATOR } from '@/lib/constants';
-import { getOrigin, timeout } from '@/lib/utils';
-import { OpenAIModelId } from '@/types/types';
 import cn from 'classnames';
 import {
   FC,
@@ -13,6 +10,10 @@ import {
 } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
+import { I_DONT_KNOW, STREAM_SEPARATOR } from '@/lib/constants';
+import { getOrigin, timeout } from '@/lib/utils';
+import { OpenAIModelId } from '@/types/types';
 
 const Caret = () => {
   return (

@@ -1,9 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
-import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { Database } from '@/types/supabase';
+import { Team } from '@/types/types';
+
+import { getAvailableTeamSlug } from '../slug/generate-team-slug';
+
 
 type Data =
   | {

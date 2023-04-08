@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
+
 import { DbFile, Project } from '@/types/types';
 
 export const getFileAtPath = async (

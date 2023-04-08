@@ -1,6 +1,7 @@
 import Markdoc from '@markdoc/markdoc';
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { backOff } from 'exponential-backoff';
+import GPT3Tokenizer from 'gpt3-tokenizer';
 import type { Content, Root } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { mdxFromMarkdown } from 'mdast-util-mdx';
@@ -9,7 +10,6 @@ import { mdxjs } from 'micromark-extension-mdxjs';
 import TurndownService from 'turndown';
 import { u } from 'unist-builder';
 import { filter } from 'unist-util-filter';
-import GPT3Tokenizer from 'gpt3-tokenizer';
 
 import { CONTEXT_TOKENS_CUTOFF, MIN_CONTENT_LENGTH } from '@/lib/constants';
 import { createEmbedding } from '@/lib/openai.edge';

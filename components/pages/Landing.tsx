@@ -1,34 +1,38 @@
-import LandingNavbar from '@/components/layouts/LandingNavbar';
-import { Pattern } from '@/components/ui/Pattern';
-import { TwitterIcon } from '@/components/icons/Twitter';
-import Button from '@/components/ui/Button';
-import { GitHubIcon } from '@/components/icons/GitHub';
+import * as Slider from '@radix-ui/react-slider';
+import cn from 'classnames';
+import Head from 'next/head';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import Balancer from 'react-wrap-balancer';
+
 import { AngeListIcon } from '@/components/icons/AngelList';
 import { CalIcon } from '@/components/icons/Cal';
-import { ReploIcon } from '@/components/icons/Replo';
-import { Code } from '@/components/ui/Code';
+import { GitHubIcon } from '@/components/icons/GitHub';
 import { MarkpromptIcon } from '@/components/icons/Markprompt';
 import { MotifIcon } from '@/components/icons/Motif';
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import * as Slider from '@radix-ui/react-slider';
+import { ReploIcon } from '@/components/icons/Replo';
+import { TwitterIcon } from '@/components/icons/Twitter';
+import LandingNavbar from '@/components/layouts/LandingNavbar';
 import { Blurs } from '@/components/ui/Blurs';
-import Head from 'next/head';
-import { DiscordIcon } from '../icons/Discord';
-import Balancer from 'react-wrap-balancer';
-import cn from 'classnames';
-import { ListItem } from '../ui/ListItem';
+import Button from '@/components/ui/Button';
+import { Code } from '@/components/ui/Code';
+import { Pattern } from '@/components/ui/Pattern';
 import {
   modelLabels,
   PricedModel,
   TierDetails,
   TIERS,
 } from '@/lib/stripe/tiers';
-import { Segment } from '../ui/Segment';
 import { formatNumQueries } from '@/lib/utils';
-import { Flashing } from '../ui/Flashing';
+
+import { SharedHead } from './SharedHead';
 import { AnalyticsExample } from '../examples/analytics';
 import { Playground } from '../files/Playground';
-import { SharedHead } from './SharedHead';
+import { DiscordIcon } from '../icons/Discord';
+import { Flashing } from '../ui/Flashing';
+import { ListItem } from '../ui/ListItem';
+import { Segment } from '../ui/Segment';
+
+
 
 const demoPrompt = 'How do I publish a component?';
 

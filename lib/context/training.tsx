@@ -1,4 +1,3 @@
-import { FileData } from '@/types/types';
 import {
   createContext,
   FC,
@@ -8,6 +7,9 @@ import {
   useRef,
   useState,
 } from 'react';
+
+import { FileData } from '@/types/types';
+
 import { getChecksums, processFile, setChecksums } from '../api';
 import useProject from '../hooks/use-project';
 import { pluralize, shouldIncludeFileWithPath, truncate } from '../utils';

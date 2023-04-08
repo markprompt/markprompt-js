@@ -1,3 +1,9 @@
+import * as Slider from '@radix-ui/react-slider';
+import cn from 'classnames';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+
 import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
 import Button from '@/components/ui/Button';
 import { Flashing } from '@/components/ui/Flashing';
@@ -16,11 +22,6 @@ import {
   TIERS,
 } from '@/lib/stripe/tiers';
 import { formatNumQueries } from '@/lib/utils';
-import * as Slider from '@radix-ui/react-slider';
-import cn from 'classnames';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
 
 const env =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'production' : 'test';

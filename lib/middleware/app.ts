@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { NextRequest, NextResponse } from 'next/server';
 
 const UNAUTHED_PATHS = [
   '/',

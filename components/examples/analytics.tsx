@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import BarChart from '@/components/charts/bar-chart';
 import { sampleVisitsData } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 
 export const AnalyticsExample = () => {
   const [isMounted, setIsMounted] = useState(false);

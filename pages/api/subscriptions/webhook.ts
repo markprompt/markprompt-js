@@ -1,8 +1,10 @@
+import { Readable } from 'node:stream';
+
+import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { Readable } from 'node:stream';
+
 import { stripe } from '@/lib/stripe/server';
-import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
 
 export const config = {

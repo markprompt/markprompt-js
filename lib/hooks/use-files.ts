@@ -1,7 +1,9 @@
-import { DbFile } from '@/types/types';
 import useSWR from 'swr';
-import { fetcher } from '../utils';
+
+import { DbFile } from '@/types/types';
+
 import useProject from './use-project';
+import { fetcher } from '../utils';
 
 export default function useFiles() {
   const { project } = useProject();

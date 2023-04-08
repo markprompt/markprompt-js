@@ -1,3 +1,4 @@
+import { getResponseOrThrow, slugFromName } from '@/lib/utils';
 import {
   DbFile,
   DbUser,
@@ -8,7 +9,6 @@ import {
   Team,
   Token,
 } from '@/types/types';
-import { getResponseOrThrow, slugFromName } from '@/lib/utils';
 
 export const updateUser = async (values: Partial<DbUser>): Promise<DbUser> => {
   const res = await fetch('/api/user', {

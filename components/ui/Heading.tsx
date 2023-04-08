@@ -1,9 +1,11 @@
 // Adapted from: https://github.com/tailwindlabs/tailwindcss.com/blob/master/src/layouts/ContentsLayout.js
 
-import { useEffect, useContext, useRef } from 'react';
-import { useTop } from '@/lib/hooks/utils/use-top';
-import { MarkdocContext } from '../layouts/MarkdocLayout';
 import cn from 'classnames';
+import { useEffect, useContext, useRef } from 'react';
+
+import { useTop } from '@/lib/hooks/utils/use-top';
+
+import { MarkdocContext } from '../layouts/MarkdocLayout';
 
 export const Heading = ({
   level,

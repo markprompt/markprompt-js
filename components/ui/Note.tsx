@@ -1,9 +1,9 @@
-import { ReactNode, FC } from 'react';
-import cn from 'classnames';
 import {
   ExclamationTriangleIcon,
   InfoCircledIcon,
 } from '@radix-ui/react-icons';
+import cn from 'classnames';
+import { ReactNode, FC } from 'react';
 
 type NoteType = 'info' | 'warning' | 'error';
 

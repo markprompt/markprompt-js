@@ -1,11 +1,11 @@
-import Button from '@/components/ui/Button';
-import { NoAutoInput } from '@/components/ui/Input';
-import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
+import * as Dialog from '@radix-ui/react-dialog';
 import {
-  CTABar,
-  DescriptionLabel,
-  SettingsCard,
-} from '@/components/ui/SettingsCard';
+  CopyIcon,
+  Cross2Icon,
+  SymbolIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
+import cn from 'classnames';
 import {
   ErrorMessage,
   Field,
@@ -14,8 +14,23 @@ import {
   FormikErrors,
   FormikValues,
 } from 'formik';
+import Link from 'next/link';
+import Router, { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
+import { toast } from 'react-hot-toast';
+
+import ConfirmDialog from '@/components/dialogs/Confirm';
+import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
+import Button from '@/components/ui/Button';
 import { ErrorLabel } from '@/components/ui/Forms';
-import useProject from '@/lib/hooks/use-project';
+import { NoAutoInput } from '@/components/ui/Input';
+import {
+  CTABar,
+  DescriptionLabel,
+  SettingsCard,
+} from '@/components/ui/SettingsCard';
+import { Tag } from '@/components/ui/Tag';
+import { NoAutoTextArea } from '@/components/ui/TextArea';
 import {
   addDomain,
   addToken,
@@ -25,22 +40,13 @@ import {
   isProjectSlugAvailable,
   updateProject,
 } from '@/lib/api';
-import Router, { useRouter } from 'next/router';
-import useTeam from '@/lib/hooks/use-team';
-import { toast } from 'react-hot-toast';
-import useProjects from '@/lib/hooks/use-projects';
-import * as Dialog from '@radix-ui/react-dialog';
-import ConfirmDialog from '@/components/dialogs/Confirm';
-import { useCallback, useState } from 'react';
-import { Domain, Project, Token } from '@/types/types';
 import { isGitHubRepoAccessible } from '@/lib/github';
 import useDomains from '@/lib/hooks/use-domains';
-import {
-  CopyIcon,
-  Cross2Icon,
-  SymbolIcon,
-  TrashIcon,
-} from '@radix-ui/react-icons';
+import useProject from '@/lib/hooks/use-project';
+import useProjects from '@/lib/hooks/use-projects';
+import useTeam from '@/lib/hooks/use-team';
+import useTokens from '@/lib/hooks/use-tokens';
+import { DEFAULT_MARKPROMPT_CONFIG, parse } from '@/lib/schema';
 import {
   capitalize,
   copyToClipboard,
@@ -49,12 +55,7 @@ import {
   removeSchema,
   truncateMiddle,
 } from '@/lib/utils';
-import useTokens from '@/lib/hooks/use-tokens';
-import { Tag } from '@/components/ui/Tag';
-import Link from 'next/link';
-import cn from 'classnames';
-import { NoAutoTextArea } from '@/components/ui/TextArea';
-import { DEFAULT_MARKPROMPT_CONFIG, parse } from '@/lib/schema';
+import { Domain, Project, Token } from '@/types/types';
 
 const ProjectSettingsPage = () => {
   const router = useRouter();

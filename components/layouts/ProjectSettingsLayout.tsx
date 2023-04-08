@@ -1,6 +1,8 @@
 import { FC, useMemo } from 'react';
-import useTeam from '@/lib/hooks/use-team';
+
 import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+
 import { NavSubtabsLayout, NavSubtabsLayoutProps } from './NavSubtabsLayout';
 
 export const ProjectSettingsLayout: FC<NavSubtabsLayoutProps> = (props) => {

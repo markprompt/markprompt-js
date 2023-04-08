@@ -1,7 +1,9 @@
-import { Token } from '@/types/types';
 import useSWR from 'swr';
-import { fetcher } from '../utils';
+
+import { Token } from '@/types/types';
+
 import useProject from './use-project';
+import { fetcher } from '../utils';
 
 export default function useTokens() {
   const { project } = useProject();

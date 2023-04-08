@@ -20,13 +20,14 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+
+import LandingNavbar from './LandingNavbar';
 import { Playground } from '../files/Playground';
 import { CodePanel } from '../ui/Code';
 import { Collapse, CollapseGroup } from '../ui/Collapse';
 import { Heading } from '../ui/Heading';
 import { Note } from '../ui/Note';
 import { Pattern } from '../ui/Pattern';
-import LandingNavbar from './LandingNavbar';
 
 export const MarkdocContext = createContext<any>(undefined);
 

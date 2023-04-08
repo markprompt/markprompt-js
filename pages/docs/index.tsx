@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Markdoc from '@markdoc/markdoc';
-import React from 'react';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import React, { FC } from 'react';
+
 import {
   collapseGroupTag,
   collapseTag,

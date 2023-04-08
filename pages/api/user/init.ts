@@ -1,16 +1,19 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import slugify from '@sindresorhus/slugify';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import {
   generateKey,
   generateRandomSlug,
   generateSKTestKey,
   slugFromEmail,
 } from '@/lib/utils';
-import { getAvailableTeamSlug } from '../slug/generate-team-slug';
+import { Database } from '@/types/supabase';
 import { Project, Team } from '@/types/types';
-import { createClient } from '@supabase/supabase-js';
+
+import { getAvailableTeamSlug } from '../slug/generate-team-slug';
+
 
 type Data =
   | {

@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { FC } from 'react';
+
 import Button, { ButtonVariant } from '../ui/Button';
 import { CTABar } from '../ui/SettingsCard';
 

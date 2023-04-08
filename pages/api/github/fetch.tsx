@@ -1,10 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import JSZip from 'jszip';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { PathContentData } from '@/types/types';
-import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
 
-import JSZip from 'jszip';
 
 type Data =
   | {

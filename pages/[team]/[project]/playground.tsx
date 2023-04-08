@@ -1,16 +1,17 @@
-import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
-import { Playground } from '@/components/files/Playground';
-import * as Select from '@radix-ui/react-select';
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@radix-ui/react-icons';
-import { FC, forwardRef, ReactNode } from 'react';
+import * as Select from '@radix-ui/react-select';
 import cn from 'classnames';
+import { FC, forwardRef, ReactNode } from 'react';
+
+import { Playground } from '@/components/files/Playground';
+import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
+import useProject from '@/lib/hooks/use-project';
 import { useLocalStorage } from '@/lib/hooks/utils/use-localstorage';
 import { OpenAIModelId, SUPPORTED_MODELS } from '@/types/types';
-import useProject from '@/lib/hooks/use-project';
 
 type SelectItemProps = {
   className?: string;

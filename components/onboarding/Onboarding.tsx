@@ -1,19 +1,24 @@
-import Head from 'next/head';
-import { NavLayout } from '@/components/layouts/NavLayout';
-import { useCallback, useState } from 'react';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon } from '@radix-ui/react-icons';
 import cn from 'classnames';
+import Head from 'next/head';
+import Router from 'next/router';
+import { useCallback, useState } from 'react';
+import { toast } from 'react-hot-toast';
+
+import { NavLayout } from '@/components/layouts/NavLayout';
+import { updateUser } from '@/lib/api';
+import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+import useUser from '@/lib/hooks/use-user';
+import { showConfetti } from '@/lib/utils';
+
 import AddFiles from './AddFiles';
 import Query from './Query';
 import Button from '../ui/Button';
-import { toast } from 'react-hot-toast';
-import useUser from '@/lib/hooks/use-user';
-import { updateUser } from '@/lib/api';
-import { showConfetti } from '@/lib/utils';
-import Router from 'next/router';
-import useTeam from '@/lib/hooks/use-team';
-import useProject from '@/lib/hooks/use-project';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
+
+
+
 
 const Onboarding = () => {
   const { team } = useTeam();

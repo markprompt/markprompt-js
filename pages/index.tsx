@@ -1,8 +1,9 @@
 import { useSession } from '@supabase/auth-helpers-react';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { FC, memo } from 'react';
-import LandingPage from '@/components/pages/Landing';
+
 import AppPage from '@/components/pages/App';
+import LandingPage from '@/components/pages/Landing';
 
 export interface RawDomainStats {
   timestamp: number;

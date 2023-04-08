@@ -1,10 +1,12 @@
-import Link from 'next/link';
 import { useSession } from '@supabase/auth-helpers-react';
+import cn from 'classnames';
+import Link from 'next/link';
+
+import { DiscordIcon } from '../icons/Discord';
+import { GitHubIcon } from '../icons/GitHub';
 import { MotifIcon } from '../icons/Motif';
 import { Slash } from '../ui/Slash';
-import { GitHubIcon } from '../icons/GitHub';
-import { DiscordIcon } from '../icons/Discord';
-import cn from 'classnames';
+
 
 export default function LandingNavbar({
   noAnimation,

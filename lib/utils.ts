@@ -1,12 +1,10 @@
-import {
-  HistogramStat,
-  OpenAIModelIdWithType,
-  TimeInterval,
-} from '@/types/types';
+import { createHash } from 'crypto';
+
 import slugify from '@sindresorhus/slugify';
 import confetti from 'canvas-confetti';
-import { createHash } from 'crypto';
+import minimatch from 'minimatch';
 import { customAlphabet } from 'nanoid';
+import pako from 'pako';
 import tailwindColors from 'tailwindcss/colors';
 import type { Config } from 'unique-names-generator';
 import {
@@ -15,8 +13,12 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
-import minimatch from 'minimatch';
-import pako from 'pako';
+
+import {
+  HistogramStat,
+  OpenAIModelIdWithType,
+  TimeInterval,
+} from '@/types/types';
 
 const lookup = [
   { value: 1, symbol: '' },

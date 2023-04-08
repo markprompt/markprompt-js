@@ -1,3 +1,9 @@
+import { createClient } from '@supabase/supabase-js';
+import JSZip from 'jszip';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import pLimit from 'p-limit';
+import { isPresent } from 'ts-is-present';
+
 import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import {
   checkEmbeddingsRateLimits,
@@ -15,11 +21,6 @@ import { getMarkpromptConfigOrDefault } from '@/lib/utils.browser';
 import { getBufferFromReadable } from '@/lib/utils.node';
 import { Database } from '@/types/supabase';
 import { FileData, Project, ProjectChecksums } from '@/types/types';
-import { createClient } from '@supabase/supabase-js';
-import JSZip from 'jszip';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import pLimit from 'p-limit';
-import { isPresent } from 'ts-is-present';
 
 type Data = {
   status?: string;

@@ -1,10 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import { SupabaseClient } from '@supabase/auth-helpers-react';
-import { isProjectSlugAvailable } from './is-project-slug-available';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { generateRandomSlug } from '@/lib/utils';
+import { Database } from '@/types/supabase';
+import { Team } from '@/types/types';
+
+
+import { isProjectSlugAvailable } from './is-project-slug-available';
+
 
 type Data =
   | {

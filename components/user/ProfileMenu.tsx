@@ -1,9 +1,10 @@
-import useTeams from '@/lib/hooks/use-teams';
-import useUser from '@/lib/hooks/use-user';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useSession } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import useTeams from '@/lib/hooks/use-teams';
+import useUser from '@/lib/hooks/use-user';
 
 const ProfileMenu = () => {
   const session = useSession();

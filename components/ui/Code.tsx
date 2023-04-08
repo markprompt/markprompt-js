@@ -1,7 +1,8 @@
-import { FC } from 'react';
-import Highlight, { defaultProps, Language } from 'prism-react-renderer';
 import { ClipboardIcon } from '@radix-ui/react-icons';
+import Highlight, { defaultProps, Language } from 'prism-react-renderer';
+import { FC } from 'react';
 import { toast } from 'react-hot-toast';
+
 import { copyToClipboard } from '@/lib/utils';
 
 type CodeProps = {

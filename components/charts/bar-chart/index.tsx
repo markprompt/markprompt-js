@@ -4,13 +4,13 @@ import { GridRows } from '@visx/grid';
 import { ParentSize } from '@visx/responsive';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import { Bar } from '@visx/shape';
+import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 import colors from 'tailwindcss/colors';
 
-import type { TimeInterval } from '@/types/types';
 import { formatNumber, intervalData } from '@/lib/utils';
-import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
+import type { TimeInterval } from '@/types/types';
 
 const LEFT_AXIS_WIDTH = 30;
 const BOTTOM_AXIS_HEIGHT = 30;

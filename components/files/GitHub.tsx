@@ -1,3 +1,7 @@
+import cn from 'classnames';
+import { FC, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+
 import { updateProject } from '@/lib/api';
 import {
   getTrainingStateMessage,
@@ -14,9 +18,7 @@ import useProject from '@/lib/hooks/use-project';
 import useProjects from '@/lib/hooks/use-projects';
 import { MarkpromptConfigType } from '@/lib/schema';
 import { createChecksum, pluralize } from '@/lib/utils';
-import cn from 'classnames';
-import { FC, useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import { ToggleMessage } from '../ui/ToggleMessage';

@@ -1,7 +1,7 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import React, { FC, forwardRef, ReactNode } from 'react';
-import cn from 'classnames';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import cn from 'classnames';
+import React, { FC, forwardRef, ReactNode } from 'react';
 
 type CollapseGroupProps = {
   children: ReactNode;
