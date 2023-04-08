@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "yarn lint:format && yarn lint:js && yarn lint:ts",
+    "lint": "run-p lint:format lint:js lint:ts",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:ts": "tsc"
@@ -116,6 +116,7 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "lint-staged": "13.1.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "8.4.20",
     "prettier": "2.8.1",
     "prettier-plugin-tailwindcss": "0.2.1",
