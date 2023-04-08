@@ -105,6 +105,7 @@ export interface Database {
           id: string
           inserted_at: string
           is_starter: boolean
+          markprompt_config: Json | null
           name: string
           openai_key: string | null
           private_dev_api_key: string
@@ -118,6 +119,7 @@ export interface Database {
           id?: string
           inserted_at?: string
           is_starter?: boolean
+          markprompt_config?: Json | null
           name: string
           openai_key?: string | null
           private_dev_api_key: string
@@ -131,6 +133,7 @@ export interface Database {
           id?: string
           inserted_at?: string
           is_starter?: boolean
+          markprompt_config?: Json | null
           name?: string
           openai_key?: string | null
           private_dev_api_key?: string

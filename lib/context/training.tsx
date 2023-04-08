@@ -16,7 +16,7 @@ import {
   processFile,
 } from '../api';
 import useProject from '../hooks/use-project';
-import { pluralize, truncate } from '../utils';
+import { pluralize, shouldIncludeFileWithPath, truncate } from '../utils';
 
 type IdleState = { state: 'idle' };
 type LoadingState = {
@@ -77,7 +77,7 @@ export const getTrainingStateMessage = (
 };
 
 const TrainingContextProvider = (props: PropsWithChildren) => {
-  const { project } = useProject();
+  const { project, config } = useProject();
   const [state, setState] = useState<TrainingState>({ state: 'idle' });
   const [errors, setErrors] = useState<string[]>([]);
   const stopFlag = useRef(false);
@@ -112,6 +112,17 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
         // could be an expensive operation (GitHub) that might not be
         // needed if the checksums match.
         const fileMeta = getFileMeta(i);
+
+        if (
+          !shouldIncludeFileWithPath(
+            fileMeta.path,
+            config.include || [],
+            config.exclude || [],
+          )
+        ) {
+          console.info('Skipping', fileMeta.path);
+          continue;
+        }
 
         setState({
           state: 'loading',
@@ -150,7 +161,7 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
 
       setState({ state: 'idle' });
     },
-    [project?.id],
+    [project?.id, config],
   );
 
   const stopGeneratingEmbeddings = useCallback(() => {

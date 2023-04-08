@@ -15,6 +15,7 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
+import minimatch from 'minimatch';
 
 const pako = require('pako');
 
@@ -395,10 +396,30 @@ const isSupportedExtension = (path: string) => {
   return /\.(md|mdx|mdoc|html|txt)$/.test(path);
 };
 
-export const shouldIncludeFileWithPath = (path: string) => {
-  return (
-    !path.startsWith('.') && !path.includes('/.') && isSupportedExtension(path)
-  );
+const matchesGlobs = (path: string, globs: string[]) => {
+  return globs.some((g) => minimatch(path, g));
+};
+
+export const shouldIncludeFileWithPath = (
+  path: string,
+  includeGlobs: string[],
+  excludeGlobs: string[],
+) => {
+  if (
+    !(
+      !path.startsWith('.') &&
+      !path.includes('/.') &&
+      isSupportedExtension(path)
+    )
+  ) {
+    // Exclude unsupported files and dotfiles
+    return false;
+  }
+
+  if (matchesGlobs(path, includeGlobs)) {
+    return !matchesGlobs(path, excludeGlobs);
+  }
+  return false;
 };
 
 export const getNameFromPath = (path: string) => {
@@ -407,4 +428,8 @@ export const getNameFromPath = (path: string) => {
 
 export const createChecksum = (content: string) => {
   return createHash('sha256').update(content).digest('base64');
+};
+
+export const capitalize = (text: string) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 };

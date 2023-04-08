@@ -58,6 +58,8 @@ export const useDebouncedState = <T>(
 
 export const extractFileDataEntriesFromZip = async (
   path: string,
+  includeGlobs: string[],
+  excludeGlobs: string[],
 ): Promise<FileData[]> => {
   const filesWithPath: FileData[] = [];
 
@@ -65,7 +67,10 @@ export const extractFileDataEntriesFromZip = async (
     fs.createReadStream(path)
       .pipe(unzip.Parse())
       .on('entry', async (entry: any) => {
-        if (entry.type !== 'File' || !shouldIncludeFileWithPath(entry.path)) {
+        if (
+          entry.type !== 'File' ||
+          !shouldIncludeFileWithPath(entry.path, includeGlobs, excludeGlobs)
+        ) {
           // Ignore dotfiles, e.g. '.DS_Store'
           return;
         }

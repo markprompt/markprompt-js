@@ -35,6 +35,7 @@ import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 // Cf. https://github.com/iamkun/dayjs/issues/297#issuecomment-1202327426
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { MarkpromptConfigType, parse } from '@/lib/schema';
 dayjs.extend(relativeTime);
 
 const getBasePath = (pathWithFile: string) => {
@@ -113,7 +114,7 @@ const StatusMessage: FC<StatusMessageProps> = ({
 
 const Data = () => {
   const { team } = useTeam();
-  const { project } = useProject();
+  const { project, config } = useProject();
   const { files, mutate: mutateFiles, loading: loadingFiles } = useFiles();
   const {
     generateEmbeddings,
@@ -299,7 +300,11 @@ const Data = () => {
                       return;
                     }
                     setIsDownloadingRepo(true);
-                    const mdFiles = await getGitHubMDFiles(project.github_repo);
+                    const mdFiles = await getGitHubMDFiles(
+                      project.github_repo,
+                      config.include || [],
+                      config.exclude || [],
+                    );
                     setIsDownloadingRepo(false);
                     await generateEmbeddings(
                       mdFiles.length,

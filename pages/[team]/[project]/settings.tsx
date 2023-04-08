@@ -42,6 +42,7 @@ import {
   TrashIcon,
 } from '@radix-ui/react-icons';
 import {
+  capitalize,
   copyToClipboard,
   generateSKTestKey,
   isValidDomain,
@@ -52,6 +53,8 @@ import useTokens from '@/lib/hooks/use-tokens';
 import { Tag } from '@/components/ui/Tag';
 import Link from 'next/link';
 import cn from 'classnames';
+import { NoAutoTextArea } from '@/components/ui/TextArea';
+import { DEFAULT_MARKPROMPT_CONFIG, parse } from '@/lib/schema';
 
 const ProjectSettingsPage = () => {
   const router = useRouter();
@@ -567,6 +570,83 @@ const ProjectSettingsPage = () => {
                     disabled={isSubmitting}
                   />
                   <ErrorMessage name="openai_key" component={ErrorLabel} />
+                </div>
+                <CTABar>
+                  <Button
+                    loading={isSubmitting}
+                    variant="plain"
+                    buttonSize="sm"
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+                </CTABar>
+              </Form>
+            )}
+          </Formik>
+        </SettingsCard>
+        <SettingsCard
+          title={<>Configuration</>}
+          description={
+            <>
+              Configure what paths to include and exclude from training, using a{' '}
+              <a
+                className="subtle-underline"
+                href="https://en.wikipedia.org/wiki/Glob_(programming)"
+                target="_blank"
+                rel="noreferrer"
+              >
+                glob pattern
+              </a>
+              .{' '}
+              <Link href="/docs#configuration" className="subtle-underline">
+                Read more in the docs
+              </Link>
+              .
+            </>
+          }
+        >
+          <Formik
+            initialValues={{
+              markprompt_config:
+                JSON.stringify(project.markprompt_config, null, 2) ||
+                DEFAULT_MARKPROMPT_CONFIG,
+            }}
+            validate={async (values) => {
+              let errors: FormikErrors<FormikValues> = {};
+              if (values.markprompt_config) {
+                const parsedConfig = parse(values.markprompt_config as string);
+                if (!parsedConfig && parse.message) {
+                  errors.markprompt_config = `${capitalize(
+                    parse.message,
+                  )} at character ${parse.position}.`;
+                }
+              }
+              return errors;
+            }}
+            validateOnMount
+            onSubmit={async (values, { setSubmitting }) => {
+              const config = parse(values.markprompt_config as string);
+              _updateProject(
+                { markprompt_config: config || { include: [], exclude: [] } },
+                setSubmitting,
+              );
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="flex flex-col gap-1 p-4">
+                  <Field
+                    type="text"
+                    name="markprompt_config"
+                    className="h-[220px] font-mono"
+                    as={NoAutoTextArea}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage
+                    name="markprompt_config"
+                    component={ErrorLabel}
+                  />
                 </div>
                 <CTABar>
                   <Button

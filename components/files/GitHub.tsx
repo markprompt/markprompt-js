@@ -19,7 +19,8 @@ import useProjects from '@/lib/hooks/use-projects';
 import useProject from '@/lib/hooks/use-project';
 import { updateProject } from '@/lib/api';
 import useFiles from '@/lib/hooks/use-files';
-import { createHash } from 'crypto';
+import { MarkpromptConfigType } from '@/lib/schema';
+import { Project } from '@/types/types';
 
 type GitHubProps = {
   onTrainingComplete: () => void;
@@ -80,7 +81,7 @@ const getReadyMessage = (
 
 export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
   const { projects, mutate: mutateProjects } = useProjects();
-  const { project, mutate: mutateProject } = useProject();
+  const { project, config, mutate: mutateProject } = useProject();
   const { mutate: mutateFiles } = useFiles();
   const {
     generateEmbeddings,
@@ -94,26 +95,33 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
   const [isTrainingInitiatedByGitHub, setIsTrainingInitiatedByGitHub] =
     useState(false);
 
-  const checkRepo = useDebouncedCallback(async (url) => {
-    if (!url) {
-      setGitHubState({ state: 'idle' });
-      return;
-    }
-
-    setGitHubState({ state: 'checking' });
-
-    const isAccessible = await isGitHubRepoAccessible(url);
-    if (isAccessible) {
-      const files = await getRepositoryMDFilesInfo(url);
-      if (!files || files.length === 0) {
-        setGitHubState({ state: 'no_files' });
-      } else {
-        setGitHubState({ state: 'ready', numFiles: files.length });
+  const checkRepo = useDebouncedCallback(
+    async (url: string, config: MarkpromptConfigType) => {
+      if (!url || !project) {
+        setGitHubState({ state: 'idle' });
+        return;
       }
-    } else {
-      setGitHubState({ state: 'inaccessible' });
-    }
-  }, 500);
+
+      setGitHubState({ state: 'checking' });
+
+      const isAccessible = await isGitHubRepoAccessible(url);
+      if (isAccessible) {
+        const files = await getRepositoryMDFilesInfo(
+          url,
+          config.include || [],
+          config.exclude || [],
+        );
+        if (!files || files.length === 0) {
+          setGitHubState({ state: 'no_files' });
+        } else {
+          setGitHubState({ state: 'ready', numFiles: files.length });
+        }
+      } else {
+        setGitHubState({ state: 'inaccessible' });
+      }
+    },
+    500,
+  );
 
   const isReady =
     gitHubState.state === 'ready' || gitHubState.state === 'fetching_gh_data';
@@ -144,7 +152,7 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
             type="text"
             onChange={(e: any) => {
               setGitHubUrl(e.target.value);
-              checkRepo(e.target.value);
+              checkRepo(e.target.value, config);
             }}
             placeholder="Enter URL"
             autoComplete="off"
@@ -180,7 +188,11 @@ export const GitHub: FC<GitHubProps> = ({ onTrainingComplete }) => {
                 ...projects.filter((p) => p.id !== updatedProject.id),
                 updatedProject,
               ]);
-              const mdFiles = await getGitHubMDFiles(githubUrl);
+              const mdFiles = await getGitHubMDFiles(
+                githubUrl,
+                config.include || [],
+                config.exclude || [],
+              );
               await generateEmbeddings(
                 mdFiles.length,
                 (i) => {

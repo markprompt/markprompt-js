@@ -20,6 +20,8 @@ const PAYLOAD_MAX_SIZE_BYTES = 4_000_000;
 const extractFromZip = async (
   zipFiles: any,
   offset = 0,
+  includeGlobs: string[],
+  excludeGlobs: string[],
 ): Promise<PathContentData[]> => {
   const mdFileData: PathContentData[] = [];
 
@@ -32,7 +34,7 @@ const extractFromZip = async (
     .filter((p) => {
       // Ignore files with unsupported extensions and files in dot
       // folders, like .github.
-      return shouldIncludeFileWithPath(p);
+      return shouldIncludeFileWithPath(p, includeGlobs, excludeGlobs);
     });
 
   for (let i = offset; i < relativePaths.length; i++) {
@@ -115,7 +117,12 @@ export default async function handler(
 
   // First, we load all the files, taking into account the start
   // offset if provided.
-  const files = await extractFromZip(zip.files, req.body.offset ?? 0);
+  const files = await extractFromZip(
+    zip.files,
+    req.body.offset ?? 0,
+    req.body.includeGlobs,
+    req.body.excludeGlobs,
+  );
 
   // Then, we compute the compressed size. It needs to be < 4MB to
   // meet the Vercel limits:
