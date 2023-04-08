@@ -1,7 +1,9 @@
 import { Project } from '@/types/types';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '../utils';
+import { getMarkpromptConfigOrDefault } from '../utils.browser';
 import useProjects from './use-projects';
 
 export default function useProject() {
@@ -16,5 +18,9 @@ export default function useProject() {
 
   const loading = !project && !error;
 
-  return { loading, project, mutate };
+  const config = useMemo(() => {
+    return getMarkpromptConfigOrDefault(project?.markprompt_config);
+  }, [project?.markprompt_config]);
+
+  return { loading, project, config, mutate };
 }

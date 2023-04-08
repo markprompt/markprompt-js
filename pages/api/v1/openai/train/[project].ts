@@ -19,6 +19,8 @@ import JSZip from 'jszip';
 import { getBufferFromReadable } from '@/lib/utils.node';
 import { isPresent } from 'ts-is-present';
 import pLimit from 'p-limit';
+import { MarkpromptConfigType } from '@/lib/schema';
+import { getMarkpromptConfigOrDefault } from '@/lib/utils.browser';
 
 type Data = {
   status?: string;
@@ -32,6 +34,7 @@ export const config = {
 };
 
 const MAX_FILE_SIZE = 9_000_000;
+
 const ACCEPTED_CONTENT_TYPES = [
   'application/json',
   'application/octet-stream',
@@ -92,6 +95,15 @@ export default async function handler(
     });
   }
 
+  const { data } = await supabaseAdmin
+    .from('projects')
+    .select('markprompt_config')
+    .eq('id', projectId)
+    .limit(1)
+    .maybeSingle();
+
+  const config = getMarkpromptConfigOrDefault(data?.markprompt_config);
+
   if (
     contentType === 'application/zip' ||
     contentType === 'application/octet-stream'
@@ -102,7 +114,13 @@ export default async function handler(
       filesWithPath = (
         await Promise.all(
           Object.keys(zip.files).map(async (k) => {
-            if (!shouldIncludeFileWithPath(k)) {
+            if (
+              !shouldIncludeFileWithPath(
+                k,
+                config.include || [],
+                config.exclude || [],
+              )
+            ) {
               return undefined;
             }
             try {
@@ -127,22 +145,44 @@ export default async function handler(
       const body = JSON.parse(rawBody);
       if (body?.files && Array.isArray(body.files)) {
         // v1
-        filesWithPath = body.files.map((f: any) => {
-          return {
-            path: f.id,
-            name: getNameFromPath(f.id),
-            content: f.content,
-          };
-        });
+        filesWithPath = body.files
+          .map((f: any) => {
+            if (
+              !shouldIncludeFileWithPath(
+                f.id,
+                config.include || [],
+                config.exclude || [],
+              )
+            ) {
+              return undefined;
+            }
+            return {
+              path: f.id,
+              name: getNameFromPath(f.id),
+              content: f.content,
+            };
+          })
+          .filter(isPresent);
       } else {
         // v0
-        filesWithPath = Object.keys(body).map((path) => {
-          return {
-            path,
-            name: getNameFromPath(path),
-            content: body[path],
-          };
-        });
+        filesWithPath = Object.keys(body)
+          .map((path) => {
+            if (
+              !shouldIncludeFileWithPath(
+                path,
+                config.include || [],
+                config.exclude || [],
+              )
+            ) {
+              return undefined;
+            }
+            return {
+              path,
+              name: getNameFromPath(path),
+              content: body[path],
+            };
+          })
+          .filter(isPresent);
       }
     } catch (e) {
       console.error('Error extracting payload', e);

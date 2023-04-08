@@ -82,6 +82,8 @@ export const getOwnerRepoString = (url: string) => {
 
 export const getRepositoryMDFilesInfo = async (
   url: string,
+  includeGlobs: string[],
+  excludeGlobs: string[],
 ): Promise<{ name: string; path: string; url: string; sha: string }[]> => {
   const info = parseGitHubURL(url);
   if (!info?.owner && !info?.repo) {
@@ -92,7 +94,11 @@ export const getRepositoryMDFilesInfo = async (
 
   const mdFileUrls = tree
     .map((f) => {
-      if (f.url && f.path && shouldIncludeFileWithPath(f.path)) {
+      if (
+        f.url &&
+        f.path &&
+        shouldIncludeFileWithPath(f.path, includeGlobs, excludeGlobs)
+      ) {
         let path = f.path;
         if (!path.startsWith('/')) {
           path = '/' + path;
@@ -113,27 +119,45 @@ export const getRepositoryMDFilesInfo = async (
 const paginatedFetchRepo = async (
   owner: string,
   repo: string,
-  offset: number = 0,
+  offset: number,
+  includeGlobs: string[],
+  excludeGlobs: string[],
 ): Promise<{ files: PathContentData[]; capped?: boolean }> => {
   const res = await fetch('/api/github/fetch', {
     method: 'POST',
-    body: JSON.stringify({ owner, repo, offset }),
+    body: JSON.stringify({ owner, repo, offset, includeGlobs, excludeGlobs }),
     headers: { 'Content-Type': 'application/json' },
   });
   const ab = await res.arrayBuffer();
   return JSON.parse(decompress(Buffer.from(ab)));
 };
 
-export const getGitHubMDFiles = async (url: string): Promise<FileData[]> => {
+export const getGitHubMDFiles = async (
+  url: string,
+  includeGlobs: string[],
+  excludeGlobs: string[],
+): Promise<FileData[]> => {
   const info = parseGitHubURL(url);
   if (!info?.owner && !info?.repo) {
     return [];
   }
 
-  let data = await paginatedFetchRepo(info.owner, info.repo);
+  let data = await paginatedFetchRepo(
+    info.owner,
+    info.repo,
+    0,
+    includeGlobs,
+    excludeGlobs,
+  );
   let allFilesData = data.files;
   while (data.capped) {
-    data = await paginatedFetchRepo(info.owner, info.repo, allFilesData.length);
+    data = await paginatedFetchRepo(
+      info.owner,
+      info.repo,
+      allFilesData.length,
+      includeGlobs,
+      excludeGlobs,
+    );
     allFilesData = [...allFilesData, ...data.files];
   }
 
