@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type ReploIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const ReploIcon: FC<ReploIconProps> = ({ className }) => {
   return (
@@ -17,5 +17,5 @@ export const ReploIcon: FC<ReploIconProps> = ({ className }) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

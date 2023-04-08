@@ -5,7 +5,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Database } from '@/types/supabase';
 import { DbUser } from '@/types/types';
 
-
 type Data =
   | {
       status?: string;

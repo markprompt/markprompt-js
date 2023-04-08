@@ -10,7 +10,6 @@ import unzip from 'unzipper';
 
 import { FileData } from '@/types/types';
 
-
 import { shouldIncludeFileWithPath } from './utils';
 
 export const extractFrontmatter = (

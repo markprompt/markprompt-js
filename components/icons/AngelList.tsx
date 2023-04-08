@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type AngeListIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const AngeListIcon: FC<AngeListIconProps> = ({ className }) => {
   return (
@@ -19,5 +19,5 @@ export const AngeListIcon: FC<AngeListIconProps> = ({ className }) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

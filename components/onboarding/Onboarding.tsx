@@ -17,9 +17,6 @@ import AddFiles from './AddFiles';
 import Query from './Query';
 import Button from '../ui/Button';
 
-
-
-
 const Onboarding = () => {
   const { team } = useTeam();
   const { project } = useProject();

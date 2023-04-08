@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --quiet"
+    "lint": "yarn lint:format && yarn lint:js && yarn lint:ts",
+    "lint:format": "prettier --check .",
+    "lint:js": "eslint . --quiet",
+    "lint:ts": "tsc"
   },
   "dependencies": {
     "@markdoc/markdoc": "^0.2.2",

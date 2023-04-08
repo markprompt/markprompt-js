@@ -7,7 +7,6 @@ import { GitHubIcon } from '../icons/GitHub';
 import { MotifIcon } from '../icons/Motif';
 import { Slash } from '../ui/Slash';
 
-
 export default function LandingNavbar({
   noAnimation,
 }: {

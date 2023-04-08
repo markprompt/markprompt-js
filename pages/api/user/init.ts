@@ -14,7 +14,6 @@ import { Project, Team } from '@/types/types';
 
 import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 
-
 type Data =
   | {
       status?: string;

@@ -4,7 +4,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { Database } from '@/types/supabase';
 
-
 type Data =
   | {
       status?: string;

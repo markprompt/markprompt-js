@@ -6,9 +6,7 @@ import { generateRandomSlug } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { Team } from '@/types/types';
 
-
 import { isProjectSlugAvailable } from './is-project-slug-available';
-
 
 type Data =
   | {

@@ -32,8 +32,6 @@ import { Flashing } from '../ui/Flashing';
 import { ListItem } from '../ui/ListItem';
 import { Segment } from '../ui/Segment';
 
-
-
 const demoPrompt = 'How do I publish a component?';
 
 const demoResponse = `To publish a component on Acme, follow these steps:

@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type CheckIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const CheckIcon: FC<CheckIconProps> = ({ className }) => {
   return (
@@ -13,5 +13,5 @@ export const CheckIcon: FC<CheckIconProps> = ({ className }) => {
         clipRule="evenodd"
       />
     </svg>
-  )
-}
+  );
+};

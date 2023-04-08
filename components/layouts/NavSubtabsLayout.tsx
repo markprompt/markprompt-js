@@ -7,7 +7,6 @@ import useUser from '@/lib/hooks/use-user';
 import { NavLayout } from './NavLayout';
 import SubTabs, { SubTabItem } from './SubTabs';
 
-
 export type NavSubtabsLayoutProps = {
   title: string;
   titleComponent?: ReactNode;

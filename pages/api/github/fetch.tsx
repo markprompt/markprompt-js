@@ -6,7 +6,6 @@ import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { PathContentData } from '@/types/types';
 
-
 type Data =
   | {
       status?: string;
