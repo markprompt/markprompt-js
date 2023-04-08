@@ -1,14 +1,11 @@
-import { useSession } from '@supabase/auth-helpers-react';
-import { FC } from 'react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import Image from 'next/image';
-import useUser from '@/lib/hooks/use-user';
 import useTeams from '@/lib/hooks/use-teams';
+import useUser from '@/lib/hooks/use-user';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { useSession } from '@supabase/auth-helpers-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-type ProfileMenuProps = {};
-
-const ProfileMenu: FC<ProfileMenuProps> = () => {
+const ProfileMenu = () => {
   const session = useSession();
   const { user, signOut } = useUser();
   const { teams } = useTeams();

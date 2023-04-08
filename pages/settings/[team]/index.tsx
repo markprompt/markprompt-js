@@ -53,7 +53,7 @@ const TeamSettingsPage = () => {
             }}
             validateOnMount
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
               if (!values.name) {
                 errors.name = 'Required';
               } else if (!values.slug) {

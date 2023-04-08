@@ -125,7 +125,7 @@ const ProjectSettingsPage = () => {
             }}
             validateOnMount
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
               if (!values.name) {
                 errors.name = 'Required';
               } else if (!values.slug) {
@@ -198,7 +198,7 @@ const ProjectSettingsPage = () => {
             }}
             validateOnMount
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
               if (values.github_repo) {
                 const isAccessible = await isGitHubRepoAccessible(
                   values.github_repo,
@@ -288,7 +288,7 @@ const ProjectSettingsPage = () => {
                 }}
                 validateOnMount
                 validate={async (values) => {
-                  let errors: FormikErrors<FormikValues> = {};
+                  const errors: FormikErrors<FormikValues> = {};
                   if (
                     values.domain_name &&
                     !isValidDomain(removeSchema(values.domain_name))
@@ -613,7 +613,7 @@ const ProjectSettingsPage = () => {
                 DEFAULT_MARKPROMPT_CONFIG,
             }}
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
               if (values.markprompt_config) {
                 const parsedConfig = parse(values.markprompt_config as string);
                 if (!parsedConfig && parse.message) {

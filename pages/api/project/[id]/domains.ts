@@ -53,7 +53,7 @@ export default async function handler(
       return res.status(400).json({ error: 'No domain provided.' });
     }
 
-    let { error, data } = await supabase
+    const { error, data } = await supabase
       .from('domains')
       .insert([{ project_id: projectId, name: req.body.name as string }])
       .select('*')

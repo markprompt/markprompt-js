@@ -138,7 +138,7 @@ const splitWithinTokenCutoff = (section: string): string[] => {
   let accTokenCounter = 0;
   let accLines = '';
 
-  let i = 0;
+  const i = 0;
   for (const line of lines) {
     const lineTokenCount = line.length / 4;
     if (accTokenCounter + lineTokenCount < TOKEN_CUTOFF_ADJUSTED) {
@@ -151,7 +151,7 @@ const splitWithinTokenCutoff = (section: string): string[] => {
     }
   }
 
-  if (!!accLines) {
+  if (accLines) {
     subSections.push(accLines);
   }
 
@@ -195,7 +195,7 @@ export const generateFileEmbeddings = async (
   byoOpenAIKey: string | undefined,
 ) => {
   let embeddingsTokenCount = 0;
-  let errors: { path: string; message: string }[] = [];
+  const errors: { path: string; message: string }[] = [];
 
   const { meta, sections } = processFile(file);
 

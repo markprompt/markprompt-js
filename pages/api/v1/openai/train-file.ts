@@ -15,7 +15,7 @@ import { getBYOOpenAIKey } from '@/lib/supabase';
 type Data = {
   status?: string;
   error?: string;
-  errors?: any[];
+  errors?: { path: string; message: string }[];
 };
 
 // Admin access to Supabase, bypassing RLS.

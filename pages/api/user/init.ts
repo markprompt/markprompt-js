@@ -70,7 +70,7 @@ export default async function handler(
     // We must use the admin database here, because RLS prevents a
     // user from selecting a team before they have been added as
     // members.
-    let { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         {
@@ -153,7 +153,7 @@ export default async function handler(
   }
 
   // Check if token already exists
-  let { count: tokenCount } = await supabase
+  const { count: tokenCount } = await supabase
     .from('tokens')
     .select('id', { count: 'exact' })
     .match({ project_id: project.id });

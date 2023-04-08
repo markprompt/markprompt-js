@@ -55,7 +55,7 @@ export default async function handler(
     }
 
     const value = generateKey();
-    let { error, data } = await supabase
+    const { error, data } = await supabase
       .from('tokens')
       .insert([
         {

@@ -153,7 +153,9 @@ export const Markprompt: FC<MarkpromptProps> = ({
               const parts = startText.split(STREAM_SEPARATOR);
               try {
                 refs = JSON.parse(parts[0]);
-              } catch {}
+              } catch {
+                // do nothing
+              }
               setAnswer((prev) => prev + parts[1]);
               didHandleHeader = true;
             }

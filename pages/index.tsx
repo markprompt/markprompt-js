@@ -10,7 +10,7 @@ export interface RawDomainStats {
 
 const repo = 'https://api.github.com/repos/motifland/markprompt';
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(repo);
   const json = await res.json();
 

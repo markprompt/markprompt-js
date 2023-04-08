@@ -26,7 +26,7 @@ export const createFile = async (
   path: string,
   meta: any,
 ): Promise<DbFile['id'] | undefined> => {
-  let { error, data } = await supabase
+  const { error, data } = await supabase
     .from('files')
     .insert([{ project_id: projectId, path, meta }])
     .select('id')

@@ -58,7 +58,7 @@ export default async function handler(
     // We must use the admin database here, because RLS prevents a
     // user from selecting a team before they have been added as
     // members.
-    let { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         { ...rest, is_personal: isPersonal, slug, created_by: session.user.id },

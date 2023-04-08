@@ -1,26 +1,25 @@
-import cn from 'classnames';
-import { FC, useState } from 'react';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import { createChecksum, pluralize } from '@/lib/utils';
-import { useDebouncedCallback } from 'use-debounce';
-import {
-  getGitHubMDFiles,
-  getRepositoryMDFilesInfo,
-  isGitHubRepoAccessible,
-} from '@/lib/github';
-import { ToggleMessage } from '../ui/ToggleMessage';
+import { updateProject } from '@/lib/api';
 import {
   getTrainingStateMessage,
   TrainingState,
   useTrainingContext,
 } from '@/lib/context/training';
-import useProjects from '@/lib/hooks/use-projects';
-import useProject from '@/lib/hooks/use-project';
-import { updateProject } from '@/lib/api';
+import {
+  getGitHubMDFiles,
+  getRepositoryMDFilesInfo,
+  isGitHubRepoAccessible,
+} from '@/lib/github';
 import useFiles from '@/lib/hooks/use-files';
+import useProject from '@/lib/hooks/use-project';
+import useProjects from '@/lib/hooks/use-projects';
 import { MarkpromptConfigType } from '@/lib/schema';
-import { Project } from '@/types/types';
+import { createChecksum, pluralize } from '@/lib/utils';
+import cn from 'classnames';
+import { FC, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import Button from '../ui/Button';
+import Input from '../ui/Input';
+import { ToggleMessage } from '../ui/ToggleMessage';
 
 type GitHubProps = {
   onTrainingComplete: () => void;

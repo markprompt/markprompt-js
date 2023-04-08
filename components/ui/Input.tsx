@@ -27,7 +27,7 @@ const Input: FC<InputProps> = ({
   className,
   ...props
 }) => {
-  let inputSize = s ?? 'base';
+  const inputSize = s ?? 'base';
   return (
     <input
       {...props}

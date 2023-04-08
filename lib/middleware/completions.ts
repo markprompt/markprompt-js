@@ -106,7 +106,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     const _isSKTestKey = isSKTestKey(projectKey);
 
     // Admin supabase needed here, as the projects table is subject to RLS
-    let { data } = await supabaseAdmin
+    const { data } = await supabaseAdmin
       .from('projects')
       .select('id')
       .match(
@@ -135,7 +135,7 @@ export default async function CompletionsMiddleware(req: NextRequest) {
     // Admin supabase needed here, as the projects table is subject to RLS.
     // We bypass this check if the key is a test key.
     if (!_isSKTestKey) {
-      let { count } = await supabaseAdmin
+      const { count } = await supabaseAdmin
         .from('domains')
         .select('id', { count: 'exact' })
         .match({ project_id: projectId, name: requesterHost });

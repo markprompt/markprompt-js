@@ -1,12 +1,12 @@
 import { FileDnd } from '@/components/files/FileDnd';
 import { Code } from '@/components/ui/Code';
-import { ClipboardIcon, InfoCircledIcon } from '@radix-ui/react-icons';
-import { copyToClipboard, getHost, getOrigin, pluralize } from '@/lib/utils';
-import { toast } from 'react-hot-toast';
-import { FC, ReactNode } from 'react';
-import cn from 'classnames';
 import useFiles from '@/lib/hooks/use-files';
 import useTokens from '@/lib/hooks/use-tokens';
+import { copyToClipboard, getHost, pluralize } from '@/lib/utils';
+import { ClipboardIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+import cn from 'classnames';
+import { FC, ReactNode } from 'react';
+import { toast } from 'react-hot-toast';
 import { GitHub } from '../files/GitHub';
 
 type TagProps = {

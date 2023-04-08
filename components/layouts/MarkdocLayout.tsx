@@ -1,15 +1,5 @@
 // Adapted from: https://github.com/tailwindlabs/tailwindcss.com/blob/master/src/layouts/ContentsLayout.js
 
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  Fragment,
-  useCallback,
-  ReactNode,
-  FC,
-} from 'react';
-import cn from 'classnames';
 import Markdoc, {
   Config,
   Node,
@@ -17,16 +7,26 @@ import Markdoc, {
   SchemaAttribute,
   Tag,
 } from '@markdoc/markdoc';
+import { Cross2Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import * as Popover from '@radix-ui/react-popover';
+import cn from 'classnames';
+import { Language } from 'prism-react-renderer';
+import React, {
+  createContext,
+  FC,
+  Fragment,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { Playground } from '../files/Playground';
 import { CodePanel } from '../ui/Code';
+import { Collapse, CollapseGroup } from '../ui/Collapse';
 import { Heading } from '../ui/Heading';
 import { Note } from '../ui/Note';
-import { Language } from 'prism-react-renderer';
 import { Pattern } from '../ui/Pattern';
 import LandingNavbar from './LandingNavbar';
-import { Playground } from '../files/Playground';
-import * as Popover from '@radix-ui/react-popover';
-import { Cross2Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Collapse, CollapseGroup } from '../ui/Collapse';
 
 export const MarkdocContext = createContext<any>(undefined);
 
@@ -276,10 +276,6 @@ const TableOfContents: FC<TableOfContentsProps> = ({ toc, currentSection }) => {
     return section.children.findIndex(isActive) > -1;
   };
 
-  let pageHasSubsections = toc.some(
-    (section: any) => section.children.length > 0,
-  );
-
   return (
     <>
       <ul className="text-sm leading-6 text-neutral-500">
@@ -332,8 +328,8 @@ export type TOCEntry = { title: string; slug: string; children?: TOC };
 export type TOC = TOCEntry[];
 
 const useTableOfContents = (toc: TOC) => {
-  let [currentSection, setCurrentSection] = useState(toc[0]?.slug);
-  let [headings, setHeadings] = useState<ContentHeading[]>([]);
+  const [currentSection, setCurrentSection] = useState(toc[0]?.slug);
+  const [headings, setHeadings] = useState<ContentHeading[]>([]);
 
   const registerHeading = useCallback(
     (id: string, top: number, level: number) => {
@@ -356,7 +352,7 @@ const useTableOfContents = (toc: TOC) => {
 
     const onScroll = () => {
       const style: any = window.getComputedStyle(document.documentElement);
-      let scrollMt = parseFloat(
+      const scrollMt = parseFloat(
         style.getPropertyValue('--scroll-margin-top').match(/[\d.]+/)?.[0] ?? 0,
       );
       const sortedHeadings = headings.concat([]).sort((a, b) => a.top - b.top);

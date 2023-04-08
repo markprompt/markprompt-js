@@ -1,26 +1,25 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { generateFileEmbeddings } from '@/lib/generate-embeddings';
-import { ProjectChecksums, FileData, Project } from '@/types/types';
-import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
-import { Database } from '@/types/supabase';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
+import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
+import { getBYOOpenAIKey } from '@/lib/supabase';
 import {
   createChecksum,
   getNameFromPath,
   pluralize,
   shouldIncludeFileWithPath,
 } from '@/lib/utils';
-import { createClient } from '@supabase/supabase-js';
-import { getBYOOpenAIKey } from '@/lib/supabase';
-import JSZip from 'jszip';
-import { getBufferFromReadable } from '@/lib/utils.node';
-import { isPresent } from 'ts-is-present';
-import pLimit from 'p-limit';
-import { MarkpromptConfigType } from '@/lib/schema';
 import { getMarkpromptConfigOrDefault } from '@/lib/utils.browser';
+import { getBufferFromReadable } from '@/lib/utils.node';
+import { Database } from '@/types/supabase';
+import { FileData, Project, ProjectChecksums } from '@/types/types';
+import { createClient } from '@supabase/supabase-js';
+import JSZip from 'jszip';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import pLimit from 'p-limit';
+import { isPresent } from 'ts-is-present';
 
 type Data = {
   status?: string;
@@ -32,8 +31,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-const MAX_FILE_SIZE = 9_000_000;
 
 const ACCEPTED_CONTENT_TYPES = [
   'application/json',
@@ -146,7 +143,14 @@ export default async function handler(
       if (body?.files && Array.isArray(body.files)) {
         // v1
         filesWithPath = body.files
-          .map((f: any) => {
+          .map((f: unknown) => {
+            if (f === null || typeof f !== 'object') return undefined;
+            if (!('id' in f) || !('content' in f)) return undefined;
+
+            if (typeof f.id !== 'string' || typeof f.content !== 'string') {
+              return undefined;
+            }
+
             if (
               !shouldIncludeFileWithPath(
                 f.id,
@@ -156,6 +160,7 @@ export default async function handler(
             ) {
               return undefined;
             }
+
             return {
               path: f.id,
               name: getNameFromPath(f.id),
@@ -190,7 +195,7 @@ export default async function handler(
     }
   }
 
-  let updatedChecksums: ProjectChecksums = {};
+  const updatedChecksums: ProjectChecksums = {};
   const checksums: ProjectChecksums = await safeGetObject(
     getProjectChecksumsKey(projectId),
     {},

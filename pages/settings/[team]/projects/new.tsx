@@ -31,7 +31,8 @@ const NewProject = () => {
             initialValues={{ name: '', slug: '', github: '' }}
             validateOnMount
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
+
               if (!values.name) {
                 errors.name = 'Required';
                 return errors;
@@ -48,6 +49,7 @@ const NewProject = () => {
                 }
                 return errors;
               }
+
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {

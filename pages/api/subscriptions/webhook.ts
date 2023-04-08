@@ -73,7 +73,9 @@ export default async function handler(
             checkoutSession.metadata?.appId !==
             process.env.NEXT_PUBLIC_STRIPE_APP_ID
           ) {
+            // nothing here yet
           }
+
           if (!checkoutSession.customer) {
             throw new Error('Invalid customer.');
           }

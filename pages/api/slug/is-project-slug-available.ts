@@ -18,7 +18,7 @@ export const isProjectSlugAvailable = async (
   teamId: Team['id'],
   slug: string,
 ) => {
-  let { count } = await supabase
+  const { count } = await supabase
     .from('projects')
     .select('slug', { count: 'exact' })
     .match({ team_id: teamId, slug: slug });

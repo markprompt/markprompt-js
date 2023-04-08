@@ -18,7 +18,7 @@ import { PlainProvider } from '@team-plain/react-chat-ui';
 import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { getHost } from '@/lib/utils';
 
-interface CustomAppProps<P = {}> extends AppProps<P> {
+interface CustomAppProps<P = any> extends AppProps<P> {
   Component: NextComponentType<NextPageContext, any, P> & {
     getLayout?: (page: ReactNode) => JSX.Element;
     title?: string;

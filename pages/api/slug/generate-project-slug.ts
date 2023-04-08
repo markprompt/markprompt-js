@@ -29,18 +29,15 @@ export const getAvailableProjectSlug = async (
   }
 
   let attempt = 0;
-  while (true) {
-    const isAvailable = await isProjectSlugAvailable(
-      supabase,
-      teamId,
-      candidateSlug,
-    );
-    if (isAvailable) {
-      return candidateSlug;
-    }
+  let isAvailable = false;
+
+  while (!isAvailable) {
+    isAvailable = await isProjectSlugAvailable(supabase, teamId, candidateSlug);
     attempt++;
     candidateSlug = `${baseSlug}-${attempt}`;
   }
+
+  return candidateSlug;
 };
 
 export default async function handler(

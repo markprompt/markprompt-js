@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp: any = asLink ? Link : href ? 'a' : Component;
 
-    let size = buttonSize ?? 'base';
+    const size = buttonSize ?? 'base';
     return (
       <Comp
         {...(!asLink ? { ref } : {})}

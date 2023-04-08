@@ -21,7 +21,7 @@ export const isTeamSlugAvailable = async (
   if (RESERVED_SLUGS.includes(slug)) {
     return false;
   }
-  let { count } = await supabase
+  const { count } = await supabase
     .from('teams')
     .select('slug', { count: 'exact' })
     .eq('slug', slug);
@@ -34,14 +34,13 @@ export const getAvailableTeamSlug = async (
 ) => {
   let candidateSlug = baseSlug;
   let attempt = 0;
-  while (true) {
-    const isAvailable = await isTeamSlugAvailable(supabase, candidateSlug);
-    if (isAvailable) {
-      return candidateSlug;
-    }
+  let isAvailable = false;
+  while (!isAvailable) {
+    isAvailable = await isTeamSlugAvailable(supabase, candidateSlug);
     attempt++;
     candidateSlug = `${baseSlug}-${attempt}`;
   }
+  return candidateSlug;
 };
 
 export default async function handler(

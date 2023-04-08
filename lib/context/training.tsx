@@ -1,5 +1,4 @@
-import { FileData, ProjectChecksums } from '@/types/types';
-import { createHash } from 'crypto';
+import { FileData } from '@/types/types';
 import {
   createContext,
   FC,
@@ -9,12 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  deleteAllFiles,
-  getChecksums,
-  setChecksums,
-  processFile,
-} from '../api';
+import { getChecksums, processFile, setChecksums } from '../api';
 import useProject from '../hooks/use-project';
 import { pluralize, shouldIncludeFileWithPath, truncate } from '../utils';
 
@@ -53,7 +47,9 @@ export type State = {
 const initialState: State = {
   state: { state: 'idle' },
   errors: [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   generateEmbeddings: async () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   stopGeneratingEmbeddings: () => {},
 };
 
@@ -162,7 +158,7 @@ const TrainingContextProvider = (props: PropsWithChildren) => {
       setState({ state: 'idle' });
     },
     [project?.id, config],
-  );
+  ) satisfies State['generateEmbeddings'];
 
   const stopGeneratingEmbeddings = useCallback(() => {
     stopFlag.current = true;

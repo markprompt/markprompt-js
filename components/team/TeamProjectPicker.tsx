@@ -169,7 +169,7 @@ export const TeamProjectPicker = () => {
               initialValues={{ name: generateTeamName(session) }}
               validateOnMount
               validate={(values) => {
-                let errors: FormikErrors<FormikValues> = {};
+                const errors: FormikErrors<FormikValues> = {};
                 if (!values.name) {
                   errors.name = 'Required';
                 }

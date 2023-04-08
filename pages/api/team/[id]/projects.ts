@@ -52,7 +52,7 @@ export default async function handler(
     const slug = await getAvailableProjectSlug(supabase, teamId, candidateSlug);
     const public_api_key = generateKey();
     const private_dev_api_key = generateSKTestKey();
-    let { data, error } = await supabase
+    const { data, error } = await supabase
       .from('projects')
       .insert([
         {

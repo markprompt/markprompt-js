@@ -14,7 +14,7 @@ import {
 } from '@/components/layouts/MarkdocLayout';
 import { SharedHead } from '@/components/pages/SharedHead';
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(
     `https://api.motif.land/v1/exports/raw/${process.env.MOTIF_DOCS_PAGE_ID}`,
   );
