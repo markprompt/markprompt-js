@@ -20,7 +20,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt.git",
-    "directory": "packages/markprompt-react"
+    "directory": "packages/react"
   },
   "publishConfig": {
     "access": "public"

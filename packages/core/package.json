@@ -2,11 +2,17 @@
   "name": "@markprompt/core",
   "version": "0.2.0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motifland/markprompt.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
   "typings": "index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "declaration": "tsc -b tsconfig.json"
   }

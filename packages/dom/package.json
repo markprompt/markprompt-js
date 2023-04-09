@@ -1,4 +1,12 @@
 {
   "name": "@markprompt/dom",
-  "type": "module"
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motifland/markprompt.git",
+    "directory": "packages/dom"
+  },
+  "sideEffects": false
 }

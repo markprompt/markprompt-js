@@ -1,4 +1,4 @@
-/** 
+/**
  * @typedef {'gpt-4' | 'gpt-4-0314' | 'gpt-4-32k' | 'gpt-4-32k-0314' | 'gpt-3.5-turbo' | 'gpt-3.5-turbo-0301'} OpenAIChatCompletionsModelId
  * @typedef {'text-davinci-003' | 'text-davinci-002' | 'text-curie-001' | 'text-babbage-001' | 'text-ada-001' | 'davinci' | 'curie' | 'babbage' | 'ada'} OpenAICompletionsModelId
  * @typedef {OpenAIChatCompletionsModelId | OpenAICompletionsModelId} OpenAIModelId
@@ -12,7 +12,6 @@ export const I_DONT_KNOW_MESSAGE = 'Sorry, I am not sure how to answer that.';
 export const MARKPROMPT_COMPLETIONS_URL =
   'https://api.markprompt.com/v1/completions';
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
-
 
 /**
  * @typedef {Object} Options
@@ -77,7 +76,6 @@ export const submitPrompt = async function (
 
     /** @type {string[]} */
     let refs = [];
-    let answer = '';
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
