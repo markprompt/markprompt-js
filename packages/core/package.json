@@ -1,0 +1,12 @@
+{
+  "name": "@markprompt/core",
+  "version": "0.2.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "typings": "index.d.ts",
+  "scripts": {
+    "declaration": "tsc -b tsconfig.json"
+  }
+}

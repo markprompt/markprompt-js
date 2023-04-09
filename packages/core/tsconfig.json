@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "allowJs": true,
+    "checkJs": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "moduleResolution": "node",
+    "incremental": true
+  },
+  "exclude": ["./index.d.ts", "./index.d.ts.map"]
+}

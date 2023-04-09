@@ -1,6 +1,6 @@
 {
-  "name": "markprompt",
-  "version": "0.1.7",
+  "name": "@markprompt/react",
+  "version": "0.2.0",
   "description": "A React component for adding GPT-4 powered search using the Markprompt API.",
   "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
@@ -17,9 +17,6 @@
   },
   "type": "module",
   "sideEffects": false,
-  "engines": {
-    "node": ">=10"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt.git",
@@ -64,6 +61,7 @@
     "classnames": "^2.3.2",
     "client-only": "^0.0.1",
     "react-markdown": "^8.0.6",
-    "remark-gfm": "^3.0.1"
+    "remark-gfm": "^3.0.1",
+    "@markprompt/core": "0.2.0"
   }
 }

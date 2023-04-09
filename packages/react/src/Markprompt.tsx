@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import React, {
   FC,
   ReactNode,
@@ -8,34 +7,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import ReactMarkdown from 'react-markdown';
+import cn from 'classnames';
 import remarkGfm from 'remark-gfm';
-
-const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions';
-const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
-
-type OpenAIModelId = OpenAIChatCompletionsModelId | OpenAICompletionsModelId;
-
-type OpenAIChatCompletionsModelId =
-  | 'gpt-4'
-  | 'gpt-4-0314'
-  | 'gpt-4-32k'
-  | 'gpt-4-32k-0314'
-  | 'gpt-3.5-turbo'
-  | 'gpt-3.5-turbo-0301';
-
-type OpenAICompletionsModelId =
-  | 'text-davinci-003'
-  | 'text-davinci-002'
-  | 'text-curie-001'
-  | 'text-babbage-001'
-  | 'text-ada-001'
-  | 'davinci'
-  | 'curie'
-  | 'babbage'
-  | 'ada';
-
-const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
+import ReactMarkdown from 'react-markdown';
+import { submitPrompt } from '@markprompt/core';
+import type { OpenAIModelId } from '@markprompt/core';
 
 const Caret = () => {
   return (
@@ -99,7 +75,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
     _iDontKnowMessage || 'Sorry, I am not sure how to answer that.';
   const placeholder = _placeholder || 'Ask me anything...';
 
-  const submitPrompt = useCallback(
+  const handleSubmit = useCallback(
     async (e: SyntheticEvent<EventTarget>) => {
       e.preventDefault();
 
@@ -111,66 +87,21 @@ export const Markprompt: FC<MarkpromptProps> = ({
       setReferences([]);
       setLoading(true);
 
-      try {
-        const res = await fetch(
-          `${completionsUrl || MARKPROMPT_COMPLETIONS_URL}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              prompt,
-              model: model || DEFAULT_MODEL,
-              iDontKnowMessage,
-              projectKey,
-            }),
-          },
-        );
+      await submitPrompt(
+        prompt,
+        projectKey,
+        (chunk) => setAnswer((prev) => prev + chunk),
+        (refs) => setReferences(refs),
+        {
+          completionsUrl: completionsUrl,
+          iDontKnowMessage: iDontKnowMessage,
+          model: model,
+        },
+      );
 
-        if (!res.ok || !res.body) {
-          const text = await res.text();
-          console.error('Error:', text);
-          setAnswer(iDontKnowMessage);
-          setLoading(false);
-          return;
-        }
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let done = false;
-        let startText = '';
-        let didHandleHeader = false;
-        let refs: string[] = [];
-
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
-          const chunkValue = decoder.decode(value);
-          if (!didHandleHeader) {
-            startText = startText + chunkValue;
-            if (startText.includes(STREAM_SEPARATOR)) {
-              const parts = startText.split(STREAM_SEPARATOR);
-              try {
-                refs = JSON.parse(parts[0]);
-              } catch {
-                // do nothing
-              }
-              setAnswer((prev) => prev + parts[1]);
-              didHandleHeader = true;
-            }
-          } else {
-            setAnswer((prev) => prev + chunkValue);
-          }
-        }
-        setReferences(refs);
-      } catch (e) {
-        console.error('Error', e);
-        setAnswer(iDontKnowMessage);
-      }
       setLoading(false);
     },
-    [prompt, completionsUrl, projectKey, iDontKnowMessage, model],
+    [prompt, projectKey, completionsUrl, iDontKnowMessage, model],
   );
 
   useEffect(() => {
@@ -199,7 +130,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
   return (
     <div className="relative flex h-full flex-col">
       <div className="h-12 border-b border-neutral-900">
-        <form onSubmit={submitPrompt}>
+        <form onSubmit={handleSubmit}>
           <input
             value={prompt || ''}
             type="text"
