@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { PlainProvider } from '@team-plain/react-chat-ui';
 import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { getHost } from '@/lib/utils';
+import { Analytics } from '@vercel/analytics/react';
 
 interface CustomAppProps<P = {}> extends AppProps<P> {
   Component: NextComponentType<NextPageContext, any, P> & {
@@ -73,6 +74,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         </SessionContextProvider>
       </ThemeProvider>
       <Toaster />
+      <Analytics />
     </>
   );
 }
