@@ -13,6 +13,12 @@ export const MARKPROMPT_COMPLETIONS_URL =
   'https://api.markprompt.com/v1/completions';
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
+const defaultOptions = {
+  model: DEFAULT_MODEL,
+  completionsUrl: MARKPROMPT_COMPLETIONS_URL,
+  iDontKnowMessage: I_DONT_KNOW_MESSAGE,
+};
+
 /**
  * @typedef {Object} Options
  * @property {string} [completionsUrl] - URL at which to fetch completions
@@ -40,12 +46,12 @@ export const submitPrompt = async function (
 
   if (!prompt) return;
 
-  options = {
-    model: DEFAULT_MODEL,
-    completionsUrl: MARKPROMPT_COMPLETIONS_URL,
-    iDontKnowMessage: I_DONT_KNOW_MESSAGE,
-    ...(options ?? {}),
-  };
+  options = Object.fromEntries(
+    Object.entries(defaultOptions).map(([key, value]) => [
+      key,
+      options?.[key] ?? value,
+    ]),
+  );
 
   try {
     const res = await fetch(options.completionsUrl, {
