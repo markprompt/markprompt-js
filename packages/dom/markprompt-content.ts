@@ -17,6 +17,14 @@ import remarkGfm from 'remark-gfm';
 import { until } from 'lit/directives/until.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
+declare global {
+  interface HTMLElementTagNameMap {
+    'animated-caret': Caret;
+    'markprompt-content': Markprompt;
+    'prose-block': ProseBlock;
+  }
+}
+
 @customElement('markprompt-content')
 export class Markprompt extends LitElement {
   @property({ type: String })
