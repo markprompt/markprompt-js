@@ -3,6 +3,17 @@
   "version": "0.2.0",
   "description": "Vanilla JavaScript version of the Markprompt client library",
   "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    },
+    "./markprompt-content": {
+      "types": "./markprompt-content.d.ts",
+      "import": "./markprompt-content.js"
+    }
+  },
   "scripts": {
     "build": "npx tsc -b",
     "dev": "npx tsc -b -w"
