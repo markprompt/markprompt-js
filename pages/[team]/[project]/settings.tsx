@@ -608,9 +608,9 @@ const ProjectSettingsPage = () => {
         >
           <Formik
             initialValues={{
-              markprompt_config:
-                JSON.stringify(project.markprompt_config, null, 2) ||
-                DEFAULT_MARKPROMPT_CONFIG,
+              markprompt_config: project.markprompt_config
+                ? project.markprompt_config
+                : DEFAULT_MARKPROMPT_CONFIG,
             }}
             validate={async (values) => {
               let errors: FormikErrors<FormikValues> = {};

@@ -7,11 +7,7 @@ export type MarkpromptConfigType = {
 
 export const DEFAULT_MARKPROMPT_CONFIG = `{
   "include": [
-    "**/*.md",
-    "**/*.mdoc",
-    "**/*.mdx",
-    "**/*.html",
-    "**/*.txt"
+    "**/*"
   ],
   "exclude": []
 }`;
