@@ -1,3 +1,5 @@
 node_modules/
 index.*
 !index.ts
+markprompt-content.*
+!markprompt-content.ts
