@@ -43,10 +43,25 @@ export class Markprompt extends LitElement {
   dark = false;
 
   @property({ type: String })
+  accentColor = '';
+
+  @property({ type: String })
+  responseStyle = '';
+
+  @property({ type: String })
+  referenceItemStyle = '';
+
+  @property({ type: String })
   placeholder = 'Ask me anything…';
 
   @property({ type: String, state: true })
   prompt = '';
+
+  @property({ type: Object })
+  idToRefMap = {};
+
+  // @property({ type: Object })
+  // getRefFromId = {};
 
   @property({ type: Boolean, state: true })
   loading = false;
@@ -66,24 +81,42 @@ export class Markprompt extends LitElement {
     }
 
     .prompt {
-      height: 3rem;
+      box-sizing: border-box;
+      padding: 1rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
       border-bottom-width: 1px;
-      border-bottom-color: rgb(23 23 23);
+      border-color: #e5e5e5;
+      height: 3rem;
+    }
+
+    .prompt svg {
+      height: 20px;
+      width: 20px;
+      color: #aaa;
+      flex: none;
+    }
+
+    .prompt-form {
+      flex-grow: 1;
     }
 
     .prompt-input {
+      box-sizing: border-box;
       width: 100%;
+      padding: 4px;
       appearance: none;
       border-radius: 0.375rem;
-      border-width: 0;
+      border-width: 0px;
       background-color: transparent;
-      padding-inline: 0;
-      padding-block-start: 0.25rem;
-      padding-block-end: 0.5rem;
+      font-size: 1rem;
     }
 
     .prompt-input::placeholder {
-      color: rgb(115 115 115);
+      color: #a3a3a3;
     }
 
     .prompt-input:focus {
@@ -100,7 +133,6 @@ export class Markprompt extends LitElement {
       bottom: 0;
       z-index: 10;
       height: 2.5rem;
-      background-image: linear-gradient(to top, #0e0e0e, rgb(14 14 14 / 0));
     }
 
     .gradient-dark {
@@ -108,6 +140,9 @@ export class Markprompt extends LitElement {
     }
 
     .response {
+      box-sizing: border-box;
+      background-color: #fafafa;
+      border-top: 1px solid #e5e5e5;
       scrollbar-width: none;
       -ms-overflow-style: none;
       position: absolute;
@@ -119,32 +154,86 @@ export class Markprompt extends LitElement {
       max-width: 100%;
       overflow-y: auto;
       scroll-behavior: smooth;
-      padding-block-start: 1rem;
-      padding-block-end: 2rem;
     }
 
     .response::-webkit-scrollbar {
       display: none;
     }
 
+    .response .answer {
+      padding: 1rem;
+    }
+
     .spacer {
       height: 2rem;
     }
 
-    .references {
-      margin-block-start: 2rem;
-      border-block-start-width: 1px;
-      border-color: rgb(23 23 23 / 1);
-      padding-block-start: 1rem;
+    .references-container {
+      border-top: 1px solid #e5e5e5;
+      padding: 1rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
       color: rgb(115 115 115 / 1);
+    }
+
+    .references {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reference-item {
+      font-weight: 500;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      border-radius: 0.375rem;
+      border: 1px solid #e5e5e5;
+      text-decoration: none;
+      background-color: #f5f5f5;
+      transition-property: background-color, border-color, color, fill, stroke,
+        opacity, box-shadow, transform;
+      transition-duration: 200ms;
+    }
+
+    .reference-item:hover {
+      background-color: #ebebeb;
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-slide-up {
+      animation-name: slide-up;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+      transition-timing-function: ease-in-out;
     }
   `;
 
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     this.prompt = input.value;
+  }
+
+  scrollToBottom() {
+    const responseContainer = this.renderRoot.querySelector('#response');
+    responseContainer.scrollTop = responseContainer.scrollHeight;
+  }
+
+  getRefFromId(id: string) {
+    return undefined;
   }
 
   async onSubmit(event: Event) {
@@ -159,8 +248,14 @@ export class Markprompt extends LitElement {
     await submitPrompt(
       this.prompt,
       this.projectKey,
-      (chunk) => (this.answer += chunk),
-      (references) => (this.references = references),
+      (chunk) => {
+        this.scrollToBottom();
+        this.answer += chunk;
+      },
+      (references) => {
+        this.scrollToBottom();
+        this.references = references;
+      },
       {
         model: this.model,
         iDontKnowMessage: this.iDontKnowMessage,
@@ -180,7 +275,9 @@ export class Markprompt extends LitElement {
       .use(rehypeStringify)
       .process(markdown);
 
-    if (typeof file.value !== 'string') return '';
+    if (typeof file.value !== 'string') {
+      return '';
+    }
 
     return unsafeHTML(file.value);
   }
@@ -189,7 +286,19 @@ export class Markprompt extends LitElement {
     return html`
       <div class="root">
         <div class="prompt">
-          <form @submit="${this.onSubmit}">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+
+          <form class="prompt-form" @submit="${this.onSubmit}">
             <input
               class="prompt-input"
               type="text"
@@ -209,24 +318,59 @@ export class Markprompt extends LitElement {
         <div
           class="${classMap({ gradient: true, 'gradient-dark': this.dark })}"
         ></div>
-        <prose-block class="response">
-          ${this.loading && !(this.answer.length > 0)
-            ? html`<animated-caret></animated-caret>`
-            : nothing}
-          ${until(this.renderMarkdown(this.answer), nothing)}
-          ${this.answer.length > 0
-            ? html`<animated-caret></animated-caret>`
-            : nothing}
+        <prose-block class="response" id="response">
+          <div class="answer">
+            ${this.loading && !(this.answer.length > 0)
+              ? html`<animated-caret
+                  style="${this.accentColor
+                    ? `color: ${this.accentColor}`
+                    : 'color: rgb(217, 70, 239);'}"
+                ></animated-caret>`
+              : nothing}
+            ${until(this.renderMarkdown(this.answer), nothing)}
+            ${this.loading && this.answer.length > 0
+              ? html`<animated-caret
+                  style="${this.accentColor
+                    ? `color: ${this.accentColor}`
+                    : 'color: rgb(217, 70, 239);'}"
+                ></animated-caret>`
+              : nothing}
+          </div>
           ${this.answer.length > 0 && this.references.length > 0
             ? html`
-                <div class="references">
-                  <div>
-                    <p>generated from the following sources:</p>
-                    <div>
-                      ${this.references.map(
-                        (reference) => html`<div>${reference}</div>`,
-                      )}
-                    </div>
+                <div class="references-container">
+                  <div
+                    class="${classMap({
+                      'animate-slide-up': !this.loading,
+                    })}"
+                  >
+                    <p>Generated from the following sources:</p>
+                    <div class="references">
+                      ${this.references.map((reference) => {
+                        let refInfo = this.idToRefMap
+                          ? this.idToRefMap[reference]
+                          : undefined;
+                        console.log('refInfo 1', refInfo);
+                        if (!refInfo) {
+                          refInfo = this.getRefFromId(reference);
+                          console.log('refInfo 2', refInfo);
+                        }
+                        if (refInfo && refInfo.href) {
+                          return html`<a
+                            href="${refInfo.href}"
+                            style="color: ${this.accentColor || '#0ea5e9'}"
+                            class="reference-item"
+                          >
+                            ${refInfo.label || reference}</a
+                          >`;
+                        }
+                        return html`<div
+                          style="color: ${this.accentColor || '#0ea5e9'}"
+                          class="reference-item"
+                        >
+                          ${reference}
+                        </div>`;
+                      })}
                     </div>
                   </div>
                 </div>
@@ -248,7 +392,6 @@ export class Caret extends LitElement {
       height: 15px;
       background-color: currentColor;
       animation: blink 1s infinite;
-      background-color: rgb(217, 70, 239);
       transform: matrix(1, 0, 0, 1, 2, 2);
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
         rgba(0, 0, 0, 0) 0px 0px 0px 0px,
