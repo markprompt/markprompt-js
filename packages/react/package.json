@@ -6,6 +6,8 @@
   "typings": "dist/index.d.ts",
   "module": "dist/markprompt.esm.js",
   "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
   "files": [
     "README.md",
     "dist"
@@ -15,8 +17,6 @@
     "require": "./dist/index.cjs",
     "types": "./dist/index.d.ts"
   },
-  "type": "module",
-  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt.git",

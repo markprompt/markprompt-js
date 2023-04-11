@@ -100,7 +100,3 @@ For a fully working setup based on Next.js + Tailwind, check out the [Markprompt
 
 This library is created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
-
-## License
-
-MIT
