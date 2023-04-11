@@ -11,8 +11,6 @@ declare global {
       model?: OpenAIModelId;
       iDontKnowMessage?: string;
       placeholder?: string;
-      dark?: boolean;
-      accentColor?: string;
       idToRefMap?: { [key: string]: { label: string; href: string } };
     };
   }

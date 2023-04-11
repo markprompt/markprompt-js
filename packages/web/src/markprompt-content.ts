@@ -39,18 +39,6 @@ export class Markprompt extends LitElement {
   @property({ type: String })
   projectKey = '';
 
-  @property({ type: Boolean })
-  dark = false;
-
-  @property({ type: String })
-  accentColor = '';
-
-  @property({ type: String })
-  responseStyle = '';
-
-  @property({ type: String })
-  referenceItemStyle = '';
-
   @property({ type: String })
   placeholder = 'Ask me anything…';
 
@@ -59,9 +47,6 @@ export class Markprompt extends LitElement {
 
   @property({ type: Object })
   idToRefMap = {};
-
-  // @property({ type: Object })
-  // getRefFromId = {};
 
   @property({ type: Boolean, state: true })
   loading = false;
@@ -80,7 +65,6 @@ export class Markprompt extends LitElement {
       flex-direction: column;
     }
 
-    .prompt {
       box-sizing: border-box;
       padding: 1rem;
       display: flex;
@@ -89,14 +73,15 @@ export class Markprompt extends LitElement {
       gap: 0.5rem;
       width: 100%;
       border-bottom-width: 1px;
-      border-color: #e5e5e5;
+      background-color: var(--input-bg-color);
+      border-color: var(--border-color);
       height: 3rem;
     }
 
-    .prompt svg {
+    .input-container svg {
       height: 20px;
       width: 20px;
-      color: #aaa;
+      color: var(--search-icon-color);
       flex: none;
     }
 
@@ -112,11 +97,12 @@ export class Markprompt extends LitElement {
       border-radius: 0.375rem;
       border-width: 0px;
       background-color: transparent;
+      color: var(--text-color);
       font-size: 1rem;
     }
 
     .prompt-input::placeholder {
-      color: #a3a3a3;
+      color: var(--input-placeholder-color);
     }
 
     .prompt-input:focus {
@@ -135,14 +121,10 @@ export class Markprompt extends LitElement {
       height: 2.5rem;
     }
 
-    .gradient-dark {
-      background-image: linear-gradient(to top, #050505, rgb(5 5 5 / 0));
-    }
-
-    .response {
+    .result {
       box-sizing: border-box;
-      background-color: #fafafa;
-      border-top: 1px solid #e5e5e5;
+      border-top: 1px solid var(--border-color);
+      background-color: var(--result-bg-color);
       scrollbar-width: none;
       -ms-overflow-style: none;
       position: absolute;
@@ -156,12 +138,21 @@ export class Markprompt extends LitElement {
       scroll-behavior: smooth;
     }
 
-    .response::-webkit-scrollbar {
+    .result::-webkit-scrollbar {
       display: none;
     }
 
-    .response .answer {
+    .answer {
       padding: 2rem;
+      color: var(--text-color);
+    }
+
+    .answer img {
+      max-width: 100%;
+    }
+
+    .answer a {
+      color: var(--link-color);
     }
 
     .spacer {
@@ -169,7 +160,7 @@ export class Markprompt extends LitElement {
     }
 
     .references-container {
-      border-top: 1px solid #e5e5e5;
+      border-top: 1px solid var(--border-color);
       padding: 2rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
@@ -191,16 +182,21 @@ export class Markprompt extends LitElement {
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
       border-radius: 0.375rem;
-      border: 1px solid #e5e5e5;
+      border: 1px solid var(--border-color);
+      color: var(--accent-color);
       text-decoration: none;
-      background-color: #f5f5f5;
+      background-color: var(--reference-item-bg-color);
       transition-property: background-color, border-color, color, fill, stroke,
         opacity, box-shadow, transform;
       transition-duration: 200ms;
     }
 
     .reference-item:hover {
-      background-color: #ebebeb;
+      background-color: var(--reference-item-bg-color-hover);
+    }
+
+    .caret {
+      color: var(--caret-color);
     }
 
     @keyframes slide-up {
@@ -228,12 +224,29 @@ export class Markprompt extends LitElement {
   }
 
   scrollToBottom() {
-    const responseContainer = this.renderRoot.querySelector('#response');
-    responseContainer.scrollTop = responseContainer.scrollHeight;
+    const resultContainer = this.renderRoot.querySelector('#result');
+    resultContainer.scrollTop = resultContainer.scrollHeight;
   }
 
   getRefFromId(id: string) {
     return undefined;
+  }
+
+  reset() {
+    const input = this.renderRoot.querySelector(
+      '#prompt-input',
+    ) as HTMLInputElement;
+    input.value = '';
+    this.answer = '';
+    this.references = [];
+    this.loading = false;
+  }
+
+  focus() {
+    const input = this.renderRoot.querySelector(
+      '#prompt-input',
+    ) as HTMLInputElement;
+    input.focus();
   }
 
   async onSubmit(event: Event) {
@@ -285,7 +298,7 @@ export class Markprompt extends LitElement {
   render() {
     return html`
       <div class="root">
-        <div class="prompt">
+        <div class="input-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -300,6 +313,7 @@ export class Markprompt extends LitElement {
 
           <form class="prompt-form" @submit="${this.onSubmit}">
             <input
+              id="prompt-input"
               class="prompt-input"
               type="text"
               name="prompt"
@@ -315,25 +329,15 @@ export class Markprompt extends LitElement {
           </form>
         </div>
 
-        <div
-          class="${classMap({ gradient: true, 'gradient-dark': this.dark })}"
-        ></div>
-        <prose-block class="response" id="response">
+        <div class="gradient"></div>
+        <prose-block class="result" id="result">
           <div class="answer prose">
             ${this.loading && !(this.answer.length > 0)
-              ? html`<animated-caret
-                  style="${this.accentColor
-                    ? `color: ${this.accentColor}`
-                    : 'color: rgb(217, 70, 239);'}"
-                ></animated-caret>`
+              ? html`<animated-caret class="caret"></animated-caret>`
               : nothing}
             ${until(this.renderMarkdown(this.answer), nothing)}
             ${this.loading && this.answer.length > 0
-              ? html`<animated-caret
-                  style="${this.accentColor
-                    ? `color: ${this.accentColor}`
-                    : 'color: rgb(217, 70, 239);'}"
-                ></animated-caret>`
+              ? html`<animated-caret class="caret"></animated-caret>`
               : nothing}
           </div>
           ${this.answer.length > 0 && this.references.length > 0
@@ -356,16 +360,12 @@ export class Markprompt extends LitElement {
                         if (refInfo && refInfo.href) {
                           return html`<a
                             href="${refInfo.href}"
-                            style="color: ${this.accentColor || '#0ea5e9'}"
                             class="reference-item"
                           >
                             ${refInfo.label || reference}</a
                           >`;
                         }
-                        return html`<div
-                          style="color: ${this.accentColor || '#0ea5e9'}"
-                          class="reference-item"
-                        >
+                        return html`<div class="reference-item">
                           ${reference}
                         </div>`;
                       })}
