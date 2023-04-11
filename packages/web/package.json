@@ -1,0 +1,32 @@
+{
+  "name": "@markprompt/web",
+  "version": "0.2.1",
+  "description": "Prompt web component for Markprompt",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Motif",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motifland/markprompt.git",
+    "directory": "packages/web"
+  },
+  "type": "module",
+  "module": "index.js",
+  "scripts": {
+    "build": "npx tsc -b",
+    "dev": "npx tsc -b -w"
+  },
+  "dependencies": {
+    "@markprompt/core": "0.2.0",
+    "lit": "^2.7.2",
+    "rehype-sanitize": "^5.0.1",
+    "rehype-stringify": "^9.0.3",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
