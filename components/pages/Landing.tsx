@@ -12,7 +12,6 @@ import { MotifIcon } from '@/components/icons/Motif';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 import { Blurs } from '@/components/ui/Blurs';
-import Head from 'next/head';
 import { DiscordIcon } from '../icons/Discord';
 import Balancer from 'react-wrap-balancer';
 import cn from 'classnames';
@@ -208,6 +207,15 @@ const useOnScreen = (ref: any) => {
   return isIntersecting;
 };
 
+const formatNumStars = (stars: number) => {
+  if (stars > 1000) {
+    try {
+      return `${(stars / 1000).toFixed(1)}k`;
+    } catch {}
+  }
+  return stars;
+};
+
 const LandingPage: FC<LandingPageProps> = ({ stars }) => {
   const [model, setModel] = useState<PricedModel>('gpt-3.5-turbo');
   const playgroundAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -268,7 +276,9 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
               Icon={GitHubIcon}
             >
               Star on GitHub
-              <span className="ml-2 text-neutral-600">{stars}</span>
+              <span className="ml-2 text-neutral-600">
+                {formatNumStars(stars)}
+              </span>
             </Button>
           </div>
           <p className="pt-20 text-center text-neutral-700">Live with</p>
@@ -473,7 +483,9 @@ const LandingPage: FC<LandingPageProps> = ({ stars }) => {
               Icon={GitHubIcon}
             >
               Star on GitHub
-              <span className="ml-2 text-neutral-600">{stars}</span>
+              <span className="ml-2 text-neutral-600">
+                {formatNumStars(stars)}
+              </span>
             </Button>
           </div>
         </div>
