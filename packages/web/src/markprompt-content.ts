@@ -161,7 +161,7 @@ export class Markprompt extends LitElement {
     }
 
     .response .answer {
-      padding: 1rem;
+      padding: 2rem;
     }
 
     .spacer {
@@ -170,7 +170,7 @@ export class Markprompt extends LitElement {
 
     .references-container {
       border-top: 1px solid #e5e5e5;
-      padding: 1rem;
+      padding: 2rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
       color: rgb(115 115 115 / 1);
@@ -185,7 +185,7 @@ export class Markprompt extends LitElement {
     }
 
     .reference-item {
-      font-weight: 500;
+      font-weight: 600;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       padding-top: 0.25rem;
@@ -319,7 +319,7 @@ export class Markprompt extends LitElement {
           class="${classMap({ gradient: true, 'gradient-dark': this.dark })}"
         ></div>
         <prose-block class="response" id="response">
-          <div class="answer">
+          <div class="answer prose">
             ${this.loading && !(this.answer.length > 0)
               ? html`<animated-caret
                   style="${this.accentColor
@@ -350,10 +350,8 @@ export class Markprompt extends LitElement {
                         let refInfo = this.idToRefMap
                           ? this.idToRefMap[reference]
                           : undefined;
-                        console.log('refInfo 1', refInfo);
                         if (!refInfo) {
                           refInfo = this.getRefFromId(reference);
-                          console.log('refInfo 2', refInfo);
                         }
                         if (refInfo && refInfo.href) {
                           return html`<a
@@ -394,8 +392,7 @@ export class Caret extends LitElement {
       animation: blink 1s infinite;
       transform: matrix(1, 0, 0, 1, 2, 2);
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-        rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-        rgba(217, 70, 219, 0.9) 0px 0px 3px 0px;
+        rgba(0, 0, 0, 0) 0px 0px 0px 0px, currentColor 0px 0px 3px 0px;
       border-radius: 1px;
     }
 
