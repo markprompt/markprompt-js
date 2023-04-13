@@ -234,7 +234,7 @@ export default async function handler(req: NextRequest) {
   }
 
   const fullPrompt = stripIndent`
-  ${oneLine`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you encounter a relative link (and only a relative link, not a link starting with a slash /), prepend it with the section id. If you are unsure and the answer is not explicitly written in the documentation, say "${
+  ${oneLine`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "${
     iDontKnowMessage || I_DONT_KNOW
   }"`}
 
