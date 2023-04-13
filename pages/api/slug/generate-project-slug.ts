@@ -1,10 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import { SupabaseClient } from '@supabase/auth-helpers-react';
-import { isProjectSlugAvailable } from './is-project-slug-available';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { generateRandomSlug } from '@/lib/utils';
+import { Database } from '@/types/supabase';
+import { Team } from '@/types/types';
+
+import { isProjectSlugAvailable } from './is-project-slug-available';
 
 type Data =
   | {
@@ -29,18 +31,15 @@ export const getAvailableProjectSlug = async (
   }
 
   let attempt = 0;
-  while (true) {
-    const isAvailable = await isProjectSlugAvailable(
-      supabase,
-      teamId,
-      candidateSlug,
-    );
-    if (isAvailable) {
-      return candidateSlug;
-    }
+  let isAvailable = false;
+
+  while (!isAvailable) {
+    isAvailable = await isProjectSlugAvailable(supabase, teamId, candidateSlug);
     attempt++;
     candidateSlug = `${baseSlug}-${attempt}`;
   }
+
+  return candidateSlug;
 };
 
 export default async function handler(

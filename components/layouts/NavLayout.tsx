@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+
 import { AppNavbar } from '@/components/layouts/AppNavbar';
 
 type NavLayoutProps = {

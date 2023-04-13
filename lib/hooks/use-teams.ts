@@ -1,7 +1,9 @@
-import { Team } from '@/types/types';
 import useSWR from 'swr';
-import { fetcher } from '../utils';
+
+import { Team } from '@/types/types';
+
 import useUser from './use-user';
+import { fetcher } from '../utils';
 
 export default function useTeams() {
   const { user } = useUser();

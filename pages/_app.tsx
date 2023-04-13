@@ -1,25 +1,26 @@
 import '@/styles/globals.css';
 
-import type { AppProps } from 'next/app';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import {
   SessionContextProvider,
   useSession,
 } from '@supabase/auth-helpers-react';
+import { PlainProvider } from '@team-plain/react-chat-ui';
+import { Analytics } from '@vercel/analytics/react';
+import * as Fathom from 'fathom-client';
+import { NextComponentType, NextPageContext } from 'next';
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
 import { ThemeProvider } from 'next-themes';
 import { ReactNode, useEffect, useState } from 'react';
-import { NextComponentType, NextPageContext } from 'next';
+
 import { Toaster } from '@/components/ui/Toaster';
+import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { ManagedAppContext } from '@/lib/context/app';
 import { ManagedTrainingContext } from '@/lib/context/training';
-import * as Fathom from 'fathom-client';
-import { useRouter } from 'next/router';
-import { PlainProvider } from '@team-plain/react-chat-ui';
-import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { getHost } from '@/lib/utils';
-import { Analytics } from '@vercel/analytics/react';
 
-interface CustomAppProps<P = {}> extends AppProps<P> {
+interface CustomAppProps<P = any> extends AppProps<P> {
   Component: NextComponentType<NextPageContext, any, P> & {
     getLayout?: (page: ReactNode) => JSX.Element;
     title?: string;

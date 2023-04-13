@@ -1,5 +1,6 @@
-import AuthPage from '@/components/user/AuthPage';
 import Head from 'next/head';
+
+import AuthPage from '@/components/user/AuthPage';
 
 const Login = () => {
   return (

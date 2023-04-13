@@ -1,8 +1,9 @@
 import { useSession } from '@supabase/auth-helpers-react';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { FC, memo } from 'react';
-import LandingPage from '@/components/pages/Landing';
+
 import AppPage from '@/components/pages/App';
+import LandingPage from '@/components/pages/Landing';
 
 export interface RawDomainStats {
   timestamp: number;
@@ -10,7 +11,7 @@ export interface RawDomainStats {
 
 const repo = 'https://api.github.com/repos/motifland/markprompt';
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(repo);
   const json = await res.json();
 

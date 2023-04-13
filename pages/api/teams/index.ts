@@ -1,9 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
-import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { Database } from '@/types/supabase';
+import { Team } from '@/types/types';
+
+import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 
 type Data =
   | {
@@ -58,7 +60,7 @@ export default async function handler(
     // We must use the admin database here, because RLS prevents a
     // user from selecting a team before they have been added as
     // members.
-    let { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         { ...rest, is_personal: isPersonal, slug, created_by: session.user.id },

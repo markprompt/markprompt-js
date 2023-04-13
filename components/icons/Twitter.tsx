@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type TwitterIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const TwitterIcon: FC<TwitterIconProps> = ({ className }) => {
   return (
@@ -18,5 +18,5 @@ export const TwitterIcon: FC<TwitterIconProps> = ({ className }) => {
         fill="currentColor"
       ></path>
     </svg>
-  )
-}
+  );
+};

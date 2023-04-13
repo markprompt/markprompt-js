@@ -1,12 +1,9 @@
-import { FC, useState } from 'react';
-import { Chat } from '@team-plain/react-chat-ui';
 import { ChatBubbleIcon, Cross2Icon } from '@radix-ui/react-icons';
 import * as Popover from '@radix-ui/react-popover';
+import { Chat } from '@team-plain/react-chat-ui';
 import cn from 'classnames';
+import { useState } from 'react';
 import colors from 'tailwindcss/colors';
-import { useSession } from '@supabase/auth-helpers-react';
-
-type ChatWindowProps = {};
 
 export const plainTheme = {
   input: {
@@ -36,9 +33,8 @@ export const plainTheme = {
   },
 };
 
-export const ChatWindow: FC<ChatWindowProps> = () => {
+export const ChatWindow = () => {
   const [chatOpen, setChatOpen] = useState(false);
-  const session = useSession();
 
   return (
     <Popover.Root open={chatOpen} onOpenChange={setChatOpen}>

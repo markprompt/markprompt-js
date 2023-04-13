@@ -1,8 +1,9 @@
+import Link from 'next/link';
+
 import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
+import Button from '@/components/ui/Button';
 import useProjects from '@/lib/hooks/use-projects';
 import useTeam from '@/lib/hooks/use-team';
-import Link from 'next/link';
-import Button from '@/components/ui/Button';
 
 const Team = () => {
   const { team } = useTeam();

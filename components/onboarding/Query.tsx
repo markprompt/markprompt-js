@@ -1,13 +1,15 @@
-import { FC, ReactNode, useState } from 'react';
-import cn from 'classnames';
-import { Code } from '../ui/Code';
 import { ClipboardIcon } from '@radix-ui/react-icons';
-import { copyToClipboard, pluralize } from '@/lib/utils';
+import cn from 'classnames';
+import { FC, ReactNode, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Playground } from '../files/Playground';
+
 import useFiles from '@/lib/hooks/use-files';
-import useTeam from '@/lib/hooks/use-team';
 import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+import { copyToClipboard, pluralize } from '@/lib/utils';
+
+import { Playground } from '../files/Playground';
+import { Code } from '../ui/Code';
 
 const npmCode = `
 npm install markprompt

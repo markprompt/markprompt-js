@@ -1,26 +1,27 @@
-import type { NextRequest } from 'next/server';
-import { createEmbedding, createModeration } from '@/lib/openai.edge';
-import {
-  CONTEXT_TOKENS_CUTOFF,
-  I_DONT_KNOW,
-  MAX_PROMPT_LENGTH,
-  STREAM_SEPARATOR,
-} from '@/lib/constants';
-import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
 import { createClient } from '@supabase/supabase-js';
-import { backOff } from 'exponential-backoff';
-import { CreateEmbeddingResponse } from 'openai';
 import { oneLine, stripIndent } from 'common-tags';
 import {
   createParser,
   ParsedEvent,
   ReconnectInterval,
 } from 'eventsource-parser';
+import { backOff } from 'exponential-backoff';
 import GPT3Tokenizer from 'gpt3-tokenizer';
-import { stringToModel } from '@/lib/utils';
+import type { NextRequest } from 'next/server';
+import { CreateEmbeddingResponse } from 'openai';
+
+import {
+  CONTEXT_TOKENS_CUTOFF,
+  I_DONT_KNOW,
+  MAX_PROMPT_LENGTH,
+  STREAM_SEPARATOR,
+} from '@/lib/constants';
+import { createEmbedding, createModeration } from '@/lib/openai.edge';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
-import { Database } from '@/types/supabase';
 import { getBYOOpenAIKey } from '@/lib/supabase';
+import { stringToModel } from '@/lib/utils';
+import { Database } from '@/types/supabase';
+import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
 
 export const config = {
   runtime: 'edge',

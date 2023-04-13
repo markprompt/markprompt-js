@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, {
   FC,
   ReactNode,
@@ -7,9 +8,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import cn from 'classnames';
-import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions';
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
@@ -153,7 +153,9 @@ export const Markprompt: FC<MarkpromptProps> = ({
               const parts = startText.split(STREAM_SEPARATOR);
               try {
                 refs = JSON.parse(parts[0]);
-              } catch {}
+              } catch {
+                // do nothing
+              }
               setAnswer((prev) => prev + parts[1]);
               didHandleHeader = true;
             }

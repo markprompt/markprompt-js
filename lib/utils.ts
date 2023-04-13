@@ -1,12 +1,10 @@
-import {
-  HistogramStat,
-  OpenAIModelIdWithType,
-  TimeInterval,
-} from '@/types/types';
+import { createHash } from 'crypto';
+
 import slugify from '@sindresorhus/slugify';
 import confetti from 'canvas-confetti';
-import { createHash } from 'crypto';
+import minimatch from 'minimatch';
 import { customAlphabet } from 'nanoid';
+import pako from 'pako';
 import tailwindColors from 'tailwindcss/colors';
 import type { Config } from 'unique-names-generator';
 import {
@@ -15,9 +13,12 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
-import minimatch from 'minimatch';
 
-const pako = require('pako');
+import {
+  HistogramStat,
+  OpenAIModelIdWithType,
+  TimeInterval,
+} from '@/types/types';
 
 const lookup = [
   { value: 1, symbol: '' },
@@ -196,7 +197,7 @@ export const timeout = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const compress = (plainString: string): Buffer => {
+export const compress = (plainString: string): Uint8Array => {
   return pako.deflate(plainString);
 };
 
@@ -348,7 +349,7 @@ export const getAuthorizationToken = (header: string | undefined | null) => {
 
 // Reference: https://stackoverflow.com/questions/10306690/what-is-a-regular-expression-which-will-match-a-valid-domain-name-without-a-subd
 export const isValidDomain = (domain: string) => {
-  return /^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(
+  return /^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$/.test(
     domain,
   );
 };

@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type GitHubIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const GitHubIcon: FC<GitHubIconProps> = ({ className }) => {
   return (
@@ -18,5 +18,5 @@ export const GitHubIcon: FC<GitHubIconProps> = ({ className }) => {
         fill="currentColor"
       ></path>
     </svg>
-  )
-}
+  );
+};

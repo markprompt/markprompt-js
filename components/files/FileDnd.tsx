@@ -1,17 +1,19 @@
-import { FileData } from '@/types/types';
-import { createChecksum, readTextFileAsync } from '@/lib/utils';
 import cn from 'classnames';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Button from '../ui/Button';
-import useFiles from '@/lib/hooks/use-files';
+import { toast } from 'react-hot-toast';
+
 import {
   getTrainingStateMessage,
   useTrainingContext,
 } from '@/lib/context/training';
-import { ToggleMessage } from '../ui/ToggleMessage';
-import { toast } from 'react-hot-toast';
+import useFiles from '@/lib/hooks/use-files';
 import useProject from '@/lib/hooks/use-project';
+import { createChecksum, readTextFileAsync } from '@/lib/utils';
+import { FileData } from '@/types/types';
+
+import Button from '../ui/Button';
+import { ToggleMessage } from '../ui/ToggleMessage';
 
 type FileDndProps = {
   onTrainingComplete: () => void;

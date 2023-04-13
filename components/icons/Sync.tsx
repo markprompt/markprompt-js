@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type SyncIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const SyncIcon: FC<SyncIconProps> = ({ className }) => {
   return (
@@ -14,5 +14,5 @@ export const SyncIcon: FC<SyncIconProps> = ({ className }) => {
         clip-rule="evenodd"
       ></path>
     </svg>
-  )
-}
+  );
+};

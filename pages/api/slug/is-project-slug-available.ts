@@ -1,8 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Team } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import { SupabaseClient } from '@supabase/auth-helpers-react';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { Database } from '@/types/supabase';
+import { Team } from '@/types/types';
 
 type Data =
   | {
@@ -18,7 +19,7 @@ export const isProjectSlugAvailable = async (
   teamId: Team['id'],
   slug: string,
 ) => {
-  let { count } = await supabase
+  const { count } = await supabase
     .from('projects')
     .select('slug', { count: 'exact' })
     .match({ team_id: teamId, slug: slug });

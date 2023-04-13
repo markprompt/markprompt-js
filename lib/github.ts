@@ -1,19 +1,19 @@
 import { Octokit } from 'octokit';
 import { isPresent } from 'ts-is-present';
+
 import { FileData, PathContentData } from '@/types/types';
+
 import {
   decompress,
   getNameFromPath,
   shouldIncludeFileWithPath,
 } from './utils';
 
-const JSZip = require('jszip');
-
 const octokit = new Octokit();
 
 const parseGitHubURL = (url: string) => {
   const match = url.match(
-    /^https:\/\/github.com\/([a-zA-Z0-9\-_\.]+)\/([a-zA-Z0-9\-_\.]+)/,
+    /^https:\/\/github.com\/([a-zA-Z0-9\-_.]+)\/([a-zA-Z0-9\-_.]+)/,
   );
   if (match && match.length > 2) {
     return { owner: match[1], repo: match[2] };

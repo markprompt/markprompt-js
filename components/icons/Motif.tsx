@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type MotifIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const MotifIcon: FC<MotifIconProps> = ({ className }) => {
   return (
@@ -14,5 +14,5 @@ export const MotifIcon: FC<MotifIconProps> = ({ className }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

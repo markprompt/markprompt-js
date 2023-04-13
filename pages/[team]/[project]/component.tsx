@@ -1,17 +1,18 @@
-import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
-import { Code, CodePanel } from '@/components/ui/Code';
-import { copyToClipboard } from '@/lib/utils';
 import { ClipboardIcon } from '@radix-ui/react-icons';
-import { Language } from 'prism-react-renderer';
-import { toast } from 'react-hot-toast';
-import { Playground } from '@/components/files/Playground';
-import { useState } from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
-import Button from '@/components/ui/Button';
 import { useRouter } from 'next/router';
-import useTeam from '@/lib/hooks/use-team';
+import { Language } from 'prism-react-renderer';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+
+import { Playground } from '@/components/files/Playground';
+import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
+import Button from '@/components/ui/Button';
+import { Code, CodePanel } from '@/components/ui/Code';
 import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+import { copyToClipboard } from '@/lib/utils';
 import { SUPPORTED_MODELS } from '@/types/types';
 
 const motifCode = `

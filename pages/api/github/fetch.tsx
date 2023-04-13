@@ -1,10 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import JSZip from 'jszip';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { PathContentData } from '@/types/types';
-import { compress, shouldIncludeFileWithPath } from '@/lib/utils';
-
-const JSZip = require('jszip');
 
 type Data =
   | {
@@ -18,7 +18,7 @@ const allowedMethods = ['POST'];
 const PAYLOAD_MAX_SIZE_BYTES = 4_000_000;
 
 const extractFromZip = async (
-  zipFiles: any,
+  zipFiles: typeof JSZip.files,
   offset = 0,
   includeGlobs: string[],
   excludeGlobs: string[],

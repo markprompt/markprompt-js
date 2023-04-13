@@ -1,13 +1,13 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode } from 'react';
 
 type MDXComponentProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export const MDXComponent: FC<MDXComponentProps> = ({ children }) => {
   return (
-    <div className="prose dark:prose-invert max-w-screen-md mx-auto p-8">
+    <div className="prose mx-auto max-w-screen-md p-8 dark:prose-invert">
       {children}
     </div>
-  )
-}
+  );
+};

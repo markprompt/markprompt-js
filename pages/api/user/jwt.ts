@@ -1,6 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import jwt from 'jsonwebtoken';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { Database } from '@/types/supabase';
 
 type Data = { error?: string } | { customerJwt: string };

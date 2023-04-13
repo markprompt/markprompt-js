@@ -1,10 +1,11 @@
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import cn from 'classnames';
 import Link from 'next/link';
 import { FC } from 'react';
+
 import { MarkpromptIcon } from '../icons/Markprompt';
-import ProfileMenu from '../user/ProfileMenu';
 import TeamProjectPicker from '../team/TeamProjectPicker';
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import ProfileMenu from '../user/ProfileMenu';
 
 type AppNavbarProps = {
   animated?: boolean;

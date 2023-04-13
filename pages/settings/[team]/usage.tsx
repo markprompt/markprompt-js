@@ -1,7 +1,7 @@
-import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
 import BarChart from '@/components/charts/bar-chart';
-import { sampleVisitsData } from '@/lib/utils';
+import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
 import { Tag } from '@/components/ui/Tag';
+import { sampleVisitsData } from '@/lib/utils';
 
 const Usage = () => {
   return (

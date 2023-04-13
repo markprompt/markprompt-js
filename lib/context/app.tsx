@@ -1,4 +1,5 @@
 import { useSession } from '@supabase/auth-helpers-react';
+import Router, { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -6,12 +7,12 @@ import {
   useContext,
   useEffect,
 } from 'react';
-import Router, { useRouter } from 'next/router';
-import useUser from '../hooks/use-user';
+
+import { initUserData } from '../api';
+import useProjects from '../hooks/use-projects';
 import useTeam from '../hooks/use-team';
 import useTeams from '../hooks/use-teams';
-import useProjects from '../hooks/use-projects';
-import { initUserData } from '../api';
+import useUser from '../hooks/use-user';
 
 export type State = {
   isOnboarding: boolean;

@@ -1,8 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
-import { Project, ProjectChecksums } from '@/types/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { getProjectChecksumsKey, safeGetObject, set } from '@/lib/redis';
 import { Database } from '@/types/supabase';
+import { Project, ProjectChecksums } from '@/types/types';
 
 type Data = {
   checksums?: ProjectChecksums;

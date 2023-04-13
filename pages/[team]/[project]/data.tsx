@@ -1,28 +1,29 @@
-import Button from '@/components/ui/Button';
-import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
-import { Checkbox } from '@/components/ui/Checkbox';
+import * as Dialog from '@radix-ui/react-dialog';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  useReactTable,
   SortingState,
+  useReactTable,
 } from '@tanstack/react-table';
 import cn from 'classnames';
 import dayjs from 'dayjs';
-import { FC, useMemo, useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
-import { FileDnd } from '@/components/files/FileDnd';
-import { createChecksum, pluralize, truncate } from '@/lib/utils';
-import { toast } from 'react-hot-toast';
-import ConfirmDialog from '@/components/dialogs/Confirm';
+// Cf. https://github.com/iamkun/dayjs/issues/297#issuecomment-1202327426
+import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
-import useTeam from '@/lib/hooks/use-team';
-import useProject from '@/lib/hooks/use-project';
-import useFiles from '@/lib/hooks/use-files';
+import { FC, useMemo, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { isPresent } from 'ts-is-present';
+
+import ConfirmDialog from '@/components/dialogs/Confirm';
+import { FileDnd } from '@/components/files/FileDnd';
+import { GitHubIcon } from '@/components/icons/GitHub';
+import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
+import Button from '@/components/ui/Button';
+import { Checkbox } from '@/components/ui/Checkbox';
 import { deleteFiles } from '@/lib/api';
 import {
   getTrainingStateMessage,
@@ -30,12 +31,11 @@ import {
   useTrainingContext,
 } from '@/lib/context/training';
 import { getGitHubMDFiles, getOwnerRepoString } from '@/lib/github';
-import { GitHubIcon } from '@/components/icons/GitHub';
-import { ExternalLinkIcon } from '@radix-ui/react-icons';
+import useFiles from '@/lib/hooks/use-files';
+import useProject from '@/lib/hooks/use-project';
+import useTeam from '@/lib/hooks/use-team';
+import { createChecksum, pluralize, truncate } from '@/lib/utils';
 
-// Cf. https://github.com/iamkun/dayjs/issues/297#issuecomment-1202327426
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { MarkpromptConfigType, parse } from '@/lib/schema';
 dayjs.extend(relativeTime);
 
 const getBasePath = (pathWithFile: string) => {

@@ -1,7 +1,7 @@
-import { FC, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { FC } from 'react';
+
 import Button, { ButtonVariant } from '../ui/Button';
-// import { AppState } from '@/types/types';
 import { CTABar } from '../ui/SettingsCard';
 
 type ConfirmDialogProps = {

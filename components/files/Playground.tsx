@@ -1,4 +1,3 @@
-import { I_DONT_KNOW, STREAM_SEPARATOR } from '@/lib/constants';
 import cn from 'classnames';
 import {
   FC,
@@ -9,11 +8,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
-import useProject from '@/lib/hooks/use-project';
+import remarkGfm from 'remark-gfm';
+
+import { I_DONT_KNOW, STREAM_SEPARATOR } from '@/lib/constants';
 import { getOrigin, timeout } from '@/lib/utils';
-import { OpenAIModelId, Project } from '@/types/types';
+import { OpenAIModelId } from '@/types/types';
 
 const Caret = () => {
   return (
@@ -192,7 +192,9 @@ export const Playground: FC<PlaygroundProps> = ({
               const parts = startText.split(STREAM_SEPARATOR);
               try {
                 refs = JSON.parse(parts[0]);
-              } catch {}
+              } catch {
+                // do nothing
+              }
               setAnswer((prev) => prev + parts[1]);
               didHandleHeader = true;
             }

@@ -1,8 +1,17 @@
-import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
-import { ListItem } from '@/components/ui/ListItem';
-import { useEffect, useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 import cn from 'classnames';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+
+import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
+import Button from '@/components/ui/Button';
+import { Flashing } from '@/components/ui/Flashing';
+import { ListItem } from '@/components/ui/ListItem';
+import { Segment } from '@/components/ui/Segment';
+import { cancelSubscription } from '@/lib/api';
+import useTeam from '@/lib/hooks/use-team';
+import { getStripe } from '@/lib/stripe/client';
 import {
   comparePlans,
   getTierDetailsFromPriceId,
@@ -10,18 +19,9 @@ import {
   isYearlyPrice,
   PricedModel,
   Tier,
-  TierDetails,
   TIERS,
 } from '@/lib/stripe/tiers';
-import { Segment } from '@/components/ui/Segment';
-import Button from '@/components/ui/Button';
-import { useRouter } from 'next/router';
-import useTeam from '@/lib/hooks/use-team';
 import { formatNumQueries } from '@/lib/utils';
-import { Flashing } from '@/components/ui/Flashing';
-import { getStripe } from '@/lib/stripe/client';
-import { toast } from 'react-hot-toast';
-import { cancelSubscription } from '@/lib/api';
 
 const env =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'production' : 'test';
@@ -273,7 +273,7 @@ const PricingCard = ({
 };
 
 const Team = () => {
-  const { team, loading } = useTeam();
+  const { team } = useTeam();
   const [model, setModel] = useState<PricedModel>('gpt-3.5-turbo');
   const [hasSwitched, setHasSwitched] = useState(false);
 

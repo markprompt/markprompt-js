@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import cn from 'classnames';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import cn from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { FC } from 'react';
 
 export type SubTabItem = { label: string; href: string };
 

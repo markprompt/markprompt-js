@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type CheckFullIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const CheckFullIcon: FC<CheckFullIconProps> = ({ className }) => {
   return (
@@ -13,5 +13,5 @@ export const CheckFullIcon: FC<CheckFullIconProps> = ({ className }) => {
         clipRule="evenodd"
       />
     </svg>
-  )
-}
+  );
+};

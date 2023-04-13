@@ -1,21 +1,22 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Project, ProjectChecksums, FileData } from '@/types/types';
-import { generateFileEmbeddings } from '@/lib/generate-embeddings';
-import { getProjectChecksumsKey, safeGetObject } from '@/lib/redis';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
+import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { generateFileEmbeddings } from '@/lib/generate-embeddings';
 import {
   checkEmbeddingsRateLimits,
   getEmbeddingsRateLimitResponse,
 } from '@/lib/rate-limits';
-import { createClient } from '@supabase/supabase-js';
-import { createChecksum } from '@/lib/utils';
+import { getProjectChecksumsKey, safeGetObject } from '@/lib/redis';
 import { getBYOOpenAIKey } from '@/lib/supabase';
+import { createChecksum } from '@/lib/utils';
+import { Database } from '@/types/supabase';
+import { Project, ProjectChecksums, FileData } from '@/types/types';
 
 type Data = {
   status?: string;
   error?: string;
-  errors?: any[];
+  errors?: { path: string; message: string }[];
 };
 
 // Admin access to Supabase, bypassing RLS.

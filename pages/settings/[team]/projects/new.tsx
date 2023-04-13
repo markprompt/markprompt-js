@@ -1,12 +1,3 @@
-import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
-import Button from '@/components/ui/Button';
-import { ErrorLabel } from '@/components/ui/Forms';
-import { NoAutoInput } from '@/components/ui/Input';
-import { createProject } from '@/lib/api';
-import { isGitHubRepoAccessible } from '@/lib/github';
-import useProjects from '@/lib/hooks/use-projects';
-import useTeam from '@/lib/hooks/use-team';
-import { showConfetti } from '@/lib/utils';
 import {
   ErrorMessage,
   Field,
@@ -17,6 +8,16 @@ import {
 } from 'formik';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
+
+import { TeamSettingsLayout } from '@/components/layouts/TeamSettingsLayout';
+import Button from '@/components/ui/Button';
+import { ErrorLabel } from '@/components/ui/Forms';
+import { NoAutoInput } from '@/components/ui/Input';
+import { createProject } from '@/lib/api';
+import { isGitHubRepoAccessible } from '@/lib/github';
+import useProjects from '@/lib/hooks/use-projects';
+import useTeam from '@/lib/hooks/use-team';
+import { showConfetti } from '@/lib/utils';
 
 const NewProject = () => {
   const router = useRouter();
@@ -31,7 +32,8 @@ const NewProject = () => {
             initialValues={{ name: '', slug: '', github: '' }}
             validateOnMount
             validate={async (values) => {
-              let errors: FormikErrors<FormikValues> = {};
+              const errors: FormikErrors<FormikValues> = {};
+
               if (!values.name) {
                 errors.name = 'Required';
                 return errors;
@@ -48,6 +50,7 @@ const NewProject = () => {
                 }
                 return errors;
               }
+
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {

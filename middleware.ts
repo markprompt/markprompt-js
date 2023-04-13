@@ -1,8 +1,9 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
-import CompletionsMiddleware from './lib/middleware/completions';
+
 import AppMiddleware from './lib/middleware/app';
-import { getHost } from './lib/utils';
+import CompletionsMiddleware from './lib/middleware/completions';
 import TrainMiddleware from './lib/middleware/train';
+import { getHost } from './lib/utils';
 
 export const config = {
   matcher: [

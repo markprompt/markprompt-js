@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type CalIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const CalIcon: FC<CalIconProps> = ({ className }) => {
   return (
@@ -12,5 +12,5 @@ export const CalIcon: FC<CalIconProps> = ({ className }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};

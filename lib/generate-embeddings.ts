@@ -1,6 +1,7 @@
 import Markdoc from '@markdoc/markdoc';
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { backOff } from 'exponential-backoff';
+import GPT3Tokenizer from 'gpt3-tokenizer';
 import type { Content, Root } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { mdxFromMarkdown } from 'mdast-util-mdx';
@@ -9,7 +10,6 @@ import { mdxjs } from 'micromark-extension-mdxjs';
 import TurndownService from 'turndown';
 import { u } from 'unist-builder';
 import { filter } from 'unist-util-filter';
-import GPT3Tokenizer from 'gpt3-tokenizer';
 
 import { CONTEXT_TOKENS_CUTOFF, MIN_CONTENT_LENGTH } from '@/lib/constants';
 import { createEmbedding } from '@/lib/openai.edge';
@@ -138,7 +138,7 @@ const splitWithinTokenCutoff = (section: string): string[] => {
   let accTokenCounter = 0;
   let accLines = '';
 
-  let i = 0;
+  const i = 0;
   for (const line of lines) {
     const lineTokenCount = line.length / 4;
     if (accTokenCounter + lineTokenCount < TOKEN_CUTOFF_ADJUSTED) {
@@ -151,7 +151,7 @@ const splitWithinTokenCutoff = (section: string): string[] => {
     }
   }
 
-  if (!!accLines) {
+  if (accLines) {
     subSections.push(accLines);
   }
 
@@ -195,7 +195,7 @@ export const generateFileEmbeddings = async (
   byoOpenAIKey: string | undefined,
 ) => {
   let embeddingsTokenCount = 0;
-  let errors: { path: string; message: string }[] = [];
+  const errors: { path: string; message: string }[] = [];
 
   const { meta, sections } = processFile(file);
 

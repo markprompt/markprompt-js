@@ -1,5 +1,7 @@
-import { Project } from '@/types/types';
 import { Ratelimit } from '@upstash/ratelimit';
+
+import { Project } from '@/types/types';
+
 import { getRedisClient } from './redis';
 import { pluralize } from './utils';
 

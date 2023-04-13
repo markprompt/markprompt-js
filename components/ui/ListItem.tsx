@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
-import { CheckIcon } from '@/components/icons/Check';
 import cn from 'classnames';
+import { ReactNode } from 'react';
+
+import { CheckIcon } from '@/components/icons/Check';
 
 export const ListItem = ({
   size = 'base',

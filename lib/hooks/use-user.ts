@@ -1,10 +1,12 @@
-import { DbUser } from '@/types/types';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { usePlain } from '@team-plain/react-chat-ui';
 import Router from 'next/router';
 import { useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import useSWR, { useSWRConfig } from 'swr';
+
+import { DbUser } from '@/types/types';
+
 import { fetcher } from '../utils';
 
 export default function useUser() {

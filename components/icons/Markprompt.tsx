@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
 type MarkpromptIconProps = {
-  className?: string
-}
+  className?: string;
+};
 
 export const MarkpromptIcon: FC<MarkpromptIconProps> = ({ className }) => {
   return (
@@ -24,8 +24,8 @@ export const MarkpromptIcon: FC<MarkpromptIconProps> = ({ className }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 /* <svg className={className} viewBox="0 0 184 128" fill="none">
 <g clipPath="url(#prefix__clip0_5685_199803)" fill="currentColor">

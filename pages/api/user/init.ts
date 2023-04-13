@@ -1,16 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import slugify from '@sindresorhus/slugify';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import {
   generateKey,
   generateRandomSlug,
   generateSKTestKey,
   slugFromEmail,
 } from '@/lib/utils';
-import { getAvailableTeamSlug } from '../slug/generate-team-slug';
+import { Database } from '@/types/supabase';
 import { Project, Team } from '@/types/types';
-import { createClient } from '@supabase/supabase-js';
+
+import { getAvailableTeamSlug } from '../slug/generate-team-slug';
 
 type Data =
   | {
@@ -70,7 +72,7 @@ export default async function handler(
     // We must use the admin database here, because RLS prevents a
     // user from selecting a team before they have been added as
     // members.
-    let { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('teams')
       .insert([
         {
@@ -153,7 +155,7 @@ export default async function handler(
   }
 
   // Check if token already exists
-  let { count: tokenCount } = await supabase
+  const { count: tokenCount } = await supabase
     .from('tokens')
     .select('id', { count: 'exact' })
     .match({ project_id: project.id });

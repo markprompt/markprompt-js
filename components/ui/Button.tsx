@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import Link from 'next/link';
 import { forwardRef, JSXElementConstructor, ReactNode, useRef } from 'react';
+
 import LoadingDots from './LoadingDots';
 
 export type ButtonVariant =
@@ -47,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp: any = asLink ? Link : href ? 'a' : Component;
 
-    let size = buttonSize ?? 'base';
+    const size = buttonSize ?? 'base';
     return (
       <Comp
         {...(!asLink ? { ref } : {})}

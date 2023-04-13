@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useRect } from '@reach/rect';
+import { useEffect, useState } from 'react';
 
 export const useTop = (ref: any) => {
   const [top, setTop] = useState<number | undefined>(undefined);

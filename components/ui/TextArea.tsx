@@ -27,7 +27,7 @@ const TextArea: FC<TextAreaProps> = ({
   className,
   ...props
 }) => {
-  let textAreaSize = s ?? 'base';
+  const textAreaSize = s ?? 'base';
   return (
     <textarea
       {...props}

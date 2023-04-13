@@ -1,5 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { Database } from '@/types/supabase';
 import { DbUser } from '@/types/types';
 
@@ -50,7 +51,7 @@ export default async function handler(
 
     return res.status(200).json(data);
   } else if (req.method === 'PATCH') {
-    let { error } = await supabase
+    const { error } = await supabase
       .from('users')
       .update({
         ...req.body,

@@ -1,12 +1,13 @@
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeMinimal } from '@supabase/auth-ui-shared';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
+import { FC } from 'react';
+
 import { MarkpromptIcon } from '@/components/icons/Markprompt';
 import Button from '@/components/ui/Button';
-import { FC } from 'react';
-import Link from 'next/link';
-import { getOrigin } from '@/lib/utils';
 import useUser from '@/lib/hooks/use-user';
+import { getOrigin } from '@/lib/utils';
 
 type AuthPageProps = {
   type: 'signin' | 'signup';
