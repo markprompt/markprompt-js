@@ -27,6 +27,18 @@ export const config = {
   runtime: 'edge',
 };
 
+export const DEFAULT_PROMPT_TEMPLATE = stripIndent`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. Here as some further instructions:
+- If you encounter a relative link, or an anchor link (starting with #), prepend it with the section id. Also remove any extension (such as .md).
+- If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
+
+Context sections:
+---
+{{CONTEXT}}
+
+Question: "{{PROMPT}}"
+
+Answer (including related code snippets if available):`;
+
 const getPayload = (prompt: string, model: OpenAIModelIdWithType) => {
   const payload = {
     model: model.value,
@@ -233,18 +245,12 @@ export default async function handler(req: NextRequest) {
     }
   }
 
-  const fullPrompt = stripIndent`
-  ${oneLine`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "${
-    iDontKnowMessage || I_DONT_KNOW
-  }"`}
-
-Context sections:
----
-${contextText}
-
-Question: "${sanitizedQuery}"
-
-Answer (including related code snippets if available):`;
+  const fullPrompt = stripIndent(
+    ((params.promptTemplate as string) || DEFAULT_PROMPT_TEMPLATE)
+      .replace('{{I_DONT_KNOW}}', iDontKnowMessage || I_DONT_KNOW)
+      .replace('{{CONTEXT}}', contextText)
+      .replace('{{PROMPT}}', sanitizedQuery),
+  );
 
   const payload = getPayload(fullPrompt, model);
 
