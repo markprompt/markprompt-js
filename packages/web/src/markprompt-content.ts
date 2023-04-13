@@ -27,36 +27,6 @@ declare global {
 
 @customElement('markprompt-content')
 export class Markprompt extends LitElement {
-  @property({ type: String })
-  model: OpenAIModelId = DEFAULT_MODEL;
-
-  @property({ type: String })
-  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
-
-  @property({ type: String })
-  completionsUrl = MARKPROMPT_COMPLETIONS_URL;
-
-  @property({ type: String })
-  projectKey = '';
-
-  @property({ type: String })
-  placeholder = 'Ask me anything…';
-
-  @property({ type: String, state: true })
-  prompt = '';
-
-  @property({ type: Object })
-  idToRefMap = {};
-
-  @property({ type: Boolean, state: true })
-  loading = false;
-
-  @property({ type: String, state: true })
-  answer = '';
-
-  @property({ type: Array, state: true })
-  references = [];
-
   static styles = css`
     .root {
       position: relative;
@@ -217,6 +187,36 @@ export class Markprompt extends LitElement {
       transition-timing-function: ease-in-out;
     }
   `;
+
+  @property({ type: String })
+  model: OpenAIModelId = DEFAULT_MODEL;
+
+  @property({ type: String })
+  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
+
+  @property({ type: String })
+  completionsUrl = MARKPROMPT_COMPLETIONS_URL;
+
+  @property({ type: String })
+  projectKey = '';
+
+  @property({ type: String })
+  placeholder = 'Ask me anything…';
+
+  @property({ type: String, state: true })
+  prompt = '';
+
+  @property({ type: Object })
+  idToRefMap = {};
+
+  @property({ type: Boolean, state: true })
+  loading = false;
+
+  @property({ type: String, state: true })
+  answer = '';
+
+  @property({ type: Array, state: true })
+  references = [];
 
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;

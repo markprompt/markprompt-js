@@ -5,7 +5,7 @@ import './markprompt-content';
 
 declare global {
   interface Window {
-    markprompt: {
+    'markprompt-content': {
       projectKey: string;
       completionsUrl?: string;
       model?: OpenAIModelId;
