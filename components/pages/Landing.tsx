@@ -212,9 +212,7 @@ const useOnScreen = (ref: any) => {
 
 const formatNumStars = (stars: number) => {
   if (stars > 1000) {
-    try {
-      return `${(stars / 1000).toFixed(1)}k`;
-    } catch {}
+    return `${(stars / 1000).toFixed(1)}k`;
   }
   return stars;
 };
