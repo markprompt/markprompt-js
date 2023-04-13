@@ -8,7 +8,6 @@ import {
   getProjectIdFromToken,
   noProjectForTokenResponse,
   noTokenOrProjectKeyResponse,
-  noTokenResponse,
 } from './common';
 import { checkCompletionsRateLimits } from '../rate-limits';
 import {
