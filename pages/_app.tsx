@@ -6,6 +6,7 @@ import {
   useSession,
 } from '@supabase/auth-helpers-react';
 import { PlainProvider } from '@team-plain/react-chat-ui';
+import { Analytics } from '@vercel/analytics/react';
 import * as Fathom from 'fathom-client';
 import { NextComponentType, NextPageContext } from 'next';
 import type { AppProps } from 'next/app';
@@ -18,7 +19,6 @@ import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { ManagedAppContext } from '@/lib/context/app';
 import { ManagedTrainingContext } from '@/lib/context/training';
 import { getHost } from '@/lib/utils';
-import { Analytics } from '@vercel/analytics/react';
 
 interface CustomAppProps<P = any> extends AppProps<P> {
   Component: NextComponentType<NextPageContext, any, P> & {
