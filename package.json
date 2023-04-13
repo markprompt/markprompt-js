@@ -40,6 +40,7 @@
     "@team-plain/react-chat-ui": "^6.2.3",
     "@upstash/ratelimit": "^0.4.0",
     "@upstash/redis": "^1.20.1",
+    "@vercel/analytics": "^0.1.11",
     "@visx/axis": "^2.12.2",
     "@visx/event": "^2.6.0",
     "@visx/grid": "^2.12.2",

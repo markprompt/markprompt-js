@@ -18,6 +18,7 @@ import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { ManagedAppContext } from '@/lib/context/app';
 import { ManagedTrainingContext } from '@/lib/context/training';
 import { getHost } from '@/lib/utils';
+import { Analytics } from '@vercel/analytics/react';
 
 interface CustomAppProps<P = any> extends AppProps<P> {
   Component: NextComponentType<NextPageContext, any, P> & {
@@ -74,6 +75,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         </SessionContextProvider>
       </ThemeProvider>
       <Toaster />
+      <Analytics />
     </>
   );
 }

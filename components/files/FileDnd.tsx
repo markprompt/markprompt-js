@@ -134,7 +134,7 @@ export const FileDnd: FC<FileDndProps> = ({ onTrainingComplete }) => {
                         },
                       )}
                     >
-                      A folder also works. Max size: 1MB.
+                      A folder also works.
                     </span>
                   </>
                 }

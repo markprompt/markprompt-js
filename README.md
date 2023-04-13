@@ -85,7 +85,3 @@ Markprompt keeps the data as long as you need to query it. If you remove a file 
 
 Created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
-
-## License
-
-MIT
