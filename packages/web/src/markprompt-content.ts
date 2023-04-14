@@ -1,10 +1,10 @@
 import {
+  OpenAIModelId,
   I_DONT_KNOW_MESSAGE,
   MARKPROMPT_COMPLETIONS_URL,
   DEFAULT_MODEL,
   submitPrompt,
 } from '@markprompt/core';
-import { OpenAIModelId } from '@markprompt/core/types';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -32,7 +32,7 @@ export class Markprompt extends LitElement {
   model: OpenAIModelId = DEFAULT_MODEL;
 
   @property({ type: String })
-  promptTemplate: string;
+  promptTemplate: string | undefined = undefined;
 
   @property({ type: String })
   iDontKnowMessage = I_DONT_KNOW_MESSAGE;
@@ -50,7 +50,10 @@ export class Markprompt extends LitElement {
   prompt = '';
 
   @property({ type: Object })
-  idToRefMap = {};
+  idToRefMap: Record<
+    typeof this.references[number],
+    { href: string; label: string }
+  > = {};
 
   @property({ type: Boolean, state: true })
   loading = false;
@@ -59,7 +62,7 @@ export class Markprompt extends LitElement {
   answer = '';
 
   @property({ type: Array, state: true })
-  references = [];
+  references: string[] = [];
 
   controller = new AbortController();
   inputRef: Ref<HTMLInputElement> = createRef();

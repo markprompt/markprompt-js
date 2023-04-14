@@ -3,20 +3,14 @@
   "version": "0.3.0",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "author": "Motif",
-  "main": "dist/index.cjs",
-  "typings": "dist/index.d.ts",
-  "module": "dist/markprompt.esm.js",
+  "main": "dist/index.js",
+  "exports": "./dist/index.js",
   "license": "MIT",
   "type": "module",
   "files": [
     "README.md",
     "dist"
   ],
-  "exports": {
-    "import": "./dist/markprompt.esm.js",
-    "require": "./dist/index.cjs",
-    "types": "./dist/index.d.ts"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt.git",
@@ -26,8 +20,8 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "npx tsc -b -w",
-    "build": "./scripts/build.sh --external:react --external:react-dom",
+    "dev": "tsc --build --watch",
+    "build": "tsc --build",
     "vite": "vite"
   },
   "dependencies": {

@@ -11,6 +11,5 @@
     "strict": true,
     "isolatedModules": true,
     "skipLibCheck": true
-  },
-  "exclude": ["dist/"]
+  }
 }

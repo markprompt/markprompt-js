@@ -1,4 +1,6 @@
-import { OpenAIModelId } from './types.js';
+import type { OpenAIModelId } from './types.js';
+
+export type { OpenAIModelId };
 
 type Options = {
   /** URL at which to fetch completions */
