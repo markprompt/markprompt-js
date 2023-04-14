@@ -8,13 +8,12 @@
     "directory": "packages/core"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -b tsconfig.json",
-    "dev": "tsc -b tsconfig.json -w"
+    "prepack": "tsc --build",
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
   }
 }
