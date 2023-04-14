@@ -38,7 +38,7 @@ function MyPrompt() {
 }
 ```
 
-where `project-key` can be obtained in your project settings
+where `<project-key>` can be obtained in your project settings
 
 ## Documentation
 
