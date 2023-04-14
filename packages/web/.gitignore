@@ -2,10 +2,8 @@
 
 # dependencies
 node_modules
-*.tgz
-
-# packing
-dist/
+/.pnp
+.pnp.js
 
 # testing
 /coverage
@@ -15,8 +13,8 @@ dist/
 /out/
 
 # production
-/build/
-/dist/
+/dist
+dist
 
 # misc
 .DS_Store
@@ -29,10 +27,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env
-.env.*
-
-private
+.env*.local
 
 # vercel
 .vercel
@@ -40,3 +35,5 @@ private
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+index.html

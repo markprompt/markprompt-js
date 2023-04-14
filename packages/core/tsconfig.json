@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "module": "node16",
+    "target": "es2021",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "dist/",
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  }
+}

@@ -1,6 +1,6 @@
-# Markprompt React
+# Markprompt Web
 
-A headless React component for building a prompt interface, based on the [Markprompt](https://markprompt.com) API.
+A Web Component component for building a prompt interface, based on the [Markprompt](https://markprompt.com) API.
 
 <br />
 <p align="center">
@@ -14,39 +14,25 @@ A headless React component for building a prompt interface, based on the [Markpr
 
 ## Installation
 
-Check out the starter template for a fully working example: [Markprompt starter template](href="https://github.com/motifland/markprompt-starter-template).
+Add the following script tag to your HTML page:
 
-Install the `@markprompt/react` package via npm or yarn:
-
-```sh
-# npm
-npm install @markprompt/react
-
-# Yarn
-yarn add @markprompt/react
+```html
+<script type="module" src="https://esm.sh/@markprompt/web@0.2.2-beta18" />
 ```
 
 ## Usage
 
-Example:
+Then add the `markprompt-web` component anywhere on your page:
 
-```jsx
-import { Markprompt } from '@markprompt/react';
-
-function MyPrompt() {
-  return <Markprompt projectKey="<project-key>" model="gpt-4" />;
-}
+```html
+<markprompt-content projectKey="<project-key>" />
 ```
 
-where `project-key` can be obtained in your project settings
+where `project-key` can be obtained in your project settings.
 
 ## Documentation
 
 The full documentation for the component can be found on the [Markprompt docs](https://markprompt.com/docs#web-component).
-
-## Starter Template
-
-For a working setup based on Next.js + Tailwind, check out the [Markprompt starter template](https://github.com/motifland/markprompt-starter-template).
 
 ## Community
 
