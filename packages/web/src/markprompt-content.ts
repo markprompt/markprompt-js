@@ -1,10 +1,10 @@
 import {
-  OpenAIModelId,
   I_DONT_KNOW_MESSAGE,
   MARKPROMPT_COMPLETIONS_URL,
   DEFAULT_MODEL,
   submitPrompt,
 } from '@markprompt/core';
+import { OpenAIModelId } from '@markprompt/core/types';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';

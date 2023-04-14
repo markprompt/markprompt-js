@@ -1,5 +1,5 @@
 import { submitPrompt } from '@markprompt/core';
-import type { OpenAIModelId } from '@markprompt/core';
+import type { OpenAIModelId } from '@markprompt/core/types';
 import cn from 'classnames';
 import React, {
   FC,
