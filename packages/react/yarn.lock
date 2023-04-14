@@ -683,10 +683,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@markprompt/core@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@markprompt/core/-/core-0.2.0.tgz#6a4e00cd958c1bf54a67f53046826085d898015d"
-  integrity sha512-HKyUXLDj9z+hT6X2ynhGycY7zd81kplrATQG/2Eq/+P4YQeTP9ciw159TfoxXx1a7vezDADVNG5ON5chap1L6g==
+"@markprompt/core@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@markprompt/core/-/core-0.2.1.tgz#eb22768b95427617e8a4b546ea4eb248ab3bc5db"
+  integrity sha512-SnQE9lcev66pMMh6T49wTegjuAe2kv6yjrgNSVtN+69UEdwCX77CFNRmoPSstsBwvRmQtB2h1sjO27kIfvp5ug==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
