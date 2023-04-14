@@ -1,12 +1,16 @@
 {
   "name": "@markprompt/core",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt.git",
     "directory": "packages/core"
   },
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "exports": "./dist/index.js",

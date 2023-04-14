@@ -5,10 +5,10 @@ import {
   OpenAIModelId,
   submitPrompt,
 } from '@markprompt/core';
-import { css, html, LitElement, nothing } from 'lit';
+import { LitElement, css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { createRef, Ref, ref } from 'lit/directives/ref.js';
+import { Ref, createRef, ref } from 'lit/directives/ref.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { until } from 'lit/directives/until.js';
 import rehypeSanitize from 'rehype-sanitize';
@@ -165,7 +165,7 @@ export class Markprompt extends LitElement {
 
     .answer pre {
       max-width: 100%;
-      overflow-x: hidden;
+      overflow-x: auto;
     }
 
     .answer a {
