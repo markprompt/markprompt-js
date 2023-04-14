@@ -1,4 +1,4 @@
-import { OpenAIModelId, RequiredKeys } from './types.js';
+import { OpenAIModelId } from './types.js';
 
 type Options = {
   /** URL at which to fetch completions */
@@ -18,14 +18,6 @@ export const I_DONT_KNOW_MESSAGE = 'Sorry, I am not sure how to answer that.';
 export const MARKPROMPT_COMPLETIONS_URL =
   'https://api.markprompt.com/v1/completions';
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
-
-const defaultOptions = {
-  model: DEFAULT_MODEL,
-  completionsUrl: MARKPROMPT_COMPLETIONS_URL,
-  iDontKnowMessage: I_DONT_KNOW_MESSAGE,
-  promptTemplate: undefined,
-  signal: undefined,
-} as const;
 
 /**
  * @param {string} prompt - Prompt to submit to the model
@@ -49,39 +41,30 @@ export async function submitPrompt(
 
   if (!prompt) return;
 
-  const resolvedOptions = Object.fromEntries(
-    Object.entries(defaultOptions).map(([key, value]) => {
-      const option = key as keyof Options;
-
-      if (option in options && !!options[option]) {
-        return [option, options[option]];
-      }
-
-      return [option, value];
-    }),
-  ) as RequiredKeys<Options, 'completionsUrl' | 'iDontKnowMessage' | 'model'>;
+  const iDontKnowMessage = options.iDontKnowMessage ?? I_DONT_KNOW_MESSAGE;
 
   try {
-    const res = await fetch(resolvedOptions.completionsUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      options.completionsUrl ?? MARKPROMPT_COMPLETIONS_URL,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          projectKey: projectKey,
+          iDontKnowMessage: iDontKnowMessage,
+          model: options?.model ?? DEFAULT_MODEL,
+          promptTemplate: options.promptTemplate,
+        }),
+        signal: options.signal,
       },
-      body: JSON.stringify({
-        prompt,
-        model: resolvedOptions.model,
-        iDontKnowMessage: resolvedOptions.iDontKnowMessage,
-        ...(resolvedOptions.promptTemplate
-          ? { promptTemplate: resolvedOptions.promptTemplate }
-          : {}),
-        projectKey,
-      }),
-      signal: resolvedOptions.signal,
-    });
+    );
 
     if (!res.ok || !res.body) {
       const text = await res.text();
-      onAnswerChunk(resolvedOptions.iDontKnowMessage);
+      onAnswerChunk(iDontKnowMessage);
       onError(new Error(text));
       return;
     }
@@ -117,7 +100,7 @@ export async function submitPrompt(
     }
     onReferences(refs);
   } catch (error) {
-    onAnswerChunk(resolvedOptions.iDontKnowMessage);
+    onAnswerChunk(iDontKnowMessage);
     onError(error instanceof Error ? error : new Error(`${error}`));
   }
 }
