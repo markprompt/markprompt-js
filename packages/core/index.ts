@@ -54,7 +54,7 @@ export async function submitPrompt(
         body: JSON.stringify({
           prompt: prompt,
           projectKey: projectKey,
-          iDontKnowMessage: iDontKnowMessage,
+          iDontKnowMessage,
           model: options?.model ?? DEFAULT_MODEL,
           promptTemplate: options.promptTemplate,
         }),
