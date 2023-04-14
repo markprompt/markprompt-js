@@ -17,12 +17,12 @@ import {
   STREAM_SEPARATOR,
 } from '@/lib/constants';
 import { createEmbedding, createModeration } from '@/lib/openai.edge';
+import { DEFAULT_PROMPT_TEMPLATE } from '@/lib/prompt';
 import { checkCompletionsRateLimits } from '@/lib/rate-limits';
 import { getBYOOpenAIKey } from '@/lib/supabase';
 import { stringToModel } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
-import { DEFAULT_PROMPT_TEMPLATE } from '@/lib/prompt';
 
 export const config = {
   runtime: 'edge',
