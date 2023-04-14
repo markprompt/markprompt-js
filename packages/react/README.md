@@ -16,14 +16,14 @@ A headless React component for building a prompt interface, based on the [Markpr
 
 Check out the starter template for a fully working example: [Markprompt starter template](href="https://github.com/motifland/markprompt-starter-template).
 
-Install the `markprompt` package via npm or yarn:
+Install the `@markprompt/react` package via npm or yarn:
 
 ```sh
 # npm
-npm install markprompt
+npm install @markprompt/react
 
 # Yarn
-yarn add markprompt
+yarn add @markprompt/react
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ yarn add markprompt
 Example:
 
 ```jsx
-import { Markprompt } from 'markprompt';
+import { Markprompt } from '@markprompt/react';
 
 function MyPrompt() {
   return <Markprompt projectKey="<project-key>" model="gpt-4" />;
