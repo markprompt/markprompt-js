@@ -1,3 +1,3 @@
 import 'client-only';
 
-export * from './Markprompt';
+export * from './Markprompt.js';

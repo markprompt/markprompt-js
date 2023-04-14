@@ -12,13 +12,13 @@ import { Playground } from '../files/Playground';
 import { Code } from '../ui/Code';
 
 const npmCode = `
-npm install markprompt
+npm install @markprompt/react
 `.trim();
 
 const reactCode = (publicApiKey: string) =>
   `
 // Use on whitelisted domain
-import { Markprompt } from "markprompt"
+import { Markprompt } from "@markprompt/react"
 
 <Markprompt
   projectKey="${publicApiKey}" />

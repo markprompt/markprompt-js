@@ -1,7 +1,6 @@
-import { submitPrompt } from '@markprompt/core';
-import type { OpenAIModelId } from '@markprompt/core/types';
+import { OpenAIModelId, submitPrompt } from '@markprompt/core';
 import cn from 'classnames';
-import React, {
+import {
   FC,
   ReactNode,
   SyntheticEvent,

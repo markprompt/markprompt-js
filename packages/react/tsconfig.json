@@ -1,32 +1,18 @@
 {
-  "include": ["src", "types"],
   "compilerOptions": {
-    "module": "esnext",
-    "lib": ["dom", "esnext", "dom.iterable"],
-    "importHelpers": true,
+    "module": "node16",
     "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
     "rootDir": "./src",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "downlevelIteration": true,
-    "moduleResolution": "node",
-    "baseUrl": "./",
     "paths": {
-      "markprompt": ["src"],
-      "*": ["src/*", "node_modules/*"]
+      "@markprompt/*": ["../*/src"]
     },
-    "jsx": "react",
-    "esModuleInterop": true,
-    "target": "ESNext",
-    "allowJs": true,
+    "jsx": "react-jsx",
+    "outDir": "dist",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
+    "target": "es2021",
     "isolatedModules": true
-  },
-  "exclude": ["node_modules", "**/*.test.tsx?"]
+  }
 }
