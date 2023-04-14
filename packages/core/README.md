@@ -4,8 +4,6 @@
 
 It contains core functionality for Markprompt and allows you to build abstractions on top of it.
 
-Currently,
-
 ## Installation
 
 ```sh
