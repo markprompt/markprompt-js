@@ -27,9 +27,8 @@ export const config = {
   runtime: 'edge',
 };
 
-export const DEFAULT_PROMPT_TEMPLATE = stripIndent`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. Here as some further instructions:
-- If you encounter a relative link, or an anchor link (starting with #), prepend it with the section id. Also remove any extension (such as .md).
-- If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
+const DEFAULT_PROMPT_TEMPLATE = stripIndent`
+  ${oneLine`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}"`}
 
 Context sections:
 ---
