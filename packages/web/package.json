@@ -20,6 +20,7 @@
     "access": "public"
   },
   "scripts": {
+    "prepack": "tsc --build",
     "dev": "tsc --build --watch",
     "build": "tsc --build",
     "vite": "vite"
