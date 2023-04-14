@@ -412,7 +412,7 @@ export const MarkdocLayout: FC<MarkdocLayoutProps> = ({
             </div>
           </div>
           <div className="relative mx-auto min-h-screen max-w-screen-xl">
-            <div className="fixed inset-0 top-24 left-[max(0px,calc(50%-40rem))] right-auto z-20 hidden w-72 overflow-y-auto px-6 pb-10 sm:px-8 md:block">
+            <div className="hidden-scrollbar fixed inset-0 top-24 left-[max(0px,calc(50%-40rem))] right-auto z-20 hidden w-72 overflow-y-auto px-6 pb-10 sm:px-8 md:block">
               <div className="mt-[26px] flex flex-col gap-1 pb-12">
                 <div className="mb-4 w-full">
                   <DocsSearch />
