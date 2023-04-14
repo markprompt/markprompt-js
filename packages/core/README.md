@@ -39,6 +39,11 @@ function onReferences(references) {
   // process references
 }
 
+// called when submitPrompt encounters an error
+const onError(error) {
+  // handle errors
+}
+
 // optional options, defaults displayed
 const options = {
   model: 'gpt-3.5-turbo', // supports all OpenAI models
@@ -46,5 +51,5 @@ const options = {
   completionsUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
 };
 
-await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, options);
+await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
 ```

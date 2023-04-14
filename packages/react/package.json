@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/react",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A React component for adding GPT-4 powered search using the Markprompt API.",
   "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
@@ -49,6 +49,6 @@
     "client-only": "^0.0.1",
     "react-markdown": "^8.0.6",
     "remark-gfm": "^3.0.1",
-    "@markprompt/core": "0.2.1"
+    "@markprompt/core": "^0.3.0"
   }
 }

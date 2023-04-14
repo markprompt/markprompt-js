@@ -1,3 +1,6 @@
+import { submitPrompt } from '@markprompt/core';
+import type { OpenAIModelId } from '@markprompt/core';
+import cn from 'classnames';
 import React, {
   FC,
   ReactNode,
@@ -7,11 +10,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import cn from 'classnames';
-import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
-import { submitPrompt } from '@markprompt/core';
-import type { OpenAIModelId } from '@markprompt/core';
+import remarkGfm from 'remark-gfm';
 
 const Caret = () => {
   return (
@@ -92,6 +92,9 @@ export const Markprompt: FC<MarkpromptProps> = ({
         projectKey,
         (chunk) => setAnswer((prev) => prev + chunk),
         (refs) => setReferences(refs),
+        (error) => {
+          console.error(error);
+        },
         {
           completionsUrl: completionsUrl,
           iDontKnowMessage: iDontKnowMessage,

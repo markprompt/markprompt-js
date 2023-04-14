@@ -31,15 +31,17 @@ const defaultOptions = {
 /**
  * @param {string} prompt - Prompt to submit to the model
  * @param {string} projectKey - The key of your project
- * @param {(answerChunk: string) => void} onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
+ * @param {(answerChunk: string, error?: Error) => void} onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
  * @param {(references: string[]) => void} onReferences - This function is called when a chunk includes references.
+ * @param {(error: Error) => void} onError - called when an error occurs
  * @param {Options} [options] - Optional options object
  */
-export const submitPrompt = async function (
+export async function submitPrompt(
   prompt,
   projectKey,
   onAnswerChunk,
   onReferences,
+  onError,
   options,
 ) {
   if (!projectKey) {
@@ -74,8 +76,9 @@ export const submitPrompt = async function (
 
     if (!res.ok || !res.body) {
       const text = await res.text();
-      console.error('Error:', text);
-      return I_DONT_KNOW_MESSAGE;
+      onAnswerChunk(options.iDontKnowMessage);
+      onError(new Error(text));
+      return;
     }
 
     const reader = res.body.getReader();
@@ -99,7 +102,9 @@ export const submitPrompt = async function (
           const parts = startText.split(STREAM_SEPARATOR);
           try {
             refs = JSON.parse(parts[0]);
-          } catch {}
+          } catch {
+            // do nothing
+          }
           onAnswerChunk(parts[1]);
           didHandleHeader = true;
         }
@@ -108,8 +113,8 @@ export const submitPrompt = async function (
       }
     }
     onReferences(refs);
-  } catch (e) {
-    console.error('Error', e);
+  } catch (error) {
     onAnswerChunk(options.iDontKnowMessage);
+    onError(error instanceof Error ? error : new Error(error));
   }
-};
+}

@@ -273,6 +273,9 @@ export class Markprompt extends LitElement {
         this.scrollToBottom();
         this.references = references;
       },
+      (error) => {
+        console.error(error);
+      },
       {
         model: this.model,
         iDontKnowMessage: this.iDontKnowMessage,
