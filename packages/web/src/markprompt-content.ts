@@ -1,11 +1,11 @@
 import {
-  OpenAIModelId,
+  DEFAULT_MODEL,
   I_DONT_KNOW_MESSAGE,
   MARKPROMPT_COMPLETIONS_URL,
-  DEFAULT_MODEL,
+  OpenAIModelId,
   submitPrompt,
 } from '@markprompt/core';
-import { LitElement, html, css, nothing } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { createRef, Ref, ref } from 'lit/directives/ref.js';
@@ -161,6 +161,11 @@ export class Markprompt extends LitElement {
 
     .answer img {
       max-width: 100%;
+    }
+
+    .answer pre {
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     .answer a {
