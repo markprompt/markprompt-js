@@ -262,8 +262,6 @@ export class Markprompt extends LitElement {
     this.references = [];
     this.loading = true;
 
-    console.log('this.promptTemplate', this.promptTemplate);
-
     await submitPrompt(
       this.prompt,
       this.projectKey,
