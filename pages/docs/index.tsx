@@ -13,6 +13,7 @@ import {
   playgroundTag,
 } from '@/components/layouts/MarkdocLayout';
 import { SharedHead } from '@/components/pages/SharedHead';
+import { DEFAULT_PROMPT_TEMPLATE } from '@/lib/prompt';
 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(
@@ -30,6 +31,9 @@ export const getStaticProps: GetStaticProps = async () => {
       note: noteTag,
       collapsegroup: collapseGroupTag,
       collapse: collapseTag,
+    },
+    variables: {
+      defaultPromptTemplate: DEFAULT_PROMPT_TEMPLATE,
     },
   };
 

@@ -22,21 +22,11 @@ import { getBYOOpenAIKey } from '@/lib/supabase';
 import { stringToModel } from '@/lib/utils';
 import { Database } from '@/types/supabase';
 import { DbFile, OpenAIModelIdWithType, Project } from '@/types/types';
+import { DEFAULT_PROMPT_TEMPLATE } from '@/lib/prompt';
 
 export const config = {
   runtime: 'edge',
 };
-
-const DEFAULT_PROMPT_TEMPLATE = stripIndent`
-  ${oneLine`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}"`}
-
-Context sections:
----
-{{CONTEXT}}
-
-Question: "{{PROMPT}}"
-
-Answer (including related code snippets if available):`;
 
 const getPayload = (prompt: string, model: OpenAIModelIdWithType) => {
   const payload = {

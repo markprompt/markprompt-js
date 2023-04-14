@@ -16,7 +16,7 @@ export const Code: FC<CodeProps> = ({ code, language, className }) => {
     <div className={className}>
       <Highlight {...defaultProps} code={code} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre className={className} style={style}>
+          <pre className={`${className} whitespace-pre-wrap`} style={style}>
             {tokens.map((line, i) => (
               <div key={`code-line-${i}`} {...getLineProps({ line, key: i })}>
                 {line.map((token, key) => (
