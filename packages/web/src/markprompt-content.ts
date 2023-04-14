@@ -61,6 +61,7 @@ export class Markprompt extends LitElement {
   @property({ type: Array, state: true })
   references = [];
 
+  controller = new AbortController();
   inputRef: Ref<HTMLInputElement> = createRef();
   resultRef: Ref<HTMLDivElement> = createRef();
 
@@ -226,6 +227,12 @@ export class Markprompt extends LitElement {
     }
   `;
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    // abort requests on removal from DOM
+    this.controller.abort();
+  }
+
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     this.prompt = input.value;
@@ -280,6 +287,7 @@ export class Markprompt extends LitElement {
         model: this.model,
         iDontKnowMessage: this.iDontKnowMessage,
         completionsUrl: this.completionsUrl,
+        signal: this.controller.signal,
         ...(this.promptTemplate ? { promptTemplate: this.promptTemplate } : {}),
       },
     );

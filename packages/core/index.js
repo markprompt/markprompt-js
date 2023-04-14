@@ -18,6 +18,7 @@ const defaultOptions = {
   completionsUrl: MARKPROMPT_COMPLETIONS_URL,
   iDontKnowMessage: I_DONT_KNOW_MESSAGE,
   promptTemplate: undefined,
+  signal: null,
 };
 
 /**
@@ -26,12 +27,13 @@ const defaultOptions = {
  * @property {string} [iDontKnowMessage] - Message returned when the model does not have an answer
  * @property {OpenAIModelId} [model] - The model to use
  * @property {string} [promptTemplate] - The prompt template
+ * @property {AbortSignal} [signal] - Abort signal
  */
 
 /**
  * @param {string} prompt - Prompt to submit to the model
  * @param {string} projectKey - The key of your project
- * @param {(answerChunk: string, error?: Error) => void} onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
+ * @param {(answerChunk: string) => void} onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
  * @param {(references: string[]) => void} onReferences - This function is called when a chunk includes references.
  * @param {(error: Error) => void} onError - called when an error occurs
  * @param {Options} [options] - Optional options object
@@ -72,6 +74,7 @@ export async function submitPrompt(
           : {}),
         projectKey,
       }),
+      signal: options.signal,
     });
 
     if (!res.ok || !res.body) {

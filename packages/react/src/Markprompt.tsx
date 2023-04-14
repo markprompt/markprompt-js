@@ -63,6 +63,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
   onDark,
   completionsUrl,
 }) => {
+  const controller = useRef(new AbortController());
   const [prompt, setPrompt] = useState<string | undefined>(undefined);
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
@@ -74,6 +75,12 @@ export const Markprompt: FC<MarkpromptProps> = ({
   const iDontKnowMessage =
     _iDontKnowMessage || 'Sorry, I am not sure how to answer that.';
   const placeholder = _placeholder || 'Ask me anything...';
+
+  // abort requests on unmount
+  useEffect(() => {
+    const c = controller.current;
+    return () => c.abort();
+  }, []);
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent<EventTarget>) => {
@@ -99,6 +106,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
           completionsUrl: completionsUrl,
           iDontKnowMessage: iDontKnowMessage,
           model: model,
+          signal: controller.current.signal,
         },
       );
 
