@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { oneLine, stripIndent } from 'common-tags';
+import { stripIndent } from 'common-tags';
 import {
   createParser,
   ParsedEvent,
