@@ -1,13 +1,19 @@
-/**
- * @typedef {'gpt-4' | 'gpt-4-0314' | 'gpt-4-32k' | 'gpt-4-32k-0314' | 'gpt-3.5-turbo' | 'gpt-3.5-turbo-0301'} OpenAIChatCompletionsModelId
- * @typedef {'text-davinci-003' | 'text-davinci-002' | 'text-curie-001' | 'text-babbage-001' | 'text-ada-001' | 'davinci' | 'curie' | 'babbage' | 'ada'} OpenAICompletionsModelId
- * @typedef {OpenAIChatCompletionsModelId | OpenAICompletionsModelId} OpenAIModelId
- */
+import { OpenAIModelId, RequiredKeys } from './types.js';
 
-/**
- * @type {OpenAIModelId}
- */
-export const DEFAULT_MODEL = 'gpt-3.5-turbo';
+type Options = {
+  /** URL at which to fetch completions */
+  completionsUrl?: string;
+  /** Message returned when the model does not have an answer */
+  iDontKnowMessage?: string;
+  /** The OpenAI model to use */
+  model?: OpenAIModelId;
+  /** The prompt template */
+  promptTemplate?: string;
+  /** AbortController signal */
+  signal?: AbortSignal;
+};
+
+export const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
 export const I_DONT_KNOW_MESSAGE = 'Sorry, I am not sure how to answer that.';
 export const MARKPROMPT_COMPLETIONS_URL =
   'https://api.markprompt.com/v1/completions';
@@ -18,17 +24,8 @@ const defaultOptions = {
   completionsUrl: MARKPROMPT_COMPLETIONS_URL,
   iDontKnowMessage: I_DONT_KNOW_MESSAGE,
   promptTemplate: undefined,
-  signal: null,
-};
-
-/**
- * @typedef {Object} Options
- * @property {string} [completionsUrl] - URL at which to fetch completions
- * @property {string} [iDontKnowMessage] - Message returned when the model does not have an answer
- * @property {OpenAIModelId} [model] - The model to use
- * @property {string} [promptTemplate] - The prompt template
- * @property {AbortSignal} [signal] - Abort signal
- */
+  signal: undefined,
+} as const;
 
 /**
  * @param {string} prompt - Prompt to submit to the model
@@ -39,12 +36,12 @@ const defaultOptions = {
  * @param {Options} [options] - Optional options object
  */
 export async function submitPrompt(
-  prompt,
-  projectKey,
-  onAnswerChunk,
-  onReferences,
-  onError,
-  options,
+  prompt: string,
+  projectKey: string,
+  onAnswerChunk: (answerChunk: string) => void,
+  onReferences: (references: string[]) => void,
+  onError: (error: Error) => void,
+  options: Options = {},
 ) {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
@@ -52,34 +49,39 @@ export async function submitPrompt(
 
   if (!prompt) return;
 
-  options = Object.fromEntries(
-    Object.entries(defaultOptions).map(([key, value]) => [
-      key,
-      options?.[key] ?? value,
-    ]),
-  );
+  const resolvedOptions = Object.fromEntries(
+    Object.entries(defaultOptions).map(([key, value]) => {
+      const option = key as keyof Options;
+
+      if (option in options && !!options[option]) {
+        return [option, options[option]];
+      }
+
+      return [option, value];
+    }),
+  ) as RequiredKeys<Options, 'completionsUrl' | 'iDontKnowMessage' | 'model'>;
 
   try {
-    const res = await fetch(options.completionsUrl, {
+    const res = await fetch(resolvedOptions.completionsUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         prompt,
-        model: options.model,
-        iDontKnowMessage: options.iDontKnowMessage,
-        ...(options.promptTemplate
-          ? { promptTemplate: options.promptTemplate }
+        model: resolvedOptions.model,
+        iDontKnowMessage: resolvedOptions.iDontKnowMessage,
+        ...(resolvedOptions.promptTemplate
+          ? { promptTemplate: resolvedOptions.promptTemplate }
           : {}),
         projectKey,
       }),
-      signal: options.signal,
+      signal: resolvedOptions.signal,
     });
 
     if (!res.ok || !res.body) {
       const text = await res.text();
-      onAnswerChunk(options.iDontKnowMessage);
+      onAnswerChunk(resolvedOptions.iDontKnowMessage);
       onError(new Error(text));
       return;
     }
@@ -90,9 +92,7 @@ export async function submitPrompt(
     let done = false;
     let startText = '';
     let didHandleHeader = false;
-
-    /** @type {string[]} */
-    let refs = [];
+    let refs: string[] = [];
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
@@ -117,7 +117,7 @@ export async function submitPrompt(
     }
     onReferences(refs);
   } catch (error) {
-    onAnswerChunk(options.iDontKnowMessage);
-    onError(error instanceof Error ? error : new Error(error));
+    onAnswerChunk(resolvedOptions.iDontKnowMessage);
+    onError(error instanceof Error ? error : new Error(`${error}`));
   }
 }

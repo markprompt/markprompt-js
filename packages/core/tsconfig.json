@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "module": "ESNext",
-    "allowJs": true,
-    "checkJs": true,
-    "emitDeclarationOnly": true,
+    "lib": ["esnext", "dom"],
+    "module": "node16",
+    "target": "es2021",
+    "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "moduleResolution": "node",
-    "incremental": true
+    "incremental": true,
+    "outDir": "dist/",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   },
-  "exclude": ["./index.d.ts", "./index.d.ts.map"]
+  "exclude": ["dist/"]
 }
