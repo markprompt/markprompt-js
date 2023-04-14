@@ -37,7 +37,7 @@ yarn add markprompt
 Example:
 
 ```jsx
-import { Markprompt } from 'markprompt';
+import { Markprompt } from '@markprompt/react';
 
 function MyPrompt() {
   return <Markprompt projectKey="<project-key>" model="gpt-4" />;

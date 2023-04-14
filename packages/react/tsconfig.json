@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "rootDir": "./src",
+    "strict": true,
+    "paths": {
+      "@markprompt/*": ["../*/src"]
+    },
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "target": "es2021",
+    "isolatedModules": true
+  }
+}
