@@ -7,6 +7,7 @@ declare global {
   interface Window {
     'markprompt-content': {
       projectKey: string;
+      promptTemplate?: string;
       completionsUrl?: string;
       model?: OpenAIModelId;
       iDontKnowMessage?: string;

@@ -27,6 +27,39 @@ declare global {
 
 @customElement('markprompt-content')
 export class Markprompt extends LitElement {
+  @property({ type: String })
+  model: OpenAIModelId = DEFAULT_MODEL;
+
+  @property({ type: String })
+  promptTemplate: string;
+
+  @property({ type: String })
+  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
+
+  @property({ type: String })
+  completionsUrl = MARKPROMPT_COMPLETIONS_URL;
+
+  @property({ type: String })
+  projectKey = '';
+
+  @property({ type: String })
+  placeholder = 'Ask me anything…';
+
+  @property({ type: String, state: true })
+  prompt = '';
+
+  @property({ type: Object })
+  idToRefMap = {};
+
+  @property({ type: Boolean, state: true })
+  loading = false;
+
+  @property({ type: String, state: true })
+  answer = '';
+
+  @property({ type: Array, state: true })
+  references = [];
+
   static styles = css`
     .root {
       position: relative;
@@ -35,6 +68,7 @@ export class Markprompt extends LitElement {
       flex-direction: column;
     }
 
+    .input-container {
       box-sizing: border-box;
       padding: 1rem;
       display: flex;
@@ -188,36 +222,6 @@ export class Markprompt extends LitElement {
     }
   `;
 
-  @property({ type: String })
-  model: OpenAIModelId = DEFAULT_MODEL;
-
-  @property({ type: String })
-  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
-
-  @property({ type: String })
-  completionsUrl = MARKPROMPT_COMPLETIONS_URL;
-
-  @property({ type: String })
-  projectKey = '';
-
-  @property({ type: String })
-  placeholder = 'Ask me anything…';
-
-  @property({ type: String, state: true })
-  prompt = '';
-
-  @property({ type: Object })
-  idToRefMap = {};
-
-  @property({ type: Boolean, state: true })
-  loading = false;
-
-  @property({ type: String, state: true })
-  answer = '';
-
-  @property({ type: Array, state: true })
-  references = [];
-
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     this.prompt = input.value;
@@ -258,6 +262,8 @@ export class Markprompt extends LitElement {
     this.references = [];
     this.loading = true;
 
+    console.log('this.promptTemplate', this.promptTemplate);
+
     await submitPrompt(
       this.prompt,
       this.projectKey,
@@ -273,6 +279,7 @@ export class Markprompt extends LitElement {
         model: this.model,
         iDontKnowMessage: this.iDontKnowMessage,
         completionsUrl: this.completionsUrl,
+        ...(this.promptTemplate ? { promptTemplate: this.promptTemplate } : {}),
       },
     );
 

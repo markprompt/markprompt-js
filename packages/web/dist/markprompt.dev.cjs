@@ -806,7 +806,8 @@ var STREAM_SEPARATOR = "___START_RESPONSE_STREAM___";
 var defaultOptions = {
   model: DEFAULT_MODEL,
   completionsUrl: MARKPROMPT_COMPLETIONS_URL,
-  iDontKnowMessage: I_DONT_KNOW_MESSAGE
+  iDontKnowMessage: I_DONT_KNOW_MESSAGE,
+  promptTemplate: void 0
 };
 var submitPrompt = async function(prompt, projectKey, onAnswerChunk, onReferences, options) {
   if (!projectKey) {
@@ -833,6 +834,7 @@ var submitPrompt = async function(prompt, projectKey, onAnswerChunk, onReference
         prompt,
         model: options.model,
         iDontKnowMessage: options.iDontKnowMessage,
+        ...options.promptTemplate ? { promptTemplate: options.promptTemplate } : {},
         projectKey
       })
     });
@@ -13026,10 +13028,6 @@ var Markprompt = class extends s4 {
     this.iDontKnowMessage = I_DONT_KNOW_MESSAGE;
     this.completionsUrl = MARKPROMPT_COMPLETIONS_URL;
     this.projectKey = "";
-    this.dark = true;
-    this.accentColor = "";
-    this.responseStyle = "";
-    this.referenceItemStyle = "";
     this.placeholder = "Ask me anything\u2026";
     this.prompt = "";
     this.idToRefMap = {};
@@ -13070,6 +13068,7 @@ var Markprompt = class extends s4 {
     this.answer = "";
     this.references = [];
     this.loading = true;
+    console.log("this.promptTemplate", this.promptTemplate);
     await submitPrompt(
       this.prompt,
       this.projectKey,
@@ -13084,7 +13083,8 @@ var Markprompt = class extends s4 {
       {
         model: this.model,
         iDontKnowMessage: this.iDontKnowMessage,
-        completionsUrl: this.completionsUrl
+        completionsUrl: this.completionsUrl,
+        ...this.promptTemplate ? { promptTemplate: this.promptTemplate } : {}
       }
     );
     this.loading = false;
@@ -13339,6 +13339,9 @@ __decorateClass([
 ], Markprompt.prototype, "model", 2);
 __decorateClass([
   e5({ type: String })
+], Markprompt.prototype, "promptTemplate", 2);
+__decorateClass([
+  e5({ type: String })
 ], Markprompt.prototype, "iDontKnowMessage", 2);
 __decorateClass([
   e5({ type: String })
@@ -13346,18 +13349,6 @@ __decorateClass([
 __decorateClass([
   e5({ type: String })
 ], Markprompt.prototype, "projectKey", 2);
-__decorateClass([
-  e5({ type: Boolean })
-], Markprompt.prototype, "dark", 2);
-__decorateClass([
-  e5({ type: String })
-], Markprompt.prototype, "accentColor", 2);
-__decorateClass([
-  e5({ type: String })
-], Markprompt.prototype, "responseStyle", 2);
-__decorateClass([
-  e5({ type: String })
-], Markprompt.prototype, "referenceItemStyle", 2);
 __decorateClass([
   e5({ type: String })
 ], Markprompt.prototype, "placeholder", 2);
