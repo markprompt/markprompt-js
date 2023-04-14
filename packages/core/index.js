@@ -17,6 +17,7 @@ const defaultOptions = {
   model: DEFAULT_MODEL,
   completionsUrl: MARKPROMPT_COMPLETIONS_URL,
   iDontKnowMessage: I_DONT_KNOW_MESSAGE,
+  promptTemplate: undefined,
 };
 
 /**
@@ -24,6 +25,7 @@ const defaultOptions = {
  * @property {string} [completionsUrl] - URL at which to fetch completions
  * @property {string} [iDontKnowMessage] - Message returned when the model does not have an answer
  * @property {OpenAIModelId} [model] - The model to use
+ * @property {string} [promptTemplate] - The prompt template
  */
 
 /**
@@ -63,6 +65,9 @@ export const submitPrompt = async function (
         prompt,
         model: options.model,
         iDontKnowMessage: options.iDontKnowMessage,
+        ...(options.promptTemplate
+          ? { promptTemplate: options.promptTemplate }
+          : {}),
         projectKey,
       }),
     });
