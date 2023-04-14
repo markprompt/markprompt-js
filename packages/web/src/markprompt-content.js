@@ -1,14 +1,14 @@
-import {
-  OpenAIModelId,
-  I_DONT_KNOW_MESSAGE,
-  MARKPROMPT_COMPLETIONS_URL,
-  DEFAULT_MODEL,
-  submitPrompt,
-} from '@markprompt/core';
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import { I_DONT_KNOW_MESSAGE, MARKPROMPT_COMPLETIONS_URL, DEFAULT_MODEL, submitPrompt, } from '@markprompt/core';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { createRef, Ref, ref } from 'lit/directives/ref.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { until } from 'lit/directives/until.js';
 import rehypeSanitize from 'rehype-sanitize';
@@ -17,54 +17,165 @@ import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+let Markprompt = class Markprompt extends LitElement {
+    constructor() {
+        super(...arguments);
+        this.model = DEFAULT_MODEL;
+        this.iDontKnowMessage = I_DONT_KNOW_MESSAGE;
+        this.completionsUrl = MARKPROMPT_COMPLETIONS_URL;
+        this.projectKey = '';
+        this.placeholder = 'Ask me anything…';
+        this.prompt = '';
+        this.idToRefMap = {};
+        this.loading = false;
+        this.answer = '';
+        this.references = [];
+        this.inputRef = createRef();
+        this.resultRef = createRef();
+    }
+    onInput(event) {
+        const input = event.target;
+        this.prompt = input.value;
+    }
+    scrollToBottom() {
+        const results = this.resultRef.value;
+        if (!results)
+            return;
+        results.scrollTop = results.scrollHeight;
+    }
+    getRefFromId(id) {
+        return undefined;
+    }
+    reset() {
+        this.prompt = '';
+        this.answer = '';
+        this.references = [];
+        this.loading = false;
+    }
+    focus() {
+        const input = this.inputRef.value;
+        input === null || input === void 0 ? void 0 : input.focus();
+    }
+    async onSubmit(event) {
+        event.preventDefault();
+        if (this.prompt === '')
+            return;
+        this.answer = '';
+        this.references = [];
+        this.loading = true;
+        await submitPrompt(this.prompt, this.projectKey, (chunk) => {
+            this.scrollToBottom();
+            this.answer += chunk;
+        }, (references) => {
+            this.scrollToBottom();
+            this.references = references;
+        }, {
+            model: this.model,
+            iDontKnowMessage: this.iDontKnowMessage,
+            completionsUrl: this.completionsUrl,
+            ...(this.promptTemplate ? { promptTemplate: this.promptTemplate } : {}),
+        });
+        this.loading = false;
+    }
+    async renderMarkdown(markdown) {
+        const file = await unified()
+            .use(remarkParse)
+            .use(remarkGfm)
+            .use(remarkRehype, { allowDangerousHtml: true })
+            .use(rehypeSanitize)
+            .use(rehypeStringify)
+            .process(markdown);
+        if (typeof file.value !== 'string') {
+            return '';
+        }
+        return unsafeHTML(file.value);
+    }
+    render() {
+        return html `
+      <div class="root">
+        <div class="input-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clip-rule="evenodd"
+            />
+          </svg>
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'animated-caret': Caret;
-    'markprompt-content': Markprompt;
-    'prose-block': ProseBlock;
-  }
-}
+          <form class="prompt-form" @submit="${this.onSubmit}">
+            <input
+              ${ref(this.inputRef)}
+              class="prompt-input"
+              type="text"
+              name="prompt"
+              @input="${this.onInput}"
+              placeholder="${this.placeholder}"
+              value="${this.prompt}"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              autofocus
+            />
+          </form>
+        </div>
 
-@customElement('markprompt-content')
-export class Markprompt extends LitElement {
-  @property({ type: String })
-  model: OpenAIModelId = DEFAULT_MODEL;
-
-  @property({ type: String })
-  promptTemplate: string;
-
-  @property({ type: String })
-  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
-
-  @property({ type: String })
-  completionsUrl = MARKPROMPT_COMPLETIONS_URL;
-
-  @property({ type: String })
-  projectKey = '';
-
-  @property({ type: String })
-  placeholder = 'Ask me anything…';
-
-  @property({ type: String, state: true })
-  prompt = '';
-
-  @property({ type: Object })
-  idToRefMap = {};
-
-  @property({ type: Boolean, state: true })
-  loading = false;
-
-  @property({ type: String, state: true })
-  answer = '';
-
-  @property({ type: Array, state: true })
-  references = [];
-
-  inputRef: Ref<HTMLInputElement> = createRef();
-  resultRef: Ref<HTMLDivElement> = createRef();
-
-  static styles = css`
+        <div class="gradient"></div>
+        <prose-block class="result" ${ref(this.resultRef)}>
+          <div class="answer prose">
+            ${this.loading && !(this.answer.length > 0)
+            ? html `<animated-caret class="caret"></animated-caret>`
+            : nothing}
+            ${until(this.renderMarkdown(this.answer), nothing)}
+            ${this.loading && this.answer.length > 0
+            ? html `<animated-caret class="caret"></animated-caret>`
+            : nothing}
+          </div>
+          ${this.answer.length > 0 && this.references.length > 0
+            ? html `
+                <div class="references-container">
+                  <div
+                    class="${classMap({
+                'animate-slide-up': !this.loading,
+            })}"
+                  >
+                    <p>Generated from the following sources:</p>
+                    <div class="references">
+                      ${this.references.map((reference) => {
+                let refInfo = this.idToRefMap
+                    ? this.idToRefMap[reference]
+                    : undefined;
+                if (!refInfo) {
+                    refInfo = this.getRefFromId(reference);
+                }
+                if (refInfo && refInfo.href) {
+                    return html `<a
+                            href="${refInfo.href}"
+                            class="reference-item"
+                          >
+                            ${refInfo.label || reference}</a
+                          >`;
+                }
+                return html `<div class="reference-item">
+                          ${reference}
+                        </div>`;
+            })}
+                    </div>
+                  </div>
+                </div>
+              `
+            : nothing}
+          <div class="spacer"></div>
+        </prose-block>
+      </div>
+    `;
+    }
+};
+Markprompt.styles = css `
     .root {
       position: relative;
       height: 100%;
@@ -225,170 +336,49 @@ export class Markprompt extends LitElement {
       transition-timing-function: ease-in-out;
     }
   `;
-
-  onInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.prompt = input.value;
-  }
-
-  scrollToBottom() {
-    const results = this.resultRef.value;
-    if (!results) return;
-    results.scrollTop = results.scrollHeight;
-  }
-
-  getRefFromId(id: string) {
-    return undefined;
-  }
-
-  reset() {
-    this.prompt = '';
-    this.answer = '';
-    this.references = [];
-    this.loading = false;
-  }
-
-  focus() {
-    const input = this.inputRef.value;
-    input?.focus();
-  }
-
-  async onSubmit(event: Event) {
-    event.preventDefault();
-
-    if (this.prompt === '') return;
-
-    this.answer = '';
-    this.references = [];
-    this.loading = true;
-
-    await submitPrompt(
-      this.prompt,
-      this.projectKey,
-      (chunk) => {
-        this.scrollToBottom();
-        this.answer += chunk;
-      },
-      (references) => {
-        this.scrollToBottom();
-        this.references = references;
-      },
-      {
-        model: this.model,
-        iDontKnowMessage: this.iDontKnowMessage,
-        completionsUrl: this.completionsUrl,
-        ...(this.promptTemplate ? { promptTemplate: this.promptTemplate } : {}),
-      },
-    );
-
-    this.loading = false;
-  }
-
-  async renderMarkdown(markdown: string) {
-    const file = await unified()
-      .use(remarkParse)
-      .use(remarkGfm)
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeSanitize)
-      .use(rehypeStringify)
-      .process(markdown);
-
-    if (typeof file.value !== 'string') {
-      return '';
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "model", void 0);
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "promptTemplate", void 0);
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "iDontKnowMessage", void 0);
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "completionsUrl", void 0);
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "projectKey", void 0);
+__decorate([
+    property({ type: String })
+], Markprompt.prototype, "placeholder", void 0);
+__decorate([
+    property({ type: String, state: true })
+], Markprompt.prototype, "prompt", void 0);
+__decorate([
+    property({ type: Object })
+], Markprompt.prototype, "idToRefMap", void 0);
+__decorate([
+    property({ type: Boolean, state: true })
+], Markprompt.prototype, "loading", void 0);
+__decorate([
+    property({ type: String, state: true })
+], Markprompt.prototype, "answer", void 0);
+__decorate([
+    property({ type: Array, state: true })
+], Markprompt.prototype, "references", void 0);
+Markprompt = __decorate([
+    customElement('markprompt-content')
+], Markprompt);
+export { Markprompt };
+let Caret = class Caret extends LitElement {
+    render() {
+        return html `<span></span>`;
     }
-
-    return unsafeHTML(file.value);
-  }
-
-  render() {
-    return html`
-      <div class="root">
-        <div class="input-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-              clip-rule="evenodd"
-            />
-          </svg>
-
-          <form class="prompt-form" @submit="${this.onSubmit}">
-            <input
-              ${ref(this.inputRef)}
-              class="prompt-input"
-              type="text"
-              name="prompt"
-              @input="${this.onInput}"
-              placeholder="${this.placeholder}"
-              value="${this.prompt}"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"
-              autofocus
-            />
-          </form>
-        </div>
-
-        <div class="gradient"></div>
-        <prose-block class="result" ${ref(this.resultRef)}>
-          <div class="answer">
-            ${this.loading && !(this.answer.length > 0)
-              ? html`<animated-caret class="caret"></animated-caret>`
-              : nothing}
-            ${until(this.renderMarkdown(this.answer), nothing)}
-            ${this.loading && this.answer.length > 0
-              ? html`<animated-caret class="caret"></animated-caret>`
-              : nothing}
-          </div>
-          ${this.answer.length > 0 && this.references.length > 0
-            ? html`
-                <div class="references-container">
-                  <div
-                    class="${classMap({
-                      'animate-slide-up': !this.loading,
-                    })}"
-                  >
-                    <p>Generated from the following sources:</p>
-                    <div class="references">
-                      ${this.references.map((reference) => {
-                        let refInfo = this.idToRefMap
-                          ? this.idToRefMap[reference]
-                          : undefined;
-                        if (!refInfo) {
-                          refInfo = this.getRefFromId(reference);
-                        }
-                        if (refInfo && refInfo.href) {
-                          return html`<a
-                            href="${refInfo.href}"
-                            class="reference-item"
-                          >
-                            ${refInfo.label || reference}</a
-                          >`;
-                        }
-                        return html`<div class="reference-item">
-                          ${reference}
-                        </div>`;
-                      })}
-                    </div>
-                  </div>
-                </div>
-              `
-            : nothing}
-          <div class="spacer"></div>
-        </prose-block>
-      </div>
-    `;
-  }
-}
-
-@customElement('animated-caret')
-export class Caret extends LitElement {
-  static styles = css`
+};
+Caret.styles = css `
     :host {
       display: inline-block;
       width: 8px;
@@ -413,18 +403,29 @@ export class Caret extends LitElement {
       }
     }
   `;
-
-  render() {
-    return html`<span></span>`;
-  }
-}
-
-@customElement('prose-block')
-export class ProseBlock extends LitElement {
-  @property({ type: String })
-  class = '';
-
-  static styles = css`
+Caret = __decorate([
+    customElement('animated-caret')
+], Caret);
+export { Caret };
+let ProseBlock = class ProseBlock extends LitElement {
+    constructor() {
+        super(...arguments);
+        this.class = '';
+    }
+    render() {
+        return html `
+      <div
+        class="${classMap({
+            prose: true,
+            [this.class]: this.class.length > 0,
+        })}"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+};
+ProseBlock.styles = css `
     .prose {
       color: var(--tw-prose-body);
       max-width: 65ch;
@@ -1059,17 +1060,10 @@ export class ProseBlock extends LitElement {
       margin-bottom: 0;
     }
   `;
-
-  render() {
-    return html`
-      <div
-        class="${classMap({
-          prose: true,
-          [this.class]: this.class.length > 0,
-        })}"
-      >
-        <slot></slot>
-      </div>
-    `;
-  }
-}
+__decorate([
+    property({ type: String })
+], ProseBlock.prototype, "class", void 0);
+ProseBlock = __decorate([
+    customElement('prose-block')
+], ProseBlock);
+export { ProseBlock };
