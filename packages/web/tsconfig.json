@@ -1,6 +1,8 @@
 {
+  "references": [{ "path": "../core" }],
   "compilerOptions": {
     "module": "node16",
+    "rootDir": "src",
     "target": "es2021",
     "sourceMap": true,
     "declaration": true,

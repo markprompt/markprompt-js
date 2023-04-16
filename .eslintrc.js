@@ -14,15 +14,6 @@ module.exports = {
     es2022: true,
     node: true,
   },
-  settings: {
-    'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true,
-        project: ['./tsconfig.json', './packages/markprompt/tsconfig.json'],
-      },
-      node: true,
-    },
-  },
   rules: {
     'import/order': [
       'error',
@@ -39,5 +30,6 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    'import/no-unresolved': 'off',
   },
 };

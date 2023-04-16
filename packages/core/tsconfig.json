@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
     "module": "node16",
     "target": "es2021",
     "sourceMap": true,
