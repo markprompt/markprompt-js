@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "lib": ["esnext", "dom"],
     "module": "node16",
     "target": "es2021",
     "sourceMap": true,

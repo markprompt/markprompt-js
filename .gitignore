@@ -10,10 +10,6 @@ dist/
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build/
 /dist/
@@ -31,10 +27,6 @@ dist/
 
 private
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 .editorconfig
