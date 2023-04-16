@@ -1,7 +1,6 @@
 import { OpenAIModelId, submitPrompt } from '@markprompt/core';
 import cn from 'classnames';
 import {
-  FC,
   ReactNode,
   SyntheticEvent,
   useCallback,
@@ -10,6 +9,7 @@ import {
   useState,
 } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { ReactElement } from 'react-markdown/lib/react-markdown.js';
 import remarkGfm from 'remark-gfm';
 
 const Caret = () => {
@@ -23,7 +23,11 @@ type WithCaretProps = {
   children?: ReactNode;
 } & any;
 
-const WithCaret: FC<WithCaretProps> = ({ Component, children, ...rest }) => {
+function WithCaret({
+  Component,
+  children,
+  ...rest
+}: WithCaretProps): ReactElement {
   if (Component === 'code' && rest.inline) {
     // The code component mistakenly receives a prop `inline: true` which
     // the DOM will complain about unless it's converted to a string.
@@ -39,7 +43,7 @@ const WithCaret: FC<WithCaretProps> = ({ Component, children, ...rest }) => {
       <Caret />
     </Component>
   );
-};
+}
 
 type MarkpromptProps = {
   projectKey: string;
@@ -52,7 +56,7 @@ type MarkpromptProps = {
   completionsUrl?: string;
 };
 
-export const Markprompt: FC<MarkpromptProps> = ({
+export function Markprompt({
   model,
   projectKey,
   iDontKnowMessage: _iDontKnowMessage,
@@ -61,7 +65,7 @@ export const Markprompt: FC<MarkpromptProps> = ({
   didCompleteFirstQuery,
   onDark,
   completionsUrl,
-}) => {
+}: MarkpromptProps) {
   const controller = useRef(new AbortController());
   const [prompt, setPrompt] = useState<string | undefined>(undefined);
   const [answer, setAnswer] = useState('');
@@ -218,6 +222,6 @@ export const Markprompt: FC<MarkpromptProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default Markprompt;
