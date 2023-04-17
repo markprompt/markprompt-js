@@ -15,7 +15,7 @@
   "exports": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motifland/markprompt.git",
+    "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/react"
   },
   "publishConfig": {
