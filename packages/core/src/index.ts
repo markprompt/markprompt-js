@@ -32,7 +32,7 @@ export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 export async function submitPrompt(
   prompt: string,
   projectKey: string,
-  onAnswerChunk: (answerChunk: string) => void,
+  onAnswerChunk: (answerChunk: string) => boolean,
   onReferences: (references: string[]) => void,
   onError: (error: Error) => void,
   options: Options = {},
@@ -77,7 +77,6 @@ export async function submitPrompt(
     let done = false;
     let startText = '';
     let didHandleHeader = false;
-    let refs: string[] = [];
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
@@ -89,7 +88,7 @@ export async function submitPrompt(
         if (startText.includes(STREAM_SEPARATOR)) {
           const parts = startText.split(STREAM_SEPARATOR);
           try {
-            refs = JSON.parse(parts[0]);
+            onReferences(JSON.parse(parts[0]));
           } catch {
             // do nothing
           }
@@ -97,10 +96,14 @@ export async function submitPrompt(
           didHandleHeader = true;
         }
       } else {
-        onAnswerChunk(chunkValue);
+        const shouldContinue = onAnswerChunk(chunkValue);
+        if (!shouldContinue) {
+          // If callback returns false, it means it wishes
+          // to interrupt the streaming.
+          done = true;
+        }
       }
     }
-    onReferences(refs);
   } catch (error) {
     onAnswerChunk(iDontKnowMessage);
     onError(error instanceof Error ? error : new Error(`${error}`));
