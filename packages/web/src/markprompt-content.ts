@@ -37,6 +37,9 @@ export class Markprompt extends LitElement {
   @property({ type: String })
   iDontKnowMessage = I_DONT_KNOW_MESSAGE;
 
+  @property({ type: Boolean })
+  showReferencesImmediatebly = true;
+
   @property({ type: String })
   completionsUrl = MARKPROMPT_COMPLETIONS_URL;
 
@@ -57,6 +60,9 @@ export class Markprompt extends LitElement {
 
   @property({ type: Boolean, state: true })
   loading = false;
+
+  @property({ type: Boolean, state: true })
+  shouldStopStreaming = false;
 
   @property({ type: String, state: true })
   answer = '';
@@ -135,7 +141,6 @@ export class Markprompt extends LitElement {
 
     .result {
       box-sizing: border-box;
-      border-top: 1px solid var(--border-color);
       background-color: var(--result-bg-color);
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -146,7 +151,6 @@ export class Markprompt extends LitElement {
       top: 3rem;
       z-index: 0;
       max-width: 100%;
-      overflow-y: auto;
       scroll-behavior: smooth;
     }
 
@@ -154,8 +158,23 @@ export class Markprompt extends LitElement {
       display: none;
     }
 
+    .stacked-result {
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
     .answer {
-      padding: 2rem;
+      overflow-y: auto;
+      box-sizing: border-box;
+      flex-grow: 1 !important;
+      padding: 1rem;
       color: var(--text-color);
     }
 
@@ -172,13 +191,11 @@ export class Markprompt extends LitElement {
       color: var(--link-color);
     }
 
-    .spacer {
-      height: 2rem;
-    }
-
     .references-container {
+      flex: none;
+      box-sizing: border-box;
       border-top: 1px solid var(--border-color);
-      padding: 2rem;
+      padding: 1rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
       color: rgb(115 115 115 / 1);
@@ -214,6 +231,10 @@ export class Markprompt extends LitElement {
 
     .caret {
       color: var(--caret-color);
+    }
+
+    .spacer {
+      height: 2rem;
     }
 
     @keyframes slide-up {
@@ -257,15 +278,19 @@ export class Markprompt extends LitElement {
   }
 
   reset() {
+    const input = this.inputRef.value;
+    if (input) {
+      input.value = '';
+    }
     this.prompt = '';
     this.answer = '';
     this.references = [];
     this.loading = false;
+    this.shouldStopStreaming = true;
   }
 
   focus() {
-    const input = this.inputRef.value;
-    input?.focus();
+    this.inputRef.value?.focus();
   }
 
   async onSubmit(event: Event) {
@@ -276,17 +301,22 @@ export class Markprompt extends LitElement {
     this.answer = '';
     this.references = [];
     this.loading = true;
+    this.shouldStopStreaming = false;
 
     await submitPrompt(
       this.prompt,
       this.projectKey,
       (chunk) => {
-        this.scrollToBottom();
+        if (this.shouldStopStreaming) {
+          return false;
+        }
         this.answer += chunk;
+        setTimeout(() => this.scrollToBottom(), 50);
+        return true;
       },
       (references) => {
-        this.scrollToBottom();
         this.references = references;
+        setTimeout(() => this.scrollToBottom(), 50);
       },
       (error) => {
         console.error(error);
@@ -320,6 +350,11 @@ export class Markprompt extends LitElement {
   }
 
   render() {
+    const shouldShowReferences =
+      this.references.length > 0 &&
+      ((!this.loading && this.answer.length > 0) ||
+        this.showReferencesImmediatebly);
+
     return html`
       <div class="root">
         <div class="input-container">
@@ -354,51 +389,50 @@ export class Markprompt extends LitElement {
         </div>
 
         <div class="gradient"></div>
-        <prose-block class="result" ${ref(this.resultRef)}>
-          <div class="answer">
-            ${this.loading && !(this.answer.length > 0)
-              ? html`<animated-caret class="caret"></animated-caret>`
-              : nothing}
-            ${until(this.renderMarkdown(this.answer), nothing)}
-            ${this.loading && this.answer.length > 0
-              ? html`<animated-caret class="caret"></animated-caret>`
-              : nothing}
-          </div>
-          ${this.answer.length > 0 && this.references.length > 0
-            ? html`
-                <div class="references-container">
-                  <div
-                    class="${classMap({
-                      'animate-slide-up': !this.loading,
-                    })}"
-                  >
-                    <p>Generated from the following sources:</p>
-                    <div class="references">
-                      ${this.references.map((reference) => {
-                        let refInfo = this.idToRefMap
-                          ? this.idToRefMap[reference]
-                          : undefined;
-                        if (!refInfo) {
-                          refInfo = this.getRefFromId(reference);
-                        }
-                        if (refInfo && refInfo.href) {
-                          return html`<a
-                            href="${refInfo.href}"
-                            class="reference-item"
-                          >
-                            ${refInfo.label || reference}</a
-                          >`;
-                        }
-                        return html`<div class="reference-item">
-                          ${reference}
-                        </div>`;
-                      })}
+        <prose-block class="result">
+          <div class="stacked-result">
+            <div class="answer" ${ref(this.resultRef)}>
+              ${this.loading && !(this.answer.length > 0)
+                ? html`<animated-caret class="caret"></animated-caret>`
+                : nothing}
+              ${until(this.renderMarkdown(this.answer), nothing)}
+              ${this.loading && this.answer.length > 0
+                ? html`<animated-caret class="caret"></animated-caret>`
+                : nothing}
+            </div>
+            ${shouldShowReferences
+              ? html`
+                  <div class="references-container">
+                    <div class="animate-slide-up">
+                      <div style="margin-bottom: 0.5rem;">
+                        Generated from the following sources:
+                      </div>
+                      <div class="references">
+                        ${this.references.map((reference) => {
+                          let refInfo = this.idToRefMap
+                            ? this.idToRefMap[reference]
+                            : undefined;
+                          if (!refInfo) {
+                            refInfo = this.getRefFromId(reference);
+                          }
+                          if (refInfo && refInfo.href) {
+                            return html`<a
+                              href="${refInfo.href}"
+                              class="reference-item"
+                            >
+                              ${refInfo.label || reference}</a
+                            >`;
+                          }
+                          return html`<div class="reference-item">
+                            ${reference}
+                          </div>`;
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              `
-            : nothing}
-          <div class="spacer"></div>
+                `
+              : nothing}
+          </div>
         </prose-block>
       </div>
     `;
