@@ -116,7 +116,7 @@ export class Markprompt extends LitElement {
       border-width: 0px;
       background-color: transparent;
       color: var(--text-color);
-      font-size: 1rem;
+      font-size: var(--text-size, 0.875rem);
     }
 
     .prompt-input::placeholder {
@@ -196,7 +196,7 @@ export class Markprompt extends LitElement {
       box-sizing: border-box;
       border-top: 1px solid var(--border-color);
       padding: 1rem;
-      font-size: 0.875rem;
+      font-size: var(--text-size, 0.875rem);
       line-height: 1.25rem;
       color: rgb(115 115 115 / 1);
     }

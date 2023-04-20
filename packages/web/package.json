@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/web",
-  "version": "0.3.2-beta3",
+  "version": "0.3.2-beta5",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "author": "Motif",
   "main": "dist/index.js",
