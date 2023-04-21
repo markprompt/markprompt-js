@@ -2,9 +2,7 @@ module.exports = {
   ignorePatterns: ['dist/'],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
-    'plugin:import/typescript',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -47,4 +45,19 @@ module.exports = {
     ],
     'import/no-unresolved': 'off',
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:import/typescript',
+        'plugin:prettier/recommended',
+      ],
+      parser: '@typescript-eslint/parser',
+      rules: {
+        '@typescript-eslint/no-namespace': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+      },
+    },
+  ],
 };
