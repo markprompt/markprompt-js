@@ -1,6 +1,7 @@
 import { OpenAIModelId, submitPrompt } from '@markprompt/core';
 import cn from 'classnames';
 import {
+  ReactElement,
   ReactNode,
   SyntheticEvent,
   useCallback,
@@ -9,7 +10,6 @@ import {
   useState,
 } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ReactElement } from 'react-markdown/lib/react-markdown.js';
 import remarkGfm from 'remark-gfm';
 
 const Caret = () => {
