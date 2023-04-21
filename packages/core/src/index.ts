@@ -32,7 +32,7 @@ export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 export async function submitPrompt(
   prompt: string,
   projectKey: string,
-  onAnswerChunk: (answerChunk: string) => boolean,
+  onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: string[]) => void,
   onError: (error: Error) => void,
   options: Options = {},
