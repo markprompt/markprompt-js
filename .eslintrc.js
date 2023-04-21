@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['dist/'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
