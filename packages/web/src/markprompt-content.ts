@@ -93,7 +93,7 @@ export class Markprompt extends LitElement {
       border-bottom-width: 1px;
       background-color: var(--input-bg-color);
       border-color: var(--border-color);
-      height: 3rem;
+      height: var(--input-height, 3rem);
     }
 
     .input-container svg {
@@ -148,7 +148,7 @@ export class Markprompt extends LitElement {
       left: 0;
       right: 0;
       bottom: 0;
-      top: 3rem;
+      top: var(--input-height, 3rem);
       z-index: 0;
       max-width: 100%;
       scroll-behavior: smooth;
@@ -206,16 +206,16 @@ export class Markprompt extends LitElement {
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.5em;
     }
 
     .reference-item {
       font-weight: 600;
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-      border-radius: 0.375rem;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+      border-radius: 0.375em;
       border: 1px solid var(--border-color);
       color: var(--accent-color);
       text-decoration: none;
@@ -234,7 +234,7 @@ export class Markprompt extends LitElement {
     }
 
     .spacer {
-      height: 2rem;
+      height: 2em;
     }
 
     @keyframes slide-up {
