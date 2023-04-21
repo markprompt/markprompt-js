@@ -2,27 +2,24 @@
   "name": "@markprompt/web",
   "version": "0.3.2-beta5",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
-  "author": "Motif",
-  "main": "dist/index.js",
-  "exports": "./dist/index.js",
-  "license": "MIT",
-  "type": "module",
-  "files": [
-    "README.md",
-    "dist"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/web"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "license": "MIT",
+  "author": "Motif",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "main": "dist/index.js",
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
-    "prepack": "tsc --build",
-    "dev": "tsc --build --watch",
     "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "prepack": "tsc --build",
     "vite": "vite"
   },
   "dependencies": {
@@ -38,5 +35,8 @@
   "devDependencies": {
     "typescript": "^5.0.4",
     "vite": "^4.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

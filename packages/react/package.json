@@ -2,38 +2,38 @@
   "name": "@markprompt/react",
   "version": "0.3.0",
   "description": "A React component for adding GPT-4 powered search using the Markprompt API.",
-  "main": "dist/index.cjs",
-  "typings": "dist/index.d.ts",
-  "module": "dist/markprompt.esm.js",
-  "license": "MIT",
-  "type": "module",
-  "sideEffects": false,
-  "files": [
-    "README.md",
-    "dist"
-  ],
-  "exports": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/react"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
+  "exports": "./dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/markprompt.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "prepack": "tsc --build"
-  },
-  "peerDependencies": {
-    "react": "^16 || ^17 || ^18"
-  },
-  "devDependencies": {
-    "react": "^18.0.0"
   },
   "dependencies": {
     "classnames": "^2.3.2",
     "client-only": "^0.0.1",
     "react-markdown": "^8.0.6",
     "remark-gfm": "^3.0.1"
+  },
+  "devDependencies": {
+    "react": "^18.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16 || ^17 || ^18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

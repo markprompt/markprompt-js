@@ -1,23 +1,23 @@
 {
   "name": "@markprompt/core",
   "version": "0.4.1",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/core"
   },
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
+  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
   "files": [
     "README.md",
     "dist"
   ],
-  "type": "module",
-  "main": "./dist/index.js",
-  "exports": "./dist/index.js",
-  "sideEffects": false,
   "scripts": {
-    "prepack": "tsc --build",
     "build": "tsc --build",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "prepack": "tsc --build"
   }
 }
