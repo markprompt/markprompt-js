@@ -1,11 +1,11 @@
 {
   "name": "with-css-modules",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
+    "dev": "vite",
     "preview": "vite preview"
   },
   "dependencies": {

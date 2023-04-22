@@ -5,7 +5,7 @@ import {
   OpenAIModelId,
   submitPrompt,
 } from '@markprompt/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 type Options = {
   projectKey: string;
