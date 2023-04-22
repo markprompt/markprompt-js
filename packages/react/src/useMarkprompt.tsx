@@ -5,21 +5,29 @@ import {
   OpenAIModelId,
   submitPrompt,
 } from '@markprompt/core';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-type Options = {
+export type MarkpromptOptions = {
+  prompt: string;
   projectKey: string;
   completionsUrl?: string;
   iDontKnowMessage?: string;
   model?: OpenAIModelId;
 };
 
+export type MarkpromptResponse = {
+  answer: string;
+  references: string[];
+  loading: boolean;
+};
+
 export function useMarkprompt({
+  prompt,
   projectKey,
   completionsUrl = MARKPROMPT_COMPLETIONS_URL,
   iDontKnowMessage = I_DONT_KNOW_MESSAGE,
   model = DEFAULT_MODEL,
-}: Options) {
+}: MarkpromptOptions): MarkpromptResponse {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
@@ -29,65 +37,43 @@ export function useMarkprompt({
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [prompt, setPrompt] = useState<string>('');
 
-  const controller = useRef(new AbortController());
+  useEffect(() => {
+    const controller = new AbortController();
 
-  //   useEffect(() => {
-  //     console.log('aborting');
-  //     const c = controller.current;
-  //     return () => c.abort();
-  //   }, []);
+    const { signal } = controller;
+    setAnswer('');
+    setReferences([]);
+    setLoading(true);
 
-  const handlePromptChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPrompt(event.target.value);
-    },
-    [],
-  );
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-
-      if (!prompt || prompt === '') {
-        return;
-      }
-
-      setAnswer('');
-      setReferences([]);
-      setLoading(true);
-
-      await submitPrompt(
-        prompt,
-        projectKey,
-        (chunk) => setAnswer((prev) => prev + chunk),
-        (refs) => setReferences(refs),
-        (error) => {
-          console.error(error);
-        },
-        {
-          completionsUrl: completionsUrl,
-          iDontKnowMessage: iDontKnowMessage,
-          model: model,
-          signal: controller.current.signal,
-        },
-      );
-
-      setLoading(false);
-    },
-    [prompt, projectKey, completionsUrl, iDontKnowMessage, model],
-  );
-
-  return useMemo(
-    () => ({
-      answer,
-      references,
-      loading,
+    submitPrompt(
       prompt,
-      handlePromptChange,
-      handleSubmit,
-    }),
-    [answer, references, loading, prompt, handlePromptChange, handleSubmit],
-  );
+      projectKey,
+      (chunk) => {
+        if (signal.aborted) {
+          return;
+        }
+        setAnswer((prev) => prev + chunk);
+        return true;
+      },
+      setReferences,
+      (error) => {
+        console.error(error);
+      },
+      {
+        completionsUrl,
+        iDontKnowMessage,
+        model,
+        signal,
+      },
+    ).then(() => {
+      setLoading(false);
+    });
+
+    return () => {
+      controller.abort();
+    };
+  }, [completionsUrl, iDontKnowMessage, model, projectKey, prompt]);
+
+  return { answer, references, loading };
 }

@@ -1,44 +1,48 @@
-import { OpenAIModelId } from '@markprompt/core';
-import * as Dialog from '@radix-ui/react-dialog';
-import React, { createContext, forwardRef, useContext } from 'react';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown.js';
+import React, {
+  createContext,
+  forwardRef,
+  useContext,
+  useState,
+  Dispatch,
+  SetStateAction,
+  FormEventHandler,
+  ReactNode,
+  ComponentPropsWithoutRef,
+} from 'react';
+import ReactMarkdown, { Options as ReactMarkdownOptions } from 'react-markdown';
 
-import { useMarkprompt } from './useMarkprompt.js';
+import {
+  MarkpromptOptions,
+  MarkpromptResponse,
+  useMarkprompt,
+} from './useMarkprompt.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-export type RootProps = React.ComponentProps<typeof Dialog.Root> & {
-  children: React.ReactNode;
+type RootProps = Omit<MarkpromptOptions, 'prompt'> & {
+  children: ReactNode;
   projectKey: string;
-  completionsUrl?: string;
-  iDontKnowMessage?: string;
-  model?: OpenAIModelId;
 };
 
-type State = {
-  answer: string | undefined;
-  loading: boolean;
+type MarkpromptContext = MarkpromptResponse & {
   prompt: string;
-  references: string[];
+  setPrompt: Dispatch<SetStateAction<string>>;
 };
 
-type Actions = {
-  handlePromptChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-};
-
-const MarkpromptContext = createContext<State & Actions>({
-  answer: undefined,
+const MarkpromptContext = createContext<MarkpromptContext>({
+  answer: '',
   loading: false,
-  prompt: '',
   references: [],
-  handlePromptChange: noop,
-  handleSubmit: noop,
+  prompt: '',
+  setPrompt: noop,
 });
 
 function Root(props: RootProps) {
-  const contextValue = useMarkprompt({
+  const [prompt, setPrompt] = useState('');
+
+  const value = useMarkprompt({
+    prompt,
     projectKey: props.projectKey,
     completionsUrl: props.completionsUrl,
     iDontKnowMessage: props.iDontKnowMessage,
@@ -46,59 +50,50 @@ function Root(props: RootProps) {
   });
 
   return (
-    <MarkpromptContext.Provider value={contextValue}>
-      <Dialog.Root modal>{props.children}</Dialog.Root>
+    <MarkpromptContext.Provider value={{ ...value, prompt, setPrompt }}>
+      {props.children}
     </MarkpromptContext.Provider>
   );
 }
 
-const Trigger = Dialog.Trigger;
-Trigger.displayName = 'Markprompt.Trigger';
+type FormProps = Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit'>;
 
-const Portal = Dialog.Portal;
-Portal.displayName = 'Markprompt.Portal';
+const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
+  const { setPrompt } = useContext(MarkpromptContext);
 
-const Overlay = Dialog.Overlay;
-Overlay.displayName = 'Markprompt.Overlay';
+  const handleSubmit: FormEventHandler<
+    HTMLFormElement & { prompt: HTMLInputElement }
+  > = (event) => {
+    event.preventDefault();
 
-const Content = Dialog.Content;
-Content.displayName = 'Markprompt.Content';
+    setPrompt(event.currentTarget.prompt.value);
+  };
 
-const Close = Dialog.Close;
-Close.displayName = 'Markprompt.Close';
+  return <form {...props} ref={ref} onSubmit={handleSubmit} />;
+});
 
-const Title = Dialog.Title;
-Title.displayName = 'Markprompt.Title';
-
-const Description = Dialog.Description;
-Description.displayName = 'Markprompt.Description';
-
-const Form = forwardRef<HTMLFormElement, React.RefAttributes<HTMLFormElement>>(
-  function Form(props, ref) {
-    const { handleSubmit } = useContext(MarkpromptContext);
-    return <form {...props} ref={ref} onSubmit={handleSubmit} />;
-  },
-);
-Form.displayName = 'Markprompt.Form';
-
-type PromptProps = React.RefAttributes<HTMLInputElement> & {
-  placeholder?: string;
-};
+type PromptProps = Omit<
+  ComponentPropsWithoutRef<'input'>,
+  | 'name'
+  | 'type'
+  | 'autoCapitalize'
+  | 'autoComplete'
+  | 'autoCorrect'
+  | 'autoFocus'
+  | 'spellCheck'
+>;
 
 const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
   ref,
 ) {
-  const { placeholder = 'Ask me anything…', ...rest } = props;
-  const { handlePromptChange, prompt } = useContext(MarkpromptContext);
   return (
     <input
-      {...rest}
-      placeholder={placeholder}
+      placeholder="Ask me anything…"
+      {...props}
+      name="prompt"
       ref={ref}
       type="text"
-      value={prompt}
-      onChange={handlePromptChange}
       autoCapitalize="none"
       autoComplete="off"
       autoCorrect="off"
@@ -107,18 +102,16 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     />
   );
 });
-Prompt.displayName = 'Markprompt.Prompt';
 
-function Answer(
-  props: Exclude<React.ComponentProps<typeof ReactMarkdown>, 'children'>,
-) {
+type AnswerProps = Omit<ReactMarkdownOptions, 'children'>;
+
+function Answer(props: AnswerProps) {
   const { answer } = useContext(MarkpromptContext);
   if (!answer) return null;
   return <ReactMarkdown {...props}>{answer}</ReactMarkdown>;
 }
-Answer.displayName = 'Markprompt.Answer';
 
-type ReferencesProps = React.RefAttributes<HTMLUListElement> & {
+type ReferencesProps = {
   Element?: React.ElementType;
   Reference?: React.ElementType;
 };
@@ -140,19 +133,4 @@ const References = forwardRef<HTMLUListElement, ReferencesProps>(
   },
 );
 
-References.displayName = 'Markprompt.References';
-
-export {
-  Root,
-  Trigger,
-  Portal,
-  Overlay,
-  Content,
-  Close,
-  Title,
-  Description,
-  Form,
-  Prompt,
-  Answer,
-  References,
-};
+export { Root, Form, Prompt, Answer, References };
