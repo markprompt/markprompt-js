@@ -84,43 +84,47 @@ export class Markprompt extends LitElement {
 
     .input-container {
       box-sizing: border-box;
-      padding: 1rem;
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 0.5rem;
       width: 100%;
-      border-bottom-width: 1px;
-      background-color: var(--input-bg-color);
-      border-color: var(--border-color);
+      gap: var(--input-container-gap, 0.5rem);
+      border-bottom-width: var(--input-container-border-bottom-width, 1px);
+      padding: var(--input-container-padding, 1rem);
+      background-color: var(
+        --input-container-bg-color,
+        var(--input-bg-color, #fff)
+      );
+      border-color: var(--border-color, #e5e5e5);
       height: var(--input-height, 3rem);
     }
 
     .input-container svg {
-      height: 20px;
-      width: 20px;
-      color: var(--search-icon-color);
       flex: none;
+      height: var(--input-container-icon-size, 20px);
+      width: var(--input-container-icon-size, 20px);
+      color: var(--search-icon-color);
     }
 
     .prompt-form {
       flex-grow: 1;
+      margin-block-end: 0;
     }
 
     .prompt-input {
       box-sizing: border-box;
       width: 100%;
-      padding: 4px;
       appearance: none;
-      border-radius: 0.375rem;
       border-width: 0px;
       background-color: transparent;
-      color: var(--text-color);
+      border-radius: var(--prompt-input-border-radius, 0.375em);
+      padding: var(--prompt-input-padding, 4px);
+      color: var(--text-color, #171717);
       font-size: var(--text-size, 0.875rem);
     }
 
     .prompt-input::placeholder {
-      color: var(--input-placeholder-color);
+      color: var(--input-placeholder-color, #d4d4d4);
     }
 
     .prompt-input:focus {
@@ -136,22 +140,22 @@ export class Markprompt extends LitElement {
       right: 0;
       bottom: 0;
       z-index: 10;
-      height: 2.5rem;
+      height: 2.5em;
     }
 
     .result {
       box-sizing: border-box;
-      background-color: var(--result-bg-color);
       scrollbar-width: none;
       -ms-overflow-style: none;
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      top: var(--input-height, 3rem);
       z-index: 0;
       max-width: 100%;
       scroll-behavior: smooth;
+      background-color: var(--result-bg-color, #f5f5f5);
+      top: var(--input-height, 3rem);
     }
 
     .result::-webkit-scrollbar {
@@ -174,8 +178,8 @@ export class Markprompt extends LitElement {
       overflow-y: auto;
       box-sizing: border-box;
       flex-grow: 1 !important;
-      padding: 1rem;
-      color: var(--text-color);
+      padding: var(--answer-padding, 1rem);
+      color: var(--text-color, #171717);
     }
 
     .answer img {
@@ -194,11 +198,13 @@ export class Markprompt extends LitElement {
     .references-container {
       flex: none;
       box-sizing: border-box;
-      border-top: 1px solid var(--border-color);
-      padding: 1rem;
+      overflow-y: auto;
+      color: var(--references-container-color, #737373);
+      border-top: 1px solid var(--border-color, #e5e5e5);
+      line-height: var(--references-container-line-height, 1.25rem);
+      padding: var(--references-container-padding, 1rem);
       font-size: var(--text-size, 0.875rem);
-      line-height: 1.25rem;
-      color: rgb(115 115 115 / 1);
+      max-height: var(--references-container-max-height, 200px);
     }
 
     .references {
@@ -206,23 +212,23 @@ export class Markprompt extends LitElement {
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.5em;
+      gap: var(--references-gap, 0.5em);
     }
 
     .reference-item {
-      font-weight: 600;
-      padding-left: 0.5em;
-      padding-right: 0.5em;
-      padding-top: 0.25em;
-      padding-bottom: 0.25em;
-      border-radius: 0.375em;
-      border: 1px solid var(--border-color);
-      color: var(--accent-color);
       text-decoration: none;
-      background-color: var(--reference-item-bg-color);
       transition-property: background-color, border-color, color, fill, stroke,
         opacity, box-shadow, transform;
       transition-duration: 200ms;
+      font-weight: var(--reference-item-font-weight, 600);
+      padding-left: var(--reference-item-padding-x, 0.5em);
+      padding-right: var(--reference-item-padding-x, 0.5em);
+      padding-top: var(--reference-item-padding-y, 0.25em);
+      padding-bottom: var(--reference-item-padding-y, 0.25em);
+      border-radius: var(--reference-item-border-radius, 0.375em);
+      background-color: var(--reference-item-bg-color, #ffffff);
+      border: 1px solid var(--border-color, #e5e5e5);
+      color: var(--accent-color, #38bdf8);
     }
 
     .reference-item:hover {
@@ -230,17 +236,17 @@ export class Markprompt extends LitElement {
     }
 
     .caret {
-      color: var(--caret-color);
+      color: var(--caret-color, #38bdf8);
     }
 
     .spacer {
-      height: 2em;
+      height: var(--spacer-height, 2em);
     }
 
     @keyframes slide-up {
       from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(var(--slide-up-translate-x, 16px));
       }
       to {
         opacity: 1;

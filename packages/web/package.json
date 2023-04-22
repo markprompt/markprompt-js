@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/web",
-  "version": "0.3.2-beta7",
+  "version": "0.3.3",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --build --clean && tsc --build",
     "dev": "tsc --build --watch",
     "prepack": "tsc --build",
     "vite": "vite"
