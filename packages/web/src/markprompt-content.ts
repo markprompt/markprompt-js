@@ -7,7 +7,6 @@ import {
 } from '@markprompt/core';
 import { LitElement, css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 import { Ref, createRef, ref } from 'lit/directives/ref.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { until } from 'lit/directives/until.js';
@@ -22,7 +21,6 @@ declare global {
   interface HTMLElementTagNameMap {
     'animated-caret': Caret;
     'markprompt-content': Markprompt;
-    'prose-block': ProseBlock;
   }
 }
 
@@ -48,6 +46,12 @@ export class Markprompt extends LitElement {
 
   @property({ type: String })
   placeholder = 'Ask me anything…';
+
+  @property({ type: Boolean })
+  includeBranding = true;
+
+  @property({ type: String })
+  referencesHeading = 'Generated from the following sources:';
 
   @property({ type: String, state: true })
   prompt = '';
@@ -80,6 +84,8 @@ export class Markprompt extends LitElement {
       height: 100%;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .input-container {
@@ -89,20 +95,24 @@ export class Markprompt extends LitElement {
       align-items: center;
       width: 100%;
       gap: var(--input-container-gap, 0.5rem);
+      border-style: var(--input-container-border-bottom-style, solid);
+      border-top-width: 0;
+      border-left-width: 0;
+      border-right-width: 0;
       border-bottom-width: var(--input-container-border-bottom-width, 1px);
+      border-color: var(--border-color, #e5e5e5);
       padding: var(--input-container-padding, 1rem);
       background-color: var(
-        --input-container-bg-color,
-        var(--input-bg-color, #fff)
+        --input-container-background-color,
+        var(--input-background-color, #fff)
       );
-      border-color: var(--border-color, #e5e5e5);
-      height: var(--input-height, 3rem);
+      height: var(--input-container-height, var(--input-height, 3rem));
     }
 
     .input-container svg {
       flex: none;
-      height: var(--input-container-icon-size, 20px);
-      width: var(--input-container-icon-size, 20px);
+      height: var(--input-container-icon-size, 16px);
+      width: var(--input-container-icon-size, 16px);
       color: var(--search-icon-color);
     }
 
@@ -120,7 +130,7 @@ export class Markprompt extends LitElement {
       border-radius: var(--prompt-input-border-radius, 0.375em);
       padding: var(--prompt-input-padding, 4px);
       color: var(--text-color, #171717);
-      font-size: var(--text-size, 0.875rem);
+      font-size: var(--font-size-base, var(--text-size, 1rem));
     }
 
     .prompt-input::placeholder {
@@ -131,16 +141,6 @@ export class Markprompt extends LitElement {
       outline: 2px solid transparent;
       outline-offset: 2px;
       box-shadow: 0 0 0 0 black;
-    }
-
-    .gradient {
-      pointer-events: none;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 10;
-      height: 2.5em;
     }
 
     .result {
@@ -154,8 +154,8 @@ export class Markprompt extends LitElement {
       z-index: 0;
       max-width: 100%;
       scroll-behavior: smooth;
-      background-color: var(--result-bg-color, #f5f5f5);
-      top: var(--input-height, 3rem);
+      background-color: var(--result-background-color, #f5f5f5);
+      top: var(--input-container-height, var(--input-height, 3rem));
     }
 
     .result::-webkit-scrollbar {
@@ -174,27 +174,6 @@ export class Markprompt extends LitElement {
       flex: 1;
     }
 
-    .answer {
-      overflow-y: auto;
-      box-sizing: border-box;
-      flex-grow: 1 !important;
-      padding: var(--answer-padding, 1rem);
-      color: var(--text-color, #171717);
-    }
-
-    .answer img {
-      max-width: 100%;
-    }
-
-    .answer pre {
-      max-width: 100%;
-      overflow-x: auto;
-    }
-
-    .answer a {
-      color: var(--link-color);
-    }
-
     .references-container {
       flex: none;
       box-sizing: border-box;
@@ -202,17 +181,37 @@ export class Markprompt extends LitElement {
       color: var(--references-container-color, #737373);
       border-top: 1px solid var(--border-color, #e5e5e5);
       line-height: var(--references-container-line-height, 1.25rem);
-      padding: var(--references-container-padding, 1rem);
-      font-size: var(--text-size, 0.875rem);
-      max-height: var(--references-container-max-height, 200px);
+      padding-top: var(--references-container-padding, 1rem);
+      padding-bottom: var(--references-container-padding, 1rem);
+      font-size: var(--font-size-base, 1rem);
+    }
+
+    .references-heading {
+      color: var(--text-color, #171717);
+      font-size: var(
+        --references-heading-font-size,
+        var(--font-size-xs, 0.875rem)
+      );
+      padding-left: var(--references-container-padding, 1rem);
+      padding-right: var(--references-container-padding, 1rem);
+      font-weight: var(--references-heading-font-weight, 600);
+      padding-bottom: var(--references-heading-padding-bottom, 0.75rem);
     }
 
     .references {
       display: flex;
       flex-direction: row;
-      flex-wrap: wrap;
+      overflow-x: auto;
       align-items: center;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-left: var(--references-container-padding, 1rem);
+      padding-right: var(--references-container-padding, 1rem);
       gap: var(--references-gap, 0.5em);
+    }
+
+    .references::-webkit-scrollbar {
+      display: none;
     }
 
     .reference-item {
@@ -220,27 +219,43 @@ export class Markprompt extends LitElement {
       transition-property: background-color, border-color, color, fill, stroke,
         opacity, box-shadow, transform;
       transition-duration: 200ms;
+      white-space: nowrap;
       font-weight: var(--reference-item-font-weight, 600);
       padding-left: var(--reference-item-padding-x, 0.5em);
       padding-right: var(--reference-item-padding-x, 0.5em);
       padding-top: var(--reference-item-padding-y, 0.25em);
       padding-bottom: var(--reference-item-padding-y, 0.25em);
       border-radius: var(--reference-item-border-radius, 0.375em);
-      background-color: var(--reference-item-bg-color, #ffffff);
-      border: 1px solid var(--border-color, #e5e5e5);
+      background-color: var(--reference-item-background-color, #ffffff);
+      border: 1px solid
+        var(--reference-item-border-color, var(--border-color, #e5e5e5));
       color: var(--accent-color, #38bdf8);
+      font-size: var(--reference-item-font-size, var(--font-size-base, 1rem));
     }
 
     .reference-item:hover {
-      background-color: var(--reference-item-bg-color-hover);
+      background-color: var(--reference-item-background-color-hover);
+    }
+
+    .branding {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      color: #a3a3a3;
+      font-size: 12px;
+      padding-left: var(--references-container-padding, 1rem);
+      padding-right: var(--references-container-padding, 1rem);
+      padding-top: 4px;
+      padding-bottom: 12px;
+    }
+
+    .branding a {
+      color: #a3a3a3;
     }
 
     .caret {
       color: var(--caret-color, #38bdf8);
-    }
-
-    .spacer {
-      height: var(--spacer-height, 2em);
     }
 
     @keyframes slide-up {
@@ -259,6 +274,219 @@ export class Markprompt extends LitElement {
       animation-duration: 1s;
       animation-fill-mode: both;
       transition-timing-function: ease-in-out;
+    }
+
+    .answer {
+      overflow-y: auto;
+      box-sizing: border-box;
+      flex-grow: 1 !important;
+      padding: var(--answer-padding, 1rem);
+      color: var(--text-color, #171717);
+      font-size: var(--font-size-sm, 14px);
+    }
+
+    .answer p {
+      margin-top: var(--answer-paragraph-margin, 1.25em);
+      margin-bottom: var(--answer-paragraph-margin, 1.25em);
+      font-size: var(--font-size-sm, 14px);
+      line-height: var(--line-height-base, 1.5);
+      color: var(--text-color, #171717);
+    }
+
+    .answer a {
+      color: var(--link-color, #0ea5e9);
+      font-weight: var(--link-weight, 600);
+    }
+
+    .answer img {
+      max-width: 100%;
+    }
+
+    .answer pre {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .answer :where(ol) {
+      list-style-type: decimal;
+      padding-left: var(--answer-list-padding-left, 1.625em);
+    }
+
+    .answer :where(ul) {
+      list-style-type: disc;
+      padding-left: var(--answer-list-padding-left, 1.625em);
+    }
+
+    .answer :where(ol > li)::marker {
+      color: var(--answer-list-numbered-color, #404040);
+    }
+
+    .answer :where(ul > li)::marker {
+      color: var(--answer-list-bullet-color, #d4d4d4);
+    }
+
+    .answer :where(li) {
+      margin-top: var(--answer-list-padding-y, 14px);
+      margin-bottom: var(--answer-list-padding-y, 14px);
+      font-size: var(--font-size-sm, 14px);
+      line-height: var(--line-height-base, 1.5);
+    }
+
+    .answer :where(hr) {
+      border-top: 1px solid var(--border-color, #e5e5e5);
+      border-bottom: 0px;
+      margin-top: 3em;
+      margin-bottom: 3em;
+    }
+
+    .answer :where(blockquote) {
+      font-weight: 500;
+      font-style: var(--answer-quote-font-style, italic);
+      color: var(--text-color, #171717);
+      border-left-style: solid;
+      border-left-width: var(--answer-quote-border-left, 0.2rem);
+      border-left-color: var(--answer-quote-border-color, #171717);
+      margin-top: var(--answer-quote-margin-y: 1.5em);
+      margin-bottom: var(--answer-quote-margin-y: 1.5em);
+      padding-left: var(--answer-quote-padding-left, 1em);
+      margin-block-start: 0;
+      margin-block-end: 0;
+      margin-inline-start: 0;
+      margin-inline-end: 0;
+    }
+
+    .answer :where(h1) {
+      color: var(--text-color, #171717);
+      font-weight: 800;
+      line-height: 1.1111111;
+      font-size: var(--answer-heading1-font-size, 2.25em);
+      margin-top: var(--answer-heading1-margin-top, 0);
+      margin-bottom: var(--answer-heading1-margin-bottom, 0.8888889em);
+    }
+
+    .answer :where(h2) {
+      font-weight: 700;
+      line-height: 1.3333333;
+      color: var(--text-color, #171717);
+      font-size: var(--answer-heading2-font-size, 1.5em);
+      margin-top: var(--answer-heading2-margin-top, 2em);
+      margin-bottom: var(--answer-heading2-margin-bottom, 1em);
+    }
+
+    .answer :where(h3) {
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text-color, #171717);
+      font-size: var(--answer-heading3-font-size, 1.25em);
+      margin-top: var(--answer-heading3-margin-top, 1.6em);
+      margin-bottom: var(--answer-heading3-margin-bottom, 0.6em);
+    }
+
+    .answer :where(h4) {
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text-color, #171717);
+      margin-top: var(--answer-heading4-margin-top, 1.5em);
+      margin-bottom: var(--answer-heading4-margin-bottom, 0.5em);
+    }
+
+    .answer :where(img) {
+      margin-top: var(--answer-image-margin-y, 1em);
+      margin-bottom: var(--answer-image-margin-y, 1em);
+      border-radius: var(--answer-image-border-radius, 0.375em);
+    }
+
+    .answer :where(code) {
+      color: var(--text-color, #171717);
+      font-weight: 600;
+      font-size: var(--font-size-sm, 14px);
+      border: 1px solid var(--border-color, #e5e5e5);
+      border-radius: var(--answer-code-border-radius, 0.25em);
+      padding-left: var(--answer-code-padding-x, 4px);
+      padding-right: var(--answer-code-padding-x, 4px);
+      padding-top: var(--answer-code-padding-y, 2px);
+      padding-bottom: var(--answer-code-padding-y, 2px);
+      background-color: var(--answer-code-background-color, #f1f5f9);
+    }
+
+    .answer :where(pre) {
+      overflow-x: auto;
+      font-weight: 400;
+      line-height: var(--answer-pre-line-height, 1.5);
+      margin-top: var(--answer-pre-margin-y, 1em);
+      margin-bottom: var(--answer-pre-margin-y, 1em);
+      padding: var(--answer-pre-padding, 1em);
+      color: var(--answer-pre-text-color, #f8fafc);
+      background-color: var(--answer-pre-background-color, #0f172a);
+      border-radius: var(--answer-pre-border-radius, 0.375em);
+      font-size: var(--font-size-sm, 14px);
+    }
+
+    .answer :where(pre code) {
+      background-color: transparent;
+      border-width: 0;
+      border-radius: 0;
+      padding: 0;
+      font-weight: inherit;
+      color: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      line-height: inherit;
+    }
+
+    .answer :where(table) {
+      width: 100%;
+      table-layout: auto;
+      border-collapse: collapse;
+      text-align: left;
+      margin-top: var(--answer-table-margin-y, 1em);
+      margin-bottom: var(--answer-table-margin-y, 1em);
+      font-size: var(--font-size-sm, 16px);
+      line-height: var(--line-height-base, 1.5);
+    }
+
+    .answer :where(thead) {
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-color: var(--border-color, #d4d4d4);
+    }
+
+    .answer :where(thead th) {
+      color: var(--text-color, #171717);
+      font-weight: 600;
+      vertical-align: bottom;
+      padding: var(--answer-table-head-padding, 0.5em);
+    }
+
+    .answer :where(tbody tr) {
+      border-bottom-style: solid;
+      border-bottom-width: 0.5px;
+      border-bottom-color: var(--border-color, #e5e5e5);
+    }
+
+    .answer :where(tbody tr:last-child) {
+      border-bottom-width: 0;
+    }
+
+    .answer :where(tbody td) {
+      vertical-align: baseline;
+      padding: var(--answer-table-head-padding, 0.5em);
+    }
+
+    .answer :where(thead th:first-child) {
+      padding-left: 0;
+    }
+
+    .answer :where(thead th:last-child) {
+      padding-right: 0;
+    }
+
+    .answer :where(tbody td:first-child) {
+      padding-left: 0;
+    }
+
+    .answer :where(tbody td:last-child) {
+      padding-right: 0;
     }
   `;
 
@@ -280,7 +508,9 @@ export class Markprompt extends LitElement {
   }
 
   getRefFromId(id: string) {
-    return undefined;
+    const href = id.replace(/.md(x|oc)?$/, '');
+    const label = id.split('/').slice(-1)[0].split('.').slice(0, -1).join('.');
+    return { href, label };
   }
 
   reset() {
@@ -393,9 +623,7 @@ export class Markprompt extends LitElement {
             />
           </form>
         </div>
-
-        <div class="gradient"></div>
-        <prose-block class="result">
+        <div class="result">
           <div class="stacked-result">
             <div class="answer" ${ref(this.resultRef)}>
               ${this.loading && !(this.answer.length > 0)
@@ -410,8 +638,8 @@ export class Markprompt extends LitElement {
               ? html`
                   <div class="references-container">
                     <div class="animate-slide-up">
-                      <div style="margin-bottom: 0.5rem;">
-                        Generated from the following sources:
+                      <div class="references-heading">
+                        ${this.referencesHeading}
                       </div>
                       <div class="references">
                         ${this.references.map((reference) => {
@@ -438,8 +666,14 @@ export class Markprompt extends LitElement {
                   </div>
                 `
               : nothing}
+            ${this.includeBranding
+              ? html` <div class="branding">
+                  <span>AI powered by</span>
+                  <a href="https://markprompt.com">Markprompt</a>
+                </div>`
+              : nothing}
           </div>
-        </prose-block>
+        </div>
       </div>
     `;
   }
@@ -475,660 +709,5 @@ export class Caret extends LitElement {
 
   render() {
     return html`<span></span>`;
-  }
-}
-
-@customElement('prose-block')
-export class ProseBlock extends LitElement {
-  @property({ type: String })
-  class = '';
-
-  static styles = css`
-    .prose {
-      color: var(--tw-prose-body);
-      max-width: 65ch;
-    }
-
-    .prose :where([class~='lead']):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-lead);
-      font-size: 1.25em;
-      line-height: 1.6;
-      margin-top: 1.2em;
-      margin-bottom: 1.2em;
-    }
-
-    .prose :where(a):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-links);
-      text-decoration: underline;
-      font-weight: 500;
-    }
-
-    .prose :where(strong):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-bold);
-      font-weight: 600;
-    }
-
-    .prose :where(ol):not(:where([class~='not-prose'] *)) {
-      list-style-type: decimal;
-      padding-left: 1.625em;
-    }
-
-    .prose :where(ol[type='A']):not(:where([class~='not-prose'] *)) {
-      list-style-type: upper-alpha;
-    }
-
-    .prose :where(ol[type='a']):not(:where([class~='not-prose'] *)) {
-      list-style-type: lower-alpha;
-    }
-
-    .prose :where(ol[type='A']):not(:where([class~='not-prose'] *)) {
-      list-style-type: upper-alpha;
-    }
-
-    .prose :where(ol[type='a']):not(:where([class~='not-prose'] *)) {
-      list-style-type: lower-alpha;
-    }
-
-    .prose :where(ol[type='I']):not(:where([class~='not-prose'] *)) {
-      list-style-type: upper-roman;
-    }
-
-    .prose :where(ol[type='i']):not(:where([class~='not-prose'] *)) {
-      list-style-type: lower-roman;
-    }
-
-    .prose :where(ol[type='I']):not(:where([class~='not-prose'] *)) {
-      list-style-type: upper-roman;
-    }
-
-    .prose :where(ol[type='i']):not(:where([class~='not-prose'] *)) {
-      list-style-type: lower-roman;
-    }
-
-    .prose :where(ol[type='1']):not(:where([class~='not-prose'] *)) {
-      list-style-type: decimal;
-    }
-
-    .prose :where(ul):not(:where([class~='not-prose'] *)) {
-      list-style-type: disc;
-      padding-left: 1.625em;
-    }
-
-    .prose :where(ol > li):not(:where([class~='not-prose'] *))::marker {
-      font-weight: 400;
-      color: var(--tw-prose-counters);
-    }
-
-    .prose :where(ul > li):not(:where([class~='not-prose'] *))::marker {
-      color: var(--tw-prose-bullets);
-    }
-
-    .prose :where(hr):not(:where([class~='not-prose'] *)) {
-      border-color: var(--tw-prose-hr);
-      border-top-width: 1px;
-      margin-top: 3em;
-      margin-bottom: 3em;
-    }
-
-    .prose :where(blockquote):not(:where([class~='not-prose'] *)) {
-      font-weight: 500;
-      font-style: italic;
-      color: var(--tw-prose-quotes);
-      border-left-width: 0.25rem;
-      border-left-color: var(--tw-prose-quote-borders);
-      quotes: '\201C''\201D''\2018''\2019';
-      margin-top: 1.6em;
-      margin-bottom: 1.6em;
-      padding-left: 1em;
-    }
-
-    .prose
-      :where(blockquote p:first-of-type):not(
-        :where([class~='not-prose'] *)
-      )::before {
-      content: open-quote;
-    }
-
-    .prose
-      :where(blockquote p:last-of-type):not(
-        :where([class~='not-prose'] *)
-      )::after {
-      content: close-quote;
-    }
-
-    .prose :where(h1):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-headings);
-      font-weight: 800;
-      font-size: 2.25em;
-      margin-top: 0;
-      margin-bottom: 0.8888889em;
-      line-height: 1.1111111;
-    }
-
-    .prose :where(h1 strong):not(:where([class~='not-prose'] *)) {
-      font-weight: 900;
-    }
-
-    .prose :where(h2):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-headings);
-      font-weight: 700;
-      font-size: 1.5em;
-      margin-top: 2em;
-      margin-bottom: 1em;
-      line-height: 1.3333333;
-    }
-
-    .prose :where(h2 strong):not(:where([class~='not-prose'] *)) {
-      font-weight: 800;
-    }
-
-    .prose :where(h3):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-headings);
-      font-weight: 600;
-      font-size: 1.25em;
-      margin-top: 1.6em;
-      margin-bottom: 0.6em;
-      line-height: 1.6;
-    }
-
-    .prose :where(h3 strong):not(:where([class~='not-prose'] *)) {
-      font-weight: 700;
-    }
-
-    .prose :where(h4):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-headings);
-      font-weight: 600;
-      margin-top: 1.5em;
-      margin-bottom: 0.5em;
-      line-height: 1.5;
-    }
-
-    .prose :where(h4 strong):not(:where([class~='not-prose'] *)) {
-      font-weight: 700;
-    }
-
-    .prose :where(figure > *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    .prose :where(figcaption):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-captions);
-      font-size: 0.875em;
-      line-height: 1.4285714;
-      margin-top: 0.8571429em;
-    }
-
-    .prose :where(code):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-code);
-      font-weight: 600;
-      font-size: 0.875em;
-    }
-
-    .prose :where(code):not(:where([class~='not-prose'] *))::before {
-      content: '\`';
-    }
-
-    .prose :where(code):not(:where([class~='not-prose'] *))::after {
-      content: '\`';
-    }
-
-    .prose :where(a code):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-links);
-    }
-
-    .prose :where(pre):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-pre-code);
-      background-color: var(--tw-prose-pre-bg);
-      overflow-x: auto;
-      font-weight: 400;
-      font-size: 0.875em;
-      line-height: 1.7142857;
-      margin-top: 1.7142857em;
-      margin-bottom: 1.7142857em;
-      border-radius: 0.375rem;
-      padding-top: 0.8571429em;
-      padding-right: 1.1428571em;
-      padding-bottom: 0.8571429em;
-      padding-left: 1.1428571em;
-    }
-
-    .prose :where(pre code):not(:where([class~='not-prose'] *)) {
-      background-color: transparent;
-      border-width: 0;
-      border-radius: 0;
-      padding: 0;
-      font-weight: inherit;
-      color: inherit;
-      font-size: inherit;
-      font-family: inherit;
-      line-height: inherit;
-    }
-
-    .prose :where(pre code):not(:where([class~='not-prose'] *))::before {
-      content: none;
-    }
-
-    .prose :where(pre code):not(:where([class~='not-prose'] *))::after {
-      content: none;
-    }
-
-    .prose :where(table):not(:where([class~='not-prose'] *)) {
-      width: 100%;
-      table-layout: auto;
-      text-align: left;
-      margin-top: 2em;
-      margin-bottom: 2em;
-      font-size: 0.875em;
-      line-height: 1.7142857;
-    }
-
-    .prose :where(thead):not(:where([class~='not-prose'] *)) {
-      border-bottom-width: 1px;
-      border-bottom-color: var(--tw-prose-th-borders);
-    }
-
-    .prose :where(thead th):not(:where([class~='not-prose'] *)) {
-      color: var(--tw-prose-headings);
-      font-weight: 600;
-      vertical-align: bottom;
-      padding-right: 0.5714286em;
-      padding-bottom: 0.5714286em;
-      padding-left: 0.5714286em;
-    }
-
-    .prose :where(tbody tr):not(:where([class~='not-prose'] *)) {
-      border-bottom-width: 1px;
-      border-bottom-color: var(--tw-prose-td-borders);
-    }
-
-    .prose :where(tbody tr:last-child):not(:where([class~='not-prose'] *)) {
-      border-bottom-width: 0;
-    }
-
-    .prose :where(tbody td):not(:where([class~='not-prose'] *)) {
-      vertical-align: baseline;
-      padding-top: 0.5714286em;
-      padding-right: 0.5714286em;
-      padding-bottom: 0.5714286em;
-      padding-left: 0.5714286em;
-    }
-
-    .prose {
-      --tw-prose-body: #374151;
-      --tw-prose-headings: #111827;
-      --tw-prose-lead: #4b5563;
-      --tw-prose-links: #111827;
-      --tw-prose-bold: #111827;
-      --tw-prose-counters: #6b7280;
-      --tw-prose-bullets: #d1d5db;
-      --tw-prose-hr: #e5e7eb;
-      --tw-prose-quotes: #111827;
-      --tw-prose-quote-borders: #e5e7eb;
-      --tw-prose-captions: #6b7280;
-      --tw-prose-code: #111827;
-      --tw-prose-pre-code: #e5e7eb;
-      --tw-prose-pre-bg: #1f2937;
-      --tw-prose-th-borders: #d1d5db;
-      --tw-prose-td-borders: #e5e7eb;
-      --tw-prose-invert-body: #d1d5db;
-      --tw-prose-invert-headings: #fff;
-      --tw-prose-invert-lead: #9ca3af;
-      --tw-prose-invert-links: #fff;
-      --tw-prose-invert-bold: #fff;
-      --tw-prose-invert-counters: #9ca3af;
-      --tw-prose-invert-bullets: #4b5563;
-      --tw-prose-invert-hr: #374151;
-      --tw-prose-invert-quotes: #f3f4f6;
-      --tw-prose-invert-quote-borders: #374151;
-      --tw-prose-invert-captions: #9ca3af;
-      --tw-prose-invert-code: #fff;
-      --tw-prose-invert-pre-code: #d1d5db;
-      --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
-      --tw-prose-invert-th-borders: #4b5563;
-      --tw-prose-invert-td-borders: #374151;
-      font-size: 1rem;
-      line-height: 1.75;
-    }
-
-    .prose :where(p):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.25em;
-      margin-bottom: 1.25em;
-    }
-
-    .prose :where(img):not(:where([class~='not-prose'] *)) {
-      margin-top: 2em;
-      margin-bottom: 2em;
-    }
-
-    .prose :where(video):not(:where([class~='not-prose'] *)) {
-      margin-top: 2em;
-      margin-bottom: 2em;
-    }
-
-    .prose :where(figure):not(:where([class~='not-prose'] *)) {
-      margin-top: 2em;
-      margin-bottom: 2em;
-    }
-
-    .prose :where(h2 code):not(:where([class~='not-prose'] *)) {
-      font-size: 0.875em;
-    }
-
-    .prose :where(h3 code):not(:where([class~='not-prose'] *)) {
-      font-size: 0.9em;
-    }
-
-    .prose :where(li):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-    }
-
-    .prose :where(ol > li):not(:where([class~='not-prose'] *)) {
-      padding-left: 0.375em;
-    }
-
-    .prose :where(ul > li):not(:where([class~='not-prose'] *)) {
-      padding-left: 0.375em;
-    }
-
-    .prose > :where(ul > li p):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.75em;
-      margin-bottom: 0.75em;
-    }
-
-    .prose
-      > :where(ul > li > *:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.25em;
-    }
-
-    .prose
-      > :where(ul > li > *:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 1.25em;
-    }
-
-    .prose
-      > :where(ol > li > *:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.25em;
-    }
-
-    .prose
-      > :where(ol > li > *:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 1.25em;
-    }
-
-    .prose
-      :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.75em;
-      margin-bottom: 0.75em;
-    }
-
-    .prose :where(hr + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose :where(h2 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose :where(h3 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose :where(h4 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose :where(thead th:first-child):not(:where([class~='not-prose'] *)) {
-      padding-left: 0;
-    }
-
-    .prose :where(thead th:last-child):not(:where([class~='not-prose'] *)) {
-      padding-right: 0;
-    }
-
-    .prose :where(tbody td:first-child):not(:where([class~='not-prose'] *)) {
-      padding-left: 0;
-    }
-
-    .prose :where(tbody td:last-child):not(:where([class~='not-prose'] *)) {
-      padding-right: 0;
-    }
-
-    .prose > :where(:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose > :where(:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 0;
-    }
-
-    .prose-sm {
-      font-size: 0.875rem;
-      line-height: 1.7142857;
-    }
-
-    .prose-sm :where(p):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.1428571em;
-      margin-bottom: 1.1428571em;
-    }
-
-    .prose-sm :where([class~='lead']):not(:where([class~='not-prose'] *)) {
-      font-size: 1.2857143em;
-      line-height: 1.5555556;
-      margin-top: 0.8888889em;
-      margin-bottom: 0.8888889em;
-    }
-
-    .prose-sm :where(blockquote):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.3333333em;
-      margin-bottom: 1.3333333em;
-      padding-left: 1.1111111em;
-    }
-
-    .prose-sm :where(h1):not(:where([class~='not-prose'] *)) {
-      font-size: 2.1428571em;
-      margin-top: 0;
-      margin-bottom: 0.8em;
-      line-height: 1.2;
-    }
-
-    .prose-sm :where(h2):not(:where([class~='not-prose'] *)) {
-      font-size: 1.4285714em;
-      margin-top: 1.6em;
-      margin-bottom: 0.8em;
-      line-height: 1.4;
-    }
-
-    .prose-sm :where(h3):not(:where([class~='not-prose'] *)) {
-      font-size: 1.2857143em;
-      margin-top: 1.5555556em;
-      margin-bottom: 0.4444444em;
-      line-height: 1.5555556;
-    }
-
-    .prose-sm :where(h4):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.4285714em;
-      margin-bottom: 0.5714286em;
-      line-height: 1.4285714;
-    }
-
-    .prose-sm :where(img):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.7142857em;
-      margin-bottom: 1.7142857em;
-    }
-
-    .prose-sm :where(video):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.7142857em;
-      margin-bottom: 1.7142857em;
-    }
-
-    .prose-sm :where(figure):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.7142857em;
-      margin-bottom: 1.7142857em;
-    }
-
-    .prose-sm :where(figure > *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    .prose-sm :where(figcaption):not(:where([class~='not-prose'] *)) {
-      font-size: 0.8571429em;
-      line-height: 1.3333333;
-      margin-top: 0.6666667em;
-    }
-
-    .prose-sm :where(code):not(:where([class~='not-prose'] *)) {
-      font-size: 0.8571429em;
-    }
-
-    .prose-sm :where(h2 code):not(:where([class~='not-prose'] *)) {
-      font-size: 0.9em;
-    }
-
-    .prose-sm :where(h3 code):not(:where([class~='not-prose'] *)) {
-      font-size: 0.8888889em;
-    }
-
-    .prose-sm :where(pre):not(:where([class~='not-prose'] *)) {
-      font-size: 0.8571429em;
-      line-height: 1.6666667;
-      margin-top: 1.6666667em;
-      margin-bottom: 1.6666667em;
-      border-radius: 0.25rem;
-      padding-top: 0.6666667em;
-      padding-right: 1em;
-      padding-bottom: 0.6666667em;
-      padding-left: 1em;
-    }
-
-    .prose-sm :where(ol):not(:where([class~='not-prose'] *)) {
-      padding-left: 1.5714286em;
-    }
-
-    .prose-sm :where(ul):not(:where([class~='not-prose'] *)) {
-      padding-left: 1.5714286em;
-    }
-
-    .prose-sm :where(li):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.2857143em;
-      margin-bottom: 0.2857143em;
-    }
-
-    .prose-sm :where(ol > li):not(:where([class~='not-prose'] *)) {
-      padding-left: 0.4285714em;
-    }
-
-    .prose-sm :where(ul > li):not(:where([class~='not-prose'] *)) {
-      padding-left: 0.4285714em;
-    }
-
-    .prose-sm > :where(ul > li p):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.5714286em;
-      margin-bottom: 0.5714286em;
-    }
-
-    .prose-sm
-      > :where(ul > li > *:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.1428571em;
-    }
-
-    .prose-sm
-      > :where(ul > li > *:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 1.1428571em;
-    }
-
-    .prose-sm
-      > :where(ol > li > *:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 1.1428571em;
-    }
-
-    .prose-sm
-      > :where(ol > li > *:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 1.1428571em;
-    }
-
-    .prose-sm
-      :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~='not-prose'] *)) {
-      margin-top: 0.5714286em;
-      margin-bottom: 0.5714286em;
-    }
-
-    .prose-sm :where(hr):not(:where([class~='not-prose'] *)) {
-      margin-top: 2.8571429em;
-      margin-bottom: 2.8571429em;
-    }
-
-    .prose-sm :where(hr + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose-sm :where(h2 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose-sm :where(h3 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose-sm :where(h4 + *):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose-sm :where(table):not(:where([class~='not-prose'] *)) {
-      font-size: 0.8571429em;
-      line-height: 1.5;
-    }
-
-    .prose-sm :where(thead th):not(:where([class~='not-prose'] *)) {
-      padding-right: 1em;
-      padding-bottom: 0.6666667em;
-      padding-left: 1em;
-    }
-
-    .prose-sm :where(thead th:first-child):not(:where([class~='not-prose'] *)) {
-      padding-left: 0;
-    }
-
-    .prose-sm :where(thead th:last-child):not(:where([class~='not-prose'] *)) {
-      padding-right: 0;
-    }
-
-    .prose-sm :where(tbody td):not(:where([class~='not-prose'] *)) {
-      padding-top: 0.6666667em;
-      padding-right: 1em;
-      padding-bottom: 0.6666667em;
-      padding-left: 1em;
-    }
-
-    .prose-sm :where(tbody td:first-child):not(:where([class~='not-prose'] *)) {
-      padding-left: 0;
-    }
-
-    .prose-sm :where(tbody td:last-child):not(:where([class~='not-prose'] *)) {
-      padding-right: 0;
-    }
-
-    .prose-sm > :where(:first-child):not(:where([class~='not-prose'] *)) {
-      margin-top: 0;
-    }
-
-    .prose-sm > :where(:last-child):not(:where([class~='not-prose'] *)) {
-      margin-bottom: 0;
-    }
-  `;
-
-  render() {
-    return html`
-      <div
-        class="${classMap({
-          prose: true,
-          [this.class]: this.class.length > 0,
-        })}"
-      >
-        <slot></slot>
-      </div>
-    `;
   }
 }
