@@ -1,10 +1,18 @@
-import { FC } from 'react';
+import React, { ReactElement } from 'react';
 
-type MarkpromptIconProps = {
+export type MarkpromptIconProps = {
+  /**
+   * A class name to apply to the SVG icon.
+   */
   className?: string;
 };
 
-export const MarkpromptIcon: FC<MarkpromptIconProps> = ({ className }) => {
+/**
+ * Render a Markprompt icon as an inline SVG.
+ */
+export function MarkpromptIcon({
+  className,
+}: MarkpromptIconProps): ReactElement {
   return (
     <svg className={className} viewBox="0 0 176 123" fill="none">
       <rect
@@ -25,23 +33,4 @@ export const MarkpromptIcon: FC<MarkpromptIconProps> = ({ className }) => {
       />
     </svg>
   );
-};
-
-/* <svg className={className} viewBox="0 0 184 128" fill="none">
-<g clipPath="url(#prefix__clip0_5685_199803)" fill="currentColor">
-  <path d="M134 30h20v35h-20V30zM156 86c0 6.627-5.373 12-12 12s-12-5.373-12-12 5.373-12 12-12 12 5.373 12 12z" />
-  <path
-    fillRule="evenodd"
-    clipRule="evenodd"
-    d="M13.788 10C12.283 10 10 11.612 10 15v98c0 3.388 2.283 5 3.788 5h156.424c1.505 0 3.788-1.612 3.788-5V15c0-3.388-2.283-5-3.788-5H13.788zM0 15C0 7.342 5.586 0 13.788 0h156.424C178.414 0 184 7.342 184 15v98c0 7.658-5.586 15-13.788 15H13.788C5.586 128 0 120.658 0 113V15z"
-  />
-  <path d="M30 98V30h20l20 25 20-25h20v68H90V59L70 84 50 59v39H30z" />
-</g>
-<defs>
-  <clipPath id="prefix__clip0_5685_199803">
-    <path fill="#fff" d="M0 0h184v128H0z" />
-  </clipPath>
-</defs>
-</svg>
 }
-*/

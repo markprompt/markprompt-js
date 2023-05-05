@@ -1,0 +1,96 @@
+.markprompt-trigger {
+  all: unset;
+  display: flex;
+  cursor: pointer;
+}
+
+.markprompt-trigger:focus,
+.markprompt-trigger:hover {
+  color: var(--markprompt-focus-color, white);
+}
+
+.markprompt-trigger-icon {
+  width: 3rem;
+  height: auto;
+}
+
+.markprompt-overlay {
+  position: fixed;
+  inset: 0;
+  animation: markpromptOverlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--markprompt-overlay-color, hsla(0, 0%, 0%, 0.478));
+}
+
+@keyframes markpromptOverlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.markprompt-content {
+  background-color: var(--markprompt-dialog-color, hsl(0, 0%, 52.3%));
+  border-radius: 6px;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--markprompt-dialog-width, 90vw);
+  max-width: var(--markprompt-dialog-max-width, 450px);
+  max-height: var(--markprompt-dialog-max-height, 85px);
+  padding: var(--markprompt-dialog-padding, 0.75rem);
+  animation: markpromptContentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes markpromptContentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.markprompt-close-button {
+  all: unset;
+  position: absolute;
+  top: calc(-0.5rem - var(--markprompt-close-button-size, 1.5rem));
+  right: 0;
+  background-color: var(--markprompt-dialog-color, hsl(0, 0%, 52.3%));
+  width: var(--markprompt-close-button-size, 1.5rem);
+  height: var(--markprompt-close-button-size, 1.5rem);
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.markprompt-close-button:fpcus,
+.markprompt-close-button:hover {
+  color: var(--markprompt-focus-color, white);
+}
+
+.markprompt-prompt {
+  background-color: var(--markprompt-prompt-background, hsla(0, 0%, 0%, 0.22));
+  border: none;
+  border-radius: var(--markprompt-prompt-border-radius, 4px);
+  width: 100%;
+  padding: var(--markprompt-prompt-padding, 1rem 0.75rem);
+  font-size: var(--markprompt-prompt-font-size, 1rem);
+  color: var(--markprompt-prompt-color, hsl(0, 0%, 88.7%));
+}
+
+.markprompt-prompt::placeholder {
+  color: var(--markprompt-prompt-placeholder-color, hsl(0, 0%, 78%));
+}
+
+.markprompt-prompt:focus {
+  outline: 2px solid
+    var(--markprompt-prompt-outline-color, hsla(0, 0%, 0%, 0.439));
+}

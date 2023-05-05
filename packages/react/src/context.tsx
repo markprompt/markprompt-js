@@ -10,6 +10,7 @@ import React, {
   ComponentPropsWithoutRef,
 } from 'react';
 import ReactMarkdown, { Options as ReactMarkdownOptions } from 'react-markdown';
+import { ReactElement } from 'react-markdown/lib/react-markdown.js';
 
 import {
   MarkpromptOptions,
@@ -19,11 +20,6 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
-
-type RootProps = Omit<MarkpromptOptions, 'prompt'> & {
-  children: ReactNode;
-  projectKey: string;
-};
 
 type MarkpromptContext = MarkpromptResponse & {
   prompt: string;
@@ -38,7 +34,17 @@ const MarkpromptContext = createContext<MarkpromptContext>({
   setPrompt: noop,
 });
 
-function Root(props: RootProps) {
+export type ProviderProps = Omit<MarkpromptOptions, 'prompt'> & {
+  /**
+   * The children to render within the markprompt context.
+   */
+  children: ReactNode;
+};
+
+/**
+ * A provider for the Markprompt context.
+ */
+export function Provider(props: ProviderProps) {
   const [prompt, setPrompt] = useState('');
 
   const value = useMarkprompt({
@@ -56,9 +62,15 @@ function Root(props: RootProps) {
   );
 }
 
-type FormProps = Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit'>;
+export type FormProps = Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit'>;
 
-const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
+/**
+ * The form that submits content to Markprompt.
+ */
+export const Form = forwardRef<HTMLFormElement, FormProps>(function Form(
+  props,
+  ref,
+) {
   const { setPrompt } = useContext(MarkpromptContext);
 
   const handleSubmit: FormEventHandler<
@@ -72,7 +84,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   return <form {...props} ref={ref} onSubmit={handleSubmit} />;
 });
 
-type PromptProps = Omit<
+export type PromptProps = Omit<
   ComponentPropsWithoutRef<'input'>,
   | 'name'
   | 'type'
@@ -83,7 +95,10 @@ type PromptProps = Omit<
   | 'spellCheck'
 >;
 
-const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
+/**
+ * The input prompt.
+ */
+export const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
   ref,
 ) {
@@ -103,24 +118,48 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   );
 });
 
-type AnswerProps = Omit<ReactMarkdownOptions, 'children'>;
+export type AnswerProps = Omit<ReactMarkdownOptions, 'children'>;
 
-function Answer(props: AnswerProps) {
+/**
+ * Render the answer from a Markprompt response.
+ */
+export function Answer(props: AnswerProps): ReactElement | null {
   const { answer } = useContext(MarkpromptContext);
-  if (!answer) return null;
+
+  if (!answer) {
+    return null;
+  }
+
   return <ReactMarkdown {...props}>{answer}</ReactMarkdown>;
 }
 
-type ReferencesProps = {
+export type ReferencesProps = {
+  /**
+   * The wrapper element to render.
+   *
+   * @default 'ul'
+   */
   Element?: React.ElementType;
+
+  /**
+   * The element ro render for each reference.
+   *
+   * @default 'li'
+   */
   Reference?: React.ElementType;
 };
 
-const References = forwardRef<HTMLUListElement, ReferencesProps>(
-  function References(props, ref) {
-    const { Element = 'ul', Reference = 'li' } = props;
+/**
+ * Render the references that Markprompt replied with.
+ */
+export const References = forwardRef<HTMLUListElement, ReferencesProps>(
+  function References({ Element = 'ul', Reference = 'li' }, ref) {
     const { references } = useContext(MarkpromptContext);
-    if (references.length === 0) return null;
+
+    if (references.length === 0) {
+      return null;
+    }
+
     return (
       <Element ref={ref}>
         {references.map((ref) => (
@@ -132,5 +171,3 @@ const References = forwardRef<HTMLUListElement, ReferencesProps>(
     );
   },
 );
-
-export { Root, Form, Prompt, Answer, References };

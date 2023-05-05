@@ -1,0 +1,8 @@
+@import '@radix-ui/colors/gray.css';
+@import '@radix-ui/colors/blackA.css';
+
+.app {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}

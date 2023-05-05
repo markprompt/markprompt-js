@@ -10,7 +10,10 @@
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./markprompt.css": "./markprompt.css"
+  },
   "files": [
     "README.md",
     "dist"
@@ -21,8 +24,10 @@
     "prepack": "tsc --build"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-icons": "^1.0.0",
+    "@radix-ui/react-visually-hidden": "^1.0.0",
     "classnames": "^2.3.2",
-    "client-only": "^0.0.1",
     "react-markdown": "^8.0.6",
     "remark-gfm": "^3.0.1"
   },
