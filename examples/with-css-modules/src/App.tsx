@@ -6,7 +6,7 @@ import styles from './App.module.css';
 export function App() {
   return (
     <div className={styles.app}>
-      <MarkpromptDialog />
+      <MarkpromptDialog projectKey="sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4" />
     </div>
   );
 }

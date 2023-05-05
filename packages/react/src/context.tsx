@@ -22,7 +22,14 @@ import {
 const noop = () => {};
 
 type MarkpromptContext = MarkpromptResponse & {
+  /**
+   * The current prompt value provided by the user.
+   */
   prompt: string;
+
+  /**
+   * Update the prompt with a new value.
+   */
   setPrompt: Dispatch<SetStateAction<string>>;
 };
 

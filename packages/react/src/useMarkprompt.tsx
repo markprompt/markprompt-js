@@ -8,19 +8,61 @@ import {
 import { useState, useEffect } from 'react';
 
 export type MarkpromptOptions = {
-  prompt: string;
-  projectKey: string;
+  /**
+   * The completions endpoint URL to call.
+   *
+   * @default 'https://api.markprompt.com/v1/completions'
+   */
   completionsUrl?: string;
+
+  /**
+   * The message to return if Markprompt doesn’t have an answer.
+   *
+   * @default 'Sorry, I am not sure how to answer that.'
+   */
   iDontKnowMessage?: string;
+
+  /**
+   * The OpenAPI model to use.
+   *
+   * @default 'gpt-3.5-turbo'
+   */
   model?: OpenAIModelId;
+
+  /**
+   * The Markprompt project key.
+   */
+  projectKey: string;
+
+  /**
+   * The user provided prompt.
+   */
+  prompt: string;
 };
 
 export type MarkpromptResponse = {
+  /**
+   * The answer given by Markprompt.
+   */
   answer: string;
+
+  /**
+   * The reference links provided by Markprompt.
+   */
   references: string[];
+
+  /**
+   * Whether or not Markprompt is loading more content.
+   */
   loading: boolean;
 };
 
+/**
+ * A React hook to get the answer to a prompt using Markprompt.
+ *
+ * The result is streamed from the Markprompt API. When the prompt changes, a
+ * new request is dispatched, and the old request is cancelled.
+ */
 export function useMarkprompt({
   prompt,
   projectKey,

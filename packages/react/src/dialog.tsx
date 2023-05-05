@@ -13,10 +13,16 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import classNames from 'classnames';
 import React, { ReactElement } from 'react';
 
-import { Answer, Form, Prompt, Provider } from './context.js';
+import {
+  Answer,
+  Form,
+  Prompt,
+  Provider,
+  type ProviderProps,
+} from './context.js';
 import { MarkpromptIcon } from './icon.js';
 
-export type MarkpromptDialogProps = {
+export type MarkpromptDialogProps = Omit<ProviderProps, 'children'> & {
   /**
    * A class name for the close button of the dialog.
    */
@@ -72,10 +78,14 @@ export type MarkpromptDialogProps = {
  */
 export function MarkpromptDialog({
   closeButtonClassName,
+  completionsUrl,
   contentClassName,
   description = 'Ask me a question…',
+  iDontKnowMessage,
   label = 'Open markprompt',
+  model,
   overlayClassName,
+  projectKey,
   promptClassName,
   title = 'Ask the robot a question.',
   triggerClassName,
@@ -118,7 +128,12 @@ export function MarkpromptDialog({
             <Description>{description}</Description>
           </VisuallyHidden>
 
-          <Provider projectKey="sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4">
+          <Provider
+            completionsUrl={completionsUrl}
+            iDontKnowMessage={iDontKnowMessage}
+            model={model}
+            projectKey={projectKey}
+          >
             <Form>
               <Prompt
                 className={classNames('markprompt-prompt', promptClassName)}
