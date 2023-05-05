@@ -1,35 +1,76 @@
 @import '@radix-ui/colors/gray.css';
 @import '@radix-ui/colors/blackA.css';
 
-.app {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
+/* style.css */
+
+:root {
+  --markprompt-background: #ffffffff;
+  --markprompt-foreground: #171717;
+  --markprompt-muted: #fafafa;
+  --markprompt-mutedForeground: #737373;
+  --markprompt-border: #e5e5e5;
+  --markprompt-input: #ffffff;
+  --markprompt-primary: #6366f1;
+  --markprompt-primaryForeground: #ffffff;
+  --markprompt-secondary: #fafafa;
+  --markprompt-secondaryForeground: #171717;
+  --markprompt-primaryHighlight: #ec4899;
+  --markprompt-secondaryHighlight: #7539ad;
+  --markprompt-ring: #0ea5e9;
+  --markprompt-overlay: #00000000;
+  --markprompt-radius: 8px;
+  --markprompt-button-icon-size: 1rem;
+  --markprompt-text-size: 0.875rem;
+}
+
+.dark {
+  --markprompt-background: #050505;
+  --markprompt-foreground: #d4d4d4;
+  --markprompt-muted: #171717;
+  --markprompt-mutedForeground: #737373;
+  --markprompt-border: #262626;
+  --markprompt-input: #ffffff;
+  --markprompt-primary: #6366f1;
+  --markprompt-primaryForeground: #ffffff;
+  --markprompt-secondary: #0e0e0e;
+  --markprompt-secondaryForeground: #ffffff;
+  --markprompt-primaryHighlight: #ec4899;
+  --markprompt-secondaryHighlight: #a855f7;
+  --markprompt-ring: #ffffff;
 }
 
 button {
   all: unset;
 }
 
-.button {
+.MarkpromptButton {
   display: flex;
   cursor: pointer;
+  border-radius: 99999px;
+  color: var(--markprompt-primaryForeground);
+  background-color: var(--markprompt-primary);
+  padding: 0.75rem;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  transition-property: opacity;
+  transition-duration: 200ms;
 }
 
-.button:hover {
-  color: white;
+.MarkpromptButton:hover {
+  opacity: 0.8;
 }
 
-.icon {
-  width: 3rem;
-  height: auto;
+.MarkpromptIcon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-.overlay {
+.MarkpromptOverlay {
   position: fixed;
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  background-color: var(--blackA10);
+  background-color: var(--markprompt-overlay);
 }
 
 @keyframes overlayShow {
@@ -41,27 +82,35 @@ button {
   }
 }
 
-.content {
-  background-color: var(--gray10);
-  border-radius: 6px;
+.MarkpromptContent {
+  background-color: var(--markprompt-background);
+  border-radius: var(--markprompt-radius);
+  border: 1px solid var(--markprompt-border);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 450px;
-  max-height: 85vh;
-  padding: 0.75rem;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  width: 80vw;
+  max-width: 600px;
+  height: 80vh;
+  max-height: 700px;
+  animation-name: contentShow;
+  animation-duration: 300ms;
+  animation-fill-mode: both;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
   color: var(--gray12);
+  overflow: hidden;
 }
 
 @keyframes contentShow {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    transform: translate(-50%, -46%) scale(0.98);
+  }
+  50% {
+    transform: translate(-50%, -51%) scale(1.02);
   }
   to {
     opacity: 1;
@@ -69,42 +118,75 @@ button {
   }
 }
 
-.close {
+.MarkpromptClose {
   position: absolute;
-  top: -2rem;
-  right: 0rem;
-  background: var(--gray10);
-  color: rgba(255 255 255 / 0.7);
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 9999px;
+  top: 0.75rem;
+  right: 0.75rem;
+  color: var(--markprompt-foreground);
+  width: var(--markprompt-button-icon-size);
+  height: var(--markprompt-button-icon-size);
+  padding: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
   display: grid;
   place-items: center;
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.MarkpromptClose:hover {
+  opacity: 0.8;
+}
+
+.MarkpromptClose:focus {
+  box-shadow: inset 0 0 0 2px var(--markprompt-primary);
+}
+
+.MarkpromptSearchIcon {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  color: var(--markprompt-foreground);
+  width: var(--markprompt-button-icon-size);
+  height: var(--markprompt-button-icon-size);
   cursor: pointer;
+  display: grid;
+  place-items: center;
 }
 
-.close:hover {
-  color: white;
-}
-
-.title {
+.MarkpromptTitle {
   margin-block-start: 0;
 }
 
-.prompt {
-  background-color: var(--blackA8);
-  border: none;
-  border-radius: 4px;
+.MarkpromptPrompt {
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  outline: none !important;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--markprompt-border);
+  box-shadow: none;
   width: 100%;
-  padding: 1rem 0.75rem;
-  font-size: 1rem;
-  color: var(--gray6);
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: var(--markprompt-text-size);
+  color: var(--markprompt-foreground);
+  caret-color: var(--markprompt-primary);
 }
 
-.prompt::placeholder {
+.MarkpromptPrompt:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.MarkpromptPrompt::placeholder {
   color: var(--gray8);
 }
 
-.prompt:focus {
+.MarkpromptPrompt:focus {
   outline: 2px solid var(--blackA9);
 }

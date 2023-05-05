@@ -100,7 +100,10 @@ export function Markprompt({
       await submitPrompt(
         prompt,
         projectKey,
-        (chunk) => setAnswer((prev) => prev + chunk),
+        (chunk) => {
+          setAnswer((prev) => prev + chunk);
+          return true;
+        },
         (refs) => setReferences(refs),
         (error) => {
           console.error(error);

@@ -1,10 +1,10 @@
 {
   "name": "@markprompt/react",
-  "version": "1.0.0",
-  "description": "A React component for adding GPT-4 powered search using the Markprompt API.",
+  "version": "1.0.2",
+  "description": "A headless React component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motifland/markprompt.git",
+    "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/react"
   },
   "license": "MIT",
@@ -16,10 +16,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --build --watch",
-    "dev-pack": "npm pack; mv markprompt-react-0.3.0.tgz ../../examples/with-css-modules/",
-    "prepack": "tsc --build"
+    "build": "tsc --build --clean && tsc --build",
+    "dev": "tsc --build --clean && tsc --build --watch",
+    "dev-pack": "npm pack; mv markprompt-react-1.0.2.tgz ../../examples/with-css-modules/",
+    "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.3",

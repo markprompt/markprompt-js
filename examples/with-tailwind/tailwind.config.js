@@ -6,5 +6,3 @@ export default {
   },
   plugins: [],
 };
-
-console.log('I’m loaded!');

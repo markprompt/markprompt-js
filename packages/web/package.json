@@ -18,8 +18,8 @@
   ],
   "scripts": {
     "build": "tsc --build --clean && tsc --build",
-    "dev": "tsc --build --watch",
-    "prepack": "tsc --build",
+    "dev": "tsc --build --clean && tsc --build --watch",
+    "prepack": "tsc --build --clean && tsc --build",
     "vite": "vite"
   },
   "dependencies": {

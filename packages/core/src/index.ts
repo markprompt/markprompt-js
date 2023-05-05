@@ -2,24 +2,60 @@ import type { OpenAIModelId } from './types.js';
 
 export type { OpenAIModelId };
 
-type Options = {
+export type Options = {
   /** URL at which to fetch completions */
   completionsUrl?: string;
+  /** The placeholder for the text input */
+  placeholder?: string;
   /** Message returned when the model does not have an answer */
   iDontKnowMessage?: string;
+  /** The heading of the references section */
+  referencesHeading?: string;
+  /** The loading heading of the references section */
+  loadingHeading?: string;
+  /** If true, include the branding footer */
+  includeBranding?: boolean;
   /** The OpenAI model to use */
   model?: OpenAIModelId;
   /** The prompt template */
   promptTemplate?: string;
+  /** The model temperature */
+  temperature?: number;
+  /** The model top P */
+  topP?: number;
+  /** The model frequency penalty */
+  frequencyPenalty?: number;
+  /** The model present penalty */
+  presencePenalty?: number;
+  /** The max number of tokens to include in the response */
+  maxTokens?: number;
   /** AbortController signal */
   signal?: AbortSignal;
 };
 
-export const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
-export const I_DONT_KNOW_MESSAGE = 'Sorry, I am not sure how to answer that.';
 export const MARKPROMPT_COMPLETIONS_URL =
   'https://api.markprompt.com/v1/completions';
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
+export const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
+export const DEFAULT_I_DONT_KNOW_MESSAGE =
+  'Sorry, I am not sure how to answer that.';
+export const DEFAULT_REFERENCES_HEADING =
+  'Answer generated from the following pages:';
+export const DEFAULT_LOADING_HEADING = 'Fetching relevant pages...';
+export const DEFAULT_PROMPT_TEMPLATE = `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
+
+Context sections:
+---
+{{CONTEXT}}
+
+Question: "{{PROMPT}}"
+
+Answer (including related code snippets if available):`;
+export const DEFAULT_TEMPERATURE = 0.1;
+export const DEFAULT_TOP_P = 1;
+export const DEFAULT_FREQUENCY_PENALTY = 0;
+export const DEFAULT_PRESENCE_PENALTY = 0;
+export const DEFAULT_MAX_TOKENS = 500;
 
 /**
  * @param {string} prompt - Prompt to submit to the model
@@ -43,7 +79,8 @@ export async function submitPrompt(
 
   if (!prompt) return;
 
-  const iDontKnowMessage = options.iDontKnowMessage ?? I_DONT_KNOW_MESSAGE;
+  const iDontKnowMessage =
+    options.iDontKnowMessage ?? DEFAULT_I_DONT_KNOW_MESSAGE;
 
   try {
     const res = await fetch(
@@ -59,6 +96,11 @@ export async function submitPrompt(
           iDontKnowMessage,
           model: options?.model ?? DEFAULT_MODEL,
           promptTemplate: options.promptTemplate,
+          temperature: options.temperature,
+          topP: options.topP,
+          frequencyPenalty: options.frequencyPenalty,
+          presencePenalty: options.presencePenalty,
+          maxTokens: options.maxTokens,
         }),
         signal: options.signal,
       },

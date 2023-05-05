@@ -1,6 +1,6 @@
 import {
   DEFAULT_MODEL,
-  I_DONT_KNOW_MESSAGE,
+  DEFAULT_I_DONT_KNOW_MESSAGE,
   MARKPROMPT_COMPLETIONS_URL,
   OpenAIModelId,
   submitPrompt,
@@ -33,7 +33,7 @@ export class Markprompt extends LitElement {
   promptTemplate: string | undefined = undefined;
 
   @property({ type: String })
-  iDontKnowMessage = I_DONT_KNOW_MESSAGE;
+  iDontKnowMessage = DEFAULT_I_DONT_KNOW_MESSAGE;
 
   @property({ type: Boolean })
   showReferencesImmediatebly = true;
