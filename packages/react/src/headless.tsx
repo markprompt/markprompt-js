@@ -1,7 +1,8 @@
 import type { Options } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
-import React, { ReactNode, createContext, forwardRef, useContext } from 'react';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown.js';
+import * as React from 'react';
+import { type ReactNode, createContext, forwardRef, useContext } from 'react';
+import { Remark } from 'react-remark';
 
 import { useMarkprompt } from './useMarkprompt.js';
 
@@ -15,41 +16,43 @@ export type RootProps = React.ComponentProps<typeof Dialog.Root> & {
 
 type State = {
   answer: string | undefined;
-  loading: boolean;
   prompt: string;
   references: string[];
+  state: 'indeterminate' | 'loading' | 'success';
 };
 
 type Actions = {
-  handlePromptChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  abort: () => void;
+  updatePrompt: (nextPrompt: string) => void;
+  submit: () => void;
 };
 
 const MarkpromptContext = createContext<State & Actions>({
   answer: undefined,
-  loading: false,
   prompt: '',
   references: [],
-  handlePromptChange: noop,
-  handleSubmit: noop,
+  state: 'indeterminate',
+  abort: noop,
+  updatePrompt: noop,
+  submit: noop,
 });
 
 function Root(props: RootProps) {
   const contextValue = useMarkprompt({
     projectKey: props.projectKey,
     completionsUrl: props.completionsUrl,
-    placeholder: props.placeholder,
+    frequencyPenalty: props.frequencyPenalty,
     iDontKnowMessage: props.iDontKnowMessage,
-    referencesHeading: props.referencesHeading,
-    loadingHeading: props.loadingHeading,
     includeBranding: props.includeBranding,
+    loadingHeading: props.loadingHeading,
+    maxTokens: props.maxTokens,
     model: props.model,
+    placeholder: props.placeholder,
+    presencePenalty: props.presencePenalty,
     promptTemplate: props.promptTemplate,
+    referencesHeading: props.referencesHeading,
     temperature: props.temperature,
     topP: props.topP,
-    frequencyPenalty: props.frequencyPenalty,
-    presencePenalty: props.presencePenalty,
-    maxTokens: props.maxTokens,
   });
 
   return (
@@ -68,10 +71,42 @@ Portal.displayName = 'Markprompt.Portal';
 const Overlay = Dialog.Overlay;
 Overlay.displayName = 'Markprompt.Overlay';
 
-const Content = Dialog.Content;
+const Content = forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof Dialog.Content>
+>(function Content(props, ref) {
+  const { state } = useContext(MarkpromptContext);
+  return (
+    <Dialog.Content {...props} data-loading-state={state} ref={ref}>
+      {props.children}
+    </Dialog.Content>
+  );
+});
 Content.displayName = 'Markprompt.Content';
 
-const Close = Dialog.Close;
+type CloseProps = React.ComponentProps<typeof Dialog.Close> & {
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+};
+
+const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
+  props: CloseProps,
+  ref,
+) {
+  const { onClick } = props;
+  const { abort } = useContext(MarkpromptContext);
+  return (
+    <Dialog.Close
+      {...props}
+      ref={ref}
+      onClick={(event) => {
+        // abort ongoing fetch requests on close
+        abort();
+        // call user-provided onClick handler
+        onClick?.(event);
+      }}
+    />
+  );
+});
 Close.displayName = 'Markprompt.Close';
 
 const Title = Dialog.Title;
@@ -85,8 +120,17 @@ type FormProps = React.RefAttributes<HTMLFormElement> & {
 };
 
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
-  const { handleSubmit } = useContext(MarkpromptContext);
-  return <form {...props} ref={ref} onSubmit={handleSubmit} />;
+  const { submit } = useContext(MarkpromptContext);
+  return (
+    <form
+      {...props}
+      ref={ref}
+      onSubmit={(event) => {
+        event?.preventDefault();
+        submit();
+      }}
+    />
+  );
 });
 Form.displayName = 'Markprompt.Form';
 
@@ -100,7 +144,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   ref,
 ) {
   const { placeholder = 'Ask me anything…', className, ...rest } = props;
-  const { handlePromptChange, prompt } = useContext(MarkpromptContext);
+  const { updatePrompt, prompt } = useContext(MarkpromptContext);
   return (
     <input
       {...rest}
@@ -109,7 +153,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       ref={ref}
       type="text"
       value={prompt}
-      onChange={handlePromptChange}
+      onChange={(event) => updatePrompt(event.target.value)}
       autoCapitalize="none"
       autoComplete="off"
       autoCorrect="off"
@@ -120,36 +164,36 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
 });
 Prompt.displayName = 'Markprompt.Prompt';
 
-function Answer(
-  props: Omit<React.ComponentProps<typeof ReactMarkdown>, 'children'>,
-) {
+function Answer(props: Omit<React.ComponentProps<typeof Remark>, 'children'>) {
   const { answer } = useContext(MarkpromptContext);
-  if (!answer) return null;
-  return <ReactMarkdown {...props}>{answer}</ReactMarkdown>;
+  return <Remark {...props}>{answer ?? ''}</Remark>;
 }
 Answer.displayName = 'Markprompt.Answer';
 
-type ReferencesProps = React.RefAttributes<HTMLUListElement> & {
-  Element?: React.ElementType;
-  Reference?: React.ElementType;
+type ReferencesProps = {
+  RootElement?: React.ElementType;
+  ReferenceElement?: React.ElementType<{
+    children: React.ReactNode;
+    reference: string;
+  }>;
 };
 
-const References = forwardRef<HTMLUListElement, ReferencesProps>(
-  function References(props, ref) {
-    const { Element = 'ul', Reference = 'li' } = props;
-    const { references } = useContext(MarkpromptContext);
-    if (references.length === 0) return null;
-    return (
-      <Element ref={ref}>
-        {references.map((ref) => (
-          <Reference key={ref} reference={ref}>
-            {ref}
-          </Reference>
-        ))}
-      </Element>
-    );
-  },
-);
+const References = forwardRef<Element, ReferencesProps>(function References(
+  props,
+  ref,
+) {
+  const { RootElement = 'ul', ReferenceElement = 'li' } = props;
+  const { references } = useContext(MarkpromptContext);
+  return (
+    <RootElement ref={ref} references={references}>
+      {references.map((ref) => (
+        <ReferenceElement key={ref} reference={ref}>
+          {ref}
+        </ReferenceElement>
+      ))}
+    </RootElement>
+  );
+});
 References.displayName = 'Markprompt.References';
 
 export {

@@ -1,130 +1,146 @@
+import type { Options } from '@markprompt/core';
 import {
-  DEFAULT_MODEL,
+  DEFAULT_FREQUENCY_PENALTY,
   DEFAULT_I_DONT_KNOW_MESSAGE,
+  DEFAULT_LOADING_HEADING,
+  DEFAULT_MAX_TOKENS,
+  DEFAULT_MODEL,
+  DEFAULT_PRESENCE_PENALTY,
+  DEFAULT_PROMPT_TEMPLATE,
+  DEFAULT_REFERENCES_HEADING,
+  DEFAULT_TEMPERATURE,
+  DEFAULT_TOP_P,
   MARKPROMPT_COMPLETIONS_URL,
   submitPrompt,
-  DEFAULT_LOADING_HEADING,
-  DEFAULT_REFERENCES_HEADING,
-  DEFAULT_PROMPT_TEMPLATE,
-  DEFAULT_TOP_P,
-  DEFAULT_TEMPERATURE,
-  DEFAULT_FREQUENCY_PENALTY,
-  DEFAULT_PRESENCE_PENALTY,
-  DEFAULT_MAX_TOKENS,
 } from '@markprompt/core';
-import type { Options } from '@markprompt/core';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useMarkprompt({
   projectKey,
   completionsUrl = MARKPROMPT_COMPLETIONS_URL,
+  frequencyPenalty = DEFAULT_FREQUENCY_PENALTY,
   iDontKnowMessage = DEFAULT_I_DONT_KNOW_MESSAGE,
-  referencesHeading = DEFAULT_REFERENCES_HEADING,
-  loadingHeading = DEFAULT_LOADING_HEADING,
   includeBranding = true,
+  loadingHeading = DEFAULT_LOADING_HEADING,
+  maxTokens = DEFAULT_MAX_TOKENS,
   model = DEFAULT_MODEL,
+  presencePenalty = DEFAULT_PRESENCE_PENALTY,
   promptTemplate = DEFAULT_PROMPT_TEMPLATE,
+  referencesHeading = DEFAULT_REFERENCES_HEADING,
   temperature = DEFAULT_TEMPERATURE,
   topP = DEFAULT_TOP_P,
-  frequencyPenalty = DEFAULT_FREQUENCY_PENALTY,
-  presencePenalty = DEFAULT_PRESENCE_PENALTY,
-  maxTokens = DEFAULT_MAX_TOKENS,
-}: { projectKey: string } & Options) {
+}: {
+  /** Project key, required */
+  projectKey: string;
+} & Options) {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
     );
   }
 
+  const [state, setState] = useState<'indeterminate' | 'loading' | 'success'>(
+    'indeterminate',
+  );
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState<string>('');
 
-  const controller = useRef(new AbortController());
+  const controllerRef = useRef<AbortController>();
 
-  //   useEffect(() => {
-  //     console.log('aborting');
-  //     const c = controller.current;
-  //     return () => c.abort();
-  //   }, []);
+  // abort ongoing fetch requests on unmount
+  useEffect(() => {
+    return () => abort();
+  }, []);
 
-  const handlePromptChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPrompt(event.target.value);
-    },
-    [],
-  );
+  const abort = useCallback(() => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+  }, []);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
+  const updatePrompt = useCallback((prompt: string) => {
+    setPrompt(prompt);
+  }, []);
 
-      if (!prompt || prompt === '') {
-        return;
-      }
+  const submit = useCallback(async () => {
+    controllerRef.current?.abort();
 
-      setAnswer('');
-      setReferences([]);
-      setLoading(true);
+    if (!prompt || prompt === '') {
+      return;
+    }
 
-      await submitPrompt(
-        prompt,
-        projectKey,
-        (chunk) => {
-          setAnswer((prev) => prev + chunk);
-          return true;
-        },
-        (refs) => setReferences(refs),
-        (error) => {
-          console.error(error);
-        },
-        {
-          completionsUrl,
-          iDontKnowMessage,
-          referencesHeading,
-          loadingHeading,
-          includeBranding,
-          model,
-          promptTemplate,
-          temperature,
-          topP,
-          frequencyPenalty,
-          presencePenalty,
-          maxTokens,
-          signal: controller.current.signal,
-        },
-      );
+    setAnswer('');
+    setReferences([]);
+    setState('loading');
 
-      setLoading(false);
-    },
-    [
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    const promise = submitPrompt(
       prompt,
       projectKey,
-      completionsUrl,
-      iDontKnowMessage,
-      referencesHeading,
-      loadingHeading,
-      includeBranding,
-      model,
-      promptTemplate,
-      temperature,
-      topP,
-      frequencyPenalty,
-      presencePenalty,
-      maxTokens,
-    ],
-  );
+      (chunk) => {
+        setAnswer((prev) => prev + chunk);
+        return true;
+      },
+      (refs) => setReferences(refs),
+      (error) => {
+        console.error(error);
+      },
+      {
+        completionsUrl,
+        iDontKnowMessage,
+        referencesHeading,
+        loadingHeading,
+        includeBranding,
+        model,
+        promptTemplate,
+        temperature,
+        topP,
+        frequencyPenalty,
+        presencePenalty,
+        maxTokens,
+        signal: controller.signal,
+      },
+    );
+
+    promise.then(() => {
+      setState('success');
+    });
+
+    promise.finally(() => {
+      if (controllerRef.current === controller) {
+        controllerRef.current = undefined;
+      }
+    });
+  }, [
+    prompt,
+    projectKey,
+    completionsUrl,
+    iDontKnowMessage,
+    referencesHeading,
+    loadingHeading,
+    includeBranding,
+    model,
+    promptTemplate,
+    temperature,
+    topP,
+    frequencyPenalty,
+    presencePenalty,
+    maxTokens,
+  ]);
 
   return useMemo(
     () => ({
       answer,
       references,
-      loading,
+      state,
       prompt,
-      handlePromptChange,
-      handleSubmit,
+      abort,
+      updatePrompt,
+      submit,
     }),
-    [answer, references, loading, prompt, handlePromptChange, handleSubmit],
+    [answer, references, state, prompt, abort, updatePrompt, submit],
   );
 }
