@@ -1,8 +1,6 @@
 @import '@radix-ui/colors/gray.css';
 @import '@radix-ui/colors/blackA.css';
 
-/* style.css */
-
 :root {
   --markprompt-background: #ffffffff;
   --markprompt-foreground: #171717;
@@ -102,6 +100,8 @@ button {
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
   color: var(--gray12);
   overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 @keyframes contentShow {
@@ -189,4 +189,84 @@ button {
 
 .MarkpromptPrompt:focus {
   outline: 2px solid var(--blackA9);
+}
+
+.wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+.answer * {
+  line-height: 1.6;
+  margin-top: 0;
+}
+
+.answer * + * {
+  margin-top: 1.5em;
+}
+
+.answer ul,
+.answer ol {
+  padding-left: 1.25em;
+}
+
+.answer code:not(pre code) {
+  background-color: var(--markprompt-muted);
+  border: 1px solid var(--markprompt-border);
+  color: var(--markprompt-foreground);
+  border-radius: 0.25em;
+  padding: 0.125em 0.25em;
+}
+
+.answer pre {
+  background-color: var(--markprompt-muted);
+  border: 1px solid var(--markprompt-border);
+  color: var(--markprompt-foreground);
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+}
+
+.answer > *:last-child:after {
+  content: '▮';
+  font-size: 1.5em;
+  vertical-align: baseline;
+  color: var(--markprompt-primary);
+  animation: 1200ms blink infinite cubic-bezier(0.14, 0, 0.16, 1);
+  text-shadow: 0 0 2px 0 var(--markprompt-primary);
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.references {
+  display: none;
+  border-top: 1px solid var(--markprompt-border);
+  color: var(--markprompt-mutedForeground);
+}
+
+.references ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.references a {
+  color: var(--markprompt-primary);
+}
+
+[data-loading-state='success'] .references {
+  display: block;
 }
