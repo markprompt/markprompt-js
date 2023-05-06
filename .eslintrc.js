@@ -8,6 +8,18 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: ['examples/**/tsconfig.json', 'packages/**/tsconfig.json'],
+      },
+      node: true,
+    },
+  },
   plugins: ['@typescript-eslint'],
   root: true,
   env: {

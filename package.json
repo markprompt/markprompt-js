@@ -6,7 +6,6 @@
     "packages/*"
   ],
   "scripts": {
-    "build-all-dev": "rm -fr node_modules; npm install; pushd packages/core; npm run build; popd; pushd packages/react; npm run dev-pack; popd; pushd examples/with-css-modules; rm -fr node_modules; npm run dev",
     "lint": "run-p lint:format lint:js lint:ts",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
@@ -17,9 +16,9 @@
     "@changesets/cli": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "esbuild": "^0.17.18",
     "eslint": "8.35.0",
     "eslint-config-prettier": "^8.0.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-lit": "^1.8.2",
     "eslint-plugin-prettier": "^4.0.0",
