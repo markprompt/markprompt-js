@@ -13,7 +13,8 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "target": "es2021",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true
   },
   "exclude": ["dist/", "examples/*"]
 }

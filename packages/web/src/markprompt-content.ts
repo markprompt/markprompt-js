@@ -2,12 +2,12 @@ import {
   DEFAULT_MODEL,
   DEFAULT_I_DONT_KNOW_MESSAGE,
   MARKPROMPT_COMPLETIONS_URL,
-  OpenAIModelId,
+  type OpenAIModelId,
   submitPrompt,
 } from '@markprompt/core';
 import { LitElement, css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Ref, createRef, ref } from 'lit/directives/ref.js';
+import { type Ref, createRef, ref } from 'lit/directives/ref.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { until } from 'lit/directives/until.js';
 import rehypeSanitize from 'rehype-sanitize';
