@@ -15,5 +15,5 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: npm run build --workspaces
+      - run: npm run build -w @markprompt/core -w @markprompt/react -w @markprompt/web
       - run: npm run lint
