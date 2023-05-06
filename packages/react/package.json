@@ -18,7 +18,6 @@
   "scripts": {
     "build": "tsc --build --clean && tsc --build",
     "dev": "tsc --build --clean && tsc --build --watch",
-    "dev-pack": "npm pack; mv markprompt-react-1.0.2.tgz ../../examples/with-css-modules/",
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
