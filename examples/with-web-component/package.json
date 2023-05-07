@@ -8,6 +8,9 @@
     "dev": "vite",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "@markprompt/web": "*"
+  },
   "devDependencies": {
     "typescript": "^4.9.3",
     "vite": "^4.2.0"
