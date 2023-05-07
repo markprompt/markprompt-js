@@ -1,12 +1,13 @@
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { clsx } from 'clsx';
+import { useContext } from 'react';
 
+import { WithCaret } from './Caret';
 import styles from './markprompt.module.css';
-import { useCaret } from './useCaret';
+import { MarkpromptIcon } from './MarkpromptIcon';
 
 function Component() {
-  const ref = useCaret<HTMLDivElement>();
-
   return (
     <Markprompt.Root
       projectKey="sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4"
@@ -28,14 +29,15 @@ function Component() {
           {/* Markprompt.Title is required for accessibility reasons. It can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
             <Markprompt.Title className={styles.title}>
-              Ask me anything about Motif.land
+              Ask me anything about Markprompt
             </Markprompt.Title>
           </VisuallyHidden>
 
           {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
             <Markprompt.Description className={styles.description}>
-              I can answer all your questions about Motif.land.
+              I can answer your questions about Markprompt's client-side
+              libraries, onboarding, API's and more.
             </Markprompt.Description>
           </VisuallyHidden>
 
@@ -44,31 +46,79 @@ function Component() {
             <Markprompt.Prompt className={styles.MarkpromptPrompt} />
           </Markprompt.Form>
 
-          <div className={styles.wrapper}>
-            <div className={styles.answer} ref={ref}>
-              <Markprompt.Answer />
-            </div>
-
-            <div className={styles.references}>
-              <p>Answer generated from the following sources:</p>
-              <Markprompt.References
-                ReferenceElement={({ reference }) => (
-                  <li>
-                    <a
-                      href={`https://github.com/motifland/markprompt-sample-docs/blob/main${reference}`}
-                    >
-                      {reference}
-                    </a>
-                  </li>
-                )}
-              />
-            </div>
+          <div className={styles.answer}>
+            <WithCaret as="p" />
+            <Markprompt.Answer
+              components={{
+                a: ({ children }) => <WithCaret as="a">{children}</WithCaret>,
+                code: ({ children }) => (
+                  <WithCaret as="code">{children}</WithCaret>
+                ),
+                h1: ({ children }) => <WithCaret as="h1">{children}</WithCaret>,
+                h2: ({ children }) => <WithCaret as="h2">{children}</WithCaret>,
+                h3: ({ children }) => <WithCaret as="h3">{children}</WithCaret>,
+                h4: ({ children }) => <WithCaret as="h4">{children}</WithCaret>,
+                h5: ({ children }) => <WithCaret as="h5">{children}</WithCaret>,
+                h6: ({ children }) => <WithCaret as="h6">{children}</WithCaret>,
+                li: ({ children }) => <WithCaret as="li">{children}</WithCaret>,
+                p: ({ children }) => <WithCaret as="p">{children}</WithCaret>,
+                span: ({ children }) => (
+                  <WithCaret as="span">{children}</WithCaret>
+                ),
+                td: ({ children }) => <WithCaret as="td">{children}</WithCaret>,
+              }}
+            />
           </div>
+
+          <References />
+
+          <p className={styles.MarkpromptPoweredBy}>
+            Powered by{' '}
+            <a href="https://markprompt.com/">
+              <VisuallyHidden>Markprompt</VisuallyHidden>
+              <MarkpromptIcon size={20} aria-hidden />
+            </a>
+          </p>
         </Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>
   );
 }
+
+const References = () => {
+  const { state, references } = useContext(Markprompt.Context);
+
+  if (state === 'indeterminate') return null;
+
+  // adding keys to the below wrapper divs makes sure React
+  // doesn't reuse them which will retrigger the intro animation.
+
+  if (state === 'loading' && references.length === 0) {
+    return (
+      <div key="loading" className={clsx(styles.references, styles.popup)}>
+        <div className={styles.progress} />
+        <p>Fetching relevant pages…</p>
+      </div>
+    );
+  }
+
+  return (
+    <div key="references" className={clsx(styles.references, styles.popup)}>
+      <p>Answer generated from the following sources:</p>
+      <Markprompt.References
+        ReferenceElement={({ reference }) => (
+          <li className={styles.reference}>
+            <a
+              href={`https://github.com/motifland/markprompt-sample-docs/blob/main${reference}`}
+            >
+              {reference}
+            </a>
+          </li>
+        )}
+      />
+    </div>
+  );
+};
 
 const SearchIcon = ({ className }: { className: string }) => (
   <svg
