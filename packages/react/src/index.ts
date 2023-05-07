@@ -1,4 +1,5 @@
 export {
+  Context,
   Root,
   Trigger,
   Portal,

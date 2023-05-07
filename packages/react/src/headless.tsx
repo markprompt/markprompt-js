@@ -2,7 +2,8 @@ import type { Options } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as React from 'react';
 import { type ReactNode, createContext, forwardRef, useContext } from 'react';
-import { Remark } from 'react-remark';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { useMarkprompt } from './useMarkprompt.js';
 
@@ -164,9 +165,15 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
 });
 Prompt.displayName = 'Markprompt.Prompt';
 
-function Answer(props: Omit<React.ComponentProps<typeof Remark>, 'children'>) {
+function Answer(
+  props: Omit<React.ComponentProps<typeof Markdown>, 'children'>,
+) {
   const { answer } = useContext(MarkpromptContext);
-  return <Remark {...props}>{answer ?? ''}</Remark>;
+  return (
+    <Markdown remarkPlugins={[remarkGfm]} {...props}>
+      {answer ?? ''}
+    </Markdown>
+  );
 }
 Answer.displayName = 'Markprompt.Answer';
 
@@ -197,6 +204,7 @@ const References = forwardRef<Element, ReferencesProps>(function References(
 References.displayName = 'Markprompt.References';
 
 export {
+  MarkpromptContext as Context,
   Root,
   Trigger,
   Portal,
