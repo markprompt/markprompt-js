@@ -147,7 +147,6 @@ export async function submitPrompt(
       }
     }
   } catch (error) {
-    onAnswerChunk(iDontKnowMessage);
     onError(error instanceof Error ? error : new Error(`${error}`));
   }
 }

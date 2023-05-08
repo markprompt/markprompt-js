@@ -1,13 +1,57 @@
-import { HTMLAttributes } from 'react';
+import type { CSSProperties } from 'react';
+import * as React from 'react';
+
+export const Footer = () => {
+  return (
+    <p
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.25rem',
+        justifyContent: 'center',
+        margin: 0,
+        padding: '.375rem 0.75rem',
+        backgroundColor: 'var(--markprompt-muted)',
+        color: 'var(--markprompt-mutedForeground)',
+        borderTop: '1px solid var(--markprompt-border)',
+        fontSize: '0.75rem',
+        fontWeight: 500,
+        zIndex: 1,
+      }}
+    >
+      Powered by{' '}
+      <a
+        style={{
+          color: 'var(--markprompt-primary)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.25rem',
+          textDecoration: 'none',
+        }}
+        href="https://markprompt.com/"
+      >
+        <MarkpromptIcon style={{ width: '16px', height: '16px' }} aria-hidden />
+        Markprompt
+      </a>
+    </p>
+  );
+};
+
+Footer.displayName = 'Markprompt.Footer';
 
 export const MarkpromptIcon = ({
-  size = 320,
+  className,
+  style,
   ...props
-}: HTMLAttributes<SVGSVGElement> & { size?: number }) => {
+}: React.HTMLAttributes<SVGSVGElement> & {
+  className?: string;
+  style?: CSSProperties;
+  size?: number;
+}) => {
   return (
     <svg
-      width={size}
-      height={size}
+      className={className}
+      style={style}
       viewBox="0 0 320 320"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

@@ -3,9 +3,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { clsx } from 'clsx';
 import { useContext } from 'react';
 
-import { WithCaret } from './Caret';
 import styles from './markprompt.module.css';
-import { MarkpromptIcon } from './MarkpromptIcon';
 
 function Component() {
   return (
@@ -47,43 +45,38 @@ function Component() {
           </Markprompt.Form>
 
           <div className={styles.answer}>
-            <WithCaret as="p" />
-            <Markprompt.Answer
-              components={{
-                a: ({ children }) => <WithCaret as="a">{children}</WithCaret>,
-                code: ({ children }) => (
-                  <WithCaret as="code">{children}</WithCaret>
-                ),
-                h1: ({ children }) => <WithCaret as="h1">{children}</WithCaret>,
-                h2: ({ children }) => <WithCaret as="h2">{children}</WithCaret>,
-                h3: ({ children }) => <WithCaret as="h3">{children}</WithCaret>,
-                h4: ({ children }) => <WithCaret as="h4">{children}</WithCaret>,
-                h5: ({ children }) => <WithCaret as="h5">{children}</WithCaret>,
-                h6: ({ children }) => <WithCaret as="h6">{children}</WithCaret>,
-                li: ({ children }) => <WithCaret as="li">{children}</WithCaret>,
-                p: ({ children }) => <WithCaret as="p">{children}</WithCaret>,
-                span: ({ children }) => (
-                  <WithCaret as="span">{children}</WithCaret>
-                ),
-                td: ({ children }) => <WithCaret as="td">{children}</WithCaret>,
-              }}
-            />
+            <Caret />
+            <Markprompt.Answer />
           </div>
 
           <References />
-
-          <p className={styles.MarkpromptPoweredBy}>
-            Powered by{' '}
-            <a href="https://markprompt.com/">
-              <VisuallyHidden>Markprompt</VisuallyHidden>
-              <MarkpromptIcon size={20} aria-hidden />
-            </a>
-          </p>
         </Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>
   );
 }
+
+const Caret = () => {
+  const { answer } = useContext(Markprompt.Context);
+
+  if (answer) {
+    return <></>;
+  }
+
+  return <span className={styles.caret} />;
+};
+
+const capitalize = (text: string) => {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
+const removeFileExtension = (fileName: string) => {
+  const lastDotIndex = fileName.lastIndexOf('.');
+  if (lastDotIndex === -1) {
+    return fileName;
+  }
+  return fileName.substring(0, lastDotIndex);
+};
 
 const References = () => {
   const { state, references } = useContext(Markprompt.Context);
@@ -108,10 +101,10 @@ const References = () => {
       <Markprompt.References
         ReferenceElement={({ reference }) => (
           <li className={styles.reference}>
-            <a
-              href={`https://github.com/motifland/markprompt-sample-docs/blob/main${reference}`}
-            >
-              {reference}
+            <a href={removeFileExtension(reference)}>
+              {capitalize(
+                removeFileExtension(reference.split('/').slice(-1)[0]),
+              )}
             </a>
           </li>
         )}
@@ -120,10 +113,10 @@ const References = () => {
   );
 };
 
-const SearchIcon = ({ className }: { className: string }) => (
+const SearchIcon = ({ className }: { className?: string }) => (
   <svg
-    className={className}
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -136,9 +129,10 @@ const SearchIcon = ({ className }: { className: string }) => (
   </svg>
 );
 
-const CloseIcon = () => (
+const CloseIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -151,7 +145,7 @@ const CloseIcon = () => (
   </svg>
 );
 
-const ChatIcon = ({ className }: { className: string }) => (
+const ChatIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}

@@ -5,6 +5,7 @@ import { type ReactNode, createContext, forwardRef, useContext } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { Footer } from './footer.js';
 import { useMarkprompt } from './useMarkprompt.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -58,8 +59,25 @@ function Root(props: RootProps) {
 
   return (
     <MarkpromptContext.Provider value={contextValue}>
-      <Dialog.Root modal>{props.children}</Dialog.Root>
+      <DialogRootWithAbort>{props.children}</DialogRootWithAbort>
     </MarkpromptContext.Provider>
+  );
+}
+
+function DialogRootWithAbort({ children }: { children: React.ReactNode }) {
+  const { abort } = useContext(MarkpromptContext);
+
+  return (
+    <Dialog.Root
+      modal
+      onOpenChange={(open) => {
+        if (!open) {
+          abort();
+        }
+      }}
+    >
+      {children}
+    </Dialog.Root>
   );
 }
 
@@ -80,6 +98,7 @@ const Content = forwardRef<
   return (
     <Dialog.Content {...props} data-loading-state={state} ref={ref}>
       {props.children}
+      <Footer />
     </Dialog.Content>
   );
 });
