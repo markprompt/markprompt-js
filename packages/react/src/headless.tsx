@@ -6,7 +6,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 import { Footer } from './footer.js';
-import { useMarkprompt } from './useMarkprompt.js';
+import { useMarkprompt, type LoadingState } from './useMarkprompt.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -20,7 +20,7 @@ type State = {
   answer: string | undefined;
   prompt: string;
   references: string[];
-  state: 'indeterminate' | 'loading' | 'success';
+  state: LoadingState;
 };
 
 type Actions = {
@@ -59,24 +59,26 @@ function Root(props: RootProps) {
 
   return (
     <MarkpromptContext.Provider value={contextValue}>
-      <DialogRootWithAbort>{props.children}</DialogRootWithAbort>
+      <DialogRootWithAbort {...props} />
     </MarkpromptContext.Provider>
   );
 }
 
-function DialogRootWithAbort({ children }: { children: React.ReactNode }) {
+function DialogRootWithAbort(props: Dialog.DialogProps) {
   const { abort } = useContext(MarkpromptContext);
 
   return (
     <Dialog.Root
+      {...props}
       modal
       onOpenChange={(open) => {
+        props.onOpenChange?.(open);
         if (!open) {
           abort();
         }
       }}
     >
-      {children}
+      {props.children}
     </Dialog.Root>
   );
 }

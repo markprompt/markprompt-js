@@ -15,6 +15,12 @@ import {
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+export type LoadingState =
+  | 'indeterminate'
+  | 'preload'
+  | 'streaming-answer'
+  | 'done';
+
 export function useMarkprompt({
   projectKey,
   completionsUrl = MARKPROMPT_COMPLETIONS_URL,
@@ -39,32 +45,35 @@ export function useMarkprompt({
     );
   }
 
-  const [state, setState] = useState<'indeterminate' | 'loading' | 'success'>(
-    'indeterminate',
-  );
+  const [state, setState] = useState<LoadingState>('indeterminate');
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
 
   const controllerRef = useRef<AbortController>();
 
-  // abort ongoing fetch requests on unmount
-  useEffect(() => {
-    return () => abort();
-  }, []);
-
   const abort = useCallback(() => {
     if (controllerRef.current) {
       controllerRef.current.abort();
+      controllerRef.current = undefined;
     }
   }, []);
+
+  // Abort ongoing fetch requests on unmount
+  useEffect(() => {
+    return () => abort();
+  }, [abort]);
 
   const updatePrompt = useCallback((prompt: string) => {
     setPrompt(prompt);
   }, []);
 
   const submit = useCallback(async () => {
-    controllerRef.current?.abort();
+    abort();
+
+    if (state !== 'done') {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
 
     if (!prompt || prompt === '') {
       return;
@@ -72,7 +81,7 @@ export function useMarkprompt({
 
     setAnswer('');
     setReferences([]);
-    setState('loading');
+    setState('preload');
 
     const controller = new AbortController();
     controllerRef.current = controller;
@@ -81,6 +90,7 @@ export function useMarkprompt({
       prompt,
       projectKey,
       (chunk) => {
+        setState('streaming-answer');
         setAnswer((prev) => prev + chunk);
         return true;
       },
@@ -106,7 +116,7 @@ export function useMarkprompt({
     );
 
     promise.then(() => {
-      setState('success');
+      setState('done');
     });
 
     promise.finally(() => {
@@ -129,6 +139,8 @@ export function useMarkprompt({
     frequencyPenalty,
     presencePenalty,
     maxTokens,
+    state,
+    abort,
   ]);
 
   return useMemo(

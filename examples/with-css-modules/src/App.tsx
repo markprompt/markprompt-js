@@ -1,7 +1,6 @@
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { clsx } from 'clsx';
-import { memo, useContext } from 'react';
+import { useContext } from 'react';
 
 import styles from './markprompt.module.css';
 
@@ -60,7 +59,7 @@ const Caret = () => {
   const { answer } = useContext(Markprompt.Context);
 
   if (answer) {
-    return <></>;
+    return null;
   }
 
   return <span className={styles.caret} />;
@@ -101,15 +100,12 @@ const Reference = ({
 };
 
 const References = () => {
-  const { state, references } = useContext(Markprompt.Context);
+  const { state } = useContext(Markprompt.Context);
 
   if (state === 'indeterminate') return null;
 
-  const referencesState =
-    state === 'loading' && references.length === 0 ? 'loading' : 'success';
-
   return (
-    <div data-loading-state={referencesState} className={styles.references}>
+    <div data-loading-state={state} className={styles.references}>
       <div className={styles.progress} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
