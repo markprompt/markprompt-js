@@ -199,8 +199,8 @@ Answer.displayName = 'Markprompt.Answer';
 type ReferencesProps = {
   RootElement?: React.ElementType;
   ReferenceElement?: React.ElementType<{
-    children: React.ReactNode;
-    reference: string;
+    referenceId: string;
+    index: number;
   }>;
 };
 
@@ -211,12 +211,10 @@ const References = forwardRef<Element, ReferencesProps>(function References(
   const { RootElement = 'ul', ReferenceElement = 'li' } = props;
   const { references } = useContext(MarkpromptContext);
   return (
-    <RootElement ref={ref} references={references}>
-      {references.map((ref) => (
-        <ReferenceElement key={ref} reference={ref}>
-          {ref}
-        </ReferenceElement>
-      ))}
+    <RootElement ref={ref}>
+      {references.map((refId, i) => {
+        return <ReferenceElement key={refId} referenceId={refId} index={i} />;
+      })}
     </RootElement>
   );
 });

@@ -1,7 +1,7 @@
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { clsx } from 'clsx';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import styles from './markprompt.module.css';
 
@@ -26,14 +26,14 @@ function Component() {
 
           {/* Markprompt.Title is required for accessibility reasons. It can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
-            <Markprompt.Title className={styles.title}>
+            <Markprompt.Title>
               Ask me anything about Markprompt
             </Markprompt.Title>
           </VisuallyHidden>
 
           {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
-            <Markprompt.Description className={styles.description}>
+            <Markprompt.Description>
               I can answer your questions about Markprompt's client-side
               libraries, onboarding, API's and more.
             </Markprompt.Description>
@@ -44,7 +44,7 @@ function Component() {
             <Markprompt.Prompt className={styles.MarkpromptPrompt} />
           </Markprompt.Form>
 
-          <div className={styles.answer}>
+          <div className={styles.MarkpromptAnswer}>
             <Caret />
             <Markprompt.Answer />
           </div>
@@ -78,37 +78,42 @@ const removeFileExtension = (fileName: string) => {
   return fileName.substring(0, lastDotIndex);
 };
 
+const Reference = ({
+  referenceId,
+  index,
+}: {
+  referenceId: string;
+  index: number;
+}) => {
+  return (
+    <li
+      key={referenceId}
+      className={styles.reference}
+      style={{
+        animationDelay: `${100 * index}ms`,
+      }}
+    >
+      <a href={removeFileExtension(referenceId)}>
+        {capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0]))}
+      </a>
+    </li>
+  );
+};
+
 const References = () => {
   const { state, references } = useContext(Markprompt.Context);
 
   if (state === 'indeterminate') return null;
 
-  // adding keys to the below wrapper divs makes sure React
-  // doesn't reuse them which will retrigger the intro animation.
-
-  if (state === 'loading' && references.length === 0) {
-    return (
-      <div key="loading" className={clsx(styles.references, styles.popup)}>
-        <div className={styles.progress} />
-        <p>Fetching relevant pages…</p>
-      </div>
-    );
-  }
+  const referencesState =
+    state === 'loading' && references.length === 0 ? 'loading' : 'success';
 
   return (
-    <div key="references" className={clsx(styles.references, styles.popup)}>
+    <div data-loading-state={referencesState} className={styles.references}>
+      <div className={styles.progress} />
+      <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
-      <Markprompt.References
-        ReferenceElement={({ reference }) => (
-          <li className={styles.reference}>
-            <a href={removeFileExtension(reference)}>
-              {capitalize(
-                removeFileExtension(reference.split('/').slice(-1)[0]),
-              )}
-            </a>
-          </li>
-        )}
-      />
+      <Markprompt.References RootElement="ul" ReferenceElement={Reference} />
     </div>
   );
 };
