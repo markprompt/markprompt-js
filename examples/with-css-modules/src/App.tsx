@@ -7,7 +7,7 @@ import styles from './markprompt.module.css';
 function Component() {
   return (
     <Markprompt.Root
-      projectKey="sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4"
+      projectKey={process.env.PROJECT_API_KEY || ''}
       model="gpt-4"
     >
       <Markprompt.Trigger
