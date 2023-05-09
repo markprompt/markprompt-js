@@ -11,6 +11,7 @@ export {
   Form,
   Prompt,
   Answer,
+  AutoScroller,
   References,
 } from './headless.js';
 

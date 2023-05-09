@@ -190,6 +190,7 @@ function Answer(
   props: Omit<React.ComponentProps<typeof Markdown>, 'children'>,
 ) {
   const { answer } = useContext(MarkpromptContext);
+
   return (
     <Markdown remarkPlugins={[remarkGfm]} {...props}>
       {answer ?? ''}
@@ -197,6 +198,32 @@ function Answer(
   );
 }
 Answer.displayName = 'Markprompt.Answer';
+
+function AutoScroller(props: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const scrollerRef = React.useRef<HTMLDivElement>(null);
+  const { answer } = useContext(MarkpromptContext);
+
+  React.useEffect(() => {
+    if (!containerRef.current || !scrollerRef.current) {
+      return;
+    }
+
+    const childRect = scrollerRef.current.getBoundingClientRect();
+    containerRef.current.scrollTop = childRect.bottom;
+  }, [answer]);
+
+  return (
+    <div ref={containerRef} className={props.className}>
+      {props.children}
+      <div ref={scrollerRef} />
+    </div>
+  );
+}
+AutoScroller.displayName = 'Markprompt.AutoScroller';
 
 type ReferencesProps = {
   RootElement?: React.ElementType;
@@ -234,6 +261,7 @@ export {
   Description,
   Form,
   Prompt,
+  AutoScroller,
   Answer,
   References,
 };

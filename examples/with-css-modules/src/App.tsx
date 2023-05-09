@@ -43,10 +43,10 @@ function Component() {
             <Markprompt.Prompt className={styles.MarkpromptPrompt} />
           </Markprompt.Form>
 
-          <div className={styles.MarkpromptAnswer}>
+          <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
             <Caret />
             <Markprompt.Answer />
-          </div>
+          </Markprompt.AutoScroller>
 
           <References />
         </Markprompt.Content>
