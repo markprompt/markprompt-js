@@ -71,7 +71,12 @@ export function useMarkprompt({
   const submit = useCallback(async () => {
     abort();
 
-    if (state !== 'done') {
+    if (state === 'preload' || state === 'streaming-answer') {
+      // If state is loading and fetch was aborted, wait a short delay
+      // so that the original fetch request aborts and resets the state.
+      // Otherwise, the new fetch starts (and state becomes 'preload'),
+      // and after that, the state becomes 'done', which is the wrong
+      // order.
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
 

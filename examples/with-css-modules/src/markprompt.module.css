@@ -281,6 +281,10 @@ button {
 .references[data-loading-state='done'] {
   height: 95px;
 }
+.references[data-loading-state='indeterminate'] {
+  display: none;
+  height: 0;
+}
 
 .references p {
   transition: opacity 500ms ease;
@@ -299,10 +303,10 @@ button {
 .references[data-loading-state='preload'] > p:last-of-type {
   opacity: 0;
 }
-.references:not([data-loading-state='preload']) > p:first-of-type {
+[data-loading-state]:not([data-loading-state='preload']) > p:first-of-type {
   opacity: 0 !important;
 }
-.references:not([data-loading-state='preload']) > p:last-of-type {
+[data-loading-state]:not([data-loading-state='preload']) > p:last-of-type {
   opacity: 1;
 }
 

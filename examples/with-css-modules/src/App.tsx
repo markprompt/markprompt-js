@@ -100,12 +100,17 @@ const Reference = ({
 };
 
 const References = () => {
-  const { state } = useContext(Markprompt.Context);
+  const { state, references } = useContext(Markprompt.Context);
 
   if (state === 'indeterminate') return null;
 
+  let adjustedState: string = state;
+  if (state === 'done' && references.length === 0) {
+    adjustedState = 'indeterminate';
+  }
+
   return (
-    <div data-loading-state={state} className={styles.references}>
+    <div data-loading-state={adjustedState} className={styles.references}>
       <div className={styles.progress} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
