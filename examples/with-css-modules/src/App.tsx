@@ -27,6 +27,8 @@ Answer (including related code snippets if available):`}
       frequencyPenalty={0}
       presencePenalty={0}
       maxTokens={500}
+      sectionsMatchCount={10}
+      sectionsMatchThreshold={0.5}
     >
       <Markprompt.Trigger
         aria-label="Open Markprompt"

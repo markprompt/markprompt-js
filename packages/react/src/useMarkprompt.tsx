@@ -1,4 +1,8 @@
-import type { Options } from '@markprompt/core';
+import {
+  DEFAULT_SECTIONS_MATCH_COUNT,
+  DEFAULT_SECTIONS_MATCH_THRESHOLD,
+  type Options,
+} from '@markprompt/core';
 import {
   DEFAULT_FREQUENCY_PENALTY,
   DEFAULT_I_DONT_KNOW_MESSAGE,
@@ -35,6 +39,8 @@ export function useMarkprompt({
   referencesHeading = DEFAULT_REFERENCES_HEADING,
   temperature = DEFAULT_TEMPERATURE,
   topP = DEFAULT_TOP_P,
+  sectionsMatchCount = DEFAULT_SECTIONS_MATCH_COUNT,
+  sectionsMatchThreshold = DEFAULT_SECTIONS_MATCH_THRESHOLD,
 }: {
   /** Project key, required */
   projectKey: string;
@@ -116,6 +122,8 @@ export function useMarkprompt({
         frequencyPenalty,
         presencePenalty,
         maxTokens,
+        sectionsMatchCount,
+        sectionsMatchThreshold,
         signal: controller.signal,
       },
     );
@@ -144,6 +152,8 @@ export function useMarkprompt({
     frequencyPenalty,
     presencePenalty,
     maxTokens,
+    sectionsMatchCount,
+    sectionsMatchThreshold,
     state,
     abort,
   ]);

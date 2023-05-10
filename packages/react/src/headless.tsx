@@ -48,6 +48,8 @@ function Root(props: RootProps) {
     includeBranding: props.includeBranding,
     loadingHeading: props.loadingHeading,
     maxTokens: props.maxTokens,
+    sectionsMatchCount: props.sectionsMatchCount,
+    sectionsMatchThreshold: props.sectionsMatchThreshold,
     model: props.model,
     placeholder: props.placeholder,
     presencePenalty: props.presencePenalty,

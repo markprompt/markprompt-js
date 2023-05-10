@@ -29,6 +29,10 @@ export type Options = {
   presencePenalty?: number;
   /** The max number of tokens to include in the response */
   maxTokens?: number;
+  /** 	The number of sections to include in the prompt context */
+  sectionsMatchCount?: number;
+  /** The similarity threshold between the input question and selected sections */
+  sectionsMatchThreshold?: number;
   /** AbortController signal */
   signal?: AbortSignal;
 };
@@ -56,6 +60,8 @@ export const DEFAULT_TOP_P = 1;
 export const DEFAULT_FREQUENCY_PENALTY = 0;
 export const DEFAULT_PRESENCE_PENALTY = 0;
 export const DEFAULT_MAX_TOKENS = 500;
+export const DEFAULT_SECTIONS_MATCH_COUNT = 10;
+export const DEFAULT_SECTIONS_MATCH_THRESHOLD = 0.5;
 
 /**
  * @param {string} prompt - Prompt to submit to the model
@@ -101,6 +107,8 @@ export async function submitPrompt(
           frequencyPenalty: options.frequencyPenalty,
           presencePenalty: options.presencePenalty,
           maxTokens: options.maxTokens,
+          sectionsMatchCount: options.sectionsMatchCount,
+          sectionsMatchThreshold: options.sectionsMatchThreshold,
         }),
         signal: options.signal,
       },
