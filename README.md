@@ -11,13 +11,24 @@ Markprompt is a platform for building GPT-powered prompts. It takes Markdown, Ma
   <a href="https://twitter.com/markprompt">
     <img src="https://img.shields.io/twitter/follow/markprompt?style=flat&label=%40markprompt&logo=twitter&color=0bf&logoColor=fff" alt="Twitter" />
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/markprompt">
-    <img alt="" src="https://badgen.net/npm/v/markprompt">
-  </a>
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
   </a>
 </p>
+
+## Components
+
+This repo contains various UI libraries for building prompts based on the Markprompt API:
+
+- [@markprompt/react](https://github.com/motifland/markprompt-js/blob/main/packages/react/README.md) - a headless React component
+- [@markprompt/web](https://github.com/motifland/markprompt-js/blob/main/packages/web/README.md) - a Web Component
+- [@markprompt/core](https://github.com/motifland/markprompt-js/blob/main/packages/web/README.md) - shared utility functions to speak with the Markprompt API
+
+and some example implementations:
+
+- [with-css-modules](https://github.com/motifland/markprompt-js/blob/main/examples/with-css-modules/README.md) - a web application based on `@markprompt/react`, Vite and CSS modules.
+- [with-tailwind-css](https://github.com/motifland/markprompt-js/blob/main/examples/with-tailwind-css/README.md) - a web application based on `@markprompt/react`, Vite and Tailwind CSS.
+- [with-stitches](https://github.com/motifland/markprompt-js/blob/main/examples/with-stitches/README.md) - a web application based on `@markprompt/react`, Vite and Stitches.
 
 ## Documentation
 

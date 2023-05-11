@@ -8,7 +8,7 @@ The [Markprompt](https://markprompt.com) React component is a headless component
     <img alt="" src="https://badgen.net/npm/v/@markprompt/react">
   </a>
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/LICENSE">
-    <img alt="" src="https://badgen.net/npm/license/markprompt">
+    <img alt="" src="https://badgen.net/npm/license/@markprompt/react">
   </a>
 </p>
 
@@ -18,14 +18,14 @@ Install the `@markprompt/react` package via NPM or Yarn:
 
 ```sh
 # NPM
-npm install @markprompt/react react @radix-ui/react-visually-hidden
+npm install @markprompt/react
 # Yarn
-yarn add @markprompt/react react @radix-ui/react-visually-hidden
+yarn add @markprompt/react
 ```
 
 ## Usage
 
-In your React application, paste the following in an MDX, JSX or TSX file:
+Example:
 
 ```jsx
 import { Markprompt } from '@markprompt/react';
