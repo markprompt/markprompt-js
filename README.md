@@ -26,7 +26,7 @@ This repo contains various UI libraries for building prompts based on the Markpr
 
 and some example implementations:
 
-- [with-css-modules](https://github.com/motifland/markprompt-js/blob/main/examples/with-css-modules/README.md) - a web application based on `@markprompt/react`, Vite and CSS modules
+- [with-css-modules](https://github.com/motifland/markprompt-js/blob/main/examples/with-css-modules/README.md) - a web application based on `@markprompt/react`, Vite and CSS Modules
 - [with-tailwind-css](https://github.com/motifland/markprompt-js/blob/main/examples/with-tailwind-css/README.md) - a web application based on `@markprompt/react`, Vite and Tailwind CSS
 - [with-stitches](https://github.com/motifland/markprompt-js/blob/main/examples/with-stitches/README.md) - a web application based on `@markprompt/react`, Vite and Stitches
 
