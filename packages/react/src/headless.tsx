@@ -1,7 +1,16 @@
 import type { Options } from '@markprompt/core';
-import * as Dialog from '@radix-ui/react-dialog';
-import * as React from 'react';
-import { type ReactNode, createContext, forwardRef, useContext } from 'react';
+import Dialog from '@radix-ui/react-dialog';
+import React, {
+  type ComponentPropsWithoutRef,
+  type ComponentPropsWithRef,
+  type MouseEvent,
+  type ReactNode,
+  createContext,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -11,8 +20,8 @@ import { useMarkprompt, type LoadingState } from './useMarkprompt.js';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-export type RootProps = React.ComponentProps<typeof Dialog.Root> & {
-  children: React.ReactNode;
+export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
+  children: ReactNode;
   projectKey: string;
 } & Options;
 
@@ -96,7 +105,7 @@ Overlay.displayName = 'Markprompt.Overlay';
 
 const Content = forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof Dialog.Content>
+  ComponentPropsWithRef<typeof Dialog.Content>
 >(function Content(props, ref) {
   const { state } = useContext(MarkpromptContext);
   return (
@@ -108,8 +117,8 @@ const Content = forwardRef<
 });
 Content.displayName = 'Markprompt.Content';
 
-type CloseProps = React.ComponentProps<typeof Dialog.Close> & {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+type CloseProps = ComponentPropsWithRef<typeof Dialog.Close> & {
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
@@ -205,11 +214,11 @@ function AutoScroller(props: {
   className?: string;
   children: React.ReactNode;
 }) {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const scrollerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const { answer } = useContext(MarkpromptContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!containerRef.current || !scrollerRef.current) {
       return;
     }

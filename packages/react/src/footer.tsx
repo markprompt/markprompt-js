@@ -1,5 +1,4 @@
-import type { CSSProperties } from 'react';
-import * as React from 'react';
+import React, { type ComponentPropsWithoutRef } from 'react';
 
 export const Footer = () => {
   return (
@@ -43,11 +42,7 @@ export const MarkpromptIcon = ({
   className,
   style,
   ...props
-}: React.HTMLAttributes<SVGSVGElement> & {
-  className?: string;
-  style?: CSSProperties;
-  size?: number;
-}) => {
+}: ComponentPropsWithoutRef<'svg'>) => {
   return (
     <svg
       className={className}
