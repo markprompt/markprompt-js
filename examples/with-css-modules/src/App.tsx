@@ -1,6 +1,6 @@
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import styles from './markprompt.module.css';
 
@@ -53,8 +53,8 @@ Answer (including related code snippets if available):`}
           {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
             <Markprompt.Description>
-              I can answer your questions about Markprompt's client-side
-              libraries, onboarding, API's and more.
+              I can answer your questions about Markprompt’s client-side
+              libraries, onboarding, API’s and more.
             </Markprompt.Description>
           </VisuallyHidden>
 
