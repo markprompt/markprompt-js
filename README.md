@@ -3,7 +3,7 @@
   <h1 align="center">Markprompt</h1>
 </a>
 
-Markprompt is a platform for building GPT-powered prompts. It scans Markdown, Markdoc and MDX files in your GitHub repo and creates embeddings that you can use to create a prompt, for instance using the companion [Markprompt React](https://github.com/motifland/markprompt-js) component. Markprompt also offers analytics, so you can gain insights on how visitors interact with your docs.
+Markprompt is a platform for building GPT-powered prompts. It takes Markdown, Markdoc, MDX, HTML and plain text files (from a GitHub repo, website or file uploads), and creates embeddings that you can use to create a prompt, for instance using the companion [Markprompt React or Web component](https://markprompt.com/docs#components). Markprompt also offers analytics, so you can gain insights on how visitors interact with your docs.
 
 <br />
 
