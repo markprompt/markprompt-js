@@ -42,7 +42,7 @@ where `<project-key>` can be obtained in your project settings
 
 ## Documentation
 
-The full documentation for the component can be found on the [Markprompt docs](https://markprompt.com/docs#web-component).
+The full documentation for the component can be found on the [Markprompt docs](https://markprompt.com/docs#react).
 
 ## Starter Template
 
