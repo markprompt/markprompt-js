@@ -28,6 +28,8 @@ module.exports = {
     node: true,
   },
   rules: {
+    'import/default': 'off',
+    'import/no-named-as-default-member': 'off',
     'import/order': [
       'error',
       {
