@@ -1,4 +1,3 @@
-import { consume, createContext, provide } from '@lit-labs/context';
 import {
   DEFAULT_FREQUENCY_PENALTY,
   DEFAULT_I_DONT_KNOW_MESSAGE,
@@ -31,8 +30,6 @@ type State = {
   references: string[];
   state: 'indeterminate' | 'loading' | 'success';
 };
-
-export const stateContext = createContext<State>(Symbol.for('state'));
 
 @customElement('markprompt-root')
 export class Root extends LitElement {
@@ -109,7 +106,7 @@ export class Root extends LitElement {
           >open</markprompt-trigger
         >
         <markprompt-dialog ?open="{this.open}">
-          <slot />
+          <slot>
         </markprompt-dialog>
       </div>
     `;
@@ -122,7 +119,7 @@ class Dialog extends LitElement {
   open = false;
 
   render() {
-    return html`<dialog ?open=${this.open}><slot /></dialog> `;
+    return html`<dialog ?open=${this.open}><slot></dialog> `;
   }
 }
 
@@ -132,13 +129,10 @@ class Trigger extends LitElement {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleClick = () => {};
 
-  @consume({ context: stateContext })
-  state: State | undefined;
-
   render() {
     return html`
       <button @click=${this.handleClick}>
-        <slot />
+        <slot>
       </button>
     `;
   }
