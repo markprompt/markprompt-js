@@ -45,7 +45,8 @@ export const DEFAULT_I_DONT_KNOW_MESSAGE =
   'Sorry, I am not sure how to answer that.';
 export const DEFAULT_REFERENCES_HEADING =
   'Answer generated from the following pages:';
-export const DEFAULT_LOADING_HEADING = 'Fetching relevant pages...';
+export const DEFAULT_PLACEHOLDER = 'Ask me anything…';
+export const DEFAULT_LOADING_HEADING = 'Fetching relevant pages…';
 export const DEFAULT_PROMPT_TEMPLATE = `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
 
 Context sections:
