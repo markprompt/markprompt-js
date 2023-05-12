@@ -26,8 +26,8 @@
     "vite": "vite"
   },
   "dependencies": {
-    "@markprompt/core": "0.4.2",
     "@lit-labs/context": "^0.3.1",
+    "@markprompt/core": "0.4.3",
     "lit": "^2.7.2",
     "rehype-sanitize": "^5.0.1",
     "rehype-stringify": "^9.0.3",
@@ -37,6 +37,8 @@
     "unified": "^10.1.2"
   },
   "devDependencies": {
+    "eslint-plugin-lit": "^1.8.3",
+    "eslint-plugin-wc": "^1.4.0",
     "typescript": "^5.0.4",
     "vite": "^4.2.0"
   },
