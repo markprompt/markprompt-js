@@ -19,6 +19,7 @@ import {
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { when } from 'lit/directives/when.js';
 
 import {
   answer,
@@ -216,6 +217,7 @@ export class Root extends LitElement {
     this.answer = '';
     this.references = [];
     this.controller = new AbortController();
+    this.loadingState = 'preload';
 
     const promise = submitPrompt(
       this.prompt,
@@ -262,12 +264,23 @@ export class Root extends LitElement {
 
   render() {
     return html`
-      <markprompt-trigger></markprompt-trigger>
-      <markprompt-dialog>
-        <markprompt-form placeholder=${this.placeholder}></markprompt-form>
-        <markprompt-answer></markprompt-answer>
-        <markprompt-footer></markprompt-footer>
-      </markprompt-dialog>
+      <div data-loading-state=${this.loadingState}>
+        <markprompt-trigger></markprompt-trigger>
+        <markprompt-dialog>
+          <markprompt-form placeholder=${this.placeholder}></markprompt-form>
+          <markprompt-autoscroller>
+            <markprompt-answer></markprompt-answer>
+          </markprompt-autoscroller>
+          <markprompt-animated-footer>
+            ${when(
+              this.loadingState === 'preload',
+              () => html`<markprompt-loading></markprompt-loading>`,
+              () => html`<markprompt-references></markprompt-references>`,
+            )}
+          </markprompt-animated-footer>
+          <markprompt-footer></markprompt-footer>
+        </markprompt-dialog>
+      </div>
     `;
   }
 }

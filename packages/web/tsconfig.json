@@ -15,6 +15,5 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "verbatimModuleSyntax": true,
-    "plugins": [{ "name": "ts-lit-plugin" }]
   }
 }
