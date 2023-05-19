@@ -36,7 +36,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       markprompt: {
-        projectKey: 'Your Markprompt key',
+        projectKey: 'Your Markprompt project key',
       },
       navbar: {
         title: 'My Site',
