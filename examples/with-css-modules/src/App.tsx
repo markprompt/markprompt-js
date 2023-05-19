@@ -130,7 +130,10 @@ const References = () => {
       <div className={styles.progress} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
-      <Markprompt.References RootElement="ul" ReferenceElement={Reference} />
+      <Markprompt.References
+        RootComponent="ul"
+        ReferenceComponent={Reference}
+      />
     </div>
   );
 };
