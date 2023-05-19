@@ -24,6 +24,7 @@
     "@markprompt/core": "^0.4.5",
     "@radix-ui/react-dialog": "^1.0.3",
     "react-markdown": "^8.0.7",
+    "react-merge-refs": "^2.0.2",
     "remark-gfm": "^3.0.1"
   },
   "devDependencies": {
