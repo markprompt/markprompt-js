@@ -52,6 +52,7 @@
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
+  z-index: calc(var(--ifm-z-index-fixed) + 2);
 }
 
 .MarkpromptClose {
