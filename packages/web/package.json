@@ -17,26 +17,35 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build --clean && tsc --build",
-    "dev": "tsc --build --clean && tsc --build --watch",
-    "prepack": "tsc --build --clean && tsc --build",
-    "vite": "vite"
+    "build": "rollup -c",
+    "dev": "rollup -c --watch",
+    "prepack": "rollup -c"
   },
   "dependencies": {
-    "@markprompt/core": "0.4.2",
-    "lit": "^2.7.2",
-    "rehype-sanitize": "^5.0.1",
-    "rehype-stringify": "^9.0.3",
-    "remark-gfm": "^3.0.1",
-    "remark-parse": "^10.0.1",
-    "remark-rehype": "^10.1.0",
-    "unified": "^10.1.2"
+    "@markprompt/react": "0.3.5",
+    "@radix-ui/react-accessible-icon": "^1.0.2",
+    "@radix-ui/react-visually-hidden": "^1.0.2",
+    "preact": "^10.14.1",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat"
   },
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "vite": "^4.2.0"
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.1",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "rollup": "^3.22.0",
+    "rollup-plugin-summary": "^2.0.0",
+    "typescript": "^5.0.4"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "overrides": {
+    "react": "npm:@preact/compat@^17.1.2",
+    "react-dom": "npm:@preact/compat@^17.1.2"
   }
 }
