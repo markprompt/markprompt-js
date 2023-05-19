@@ -36,7 +36,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       markprompt: {
-        projectKey: 'Your markprompt key',
+        projectKey: 'Your Markprompt key',
       },
       navbar: {
         title: 'My Site',
@@ -54,7 +54,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: `Copyright © ${new Date().getFullYear()} Motif. Built with Docusaurus and Markprompt.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Markprompt. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
