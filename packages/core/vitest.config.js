@@ -1,3 +1,1 @@
-export default {
-  name: 'core',
-};
+export default {};
