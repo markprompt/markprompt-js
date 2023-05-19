@@ -35,11 +35,7 @@ import { useContext } from 'react';
 
 function Component() {
   return (
-    <Markprompt.Root
-      projectKey="<projectKey>"
-      loadingHeading="Fetching relevant pages…"
-      model="gpt-4"
-    >
+    <Markprompt.Root projectKey="<your-markprompt-project-key>">
       <Markprompt.Trigger
         aria-label="Open Markprompt"
         className="MarkpromptButton"
@@ -70,7 +66,10 @@ function Component() {
 
           <Markprompt.Form>
             <SearchIcon className="MarkpromptSearchIcon" />
-            <Markprompt.Prompt className="MarkpromptPrompt" />
+            <Markprompt.Prompt
+              className="MarkpromptPrompt"
+              placeholder="Ask me anything…"
+            />
           </Markprompt.Form>
 
           <Markprompt.AutoScroller className="MarkpromptAnswer">
