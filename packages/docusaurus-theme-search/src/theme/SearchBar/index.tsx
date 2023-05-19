@@ -36,8 +36,8 @@ export default function SearchBar(): ReactElement {
           {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
             <Markprompt.Description>
-              I can answer your questions about Markprompt's client-side
-              libraries, onboarding, API's and more.
+              I can answer your questions about Markprompt’s client-side
+              libraries, onboarding, APIs and more.
             </Markprompt.Description>
           </VisuallyHidden>
 
