@@ -1,4 +1,5 @@
 {
+  "references": [{ "path": "../../packages/react" }],
   "compilerOptions": {
     "target": "es2021",
     "skipLibCheck": true,
