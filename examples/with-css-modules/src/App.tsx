@@ -9,10 +9,6 @@ function Component() {
     <Markprompt.Root
       projectKey={import.meta.env.VITE_PROJECT_API_KEY}
       iDontKnowMessage="Sorry, I am not sure how to answer that."
-      placeholder="Ask me anything…"
-      loadingHeading="Fetching relevant pages…"
-      referencesHeading="Answer generated from the following pages:"
-      model="gpt-4"
       promptTemplate={`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, output in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
 
 Context sections:
