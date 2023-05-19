@@ -1,0 +1,12 @@
+{
+  "name": "@markprompt/css",
+  "version": "1.0.0",
+  "description": "Common CSS for Markprompt components",
+  "license": "MIT",
+  "type": "module",
+  "exports": "./markprompt.css",
+  "main": "markprompt.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
