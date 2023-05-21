@@ -17,10 +17,21 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
 Install the package from NPM:
 
 ```sh
-npm add @markprompt/web
+npm add @markprompt/web @markprompt/css
 ```
 
 ## Usage
+
+Include the CSS on your page, via a link tag or by importing it in your JavaScript:
+
+```html
+<!-- load from a CDN: -->
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
+```
+
+```js
+import '@markprompt/css';
+```
 
 Call the `markprompt` function with your project key:
 
@@ -90,9 +101,45 @@ type Options = {
 };
 ```
 
+Styles are easily overridable for customization via targeting classes. Additionally, see the [styling section](https://markprompt.com/docs#styling) in our documentation for a full list of variables.
+
+## Usage via `<script>` tag
+
+Besides initializing the Markprompt component yourselves from JavaScript, you can load the script from a CDN. We'll automatically initialize Markprompt for you in a `<div />` element attached to the `<body>`.
+
+```html
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
+<script
+  async
+  src="https://esm.sh/@markprompt/web"
+  data-markprompt-project-key="<your project key>"
+></script>
+```
+
+Most configuration options can be passed via snake-cased data attributes, except `transformReferenceId`, for which the defaults will be used. Alternatively, you can attach the options to the window prior to initializing our script:
+
+```html
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
+<script>
+  window.markprompt = {
+    projectKey: `<your-project-key>`,
+    container: `#markprompt`,
+    options: {
+      references: {
+        transformReferenceId: (referenceId) => ({
+          text: referenceId.replace('-', ' '),
+          href: `/docs/${referenceId}`,
+        }),
+      },
+    },
+  };
+</script>
+<script async src="https://esm.sh/@markprompt/web"></script>
+```
+
 ## Documentation
 
-The full documentation for the component can be found on the [Markprompt docs](https://markprompt.com/docs#web-component).
+The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#%40markprompt%2Fweb).
 
 ## Community
 
@@ -104,3 +151,7 @@ The full documentation for the component can be found on the [Markprompt docs](h
 
 This library is created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
+
+```
+
+```
