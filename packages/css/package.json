@@ -6,6 +6,11 @@
   "type": "module",
   "exports": "./markprompt.css",
   "main": "markprompt.css",
+  "files": [
+    "README.md",
+    "LICENSE",
+    "markprompt.css"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
