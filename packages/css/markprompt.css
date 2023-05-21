@@ -194,10 +194,6 @@
   padding: 1rem 2rem;
 }
 
-:where(.MarkpromptAnswer :not(:last-child) .MarkpromptCaret) {
-  display: none;
-}
-
 :where(.MarkpromptAnswer p) {
   margin-top: 1.1428571em;
   margin-bottom: 1.1428571em;
@@ -606,8 +602,9 @@
 
 :where(.MarkpromptCaret) {
   display: none;
-  height: 1rem;
-  width: 0.5rem;
+  height: 1em;
+  width: 0.8ch;
+  margin-top: 1.1428571em;
   margin-left: 0.2rem;
   transform: translate(2px, 2px);
   border-radius: 1px;
@@ -622,10 +619,6 @@
 
 :where([data-loading-state='preload'] .MarkpromptCaret) {
   display: inline-block;
-}
-
-:where([data-loading-state]:not([data-loading-state='done']) .MarkpromptCaret) {
-  display: none;
 }
 
 :where([data-loading-state='preload'] .MarkpromptProgress) {
