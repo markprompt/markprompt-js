@@ -10,10 +10,14 @@
   "license": "MIT",
   "author": "Motif",
   "type": "module",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./init": "./dist/init.js"
+  },
   "main": "dist/index.js",
   "files": [
     "README.md",
+    "LICENSE",
     "dist"
   ],
   "scripts": {
