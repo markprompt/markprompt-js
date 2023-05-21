@@ -79,7 +79,7 @@
 :where(.MarkpromptOverlay) {
   position: fixed;
   inset: 0;
-  animation: show-overlay 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
   background-color: var(--markprompt-overlay);
 }
 
@@ -132,16 +132,22 @@
   box-shadow: inset 0 0 0 2px var(--markprompt-primary);
 }
 
+:where(.MarkpromptForm) {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 3.5rem;
+  border-bottom: 1px solid var(--markprompt-border);
+}
+
+:where(.MarkpromptPromptLabel) {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
 :where(.MarkpromptSearchIcon) {
-  position: absolute;
-  top: 1rem;
-  left: 1.25rem;
   color: var(--markprompt-foreground);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
 }
 
 :where(.MarkpromptTitle) {
@@ -149,15 +155,8 @@
 }
 
 :where(.MarkpromptPrompt) {
-  border-left: none !important;
-  border-right: none !important;
-  border-top: none !important;
-  outline: none !important;
-  border-bottom: 1px solid var(--markprompt-border);
-  box-shadow: none;
+  border: none;
   width: 100%;
-  padding-left: 3.5rem;
-  padding-right: 3.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: var(--markprompt-text-size);
@@ -166,42 +165,33 @@
   caret-color: var(--markprompt-primary);
 }
 
-:where(.MarkpromptPrompt:focus) {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow: none;
-}
-
 :where(.MarkpromptPrompt::placeholder) {
   color: var(--markprompt-mutedForeground);
 }
 
 :where(.MarkpromptPrompt:focus) {
-  outline: 2px solid var(--markprompt-mutedForeground);
+  outline: none;
 }
 
-:where(:where(.MarkpromptReferences)) {
-  background-color: var(--markprompt-muted);
-  color: var(--markprompt-mutedForeground);
-  border-top: 1px solid var(--markprompt-border);
+:where(.MarkpromptAutoScroller) {
+  height: 100%;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+:where(.MarkpromptAutoScroller::-webkit-scrollbar) {
+  display: none;
 }
 
 :where(.MarkpromptAnswer) {
   color: var(--markprompt-foreground);
   font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
-  height: 100%;
   line-height: 1.7142857;
-  overflow-x: hidden;
-  overflow-y: auto;
   padding: 1rem 2rem;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-}
-
-:where(.MarkpromptAnswer::-webkit-scrollbar) {
-  display: none;
 }
 
 :where(.MarkpromptAnswer :not(:last-child) .MarkpromptCaret) {
@@ -623,7 +613,7 @@
   border-radius: 1px;
   background-color: var(--markprompt-primary);
   box-shadow: 0 0 3px 0 var(--markprompt-primary);
-  animation-name: blink;
+  animation-name: fade-out;
   animation-duration: 1000ms;
   animation-fill-mode: both;
   animation-iteration-count: infinite;
@@ -667,12 +657,12 @@
 }
 
 :where(.MarkpromptReferences) {
-  position: 'relative';
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-block: 1rem;
+  padding-inline: 2rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   font-size: 0.75rem;
+  color: var(--markprompt-mutedForeground);
   transition: height 500ms ease;
   transform: translateY(100%);
   opacity: 0;
@@ -698,57 +688,19 @@
 }
 
 :where(.MarkpromptReferences p) {
-  transition: opacity 500ms ease;
-  position: absolute;
-  top: 0.25rem;
-  left: 2rem;
-  right: 2rem;
+  animation: fade-in 500ms ease-out forwards 1;
   font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-:where(.MarkpromptReferences[data-loading-state='preload'] > p:first-of-type) {
-  opacity: 1;
-}
-
-:where(.MarkpromptReferences[data-loading-state='preload'] > p:last-of-type) {
-  opacity: 0;
-}
-
-:where(
-    .MarkpromptReferences[data-loading-state]:not(
-        [data-loading-state='preload']
-      )
-      > p:first-of-type
-  ) {
-  opacity: 0 !important;
-}
-
-:where(
-    .MarkpromptReferences[data-loading-state]:not(
-        [data-loading-state='preload']
-      )
-      > p:last-of-type
-  ) {
-  opacity: 1;
+  margin: 0;
 }
 
 :where(.MarkpromptReferences ul) {
-  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
+  padding-left: 0;
   list-style-type: none;
-  margin-top: 2.25rem;
-  padding-left: 2rem;
-  padding-bottom: 2rem;
-  overflow-x: auto;
-  min-width: 100%;
-  width: 0;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -797,7 +749,7 @@
   }
 }
 
-@keyframes show-overlay {
+@keyframes fade-in {
   from {
     opacity: 0;
   }
@@ -806,11 +758,11 @@
   }
 }
 
-@keyframes blink {
-  0% {
+@keyframes fade-out {
+  from {
     opacity: 1;
   }
-  100% {
+  to {
     opacity: 0;
   }
 }

@@ -3,6 +3,7 @@ import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React from 'react';
 
+import { Answer } from './Answer.js';
 import { Caret } from './Caret.js';
 import { ConditionalWrap } from './ConditionalWrap.js';
 import { ChatIcon, CloseIcon } from './icons.js';
@@ -37,15 +38,8 @@ function Markprompt(props: MarkpromptProps) {
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
         <BaseMarkprompt.Content className="MarkpromptContent">
-          <BaseMarkprompt.Close className="MarkpromptClose">
-            <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
-              <CloseIcon />
-            </AccessibleIcon.Root>
-          </BaseMarkprompt.Close>
-
-          {/* BaseMarkprompt.Title is required for accessibility reasons. It can be hidden using an accessible content hiding technique. */}
           <ConditionalWrap
-            condition={title?.hidden ?? true}
+            condition={title?.hide ?? true}
             wrap={(children) => (
               <VisuallyHidden asChild>{children}</VisuallyHidden>
             )}
@@ -55,10 +49,9 @@ function Markprompt(props: MarkpromptProps) {
             </BaseMarkprompt.Title>
           </ConditionalWrap>
 
-          {/* BaseMarkprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
           {description?.text && (
             <ConditionalWrap
-              condition={description?.hidden ?? true}
+              condition={description?.hide ?? true}
               wrap={(children) => (
                 <VisuallyHidden asChild>{children}</VisuallyHidden>
               )}
@@ -69,13 +62,12 @@ function Markprompt(props: MarkpromptProps) {
             </ConditionalWrap>
           )}
 
-          <BaseMarkprompt.Form>
+          <BaseMarkprompt.Form className="MarkpromptForm">
             <Prompt label={prompt?.label} placeholder={prompt?.placeholder} />
           </BaseMarkprompt.Form>
 
-          <BaseMarkprompt.AutoScroller className="MarkpromptAnswer">
-            <Caret />
-            <BaseMarkprompt.Answer />
+          <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
+            <Answer />
           </BaseMarkprompt.AutoScroller>
 
           <References
@@ -83,6 +75,12 @@ function Markprompt(props: MarkpromptProps) {
             referencesText={references?.referencesText}
             transformReferenceId={references?.transformReferenceId}
           />
+
+          <BaseMarkprompt.Close className="MarkpromptClose">
+            <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
+              <CloseIcon />
+            </AccessibleIcon.Root>
+          </BaseMarkprompt.Close>
         </BaseMarkprompt.Content>
       </BaseMarkprompt.Portal>
     </BaseMarkprompt.Root>

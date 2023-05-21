@@ -1,6 +1,7 @@
 import * as Markprompt from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import React, { useId } from 'react';
+
 import { SearchIcon } from './icons.js';
 
 type PromptProps = {
@@ -12,7 +13,7 @@ export const Prompt = (props: PromptProps) => {
   const id = useId();
   return (
     <>
-      <label htmlFor={id}>
+      <label className="MarkpromptPromptLabel" htmlFor={id}>
         <AccessibleIcon.Root label={label ?? 'Your prompt'}>
           <SearchIcon className="MarkpromptSearchIcon" />
         </AccessibleIcon.Root>

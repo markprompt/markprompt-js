@@ -84,10 +84,25 @@ const References = (props: ReferencesProps) => {
   }
 
   return (
-    <div data-loading-state={adjustedState} className="MarkpromptReferences">
-      <div className="MarkpromptProgress" />
-      <p>{loadingText}</p>
-      <p>{referencesText}</p>
+    <div
+      data-loading-state={adjustedState}
+      className="MarkpromptReferences"
+      role="status"
+    >
+      {state === 'preload' && (
+        <>
+          <div
+            className="MarkpromptProgress"
+            id="markprompt-progressbar"
+            role="progressbar"
+            aria-labelledby="markprompt-loading-text"
+          />
+          <p id="markprompt-loading-text">{loadingText}</p>
+        </>
+      )}
+
+      {state !== 'preload' && <p>{referencesText}</p>}
+
       <Markprompt.References ReferenceComponent={ReferenceComponent} />
     </div>
   );
