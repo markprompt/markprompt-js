@@ -34,26 +34,26 @@ function Markprompt(props: MarkpromptProps) {
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
         <BaseMarkprompt.Content className="MarkpromptContent">
-          <BaseMarkprompt.Title hide>
+          <BaseMarkprompt.Title hide={title?.hide ?? true}>
             {title?.text ?? 'Ask me anything'}
           </BaseMarkprompt.Title>
 
           {description?.text && (
-            <BaseMarkprompt.Description hide>
+            <BaseMarkprompt.Description hide={title?.hide ?? true}>
               {description?.text}
             </BaseMarkprompt.Description>
           )}
 
           <BaseMarkprompt.Form className="MarkpromptForm">
             <BaseMarkprompt.Prompt
+              className="MarkpromptPrompt"
+              placeholder={prompt?.placeholder}
               labelClassName="MarkpromptPromptLabel"
               label={
                 <AccessibleIcon.Root label={prompt?.label ?? 'Your prompt'}>
                   <SearchIcon className="MarkpromptSearchIcon" />
                 </AccessibleIcon.Root>
               }
-              className="MarkpromptPrompt"
-              placeholder={prompt?.placeholder}
             />
           </BaseMarkprompt.Form>
 

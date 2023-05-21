@@ -1,6 +1,6 @@
-# Markprompt Web
+# `@markprompt/web`
 
-A Web Component component for building a prompt interface, based on the [Markprompt](https://markprompt.com) API.
+A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built with Preact for bundle-size savings. Viable for use from vanilla JavaScript or any framework.
 
 <br />
 <p align="center">
@@ -14,21 +14,81 @@ A Web Component component for building a prompt interface, based on the [Markpro
 
 ## Installation
 
-Add the following script tag to your HTML page:
+Install the package from NPM:
 
-```html
-<script type="module" src="https://esm.sh/@markprompt/web@0.2.2-beta18" />
+```sh
+npm add @markprompt/web
 ```
 
 ## Usage
 
-Then add the `markprompt-web` component anywhere on your page:
+Call the `markprompt` function with your project key:
 
-```html
-<markprompt-content projectKey="<project-key>" />
+```js
+import { markprompt } from '@markprompt/web';
+
+const markpromptEl = document.querySelector('#markprompt');
+
+markprompt('<project-key>', markpromptEl, {
+  references: {
+    transformReferenceId: (referenceId) => ({
+      text: referenceId.replace('-', ' '),
+      href: `/docs/${referenceId}`,
+    }),
+  },
+});
 ```
 
-where `project-key` can be obtained in your project settings.
+where `project-key` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
+
+Options are optional and allow you to configure texts the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
+
+```ts
+type Options = {
+  /** Props for the close modal button */
+  close?: {
+    /** Aria-label for the close modal button */
+    label?: string;
+  };
+  /** Props for the description */
+  description?: {
+    /** Whether to hide the description, default: `true` */
+    hide?: boolean;
+    /** Text for the description */
+    text?: string;
+  };
+  /** Props for the prompt */
+  prompt?: {
+    /** Label for the prompt input, default: `Your prompt` */
+    label?: string;
+    /** Placeholder for the prompt input, default: `Ask me anything…` */
+    placeholder?: string;
+  };
+  references?: {
+    /** Callback to transform a reference id into an href and text */
+    transformReferenceId?: (referenceId: string) => {
+      href: string;
+      text: string;
+    };
+    /** Loading text, default: `Fetching relevant pages…` */
+    loadingText?: string;
+    /** References title, default: `Answer generated from the following sources:` */
+    referencesText?: string;
+  };
+  /** Props for the trigger */
+  trigger?: {
+    /** Aria-label for the trigger button */
+    label?: string;
+  };
+  /** Props for the title */
+  title?: {
+    /** Whether to hide the title, default: `true` */
+    hide?: boolean;
+    /** Text for the title: default `Ask me anything` */
+    text?: string;
+  };
+};
+```
 
 ## Documentation
 
