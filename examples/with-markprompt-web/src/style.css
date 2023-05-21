@@ -21,6 +21,7 @@ body {
 body,
 #app {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 main {
@@ -28,4 +29,5 @@ main {
   place-items: center;
   height: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
 }

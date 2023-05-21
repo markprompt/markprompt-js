@@ -31,9 +31,11 @@ body {
   font-weight: 400;
   line-height: 1.6;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 body,
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
