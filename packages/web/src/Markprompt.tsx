@@ -1,13 +1,9 @@
 import * as BaseMarkprompt from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React from 'react';
 
 import { Answer } from './Answer.js';
-import { Caret } from './Caret.js';
-import { ConditionalWrap } from './ConditionalWrap.js';
-import { ChatIcon, CloseIcon } from './icons.js';
-import { Prompt } from './Prompt.js';
+import { ChatIcon, CloseIcon, SearchIcon } from './icons.js';
 import { References } from './References.js';
 import type { MarkpromptOptions } from './types.js';
 
@@ -38,32 +34,27 @@ function Markprompt(props: MarkpromptProps) {
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
         <BaseMarkprompt.Content className="MarkpromptContent">
-          <ConditionalWrap
-            condition={title?.hide ?? true}
-            wrap={(children) => (
-              <VisuallyHidden asChild>{children}</VisuallyHidden>
-            )}
-          >
-            <BaseMarkprompt.Title>
-              {title?.text ?? 'Ask me anything'}
-            </BaseMarkprompt.Title>
-          </ConditionalWrap>
+          <BaseMarkprompt.Title hide>
+            {title?.text ?? 'Ask me anything'}
+          </BaseMarkprompt.Title>
 
           {description?.text && (
-            <ConditionalWrap
-              condition={description?.hide ?? true}
-              wrap={(children) => (
-                <VisuallyHidden asChild>{children}</VisuallyHidden>
-              )}
-            >
-              <BaseMarkprompt.Description>
-                {description.text}
-              </BaseMarkprompt.Description>
-            </ConditionalWrap>
+            <BaseMarkprompt.Description hide>
+              {description?.text}
+            </BaseMarkprompt.Description>
           )}
 
           <BaseMarkprompt.Form className="MarkpromptForm">
-            <Prompt label={prompt?.label} placeholder={prompt?.placeholder} />
+            <BaseMarkprompt.Prompt
+              labelClassName="MarkpromptPromptLabel"
+              label={
+                <AccessibleIcon.Root label={prompt?.label ?? 'Your prompt'}>
+                  <SearchIcon className="MarkpromptSearchIcon" />
+                </AccessibleIcon.Root>
+              }
+              className="MarkpromptPrompt"
+              placeholder={prompt?.placeholder}
+            />
           </BaseMarkprompt.Form>
 
           <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">

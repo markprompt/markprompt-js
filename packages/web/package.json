@@ -24,7 +24,6 @@
   "dependencies": {
     "@markprompt/react": "0.3.5",
     "@radix-ui/react-accessible-icon": "^1.0.2",
-    "@radix-ui/react-visually-hidden": "^1.0.2",
     "preact": "^10.14.1",
     "react": "npm:@preact/compat",
     "react-dom": "npm:@preact/compat"
