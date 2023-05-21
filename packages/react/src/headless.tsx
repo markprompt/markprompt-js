@@ -1,5 +1,6 @@
 import type { Options } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, {
   createContext,
   forwardRef,
@@ -20,6 +21,10 @@ import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
+import {
+  ConditionalVisuallyHidden,
+  ConditionalWrap,
+} from './ConditionalWrap.js';
 import { Footer } from './footer.js';
 import type { PolymorphicRef } from './types.js';
 import { useMarkprompt, type LoadingState } from './useMarkprompt.js';
@@ -166,20 +171,32 @@ const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
 });
 Close.displayName = 'Markprompt.Close';
 
-const Title = forwardRef<
-  HTMLHeadingElement,
-  ComponentPropsWithRef<typeof Dialog.Title>
->((props, ref) => {
-  return <Dialog.Title {...props} ref={ref} />;
+type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
+  hide?: boolean;
+};
+const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
+  const { hide } = props;
+  return (
+    <ConditionalVisuallyHidden hide={hide}>
+      <Dialog.Title {...props} ref={ref} />
+    </ConditionalVisuallyHidden>
+  );
 });
 Title.displayName = 'Markprompt.Title';
 
-const Description = forwardRef<
-  HTMLParagraphElement,
-  ComponentPropsWithRef<typeof Dialog.Description>
->((props, ref) => {
-  return <Dialog.Description {...props} ref={ref} />;
-});
+type DescriptionProps = ComponentPropsWithRef<typeof Dialog.Description> & {
+  hide?: boolean;
+};
+const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
+  (props, ref) => {
+    const { hide } = props;
+    return (
+      <ConditionalVisuallyHidden hide={hide}>
+        <Dialog.Description {...props} ref={ref} />
+      </ConditionalVisuallyHidden>
+    );
+  },
+);
 Description.displayName = 'Markprompt.Description';
 
 type FormProps = ComponentPropsWithRef<'form'>;
@@ -200,7 +217,10 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
 });
 Form.displayName = 'Markprompt.Form';
 
-type PromptProps = ComponentPropsWithRef<'input'>;
+type PromptProps = ComponentPropsWithRef<'input'> & {
+  label?: ReactNode;
+  labelClassName?: string;
+};
 const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
   ref,
@@ -210,6 +230,8 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     autoComplete = 'off',
     autoCorrect = 'off',
     autoFocus = true,
+    label,
+    labelClassName,
     onChange,
     placeholder = 'Ask me anything…',
     spellCheck = false,
@@ -225,20 +247,29 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     [onChange, updatePrompt],
   );
 
+  const name = 'markprompt-prompt';
+
   return (
-    <input
-      {...rest}
-      placeholder={placeholder}
-      ref={ref}
-      type="text"
-      value={prompt}
-      onChange={handleChange}
-      autoCapitalize={autoCapitalize}
-      autoComplete={autoComplete}
-      autoCorrect={autoCorrect}
-      autoFocus={autoFocus}
-      spellCheck={spellCheck}
-    />
+    <>
+      <label htmlFor={name} className={labelClassName}>
+        {label}
+      </label>
+      <input
+        {...rest}
+        id={name}
+        name={name}
+        placeholder={placeholder}
+        ref={ref}
+        type="text"
+        value={prompt}
+        onChange={handleChange}
+        autoCapitalize={autoCapitalize}
+        autoComplete={autoComplete}
+        autoCorrect={autoCorrect}
+        autoFocus={autoFocus}
+        spellCheck={spellCheck}
+      />
+    </>
   );
 });
 Prompt.displayName = 'Markprompt.Prompt';
