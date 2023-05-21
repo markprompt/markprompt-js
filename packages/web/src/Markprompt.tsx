@@ -20,6 +20,7 @@ function Markprompt(props: MarkpromptProps) {
     references,
     title,
     trigger,
+    showBranding = true,
     ...options
   } = props;
 
@@ -33,13 +34,16 @@ function Markprompt(props: MarkpromptProps) {
 
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
-        <BaseMarkprompt.Content className="MarkpromptContent">
+        <BaseMarkprompt.Content
+          className="MarkpromptContent"
+          showBranding={showBranding}
+        >
           <BaseMarkprompt.Title hide={title?.hide ?? true}>
             {title?.text ?? 'Ask me anything'}
           </BaseMarkprompt.Title>
 
           {description?.text && (
-            <BaseMarkprompt.Description hide={title?.hide ?? true}>
+            <BaseMarkprompt.Description hide={description?.hide ?? true}>
               {description?.text}
             </BaseMarkprompt.Description>
           )}
