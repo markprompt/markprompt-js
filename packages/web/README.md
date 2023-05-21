@@ -105,18 +105,7 @@ Styles are easily overridable for customization via targeting classes. Additiona
 
 ## Usage via `<script>` tag
 
-Besides initializing the Markprompt component yourselves from JavaScript, you can load the script from a CDN. We'll automatically initialize Markprompt for you in a `<div />` element attached to the `<body>`.
-
-```html
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
-<script
-  async
-  src="https://esm.sh/@markprompt/web"
-  data-markprompt-project-key="<your project key>"
-></script>
-```
-
-Most configuration options can be passed via snake-cased data attributes, except `transformReferenceId`, for which the defaults will be used. Alternatively, you can attach the options to the window prior to initializing our script:
+Besides initializing the Markprompt component yourselves from JavaScript, you can load the script from a CDN. You can attach the options for the Markprompt component to the window prior to loading our script:
 
 ```html
 <link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
