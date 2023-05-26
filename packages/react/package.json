@@ -27,9 +27,6 @@
     "react-merge-refs": "^2.0.2",
     "remark-gfm": "^3.0.1"
   },
-  "devDependencies": {
-    "react": "^18.0.0"
-  },
   "peerDependencies": {
     "react": "^16 || ^17 || ^18"
   },

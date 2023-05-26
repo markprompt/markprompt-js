@@ -1,5 +1,5 @@
 <a href="https://markprompt.com">
-  <img alt="Markprompt – Open-source GPT-4 platform for Markdown, Markdoc and MDX with built-in analytics" src="https://user-images.githubusercontent.com/504893/227404383-62737a47-72ab-4426-b7b3-83db5b836ebb.png">
+  <img alt="Markprompt – Enterprise-grade AI chatbots for your website and docs" src="https://github.com/motifland/markprompt-js/assets/504893/9df7ac5a-1ac3-4b33-9bb3-a146d119ed73">
   <h1 align="center">Markprompt</h1>
 </a>
 
