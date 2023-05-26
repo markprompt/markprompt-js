@@ -18,7 +18,7 @@ npm run lint
 
 When you open a pull request, this is also run by our GitHub Actions [ci workflow](./.github/workflows/ci.yml) to make sure all code conforms to the code quality standards.
 
-You can format all code using a the `prettier` command:
+You can format all code using the `prettier` command:
 
 ```sh
 npx prettier --write .
