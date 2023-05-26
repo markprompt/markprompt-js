@@ -1,6 +1,7 @@
 import * as Markprompt from '@markprompt/react';
+import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React, { useContext } from 'react';
+import React from 'react';
 
 import styles from './markprompt.module.css';
 
@@ -72,7 +73,7 @@ Answer (including related code snippets if available):`}
 }
 
 const Caret = () => {
-  const { answer } = useContext(Markprompt.Context);
+  const { answer } = useMarkpromptContext();
 
   if (answer) {
     return null;
@@ -116,7 +117,7 @@ const Reference = ({
 };
 
 const References = () => {
-  const { state, references } = useContext(Markprompt.Context);
+  const { state, references } = useMarkpromptContext();
 
   if (state === 'indeterminate') return null;
 
