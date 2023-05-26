@@ -16,33 +16,30 @@
   },
   "main": "dist/index.js",
   "files": [
-    "README.md",
-    "LICENSE",
-    "dist"
+    "dist/index.*",
+    "dist/init.*"
   ],
   "scripts": {
+    "analyze": "node scripts/analyze.js",
     "build": "node scripts/build.js",
     "dev": "node scripts/dev.js",
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
-    "@markprompt/react": "0.3.5",
-    "@radix-ui/react-accessible-icon": "^1.0.2",
-    "preact": "^10.14.1",
-    "react": "npm:@preact/compat",
-    "react-dom": "npm:@preact/compat"
+    "@markprompt/core": "^0.4.5"
   },
   "devDependencies": {
+    "@markprompt/react": "^0.3.5",
+    "@radix-ui/react-accessible-icon": "^1.0.2",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "esbuild": "^0.17.19",
+    "preact": "^10.14.1",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat",
     "typescript": "^5.0.4"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "overrides": {
-    "react": "npm:@preact/compat@^17.1.2",
-    "react-dom": "npm:@preact/compat@^17.1.2"
   }
 }

@@ -20,6 +20,7 @@ dist/
 
 # debug
 *.log*
+meta.json
 
 # local env files
 .env
