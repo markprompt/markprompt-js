@@ -16,7 +16,7 @@
   },
   "main": "dist/index.js",
   "files": [
-    "dist/global.*",
+    "dist/globals.*",
     "dist/index.*",
     "dist/init.*",
     "dist/types.*"
@@ -43,9 +43,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "overrides": {
-    "react": "npm:@preact/compat",
-    "react-dom": "npm:@preact/compat"
   }
 }
