@@ -148,12 +148,8 @@ export function useMarkprompt({
       references,
       state,
       abort,
-<<<<<<< HEAD
-=======
       updatePrompt: setPrompt,
->>>>>>> main
       submit,
-      updatePrompt,
     }),
     [answer, references, state, prompt, abort, submit],
   );
