@@ -1,5 +1,5 @@
 {
-  "include": ["src", "vitest.setup.ts"],
+  "include": ["src/"],
   "references": [{ "path": "../core" }],
   "compilerOptions": {
     "composite": true,
