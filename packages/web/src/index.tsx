@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { Markprompt } from './Markprompt.js';
-import type { MarkpromptOptions } from './types.js';
+import { type MarkpromptOptions } from './types.js';
 
 function getHTMLElement(
   value: HTMLElement | string,

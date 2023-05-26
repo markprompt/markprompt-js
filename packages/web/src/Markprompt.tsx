@@ -5,7 +5,7 @@ import React from 'react';
 import { Answer } from './Answer.js';
 import { ChatIcon, CloseIcon, SearchIcon } from './icons.js';
 import { References } from './References.js';
-import type { MarkpromptOptions } from './types.js';
+import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions & {
   projectKey: string;

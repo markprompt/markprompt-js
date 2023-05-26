@@ -21,9 +21,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c --watch",
-    "prepack": "rollup -c"
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "prepack": "node scripts/build.js"
   },
   "dependencies": {
     "@markprompt/react": "0.3.5",
@@ -33,15 +33,9 @@
     "react-dom": "npm:@preact/compat"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^5.0.0",
-    "@rollup/plugin-commonjs": "^25.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@rollup/plugin-terser": "^0.4.3",
-    "@rollup/plugin-typescript": "^11.1.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
-    "rollup": "^3.22.0",
-    "rollup-plugin-summary": "^2.0.0",
+    "esbuild": "^0.17.19",
     "typescript": "^5.0.4"
   },
   "publishConfig": {

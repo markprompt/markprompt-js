@@ -13,7 +13,6 @@ dist/
 # production
 /build/
 /dist/
-.rollup.cache
 
 # misc
 .DS_Store

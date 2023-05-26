@@ -2,23 +2,27 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "references": [{ "path": "../core" }, { "path": "../react" }],
   "compilerOptions": {
+    "checkJs": true,
     "module": "node16",
     "target": "esnext",
     "sourceMap": true,
-    "emitDeclarationOnly": true,
     "declaration": true,
     "declarationMap": true,
     "incremental": true,
+    "emitDeclarationOnly": true,
+    "composite": true,
     "strict": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "outDir": "dist/",
-    "baseUrl": ".",
+    "rootDir": "src/",
+    "tsBuildInfoFile": ".tsbuildinfo",
     "paths": {
-      "react": ["node_modules/preact/compat/"],
-      "react-dom": ["node_modules/preact/compat/"]
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
     }
-  }
+  },
+  "include": ["src/*"]
 }
