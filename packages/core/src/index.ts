@@ -142,10 +142,12 @@ export async function submitPrompt(
           } catch {
             // do nothing
           }
-          onAnswerChunk(parts[1]);
+          if (parts[1]) {
+            onAnswerChunk(parts[1]);
+          }
           didHandleHeader = true;
         }
-      } else {
+      } else if (chunkValue) {
         const shouldContinue = onAnswerChunk(chunkValue);
         if (!shouldContinue) {
           // If callback returns false, it means it wishes
