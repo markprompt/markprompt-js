@@ -26,9 +26,6 @@
     "react-markdown": "^8.0.7",
     "remark-gfm": "^3.0.1"
   },
-  "devDependencies": {
-    "react": "^18.0.0"
-  },
   "peerDependencies": {
     "react": "^16 || ^17 || ^18"
   },
