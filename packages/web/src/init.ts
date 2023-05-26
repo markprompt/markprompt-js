@@ -2,9 +2,8 @@ import { markprompt } from './index.js';
 
 (async () => {
   if (!window.markprompt) {
-    // todo: replace placeholder
     throw new Error(
-      'Markprompt configuration not found on window. See: https://markprompt.com/docs#<placeholder>',
+      'Markprompt configuration not found on window. See: https://markprompt.com/docs#script-tag',
     );
   }
 
