@@ -17,7 +17,7 @@
     "src/theme"
   ],
   "scripts": {
-    "prepack": "tsc --build && cpy 'src/**/*.css' dist"
+    "prepack": "tsc --build --clean && tsc --build && cpy 'src/**/*.css' dist"
   },
   "dependencies": {
     "@docusaurus/types": "^2.0.0",

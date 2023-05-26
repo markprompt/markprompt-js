@@ -1,6 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "references": [{ "path": "../core" }, { "path": "../react" }],
+  "include": ["src/*"],
   "compilerOptions": {
     "checkJs": true,
     "module": "node16",
@@ -17,12 +18,10 @@
     "verbatimModuleSyntax": true,
     "jsx": "react",
     "outDir": "dist/",
-    "rootDir": "src/",
-    "tsBuildInfoFile": ".tsbuildinfo",
+    "rootDir": "./src",
     "paths": {
       "react": ["./node_modules/preact/compat/"],
       "react-dom": ["./node_modules/preact/compat/"]
     }
-  },
-  "include": ["src/*"]
+  }
 }

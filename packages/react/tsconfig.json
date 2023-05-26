@@ -15,12 +15,5 @@
     "target": "es2021",
     "isolatedModules": true,
     "verbatimModuleSyntax": true
-  },
-  "exclude": [
-    "dist/",
-    "examples/*",
-    "*.test.ts",
-    "*.test.tsx",
-    "vitest.setup.ts"
-  ]
+  }
 }

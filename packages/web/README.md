@@ -140,7 +140,3 @@ The full documentation for `@markprompt/web` can be found on the [Markprompt doc
 
 This library is created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
-
-```
-
-```

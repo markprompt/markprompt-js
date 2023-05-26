@@ -14,12 +14,14 @@ function getHTMLElement(
   return el;
 }
 
+/**
+ * @param projectKey Your Markprompt project key
+ * @param container The element or selector to render Markprompt into
+ * @param options Options for customizing Markprompt
+ */
 export function markprompt(
-  /** Your Markprompt project key */
   projectKey: string,
-  /** The element or selector to render Markprompt into */
   container: HTMLElement | string,
-  /** Options for customizing Markprompt */
   options?: MarkpromptOptions,
 ) {
   const { render } = createRoot(getHTMLElement(container));

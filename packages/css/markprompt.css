@@ -79,7 +79,7 @@
 :where(.MarkpromptOverlay) {
   position: fixed;
   inset: 0;
-  animation: fade-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: markprompt-fade-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
   background-color: var(--markprompt-overlay);
 }
 
@@ -97,7 +97,7 @@
   max-width: 600px;
   height: calc(100vh - 200px);
   max-height: 600px;
-  animation-name: show-content;
+  animation-name: markprompt-show-content;
   animation-duration: 300ms;
   animation-fill-mode: both;
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
@@ -610,7 +610,7 @@
   border-radius: 1px;
   background-color: var(--markprompt-primary);
   box-shadow: 0 0 3px 0 var(--markprompt-primary);
-  animation-name: fade-out;
+  animation-name: markprompt-fade-out;
   animation-duration: 1000ms;
   animation-fill-mode: both;
   animation-iteration-count: infinite;
@@ -631,7 +631,7 @@
     var(--markprompt-primaryHighlight),
     var(--markprompt-secondaryHighlight)
   );
-  animation-name: progress;
+  animation-name: markprompt-progress;
   animation-duration: 2s;
   animation-fill-mode: none;
   animation-iteration-count: infinite;
@@ -659,7 +659,7 @@
   transition: height 500ms ease;
   transform: translateY(100%);
   opacity: 0;
-  animation: popup 200ms ease-out forwards;
+  animation: markprompt-popup 200ms ease-out forwards;
   width: 100%;
   box-sizing: border-box;
 }
@@ -681,7 +681,7 @@
 }
 
 :where(.MarkpromptReferences p) {
-  animation: fade-in 500ms ease-out forwards 1;
+  animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-weight: 600;
   margin: 0;
 }
@@ -705,7 +705,7 @@
 .MarkpromptReference {
   font-size: 0.875rem;
   line-height: 1.5rem;
-  animation-name: slide-up;
+  animation-name: markprompt-slide-up;
   animation-duration: 1s;
   animation-fill-mode: both;
   transition-timing-function: ease-in-out;
@@ -728,7 +728,7 @@
   opacity: 0.8;
 }
 
-@keyframes show-content {
+@keyframes markprompt-show-content {
   from {
     opacity: 0;
     transform: translate(-50%, -46%) scale(0.98);
@@ -742,7 +742,7 @@
   }
 }
 
-@keyframes fade-in {
+@keyframes markprompt-fade-in {
   from {
     opacity: 0;
   }
@@ -751,7 +751,7 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes markprompt-fade-out {
   from {
     opacity: 1;
   }
@@ -760,7 +760,7 @@
   }
 }
 
-@keyframes popup {
+@keyframes markprompt-popup {
   from {
     transform: translateY(100%);
     opacity: 0;
@@ -771,7 +771,7 @@
   }
 }
 
-@keyframes progress {
+@keyframes markprompt-progress {
   0% {
     width: 0;
     transform: translateX(0);
@@ -786,7 +786,7 @@
   }
 }
 
-@keyframes slide-up {
+@keyframes markprompt-slide-up {
   from {
     opacity: 0;
     transform: translateY(16px);

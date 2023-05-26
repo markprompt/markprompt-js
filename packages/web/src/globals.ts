@@ -1,4 +1,4 @@
-import type { MarkpromptOptions } from './types.ts';
+import type { MarkpromptOptions } from './types.js';
 
 declare global {
   interface Window {

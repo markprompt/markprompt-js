@@ -1,8 +1,6 @@
 ---
-'@markprompt/css': major
+'@markprompt/css': minor
 ---
-
-# Default Markprompt styles
 
 This package contains default styles for `@markprompt/web`.
 

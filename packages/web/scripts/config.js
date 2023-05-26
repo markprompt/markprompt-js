@@ -2,7 +2,7 @@ import { tscPlugin } from './tsc-plugin.js';
 
 /**
  * Shared configuration options for esbuild
- * @type {import('esbuild').CommonOptions}
+ * @type {import('esbuild').BuildOptions}
  **/
 const config = {
   entryPoints: ['src/index.tsx', 'src/init.ts'],
