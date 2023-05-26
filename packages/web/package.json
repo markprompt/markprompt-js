@@ -16,8 +16,10 @@
   },
   "main": "dist/index.js",
   "files": [
+    "dist/global.*",
     "dist/index.*",
-    "dist/init.*"
+    "dist/init.*",
+    "dist/types.*"
   ],
   "scripts": {
     "analyze": "node scripts/analyze.js",
