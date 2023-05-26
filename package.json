@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "run-p lint:*",
+    "lint": "run-p lint:format lint:js lint:ts",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:ts": "npm --workspaces pack",
