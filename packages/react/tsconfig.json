@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src/"],
   "references": [{ "path": "../core" }],
   "compilerOptions": {
     "composite": true,
@@ -15,6 +15,5 @@
     "target": "es2021",
     "isolatedModules": true,
     "verbatimModuleSyntax": true
-  },
-  "exclude": ["dist/", "examples/*"]
+  }
 }

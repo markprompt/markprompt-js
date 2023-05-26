@@ -10,31 +10,36 @@
   "license": "MIT",
   "author": "Motif",
   "type": "module",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./init": "./dist/init.js"
+  },
   "main": "dist/index.js",
   "files": [
-    "README.md",
-    "dist"
+    "dist/globals.*",
+    "dist/index.*",
+    "dist/init.*",
+    "dist/types.*"
   ],
   "scripts": {
-    "build": "tsc --build --clean && tsc --build",
-    "dev": "tsc --build --clean && tsc --build --watch",
-    "prepack": "tsc --build --clean && tsc --build",
-    "vite": "vite"
+    "analyze": "node scripts/analyze.js",
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "prepack": "node scripts/build.js"
   },
   "dependencies": {
-    "@markprompt/core": "0.4.5",
-    "lit": "^2.7.2",
-    "rehype-sanitize": "^5.0.1",
-    "rehype-stringify": "^9.0.3",
-    "remark-gfm": "^3.0.1",
-    "remark-parse": "^10.0.1",
-    "remark-rehype": "^10.1.0",
-    "unified": "^10.1.2"
+    "@markprompt/core": "0.4.5"
   },
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "vite": "^4.2.0"
+    "@markprompt/react": "0.3.5",
+    "@radix-ui/react-accessible-icon": "^1.0.2",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "esbuild": "^0.17.19",
+    "preact": "^10.14.1",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat",
+    "typescript": "^5.0.4"
   },
   "publishConfig": {
     "access": "public"

@@ -12,7 +12,6 @@
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
   "files": [
-    "README.md",
     "dist"
   ],
   "scripts": {

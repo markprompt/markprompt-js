@@ -1,6 +1,7 @@
 import * as Markprompt from '@markprompt/react';
+import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React, { useContext } from 'react';
+import React from 'react';
 
 import styles from './markprompt.module.css';
 
@@ -9,10 +10,6 @@ function Component() {
     <Markprompt.Root
       projectKey={import.meta.env.VITE_PROJECT_API_KEY}
       iDontKnowMessage="Sorry, I am not sure how to answer that."
-      placeholder="Ask me anything…"
-      loadingHeading="Fetching relevant pages…"
-      referencesHeading="Answer generated from the following pages:"
-      model="gpt-4"
       promptTemplate={`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, output in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
 
 Context sections:
@@ -76,7 +73,7 @@ Answer (including related code snippets if available):`}
 }
 
 const Caret = () => {
-  const { answer } = useContext(Markprompt.Context);
+  const { answer } = useMarkpromptContext();
 
   if (answer) {
     return null;
@@ -120,7 +117,7 @@ const Reference = ({
 };
 
 const References = () => {
-  const { state, references } = useContext(Markprompt.Context);
+  const { state, references } = useMarkpromptContext();
 
   if (state === 'indeterminate') return null;
 
@@ -134,7 +131,10 @@ const References = () => {
       <div className={styles.progress} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
-      <Markprompt.References RootElement="ul" ReferenceElement={Reference} />
+      <Markprompt.References
+        RootComponent="ul"
+        ReferenceComponent={Reference}
+      />
     </div>
   );
 };

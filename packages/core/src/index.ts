@@ -5,16 +5,8 @@ export type { OpenAIModelId };
 export type Options = {
   /** URL at which to fetch completions */
   completionsUrl?: string;
-  /** The placeholder for the text input */
-  placeholder?: string;
   /** Message returned when the model does not have an answer */
   iDontKnowMessage?: string;
-  /** The heading of the references section */
-  referencesHeading?: string;
-  /** The loading heading of the references section */
-  loadingHeading?: string;
-  /** If true, include the branding footer */
-  includeBranding?: boolean;
   /** The OpenAI model to use */
   model?: OpenAIModelId;
   /** The prompt template */

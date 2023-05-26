@@ -1,0 +1,12 @@
+{
+  "name": "@markprompt/css",
+  "version": "0.0.0",
+  "description": "Common CSS for Markprompt components",
+  "license": "MIT",
+  "main": "markprompt.css",
+  "types": "./index.d.ts",
+  "files": [
+    "markprompt.css",
+    "index.d.ts"
+  ]
+}
