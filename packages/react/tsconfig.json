@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "vitest.setup.ts"],
   "references": [{ "path": "../core" }],
   "compilerOptions": {
     "composite": true,
@@ -16,5 +16,5 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true
   },
-  "exclude": ["dist/", "examples/*", "*.test.ts"]
+  "exclude": ["dist/", "examples/*", "*.test.ts", "vitest.setup.ts"]
 }

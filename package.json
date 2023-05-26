@@ -6,10 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "run-p lint:format lint:js lint:ts",
+    "lint": "run-p lint:*",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
-    "lint:ts": "npx --workspaces path-exists tsconfig.json && tsc --noEmit || echo 'No tsconfig.json found, skipping TypeScript linting'",
+    "lint:ts": "npm --workspaces pack",
     "test": "vitest run --coverage"
   },
   "dependencies": {
