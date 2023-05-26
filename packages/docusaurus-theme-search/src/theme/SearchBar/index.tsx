@@ -1,8 +1,9 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
 import * as Markprompt from '@markprompt/react';
+import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React, { type ReactElement, useContext } from 'react';
+import React, { type ReactElement } from 'react';
 
 import styles from './index.module.css';
 
@@ -59,7 +60,7 @@ export default function SearchBar(): ReactElement {
 }
 
 const Caret = () => {
-  const { answer } = useContext(Markprompt.Context);
+  const { answer } = useMarkpromptContext();
 
   if (answer) {
     return null;
@@ -103,7 +104,7 @@ const Reference = ({
 };
 
 const References = () => {
-  const { state, references } = useContext(Markprompt.Context);
+  const { state, references } = useMarkpromptContext();
 
   if (state === 'indeterminate') return null;
 
@@ -117,7 +118,10 @@ const References = () => {
       <div className={styles.progress} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
-      <Markprompt.References RootElement="ul" ReferenceElement={Reference} />
+      <Markprompt.References
+        RootComponent="ul"
+        ReferenceComponent={Reference}
+      />
     </div>
   );
 };
