@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "outDir": "dist/",
     "rootDir": "src/",
     "tsBuildInfoFile": ".tsbuildinfo",

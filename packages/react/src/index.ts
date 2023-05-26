@@ -1,5 +1,6 @@
+export { useMarkprompt } from './useMarkprompt.js';
+
 export {
-  Context,
   Root,
   type RootProps,
   Trigger,
@@ -16,4 +17,4 @@ export {
   References,
 } from './headless.js';
 
-export { useMarkprompt } from './useMarkprompt.js';
+export { useMarkpromptContext } from './context.js';

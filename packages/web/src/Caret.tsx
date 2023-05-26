@@ -1,8 +1,8 @@
-import * as Markprompt from '@markprompt/react';
-import React, { useContext } from 'react';
+import { useMarkpromptContext } from '@markprompt/react';
+import React from 'react';
 
 export const Caret = () => {
-  const { answer } = useContext(Markprompt.Context);
+  const { answer } = useMarkpromptContext();
 
   if (answer) {
     return null;

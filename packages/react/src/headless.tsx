@@ -1,64 +1,36 @@
 import type { Options } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, {
-  createContext,
   forwardRef,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   type ChangeEventHandler,
   type ComponentPropsWithRef,
   type ComponentPropsWithoutRef,
+  type ElementType,
   type FormEventHandler,
   type MouseEvent,
   type MouseEventHandler,
   type ReactNode,
-  type ElementType,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
-import {
-  ConditionalVisuallyHidden,
-  ConditionalWrap,
-} from './ConditionalWrap.js';
+import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
+import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
 import type { PolymorphicRef } from './types.js';
-import { useMarkprompt, type LoadingState } from './useMarkprompt.js';
+import { useMarkprompt } from './useMarkprompt.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = () => {};
+export const noop = () => {};
 
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
 } & Options;
-
-type State = {
-  answer: string | undefined;
-  prompt: string;
-  references: string[];
-  state: LoadingState;
-};
-
-type Actions = {
-  abort: () => void;
-  submit: () => void;
-  updatePrompt: (nextPrompt: string) => void;
-};
-
-const MarkpromptContext = createContext<State & Actions>({
-  answer: undefined,
-  prompt: '',
-  references: [],
-  state: 'indeterminate',
-  abort: noop,
-  submit: noop,
-  updatePrompt: noop,
-});
 
 function Root(props: RootProps) {
   const {
@@ -88,7 +60,7 @@ function Root(props: RootProps) {
 
 function DialogRootWithAbort(props: Dialog.DialogProps) {
   const { onOpenChange, modal = true, ...rest } = props;
-  const { abort } = useContext(MarkpromptContext);
+  const { abort } = useMarkpromptContext();
 
   const handleOpenChange: NonNullable<Dialog.DialogProps['onOpenChange']> =
     useCallback(
@@ -136,7 +108,7 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   ref,
 ) {
   const { showBranding = true } = props;
-  const { state } = useContext(MarkpromptContext);
+  const { state } = useMarkpromptContext();
 
   return (
     <Dialog.Content {...props} ref={ref} data-loading-state={state}>
@@ -155,7 +127,7 @@ const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
   ref,
 ) {
   const { onClick, ...rest } = props;
-  const { abort } = useContext(MarkpromptContext);
+  const { abort } = useMarkpromptContext();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
@@ -202,7 +174,7 @@ Description.displayName = 'Markprompt.Description';
 type FormProps = ComponentPropsWithRef<'form'>;
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
-  const { submit } = useContext(MarkpromptContext);
+  const { submit } = useMarkpromptContext();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -237,7 +209,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     spellCheck = false,
     ...rest
   } = props;
-  const { updatePrompt, prompt } = useContext(MarkpromptContext);
+  const { updatePrompt, prompt } = useMarkpromptContext();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -277,7 +249,7 @@ Prompt.displayName = 'Markprompt.Prompt';
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
 function Answer(props: AnswerProps) {
   const { remarkPlugins = [remarkGfm], ...rest } = props;
-  const { answer } = useContext(MarkpromptContext);
+  const { answer } = useMarkpromptContext();
   return (
     <Markdown {...rest} remarkPlugins={remarkPlugins}>
       {answer ?? ''}
@@ -294,7 +266,7 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
   (props, ref) => {
     const { autoScroll = true, scrollBehavior = 'smooth' } = props;
     const localRef = useRef<HTMLDivElement>(null);
-    const { answer } = useContext(MarkpromptContext);
+    const { answer } = useMarkpromptContext();
 
     useEffect(() => {
       if (!localRef.current) return;
@@ -331,7 +303,7 @@ const References = function References<
   P extends ReferencesProps<TRoot, TReference> = {},
 >(props: P, ref: PolymorphicRef<TRoot>) {
   const { RootComponent = 'ul', ReferenceComponent = 'li' } = props;
-  const { references } = useContext(MarkpromptContext);
+  const { references } = useMarkpromptContext();
   return (
     <RootComponent ref={ref}>
       {references.map((reference, index) => {
@@ -354,7 +326,6 @@ export {
   AutoScroller,
   Close,
   Content,
-  MarkpromptContext as Context,
   Description,
   Form,
   Overlay,

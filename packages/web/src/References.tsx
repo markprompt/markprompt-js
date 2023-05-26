@@ -1,5 +1,6 @@
 import * as Markprompt from '@markprompt/react';
-import React, { useCallback, useContext, useMemo } from 'react';
+import { useMarkpromptContext } from '@markprompt/react';
+import React, { useCallback, useMemo } from 'react';
 
 const capitalize = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -67,7 +68,7 @@ const References = (props: ReferencesProps) => {
     referencesText = 'Answer generated from the following sources:',
     transformReferenceId,
   } = props;
-  const { state, references } = useContext(Markprompt.Context);
+  const { state, references } = useMarkpromptContext();
 
   const ReferenceComponent = useCallback(
     (props: { referenceId: string; index: number }) => (
