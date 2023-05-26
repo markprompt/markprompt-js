@@ -13,5 +13,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true
-  }
+  },
+  "include": ["src/*"],
+  "exclude": ["*.test.ts"]
 }
