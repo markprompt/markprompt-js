@@ -10,6 +10,7 @@
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:ts": "npm --workspaces pack",
+    "release": "changeset version && npm install",
     "test": "vitest run --coverage"
   },
   "dependencies": {
