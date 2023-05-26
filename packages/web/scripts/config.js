@@ -1,13 +1,17 @@
 import { tscPlugin } from './tsc-plugin.js';
 
-/** @type {import('esbuild').CommonOptions} */
+/**
+ * Shared configuration options for esbuild
+ * @type {import('esbuild').CommonOptions}
+ **/
 const config = {
   entryPoints: ['src/index.tsx', 'src/init.ts'],
   outdir: 'dist/',
+  format: 'esm',
   bundle: true,
   treeShaking: true,
-  format: 'esm',
   sourcemap: true,
+  jsx: 'automatic',
   alias: {
     react: 'preact/compat',
     'react-dom': 'preact/compat',

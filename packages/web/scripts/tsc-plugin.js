@@ -1,6 +1,9 @@
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 
-/** @type {import('esbuild').Plugin} */
+/**
+ * This esbuild plugin runs tsc to generate type declaration files
+ * @type {import('esbuild').Plugin}
+ **/
 export const tscPlugin = {
   name: 'tsc',
   setup(build) {
