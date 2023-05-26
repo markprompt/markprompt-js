@@ -63,10 +63,6 @@ export function useMarkprompt({
     return () => abort();
   }, [abort]);
 
-  const updatePrompt = useCallback((prompt: string) => {
-    setPrompt(prompt);
-  }, []);
-
   const submit = useCallback(async () => {
     abort();
 
@@ -152,9 +148,13 @@ export function useMarkprompt({
       references,
       state,
       abort,
+<<<<<<< HEAD
+=======
+      updatePrompt: setPrompt,
+>>>>>>> main
       submit,
       updatePrompt,
     }),
-    [answer, references, state, prompt, abort, updatePrompt, submit],
+    [answer, references, state, prompt, abort, submit],
   );
 }

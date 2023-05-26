@@ -1,3 +1,1 @@
-export default {
-  name: 'react',
-};
+export default {};
