@@ -16,5 +16,11 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true
   },
-  "exclude": ["dist/", "examples/*", "*.test.ts", "vitest.setup.ts"]
+  "exclude": [
+    "dist/",
+    "examples/*",
+    "*.test.ts",
+    "*.test.tsx",
+    "vitest.setup.ts"
+  ]
 }
