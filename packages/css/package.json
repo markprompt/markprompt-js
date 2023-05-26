@@ -7,8 +7,6 @@
   "exports": "./markprompt.css",
   "main": "markprompt.css",
   "files": [
-    "README.md",
-    "LICENSE",
     "markprompt.css"
   ],
   "scripts": {
