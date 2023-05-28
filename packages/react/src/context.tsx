@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 
-import { noop } from './headless.js';
 import { type LoadingState } from './useMarkprompt.js';
 
 type State = {
@@ -15,6 +14,9 @@ type Actions = {
   submit: () => void;
   updatePrompt: (nextPrompt: string) => void;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = () => {};
 
 const MarkpromptContext = createContext<State & Actions>({
   answer: undefined,

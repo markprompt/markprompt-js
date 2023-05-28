@@ -24,9 +24,6 @@ import { Footer } from './footer.js';
 import type { PolymorphicRef } from './types.js';
 import { useMarkprompt } from './useMarkprompt.js';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const noop = () => {};
-
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
