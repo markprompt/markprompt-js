@@ -15,7 +15,8 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: npm run build -w @markprompt/core -w @markprompt/react -w @markprompt/web
+      - name: build packages
+        run: npm run build -w @markprompt/core -w @markprompt/react -w @markprompt/web
       - run: npm run lint
 
   test:
@@ -29,3 +30,14 @@ jobs:
       - run: npm ci
       - run: npm test
       - uses: codecov/codecov-action@v3
+
+  build-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w with-css-modules -w with-docusaurus -w with-markprompt-web
