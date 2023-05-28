@@ -23,3 +23,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           version: npm run release
+          publish: |
+            npm pack --workspaces &&
+            npx changeset publish
