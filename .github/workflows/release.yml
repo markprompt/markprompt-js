@@ -22,7 +22,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
-          version: npm run release
-          publish: |
-            npm --workspaces pack &&
-            npx changeset publish
+          version: npm run version
+          publish: npm run publish

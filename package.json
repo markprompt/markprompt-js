@@ -6,12 +6,14 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "npm pack --workspaces",
     "lint": "run-p lint:format lint:js lint:ts",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
-    "lint:ts": "npm --workspaces pack",
-    "release": "changeset version && npm install",
-    "test": "vitest run --coverage"
+    "lint:ts": "npm run build",
+    "publish": "npm run build && changeset publish",
+    "test": "vitest run --coverage",
+    "version": "changeset version && npm install"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.4.0",
