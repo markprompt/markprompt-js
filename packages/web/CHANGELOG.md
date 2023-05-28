@@ -1,5 +1,11 @@
 # @markprompt/web
 
+## 0.4.1
+
+### Patch Changes
+
+- [`7bf343f`](https://github.com/motifland/markprompt-js/commit/7bf343ffeeb138196a1028d83d56876fa2cd272f) Thanks [@nickrttn](https://github.com/nickrttn)! - Update README
+
 ## 0.4.0
 
 ### Minor Changes
