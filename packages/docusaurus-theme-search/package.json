@@ -22,7 +22,7 @@
   "dependencies": {
     "@docusaurus/types": "^2.0.0",
     "@markprompt/react": "0.3.5",
-    "@radix-ui/react-visually-hidden": "^1.0.2"
+    "@radix-ui/react-visually-hidden": "^1.0.3"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0",
