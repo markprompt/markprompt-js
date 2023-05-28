@@ -1,6 +1,7 @@
 {
-  "include": ["src/"],
   "references": [{ "path": "../core" }],
+  "include": ["src/"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/vitest.setup.ts"],
   "compilerOptions": {
     "composite": true,
     "module": "node16",
