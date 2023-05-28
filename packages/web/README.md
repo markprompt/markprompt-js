@@ -128,7 +128,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 </script>
 <script
   async
-  src="https://unpkg.com/@markprompt/web@0.4.0/dist/init.js"
+  src="https://unpkg.com/@markprompt/web@0.4.1/dist/init.js"
 ></script>
 ```
 
