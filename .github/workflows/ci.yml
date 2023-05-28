@@ -17,6 +17,7 @@ jobs:
       - run: npm ci
       - run: npm run build -w @markprompt/core -w @markprompt/react -w @markprompt/web
       - run: npm run build -w with-css-modules -w with-docusaurus -w with-markprompt-web
+      - run: ls -la packages/react/dist
       - run: npm run lint
 
   test:
