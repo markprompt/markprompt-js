@@ -1,5 +1,6 @@
 import type { Options } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
+import debounce from 'p-debounce';
 import React, {
   forwardRef,
   useCallback,
@@ -13,6 +14,7 @@ import React, {
   type MouseEvent,
   type MouseEventHandler,
   type ReactNode,
+  type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -21,7 +23,10 @@ import remarkGfm from 'remark-gfm';
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
-import type { PolymorphicRef } from './types.js';
+import type {
+  PolymorphicComponentPropWithRef,
+  PolymorphicRef,
+} from './types.js';
 import { useMarkprompt } from './useMarkprompt.js';
 
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
@@ -75,13 +80,13 @@ function DialogRootWithAbort(props: Dialog.DialogProps) {
   );
 }
 
-const Trigger = forwardRef<
+const DialogTrigger = forwardRef<
   HTMLButtonElement,
   ComponentPropsWithRef<typeof Dialog.Trigger>
 >((props, ref) => {
   return <Dialog.Trigger ref={ref} {...props} />;
 });
-Trigger.displayName = 'Markprompt.Trigger';
+DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
 function Portal(props: ComponentPropsWithoutRef<typeof Dialog.Portal>) {
   return <Dialog.Portal {...props} />;
@@ -171,21 +176,20 @@ Description.displayName = 'Markprompt.Description';
 type FormProps = ComponentPropsWithRef<'form'>;
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
-  const { submit } = useMarkpromptContext();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
-      submit();
       if (onSubmit) onSubmit(event);
     },
-    [onSubmit, submit],
+    [onSubmit],
   );
 
   return <form {...rest} ref={ref} onSubmit={handleSubmit} />;
 });
 Form.displayName = 'Markprompt.Form';
 
+const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   labelClassName?: string;
@@ -204,19 +208,27 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     onChange,
     placeholder = 'Ask me anything…',
     spellCheck = false,
+    type = 'search',
     ...rest
   } = props;
-  const { updatePrompt, prompt } = useMarkpromptContext();
+  const { updatePrompt, prompt, submitSearchQuery } = useMarkpromptContext();
+
+  console.log('rerender');
+
+  const debouncedSubmitSearchQuery = useCallback(
+    (searchQuery: string) => debounce(submitSearchQuery, 300)(searchQuery),
+    [submitSearchQuery],
+  );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
+      console.log('change', event.target.value);
       updatePrompt(event.target.value);
+      debouncedSubmitSearchQuery(event.target.value);
       if (onChange) onChange(event);
     },
-    [onChange, updatePrompt],
+    [debouncedSubmitSearchQuery, onChange, updatePrompt],
   );
-
-  const name = 'markprompt-prompt';
 
   return (
     <>
@@ -229,7 +241,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
         name={name}
         placeholder={placeholder}
         ref={ref}
-        type="text"
+        type={type}
         value={prompt}
         onChange={handleChange}
         autoCapitalize={autoCapitalize}
@@ -242,6 +254,50 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   );
 });
 Prompt.displayName = 'Markprompt.Prompt';
+
+const PromptTrigger = forwardRef<
+  HTMLButtonElement,
+  PolymorphicComponentPropWithRef<'button'>
+>((props, ref) => {
+  const { as: Component = 'button', onClick, type = 'submit', ...rest } = props;
+  const { submitPrompt } = useMarkpromptContext();
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (onClick) onClick(event);
+      submitPrompt();
+    },
+    [onClick, submitPrompt],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: ReactKeyboardEvent | KeyboardEvent) => {
+      console.log(event);
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        submitPrompt();
+      }
+    },
+    [submitPrompt],
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  return (
+    <Component
+      {...rest}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      type={type}
+      ref={ref}
+    />
+  );
+});
+PromptTrigger.displayName = 'Markprompt.PromptTrigger';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
 function Answer(props: AnswerProps) {
@@ -324,12 +380,13 @@ export {
   Close,
   Content,
   Description,
+  DialogTrigger,
   Form,
+  ForwardedReferences as References,
   Overlay,
   Portal,
   Prompt,
-  ForwardedReferences as References,
+  PromptTrigger,
   Root,
   Title,
-  Trigger,
 };

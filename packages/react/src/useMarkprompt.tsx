@@ -1,4 +1,4 @@
-import { type Options } from '@markprompt/core';
+import { type Options, type SearchResult } from '@markprompt/core';
 import {
   DEFAULT_FREQUENCY_PENALTY,
   DEFAULT_I_DONT_KNOW_MESSAGE,
@@ -11,7 +11,8 @@ import {
   DEFAULT_TEMPERATURE,
   DEFAULT_TOP_P,
   MARKPROMPT_COMPLETIONS_URL,
-  submitPrompt,
+  submitPrompt as submitPromptToMarkprompt,
+  submitSearchQuery as submitSearchQueryToMarkprompt,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -20,6 +21,46 @@ export type LoadingState =
   | 'preload'
   | 'streaming-answer'
   | 'done';
+
+const mockData: SearchResult[] = [
+  {
+    path: '/path1',
+    meta: {
+      title: 'Title 1',
+    },
+    content: '# Content 1\n\nThis is **Markdown**',
+    source_type: 'Type 1',
+    source_data: {
+      url: 'https://example.com/url1',
+    },
+    project_id: 'Project 1',
+  },
+  {
+    path: '/path2',
+    meta: {
+      title: 'Title 2',
+    },
+    content: '# Content 2\n\nThis is **Markdown**',
+    source_type: 'Type 2',
+    source_data: {
+      url: 'https://example.com/url2',
+    },
+    project_id: 'Project 2',
+  },
+  {
+    path: '/path3',
+    meta: {
+      title: 'Title 3',
+    },
+    content: '# Content 3\n\nThis is **Markdown**',
+    source_type: 'Type 3',
+    source_data: {
+      url: 'https://example.com/url3',
+    },
+    project_id: 'Project 3',
+  },
+  // Add more objects as needed
+];
 
 export function useMarkprompt({
   projectKey,
@@ -45,6 +86,7 @@ export function useMarkprompt({
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
@@ -63,7 +105,7 @@ export function useMarkprompt({
     return () => abort();
   }, [abort]);
 
-  const submit = useCallback(async () => {
+  const submitPrompt = useCallback(async () => {
     abort();
 
     if (state === 'preload' || state === 'streaming-answer') {
@@ -86,7 +128,7 @@ export function useMarkprompt({
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const promise = submitPrompt(
+    const promise = submitPromptToMarkprompt(
       prompt,
       projectKey,
       (chunk) => {
@@ -141,16 +183,74 @@ export function useMarkprompt({
     topP,
   ]);
 
+  const submitSearchQuery = useCallback(
+    async (searchQuery: string) => {
+      console.log('search', searchQuery);
+
+      abort();
+
+      // reset state if the query was set (back) to empty
+      if (searchQuery === '') {
+        if (controllerRef.current) controllerRef.current.abort();
+        setSearchResults([]);
+        setState('indeterminate');
+        return;
+      }
+
+      setState('preload');
+
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      const promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+        signal: controller.signal,
+      });
+
+      promise.then((searchResults) => {
+        // setSearchResults(searchResults);
+        setSearchResults(mockData);
+        setState('done');
+      });
+
+      promise.catch((error) => {
+        if (error.cause?.name === 'AbortError') {
+          // Ignore abort errors
+          return;
+        }
+
+        setSearchResults(mockData);
+      });
+
+      promise.finally(() => {
+        if (controllerRef.current === controller) {
+          controllerRef.current = undefined;
+        }
+      });
+    },
+    [abort, projectKey],
+  );
+
   return useMemo(
     () => ({
       answer,
       prompt,
       references,
+      searchResults,
       state,
       abort,
       updatePrompt: setPrompt,
-      submit,
+      submitPrompt,
+      submitSearchQuery,
     }),
-    [answer, references, state, prompt, abort, submit],
+    [
+      answer,
+      prompt,
+      references,
+      searchResults,
+      state,
+      abort,
+      submitPrompt,
+      submitSearchQuery,
+    ],
   );
 }

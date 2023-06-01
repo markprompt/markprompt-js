@@ -3,7 +3,7 @@ export { useMarkprompt } from './useMarkprompt.js';
 export {
   Root,
   type RootProps,
-  Trigger,
+  DialogTrigger,
   Portal,
   Overlay,
   Content,
@@ -12,6 +12,7 @@ export {
   Description,
   Form,
   Prompt,
+  PromptTrigger,
   Answer,
   AutoScroller,
   References,

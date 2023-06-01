@@ -1,6 +1,6 @@
-import type { OpenAIModelId } from './types.js';
+import type { OpenAIModelId, SearchResult } from './types.js';
 
-export type { OpenAIModelId };
+export type { OpenAIModelId, SearchResult };
 
 export type Options = {
   /** URL at which to fetch completions */
@@ -150,5 +150,47 @@ export async function submitPrompt(
     }
   } catch (error) {
     onError(error instanceof Error ? error : new Error(`${error}`));
+  }
+}
+
+export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
+export const DEFAULT_SEARCH_LIMIT = 5;
+
+export async function submitSearchQuery(
+  query: string,
+  projectKey: string,
+  options?: {
+    limit?: number;
+    searchUrl?: string;
+    signal?: AbortSignal;
+  },
+): Promise<SearchResult[]> {
+  const { limit = DEFAULT_SEARCH_LIMIT, searchUrl = DEFAULT_SEARCH_URL } =
+    options ?? {};
+
+  const params = new URLSearchParams({
+    query,
+    projectKey,
+    limit: String(limit),
+  });
+
+  try {
+    const response = await fetch(`${searchUrl}?${params.toString()}`, {
+      method: 'GET',
+      signal: options?.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch search results');
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      // do nothing on AbortError's, this is expected
+      return [];
+    } else {
+      throw error;
+    }
   }
 }

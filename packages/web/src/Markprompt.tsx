@@ -25,12 +25,12 @@ function Markprompt(props: MarkpromptProps) {
   } = props;
 
   return (
-    <BaseMarkprompt.Root projectKey={projectKey} {...options}>
-      <BaseMarkprompt.Trigger className="MarkpromptTrigger">
+    <BaseMarkprompt.Root open projectKey={projectKey} {...options}>
+      <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
         <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
           <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
         </AccessibleIcon.Root>
-      </BaseMarkprompt.Trigger>
+      </BaseMarkprompt.DialogTrigger>
 
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
@@ -51,7 +51,7 @@ function Markprompt(props: MarkpromptProps) {
           <BaseMarkprompt.Form className="MarkpromptForm">
             <BaseMarkprompt.Prompt
               className="MarkpromptPrompt"
-              placeholder={prompt?.placeholder}
+              placeholder={prompt?.placeholder ?? 'Search or ask a question…'}
               labelClassName="MarkpromptPromptLabel"
               label={
                 <AccessibleIcon.Root label={prompt?.label ?? 'Your prompt'}>
@@ -59,6 +59,7 @@ function Markprompt(props: MarkpromptProps) {
                 </AccessibleIcon.Root>
               }
             />
+            <BaseMarkprompt.PromptTrigger>search</BaseMarkprompt.PromptTrigger>
           </BaseMarkprompt.Form>
 
           <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
