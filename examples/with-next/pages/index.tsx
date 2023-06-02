@@ -1,14 +1,15 @@
 import * as Markprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import classNames from 'classnames';
 import React from 'react';
 
-import styles from './markprompt.module.css';
+import styles from './index.module.css';
 
 function Component() {
   return (
     <Markprompt.Root
-      projectKey={import.meta.env.VITE_PROJECT_API_KEY || 'asd'}
+      projectKey={process.env.MARKPROMPT_PROJECT_KEY! || 'asd'}
       iDontKnowMessage="Sorry, I am not sure how to answer that."
       promptTemplate={`You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, output in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
 
@@ -29,14 +30,14 @@ Answer (including related code snippets if available):`}
     >
       <Markprompt.Trigger
         aria-label="Open Markprompt"
-        className={styles.MarkpromptButton}
+        className={classNames('MarkpromptButton', styles.MarkpromptButton)}
       >
-        <ChatIcon className={styles.MarkpromptIcon} />
+        <ChatIcon className="MarkpromptIcon" />
       </Markprompt.Trigger>
       <Markprompt.Portal>
-        <Markprompt.Overlay className={styles.MarkpromptOverlay} />
-        <Markprompt.Content className={styles.MarkpromptContent}>
-          <Markprompt.Close className={styles.MarkpromptClose}>
+        <Markprompt.Overlay className="MarkpromptOverlay" />
+        <Markprompt.Content className="MarkpromptContent">
+          <Markprompt.Close className="MarkpromptClose">
             <CloseIcon />
           </Markprompt.Close>
 
@@ -56,11 +57,11 @@ Answer (including related code snippets if available):`}
           </VisuallyHidden>
 
           <Markprompt.Form>
-            <SearchIcon className={styles.MarkpromptSearchIcon} />
-            <Markprompt.Prompt className={styles.MarkpromptPrompt} />
+            <SearchIcon className="MarkpromptSearchIcon" />
+            <Markprompt.Prompt className="MarkpromptPrompt" />
           </Markprompt.Form>
 
-          <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
+          <Markprompt.AutoScroller className="MarkpromptAnswer">
             <Caret />
             <Markprompt.Answer />
           </Markprompt.AutoScroller>
@@ -79,7 +80,7 @@ const Caret = () => {
     return null;
   }
 
-  return <span className={styles.caret} />;
+  return <span className={'caret'} />;
 };
 
 const capitalize = (text: string) => {
@@ -104,7 +105,7 @@ const Reference = ({
   return (
     <li
       key={referenceId}
-      className={styles.reference}
+      className="reference"
       style={{
         animationDelay: `${100 * index}ms`,
       }}
@@ -127,8 +128,8 @@ const References = () => {
   }
 
   return (
-    <div data-loading-state={adjustedState} className={styles.references}>
-      <div className={styles.progress} />
+    <div data-loading-state={adjustedState} className={'references'}>
+      <div className={'progress'} />
       <p>Fetching relevant pages…</p>
       <p>Answer generated from the following sources:</p>
       <Markprompt.References
