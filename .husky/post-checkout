@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-rm {examples,packages}/*/*.tsbuildinfo
+rm -f {examples,packages}/*/*.tsbuildinfo
