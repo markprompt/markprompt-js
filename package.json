@@ -11,6 +11,7 @@
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:ts": "npm run build",
+    "prepare": "husky install",
     "publish": "npm run build && changeset publish",
     "test": "vitest run --coverage",
     "version": "changeset version && npm install"
@@ -36,6 +37,7 @@
     "vitest": "^0.31.0"
   },
   "devDependencies": {
+    "husky": "^8.0.0",
     "path-exists-cli": "^2.0.0"
   },
   "overrides": {
