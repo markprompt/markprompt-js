@@ -6,7 +6,7 @@ import React from 'react';
 
 import styles from './index.module.css';
 
-function Component() {
+function IndexPage() {
   return (
     <Markprompt.Root
       projectKey={process.env.MARKPROMPT_PROJECT_KEY!}
