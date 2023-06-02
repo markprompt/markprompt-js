@@ -1,6 +1,6 @@
-import { type Options as CoreOptions } from '@markprompt/core';
+import { type SubmitPromptOptions } from '@markprompt/core';
 
-type MarkpromptOptions = CoreOptions & {
+type MarkpromptOptions = SubmitPromptOptions & {
   close?: {
     /**
      * `aria-label` for the close modal button

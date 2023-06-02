@@ -1,4 +1,4 @@
-import type { Options } from '@markprompt/core';
+import type { SubmitPromptOptions } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import debounce from 'p-debounce';
 import React, {
@@ -32,7 +32,7 @@ import { useMarkprompt } from './useMarkprompt.js';
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
-} & Options;
+} & SubmitPromptOptions;
 
 function Root(props: RootProps) {
   const {
@@ -213,8 +213,6 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   } = props;
   const { updatePrompt, prompt, submitSearchQuery } = useMarkpromptContext();
 
-  console.log('rerender');
-
   const debouncedSubmitSearchQuery = useCallback(
     (searchQuery: string) => debounce(submitSearchQuery, 300)(searchQuery),
     [submitSearchQuery],
@@ -374,6 +372,37 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
+const SearchResults = forwardRef<
+  HTMLUListElement,
+  Omit<ComponentPropsWithRef<'ul'>, 'children'>
+>((props, ref) => {
+  const { searchResults } = useMarkpromptContext();
+  return (
+    <div>
+      <ul {...props} ref={ref}>
+        {searchResults.map((result) => {
+          return (
+            <li key={result.path}>
+              <article>
+                <h2>{result.meta.title}</h2>
+                <ul>
+                  {result.sections.map((section) => (
+                    <li key={section.content}>
+                      {section.heading && <h3>{section.heading}</h3>}
+                      <p>{section.content}</p>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+});
+SearchResults.displayName = 'Markprompt.SearchResults';
+
 export {
   Answer,
   AutoScroller,
@@ -388,5 +417,6 @@ export {
   Prompt,
   PromptTrigger,
   Root,
+  SearchResults,
   Title,
 };

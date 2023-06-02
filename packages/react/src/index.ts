@@ -1,21 +1,23 @@
 export { useMarkprompt } from './useMarkprompt.js';
 
 export {
-  Root,
-  type RootProps,
-  DialogTrigger,
-  Portal,
-  Overlay,
-  Content,
-  Close,
-  Title,
-  Description,
-  Form,
-  Prompt,
-  PromptTrigger,
   Answer,
   AutoScroller,
+  Close,
+  Content,
+  Description,
+  DialogTrigger,
+  Form,
+  Overlay,
+  Portal,
+  Prompt,
+  PromptTrigger,
   References,
+  Root,
+  SearchResults,
+  Title,
 } from './headless.js';
+
+export type { RootProps } from './headless.js';
 
 export { useMarkpromptContext } from './context.js';

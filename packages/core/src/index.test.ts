@@ -10,11 +10,8 @@ import {
   vi,
 } from 'vitest';
 
-import {
-  MARKPROMPT_COMPLETIONS_URL,
-  STREAM_SEPARATOR,
-  submitPrompt,
-} from './index.js';
+import { submitPrompt } from './index.js';
+import { MARKPROMPT_COMPLETIONS_URL, STREAM_SEPARATOR } from './prompt.js';
 
 const encoder = new TextEncoder();
 let response: string[] = [];

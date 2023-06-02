@@ -1,18 +1,9 @@
-import { type Options, type SearchResult } from '@markprompt/core';
 import {
-  DEFAULT_FREQUENCY_PENALTY,
-  DEFAULT_I_DONT_KNOW_MESSAGE,
-  DEFAULT_MAX_TOKENS,
-  DEFAULT_MODEL,
-  DEFAULT_PRESENCE_PENALTY,
-  DEFAULT_PROMPT_TEMPLATE,
-  DEFAULT_SECTIONS_MATCH_COUNT,
-  DEFAULT_SECTIONS_MATCH_THRESHOLD,
-  DEFAULT_TEMPERATURE,
-  DEFAULT_TOP_P,
-  MARKPROMPT_COMPLETIONS_URL,
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
+  type SearchResultsResponse,
+  type SubmitPromptOptions,
+  type SearchResult,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -22,63 +13,81 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
-const mockData: SearchResult[] = [
-  {
-    path: '/path1',
-    meta: {
-      title: 'Title 1',
+const mockData: SearchResultsResponse = {
+  project_id: 'abc123',
+  data: [
+    {
+      path: '/docs/getting-started.mdoc',
+      meta: {
+        title: 'Getting Started',
+      },
+      source: {
+        type: 'gitlab',
+        data: {
+          url: 'https://gitlab.com/my-project/my-repo',
+        },
+      },
+      sections: [
+        {
+          content:
+            'Welcome to our product documentation! This guide will help you get started with using our platform.',
+        },
+        {
+          heading: 'Installation',
+          content: 'To install our platform, follow these steps...',
+        },
+        {
+          heading: 'Configuration',
+          content:
+            'Once you have installed the platform, you will need to configure it...',
+        },
+      ],
     },
-    content: '# Content 1\n\nThis is **Markdown**',
-    source_type: 'Type 1',
-    source_data: {
-      url: 'https://example.com/url1',
+    {
+      path: '/docs/faq.mdoc',
+      meta: {
+        title: 'Frequently Asked Questions',
+      },
+      source: {
+        type: 'github',
+        data: {
+          url: 'https://github.com/my-org/my-repo',
+        },
+      },
+      sections: [
+        {
+          content: 'Here are some common questions we receive from our users.',
+        },
+        {
+          heading: 'How do I reset my password?',
+          content: 'To reset your password, follow these steps...',
+        },
+        {
+          heading: 'What payment methods do you accept?',
+          content: 'We accept all major credit cards...',
+        },
+      ],
     },
-    project_id: 'Project 1',
-  },
-  {
-    path: '/path2',
-    meta: {
-      title: 'Title 2',
-    },
-    content: '# Content 2\n\nThis is **Markdown**',
-    source_type: 'Type 2',
-    source_data: {
-      url: 'https://example.com/url2',
-    },
-    project_id: 'Project 2',
-  },
-  {
-    path: '/path3',
-    meta: {
-      title: 'Title 3',
-    },
-    content: '# Content 3\n\nThis is **Markdown**',
-    source_type: 'Type 3',
-    source_data: {
-      url: 'https://example.com/url3',
-    },
-    project_id: 'Project 3',
-  },
-  // Add more objects as needed
-];
+  ],
+};
 
 export function useMarkprompt({
   projectKey,
-  completionsUrl = MARKPROMPT_COMPLETIONS_URL,
-  frequencyPenalty = DEFAULT_FREQUENCY_PENALTY,
-  iDontKnowMessage = DEFAULT_I_DONT_KNOW_MESSAGE,
-  maxTokens = DEFAULT_MAX_TOKENS,
-  model = DEFAULT_MODEL,
-  presencePenalty = DEFAULT_PRESENCE_PENALTY,
-  promptTemplate = DEFAULT_PROMPT_TEMPLATE,
-  sectionsMatchCount = DEFAULT_SECTIONS_MATCH_COUNT,
-  sectionsMatchThreshold = DEFAULT_SECTIONS_MATCH_THRESHOLD,
-  temperature = DEFAULT_TEMPERATURE,
-  topP = DEFAULT_TOP_P,
+  completionsUrl,
+  frequencyPenalty,
+  iDontKnowMessage,
+  maxTokens,
+  model,
+  presencePenalty,
+  promptTemplate,
+  sectionsMatchCount,
+  sectionsMatchThreshold,
+  temperature,
+  topP,
 }: {
   /** Project key, required */
   projectKey: string;
-} & Options) {
+} & SubmitPromptOptions) {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
@@ -208,7 +217,7 @@ export function useMarkprompt({
 
       promise.then((searchResults) => {
         // setSearchResults(searchResults);
-        setSearchResults(mockData);
+        setSearchResults(mockData.data);
         setState('done');
       });
 
@@ -218,7 +227,7 @@ export function useMarkprompt({
           return;
         }
 
-        setSearchResults(mockData);
+        setSearchResults(mockData.data);
       });
 
       promise.finally(() => {

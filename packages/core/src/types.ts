@@ -24,15 +24,26 @@ export type OpenAIModelId =
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
+export type SearchResultSection = {
+  content: string;
+  heading?: string;
+};
+
 export type SearchResult = {
   path: string;
   meta: {
     title: string;
   };
-  content: string;
-  source_type: string;
-  source_data: {
-    url: string;
+  source: {
+    type: 'github' | 'gitlab' | 'website';
+    data: {
+      url: string;
+    };
   };
+  sections: SearchResultSection[];
+};
+
+export type SearchResultsResponse = {
   project_id: string;
+  data: SearchResult[];
 };

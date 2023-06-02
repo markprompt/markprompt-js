@@ -62,9 +62,11 @@ function Markprompt(props: MarkpromptProps) {
             <BaseMarkprompt.PromptTrigger>search</BaseMarkprompt.PromptTrigger>
           </BaseMarkprompt.Form>
 
-          <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
+          <BaseMarkprompt.SearchResults />
+
+          {/* <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
             <Answer />
-          </BaseMarkprompt.AutoScroller>
+          </BaseMarkprompt.AutoScroller> */}
 
           <References
             loadingText={references?.loadingText}
