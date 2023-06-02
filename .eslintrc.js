@@ -1,5 +1,5 @@
 module.exports = {
-  ignorePatterns: ['dist/'],
+  ignorePatterns: ['.next/', '.docusaurus/', 'coverage/', 'dist/'],
   extends: [
     'eslint:recommended',
     'plugin:import/recommended',
