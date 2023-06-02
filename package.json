@@ -11,10 +11,10 @@
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:ts": "npm run build",
+    "prepare": "husky install",
     "publish": "npm run build && changeset publish",
     "test": "vitest run --coverage",
-    "version": "changeset version && npm install",
-    "prepare": "husky install"
+    "version": "changeset version && npm install"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.4.0",
@@ -37,8 +37,8 @@
     "vitest": "^0.31.0"
   },
   "devDependencies": {
-    "path-exists-cli": "^2.0.0",
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "path-exists-cli": "^2.0.0"
   },
   "overrides": {
     "react": "^17.0.0",
