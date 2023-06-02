@@ -187,4 +187,4 @@ const ChatIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export default Component;
+export default IndexPage;
