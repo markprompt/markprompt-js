@@ -1,0 +1,18 @@
+.MarkpromptButton {
+  all: unset;
+  display: flex;
+  cursor: pointer;
+  border-radius: 99999px;
+  color: var(--markprompt-primaryForeground);
+  background-color: var(--markprompt-primary);
+  padding: 0.75rem;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  transition-property: opacity;
+  transition-duration: 200ms;
+}
+
+.MarkpromptButton:hover {
+  opacity: 0.8;
+}

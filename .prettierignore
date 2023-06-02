@@ -1,3 +1,4 @@
 .docusaurus/
+.next/
 dist/
 coverage/
