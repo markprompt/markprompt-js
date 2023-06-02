@@ -23,7 +23,7 @@ export function markprompt(
   projectKey: string,
   container: HTMLElement | string,
   options?: MarkpromptOptions,
-) {
+): void {
   const { render } = createRoot(getHTMLElement(container));
   render(<Markprompt projectKey={projectKey} {...options} />);
 }

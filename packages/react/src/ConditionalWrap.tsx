@@ -7,7 +7,7 @@ type ConditionalWrapProps = {
   children: ReactNode;
 };
 
-export const ConditionalWrap = (props: ConditionalWrapProps) => {
+export const ConditionalWrap = (props: ConditionalWrapProps): ReactElement => {
   const { condition, wrap, children } = props;
   return (condition ? wrap(children) : children) as ReactElement;
 };
@@ -19,7 +19,7 @@ type ConditionalVisuallyHiddenProps = {
 
 export const ConditionalVisuallyHidden = (
   props: ConditionalVisuallyHiddenProps,
-) => {
+): ReactElement => {
   const { hide, children } = props;
   return (
     <ConditionalWrap

@@ -12,6 +12,7 @@ import React, {
   type FormEventHandler,
   type MouseEvent,
   type MouseEventHandler,
+  type ReactElement,
   type ReactNode,
 } from 'react';
 import Markdown from 'react-markdown';
@@ -29,7 +30,7 @@ export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   projectKey: string;
 } & Options;
 
-function Root(props: RootProps) {
+function Root(props: RootProps): ReactElement {
   const {
     children,
     defaultOpen,
@@ -55,7 +56,7 @@ function Root(props: RootProps) {
   );
 }
 
-function DialogRootWithAbort(props: Dialog.DialogProps) {
+function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   const { onOpenChange, modal = true, ...rest } = props;
   const { abort } = useMarkpromptContext();
 
@@ -83,7 +84,9 @@ const Trigger = forwardRef<
 });
 Trigger.displayName = 'Markprompt.Trigger';
 
-function Portal(props: ComponentPropsWithoutRef<typeof Dialog.Portal>) {
+function Portal(
+  props: ComponentPropsWithoutRef<typeof Dialog.Portal>,
+): ReactElement {
   return <Dialog.Portal {...props} />;
 }
 Portal.displayName = 'Markprompt.Portal';
@@ -244,7 +247,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
 Prompt.displayName = 'Markprompt.Prompt';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
-function Answer(props: AnswerProps) {
+function Answer(props: AnswerProps): ReactElement {
   const { remarkPlugins = [remarkGfm], ...rest } = props;
   const { answer } = useMarkpromptContext();
   return (
@@ -298,7 +301,7 @@ const References = function References<
   }>,
   // eslint-disable-next-line @typescript-eslint/ban-types
   P extends ReferencesProps<TRoot, TReference> = {},
->(props: P, ref: PolymorphicRef<TRoot>) {
+>(props: P, ref: PolymorphicRef<TRoot>): ReactElement {
   const { RootComponent = 'ul', ReferenceComponent = 'li' } = props;
   const { references } = useMarkpromptContext();
   return (
