@@ -26,7 +26,7 @@ Include the CSS on your page, via a link tag or by importing it in your JavaScri
 
 ```html
 <!-- load from a CDN: -->
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.1.1?css" />
 ```
 
 ```js
@@ -110,7 +110,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.1.0/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.1.1/markprompt.css"
 />
 <script>
   window.markprompt = {
