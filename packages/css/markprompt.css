@@ -660,7 +660,7 @@
   transform: translateY(100%);
   opacity: 0;
   animation: markprompt-popup 200ms ease-out forwards;
-  width: 100%;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -694,6 +694,7 @@
   gap: 0.5rem;
   padding-left: 0;
   list-style-type: none;
+  overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
