@@ -70,7 +70,7 @@ type Options = {
   };
   /** Props for the prompt */
   prompt?: {
-    /** Label for the prompt input, default: `Your prompt` */
+    /** Label for the prompt input, default: `Ask me anything…` */
     label?: string;
     /** Placeholder for the prompt input, default: `Ask me anything…` */
     placeholder?: string;

@@ -60,9 +60,10 @@
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  color: var(--markprompt-foreground);
+  color: var(--markprompt-mutedForeground);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
+  stroke-width: var(--markprompt-icon-stroke-width);
   padding: 0.25rem;
   border-radius: 4px;
   cursor: pointer;
@@ -88,6 +89,7 @@
   color: var(--markprompt-foreground);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
+  stroke-width: var(--markprompt-icon-stroke-width);
   cursor: pointer;
   display: grid;
   place-items: center;

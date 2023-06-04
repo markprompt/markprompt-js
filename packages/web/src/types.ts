@@ -27,7 +27,7 @@ type MarkpromptOptions = SubmitPromptOptions & {
   prompt?: {
     /**
      * Label for the prompt input
-     * @default "Your prompt"
+     * @default "Ask me anything…"
      **/
     label?: string;
     /**

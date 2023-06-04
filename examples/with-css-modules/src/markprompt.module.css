@@ -18,6 +18,7 @@
   --markprompt-radius: 8px;
   --markprompt-text-size: 0.875rem;
   --markprompt-button-icon-size: 1rem;
+  --markprompt-icon-stroke-width: 2px;
 }
 
 .dark {
@@ -102,6 +103,7 @@ button {
   color: var(--markprompt-foreground);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
+  stroke-width: var(--markprompt-icon-stroke-width);
   padding: 0.25rem;
   border-radius: 4px;
   cursor: pointer;
@@ -127,6 +129,7 @@ button {
   color: var(--markprompt-foreground);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
+  stroke-width: var(--markprompt-icon-stroke-width);
   cursor: pointer;
   display: grid;
   place-items: center;

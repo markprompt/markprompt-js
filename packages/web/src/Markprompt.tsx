@@ -4,7 +4,15 @@ import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import React, { useEffect, useState } from 'react';
 
 import { Answer } from './Answer.js';
-import { ChatIcon, CloseIcon, SearchIcon } from './icons.js';
+import {
+  ChatIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  CommandIcon,
+  CornerDownLeftIcon,
+  SearchIcon,
+  SparklesIcon,
+} from './icons.js';
 import { References } from './References.js';
 import { type MarkpromptOptions } from './types.js';
 
@@ -62,7 +70,9 @@ function Markprompt(props: MarkpromptProps) {
               placeholder={prompt?.placeholder ?? 'Search or ask a question…'}
               labelClassName="MarkpromptPromptLabel"
               label={
-                <AccessibleIcon.Root label={prompt?.label ?? 'Your prompt'}>
+                <AccessibleIcon.Root
+                  label={prompt?.label ?? 'Ask me anything…'}
+                >
                   <SearchIcon className="MarkpromptSearchIcon" />
                 </AccessibleIcon.Root>
               }
@@ -97,19 +107,11 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
 
   const { submitPrompt } = useMarkpromptContext();
 
-  let metaKey = '^'; // control key
-  if (
-    navigator.platform.indexOf('Mac') === 0 ||
-    navigator.platform === 'iPhone'
-  ) {
-    metaKey = '⌘'; // command key
-  }
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
-        (event.key === 'j' && event.ctrlKey) ||
-        (event.key === 'j' && event.metaKey)
+        (event.key === 'Enter' && event.ctrlKey) ||
+        (event.key === 'Enter' && event.metaKey)
       ) {
         event.preventDefault();
         if (!showAnswer) submitPrompt();
@@ -134,10 +136,18 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
             submitPrompt();
           }}
         >
-          <span aria-hidden>✨</span> Ask Docs AI…{' '}
+          <span aria-hidden>
+            <SparklesIcon className="MarkpromptSearchIcon" />
+          </span>{' '}
+          <span>Ask Docs AI… </span>
           <kbd>
-            <span className={'MarkpromptMetaKey'}>{metaKey}</span>
-            <span>J</span>
+            {navigator.platform.indexOf('Mac') === 0 ||
+            navigator.platform === 'iPhone' ? (
+              <CommandIcon className="MarkpromptKeyboardKey" />
+            ) : (
+              <ChevronUpIcon className="MarkpromptKeyboardKey" />
+            )}
+            <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
           </kbd>
         </button>
         <BaseMarkprompt.SearchResults className={'MarkpromptSearchResults'} />
@@ -151,11 +161,7 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
         className="MarkpromptSearchAnswerButton"
         onClick={() => setShowAnswer(false)}
       >
-        <span aria-hidden>⬅️</span> Back to search…{' '}
-        <kbd>
-          <span className={'MarkpromptMetaKey'}>{metaKey}</span>
-          <span>J</span>
-        </kbd>
+        <span aria-hidden>⬅️</span> Back to search…
       </button>
 
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">

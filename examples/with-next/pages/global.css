@@ -30,6 +30,7 @@
   --markprompt-radius: 8px;
   --markprompt-text-size: 0.875rem;
   --markprompt-button-icon-size: 1rem;
+  --markprompt-icon-stroke-width: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
