@@ -1,27 +1,33 @@
-# Markprompt React
+# `@markprompt/docusaurus-theme-search`
 
 A [Markprompt](https://markprompt.com) button for [Docusaurus](https://docusaurus.io).
 
 <br />
 <p align="center">
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/markprompt">
-    <img alt="" src="https://badgen.net/npm/v/markprompt">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/docusaurus-theme-search">
+    <img alt="" src="https://badgen.net/npm/v/@markprompt/docusaurus-theme-search">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt/blob/main/LICENSE">
-    <img alt="" src="https://badgen.net/npm/license/markprompt">
+  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/docusaurus-theme-search/LICENSE">
+    <img alt="" src="https://badgen.net/npm/license/@markprompt/docusaurus-theme-search">
+  </a>
+  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fdocusaurus-theme-search">
+    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
   </a>
 </p>
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Example](#example)
+- [Community](#community)
+- [Authors](#authors)
+- [License](#license)
+
 ## Installation
 
-Install the `@markprompt/docusaurus-theme-search` package via npm or yarn:
-
 ```sh
-# npm
 npm install @markprompt/docusaurus-theme-search
-
-# Yarn
-yarn add @markprompt/docusaurus-theme-search
 ```
 
 ## Usage
@@ -62,3 +68,7 @@ An example is available on <https://github.com/motifland/markprompt-js/tree/main
 
 This library is created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)

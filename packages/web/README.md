@@ -10,7 +10,24 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
   <a aria-label="License" href="https://github.com/motifland/markprompt/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
   </a>
+  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fweb">
+    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
+  </a>
 </p>
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Usage via `<script>` tag](#usage-via-script-tag)
+- [API](#api)
+  - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
+    - [Arguments](#arguments)
+    - [Options](#options)
+- [Documentation](#documentation)
+- [Community](#community)
+- [Authors](#authors)
+- [License](#license)
 
 ## Installation
 
@@ -132,6 +149,45 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 ></script>
 ```
 
+## API
+
+### `markprompt(projectKey, container, options?)`
+
+Render a markprompt dialog button.
+
+#### Arguments
+
+- `projectKey` (`string`): Your Markprompt project key.
+- `container` (`HTMLElement | string`): The element or selector to render Markprompt into.
+- `options` (`object`): Options for customizing Markprompt.
+
+#### Options
+
+- `completionsUrl` (`string`): URL at which to fetch completions
+- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
+- `model` (`OpenAIModelId`): The OpenAI model to use
+- `promptTemplate` (`string`): The prompt template
+- `temperature` (`number`): The model temperature
+- `topP` (`number`): The model top P
+- `frequencyPenalty` (`number`): The model frequency penalty
+- `presencePenalty` (`number`): The model present penalty
+- `maxTokens` (`number`): The max number of tokens to include in the response
+- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
+- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
+- `signal` (`AbortSignal`): AbortController signal
+- `close.label` (`string`): `aria-label` for the close modal button. (Default: `"Close Markprompt"`)
+- `decription.hide` (`boolean`): Visually hide the description. (Default `true`)
+- `decription.text` (`string`): Description text.
+- `prompt.label` )`string`): Label for the prompt input. (Default `"Your prompt"`)
+- `prompt.placeholder` )`string`): Placeholder for the prompt input. (Default `"Ask me anything…"`)
+- `references.transformReferenceId` (`Function`): Callback to transform a reference id into an href and text.
+- `references.loadingText` (`string`) Loading text. (Default: `Fetching relevant pages…`)
+- `references.referencesText` (`string`): References title. (Default: `"Answer generated from the following sources:"`)
+- `trigger.label` (`string`): `aria-label` for the open button. (Default: `"Open Markprompt"`)
+- `title.hide` (`boolean`): Visually hide the title. (Default: `true`)
+- `title.text` (`string`): Text for the title. (Default: `"Ask me anything"`)
+- `showBranding` (`boolean`): Show Markprompt branding. (Default: `true`)
+
 ## Documentation
 
 The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#%40markprompt%2Fweb).
@@ -146,3 +202,7 @@ The full documentation for `@markprompt/web` can be found on the [Markprompt doc
 
 This library is created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)

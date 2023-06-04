@@ -20,14 +20,17 @@ Markprompt is a platform for building GPT-powered prompts. It takes Markdown, Ma
 
 This repo contains various UI libraries for building prompts based on the Markprompt API:
 
-- [@markprompt/react](https://github.com/motifland/markprompt-js/blob/main/packages/react/README.md) - a headless React component
-- [@markprompt/web](https://github.com/motifland/markprompt-js/blob/main/packages/web/README.md) - a pre-built Markprompt dialog, based on `@markprompt/react`, built with Preact for bundle-size savings. Viable for use with vanilla JavaScript or any framework.
-- [@markprompt/core](https://github.com/motifland/markprompt-js/blob/main/packages/web/README.md) - shared utility functions to speak with the Markprompt API
+- [`@markprompt/core`](packages/core#readme) — shared utility functions to speak with the Markprompt API
+- [`@markprompt/docusaurus-theme-search`](packages/docusaurus-theme-search#readme) — a Markprompt search theme for Docusaurus
+- [`@markprompt/react`](packages/react#readme) — a headless React component
+- [`@markprompt/web`](packages/web#readme) — a pre-built Markprompt dialog, based on `@markprompt/react`, built with Preact for bundle-size savings. Viable for use with vanilla JavaScript or any framework.
 
 and some example implementations:
 
-- [with-css-modules](https://github.com/motifland/markprompt-js/blob/main/examples/with-css-modules/README.md) - a web application based on `@markprompt/react`, Vite and CSS Modules
-- [with-markprompt-web](https://github.com/motifland/markprompt-js/blob/main/examples/with-markprompt-web/README.md)
+- [`with-css-modules`](examples/with-css-modules#readme) — a web application based on `@markprompt/react`, Vite and CSS Modules
+- [`with-docusaurus`](examples/with-docusaurus#readme) — a Docusaurus project with `@markprompt/docusaurus-theme-search`
+- [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite
+- [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js
 
 ## Documentation
 
@@ -43,3 +46,7 @@ To use the Markprompt platform as is, please refer to the [Markprompt documentat
 
 Created by the team behind [Motif](https://motif.land)
 ([@motifland](https://twitter.com/motifland)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)

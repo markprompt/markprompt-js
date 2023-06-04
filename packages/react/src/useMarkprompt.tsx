@@ -51,6 +51,9 @@ export type UseMarkpromptResult = {
   submit: () => Promise<void>;
 };
 
+/**
+ * Create an interactive stateful Markprompt prompt
+ */
 export function useMarkprompt({
   projectKey,
   completionsUrl = MARKPROMPT_COMPLETIONS_URL,
