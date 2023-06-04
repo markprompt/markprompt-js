@@ -19,6 +19,11 @@ type MarkpromptOptions = SubmitPromptOptions & {
      **/
     text?: string;
   };
+  /**
+   * Enable search
+   * @default false
+   **/
+  enableSearch?: boolean;
   prompt?: {
     /**
      * Label for the prompt input

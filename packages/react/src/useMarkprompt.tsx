@@ -1,7 +1,6 @@
 import {
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
-  type SearchResultsResponse,
   type SubmitPromptOptions,
   type SearchResult,
 } from '@markprompt/core';
@@ -13,66 +12,9 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
-const mockData: SearchResultsResponse = {
-  project_id: 'abc123',
-  data: [
-    {
-      path: '/docs/getting-started.mdoc',
-      meta: {
-        title: 'Getting Started',
-      },
-      source: {
-        type: 'gitlab',
-        data: {
-          url: 'https://gitlab.com/my-project/my-repo',
-        },
-      },
-      sections: [
-        {
-          content:
-            'Welcome to our product documentation! This guide will help you get started with using our platform.',
-        },
-        {
-          heading: 'Installation',
-          content: 'To install our platform, follow these steps...',
-        },
-        {
-          heading: 'Configuration',
-          content:
-            'Once you have installed the platform, you will need to configure it...',
-        },
-      ],
-    },
-    {
-      path: '/docs/faq.mdoc',
-      meta: {
-        title: 'Frequently Asked Questions',
-      },
-      source: {
-        type: 'github',
-        data: {
-          url: 'https://github.com/my-org/my-repo',
-        },
-      },
-      sections: [
-        {
-          content: 'Here are some common questions we receive from our users.',
-        },
-        {
-          heading: 'How do I reset my password?',
-          content: 'To reset your password, follow these steps...',
-        },
-        {
-          heading: 'What payment methods do you accept?',
-          content: 'We accept all major credit cards...',
-        },
-      ],
-    },
-  ],
-};
-
 export function useMarkprompt({
   projectKey,
+  enableSearch,
   completionsUrl,
   frequencyPenalty,
   iDontKnowMessage,
@@ -85,6 +27,8 @@ export function useMarkprompt({
   temperature,
   topP,
 }: {
+  /** Enable search functionality */
+  enableSearch?: boolean;
   /** Project key, required */
   projectKey: string;
 } & SubmitPromptOptions) {
@@ -193,8 +137,8 @@ export function useMarkprompt({
   ]);
 
   const submitSearchQuery = useCallback(
-    async (searchQuery: string) => {
-      console.log('search', searchQuery);
+    (searchQuery: string) => {
+      if (!enableSearch) return;
 
       abort();
 
@@ -216,8 +160,7 @@ export function useMarkprompt({
       });
 
       promise.then((searchResults) => {
-        // setSearchResults(searchResults);
-        setSearchResults(mockData.data);
+        setSearchResults(searchResults?.data ?? []);
         setState('done');
       });
 
@@ -227,7 +170,7 @@ export function useMarkprompt({
           return;
         }
 
-        setSearchResults(mockData.data);
+        console.error(error);
       });
 
       promise.finally(() => {
@@ -236,12 +179,13 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, projectKey],
+    [abort, enableSearch, projectKey],
   );
 
   return useMemo(
     () => ({
       answer,
+      enableSearch: !!enableSearch,
       prompt,
       references,
       searchResults,
@@ -253,6 +197,7 @@ export function useMarkprompt({
     }),
     [
       answer,
+      enableSearch,
       prompt,
       references,
       searchResults,

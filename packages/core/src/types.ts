@@ -26,7 +26,12 @@ export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
 
 export type SearchResultSection = {
   content: string;
-  heading?: string;
+  meta?: {
+    leadHeading?: {
+      depth: number;
+      value: string;
+    };
+  };
 };
 
 export type SearchResult = {

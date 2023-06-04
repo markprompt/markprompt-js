@@ -1,6 +1,7 @@
 import * as BaseMarkprompt from '@markprompt/react';
+import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Answer } from './Answer.js';
 import { ChatIcon, CloseIcon, SearchIcon } from './icons.js';
@@ -24,8 +25,15 @@ function Markprompt(props: MarkpromptProps) {
     ...options
   } = props;
 
+  const { enableSearch } = options;
+
   return (
-    <BaseMarkprompt.Root open projectKey={projectKey} {...options}>
+    <BaseMarkprompt.Root
+      open
+      projectKey={projectKey}
+      enableSearch={enableSearch}
+      {...options}
+    >
       <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
         <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
           <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
@@ -59,19 +67,11 @@ function Markprompt(props: MarkpromptProps) {
                 </AccessibleIcon.Root>
               }
             />
-            <BaseMarkprompt.PromptTrigger>search</BaseMarkprompt.PromptTrigger>
           </BaseMarkprompt.Form>
 
-          <BaseMarkprompt.SearchResults />
-
-          {/* <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
-            <Answer />
-          </BaseMarkprompt.AutoScroller> */}
-
-          <References
-            loadingText={references?.loadingText}
-            referencesText={references?.referencesText}
-            transformReferenceId={references?.transformReferenceId}
+          <SearchResultsOrAnswer
+            enableSearch={enableSearch}
+            references={references}
           />
 
           <BaseMarkprompt.Close className="MarkpromptClose">
@@ -82,6 +82,92 @@ function Markprompt(props: MarkpromptProps) {
         </BaseMarkprompt.Content>
       </BaseMarkprompt.Portal>
     </BaseMarkprompt.Root>
+  );
+}
+
+type SearchResultsOrAnswerProps = {
+  enableSearch?: boolean;
+  references?: MarkpromptOptions['references'];
+};
+
+function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
+  const { enableSearch, references } = props;
+
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const { submitPrompt } = useMarkpromptContext();
+
+  let metaKey = '^'; // control key
+  if (
+    navigator.platform.indexOf('Mac') === 0 ||
+    navigator.platform === 'iPhone'
+  ) {
+    metaKey = '⌘'; // command key
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        (event.key === 'j' && event.ctrlKey) ||
+        (event.key === 'j' && event.metaKey)
+      ) {
+        event.preventDefault();
+        if (!showAnswer) submitPrompt();
+        setShowAnswer(!showAnswer);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showAnswer, submitPrompt]);
+
+  if (!showAnswer && enableSearch) {
+    return (
+      <div>
+        <button
+          className="MarkpromptSearchAnswerButton"
+          onClick={() => {
+            setShowAnswer(true);
+            submitPrompt();
+          }}
+        >
+          <span aria-hidden>✨</span> Ask Docs AI…{' '}
+          <kbd>
+            <span className={'MarkpromptMetaKey'}>{metaKey}</span>
+            <span>J</span>
+          </kbd>
+        </button>
+        <BaseMarkprompt.SearchResults className={'MarkpromptSearchResults'} />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button
+        className="MarkpromptSearchAnswerButton"
+        onClick={() => setShowAnswer(false)}
+      >
+        <span aria-hidden>⬅️</span> Back to search…{' '}
+        <kbd>
+          <span className={'MarkpromptMetaKey'}>{metaKey}</span>
+          <span>J</span>
+        </kbd>
+      </button>
+
+      <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
+        <Answer />
+      </BaseMarkprompt.AutoScroller>
+
+      <References
+        loadingText={references?.loadingText}
+        referencesText={references?.referencesText}
+        transformReferenceId={references?.transformReferenceId}
+      />
+    </div>
   );
 }
 

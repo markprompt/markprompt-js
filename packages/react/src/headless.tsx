@@ -1,4 +1,8 @@
-import type { SubmitPromptOptions } from '@markprompt/core';
+import type {
+  SearchResult as TSearchResult,
+  SearchResultSection as TSearchResultSection,
+  SubmitPromptOptions,
+} from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import debounce from 'p-debounce';
 import React, {
@@ -15,6 +19,8 @@ import React, {
   type MouseEventHandler,
   type ReactNode,
   type KeyboardEvent as ReactKeyboardEvent,
+  useMemo,
+  type ForwardedRef,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -32,6 +38,7 @@ import { useMarkprompt } from './useMarkprompt.js';
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
+  enableSearch?: boolean;
 } & SubmitPromptOptions;
 
 function Root(props: RootProps) {
@@ -177,12 +184,23 @@ type FormProps = ComponentPropsWithRef<'form'>;
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
 
+  const { enableSearch, submitPrompt, submitSearchQuery, prompt } =
+    useMarkpromptContext();
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
+      // call user-provided onSubmit handler
       if (onSubmit) onSubmit(event);
+      // submit search query if search is enabled
+      if (enableSearch) {
+        await submitSearchQuery(prompt);
+        return;
+      }
+      // submit prompt if search is disabled
+      await submitPrompt();
     },
-    [onSubmit],
+    [enableSearch, onSubmit, prompt, submitPrompt, submitSearchQuery],
   );
 
   return <form {...rest} ref={ref} onSubmit={handleSubmit} />;
@@ -211,21 +229,19 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     type = 'search',
     ...rest
   } = props;
-  const { updatePrompt, prompt, submitSearchQuery } = useMarkpromptContext();
 
-  const debouncedSubmitSearchQuery = useCallback(
-    (searchQuery: string) => debounce(submitSearchQuery, 300)(searchQuery),
-    [submitSearchQuery],
-  );
+  const { updatePrompt, prompt, submitSearchQuery } = useMarkpromptContext();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
-      console.log('change', event.target.value);
-      updatePrompt(event.target.value);
-      debouncedSubmitSearchQuery(event.target.value);
+      const value = event.target.value;
+      // we use the input value directly instead of using the prompt state
+      // to avoid an off-by-one-bug when querying.
+      submitSearchQuery(value);
+      updatePrompt(value);
       if (onChange) onChange(event);
     },
-    [debouncedSubmitSearchQuery, onChange, updatePrompt],
+    [onChange, submitSearchQuery, updatePrompt],
   );
 
   return (
@@ -252,50 +268,6 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   );
 });
 Prompt.displayName = 'Markprompt.Prompt';
-
-const PromptTrigger = forwardRef<
-  HTMLButtonElement,
-  PolymorphicComponentPropWithRef<'button'>
->((props, ref) => {
-  const { as: Component = 'button', onClick, type = 'submit', ...rest } = props;
-  const { submitPrompt } = useMarkpromptContext();
-
-  const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      event.preventDefault();
-      if (onClick) onClick(event);
-      submitPrompt();
-    },
-    [onClick, submitPrompt],
-  );
-
-  const handleKeyDown = useCallback(
-    (event: ReactKeyboardEvent | KeyboardEvent) => {
-      console.log(event);
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        submitPrompt();
-      }
-    },
-    [submitPrompt],
-  );
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  return (
-    <Component
-      {...rest}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      type={type}
-      ref={ref}
-    />
-  );
-});
-PromptTrigger.displayName = 'Markprompt.PromptTrigger';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
 function Answer(props: AnswerProps) {
@@ -372,36 +344,94 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
-const SearchResults = forwardRef<
-  HTMLUListElement,
-  Omit<ComponentPropsWithRef<'ul'>, 'children'>
->((props, ref) => {
-  const { searchResults } = useMarkpromptContext();
-  return (
-    <div>
-      <ul {...props} ref={ref}>
-        {searchResults.map((result) => {
-          return (
-            <li key={result.path}>
-              <article>
-                <h2>{result.meta.title}</h2>
-                <ul>
-                  {result.sections.map((section) => (
-                    <li key={section.content}>
-                      {section.heading && <h3>{section.heading}</h3>}
-                      <p>{section.content}</p>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-});
+type SearchResultsProps = PolymorphicComponentPropWithRef<
+  'ul',
+  {
+    SearchResultComponent?: ElementType<{
+      result: TSearchResult;
+      index: number;
+    }>;
+  }
+>;
+
+const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
+  (props, ref) => {
+    const {
+      as: Component = 'ul',
+      SearchResultComponent = SearchResult,
+      ...rest
+    } = props;
+    const { searchResults } = useMarkpromptContext();
+    return (
+      <Component {...rest} ref={ref}>
+        {searchResults.map((result, index) => (
+          <SearchResultComponent
+            key={result.path}
+            index={index}
+            result={result}
+          />
+        ))}
+      </Component>
+    );
+  },
+);
 SearchResults.displayName = 'Markprompt.SearchResults';
+
+type SearchResultProps = PolymorphicComponentPropWithRef<
+  'li',
+  { result: TSearchResult }
+>;
+const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
+  (props, ref) => {
+    const { as: Component = 'li', result, ...rest } = props;
+
+    return (
+      <Component {...rest} ref={ref}>
+        <article>
+          <h2>{result.meta.title}</h2>
+          <ul>
+            {result.sections.map((section) => (
+              <SearchResultSection key={section.content} section={section} />
+            ))}
+          </ul>
+        </article>
+      </Component>
+    );
+  },
+);
+SearchResult.displayName = 'Markprompt.SearchResult';
+
+type SearchResultSectionProps = Omit<
+  ComponentPropsWithRef<'li'>,
+  'children'
+> & {
+  section: TSearchResultSection;
+};
+
+const SearchResultSection = forwardRef<HTMLLIElement, SearchResultSectionProps>(
+  (props, ref) => {
+    const { section, ...rest } = props;
+
+    const Heading = useMemo(() => {
+      const depth = section?.meta?.leadHeading?.depth;
+      if (!depth) return;
+      if (depth === 1) return 'h1';
+      if (depth === 2) return 'h2';
+      if (depth === 3) return 'h3';
+      if (depth === 4) return 'h4';
+      if (depth === 5) return 'h5';
+      if (depth === 6) return 'h6';
+    }, [section?.meta?.leadHeading?.depth]);
+
+    return (
+      <li {...rest} ref={ref}>
+        {Heading && <Heading>{section.meta?.leadHeading?.value}</Heading>}
+        <Markdown remarkPlugins={[remarkGfm]}>{section.content}</Markdown>
+      </li>
+    );
+  },
+);
+SearchResultSection.displayName = 'Markprompt.SearchResultSection';
 
 export {
   Answer,
@@ -415,7 +445,6 @@ export {
   Overlay,
   Portal,
   Prompt,
-  PromptTrigger,
   Root,
   SearchResults,
   Title,

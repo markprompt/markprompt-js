@@ -703,7 +703,7 @@
   display: none;
 }
 
-.MarkpromptReference {
+:where(.MarkpromptReference) {
   font-size: 0.875rem;
   line-height: 1.5rem;
   animation-name: markprompt-slide-up;
@@ -712,7 +712,7 @@
   transition-timing-function: ease-in-out;
 }
 
-.MarkpromptReference a {
+:where(.MarkpromptReference a) {
   display: inline-block;
   text-decoration: none;
   padding: 0.125rem 0.5rem;
@@ -725,8 +725,41 @@
   white-space: nowrap;
 }
 
-.MarkpromptReference a:hover {
+:where(.MarkpromptReference a:hover) {
   opacity: 0.8;
+}
+
+:where(.MarkpromptSearchAnswerButton) {
+  padding-block: 1rem;
+  padding-inline: 2rem;
+  border: none;
+  background: none;
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+:where(.MarkpromptSearchAnswerButton:hover) {
+  background-color: var(--markprompt-muted);
+}
+
+:where(.MarkpromptSearchAnswerButton :last-child) {
+  margin-left: auto;
+}
+
+:where(.MarkpromptSearchAnswerButton kbd) {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1;
+  font-family: monospace;
+  gap: 2px;
+  color: var(--markprompt-mutedForeground);
+}
+
+:where(.MarkpromptMetaKey) {
+  font-size: 1.35em;
 }
 
 @keyframes markprompt-show-content {

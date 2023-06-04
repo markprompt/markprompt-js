@@ -5,6 +5,7 @@ import { type LoadingState } from './useMarkprompt.js';
 
 type State = {
   answer: string | undefined;
+  enableSearch: boolean;
   prompt: string;
   references: string[];
   searchResults: SearchResult[];
@@ -13,25 +14,24 @@ type State = {
 
 type Actions = {
   abort: () => void;
-  submitPrompt: () => Promise<void>;
-  submitSearchQuery: (searchQuery: string) => Promise<void>;
+  submitPrompt: () => void;
+  submitSearchQuery: (searchQuery: string) => void;
   updatePrompt: (nextPrompt: string) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const asyncNoop = async () => {};
 
 const MarkpromptContext = createContext<State & Actions>({
   answer: undefined,
+  enableSearch: false,
   prompt: '',
   references: [],
   searchResults: [],
   state: 'indeterminate',
   abort: noop,
-  submitPrompt: asyncNoop,
-  submitSearchQuery: asyncNoop,
+  submitPrompt: noop,
+  submitSearchQuery: noop,
   updatePrompt: noop,
 });
 

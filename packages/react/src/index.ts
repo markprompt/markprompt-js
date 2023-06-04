@@ -11,7 +11,6 @@ export {
   Overlay,
   Portal,
   Prompt,
-  PromptTrigger,
   References,
   Root,
   SearchResults,
