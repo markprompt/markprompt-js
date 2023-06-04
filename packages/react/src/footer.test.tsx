@@ -10,7 +10,7 @@ describe('Footer', () => {
 
     const element = screen.getByText(/Powered by/);
     expect(element).toBeInTheDocument();
-    expect(element.textContent).toBe('Powered by Markprompt');
+    expect(element.textContent).toBe('Powered by Markprompt AI');
 
     const anchor = screen.getByText<HTMLAnchorElement>('Markprompt');
     expect(anchor.href).toBe('https://markprompt.com/');
