@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Answer } from './Answer.js';
 import {
   ChatIcon,
+  ChevronLeftIcon,
   ChevronUpIcon,
   CloseIcon,
   CommandIcon,
@@ -14,6 +15,7 @@ import {
   SparklesIcon,
 } from './icons.js';
 import { References } from './References.js';
+import { SearchResult } from './SearchResult.js';
 import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions & {
@@ -138,7 +140,7 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
         >
           <span aria-hidden>
             <SparklesIcon className="MarkpromptSearchIcon" />
-          </span>{' '}
+          </span>
           <span>Ask Docs AI… </span>
           <kbd>
             {navigator.platform.indexOf('Mac') === 0 ||
@@ -150,19 +152,27 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
             <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
           </kbd>
         </button>
-        <BaseMarkprompt.SearchResults className={'MarkpromptSearchResults'} />
+        <BaseMarkprompt.SearchResults
+          className={'MarkpromptSearchResults'}
+          SearchResultComponent={SearchResult}
+        />
       </div>
     );
   }
 
   return (
     <div>
-      <button
-        className="MarkpromptSearchAnswerButton"
-        onClick={() => setShowAnswer(false)}
-      >
-        <span aria-hidden>⬅️</span> Back to search…
-      </button>
+      {enableSearch && (
+        <button
+          className="MarkpromptBackButton"
+          onClick={() => setShowAnswer(false)}
+        >
+          <span aria-hidden>
+            <ChevronLeftIcon className="MarkpromptHighlightedIcon" />
+          </span>
+          <span>Back to search</span>
+        </button>
+      )}
 
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
         <Answer />

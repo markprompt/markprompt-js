@@ -388,10 +388,14 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     return (
       <Component {...rest} ref={ref}>
         <article>
-          <h2>{result.meta.title}</h2>
           <ul>
             {result.sections.map((section) => (
-              <SearchResultSection key={section.content} section={section} />
+              <SearchResultSection
+                key={section.content}
+                section={section}
+                pageTitle={result.meta.title}
+                pagePath={result.path}
+              />
             ))}
           </ul>
         </article>
@@ -405,6 +409,8 @@ type SearchResultSectionProps = Omit<
   ComponentPropsWithRef<'li'>,
   'children'
 > & {
+  pageTitle: string;
+  pagePath: string;
   section: TSearchResultSection;
 };
 

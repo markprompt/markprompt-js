@@ -20,3 +20,5 @@ export {
 export type { RootProps } from './headless.js';
 
 export { useMarkpromptContext } from './context.js';
+
+export * from './types.js';

@@ -167,6 +167,13 @@ input[type='search']::-webkit-search-results-decoration {
   cursor: pointer;
 }
 
+:where(.MarkpromptHighlightedIcon) {
+  color: var(--markprompt-primary);
+  width: var(--markprompt-button-icon-size);
+  height: var(--markprompt-button-icon-size);
+  stroke-width: var(--markprompt-icon-stroke-width);
+}
+
 :where(.MarkpromptSearchIcon) {
   color: var(--markprompt-mutedForeground);
   width: var(--markprompt-button-icon-size);
@@ -753,6 +760,36 @@ input[type='search']::-webkit-search-results-decoration {
   opacity: 0.8;
 }
 
+:where(.MarkpromptBackButton) {
+  font-size: var(--markprompt-text-size);
+  background-color: var(--markprompt-muted);
+  color: var(--markprompt-primary);
+  border-bottom: 1px solid var(--markprompt-border);
+  display: flex;
+  flex: 1 auto;
+  align-items: center;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  gap: 0.25rem;
+  cursor: pointer;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 100%;
+  outline: none;
+}
+
+:where(.MarkpromptBackButton span:first-child) {
+  display: flex;
+  align-items: center;
+}
+
+:where(.MarkpromptBackButton span:last-child) {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
 :where(.MarkpromptSearchAnswerButton) {
   display: flex;
   flex: 1 1 auto;
@@ -788,6 +825,85 @@ input[type='search']::-webkit-search-results-decoration {
   stroke-width: var(--markprompt-icon-stroke-width);
   width: calc(var(--markprompt-button-icon-size) * 0.8);
   height: calc(var(--markprompt-button-icon-size) * 0.8);
+}
+
+:where(.MarkpromptSearchResults),
+:where(.MarkpromptSearchSubResults) {
+  list-style-position: inside;
+  list-style-type: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+:where(.MarkpromptSearchResults) {
+  padding: 0rem 0.5rem;
+}
+
+:where(.MarkpromptSearchSubResults) {
+  padding: 0;
+}
+
+:where(.MarkpromptSearchResult) {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  padding: 0;
+  padding-top: 0.5rem;
+}
+
+:where(.MarkpromptSearchResultIndented) {
+  margin-left: 1.25rem;
+  padding-left: 1rem;
+  padding-right: 0;
+  border-left: 1px solid var(--markprompt-border);
+}
+
+:first-child(.MarkpromptSearchResultIndented) {
+  padding-top: 1.5rem;
+}
+
+/* :where(:not(:first-child(.MarkpromptSearchResultIndented))) {
+  padding-top: 1.25rem;
+} */
+
+/* :where(.MarkpromptSearchResultIndented) {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+} */
+
+:where(.MarkpromptSearchResultLink) {
+  display: block;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background: var(--markprompt-muted);
+}
+
+:where(.MarkpromptSearchResultContainer) {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+
+:where(.MarkpromptSearchResultIconWrapper) {
+  display: flex;
+  flex: none;
+  padding: 4px;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  border: 1px solid var(--markprompt-border);
+}
+
+:where(.MarkpromptSearchResultIcon) {
+  color: var(--markprompt-mutedForeground);
+  stroke-width: var(--markprompt-icon-stroke-width);
+  width: var(--markprompt-button-icon-size);
+  height: var(--markprompt-button-icon-size);
+}
+
+:where(.MarkpromptSearchResultContentWrapper) {
+  display: flex;
+  flex-grow: 1;
+  font-size: var(--markprompt-text-size);
 }
 
 @keyframes markprompt-show-content {

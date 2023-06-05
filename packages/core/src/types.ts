@@ -40,9 +40,10 @@ export type SearchResult = {
     title: string;
   };
   source: {
-    type: 'github' | 'gitlab' | 'website';
+    type: 'github' | 'motif' | 'website' | 'file-upload' | 'api-upload';
     data: {
-      url: string;
+      url?: string;
+      domain?: string;
     };
   };
   sections: SearchResultSection[];
