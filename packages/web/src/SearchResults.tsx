@@ -36,7 +36,7 @@ const SearchResultSection = forwardRef<HTMLLIElement, SearchResultSectionProps>(
       >
         <a className="MarkpromptSearchResultLink">
           <div className="MarkpromptSearchResultContainer">
-            <div className="MarkpromptSearchResultIconWrapper">
+            <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
               {section ? (
                 <HashIcon className="MarkpromptSearchResultIcon" />
               ) : (
@@ -54,7 +54,7 @@ const SearchResultSection = forwardRef<HTMLLIElement, SearchResultSectionProps>(
 );
 SearchResultSection.displayName = 'Markprompt.SearchResultSection';
 
-const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
+const SearchResultList = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const { as: Component = 'li', result, ...rest } = props;
 
@@ -88,6 +88,6 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     );
   },
 );
-SearchResult.displayName = 'Markprompt.SearchResult';
+SearchResultList.displayName = 'Markprompt.SearchResultList';
 
-export { SearchResult };
+export { SearchResultList };

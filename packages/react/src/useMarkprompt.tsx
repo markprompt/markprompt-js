@@ -206,6 +206,60 @@ export function useMarkprompt({
             content:
               "### Train content\n\nUsing this endpoint is relevant if you want to programmatically index your content, for instance in a [GitHub action](https://docs.github.com/en/actions). If you don't need this level of automation, we recommend that you use the Markprompt dashboard, which offers simple tools such as GitHub sync and drag-and-drop to make the process easy and setup-free.\n\n```http\nPOST https://api.markprompt.com/v1/train\n```\n\nCreates and indexes embeddings for your content.\n\nThe endpoint accepts two types of payloads:\n\n*   A JSON payload.\n*   A file payload, for uploading a zip file or a plain text file.",
           },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content',
+          },
         ],
       },
     ]);

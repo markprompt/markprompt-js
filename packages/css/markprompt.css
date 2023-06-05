@@ -790,17 +790,27 @@ input[type='search']::-webkit-search-results-decoration {
   font-weight: 500;
 }
 
+:where(.SearchResultsContainer) {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
 :where(.MarkpromptSearchAnswerButton) {
+  display: block;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--markprompt-muted);
+  font-size: var(--markprompt-text-size);
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-  border-bottom: 1px solid var(--markprompt-border);
-  padding: 1rem 1.25rem;
-  gap: 1.15rem;
+  gap: 1rem;
   cursor: pointer;
-  border: none;
-  background: none;
   width: 100%;
+  border: none;
   outline: none;
 }
 
@@ -831,12 +841,12 @@ input[type='search']::-webkit-search-results-decoration {
 :where(.MarkpromptSearchSubResults) {
   list-style-position: inside;
   list-style-type: none;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 0;
+  padding: 0;
 }
 
 :where(.MarkpromptSearchResults) {
-  padding: 0rem 0.5rem;
+  padding: 0rem 0rem;
 }
 
 :where(.MarkpromptSearchSubResults) {
@@ -861,20 +871,11 @@ input[type='search']::-webkit-search-results-decoration {
   padding-top: 1.5rem;
 }
 
-/* :where(:not(:first-child(.MarkpromptSearchResultIndented))) {
-  padding-top: 1.25rem;
-} */
-
-/* :where(.MarkpromptSearchResultIndented) {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-} */
-
 :where(.MarkpromptSearchResultLink) {
   display: block;
   border-radius: 0.5rem;
   padding: 0.5rem;
-  background: var(--markprompt-muted);
+  background-color: var(--markprompt-muted);
 }
 
 :where(.MarkpromptSearchResultContainer) {
@@ -888,9 +889,16 @@ input[type='search']::-webkit-search-results-decoration {
   display: flex;
   flex: none;
   padding: 4px;
-  border-radius: 0.25rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+}
+
+:where(.MarkpromptSearchResultIconWrapperBordered) {
   background-color: #fff;
-  border: 1px solid var(--markprompt-border);
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-color: var(--markprompt-border);
 }
 
 :where(.MarkpromptSearchResultIcon) {

@@ -15,7 +15,7 @@ import {
   SparklesIcon,
 } from './icons.js';
 import { References } from './References.js';
-import { SearchResult } from './SearchResult.js';
+import { SearchResultList } from './SearchResults.js';
 import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions & {
@@ -130,7 +130,7 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
 
   if (!showAnswer && enableSearch) {
     return (
-      <div>
+      <div className="SearchResultsContainer">
         <button
           className="MarkpromptSearchAnswerButton"
           onClick={() => {
@@ -138,7 +138,7 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
             submitPrompt();
           }}
         >
-          <span aria-hidden>
+          <span aria-hidden className="MarkpromptSearchResultIconWrapper">
             <SparklesIcon className="MarkpromptSearchIcon" />
           </span>
           <span>Ask Docs AI… </span>
@@ -154,7 +154,7 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
         </button>
         <BaseMarkprompt.SearchResults
           className={'MarkpromptSearchResults'}
-          SearchResultComponent={SearchResult}
+          SearchResultComponent={SearchResultList}
         />
       </div>
     );
