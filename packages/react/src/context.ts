@@ -5,7 +5,8 @@ import { type LoadingState } from './useMarkprompt.js';
 
 type State = {
   answer: string | undefined;
-  enableSearch: boolean;
+  isSearchEnabled: boolean;
+  isSearchActive: boolean;
   prompt: string;
   references: string[];
   searchResults: SearchResult[];
@@ -24,7 +25,8 @@ export const noop = () => {};
 
 const MarkpromptContext = createContext<State & Actions>({
   answer: undefined,
-  enableSearch: false,
+  isSearchEnabled: false,
+  isSearchActive: false,
   prompt: '',
   references: [],
   searchResults: [],

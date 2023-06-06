@@ -38,7 +38,8 @@ import { useMarkprompt } from './useMarkprompt.js';
 export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
-  enableSearch?: boolean;
+  isSearchEnabled?: boolean;
+  isSearchActive?: boolean;
 } & SubmitPromptOptions;
 
 function Root(props: RootProps) {
@@ -184,23 +185,38 @@ type FormProps = ComponentPropsWithRef<'form'>;
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
 
-  const { enableSearch, submitPrompt, submitSearchQuery, prompt } =
-    useMarkpromptContext();
+  const {
+    isSearchEnabled,
+    isSearchActive,
+    submitPrompt,
+    submitSearchQuery,
+    prompt,
+  } = useMarkpromptContext();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
       event.preventDefault();
       // call user-provided onSubmit handler
-      if (onSubmit) onSubmit(event);
-      // submit search query if search is enabled
-      if (enableSearch) {
-        await submitSearchQuery(prompt);
-        return;
+      if (onSubmit) {
+        onSubmit(event);
       }
-      // submit prompt if search is disabled
-      await submitPrompt();
+
+      // submit search query if search is enabled
+      if (isSearchEnabled && isSearchActive) {
+        await submitSearchQuery(prompt);
+      } else {
+        // submit prompt if search is disabled
+        await submitPrompt();
+      }
     },
-    [enableSearch, onSubmit, prompt, submitPrompt, submitSearchQuery],
+    [
+      isSearchEnabled,
+      isSearchActive,
+      onSubmit,
+      prompt,
+      submitPrompt,
+      submitSearchQuery,
+    ],
   );
 
   return <form {...rest} ref={ref} onSubmit={handleSubmit} />;
@@ -211,6 +227,7 @@ const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   labelClassName?: string;
+  shouldSubmitSearchOnInputChange?: boolean;
 };
 const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
@@ -227,6 +244,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     placeholder = 'Ask me anything…',
     spellCheck = false,
     type = 'search',
+    shouldSubmitSearchOnInputChange = false,
     ...rest
   } = props;
 
@@ -235,13 +253,22 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
       const value = event.target.value;
-      // we use the input value directly instead of using the prompt state
+      // We use the input value directly instead of using the prompt state
       // to avoid an off-by-one-bug when querying.
-      submitSearchQuery(value);
+      if (shouldSubmitSearchOnInputChange) {
+        submitSearchQuery(value);
+      }
       updatePrompt(value);
-      if (onChange) onChange(event);
+      if (onChange) {
+        onChange(event);
+      }
     },
-    [onChange, submitSearchQuery, updatePrompt],
+    [
+      onChange,
+      submitSearchQuery,
+      updatePrompt,
+      shouldSubmitSearchOnInputChange,
+    ],
   );
 
   return (

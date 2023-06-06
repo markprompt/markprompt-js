@@ -15,7 +15,7 @@ import {
   SparklesIcon,
 } from './icons.js';
 import { References } from './References.js';
-import { SearchResultList } from './SearchResults.js';
+import { SearchResults } from './SearchResults.js';
 import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions & {
@@ -34,14 +34,15 @@ function Markprompt(props: MarkpromptProps) {
     showBranding = true,
     ...options
   } = props;
-
   const { enableSearch } = options;
+  const [showAnswer, setShowAnswer] = useState(false);
 
   return (
     <BaseMarkprompt.Root
       open
       projectKey={projectKey}
-      enableSearch={enableSearch}
+      isSearchEnabled={enableSearch}
+      isSearchActive={!showAnswer}
       {...options}
     >
       <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
@@ -71,6 +72,7 @@ function Markprompt(props: MarkpromptProps) {
               className="MarkpromptPrompt"
               placeholder={prompt?.placeholder ?? 'Search or ask a question…'}
               labelClassName="MarkpromptPromptLabel"
+              shouldSubmitSearchOnInputChange={!showAnswer}
               label={
                 <AccessibleIcon.Root
                   label={prompt?.label ?? 'Ask me anything…'}
@@ -81,10 +83,18 @@ function Markprompt(props: MarkpromptProps) {
             />
           </BaseMarkprompt.Form>
 
-          <SearchResultsOrAnswer
-            enableSearch={enableSearch}
-            references={references}
-          />
+          {!showAnswer && enableSearch ? (
+            <SearchResultsContainer
+              showAnswer={showAnswer}
+              setShowAnswer={setShowAnswer}
+            />
+          ) : (
+            <AnswerContainer
+              isSearchEnabled={enableSearch}
+              references={references}
+              setShowAnswer={setShowAnswer}
+            />
+          )}
 
           <BaseMarkprompt.Close className="MarkpromptClose">
             <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
@@ -97,16 +107,15 @@ function Markprompt(props: MarkpromptProps) {
   );
 }
 
-type SearchResultsOrAnswerProps = {
-  enableSearch?: boolean;
-  references?: MarkpromptOptions['references'];
+type SearchResultsContainerProps = {
+  showAnswer: boolean;
+  setShowAnswer: (show: boolean) => void;
 };
 
-function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
-  const { enableSearch, references } = props;
-
-  const [showAnswer, setShowAnswer] = useState(false);
-
+function SearchResultsContainer({
+  showAnswer,
+  setShowAnswer,
+}: SearchResultsContainerProps) {
   const { submitPrompt } = useMarkpromptContext();
 
   useEffect(() => {
@@ -116,7 +125,9 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
         (event.key === 'Enter' && event.metaKey)
       ) {
         event.preventDefault();
-        if (!showAnswer) submitPrompt();
+        if (!showAnswer) {
+          submitPrompt();
+        }
         setShowAnswer(!showAnswer);
       }
     };
@@ -126,46 +137,56 @@ function SearchResultsOrAnswer(props: SearchResultsOrAnswerProps) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [showAnswer, submitPrompt]);
-
-  if (!showAnswer && enableSearch) {
-    return (
-      <div className="SearchResultsContainer">
-        <button
-          className="MarkpromptSearchAnswerButton"
-          onClick={() => {
-            setShowAnswer(true);
-            submitPrompt();
-          }}
-        >
-          <span aria-hidden className="MarkpromptSearchResultIconWrapper">
-            <SparklesIcon className="MarkpromptSearchIcon" />
-          </span>
-          <span>Ask Docs AI… </span>
-          <kbd>
-            {navigator.platform.indexOf('Mac') === 0 ||
-            navigator.platform === 'iPhone' ? (
-              <CommandIcon className="MarkpromptKeyboardKey" />
-            ) : (
-              <ChevronUpIcon className="MarkpromptKeyboardKey" />
-            )}
-            <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
-          </kbd>
-        </button>
-        <BaseMarkprompt.SearchResults
-          className={'MarkpromptSearchResults'}
-          SearchResultComponent={SearchResultList}
-        />
-      </div>
-    );
-  }
+  }, [setShowAnswer, showAnswer, submitPrompt]);
 
   return (
-    <div>
-      {enableSearch && (
+    <div className="SearchResultsContainer">
+      <button
+        className="MarkpromptSearchAnswerButton"
+        onClick={() => {
+          setShowAnswer(true);
+          submitPrompt();
+        }}
+      >
+        <span aria-hidden className="MarkpromptSearchResultIconWrapper">
+          <SparklesIcon className="MarkpromptSearchIcon" />
+        </span>
+        <span>Ask Docs AI… </span>
+        <kbd>
+          {navigator.platform.indexOf('Mac') === 0 ||
+          navigator.platform === 'iPhone' ? (
+            <CommandIcon className="MarkpromptKeyboardKey" />
+          ) : (
+            <ChevronUpIcon className="MarkpromptKeyboardKey" />
+          )}
+          <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
+        </kbd>
+      </button>
+      <BaseMarkprompt.SearchResults
+        className={'MarkpromptSearchResults'}
+        SearchResultComponent={SearchResults}
+      />
+    </div>
+  );
+}
+
+type AnswerContainerProps = {
+  isSearchEnabled?: boolean;
+  references: MarkpromptOptions['references'];
+  setShowAnswer: (show: boolean) => void;
+};
+
+function AnswerContainer({
+  isSearchEnabled,
+  references,
+  setShowAnswer,
+}: AnswerContainerProps) {
+  return (
+    <div className="MarkpromptPromptContainer">
+      {isSearchEnabled && (
         <button
           className="MarkpromptBackButton"
-          onClick={() => setShowAnswer(false)}
+          onClick={() => setShowAnswer?.(false)}
         >
           <span aria-hidden>
             <ChevronLeftIcon className="MarkpromptHighlightedIcon" />

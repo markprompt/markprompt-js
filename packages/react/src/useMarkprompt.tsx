@@ -14,7 +14,8 @@ export type LoadingState =
 
 export function useMarkprompt({
   projectKey,
-  enableSearch,
+  isSearchEnabled,
+  isSearchActive,
   completionsUrl,
   frequencyPenalty,
   iDontKnowMessage,
@@ -28,7 +29,9 @@ export function useMarkprompt({
   topP,
 }: {
   /** Enable search functionality */
-  enableSearch?: boolean;
+  isSearchEnabled?: boolean;
+  /** Is search currently active */
+  isSearchActive?: boolean;
   /** Project key, required */
   projectKey: string;
 } & SubmitPromptOptions) {
@@ -267,7 +270,7 @@ export function useMarkprompt({
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
-      if (!enableSearch) return;
+      if (!isSearchEnabled) return;
 
       abort();
 
@@ -308,13 +311,14 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, enableSearch, projectKey],
+    [abort, isSearchEnabled, projectKey],
   );
 
   return useMemo(
     () => ({
       answer,
-      enableSearch: !!enableSearch,
+      isSearchEnabled: !!isSearchEnabled,
+      isSearchActive: !!isSearchActive,
       prompt,
       references,
       searchResults,
@@ -326,7 +330,8 @@ export function useMarkprompt({
     }),
     [
       answer,
-      enableSearch,
+      isSearchEnabled,
+      isSearchActive,
       prompt,
       references,
       searchResults,

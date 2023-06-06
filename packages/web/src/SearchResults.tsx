@@ -54,7 +54,7 @@ const SearchResultSection = forwardRef<HTMLLIElement, SearchResultSectionProps>(
 );
 SearchResultSection.displayName = 'Markprompt.SearchResultSection';
 
-const SearchResultList = forwardRef<HTMLLIElement, SearchResultProps>(
+const SearchResults = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const { as: Component = 'li', result, ...rest } = props;
 
@@ -88,6 +88,6 @@ const SearchResultList = forwardRef<HTMLLIElement, SearchResultProps>(
     );
   },
 );
-SearchResultList.displayName = 'Markprompt.SearchResultList';
+SearchResults.displayName = 'Markprompt.SearchResults';
 
-export { SearchResultList };
+export { SearchResults };
