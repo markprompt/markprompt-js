@@ -1,6 +1,6 @@
-import React, { type ComponentPropsWithoutRef } from 'react';
+import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
-const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -12,7 +12,7 @@ const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -24,7 +24,7 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

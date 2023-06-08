@@ -1,12 +1,12 @@
 import * as Markprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, type ReactElement } from 'react';
 
-const capitalize = (text: string) => {
+const capitalize = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
-const removeFileExtension = (fileName: string) => {
+const removeFileExtension = (fileName: string): string => {
   const lastDotIndex = fileName.lastIndexOf('.');
   if (lastDotIndex === -1) {
     return fileName;
@@ -23,12 +23,14 @@ type ReferenceProps = {
   index: number;
 };
 
-const defaultTransformReferenceId = (referenceId: string) => ({
+const defaultTransformReferenceId: ReferenceProps['transformReferenceId'] = (
+  referenceId,
+) => ({
   href: removeFileExtension(referenceId),
   text: capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0])),
 });
 
-const Reference = (props: ReferenceProps) => {
+const Reference = (props: ReferenceProps): ReactElement => {
   const {
     transformReferenceId = defaultTransformReferenceId,
     index,
@@ -62,7 +64,7 @@ type ReferencesProps = {
   };
 };
 
-const References = (props: ReferencesProps) => {
+const References = (props: ReferencesProps): ReactElement | null => {
   const {
     loadingText = 'Fetching relevant pages…',
     referencesText = 'Answer generated from the following sources:',

@@ -70,7 +70,7 @@ export async function submitPrompt(
   onReferences: (references: string[]) => void,
   onError: (error: Error) => void,
   options: Options = {},
-) {
+): Promise<void> {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
   }
