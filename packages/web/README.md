@@ -52,7 +52,7 @@ markprompt('<project-key>', markpromptEl, {
 
 where `project-key` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure texts the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
+Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
 
 ```ts
 type Options = {
@@ -85,6 +85,12 @@ type Options = {
     loadingText?: string;
     /** References title, default: `Answer generated from the following sources:` */
     referencesText?: string;
+  };
+  search?: {
+    /** Enable search **/
+    enable?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (result: FlattenedSearchResult) => string;
   };
   /** Props for the trigger */
   trigger?: {
