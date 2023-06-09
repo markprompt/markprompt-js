@@ -26,6 +26,7 @@ type MarkpromptOptions = SubmitPromptOptions & {
      * @default false
      **/
     enable?: boolean;
+    /** Callback to transform a search result into an href */
     getResultHref?: (result: FlattenedSearchResult) => string;
   };
   prompt?: {
