@@ -7,7 +7,7 @@ import * as Markprompt from './headless.js';
 test('initial state', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
-      <Markprompt.Trigger>Trigger</Markprompt.Trigger>
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
         <Markprompt.Overlay />
         <Markprompt.Content>
@@ -34,7 +34,7 @@ test('initial state', async () => {
 test('trigger opens the dialog', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
-      <Markprompt.Trigger>Trigger</Markprompt.Trigger>
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
         <Markprompt.Overlay />
         <Markprompt.Content>
