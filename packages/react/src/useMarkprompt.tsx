@@ -162,9 +162,11 @@ export function useMarkprompt({
             },
             content:
               '## Quick start\n\nThe quickest way to get started is to navigate to the [Markprompt dashboard](https://markprompt.com) and follow the onboarding, which consists of two steps:\n\n*   Step 1: Uploading and processing a set of files\n*   Step 2: Querying the content in a playground\n\nOnce you have completed the onboarding, you can expose a prompt, for instance on a website, using our [API endpoints](#api) or our [React](#react) or [Web Component](#web-component).\n\nA good starting point for integrating a prompt on your website is the [Markprompt Starter Template](https://github.com/motifland/markprompt-starter-template), which is a sample Next.js application containing the full code for the prompt component, ready to query your content.',
+            score: 5,
           },
           {
             content: 'Here is the intro section without a leading heading',
+            score: 1,
           },
           {
             meta: {
@@ -173,7 +175,8 @@ export function useMarkprompt({
                 value: 'Other sub section',
               },
             },
-            content: 'Subsection content',
+            content: '## Other sub section\n\nSubsection content',
+            score: 1,
           },
         ],
       },
@@ -198,6 +201,7 @@ export function useMarkprompt({
             },
             content:
               '## API\n\nMarkprompt exposes two endpoints at `https://api.markprompt.com`:\n\n*   `/v1/train`: turn your content into embeddings\n*   `/v1/completions`: get completions for user prompts\n\nThe `/v1/train` endpoint requires authorization using a bearer token. This token can be found in your project settings in the dashboard, and should never be shared publicly. If you suspect that your token has been compromised, you can generate a new one in the dashboard. The `/v1/completions` endpoint can be accessed either from the server using the bearer token, or from the client side using a development key (for non-public testing) or a production key from a whitelisted domain (for public sharing). See below for more details.',
+            score: 4,
           },
           {
             meta: {
@@ -208,6 +212,17 @@ export function useMarkprompt({
             },
             content:
               "### Train content\n\nUsing this endpoint is relevant if you want to programmatically index your content, for instance in a [GitHub action](https://docs.github.com/en/actions). If you don't need this level of automation, we recommend that you use the Markprompt dashboard, which offers simple tools such as GitHub sync and drag-and-drop to make the process easy and setup-free.\n\n```http\nPOST https://api.markprompt.com/v1/train\n```\n\nCreates and indexes embeddings for your content.\n\nThe endpoint accepts two types of payloads:\n\n*   A JSON payload.\n*   A file payload, for uploading a zip file or a plain text file.",
+            score: 1,
+          },
+          {
+            meta: {
+              leadHeading: {
+                depth: 3,
+                value: 'Train content',
+              },
+            },
+            content: '### Train content\n\nSome content',
+            score: 2,
           },
           {
             meta: {
@@ -217,51 +232,7 @@ export function useMarkprompt({
               },
             },
             content: '### Train content',
-          },
-          {
-            meta: {
-              leadHeading: {
-                depth: 3,
-                value: 'Train content',
-              },
-            },
-            content: '### Train content',
-          },
-          {
-            meta: {
-              leadHeading: {
-                depth: 3,
-                value: 'Train content',
-              },
-            },
-            content: '### Train content',
-          },
-          {
-            meta: {
-              leadHeading: {
-                depth: 3,
-                value: 'Train content',
-              },
-            },
-            content: '### Train content',
-          },
-          {
-            meta: {
-              leadHeading: {
-                depth: 3,
-                value: 'Train content',
-              },
-            },
-            content: '### Train content',
-          },
-          {
-            meta: {
-              leadHeading: {
-                depth: 3,
-                value: 'Train content',
-              },
-            },
-            content: '### Train content',
+            score: 5,
           },
         ],
       },

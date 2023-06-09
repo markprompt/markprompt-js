@@ -15,7 +15,7 @@ import {
   SparklesIcon,
 } from './icons.js';
 import { References } from './References.js';
-import { SearchResults } from './SearchResults.js';
+import { SearchResult } from './SearchResult.js';
 import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions & {
@@ -164,7 +164,7 @@ function SearchResultsContainer({
       </button>
       <BaseMarkprompt.SearchResults
         className={'MarkpromptSearchResults'}
-        SearchResultComponent={SearchResults}
+        SearchResultComponent={SearchResult}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import type {
   SubmitPromptOptions,
 } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
+import Slugger from 'github-slugger';
 import debounce from 'p-debounce';
 import React, {
   forwardRef,
@@ -371,15 +372,37 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
+type SearchResultData = {
+  isPage?: boolean;
+  isIndented?: boolean;
+  path?: string;
+  tag?: string;
+  title?: string;
+  score: number;
+};
+
 type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
-    SearchResultComponent?: ElementType<{
-      result: TSearchResult;
-      index: number;
-    }>;
+    SearchResultComponent?: ElementType<SearchResultData>;
   }
 >;
+
+function isPresent<T>(t: T | undefined | null | void): t is T {
+  return t !== undefined && t !== null;
+}
+
+function removeFirstLine(text: string) {
+  const firstLineBreakIndex = text.indexOf('\n');
+  if (firstLineBreakIndex === -1) {
+    return '';
+  }
+  return text.substring(firstLineBreakIndex + 1);
+}
+
+function trimContent(text: string) {
+  return text.replace(/^\s+/, '').replace(/\s+$/, '');
+}
 
 const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
   (props, ref) => {
@@ -388,15 +411,110 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       SearchResultComponent = SearchResult,
       ...rest
     } = props;
-    const { searchResults } = useMarkpromptContext();
+    const { searchResults, prompt: searchTerm } = useMarkpromptContext();
+
+    const flattenedResults: SearchResultData[] = useMemo(() => {
+      const slugger = new Slugger();
+
+      const sortedSearchResults = [...searchResults].sort((f1, f2) => {
+        const f1TopSectionScore = Math.max(...f1.sections.map((s) => s.score));
+        const f2TopSectionScore = Math.max(...f2.sections.map((s) => s.score));
+        return f2TopSectionScore - f1TopSectionScore;
+      });
+
+      // The final list is built as follows:
+      // - If the title matches the search term, include a search result
+      //   with the title itself, and no sections
+      // - If the title matches the search term, we may also get a bunch of
+      //   sections without the search term, because of the title match.
+      //   So we remove all the sections that don't include the search term
+      //   in the content and meta.leadHeading
+      // - All other sections (with matches on search term) are added
+      const normalizedSearchTerm = searchTerm.toLowerCase();
+      return sortedSearchResults.flatMap((f) => {
+        const isMatchingTitle =
+          f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchTerm) >= 0;
+
+        const sectionResults = [
+          ...f.sections
+            .map((s) => {
+              const isMatchingLeadHeading =
+                (s.meta?.leadHeading?.value
+                  ?.toLowerCase()
+                  ?.indexOf(normalizedSearchTerm) || -1) >= 0;
+
+              // Fast and hacky way to remove the lead heading from
+              // the content, which we don't want to be part of the snippet
+              const trimmedContent = trimContent(
+                s.meta?.leadHeading
+                  ? removeFirstLine(trimContent(s.content?.trim() || ''))
+                  : s.content || '',
+              );
+
+              const isMatchingContent =
+                trimmedContent.toLowerCase().indexOf(normalizedSearchTerm) >= 0;
+
+              if (!isMatchingLeadHeading && !isMatchingContent) {
+                // If this is a result because of the title only, omit
+                // it from here.
+                return undefined;
+              }
+
+              if (isMatchingLeadHeading) {
+                // If matching lead heading, show that as title
+                return {
+                  isPage: false,
+                  title: trimContent(s.meta?.leadHeading?.value || ''),
+                  score: s.score,
+                  path: `${f.path}#${slugger.slug(
+                    s.meta?.leadHeading?.value || '',
+                  )}`,
+                };
+              }
+
+              if (!trimmedContent) {
+                return undefined;
+              }
+              return {
+                isPage: false,
+                tag: f.meta.title,
+                title: trimmedContent,
+                score: s.score,
+                path: f.path,
+              };
+            })
+            .filter(isPresent),
+        ].sort((s1, s2) => s2.score - s1.score);
+
+        if (isMatchingTitle) {
+          const topSectionScore = sectionResults[0]?.score;
+          return [
+            {
+              isPage: true,
+              title: f.meta.title,
+              score: topSectionScore,
+              path: f.path,
+            },
+            // Indent results if they have a matching parent page
+            ...sectionResults.map((s) => {
+              return {
+                ...s,
+                isIndented: true,
+              };
+            }),
+          ];
+        } else {
+          return sectionResults;
+        }
+      });
+    }, [searchResults, searchTerm]);
+
+    console.log('flattenedResults', JSON.stringify(flattenedResults, null, 2));
+
     return (
       <Component {...rest} ref={ref}>
-        {searchResults.map((result, index) => (
-          <SearchResultComponent
-            key={result.path}
-            index={index}
-            result={result}
-          />
+        {flattenedResults.map((result, i) => (
+          <SearchResultComponent key={`${result.path}:${i}`} {...result} />
         ))}
       </Component>
     );
@@ -406,65 +524,16 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
-  { result: TSearchResult }
+  SearchResultData
 >;
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const { as: Component = 'li', result, ...rest } = props;
+    const { title } = props;
 
-    return (
-      <Component {...rest} ref={ref}>
-        <article>
-          <ul>
-            {result.sections.map((section) => (
-              <SearchResultSection
-                key={section.content}
-                section={section}
-                pageTitle={result.meta.title}
-                pagePath={result.path}
-              />
-            ))}
-          </ul>
-        </article>
-      </Component>
-    );
+    return <li ref={ref}>{title}</li>;
   },
 );
 SearchResult.displayName = 'Markprompt.SearchResult';
-
-type SearchResultSectionProps = Omit<
-  ComponentPropsWithRef<'li'>,
-  'children'
-> & {
-  pageTitle: string;
-  pagePath: string;
-  section: TSearchResultSection;
-};
-
-const SearchResultSection = forwardRef<HTMLLIElement, SearchResultSectionProps>(
-  (props, ref) => {
-    const { section, ...rest } = props;
-
-    const Heading = useMemo(() => {
-      const depth = section?.meta?.leadHeading?.depth;
-      if (!depth) return;
-      if (depth === 1) return 'h1';
-      if (depth === 2) return 'h2';
-      if (depth === 3) return 'h3';
-      if (depth === 4) return 'h4';
-      if (depth === 5) return 'h5';
-      if (depth === 6) return 'h6';
-    }, [section?.meta?.leadHeading?.depth]);
-
-    return (
-      <li {...rest} ref={ref}>
-        {Heading && <Heading>{section.meta?.leadHeading?.value}</Heading>}
-        <Markdown remarkPlugins={[remarkGfm]}>{section.content}</Markdown>
-      </li>
-    );
-  },
-);
-SearchResultSection.displayName = 'Markprompt.SearchResultSection';
 
 export {
   Answer,

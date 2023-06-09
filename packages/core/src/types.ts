@@ -32,6 +32,7 @@ export type SearchResultSection = {
       value: string;
     };
   };
+  score: number;
 };
 
 export type SearchResult = {

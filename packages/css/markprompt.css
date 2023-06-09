@@ -38,6 +38,11 @@
   }
 }
 
+/* Remove 2px padding that some browsers add to input */
+input[type='search' i] {
+  padding: 1rem 0;
+}
+
 /* Remove the 'x' clear button from the search input field */
 input[type='search']::-ms-clear {
   display: none;
@@ -158,14 +163,18 @@ input[type='search']::-webkit-search-results-decoration {
   flex: 1 1 auto;
   align-items: center;
   border-bottom: 1px solid var(--markprompt-border);
-  padding: 0 1.25rem;
+  padding: 0 1rem;
   gap: 1rem;
 }
 
 :where(.MarkpromptPromptLabel) {
-  display: grid;
-  place-items: center;
   cursor: pointer;
+  display: flex;
+  flex: none;
+  padding: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
 }
 
 :where(.MarkpromptHighlightedIcon) {
@@ -923,6 +932,14 @@ input[type='search']::-webkit-search-results-decoration {
   display: flex;
   flex-grow: 1;
   font-size: var(--markprompt-text-size);
+  flex-direction: column;
+  gap: 2px;
+}
+
+:where(.MarkpromptSearchResultTitle) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @keyframes markprompt-show-content {
