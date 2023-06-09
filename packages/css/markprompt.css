@@ -7,6 +7,7 @@
   --markprompt-input: #ffffff;
   --markprompt-primary: #6366f1;
   --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryBorder: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
   --markprompt-primaryHighlight: #ec4899;
@@ -29,6 +30,7 @@
     --markprompt-input: #ffffff;
     --markprompt-primary: #6366f1;
     --markprompt-primaryForeground: #ffffff;
+    --markprompt-primaryBorder: #8285f4;
     --markprompt-secondary: #0e0e0e;
     --markprompt-secondaryForeground: #ffffff;
     --markprompt-primaryHighlight: #ec4899;
@@ -939,11 +941,20 @@ font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   border-color: var(--markprompt-border);
 }
 
+:where([aria-selected='true'] .MarkpromptSearchResultIconWrapperBordered) {
+  background-color: transparent;
+  border-color: var(--markprompt-primaryBorder);
+}
+
 :where(.MarkpromptSearchResultIcon) {
   color: var(--markprompt-mutedForeground);
   stroke-width: var(--markprompt-icon-stroke-width);
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
+}
+
+:where([aria-selected='true'] .MarkpromptSearchResultIcon) {
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchResultContentWrapper) {
@@ -964,6 +975,15 @@ font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
 :where(.MarkpromptMatch) {
   font-weight: 600;
+  color: var(--markprompt-primary);
+  border-bottom-color: var(--markprompt-primary);
+  border-bottom-width: 0.1rem;
+  border-bottom-style: solid;
+}
+
+:where([aria-selected='true'] .MarkpromptMatch) {
+  border-color: var(--markprompt-primaryForeground);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptNoSearchResults) {

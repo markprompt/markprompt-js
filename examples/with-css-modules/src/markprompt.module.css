@@ -9,6 +9,7 @@
   --markprompt-input: #ffffff;
   --markprompt-primary: #6366f1;
   --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryBorder: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
   --markprompt-primaryHighlight: #ec4899;
@@ -30,6 +31,7 @@
   --markprompt-input: #ffffff;
   --markprompt-primary: #6366f1;
   --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryBorder: #8285f4;
   --markprompt-secondary: #0e0e0e;
   --markprompt-secondaryForeground: #ffffff;
   --markprompt-primaryHighlight: #ec4899;

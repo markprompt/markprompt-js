@@ -62,6 +62,7 @@ export async function submitSearchQuery(
       // do nothing on AbortError's, this is expected
       return undefined;
     } else {
+      console.log('OKOK');
       throw error;
     }
   }
