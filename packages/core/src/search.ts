@@ -1,6 +1,7 @@
 import type { SearchResultsResponse } from './types.js';
 
-export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
+// export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
+export const DEFAULT_SEARCH_URL = 'http://api.localhost:3000/v1/search';
 export const DEFAULT_SEARCH_LIMIT = 5;
 
 export interface SubmitSearchQueryOptions {
@@ -49,7 +50,10 @@ export async function submitSearchQuery(
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch search results');
+      const error = (await response.json())?.error;
+      throw new Error(
+        `Failed to fetch search results: ${error || 'Unknown error'}`,
+      );
     }
 
     return response.json();

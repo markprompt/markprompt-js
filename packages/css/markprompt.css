@@ -976,6 +976,8 @@ font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
 :where(.MarkpromptNoSearchResults p) {
   color: var(--markprompt-mutedForeground);
+  padding: 1rem;
+  text-align: center;
 }
 
 :where(.MarkpromptNoSearchResults span) {
