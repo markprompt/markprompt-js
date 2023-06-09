@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React, { type ComponentPropsWithoutRef } from 'react';
+import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
-export const Footer = () => {
+export const Footer = (): ReactElement => {
   return (
     <p
       style={{
@@ -44,7 +44,7 @@ export const MarkpromptIcon = ({
   className,
   style,
   ...props
-}: ComponentPropsWithoutRef<'svg'>) => {
+}: ComponentPropsWithoutRef<'svg'>): ReactElement => {
   return (
     <svg
       className={className}

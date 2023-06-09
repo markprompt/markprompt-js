@@ -1,7 +1,7 @@
 import * as BaseMarkprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, type ReactElement } from 'react';
 
 import { Answer } from './Answer.js';
 import {
@@ -22,7 +22,7 @@ type MarkpromptProps = MarkpromptOptions & {
   projectKey: string;
 };
 
-function Markprompt(props: MarkpromptProps) {
+function Markprompt(props: MarkpromptProps): ReactElement {
   const {
     close,
     description,
@@ -115,11 +115,11 @@ type SearchResultsContainerProps = {
 function SearchResultsContainer({
   showAnswer,
   setShowAnswer,
-}: SearchResultsContainerProps) {
+}: SearchResultsContainerProps): ReactElement {
   const { submitPrompt } = useMarkpromptContext();
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
       if (
         (event.key === 'Enter' && event.ctrlKey) ||
         (event.key === 'Enter' && event.metaKey)
@@ -149,7 +149,7 @@ function SearchResultsContainer({
         }}
       >
         <span aria-hidden className="MarkpromptSearchResultIconWrapper">
-          <SparklesIcon className="MarkpromptSearchIcon" />
+          <SparklesIcon focusable={false} className="MarkpromptSearchIcon" />
         </span>
         <span>Ask Docs AI… </span>
         <kbd>
@@ -180,7 +180,7 @@ function AnswerContainer({
   isSearchEnabled,
   references,
   setShowAnswer,
-}: AnswerContainerProps) {
+}: AnswerContainerProps): ReactElement {
   return (
     <div className="MarkpromptPromptContainer">
       {isSearchEnabled && (

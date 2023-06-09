@@ -18,6 +18,7 @@ import React, {
   type FormEventHandler,
   type MouseEvent,
   type MouseEventHandler,
+  type ReactElement,
   type ReactNode,
   type KeyboardEvent as ReactKeyboardEvent,
   useMemo,
@@ -43,7 +44,7 @@ export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   isSearchActive?: boolean;
 } & SubmitPromptOptions;
 
-function Root(props: RootProps) {
+function Root(props: RootProps): ReactElement {
   const {
     children,
     defaultOpen,
@@ -69,7 +70,7 @@ function Root(props: RootProps) {
   );
 }
 
-function DialogRootWithAbort(props: Dialog.DialogProps) {
+function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   const { onOpenChange, modal = true, ...rest } = props;
   const { abort } = useMarkpromptContext();
 
@@ -97,7 +98,9 @@ const DialogTrigger = forwardRef<
 });
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
-function Portal(props: ComponentPropsWithoutRef<typeof Dialog.Portal>) {
+function Portal(
+  props: ComponentPropsWithoutRef<typeof Dialog.Portal>,
+): ReactElement {
   return <Dialog.Portal {...props} />;
 }
 Portal.displayName = 'Markprompt.Portal';
@@ -298,7 +301,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
 Prompt.displayName = 'Markprompt.Prompt';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
-function Answer(props: AnswerProps) {
+function Answer(props: AnswerProps): ReactElement {
   const { remarkPlugins = [remarkGfm], ...rest } = props;
   const { answer } = useMarkpromptContext();
   return (
@@ -352,7 +355,7 @@ const References = function References<
   }>,
   // eslint-disable-next-line @typescript-eslint/ban-types
   P extends ReferencesProps<TRoot, TReference> = {},
->(props: P, ref: PolymorphicRef<TRoot>) {
+>(props: P, ref: PolymorphicRef<TRoot>): ReactElement {
   const { RootComponent = 'ul', ReferenceComponent = 'li' } = props;
   const { references } = useMarkpromptContext();
   return (
@@ -372,7 +375,7 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
-type SearchResultData = {
+type FlattenedSearchResult = {
   isPage?: boolean;
   isIndented?: boolean;
   path?: string;
@@ -384,7 +387,7 @@ type SearchResultData = {
 type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
-    SearchResultComponent?: ElementType<SearchResultData>;
+    SearchResultComponent?: ElementType<FlattenedSearchResult>;
   }
 >;
 
@@ -392,7 +395,7 @@ function isPresent<T>(t: T | undefined | null | void): t is T {
   return t !== undefined && t !== null;
 }
 
-function removeFirstLine(text: string) {
+function removeFirstLine(text: string): string {
   const firstLineBreakIndex = text.indexOf('\n');
   if (firstLineBreakIndex === -1) {
     return '';
@@ -400,7 +403,7 @@ function removeFirstLine(text: string) {
   return text.substring(firstLineBreakIndex + 1);
 }
 
-function trimContent(text: string) {
+function trimContent(text: string): string {
   return text.replace(/^\s+/, '').replace(/\s+$/, '');
 }
 
@@ -413,7 +416,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
     } = props;
     const { searchResults, prompt: searchTerm } = useMarkpromptContext();
 
-    const flattenedResults: SearchResultData[] = useMemo(() => {
+    const flattenedResults: FlattenedSearchResult[] = useMemo(() => {
       const slugger = new Slugger();
 
       const sortedSearchResults = [...searchResults].sort((f1, f2) => {
@@ -509,12 +512,13 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       });
     }, [searchResults, searchTerm]);
 
-    console.log('flattenedResults', JSON.stringify(flattenedResults, null, 2));
-
     return (
       <Component {...rest} ref={ref}>
-        {flattenedResults.map((result, i) => (
-          <SearchResultComponent key={`${result.path}:${i}`} {...result} />
+        {flattenedResults.map((result) => (
+          <SearchResultComponent
+            key={`${result.path}:${result.title}`}
+            {...result}
+          />
         ))}
       </Component>
     );
@@ -524,7 +528,7 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
-  SearchResultData
+  FlattenedSearchResult
 >;
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {

@@ -1,6 +1,4 @@
-import type { OpenAIModelId, SearchResult } from './types.js';
-
-export type { OpenAIModelId, SearchResult };
+import type { OpenAIModelId } from './types.js';
 
 export type SubmitPromptOptions = {
   /**
@@ -106,7 +104,7 @@ export async function submitPrompt(
   onReferences: (references: string[]) => void,
   onError: (error: Error) => void,
   options: SubmitPromptOptions = {},
-) {
+): Promise<void> {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
   }

@@ -1,11 +1,11 @@
 import * as Markprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import styles from './markprompt.module.css';
 
-function Component() {
+function Component(): ReactElement {
   return (
     <Markprompt.Root
       projectKey={import.meta.env.VITE_PROJECT_API_KEY}
@@ -72,7 +72,7 @@ Answer (including related code snippets if available):`}
   );
 }
 
-const Caret = () => {
+const Caret = (): ReactElement | null => {
   const { answer } = useMarkpromptContext();
 
   if (answer) {
@@ -82,11 +82,11 @@ const Caret = () => {
   return <span className={styles.caret} />;
 };
 
-const capitalize = (text: string) => {
+const capitalize = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
-const removeFileExtension = (fileName: string) => {
+const removeFileExtension = (fileName: string): string => {
   const lastDotIndex = fileName.lastIndexOf('.');
   if (lastDotIndex === -1) {
     return fileName;
@@ -100,7 +100,7 @@ const Reference = ({
 }: {
   referenceId: string;
   index: number;
-}) => {
+}): ReactElement => {
   return (
     <li
       key={referenceId}
@@ -116,7 +116,7 @@ const Reference = ({
   );
 };
 
-const References = () => {
+const References = (): ReactElement | null => {
   const { state, references } = useMarkpromptContext();
 
   if (state === 'indeterminate') return null;
@@ -139,7 +139,7 @@ const References = () => {
   );
 };
 
-const SearchIcon = ({ className }: { className?: string }) => (
+const SearchIcon = ({ className }: { className?: string }): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
@@ -155,7 +155,7 @@ const SearchIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const CloseIcon = ({ className }: { className?: string }) => (
+const CloseIcon = ({ className }: { className?: string }): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
@@ -171,7 +171,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const ChatIcon = ({ className }: { className?: string }) => (
+const ChatIcon = ({ className }: { className?: string }): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}

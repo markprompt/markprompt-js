@@ -1,6 +1,6 @@
-import React, { type ComponentPropsWithoutRef } from 'react';
+import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
-const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -14,7 +14,7 @@ const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -26,7 +26,9 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const ChevronLeftIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const ChevronLeftIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -38,7 +40,7 @@ const ChevronLeftIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -51,7 +53,7 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -69,7 +71,9 @@ const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const CornerDownLeftIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const CornerDownLeftIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -84,7 +88,7 @@ const CornerDownLeftIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -98,7 +102,9 @@ const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const ChevronUpIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const ChevronUpIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -112,7 +118,7 @@ const ChevronUpIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -130,7 +136,7 @@ const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
   </svg>
 );
 
-const HashIcon = (props: ComponentPropsWithoutRef<'svg'>) => (
+const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
