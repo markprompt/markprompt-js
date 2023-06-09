@@ -29,3 +29,12 @@ export type PolymorphicComponentPropWithRef<
 // This is the type for the "ref" only
 export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
+
+export type FlattenedSearchResult = {
+  isParent: boolean;
+  hasParent: boolean;
+  path: string;
+  score: number;
+  tag?: string;
+  title: string;
+};

@@ -31,17 +31,17 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     references,
     title,
     trigger,
+    search,
     showBranding = true,
     ...options
   } = props;
-  const { enableSearch } = options;
+
   const [showAnswer, setShowAnswer] = useState(false);
 
   return (
     <BaseMarkprompt.Root
-      open
       projectKey={projectKey}
-      isSearchEnabled={enableSearch}
+      isSearchEnabled={search?.enable}
       isSearchActive={!showAnswer}
       {...options}
     >
@@ -83,14 +83,15 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             />
           </BaseMarkprompt.Form>
 
-          {!showAnswer && enableSearch ? (
+          {!showAnswer && search?.enable ? (
             <SearchResultsContainer
+              getResultHref={search?.getResultHref}
               showAnswer={showAnswer}
               setShowAnswer={setShowAnswer}
             />
           ) : (
             <AnswerContainer
-              isSearchEnabled={enableSearch}
+              isSearchEnabled={search?.enable}
               references={references}
               setShowAnswer={setShowAnswer}
             />
@@ -98,7 +99,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
           <BaseMarkprompt.Close className="MarkpromptClose">
             <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
-              <CloseIcon />
+              <kbd>Esc</kbd>
             </AccessibleIcon.Root>
           </BaseMarkprompt.Close>
         </BaseMarkprompt.Content>
@@ -108,15 +109,18 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
+  getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
   showAnswer: boolean;
   setShowAnswer: (show: boolean) => void;
 };
 
-function SearchResultsContainer({
-  showAnswer,
-  setShowAnswer,
-}: SearchResultsContainerProps): ReactElement {
-  const { submitPrompt } = useMarkpromptContext();
+function SearchResultsContainer(
+  props: SearchResultsContainerProps,
+): ReactElement {
+  const { showAnswer, setShowAnswer, getResultHref } = props;
+
+  const { abort, submitPrompt, state, searchResults, prompt } =
+    useMarkpromptContext();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -140,10 +144,11 @@ function SearchResultsContainer({
   }, [setShowAnswer, showAnswer, submitPrompt]);
 
   return (
-    <div className="SearchResultsContainer">
+    <div className="MarkpromptSearchResultsContainer">
       <button
         className="MarkpromptSearchAnswerButton"
         onClick={() => {
+          abort();
           setShowAnswer(true);
           submitPrompt();
         }}
@@ -162,10 +167,22 @@ function SearchResultsContainer({
           <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
         </kbd>
       </button>
-      <BaseMarkprompt.SearchResults
-        className={'MarkpromptSearchResults'}
-        SearchResultComponent={SearchResult}
-      />
+      {state === 'done' && searchResults.length === 0 && (
+        <div className="MarkpromptNoSearchResults">
+          <p>
+            No results for “<span>{prompt}</span>”
+          </p>
+        </div>
+      )}
+
+      {searchResults.length > 0 && (
+        <BaseMarkprompt.SearchResults
+          className={'MarkpromptSearchResults'}
+          SearchResultComponent={(props) => (
+            <SearchResult {...props} getHref={getResultHref} />
+          )}
+        />
+      )}
     </div>
   );
 }
@@ -181,12 +198,17 @@ function AnswerContainer({
   references,
   setShowAnswer,
 }: AnswerContainerProps): ReactElement {
+  const { abort } = useMarkpromptContext();
+
   return (
     <div className="MarkpromptPromptContainer">
       {isSearchEnabled && (
         <button
           className="MarkpromptBackButton"
-          onClick={() => setShowAnswer?.(false)}
+          onClick={() => {
+            abort();
+            setShowAnswer?.(false);
+          }}
         >
           <span aria-hidden>
             <ChevronLeftIcon className="MarkpromptHighlightedIcon" />

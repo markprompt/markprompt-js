@@ -5,6 +5,7 @@ import {
   type SearchResult,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
+import Slugger from 'github-slugger';
 import {
   useCallback,
   useEffect,
@@ -14,6 +15,8 @@ import {
   type Dispatch,
   type SetStateAction,
 } from 'react';
+
+import type { FlattenedSearchResult } from './types.js';
 
 export type LoadingState =
   | 'indeterminate'
@@ -32,16 +35,26 @@ export type UseMarkpromptOptions = SubmitPromptOptions &
   };
 
 export type UseMarkpromptResult = {
+  /** The currently active search result */
+  activeSearchResult: string | undefined;
   /** The latest answer */
   answer: string;
+  /** Enable search functionality */
+  isSearchEnabled: boolean;
+  /** Is search currently active */
+  isSearchActive: boolean;
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
   references: string[];
+  /** Search results */
+  searchResults: FlattenedSearchResult[];
   /** The current loading state */
   state: LoadingState;
   /** Abort a pending request */
   abort: () => void;
+  /** Update the currently active search result */
+  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   /** Set a new value for the prompt */
   updatePrompt: Dispatch<SetStateAction<string>>;
   /** Submit the prompt */
@@ -171,7 +184,12 @@ export function useMarkprompt({
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchResults, setSearchResults] = useState<FlattenedSearchResult[]>(
+    [],
+  );
+  const [activeSearchResult, setActiveSearchResult] = useState<
+    string | undefined
+  >();
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
@@ -242,6 +260,7 @@ export function useMarkprompt({
     );
 
     promise.then(() => {
+      if (controller.signal.aborted) return;
       setState('done');
     });
 
@@ -278,6 +297,7 @@ export function useMarkprompt({
       if (searchQuery === '') {
         if (controllerRef.current) controllerRef.current.abort();
         setSearchResults([]);
+        setActiveSearchResult(undefined);
         setState('indeterminate');
         return;
       }
@@ -292,7 +312,16 @@ export function useMarkprompt({
       });
 
       promise.then((searchResults) => {
-        setSearchResults(mockData ?? []);
+        // const searchResults = { data: mockData };
+
+        if (controller.signal.aborted) return;
+        if (!searchResults?.data) return;
+
+        setSearchResults(
+          flattenSearchResults(searchQuery, searchResults.data) ?? [],
+        );
+        // initially focus the first result
+        setActiveSearchResult(`markprompt-result-0`);
         setState('done');
       });
 
@@ -317,6 +346,7 @@ export function useMarkprompt({
   return useMemo(
     () => ({
       answer,
+      activeSearchResult,
       isSearchEnabled: !!isSearchEnabled,
       isSearchActive: !!isSearchActive,
       prompt,
@@ -324,12 +354,14 @@ export function useMarkprompt({
       searchResults,
       state,
       abort,
+      updateActiveSearchResult: setActiveSearchResult,
       updatePrompt: setPrompt,
       submitPrompt,
       submitSearchQuery,
     }),
     [
       answer,
+      activeSearchResult,
       isSearchEnabled,
       isSearchActive,
       prompt,
@@ -341,4 +373,119 @@ export function useMarkprompt({
       submitSearchQuery,
     ],
   );
+}
+
+function isPresent<T>(t: T | undefined | null | void): t is T {
+  return t !== undefined && t !== null;
+}
+
+function removeFirstLine(text: string): string {
+  const firstLineBreakIndex = text.indexOf('\n');
+  if (firstLineBreakIndex === -1) {
+    return '';
+  }
+  return text.substring(firstLineBreakIndex + 1);
+}
+
+function trimContent(text: string): string {
+  // we don't use String.prototype.trim() because we
+  // don't want to remove line terminators from Markdown
+  return text.trimStart().trimEnd();
+}
+
+const slugger = new Slugger();
+
+function flattenSearchResults(
+  searchQuery: string,
+  searchResults: SearchResult[],
+): FlattenedSearchResult[] {
+  const sortedSearchResults = [...searchResults].sort((a, b) => {
+    const aTopSectionScore = Math.max(...a.sections.map((s) => s.score));
+    const bTopSectionScore = Math.max(...b.sections.map((s) => s.score));
+    return aTopSectionScore - bTopSectionScore;
+  });
+
+  // The final list is built as follows:
+  // - If the title matches the search term, include a search result
+  //   with the title itself, and no sections
+  // - If the title matches the search term, we may also get a bunch of
+  //   sections without the search term, because of the title match.
+  //   So we remove all the sections that don't include the search term
+  //   in the content and meta.leadHeading
+  // - All other sections (with matches on search term) are added
+  const normalizedSearchTerm = searchQuery.toLowerCase();
+
+  return sortedSearchResults.flatMap((f) => {
+    const isMatchingTitle =
+      f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchTerm) >= 0;
+
+    const sectionResults = [
+      ...f.sections
+        .map((s) => {
+          // Fast and hacky way to remove the lead heading from
+          // the content, which we don't want to be part of the snippet
+          const trimmedContent = trimContent(
+            s.meta?.leadHeading
+              ? removeFirstLine(trimContent(s.content?.trim() || ''))
+              : s.content || '',
+          );
+
+          if (!trimmedContent) {
+            return undefined;
+          }
+
+          const isMatchingLeadHeading =
+            (s.meta?.leadHeading?.value
+              ?.toLowerCase()
+              ?.indexOf(normalizedSearchTerm) || -1) >= 0;
+
+          const isMatchingContent =
+            trimmedContent.toLowerCase().indexOf(normalizedSearchTerm) >= 0;
+
+          if (!isMatchingLeadHeading && !isMatchingContent) {
+            // If this is a result because of the title only, omit
+            // it from here.
+            return undefined;
+          }
+
+          if (isMatchingLeadHeading) {
+            // If matching lead heading, show that as title
+            return {
+              isParent: false,
+              hasParent: isMatchingTitle,
+              title: trimContent(s.meta?.leadHeading?.value || ''),
+              score: s.score,
+              path: `${f.path}#${slugger.slug(
+                s.meta?.leadHeading?.value || '',
+              )}`,
+            };
+          }
+
+          return {
+            isParent: false,
+            hasParent: isMatchingTitle,
+            tag: f.meta.title,
+            title: trimmedContent,
+            score: s.score,
+            path: f.path,
+          };
+        })
+        .filter(isPresent),
+    ].sort((s1, s2) => s2.score - s1.score);
+
+    if (isMatchingTitle) {
+      const topSectionScore = sectionResults[0]?.score;
+      return [
+        {
+          isParent: true,
+          hasParent: false,
+          title: f.meta.title,
+          score: topSectionScore,
+          path: f.path,
+        },
+      ].concat(sectionResults);
+    } else {
+      return sectionResults;
+    }
+  });
 }

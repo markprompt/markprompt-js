@@ -1,28 +1,23 @@
-import type {
-  SearchResult as TSearchResult,
-  SearchResultSection as TSearchResultSection,
-  SubmitPromptOptions,
-} from '@markprompt/core';
+import type { SubmitPromptOptions } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
-import Slugger from 'github-slugger';
 import debounce from 'p-debounce';
 import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   type ChangeEventHandler,
   type ComponentPropsWithRef,
   type ComponentPropsWithoutRef,
   type ElementType,
   type FormEventHandler,
+  type KeyboardEventHandler,
   type MouseEvent,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
-  type KeyboardEvent as ReactKeyboardEvent,
-  useMemo,
-  type ForwardedRef,
+  useState,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -32,12 +27,13 @@ import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
 import type {
+  FlattenedSearchResult,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
 } from './types.js';
 import { useMarkprompt } from './useMarkprompt.js';
 
-export type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
+type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
   children: ReactNode;
   projectKey: string;
   isSearchEnabled?: boolean;
@@ -54,6 +50,7 @@ function Root(props: RootProps): ReactElement {
     ...markpromptOptions
   } = props;
 
+  const [isOpen, setIsOpen] = useState(defaultOpen || open || false);
   const contextValue = useMarkprompt(markpromptOptions);
 
   return (
@@ -90,25 +87,22 @@ function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   );
 }
 
-const DialogTrigger = forwardRef<
-  HTMLButtonElement,
-  ComponentPropsWithRef<typeof Dialog.Trigger>
->((props, ref) => {
-  return <Dialog.Trigger ref={ref} {...props} />;
-});
+type DialogTriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
+const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
+  (props, ref) => {
+    return <Dialog.Trigger ref={ref} {...props} />;
+  },
+);
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
-function Portal(
-  props: ComponentPropsWithoutRef<typeof Dialog.Portal>,
-): ReactElement {
+type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
+function Portal(props: PortalProps): ReactElement {
   return <Dialog.Portal {...props} />;
 }
 Portal.displayName = 'Markprompt.Portal';
 
-const Overlay = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithRef<typeof Dialog.Overlay>
->((props, ref) => {
+type OverlayProps = ComponentPropsWithRef<typeof Dialog.Overlay>;
+const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
   return <Dialog.Overlay ref={ref} {...props} />;
 });
 Overlay.displayName = 'Markprompt.Overlay';
@@ -116,7 +110,6 @@ Overlay.displayName = 'Markprompt.Overlay';
 type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
   showBranding?: boolean;
 };
-
 const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   props,
   ref,
@@ -252,7 +245,20 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     ...rest
   } = props;
 
-  const { updatePrompt, prompt, submitSearchQuery } = useMarkpromptContext();
+  const {
+    activeSearchResult,
+    isSearchActive,
+    prompt,
+    searchResults,
+    submitSearchQuery,
+    updateActiveSearchResult,
+    updatePrompt,
+  } = useMarkpromptContext();
+
+  const debouncedSubmitSearchQuery = useMemo(
+    () => debounce(submitSearchQuery, 220),
+    [submitSearchQuery],
+  );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -260,7 +266,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       // We use the input value directly instead of using the prompt state
       // to avoid an off-by-one-bug when querying.
       if (shouldSubmitSearchOnInputChange) {
-        submitSearchQuery(value);
+        debouncedSubmitSearchQuery(value);
       }
       updatePrompt(value);
       if (onChange) {
@@ -268,11 +274,64 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       }
     },
     [
-      onChange,
-      submitSearchQuery,
-      updatePrompt,
       shouldSubmitSearchOnInputChange,
+      updatePrompt,
+      onChange,
+      debouncedSubmitSearchQuery,
     ],
+  );
+
+  // todo: this isn't very DRY, clean it up
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      switch (event.key) {
+        case 'ArrowDown': {
+          if (!activeSearchResult) return;
+          if (activeSearchResult.endsWith(`${searchResults.length - 1}`)) {
+            return;
+          }
+          event.preventDefault();
+          const nextActiveSearchResult = activeSearchResult.replace(
+            /\d+$/,
+            (match) => String(Number(match) + 1),
+          );
+          updateActiveSearchResult(nextActiveSearchResult);
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${nextActiveSearchResult} > a`,
+          );
+          if (!el) return;
+          break;
+        }
+        case 'ArrowUp': {
+          if (!activeSearchResult) return;
+          if (activeSearchResult.endsWith('0')) return;
+          event.preventDefault();
+          const nextActiveSearchResult = activeSearchResult.replace(
+            /\d+$/,
+            (match) => String(Number(match) - 1),
+          );
+          updateActiveSearchResult(nextActiveSearchResult);
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${nextActiveSearchResult} > a`,
+          );
+          if (!el) return;
+          break;
+        }
+        case 'Enter': {
+          if (!activeSearchResult) return;
+          event.preventDefault();
+          // assumption here is that the search result will always contain an a element
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${activeSearchResult} a`,
+          );
+          // todo: reset search query and result
+          if (!el) return;
+          el?.click();
+          break;
+        }
+      }
+    },
+    [activeSearchResult, searchResults.length, updateActiveSearchResult],
   );
 
   return (
@@ -289,11 +348,14 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
         type={type}
         value={prompt}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
         autoCorrect={autoCorrect}
         autoFocus={autoFocus}
         spellCheck={spellCheck}
+        aria-controls={isSearchActive ? 'markprompt-search-results' : undefined}
+        aria-activedescendant={isSearchActive ? activeSearchResult : undefined}
       />
     </>
   );
@@ -375,152 +437,67 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
-type FlattenedSearchResult = {
-  isPage?: boolean;
-  isIndented?: boolean;
-  path?: string;
-  tag?: string;
-  title?: string;
-  score: number;
-};
-
 type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
+    label?: string;
     SearchResultComponent?: ElementType<FlattenedSearchResult>;
   }
 >;
-
-function isPresent<T>(t: T | undefined | null | void): t is T {
-  return t !== undefined && t !== null;
-}
-
-function removeFirstLine(text: string): string {
-  const firstLineBreakIndex = text.indexOf('\n');
-  if (firstLineBreakIndex === -1) {
-    return '';
-  }
-  return text.substring(firstLineBreakIndex + 1);
-}
-
-function trimContent(text: string): string {
-  return text.replace(/^\s+/, '').replace(/\s+$/, '');
-}
 
 const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
   (props, ref) => {
     const {
       as: Component = 'ul',
+      label = 'Search results',
       SearchResultComponent = SearchResult,
       ...rest
     } = props;
-    const { searchResults, prompt: searchTerm } = useMarkpromptContext();
 
-    const flattenedResults: FlattenedSearchResult[] = useMemo(() => {
-      const slugger = new Slugger();
+    const { activeSearchResult, searchResults, updateActiveSearchResult } =
+      useMarkpromptContext();
 
-      const sortedSearchResults = [...searchResults].sort((f1, f2) => {
-        const f1TopSectionScore = Math.max(...f1.sections.map((s) => s.score));
-        const f2TopSectionScore = Math.max(...f2.sections.map((s) => s.score));
-        return f2TopSectionScore - f1TopSectionScore;
+    useEffect(() => {
+      if (!activeSearchResult) {
+        return;
+      }
+
+      const element = document.getElementById(activeSearchResult);
+      if (!element) {
+        return;
+      }
+
+      element.focus();
+      element.scrollIntoView({
+        block: 'nearest',
       });
-
-      // The final list is built as follows:
-      // - If the title matches the search term, include a search result
-      //   with the title itself, and no sections
-      // - If the title matches the search term, we may also get a bunch of
-      //   sections without the search term, because of the title match.
-      //   So we remove all the sections that don't include the search term
-      //   in the content and meta.leadHeading
-      // - All other sections (with matches on search term) are added
-      const normalizedSearchTerm = searchTerm.toLowerCase();
-      return sortedSearchResults.flatMap((f) => {
-        const isMatchingTitle =
-          f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchTerm) >= 0;
-
-        const sectionResults = [
-          ...f.sections
-            .map((s) => {
-              const isMatchingLeadHeading =
-                (s.meta?.leadHeading?.value
-                  ?.toLowerCase()
-                  ?.indexOf(normalizedSearchTerm) || -1) >= 0;
-
-              // Fast and hacky way to remove the lead heading from
-              // the content, which we don't want to be part of the snippet
-              const trimmedContent = trimContent(
-                s.meta?.leadHeading
-                  ? removeFirstLine(trimContent(s.content?.trim() || ''))
-                  : s.content || '',
-              );
-
-              const isMatchingContent =
-                trimmedContent.toLowerCase().indexOf(normalizedSearchTerm) >= 0;
-
-              if (!isMatchingLeadHeading && !isMatchingContent) {
-                // If this is a result because of the title only, omit
-                // it from here.
-                return undefined;
-              }
-
-              if (isMatchingLeadHeading) {
-                // If matching lead heading, show that as title
-                return {
-                  isPage: false,
-                  title: trimContent(s.meta?.leadHeading?.value || ''),
-                  score: s.score,
-                  path: `${f.path}#${slugger.slug(
-                    s.meta?.leadHeading?.value || '',
-                  )}`,
-                };
-              }
-
-              if (!trimmedContent) {
-                return undefined;
-              }
-              return {
-                isPage: false,
-                tag: f.meta.title,
-                title: trimmedContent,
-                score: s.score,
-                path: f.path,
-              };
-            })
-            .filter(isPresent),
-        ].sort((s1, s2) => s2.score - s1.score);
-
-        if (isMatchingTitle) {
-          const topSectionScore = sectionResults[0]?.score;
-          return [
-            {
-              isPage: true,
-              title: f.meta.title,
-              score: topSectionScore,
-              path: f.path,
-            },
-            // Indent results if they have a matching parent page
-            ...sectionResults.map((s) => {
-              return {
-                ...s,
-                isIndented: true,
-              };
-            }),
-          ];
-        } else {
-          return sectionResults;
-        }
-      });
-    }, [searchResults, searchTerm]);
+    }, [activeSearchResult, searchResults]);
 
     return (
-      <Component {...rest} ref={ref}>
-        {flattenedResults.map((result) => (
-          <SearchResultComponent
-            key={`${result.path}:${result.title}`}
-            {...result}
-          />
-        ))}
-      </Component>
+      <>
+        <Component
+          {...rest}
+          ref={ref}
+          role="listbox"
+          id="markprompt-search-results"
+          tabIndex={0}
+          aria-label={label}
+        >
+          {searchResults.map((result, index) => {
+            const id = `markprompt-result-${index}`;
+            return (
+              <SearchResultComponent
+                role="option"
+                id={id}
+                onMouseOver={() => updateActiveSearchResult(id)}
+                aria-selected={id === activeSearchResult}
+                key={`${result.path}:${result.title}`}
+                {...result}
+              />
+            );
+          })}
+        </Component>
+      </>
     );
   },
 );
@@ -528,13 +505,29 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
-  FlattenedSearchResult
+  FlattenedSearchResult & {
+    getHref?: (result: FlattenedSearchResult) => string;
+  }
 >;
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const { title } = props;
-
-    return <li ref={ref}>{title}</li>;
+    const {
+      title,
+      isParent,
+      hasParent,
+      path,
+      score,
+      tag,
+      getHref = (result) => result.path,
+      ...rest
+    } = props;
+    return (
+      <li ref={ref} {...rest}>
+        <a href={getHref(props)} data-markprompt-score={score}>
+          {title}
+        </a>
+      </li>
+    );
   },
 );
 SearchResult.displayName = 'Markprompt.SearchResult';
@@ -547,11 +540,27 @@ export {
   Description,
   DialogTrigger,
   Form,
-  ForwardedReferences as References,
   Overlay,
   Portal,
   Prompt,
+  ForwardedReferences as References,
   Root,
+  SearchResult,
   SearchResults,
   Title,
+  type AnswerProps,
+  type AutoScrollerProps,
+  type CloseProps,
+  type ContentProps,
+  type DescriptionProps,
+  type DialogTriggerProps,
+  type FormProps,
+  type OverlayProps,
+  type PortalProps,
+  type PromptProps,
+  type ReferencesProps,
+  type RootProps,
+  type SearchResultProps,
+  type SearchResultsProps,
+  type TitleProps,
 };

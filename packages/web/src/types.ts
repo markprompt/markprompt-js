@@ -1,4 +1,5 @@
 import { type SubmitPromptOptions } from '@markprompt/core';
+import type { FlattenedSearchResult } from '@markprompt/react';
 
 type MarkpromptOptions = SubmitPromptOptions & {
   close?: {
@@ -19,11 +20,14 @@ type MarkpromptOptions = SubmitPromptOptions & {
      **/
     text?: string;
   };
-  /**
-   * Enable search
-   * @default false
-   **/
-  enableSearch?: boolean;
+  search?: {
+    /**
+     * Enable search
+     * @default false
+     **/
+    enable?: boolean;
+    getResultHref?: (result: FlattenedSearchResult) => string;
+  };
   prompt?: {
     /**
      * Label for the prompt input

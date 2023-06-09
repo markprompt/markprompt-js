@@ -28,7 +28,8 @@
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
-    "@markprompt/core": "0.4.6"
+    "@markprompt/core": "0.4.6",
+    "clsx": "^1.2.1"
   },
   "devDependencies": {
     "@markprompt/react": "0.4.0",

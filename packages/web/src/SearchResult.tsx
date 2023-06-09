@@ -1,15 +1,10 @@
-import type {
-  SearchResult as TSearchResult,
-  SearchResultSection as TSearchResultSection,
-} from '@markprompt/core';
-import type { PolymorphicComponentPropWithRef } from '@markprompt/react';
-import React, {
-  Fragment,
-  memo,
-  forwardRef,
-  type ComponentPropsWithRef,
-  type ElementType,
-} from 'react';
+import {
+  useMarkpromptContext,
+  type SearchResultProps,
+  type FlattenedSearchResult,
+} from '@markprompt/react';
+import { clsx } from 'clsx';
+import React, { Fragment, forwardRef, memo } from 'react';
 
 import { FileTextIcon, HashIcon } from './icons.js';
 
@@ -23,6 +18,8 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
   value,
   match,
 }: HighlightMatchesProps) {
+  if (!match || match === '') return <>{value}</>;
+
   const splitText = value ? value.split('') : [];
   const escapedSearch = match.trim().replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
   const regexp = RegExp('(' + escapedSearch.replaceAll(' ', '|') + ')', 'ig');
@@ -36,7 +33,7 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
       res.push(
         <Fragment key={id++}>
           {splitText.splice(0, result.index - index).join('')}
-          <span className="nx-text-primary-600">
+          <span className="MarkpromptMatch">
             {splitText.splice(0, regexp.lastIndex - result.index).join('')}
           </span>
         </Fragment>,
@@ -53,39 +50,44 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
   );
 });
 
-type SearchResultProps = {
-  isPage?: boolean;
-  path?: string;
-  tag?: string;
-  title?: string;
-  subtitle?: string;
-  score: number;
-};
-
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const { title, isPage, ...rest } = props;
-    const hasParent = false;
+    const {
+      title,
+      isParent,
+      hasParent,
+      path,
+      score,
+      getHref = (result: FlattenedSearchResult) => result.path,
+      ...rest
+    } = props;
+    const { prompt } = useMarkpromptContext();
 
     return (
       <li
         {...rest}
         ref={ref}
-        className={`MarkpromptSearchResult ${
-          hasParent ? 'MarkpromptSearchResultIndented' : ''
-        }`}
+        className={clsx(`MarkpromptSearchResult`, {
+          MarkpromptSearchResultIndented: hasParent,
+        })}
       >
-        <a className="MarkpromptSearchResultLink">
+        <a
+          href={getHref(props)}
+          onClick={console.log}
+          className="MarkpromptSearchResultLink"
+        >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
-              {!isPage ? (
+              {!isParent ? (
                 <HashIcon className="MarkpromptSearchResultIcon" />
               ) : (
                 <FileTextIcon className="MarkpromptSearchResultIcon" />
               )}
             </div>
             <div className="MarkpromptSearchResultContentWrapper">
-              <div className="MarkpromptSearchResultTitle">{title}</div>
+              <div className="MarkpromptSearchResultTitle">
+                <HighlightMatches value={title} match={prompt} />
+              </div>
             </div>
           </div>
         </a>
