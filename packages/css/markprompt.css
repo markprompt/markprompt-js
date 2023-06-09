@@ -111,13 +111,16 @@
 
 :where(.MarkpromptClose) {
   position: absolute;
-  top: 0.75rem;
+  top: 0.8rem;
   right: 0.75rem;
   color: var(--markprompt-mutedForeground);
-  stroke-width: var(--markprompt-icon-stroke-width);
-  padding: 0.25rem;
   background-color: var(--markprompt-muted);
+  padding: 0.25rem;
+  border-style: solid;
+  border-width: 1px;
   border-radius: 4px;
+  border-color: var(--markprompt-border);
+  text-transform: uppercase;
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -127,11 +130,18 @@
 }
 
 :where(.MarkpromptClose:hover) {
-  opacity: 0.8;
+  opacity: 0.9;
+  color: var(--markprompt-foreground);
 }
 
 :where(.MarkpromptClose:focus) {
   box-shadow: inset 0 0 0 2px var(--markprompt-primary);
+}
+
+:where(.MarkpromptClose kbd) {
+  font-weight: 600;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 0.5rem;
 }
 
 :where(.MarkpromptForm) {
@@ -192,24 +202,24 @@
 
 /* Remove 2px padding that some browsers add to input */
 :where(.MarkpromptPrompt[type='search' i]) {
-  padding: 1rem 0;
+  padding: 1rem 3rem 1rem 0;
 }
 
 /* Remove the 'x' clear button from the search :where(.MarkpromptPrompt field */
-:where(.MarkpromptPrompt[type='search']::-ms-clear) {
+.MarkpromptPrompt[type='search']::-ms-clear {
   display: none;
   width: 0;
   height: 0;
 }
-:where(.MarkpromptPrompt[type='search']::-ms-reveal) {
+.MarkpromptPrompt[type='search']::-ms-reveal {
   display: none;
   width: 0;
   height: 0;
 }
-:where(.MarkpromptPrompt[type='search']::-webkit-search-decoration),
-:where(.MarkpromptPrompt[type='search']::-webkit-search-cancel-button),
-:where(.MarkpromptPrompt[type='search']::-webkit-search-results-button),
-:where(.MarkpromptPrompt[type='search']::-webkit-search-results-decoration) {
+.MarkpromptPrompt[type='search']::-webkit-search-decoration,
+.MarkpromptPrompt[type='search']::-webkit-search-cancel-button,
+.MarkpromptPrompt[type='search']::-webkit-search-results-button,
+.MarkpromptPrompt[type='search']::-webkit-search-results-decoration {
   display: none;
 }
 
@@ -495,10 +505,10 @@
   font-weight: inherit;
   color: inherit;
   font-size: inherit;
-  font-family: inherit;
   line-height: inherit;
 }
 
+font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 :where(.MarkpromptAnswer pre code::before) {
   content: none;
 }
@@ -957,6 +967,7 @@
 }
 
 :where(.MarkpromptNoSearchResults) {
+  font-size: var(--markprompt-text-size);
   display: flex;
   justify-content: center;
   align-items: center;
