@@ -1,7 +1,6 @@
 import type { SearchResultsResponse } from './types.js';
 
-// export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
-export const DEFAULT_SEARCH_URL = 'http://api.localhost:3000/v1/search';
+export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
 export const DEFAULT_SEARCH_LIMIT = 8;
 
 export interface SubmitSearchQueryOptions {
