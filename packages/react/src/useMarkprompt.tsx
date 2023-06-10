@@ -379,18 +379,48 @@ function isPresent<T>(t: T | undefined | null | void): t is T {
   return t !== undefined && t !== null;
 }
 
-function removeFirstLine(text: string): string {
-  const firstLineBreakIndex = text.indexOf('\n');
-  if (firstLineBreakIndex === -1) {
-    return '';
+function removeLeadHeading(text: string, heading?: string): string {
+  // This needs to be revised. When returning the search result, the endpoint
+  // provides a snippet of the content around the search term (to avoid sending
+  // entire sections). This snippet may contain the start of the section
+  // content, and this content may start with a heading (the leadHeading).
+  // We don't want this leadHeading to be part of the content snippet.
+  // Since it's a snippet, we can't assume that the leadHeading will always be
+  // the first line. Instead, we have to check it in the string itself.
+  const trimmedContent = trimContent(text);
+  if (!heading) {
+    return trimmedContent;
   }
-  return text.substring(firstLineBreakIndex + 1);
+  const pattern = new RegExp(`^#{1,}\\s${heading}\\s?`);
+  return trimContent(trimmedContent.replace(pattern, ''));
 }
 
 function trimContent(text: string): string {
   // we don't use String.prototype.trim() because we
   // don't want to remove line terminators from Markdown
   return text.trimStart().trimEnd();
+}
+
+function createKWICSnippet(
+  content: string,
+  normalizedSearchQuery: string,
+): string {
+  const trimmedContent = content.trim().replace(/\n/g, ' ');
+  const index = trimmedContent
+    .toLocaleLowerCase()
+    .indexOf(normalizedSearchQuery);
+
+  if (index === -1) {
+    return trimmedContent.slice(0, 200);
+  }
+
+  const rawSnippet = trimmedContent.slice(Math.max(0, index - 50), index + 150);
+
+  const words = rawSnippet.split(/\s+/);
+  if (words.length > 3) {
+    return words.slice(1, words.length - 1).join(' ');
+  }
+  return words.join(' ');
 }
 
 const slugger = new Slugger();
@@ -413,21 +443,20 @@ function flattenSearchResults(
   //   So we remove all the sections that don't include the search term
   //   in the content and meta.leadHeading
   // - All other sections (with matches on search term) are added
-  const normalizedSearchTerm = searchQuery.toLowerCase();
+  const normalizedSearchQuery = searchQuery.toLowerCase();
 
   return sortedSearchResults.flatMap((f) => {
     const isMatchingTitle =
-      f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchTerm) >= 0;
+      f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchQuery) >= 0;
 
     const sectionResults = [
       ...f.sections
         .map((s) => {
           // Fast and hacky way to remove the lead heading from
           // the content, which we don't want to be part of the snippet
-          const trimmedContent = trimContent(
-            s.meta?.leadHeading
-              ? removeFirstLine(trimContent(s.content?.trim() || ''))
-              : s.content || '',
+          const trimmedContent = removeLeadHeading(
+            s.content,
+            s.meta?.leadHeading?.value,
           );
 
           if (!trimmedContent) {
@@ -437,10 +466,10 @@ function flattenSearchResults(
           const isMatchingLeadHeading =
             (s.meta?.leadHeading?.value
               ?.toLowerCase()
-              ?.indexOf(normalizedSearchTerm) || -1) >= 0;
+              ?.indexOf(normalizedSearchQuery) || -1) >= 0;
 
           const isMatchingContent =
-            trimmedContent.toLowerCase().indexOf(normalizedSearchTerm) >= 0;
+            trimmedContent.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
 
           if (!isMatchingLeadHeading && !isMatchingContent) {
             // If this is a result because of the title only, omit
@@ -453,7 +482,10 @@ function flattenSearchResults(
             return {
               isParent: false,
               hasParent: isMatchingTitle,
-              title: trimContent(s.meta?.leadHeading?.value || ''),
+              title: createKWICSnippet(
+                trimContent(s.meta?.leadHeading?.value || ''),
+                normalizedSearchQuery,
+              ),
               score: s.score,
               path: `${f.path}#${slugger.slug(
                 s.meta?.leadHeading?.value || '',
@@ -465,7 +497,7 @@ function flattenSearchResults(
             isParent: false,
             hasParent: isMatchingTitle,
             tag: f.meta.title,
-            title: trimmedContent,
+            title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
             score: s.score,
             path: f.path,
           };
@@ -474,12 +506,15 @@ function flattenSearchResults(
     ].sort((s1, s2) => s2.score - s1.score);
 
     if (isMatchingTitle) {
+      // Set the score of the title result to the same score as the
+      // highest scored section. Since the section in sectionResults are
+      // already ranked by score, just take the first one.
       const topSectionScore = sectionResults[0]?.score;
       return [
         {
           isParent: true,
           hasParent: false,
-          title: f.meta.title,
+          title: createKWICSnippet(f.meta.title, searchQuery),
           score: topSectionScore,
           path: f.path,
         },

@@ -54,10 +54,9 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const {
       title,
+      tag,
       isParent,
       hasParent,
-      path,
-      score,
       getHref = (result: FlattenedSearchResult) => result.path,
       ...rest
     } = props;
@@ -85,6 +84,11 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
               )}
             </div>
             <div className="MarkpromptSearchResultContentWrapper">
+              {tag && (
+                <div className="MarkpromptSearchResultTag">
+                  <HighlightMatches value={tag} match={prompt} />
+                </div>
+              )}
               <div className="MarkpromptSearchResultTitle">
                 <HighlightMatches value={title} match={prompt} />
               </div>
