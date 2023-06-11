@@ -983,6 +983,7 @@ font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   border-radius: 9999px;
   padding: 1px 8px;
   font-size: calc(var(--markprompt-text-size) * 0.85);
+  font-weight: 500;
 }
 
 :where([aria-selected='true'] .MarkpromptSearchResultTag) {

@@ -423,6 +423,16 @@ function createKWICSnippet(
   return words.join(' ');
 }
 
+const isMatching = (
+  text: string | undefined,
+  normalizedSearchQuery: string,
+): boolean => {
+  if (!text || text.length === 0) {
+    return false;
+  }
+  return text.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
+};
+
 const slugger = new Slugger();
 
 function flattenSearchResults(
@@ -446,8 +456,7 @@ function flattenSearchResults(
   const normalizedSearchQuery = searchQuery.toLowerCase();
 
   return sortedSearchResults.flatMap((f) => {
-    const isMatchingTitle =
-      f.meta?.title?.toLowerCase()?.indexOf(normalizedSearchQuery) >= 0;
+    const isMatchingTitle = isMatching(f.meta?.title, normalizedSearchQuery);
 
     const sectionResults = [
       ...f.sections
@@ -463,13 +472,15 @@ function flattenSearchResults(
             return undefined;
           }
 
-          const isMatchingLeadHeading =
-            (s.meta?.leadHeading?.value
-              ?.toLowerCase()
-              ?.indexOf(normalizedSearchQuery) || -1) >= 0;
+          const isMatchingLeadHeading = isMatching(
+            s.meta?.leadHeading?.value,
+            normalizedSearchQuery,
+          );
 
-          const isMatchingContent =
-            trimmedContent.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
+          const isMatchingContent = isMatching(
+            trimmedContent,
+            normalizedSearchQuery,
+          );
 
           if (!isMatchingLeadHeading && !isMatchingContent) {
             // If this is a result because of the title only, omit

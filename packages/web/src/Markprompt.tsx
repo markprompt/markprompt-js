@@ -8,7 +8,6 @@ import {
   ChatIcon,
   ChevronLeftIcon,
   ChevronUpIcon,
-  CloseIcon,
   CommandIcon,
   CornerDownLeftIcon,
   SearchIcon,
