@@ -70,11 +70,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
           MarkpromptSearchResultIndented: hasParent,
         })}
       >
-        <a
-          href={getHref(props)}
-          onClick={console.log}
-          className="MarkpromptSearchResultLink"
-        >
+        <a href={getHref(props)} className="MarkpromptSearchResultLink">
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
               {!isParent ? (
