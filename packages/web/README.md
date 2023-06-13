@@ -139,10 +139,9 @@ The full documentation for `@markprompt/web` can be found on the [Markprompt doc
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
