@@ -1,14 +1,14 @@
-# Markprompt React
+# Markprompt Docusaurus plugin
 
 A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusaurus.io).
 
 <br />
 <p align="center">
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/markprompt">
-    <img alt="" src="https://badgen.net/npm/v/markprompt">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/docusaurus-theme-search">
+    <img alt="" src="https://badgen.net/npm/v/@markprompt/docusaurus-theme-search">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt/blob/main/LICENSE">
-    <img alt="" src="https://badgen.net/npm/license/markprompt">
+  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/docusaurus-theme-search/LICENSE">
+    <img alt="" src="https://badgen.net/npm/license/@markprompt/docusaurus-theme-search">
   </a>
 </p>
 
