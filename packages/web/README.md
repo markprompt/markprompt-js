@@ -17,17 +17,19 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Usage via `<script>` tag](#usage-via-script-tag)
-- [API](#api)
-  - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-- [Documentation](#documentation)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/web`](#markpromptweb)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Usage via `<script>` tag](#usage-via-script-tag)
+  - [API](#api)
+    - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
+      - [Arguments](#arguments)
+      - [Options](#options)
+  - [Documentation](#documentation)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 
@@ -153,7 +155,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 
 ### `markprompt(projectKey, container, options?)`
 
-Render a markprompt dialog button.
+Render a Markprompt dialog button.
 
 #### Arguments
 

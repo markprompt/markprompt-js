@@ -17,14 +17,15 @@ A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusauru
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Swizzling](#swizzling)
-- [Example](#example)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [Markprompt Docusaurus plugin](#markprompt-docusaurus-plugin)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Basic Usage](#basic-usage)
+    - [Swizzling](#swizzling)
+  - [Example](#example)
+  - [Community](#community)
+  - [Authors](#authors)
 
 ## Installation
 
@@ -50,7 +51,7 @@ const config = {
   themeConfig:
     /** @type {import('@markprompt/docusaurus-theme-search').ThemeConfig} */ ({
       markprompt: {
-        projectKey: 'Your markprompt key',
+        projectKey: 'Your Markprompt key',
       },
     }),
 };
@@ -60,7 +61,7 @@ Now a search button will appears on your docusaurus page.
 
 ### Swizzling
 
-The MarkPrompt `SearchBar` can be swizzled. This allows you to fully customize the prompt. To swizzle, run:
+The Markprompt `SearchBar` can be swizzled. This allows you to fully customize the prompt. To swizzle, run:
 
 ```js
 docusaurus swizzle '@markprompt/docusaurus-theme-search' SearchBar --typescript
