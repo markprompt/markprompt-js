@@ -19,6 +19,8 @@ A [Markprompt](https://markprompt.com) button for [Docusaurus](https://docusauru
 
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Swizzling](#swizzling)
 - [Example](#example)
 - [Community](#community)
 - [Authors](#authors)
@@ -31,6 +33,8 @@ npm install @markprompt/docusaurus-theme-search
 ```
 
 ## Usage
+
+### Basic Usage
 
 In your `docusaurus.config.js`, add `@markprompt/docusaurus-theme-search` to `themes`. Configure `markprompt` in the `themeConfig`.
 
@@ -53,6 +57,30 @@ const config = {
 ```
 
 Now a search button will appears on your docusaurus page.
+
+### Swizzling
+
+The MarkPrompt `SearchBar` can be swizzled. This allows you to fully customize the prompt. To swizzle, run:
+
+```js
+docusaurus swizzle '@markprompt/docusaurus-theme-search' SearchBar --typescript
+```
+
+This is useful for example if you want to add another search provider in addition to Markprompt. Typically you will want to wrap `<Markprompt.Root>` in a fragment and add your custom search provider.
+
+```tsx
+export default function SearchBar() {
+  const { siteConfig } = useDocusaurusContext();
+  const markpromptConfig = siteConfig.themeConfig.markprompt;
+
+  return (
+    <>
+      <YourSearchComponent />
+      <Markprompt.Root {...markpromptConfig}>
+    </>
+  )
+}
+```
 
 ## Example
 
