@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "fences": true,
+    "listItemIndent": "one"
+  },
+  "plugins": [
+    "remark-frontmatter",
+    ["remark-prettier", { "report": false }],
+    ["remark-toc", { "tight": true }],
+    "remark-validate-links",
+    "unified-consistency"
+  ]
+}
