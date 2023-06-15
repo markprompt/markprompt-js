@@ -1,6 +1,6 @@
-# `@markprompt/docusaurus-theme-search`
+# Markprompt Docusaurus plugin
 
-A [Markprompt](https://markprompt.com) button for [Docusaurus](https://docusaurus.io).
+A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusaurus.io).
 
 <br />
 <p align="center">
@@ -89,14 +89,9 @@ An example is available on <https://github.com/motifland/markprompt-js/tree/main
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
-
-## License
-
-[MIT](./LICENSE) © [Motif](https://motif.land)
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
