@@ -147,6 +147,19 @@ export function useMarkprompt({
       },
       (refs) => setReferences(refs),
       (error) => {
+        if (
+          error instanceof Error &&
+          typeof error.cause === 'object' &&
+          error.cause !== null &&
+          'name' in error.cause &&
+          error.cause?.name === 'AbortError'
+        ) {
+          // Ignore abort errors
+          return;
+        }
+
+        // todo: surface errors to the user
+        // eslint-disable-next-line no-console
         console.error(error);
       },
       {
@@ -232,11 +245,19 @@ export function useMarkprompt({
       });
 
       promise.catch((error) => {
-        if (error.cause?.name === 'AbortError') {
+        if (
+          error instanceof Error &&
+          typeof error.cause === 'object' &&
+          error.cause !== null &&
+          'name' in error.cause &&
+          error.cause?.name === 'AbortError'
+        ) {
           // Ignore abort errors
           return;
         }
 
+        // todo: surface errors to the user
+        // eslint-disable-next-line no-console
         console.error(error);
       });
 
