@@ -1,5 +1,15 @@
 # @markprompt/css
 
+## 0.2.0
+
+### Minor Changes
+
+- [#31](https://github.com/motifland/markprompt-js/pull/31) [`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e) Thanks [@nickrttn](https://github.com/nickrttn)! - Add search functionality to Markprompt
+
+### Patch Changes
+
+- [#34](https://github.com/motifland/markprompt-js/pull/34) [`8eb9d01`](https://github.com/motifland/markprompt-js/commit/8eb9d01253ec624338cb16523bd5585ef1f9e203) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix references container overflow with many references
+
 ## 0.1.0
 
 ### Minor Changes
