@@ -7,8 +7,11 @@ The [Markprompt](https://markprompt.com) React component is a headless component
   <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/react">
     <img alt="" src="https://badgen.net/npm/v/@markprompt/react">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/LICENSE">
+  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/react/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/react">
+  </a>
+  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Freact">
+    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
   </a>
 </p>
 
@@ -141,6 +144,81 @@ const References = () => {
 
 replacing `<projectKey>` with the key associated to your project. It can be obtained in the project settings under "Project key".
 
+## API
+
+### `<Answer />`
+
+Render the markdown answer from the Markprompt API. It accepts the same props as [`react-markdown`](https://github.com/remarkjs/react-markdown#props), except `children`.
+
+### `<AutoScroller />`
+
+A component automatically that scrolls to the bottom. It accepts the following props:
+
+- `autoScroll` (`boolean`): Whether or not to enable automatic scrolling. (Default: `true`)
+- `scrollBehaviour` (`string`): The behaviour to use for scrolling. (Default: `smooth`)
+
+All other props will be passed to the underlying `<div>` element.
+
+### `<Close />`
+
+A button to close the Markprompt dialog and abort an ongoing request. It accepts the same props as [Radix UI `Dialog.Close`](https://www.radix-ui.com/docs/primitives/components/dialog#close).
+
+### `<Content />`
+
+The Markprompt dialog content. It accepts the same props as [Radix UI `Dialog.Content`](https://www.radix-ui.com/docs/primitives/components/dialog#content), with the following additional prop:
+
+- `showBranding` (`boolean`): Show the Markprompt footer.
+
+### `<Description />`
+
+A visually hidden aria description. It accepts the same props as [Radix UI `Dialog.Description`](https://www.radix-ui.com/docs/primitives/components/dialog#description), with the following additional prop:
+
+- `hide` (`boolean`): Hide the description.
+
+### `<Form />`
+
+A form which, when submitted, submits the current prompt. It accepts the same props as `<form>`.
+
+### `<Overlay />`
+
+The Markprompt dialog overlay. It accepts the same props as [Radix UI `Dialog.Overlay`](https://www.radix-ui.com/docs/primitives/components/dialog#overlay).
+
+### `<Portal />`
+
+The Markprompt dialog portal. It accepts the same props as [Radix UI `Dialog.Portal`](https://www.radix-ui.com/docs/primitives/components/dialog#portal).
+
+### `<Prompt />`
+
+The Markprompt input prompt. User input will update the prompt in the Markprompt context. It accepts the following props:
+
+- `label` (`ReactNode`): The label for the input.
+- `labelClassName` (`string`): The class name of the label element.
+
+### `<References />`
+
+Render the references that Markprompt returns. It accepts the following props:
+
+- `RootComponent` (`Component`): The wrapper component to render. (Default: `'ul'`)
+- `ReferenceComponent` (`Component`): The component to render for each reference. (Default: '`li`')
+
+### `<Root />`
+
+The Markprompt context provider and dialog root. It accepts the [Radix UI `Dialog.Root`](https://www.radix-ui.com/docs/primitives/components/dialog#root) props and the `useMarkprompt`options as props.
+
+### `<Title />`
+
+A visually hidden aria title. It accepts the same props as [Radix UI `Dialog.Title`](https://www.radix-ui.com/docs/primitives/components/dialog#title), with the following additional prop:
+
+- `hide` (`boolean`): Hide the title.
+
+### `<Trigger />`
+
+A button to open the Markprompt dialog. It accepts the same props as [Radix UI `Dialog.Trigger`](https://www.radix-ui.com/docs/primitives/components/dialog#trigger).
+
+### `useMarkprompt(options)`
+
+Create an interactive stateful Markprompt prompt. It takes the same options as [`submitPrompt()`](https://github.com/motifland/markprompt-js/tree/main/packages/core#options), and the project key.
+
 ## Documentation
 
 The full documentation for the component can be found on the [Markprompt docs](https://markprompt.com/docs#react).
@@ -152,10 +230,13 @@ For a working setup based on Next.js + Tailwind, check out the [Markprompt start
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)

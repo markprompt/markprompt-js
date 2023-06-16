@@ -13,7 +13,15 @@ import {
   MARKPROMPT_COMPLETIONS_URL,
   submitPrompt,
 } from '@markprompt/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
 
 export type LoadingState =
   | 'indeterminate'
@@ -21,6 +29,31 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
+export type UseMarkpromptOptions = Options & {
+  /** Project key, required */
+  projectKey: string;
+};
+
+export type UseMarkpromptResult = {
+  /** The latest answer */
+  answer: string;
+  /** The current prompt */
+  prompt: string;
+  /** The references that belong to the latest answer */
+  references: string[];
+  /** The current loading state */
+  state: LoadingState;
+  /** Abort a pending request */
+  abort: () => void;
+  /** Set a new value for the prompt */
+  updatePrompt: Dispatch<SetStateAction<string>>;
+  /** Submit the prompt */
+  submit: () => Promise<void>;
+};
+
+/**
+ * Create an interactive stateful Markprompt prompt
+ */
 export function useMarkprompt({
   projectKey,
   completionsUrl = MARKPROMPT_COMPLETIONS_URL,
@@ -34,10 +67,7 @@ export function useMarkprompt({
   sectionsMatchThreshold = DEFAULT_SECTIONS_MATCH_THRESHOLD,
   temperature = DEFAULT_TEMPERATURE,
   topP = DEFAULT_TOP_P,
-}: {
-  /** Project key, required */
-  projectKey: string;
-} & Options) {
+}: UseMarkpromptOptions): UseMarkpromptResult {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
@@ -141,7 +171,7 @@ export function useMarkprompt({
     topP,
   ]);
 
-  return useMemo(
+  return useMemo<UseMarkpromptResult>(
     () => ({
       answer,
       prompt,

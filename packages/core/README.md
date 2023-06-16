@@ -4,6 +4,32 @@
 
 It contains core functionality for Markprompt and allows you to build abstractions on top of it.
 
+<br />
+<p align="center">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/core">
+    <img alt="" src="https://badgen.net/npm/v/@markprompt/core">
+  </a>
+  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/core/LICENSE">
+    <img alt="" src="https://badgen.net/npm/license/@markprompt/core">
+  </a>
+  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fcore">
+    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
+  </a>
+</p>
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+  - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
+    - [Arguments](#arguments)
+    - [Options](#options)
+    - [Returns](#returns)
+- [Community](#community)
+- [Authors](#authors)
+- [License](#license)
+
 ## Installation
 
 ```sh
@@ -18,7 +44,7 @@ In browsers with [esm.sh](https://esm.sh):
 </script>
 ```
 
-# Usage
+## Usage
 
 ```js
 import { submitPrompt } from '@markprompt/core';
@@ -53,3 +79,52 @@ const options = {
 
 await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
 ```
+
+## API
+
+### `submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
+
+Submit a prompt the the Markprompt API.
+
+#### Arguments
+
+- `prompt` (`string`): Prompt to submit to the model
+- `projectKey` (`string`): The key of your project
+- `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
+- `onReferences` (`function`): This function is called when a chunk includes references.
+- `onError` (`function`): called when an error occurs
+- [`options`](#options) (`object`): Optional options object
+
+#### Options
+
+- `completionsUrl` (`string`): URL at which to fetch completions
+- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
+- `model` (`OpenAIModelId`): The OpenAI model to use
+- `promptTemplate` (`string`): The prompt template
+- `temperature` (`number`): The model temperature
+- `topP` (`number`): The model top P
+- `frequencyPenalty` (`number`): The model frequency penalty
+- `presencePenalty` (`number`): The model present penalty
+- `maxTokens` (`number`): The max number of tokens to include in the response
+- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
+- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
+- `signal` (`AbortSignal`): AbortController signal
+
+#### Returns
+
+A promise that resolves when the response is fully handled.
+
+## Community
+
+- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter @motifland](https://twitter.com/motifland)
+- [Discord](https://discord.gg/MBMh4apz6X)
+
+## Authors
+
+This library is created by the team behind [Motif](https://motif.land)
+([@motifland](https://twitter.com/motifland)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)

@@ -1,6 +1,6 @@
 import * as BaseMarkprompt from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import React from 'react';
+import React, { type ReactElement } from 'react';
 
 import { Answer } from './Answer.js';
 import { ChatIcon, CloseIcon, SearchIcon } from './icons.js';
@@ -11,7 +11,7 @@ type MarkpromptProps = MarkpromptOptions & {
   projectKey: string;
 };
 
-function Markprompt(props: MarkpromptProps) {
+function Markprompt(props: MarkpromptProps): ReactElement {
   const {
     close,
     description,
