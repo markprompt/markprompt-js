@@ -1,7 +1,15 @@
 import * as BaseMarkprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import React, { useEffect, useState, type ReactElement } from 'react';
+import { animated, useSpring } from '@react-spring/web';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 
 import { Answer } from './Answer.js';
 import {
@@ -21,6 +29,11 @@ type MarkpromptProps = MarkpromptOptions & {
   projectKey: string;
 };
 
+function useToggle(initial: boolean): [on: boolean, toggle: () => void] {
+  const [on, set] = useState(initial);
+  return useMemo(() => [on, () => set((prev) => !prev)], [on]);
+}
+
 function Markprompt(props: MarkpromptProps): ReactElement {
   const {
     close,
@@ -35,13 +48,14 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     ...options
   } = props;
 
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showSearch, toggle] = useToggle(search?.enable ?? false);
 
   return (
     <BaseMarkprompt.Root
+      open
       projectKey={projectKey}
       isSearchEnabled={search?.enable}
-      isSearchActive={!showAnswer}
+      isSearchActive={showSearch}
       {...options}
     >
       <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
@@ -71,7 +85,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               className="MarkpromptPrompt"
               placeholder={prompt?.placeholder ?? 'Search or ask a question…'}
               labelClassName="MarkpromptPromptLabel"
-              shouldSubmitSearchOnInputChange={!showAnswer}
               label={
                 <AccessibleIcon.Root
                   label={prompt?.label ?? 'Ask me anything…'}
@@ -82,19 +95,12 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             />
           </BaseMarkprompt.Form>
 
-          {!showAnswer && search?.enable ? (
-            <SearchResultsContainer
-              getResultHref={search?.getResultHref}
-              showAnswer={showAnswer}
-              setShowAnswer={setShowAnswer}
-            />
-          ) : (
-            <AnswerContainer
-              isSearchEnabled={search?.enable}
-              references={references}
-              setShowAnswer={setShowAnswer}
-            />
-          )}
+          <AnswerOrSearchResults
+            search={search}
+            references={references}
+            showSearch={showSearch}
+            toggleSearchAnswer={toggle}
+          />
 
           <BaseMarkprompt.Close className="MarkpromptClose">
             <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
@@ -107,19 +113,108 @@ function Markprompt(props: MarkpromptProps): ReactElement {
   );
 }
 
+type AnswerOrSearchResultsProps = {
+  references: MarkpromptOptions['references'];
+  search?: MarkpromptOptions['search'];
+  showSearch: boolean;
+  toggleSearchAnswer: () => void;
+};
+
+function AnswerOrSearchResults(
+  props: AnswerOrSearchResultsProps,
+): ReactElement {
+  const { search, showSearch, toggleSearchAnswer, references } = props;
+
+  if (!search?.enable) {
+    return (
+      <AnswerContainer
+        isSearchEnabled={search?.enable}
+        references={references}
+        toggleSearchAnswer={toggleSearchAnswer}
+      />
+    );
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <Transition isVisible={showSearch}>
+        <SearchResultsContainer
+          getResultHref={search?.getResultHref}
+          showSearch={showSearch}
+          toggleSearchAnswer={toggleSearchAnswer}
+        />
+      </Transition>
+      <Transition isVisible={!showSearch} isFlipped>
+        <AnswerContainer
+          isSearchEnabled={search?.enable}
+          references={references}
+          toggleSearchAnswer={toggleSearchAnswer}
+        />
+      </Transition>
+    </div>
+  );
+}
+
+type TransitionProps = {
+  isVisible: boolean;
+  isFlipped?: boolean;
+  children: ReactNode;
+};
+
+const Transition = (props: TransitionProps): ReactElement => {
+  const { isVisible, isFlipped, children } = props;
+
+  const [display, setDisplay] = useState(isVisible ? 'block' : 'none');
+
+  const styles = useSpring({
+    opacity: isVisible ? 1 : 0,
+    x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
+    onStart: () => {
+      if (!isVisible) return;
+      setDisplay('block');
+    },
+    onRest: () => {
+      if (isVisible) return;
+      setDisplay('none');
+    },
+  });
+
+  return (
+    <animated.div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        display,
+        ...styles,
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+};
+
 type SearchResultsContainerProps = {
   getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
-  showAnswer: boolean;
-  setShowAnswer: (show: boolean) => void;
+  showSearch: boolean;
+  toggleSearchAnswer: () => void;
 };
 
 function SearchResultsContainer(
   props: SearchResultsContainerProps,
 ): ReactElement {
-  const { showAnswer, setShowAnswer, getResultHref } = props;
+  const { showSearch, toggleSearchAnswer, getResultHref } = props;
 
-  const { abort, submitPrompt, state, searchResults, prompt } =
-    useMarkpromptContext();
+  const btn = useRef<HTMLButtonElement>(null);
+
+  const {
+    abort,
+    submitPrompt,
+    state,
+    searchResults,
+    prompt,
+    activeSearchResult,
+    updateActiveSearchResult,
+  } = useMarkpromptContext();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -128,10 +223,23 @@ function SearchResultsContainer(
         (event.key === 'Enter' && event.metaKey)
       ) {
         event.preventDefault();
-        if (!showAnswer) {
-          submitPrompt();
+        if (showSearch) submitPrompt();
+        toggleSearchAnswer();
+      }
+
+      if (event.key === 'ArrowUp') {
+        if (activeSearchResult === 'markprompt-result-0') {
+          btn.current?.focus();
+          updateActiveSearchResult(undefined);
         }
-        setShowAnswer(!showAnswer);
+      }
+
+      if (event.key === 'ArrowDown') {
+        if (searchResults.length > 0 && activeSearchResult === undefined) {
+          updateActiveSearchResult('markprompt-result-0');
+          const el = document.querySelector('#markprompt-prompt');
+          if (el instanceof HTMLInputElement) el.focus();
+        }
       }
     };
 
@@ -140,15 +248,23 @@ function SearchResultsContainer(
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [setShowAnswer, showAnswer, submitPrompt]);
+  }, [
+    activeSearchResult,
+    searchResults,
+    showSearch,
+    submitPrompt,
+    toggleSearchAnswer,
+    updateActiveSearchResult,
+  ]);
 
   return (
     <div className="MarkpromptSearchResultsContainer">
       <button
+        ref={btn}
         className="MarkpromptSearchAnswerButton"
         onClick={() => {
           abort();
-          setShowAnswer(true);
+          toggleSearchAnswer();
           submitPrompt();
         }}
       >
@@ -176,7 +292,7 @@ function SearchResultsContainer(
 
       {searchResults.length > 0 && (
         <BaseMarkprompt.SearchResults
-          className={'MarkpromptSearchResults'}
+          className="MarkpromptSearchResults"
           SearchResultComponent={(props) => (
             <SearchResult {...props} getHref={getResultHref} />
           )}
@@ -189,13 +305,13 @@ function SearchResultsContainer(
 type AnswerContainerProps = {
   isSearchEnabled?: boolean;
   references: MarkpromptOptions['references'];
-  setShowAnswer: (show: boolean) => void;
+  toggleSearchAnswer: () => void;
 };
 
 function AnswerContainer({
   isSearchEnabled,
   references,
-  setShowAnswer,
+  toggleSearchAnswer,
 }: AnswerContainerProps): ReactElement {
   const { abort } = useMarkpromptContext();
 
@@ -206,7 +322,7 @@ function AnswerContainer({
           className="MarkpromptBackButton"
           onClick={() => {
             abort();
-            setShowAnswer?.(false);
+            toggleSearchAnswer();
           }}
         >
           <span aria-hidden>

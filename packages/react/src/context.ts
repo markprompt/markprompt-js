@@ -1,4 +1,9 @@
-import { createContext, useContext } from 'react';
+import {
+  createContext,
+  useContext,
+  type SetStateAction,
+  type Dispatch,
+} from 'react';
 
 import type { FlattenedSearchResult } from './types.js';
 import { type LoadingState } from './useMarkprompt.js';
@@ -18,7 +23,7 @@ type Actions = {
   abort: () => void;
   submitPrompt: () => void;
   submitSearchQuery: (searchQuery: string) => void;
-  updateActiveSearchResult: (nextActiveSearchResult: string) => void;
+  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   updatePrompt: (nextPrompt: string) => void;
 };
 

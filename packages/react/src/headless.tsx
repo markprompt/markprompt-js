@@ -193,6 +193,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
       event.preventDefault();
+      console.log('submit');
+
       // call user-provided onSubmit handler
       if (onSubmit) {
         onSubmit(event);
@@ -224,7 +226,6 @@ const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   labelClassName?: string;
-  shouldSubmitSearchOnInputChange?: boolean;
 };
 const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
@@ -241,7 +242,6 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     placeholder = 'Ask me anything…',
     spellCheck = false,
     type = 'search',
-    shouldSubmitSearchOnInputChange = false,
     ...rest
   } = props;
 
@@ -265,25 +265,23 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       const value = event.target.value;
       // We use the input value directly instead of using the prompt state
       // to avoid an off-by-one-bug when querying.
-      if (shouldSubmitSearchOnInputChange) {
+      if (isSearchActive) {
         debouncedSubmitSearchQuery(value);
       }
+
       updatePrompt(value);
+
       if (onChange) {
         onChange(event);
       }
     },
-    [
-      shouldSubmitSearchOnInputChange,
-      updatePrompt,
-      onChange,
-      debouncedSubmitSearchQuery,
-    ],
+    [isSearchActive, updatePrompt, onChange, debouncedSubmitSearchQuery],
   );
 
-  // todo: this isn't very DRY, clean it up
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
     (event) => {
+      if (!isSearchActive) return;
+
       switch (event.key) {
         case 'ArrowDown': {
           if (!activeSearchResult) return;
@@ -331,7 +329,12 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
         }
       }
     },
-    [activeSearchResult, searchResults.length, updateActiveSearchResult],
+    [
+      activeSearchResult,
+      isSearchActive,
+      searchResults.length,
+      updateActiveSearchResult,
+    ],
   );
 
   return (
