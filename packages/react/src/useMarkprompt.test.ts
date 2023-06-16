@@ -46,13 +46,19 @@ describe('useMarkprompt', () => {
     );
 
     expect(result.current).toStrictEqual({
-      answer: '',
-      references: [],
-      state: 'indeterminate',
-      prompt: '',
       abort: expect.any(Function),
+      activeSearchResult: undefined,
+      answer: '',
+      isSearchActive: false,
+      isSearchEnabled: false,
+      prompt: '',
+      references: [],
+      searchResults: [],
+      state: 'indeterminate',
+      submitPrompt: expect.any(Function),
+      submitSearchQuery: expect.any(Function),
+      updateActiveSearchResult: expect.any(Function),
       updatePrompt: expect.any(Function),
-      submit: expect.any(Function),
     });
   });
 
@@ -71,7 +77,7 @@ describe('useMarkprompt', () => {
       'According to my calculator ',
       '1 + 2 = 3',
     ];
-    await result.current.submit();
+    await result.current.submitPrompt();
     await waitFor(() =>
       expect(result.current.answer).toBe(
         'According to my calculator 1 + 2 = 3',

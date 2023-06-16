@@ -1,17 +1,29 @@
-import { createContext, useContext } from 'react';
+import {
+  createContext,
+  useContext,
+  type SetStateAction,
+  type Dispatch,
+} from 'react';
 
+import type { FlattenedSearchResult } from './types.js';
 import { type LoadingState } from './useMarkprompt.js';
 
 type State = {
+  activeSearchResult: string | undefined;
   answer: string | undefined;
+  isSearchEnabled: boolean;
+  isSearchActive: boolean;
   prompt: string;
   references: string[];
+  searchResults: FlattenedSearchResult[];
   state: LoadingState;
 };
 
 type Actions = {
   abort: () => void;
-  submit: () => void;
+  submitPrompt: () => void;
+  submitSearchQuery: (searchQuery: string) => void;
+  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   updatePrompt: (nextPrompt: string) => void;
 };
 
@@ -19,12 +31,18 @@ type Actions = {
 export const noop = (): void => {};
 
 const MarkpromptContext = createContext<State & Actions>({
+  activeSearchResult: undefined,
   answer: undefined,
+  isSearchEnabled: false,
+  isSearchActive: false,
   prompt: '',
   references: [],
+  searchResults: [],
   state: 'indeterminate',
   abort: noop,
-  submit: noop,
+  submitPrompt: noop,
+  submitSearchQuery: noop,
+  updateActiveSearchResult: noop,
   updatePrompt: noop,
 });
 

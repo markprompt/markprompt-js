@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
 export const Footer = (): ReactElement => {
@@ -27,10 +28,11 @@ export const Footer = (): ReactElement => {
           gap: '0.25rem',
           textDecoration: 'none',
         }}
-        href="https://markprompt.com/"
+        target="_blank"
+        href="https://markprompt.com"
       >
         <MarkpromptIcon style={{ width: '16px', height: '16px' }} aria-hidden />
-        Markprompt
+        Markprompt AI
       </a>
     </p>
   );

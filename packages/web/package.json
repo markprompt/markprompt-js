@@ -28,7 +28,12 @@
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
-    "@markprompt/core": "0.4.6"
+    "@markprompt/core": "0.4.6",
+    "@react-spring/web": "^9.7.2",
+    "clsx": "^1.2.1",
+    "react-simple-animate": "^3.5.2",
+    "transition-hook": "^1.5.2",
+    "use-presence": "^1.2.0"
   },
   "devDependencies": {
     "@markprompt/react": "0.4.0",

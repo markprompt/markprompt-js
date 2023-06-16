@@ -27,12 +27,12 @@ Answer (including related code snippets if available):`}
       sectionsMatchCount={10}
       sectionsMatchThreshold={0.5}
     >
-      <Markprompt.Trigger
+      <Markprompt.DialogTrigger
         aria-label="Open Markprompt"
         className={styles.MarkpromptButton}
       >
         <ChatIcon className={styles.MarkpromptIcon} />
-      </Markprompt.Trigger>
+      </Markprompt.DialogTrigger>
       <Markprompt.Portal>
         <Markprompt.Overlay className={styles.MarkpromptOverlay} />
         <Markprompt.Content className={styles.MarkpromptContent}>

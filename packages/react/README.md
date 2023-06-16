@@ -39,12 +39,12 @@ import { useContext } from 'react';
 function Component() {
   return (
     <Markprompt.Root projectKey="<your-markprompt-project-key>">
-      <Markprompt.Trigger
+      <Markprompt.DialogTrigger
         aria-label="Open Markprompt"
         className="MarkpromptButton"
       >
         <ChatIcon className="MarkpromptIcon" />
-      </Markprompt.Trigger>
+      </Markprompt.DialogTrigger>
       <Markprompt.Portal>
         <Markprompt.Overlay className="MarkpromptOverlay" />
         <Markprompt.Content className="MarkpromptContent">

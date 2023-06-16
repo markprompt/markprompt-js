@@ -1,14 +1,19 @@
+import type { SubmitPromptOptions } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
+import debounce from 'p-debounce';
 import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
+  useState,
   type ChangeEventHandler,
-  type ComponentPropsWithRef,
   type ComponentPropsWithoutRef,
+  type ComponentPropsWithRef,
   type ElementType,
   type FormEventHandler,
+  type KeyboardEventHandler,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
@@ -20,13 +25,21 @@ import remarkGfm from 'remark-gfm';
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
-import type { PolymorphicRef } from './types.js';
-import { useMarkprompt, type UseMarkpromptOptions } from './useMarkprompt.js';
+import type {
+  FlattenedSearchResult,
+  PolymorphicComponentPropWithRef,
+  PolymorphicRef,
+} from './types.js';
+import { useMarkprompt } from './useMarkprompt.js';
+import { type UseMarkpromptOptions } from './useMarkprompt.js';
 
 type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> &
   UseMarkpromptOptions & {
     children: ReactNode;
-  };
+    projectKey: string;
+    isSearchEnabled?: boolean;
+    isSearchActive?: boolean;
+  } & SubmitPromptOptions;
 
 /**
  * The Markprompt context provider and dialog root.
@@ -40,6 +53,12 @@ function Root(props: RootProps): ReactElement {
     open,
     ...markpromptOptions
   } = props;
+
+  if (!markpromptOptions.projectKey) {
+    throw new Error(
+      'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
+    );
+  }
 
   const contextValue = useMarkprompt(markpromptOptions);
 
@@ -77,14 +96,16 @@ function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   );
 }
 
-type TriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
+type DialogTriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
 /**
  * A button to open the Markprompt dialog.
  */
-const Trigger = forwardRef<HTMLButtonElement, TriggerProps>((props, ref) => {
-  return <Dialog.Trigger ref={ref} {...props} />;
-});
-Trigger.displayName = 'Markprompt.Trigger';
+const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
+  (props, ref) => {
+    return <Dialog.Trigger ref={ref} {...props} />;
+  },
+);
+DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
 type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
 /**
@@ -192,21 +213,47 @@ type FormProps = ComponentPropsWithRef<'form'>;
  */
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
-  const { submit } = useMarkpromptContext();
+
+  const {
+    isSearchEnabled,
+    isSearchActive,
+    submitPrompt,
+    submitSearchQuery,
+    prompt,
+  } = useMarkpromptContext();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
-      submit();
-      if (onSubmit) onSubmit(event);
+
+      // call user-provided onSubmit handler
+      if (onSubmit) {
+        onSubmit(event);
+      }
+
+      // submit search query if search is enabled
+      if (isSearchEnabled && isSearchActive) {
+        await submitSearchQuery(prompt);
+      } else {
+        // submit prompt if search is disabled
+        await submitPrompt();
+      }
     },
-    [onSubmit, submit],
+    [
+      isSearchEnabled,
+      isSearchActive,
+      onSubmit,
+      prompt,
+      submitPrompt,
+      submitSearchQuery,
+    ],
   );
 
   return <form {...rest} ref={ref} onSubmit={handleSubmit} />;
 });
 Form.displayName = 'Markprompt.Form';
 
+const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
   /** The label for the input. */
   label?: ReactNode;
@@ -230,19 +277,101 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     onChange,
     placeholder = 'Ask me anything…',
     spellCheck = false,
+    type = 'search',
     ...rest
   } = props;
-  const { updatePrompt, prompt } = useMarkpromptContext();
+
+  const {
+    activeSearchResult,
+    isSearchActive,
+    prompt,
+    searchResults,
+    submitSearchQuery,
+    updateActiveSearchResult,
+    updatePrompt,
+  } = useMarkpromptContext();
+
+  const debouncedSubmitSearchQuery = useMemo(
+    () => debounce(submitSearchQuery, 220),
+    [submitSearchQuery],
+  );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
-      updatePrompt(event.target.value);
-      if (onChange) onChange(event);
+      const value = event.target.value;
+      // We use the input value directly instead of using the prompt state
+      // to avoid an off-by-one-bug when querying.
+      if (isSearchActive) {
+        debouncedSubmitSearchQuery(value);
+      }
+
+      updatePrompt(value);
+
+      if (onChange) {
+        onChange(event);
+      }
     },
-    [onChange, updatePrompt],
+    [isSearchActive, updatePrompt, onChange, debouncedSubmitSearchQuery],
   );
 
-  const name = 'markprompt-prompt';
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      if (!isSearchActive) return;
+
+      switch (event.key) {
+        case 'ArrowDown': {
+          if (!activeSearchResult) return;
+          if (activeSearchResult.endsWith(`${searchResults.length - 1}`)) {
+            return;
+          }
+          event.preventDefault();
+          const nextActiveSearchResult = activeSearchResult.replace(
+            /\d+$/,
+            (match) => String(Number(match) + 1),
+          );
+          updateActiveSearchResult(nextActiveSearchResult);
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${nextActiveSearchResult} > a`,
+          );
+          if (!el) return;
+          break;
+        }
+        case 'ArrowUp': {
+          if (!activeSearchResult) return;
+          if (activeSearchResult.endsWith('0')) return;
+          event.preventDefault();
+          const nextActiveSearchResult = activeSearchResult.replace(
+            /\d+$/,
+            (match) => String(Number(match) - 1),
+          );
+          updateActiveSearchResult(nextActiveSearchResult);
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${nextActiveSearchResult} > a`,
+          );
+          if (!el) return;
+          break;
+        }
+        case 'Enter': {
+          if (!activeSearchResult) return;
+          event.preventDefault();
+          // assumption here is that the search result will always contain an a element
+          const el: HTMLAnchorElement | null = document.querySelector(
+            `#${activeSearchResult} a`,
+          );
+          // todo: reset search query and result
+          if (!el) return;
+          el?.click();
+          break;
+        }
+      }
+    },
+    [
+      activeSearchResult,
+      isSearchActive,
+      searchResults.length,
+      updateActiveSearchResult,
+    ],
+  );
 
   return (
     <>
@@ -255,14 +384,17 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
         name={name}
         placeholder={placeholder}
         ref={ref}
-        type="text"
+        type={type}
         value={prompt}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
         autoCorrect={autoCorrect}
         autoFocus={autoFocus}
         spellCheck={spellCheck}
+        aria-controls={isSearchActive ? 'markprompt-search-results' : undefined}
+        aria-activedescendant={isSearchActive ? activeSearchResult : undefined}
       />
     </>
   );
@@ -376,31 +508,130 @@ const References = function References<
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 
+type SearchResultsProps = PolymorphicComponentPropWithRef<
+  'ul',
+  {
+    label?: string;
+    SearchResultComponent?: ElementType<FlattenedSearchResult>;
+  }
+>;
+
+const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
+  (props, ref) => {
+    const {
+      as: Component = 'ul',
+      label = 'Search results',
+      SearchResultComponent = SearchResult,
+      ...rest
+    } = props;
+
+    const { activeSearchResult, searchResults, updateActiveSearchResult } =
+      useMarkpromptContext();
+
+    useEffect(() => {
+      if (!activeSearchResult) {
+        return;
+      }
+
+      const element = document.getElementById(activeSearchResult);
+      if (!element) {
+        return;
+      }
+
+      element.focus();
+      element.scrollIntoView({
+        block: 'nearest',
+      });
+    }, [activeSearchResult, searchResults]);
+
+    return (
+      <>
+        <Component
+          {...rest}
+          ref={ref}
+          role="listbox"
+          id="markprompt-search-results"
+          tabIndex={0}
+          aria-label={label}
+        >
+          {searchResults.map((result, index) => {
+            const id = `markprompt-result-${index}`;
+            return (
+              <SearchResultComponent
+                role="option"
+                id={id}
+                onMouseOver={() => updateActiveSearchResult(id)}
+                aria-selected={id === activeSearchResult}
+                key={`${result.path}:${result.title}`}
+                {...result}
+              />
+            );
+          })}
+        </Component>
+      </>
+    );
+  },
+);
+SearchResults.displayName = 'Markprompt.SearchResults';
+
+type SearchResultProps = PolymorphicComponentPropWithRef<
+  'li',
+  FlattenedSearchResult & {
+    getHref?: (result: FlattenedSearchResult) => string;
+  }
+>;
+const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
+  (props, ref) => {
+    const {
+      title,
+      isParent,
+      hasParent,
+      path,
+      score,
+      tag,
+      getHref = (result) => result.path,
+      ...rest
+    } = props;
+    return (
+      <li ref={ref} {...rest}>
+        <a href={getHref(props)} data-markprompt-score={score}>
+          {title}
+        </a>
+      </li>
+    );
+  },
+);
+SearchResult.displayName = 'Markprompt.SearchResult';
+
 export {
   Answer,
-  type AnswerProps,
   AutoScroller,
-  type AutoScrollerProps,
   Close,
-  type CloseProps,
   Content,
-  type ContentProps,
   Description,
-  type DescriptionProps,
+  DialogTrigger,
   Form,
-  type FormProps,
   Overlay,
-  type OverlayProps,
   Portal,
-  type PortalProps,
   Prompt,
-  type PromptProps,
   ForwardedReferences as References,
-  type ReferencesProps,
   Root,
-  type RootProps,
+  SearchResult,
+  SearchResults,
   Title,
+  type AnswerProps,
+  type AutoScrollerProps,
+  type CloseProps,
+  type ContentProps,
+  type DescriptionProps,
+  type DialogTriggerProps,
+  type FormProps,
+  type OverlayProps,
+  type PortalProps,
+  type PromptProps,
+  type ReferencesProps,
+  type RootProps,
+  type SearchResultProps,
+  type SearchResultsProps,
   type TitleProps,
-  Trigger,
-  type TriggerProps,
 };

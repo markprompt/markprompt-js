@@ -17,19 +17,17 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
 
 ## Table of Contents
 
-- [`@markprompt/web`](#markpromptweb)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Usage via `<script>` tag](#usage-via-script-tag)
-  - [API](#api)
-    - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
-      - [Arguments](#arguments)
-      - [Options](#options)
-  - [Documentation](#documentation)
-  - [Community](#community)
-  - [Authors](#authors)
-  - [License](#license)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Usage via `<script>` tag](#usage-via-script-tag)
+- [API](#api)
+  - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
+    - [Arguments](#arguments)
+    - [Options](#options)
+- [Documentation](#documentation)
+- [Community](#community)
+- [Authors](#authors)
+- [License](#license)
 
 ## Installation
 
@@ -71,7 +69,7 @@ markprompt('<project-key>', markpromptEl, {
 
 where `project-key` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure texts the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
+Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
 
 ```ts
 type Options = {
@@ -89,7 +87,7 @@ type Options = {
   };
   /** Props for the prompt */
   prompt?: {
-    /** Label for the prompt input, default: `Your prompt` */
+    /** Label for the prompt input, default: `Ask me anything…` */
     label?: string;
     /** Placeholder for the prompt input, default: `Ask me anything…` */
     placeholder?: string;
@@ -104,6 +102,12 @@ type Options = {
     loadingText?: string;
     /** References title, default: `Answer generated from the following sources:` */
     referencesText?: string;
+  };
+  search?: {
+    /** Enable search **/
+    enable?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (result: FlattenedSearchResult) => string;
   };
   /** Props for the trigger */
   trigger?: {

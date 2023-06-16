@@ -1,6 +1,7 @@
-import { type Options as CoreOptions } from '@markprompt/core';
+import { type SubmitPromptOptions } from '@markprompt/core';
+import type { FlattenedSearchResult } from '@markprompt/react';
 
-type MarkpromptOptions = CoreOptions & {
+type MarkpromptOptions = SubmitPromptOptions & {
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -19,10 +20,19 @@ type MarkpromptOptions = CoreOptions & {
      **/
     text?: string;
   };
+  search?: {
+    /**
+     * Enable search
+     * @default false
+     **/
+    enable?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (result: FlattenedSearchResult) => string;
+  };
   prompt?: {
     /**
      * Label for the prompt input
-     * @default "Your prompt"
+     * @default "Ask me anything…"
      **/
     label?: string;
     /**

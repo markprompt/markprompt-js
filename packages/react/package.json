@@ -24,6 +24,8 @@
     "@markprompt/core": "^0.4.6",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-visually-hidden": "^1.0.3",
+    "github-slugger": "^2.0.0",
+    "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
     "react-merge-refs": "^2.0.2",
     "remark-gfm": "^3.0.1"
