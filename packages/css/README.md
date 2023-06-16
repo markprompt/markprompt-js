@@ -42,7 +42,7 @@ With a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.1.0/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
 />
 ```
 
