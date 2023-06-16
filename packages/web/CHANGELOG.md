@@ -1,5 +1,20 @@
 # @markprompt/web
 
+## 0.5.0
+
+### Minor Changes
+
+- [#31](https://github.com/motifland/markprompt-js/pull/31) [`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e) Thanks [@nickrttn](https://github.com/nickrttn)! - Add search functionality to Markprompt
+
+### Patch Changes
+
+- [#34](https://github.com/motifland/markprompt-js/pull/34) [`8eb9d01`](https://github.com/motifland/markprompt-js/commit/8eb9d01253ec624338cb16523bd5585ef1f9e203) Thanks [@nickrttn](https://github.com/nickrttn)! - Update README
+
+- [#40](https://github.com/motifland/markprompt-js/pull/40) [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2) Thanks [@remcohaszing](https://github.com/remcohaszing)! - Define explicit return types
+
+- Updated dependencies [[`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e), [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2)]:
+  - @markprompt/core@0.5.0
+
 ## 0.4.1
 
 ### Patch Changes
