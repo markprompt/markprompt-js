@@ -16,6 +16,9 @@
     "skipLibCheck": true,
     "target": "es2021",
     "isolatedModules": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "@markprompt/core": ["../core/src"]
+    }
   }
 }
