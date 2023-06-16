@@ -52,7 +52,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   return (
     <BaseMarkprompt.Root
-      open
       projectKey={projectKey}
       isSearchEnabled={search?.enable}
       isSearchActive={showSearch}
