@@ -62,8 +62,10 @@ Now a search button will appears on your docusaurus page.
 The Markprompt `SearchBar` can be swizzled. This allows you to fully customize the prompt. To swizzle, run:
 
 ```js
-docusaurus swizzle '@markprompt/docusaurus-theme-search' SearchBar --typescript
+npx docusaurus swizzle '@markprompt/docusaurus-theme-search' SearchBar --typescript
 ```
+
+Choose `Wrap`, and confirm.
 
 This is useful for example if you want to add another search provider in addition to Markprompt. Typically you will want to wrap `<Markprompt.Root>` in a fragment and add your custom search provider.
 
