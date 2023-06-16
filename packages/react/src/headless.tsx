@@ -7,17 +7,16 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type ChangeEventHandler,
-  type ComponentPropsWithRef,
   type ComponentPropsWithoutRef,
+  type ComponentPropsWithRef,
   type ElementType,
   type FormEventHandler,
   type KeyboardEventHandler,
-  type MouseEvent,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
-  useState,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -32,14 +31,19 @@ import type {
   PolymorphicRef,
 } from './types.js';
 import { useMarkprompt } from './useMarkprompt.js';
+import { type UseMarkpromptOptions } from './useMarkprompt.js';
 
-type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> & {
-  children: ReactNode;
-  projectKey: string;
-  isSearchEnabled?: boolean;
-  isSearchActive?: boolean;
-} & SubmitPromptOptions;
+type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> &
+  UseMarkpromptOptions & {
+    children: ReactNode;
+    projectKey: string;
+    isSearchEnabled?: boolean;
+    isSearchActive?: boolean;
+  } & SubmitPromptOptions;
 
+/**
+ * The Markprompt context provider and dialog root.
+ */
 function Root(props: RootProps): ReactElement {
   const {
     children,
@@ -50,7 +54,12 @@ function Root(props: RootProps): ReactElement {
     ...markpromptOptions
   } = props;
 
-  const [isOpen, setIsOpen] = useState(defaultOpen || open || false);
+  if (!markpromptOptions.projectKey) {
+    throw new Error(
+      'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
+    );
+  }
+
   const contextValue = useMarkprompt(markpromptOptions);
 
   return (
@@ -88,6 +97,9 @@ function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
 }
 
 type DialogTriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
+/**
+ * A button to open the Markprompt dialog.
+ */
 const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
   (props, ref) => {
     return <Dialog.Trigger ref={ref} {...props} />;
@@ -96,20 +108,33 @@ const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
 type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
+/**
+ * The Markprompt dialog portal.
+ */
 function Portal(props: PortalProps): ReactElement {
   return <Dialog.Portal {...props} />;
 }
 Portal.displayName = 'Markprompt.Portal';
 
 type OverlayProps = ComponentPropsWithRef<typeof Dialog.Overlay>;
+/**
+ * The Markprompt dialog overlay.
+ */
 const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
   return <Dialog.Overlay ref={ref} {...props} />;
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
 type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
+  /**
+   * Show the Markprompt footer.
+   */
   showBranding?: boolean;
 };
+
+/**
+ * The Markprompt dialog content.
+ */
 const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   props,
   ref,
@@ -126,11 +151,12 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
 });
 Content.displayName = 'Markprompt.Content';
 
-type CloseProps = ComponentPropsWithRef<typeof Dialog.Close> & {
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-};
+type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
+/**
+ * A button to close the Markprompt dialog and abort an ongoing request.
+ */
 const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
-  props: CloseProps,
+  props,
   ref,
 ) {
   const { onClick, ...rest } = props;
@@ -166,6 +192,9 @@ Title.displayName = 'Markprompt.Title';
 type DescriptionProps = ComponentPropsWithRef<typeof Dialog.Description> & {
   hide?: boolean;
 };
+/**
+ * A visually hidden aria description.
+ */
 const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
   (props, ref) => {
     const { hide } = props;
@@ -179,6 +208,9 @@ const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
 Description.displayName = 'Markprompt.Description';
 
 type FormProps = ComponentPropsWithRef<'form'>;
+/**
+ * A form which, when submitted, submits the current prompt.
+ */
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
 
@@ -193,7 +225,6 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
       event.preventDefault();
-      console.log('submit');
 
       // call user-provided onSubmit handler
       if (onSubmit) {
@@ -224,9 +255,14 @@ Form.displayName = 'Markprompt.Form';
 
 const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
+  /** The label for the input. */
   label?: ReactNode;
+  /** The class name of the label element. */
   labelClassName?: string;
 };
+/**
+ * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
+ */
 const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   props,
   ref,
@@ -366,6 +402,9 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
 Prompt.displayName = 'Markprompt.Prompt';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
+/**
+ * Render the markdown answer from the Markprompt API.
+ */
 function Answer(props: AnswerProps): ReactElement {
   const { remarkPlugins = [remarkGfm], ...rest } = props;
   const { answer } = useMarkpromptContext();
@@ -378,9 +417,23 @@ function Answer(props: AnswerProps): ReactElement {
 Answer.displayName = 'Markprompt.Answer';
 
 type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
+  /**
+   * Whether or not to enable automatic scrolling.
+   *
+   * @default true
+   */
   autoScroll?: boolean;
+
+  /**
+   * The behaviour to use for scrolling.
+   *
+   * @default 'smooth'
+   */
   scrollBehavior?: ScrollBehavior;
 };
+/**
+ * A component automatically that scrolls to the bottom.
+ */
 const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
   (props, ref) => {
     const { autoScroll = true, scrollBehavior = 'smooth' } = props;
@@ -408,10 +461,22 @@ type ReferencesProps<
     index: number;
   }>,
 > = {
+  /**
+   * The wrapper component to render.
+   * @default 'ul'
+   */
   RootComponent?: TRoot;
+
+  /**
+   * The component to render for each reference.
+   * @default 'li'
+   */
   ReferenceComponent?: TReference;
 };
 
+/**
+ * Render the references that Markprompt returns.
+ */
 const References = function References<
   TRoot extends ElementType,
   TReference extends ElementType<{
@@ -437,6 +502,9 @@ const References = function References<
     </RootComponent>
   );
 };
+/**
+ * Render the references that Markprompr returned.
+ */
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';
 

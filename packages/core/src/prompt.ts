@@ -90,12 +90,14 @@ export const DEFAULT_SECTIONS_MATCH_COUNT = 10;
 export const DEFAULT_SECTIONS_MATCH_THRESHOLD = 0.5;
 
 /**
- * @param {string} prompt - Prompt to submit to the model
- * @param {string} projectKey - The key of your project
- * @param {(answerChunk: string) => void} onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
- * @param {(references: string[]) => void} onReferences - This function is called when a chunk includes references.
- * @param {(error: Error) => void} onError - called when an error occurs
- * @param {SubmitPromptOptions} [options] - Optional options object
+ * Submit a prompt the the Markprompt API.
+ *
+ * @param prompt - Prompt to submit to the model
+ * @param projectKey - The key of your project
+ * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
+ * @param onReferences - This function is called when a chunk includes references.
+ * @param onError - called when an error occurs
+ * @param [options] - Optional options object
  */
 export async function submitPrompt(
   prompt: string,

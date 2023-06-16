@@ -8,7 +8,7 @@
     "directory": "packages/web"
   },
   "license": "MIT",
-  "author": "Motif",
+  "author": "Markprompt",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",

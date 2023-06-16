@@ -1,4 +1,8 @@
-export { useMarkprompt } from './useMarkprompt.js';
+export {
+  useMarkprompt,
+  type UseMarkpromptOptions,
+  type UseMarkpromptResult,
+} from './useMarkprompt.js';
 
 export {
   Answer,

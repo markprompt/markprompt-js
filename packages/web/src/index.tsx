@@ -15,6 +15,8 @@ function getHTMLElement(
 }
 
 /**
+ * Render a markprompt dialog button.
+ *
  * @param projectKey Your Markprompt project key
  * @param container The element or selector to render Markprompt into
  * @param options Options for customizing Markprompt
