@@ -18,7 +18,7 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
-  themes: [require.resolve('@markprompt/docusaurus-theme-search')],
+  themes: ['@markprompt/docusaurus-theme-search'],
 
   presets: [
     [

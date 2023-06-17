@@ -19,8 +19,8 @@ A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusauru
   - [Installation](#installation)
   - [Usage](#usage)
     - [Basic Usage](#basic-usage)
-    - [Swizzling](#swizzling)
-  - [Example](#example)
+    - [Usage with another search plugin](#usage-with-another-search-plugin)
+  - [Examples](#examples)
   - [Community](#community)
   - [Authors](#authors)
   - [License](#license)
@@ -57,37 +57,69 @@ const config = {
 
 Now a search button will appears on your docusaurus page.
 
-### Swizzling
+### Usage with another search plugin
 
-The Markprompt `SearchBar` can be swizzled. This allows you to fully customize the prompt. To swizzle, run:
+If your Docusaurus project already has a search plugin, such as [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia), you need to [swizzle](https://docusaurus.io/docs/swizzling) the current search plugin, and add Markprompt as a standalone component.
 
-```js
-npx docusaurus swizzle '@markprompt/docusaurus-theme-search' SearchBar --typescript
+To swizzle your current search plugin, run:
+
+```
+npx docusaurus swizzle
 ```
 
-Choose `Wrap`, and confirm.
+Choose `Wrap`, and confirm. This will create a `SearchBar` wrapper component in `/src/theme/SearchBar`. Next, install the standalone Markprompt web component and CSS:
 
-This is useful for example if you want to add another search provider in addition to Markprompt. Typically you will want to wrap `<Markprompt.Root>` in a fragment and add your custom search provider.
+```
+npm install @markprompt/web @markprompt/css
+```
+
+Edit `/src/theme/SearchBar/index.tsx` to include Markprompt next to your existing search bar. Here is an example:
 
 ```tsx
+import type { WrapperProps } from '@docusaurus/types';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { markprompt } from '@markprompt/web';
+import type SearchBarType from '@theme/SearchBar';
+import SearchBar from '@theme-original/SearchBar';
+import React, { useEffect } from 'react';
 
-export default function SearchBar() {
+import '@markprompt/css';
+
+type Props = WrapperProps<typeof SearchBarType>;
+
+export default function SearchBarWrapper(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
-  const markpromptConfig = siteConfig.themeConfig.markprompt;
+
+  useEffect(() => {
+    const { projectKey, ...config } = siteConfig.themeConfig.markprompt as any;
+    markprompt(projectKey, '#markprompt', {
+      ...config,
+      references: {
+        transformReferenceId: (referenceId) => {
+          // Sample code that transforms a reference path to a link.
+          // Remove file extension
+          const href = referenceId.replace(/\.[^.]+$/, '');
+          // Use last part of path for label
+          const text = href.split('/').slice(-1)[0];
+          return { text, href };
+        },
+      },
+    });
+  }, [siteConfig.themeConfig.markprompt]);
 
   return (
-    <>
-      <YourSearchComponent />
-      <Markprompt.Root {...markpromptConfig}>
-    </>
-  )
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <div id="markprompt" />
+      <SearchBar {...props} />
+    </div>
+  );
 }
 ```
 
-## Example
+## Examples
 
-An example is available on <https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus>.
+- [With the Docusaurus plugin](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus)
+- [With an external search plugin](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-swizzled)
 
 ## Community
 
