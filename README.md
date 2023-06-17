@@ -39,7 +39,7 @@ To use the Markprompt platform as is, please refer to the [Markprompt documentat
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors

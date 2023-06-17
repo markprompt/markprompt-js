@@ -226,7 +226,7 @@ For a working setup based on Next.js + Tailwind, check out the [Markprompt start
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors

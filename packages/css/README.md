@@ -96,7 +96,7 @@ Styling can be customized using the following CSS variables.
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors

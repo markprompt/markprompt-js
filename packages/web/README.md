@@ -14,17 +14,19 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Usage via `<script>` tag](#usage-via-script-tag)
-- [API](#api)
-  - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-- [Documentation](#documentation)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/web`](#markpromptweb)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Usage via `<script>` tag](#usage-via-script-tag)
+  - [API](#api)
+    - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
+      - [Arguments](#arguments)
+      - [Options](#options)
+  - [Documentation](#documentation)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 
@@ -197,7 +199,7 @@ The full documentation for `@markprompt/web` can be found on the [Markprompt doc
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
