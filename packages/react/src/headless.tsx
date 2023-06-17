@@ -346,6 +346,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
           break;
         }
         case 'Enter': {
+          if (event.ctrlKey || event.metaKey) return;
           if (!activeSearchResult) return;
           event.preventDefault();
           // assumption here is that the search result will always contain an a element

@@ -2,9 +2,9 @@ import {
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
-import type { FlattenedSearchResult, RootProps } from '@markprompt/react';
+import type { FlattenedSearchResult } from '@markprompt/react';
 
-type MarkpromptOptions = Omit<RootProps, 'children'> & {
+type MarkpromptOptions = {
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -69,6 +69,12 @@ type MarkpromptOptions = Omit<RootProps, 'children'> & {
      * @default "Open Markprompt"
      **/
     label?: string;
+    /**
+     * Should the trigger button be displayed as a floating button at the bottom right of the page?
+     * Setting this to false will display a trigger button in the element passed
+     * to the `markprompt` function.
+     */
+    floating?: boolean;
   };
   title?: {
     /**

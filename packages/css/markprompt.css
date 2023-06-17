@@ -52,11 +52,15 @@
   box-sizing: inherit;
 }
 
-:where(.MarkpromptTrigger, .MarkpromptClose) {
+:where(
+    .MarkpromptFloatingTrigger,
+    .MarkpromptSearchBoxTrigger,
+    .MarkpromptClose
+  ) {
   all: unset;
 }
 
-:where(.MarkpromptTrigger) {
+:where(.MarkpromptFloatingTrigger) {
   display: flex;
   cursor: pointer;
   border-radius: 99999px;
@@ -71,8 +75,39 @@
   transition-duration: 200ms;
 }
 
-:where(.MarkpromptTrigger:hover) {
+:where(.MarkpromptFloatingTrigger:hover) {
   opacity: 0.8;
+}
+
+:where(.MarkpromptSearchBoxTrigger) {
+  display: flex;
+  cursor: pointer;
+  color: var(--markprompt-mutedForeground);
+  background-color: var(--markprompt-muted);
+  border: var(--markprompt-border);
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  min-width: 10rem;
+}
+
+:where(.MarkpromptSearchBoxTriggerContent) {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+}
+
+:where(.MarkPromptSearchBoxTriggerText) {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+:where(.MarkpromptSearchBoxTriggerContent kbd) {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 :where(.MarkpromptIcon) {
