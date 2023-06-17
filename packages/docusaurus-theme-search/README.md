@@ -55,7 +55,7 @@ const config = {
 };
 ```
 
-Now a search button will appears on your docusaurus page.
+Now a search button will appear on your Docusaurus page.
 
 ### Usage with another search plugin
 
