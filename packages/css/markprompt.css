@@ -268,7 +268,7 @@
 }
 
 :where(.MarkpromptAutoScroller) {
-  flex-grow: 1;
+  flex: 1 1 auto;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -732,47 +732,24 @@
   transition: opacity 200ms ease;
 }
 
-:where([data-loading-state='preload'] .MarkpromptProgress) {
-  opacity: 1;
-}
-
 :where(
     [data-loading-state]:not([data-loading-state='preload']) .MarkpromptProgress
   ) {
   opacity: 0;
 }
 
+:where([data-loading-state='preload'] .MarkpromptProgress) {
+  opacity: 1;
+}
+
 :where(.MarkpromptReferences) {
   position: relative;
-  padding-top: 1rem;
+  padding-block: 1rem;
   padding-inline: 2rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   font-size: 0.75rem;
   color: var(--markprompt-mutedForeground);
-  transition: height 500ms ease;
-  transform: translateY(100%);
-  opacity: 0;
-  animation: markprompt-popup 200ms ease-out forwards;
-  overflow: hidden;
-  box-sizing: border-box;
-  flex: none;
-}
-
-:where(.MarkpromptReferences[data-loading-state='preload']) {
-  height: 50px;
-}
-
-:where(
-    .MarkpromptReferences[data-loading-state='streaming-answer'],
-    .MarkpromptReferences[data-loading-state='done']
-  ) {
-  height: auto;
-}
-
-:where(.MarkpromptReferences[data-loading-state='indeterminate']) {
-  display: none;
-  height: 0;
 }
 
 :where(.MarkpromptReferences p) {
@@ -788,13 +765,8 @@
   align-items: center;
   gap: 0.5rem;
   padding-left: 0;
-  padding-bottom: 20px;
   list-style-type: none;
   margin-bottom: 0;
-}
-
-:where(.MarkpromptReferences ul::-webkit-scrollbar) {
-  display: none;
 }
 
 :where(.MarkpromptReference) {
@@ -1100,17 +1072,6 @@
   }
   to {
     opacity: 0;
-  }
-}
-
-@keyframes markprompt-popup {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
   }
 }
 
