@@ -35,7 +35,7 @@ import { useContext } from 'react';
 
 function Component() {
   return (
-    <Markprompt.Root projectKey="<your-markprompt-project-key>">
+    <Markprompt.Root projectKey="YOUR-PROJECT-KEY">
       <Markprompt.DialogTrigger
         aria-label="Open Markprompt"
         className="MarkpromptButton"
@@ -139,7 +139,7 @@ const References = () => {
 };
 ```
 
-replacing `<projectKey>` with the key associated to your project. It can be obtained in the project settings under "Project key".
+replacing `YOUR-PROJECT-KEY` with the key associated to your project. It can be obtained in the project settings under "Project key".
 
 ## API
 

@@ -40,7 +40,7 @@ import { markprompt } from '@markprompt/web';
 
 const markpromptEl = document.querySelector('#markprompt');
 
-markprompt('<project-key>', markpromptEl, {
+markprompt('YOUR-PROJECT-KEY', markpromptEl, {
   references: {
     transformReferenceId: (referenceId) => ({
       text: referenceId.replace('-', ' '),
@@ -50,7 +50,7 @@ markprompt('<project-key>', markpromptEl, {
 });
 ```
 
-where `project-key` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
+where `YOUR-PROJECT-KEY` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
 Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
 
@@ -120,7 +120,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 />
 <script>
   window.markprompt = {
-    projectKey: `<your-project-key>`,
+    projectKey: `YOUR-PROJECT-KEY`,
     container: `#markprompt`,
     options: {
       references: {

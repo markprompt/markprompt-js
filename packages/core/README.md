@@ -36,7 +36,7 @@ import { submitPrompt } from '@markprompt/core';
 // user input
 const prompt = 'Hello, Markprompt!';
 // can be obtained in your project settings on markprompt.com
-const projectKey = '<project-key>';
+const projectKey = 'YOUR-PROJECT-KEY';
 
 // called when a new answer chunk is available
 // should be concatenated to previous chunks
