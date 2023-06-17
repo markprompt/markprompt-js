@@ -12,19 +12,6 @@ A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusauru
   </a>
 </p>
 
-## Table of Contents
-
-- [Markprompt Docusaurus plugin](#markprompt-docusaurus-plugin)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Basic Usage](#basic-usage)
-    - [Usage with another search plugin](#usage-with-another-search-plugin)
-  - [Examples](#examples)
-  - [Community](#community)
-  - [Authors](#authors)
-  - [License](#license)
-
 ## Installation
 
 ```sh

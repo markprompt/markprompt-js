@@ -7,6 +7,7 @@
     "remark-frontmatter",
     ["remark-prettier", { "report": false }],
     ["remark-toc", { "tight": true }],
-    "remark-validate-links"
+    "remark-validate-links",
+    "unified-consistency"
   ]
 }

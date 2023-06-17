@@ -12,19 +12,6 @@ Common CSS for [Markprompt](https://markprompt.com) components.
   </a>
 </p>
 
-## Table of Contents
-
-- [`@markprompt/css`](#markpromptcss)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [API](#api)
-    - [CSS Classes](#css-classes)
-    - [CSS Variables](#css-variables)
-  - [Community](#community)
-  - [Authors](#authors)
-  - [License](#license)
-
 ## Installation
 
 ```sh
