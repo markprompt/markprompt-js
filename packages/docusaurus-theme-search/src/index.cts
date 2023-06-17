@@ -7,7 +7,7 @@ declare namespace themeSearchMarkprompt {
   export type MarkpromptConfig = Omit<RootProps, 'children'>;
 
   export interface ThemeConfig {
-    markprompt?: MarkpromptConfig;
+    markprompt?: Omit<MarkpromptConfig, 'isSearchActive' | 'searchOptions'>;
   }
 }
 

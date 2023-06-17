@@ -1,7 +1,10 @@
-import { type SubmitPromptOptions } from '@markprompt/core';
+import {
+  type SubmitPromptOptions,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
 import type { FlattenedSearchResult } from '@markprompt/react';
 
-type MarkpromptOptions = SubmitPromptOptions & {
+type MarkpromptOptions = {
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -20,16 +23,7 @@ type MarkpromptOptions = SubmitPromptOptions & {
      **/
     text?: string;
   };
-  search?: {
-    /**
-     * Enable search
-     * @default false
-     **/
-    enable?: boolean;
-    /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
-  };
-  prompt?: {
+  prompt?: SubmitPromptOptions & {
     /**
      * Label for the prompt input
      * @default "Ask me anything…"
@@ -57,12 +51,30 @@ type MarkpromptOptions = SubmitPromptOptions & {
      **/
     referencesText?: string;
   };
+  /**
+   * Enable and configure search functionality
+   */
+  search?: SubmitSearchQueryOptions & {
+    /**
+     * Enable search
+     * @default false
+     **/
+    enable?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (result: FlattenedSearchResult) => string;
+  };
   trigger?: {
     /**
      * `aria-label` for the open button
      * @default "Open Markprompt"
      **/
     label?: string;
+    /**
+     * Should the trigger button be displayed as a floating button at the bottom right of the page?
+     * Setting this to false will display a trigger button in the element passed
+     * to the `markprompt` function.
+     */
+    floating?: boolean;
   };
   title?: {
     /**

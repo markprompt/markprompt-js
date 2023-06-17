@@ -16,18 +16,16 @@ It contains core functionality for Markprompt and allows you to build abstractio
 
 ## Table of Contents
 
-- [`@markprompt/core`](#markpromptcore)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [API](#api)
-    - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
-      - [Arguments](#arguments)
-      - [Options](#options)
-      - [Returns](#returns)
-  - [Community](#community)
-  - [Authors](#authors)
-  - [License](#license)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+  - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
+    - [Arguments](#arguments)
+    - [Options](#options)
+    - [Returns](#returns)
+- [Community](#community)
+- [Authors](#authors)
+- [License](#license)
 
 ## Installation
 

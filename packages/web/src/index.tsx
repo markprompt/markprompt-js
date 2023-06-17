@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 
 import { Markprompt } from './Markprompt.js';
 import { type MarkpromptOptions } from './types.js';
@@ -14,8 +14,10 @@ function getHTMLElement(
   return el;
 }
 
+let root: Root;
+
 /**
- * Render a markprompt dialog button.
+ * Render a markprompt dialog.
  *
  * @param projectKey Your Markprompt project key
  * @param container The element or selector to render Markprompt into
@@ -26,6 +28,6 @@ export function markprompt(
   container: HTMLElement | string,
   options?: MarkpromptOptions,
 ): void {
-  const { render } = createRoot(getHTMLElement(container));
-  render(<Markprompt projectKey={projectKey} {...options} />);
+  if (!root) root = createRoot(getHTMLElement(container));
+  root.render(<Markprompt projectKey={projectKey} {...options} />);
 }

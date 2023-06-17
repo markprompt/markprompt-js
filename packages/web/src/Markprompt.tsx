@@ -9,6 +9,8 @@ import React, {
   useState,
   type ReactElement,
   type ReactNode,
+  type Dispatch,
+  type SetStateAction,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -25,9 +27,18 @@ import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
 import { type MarkpromptOptions } from './types.js';
 
-type MarkpromptProps = MarkpromptOptions & {
-  projectKey: string;
-};
+type MarkpromptProps = MarkpromptOptions &
+  Omit<
+    BaseMarkprompt.RootProps,
+    | 'children'
+    | 'isSearchActive'
+    | 'open'
+    | 'onOpenChange'
+    | 'promptOptions'
+    | 'searchOptions'
+  > & {
+    projectKey: string;
+  };
 
 function useToggle(initial: boolean): [on: boolean, toggle: () => void] {
   const [on, set] = useState(initial);
@@ -45,23 +56,32 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     trigger,
     search,
     showBranding = true,
-    ...options
+    ...dialogProps
   } = props;
+
+  const [open, setOpen] = useState(false);
 
   const [showSearch, toggle] = useToggle(search?.enable ?? false);
 
   return (
     <BaseMarkprompt.Root
       projectKey={projectKey}
-      isSearchEnabled={search?.enable}
       isSearchActive={showSearch}
-      {...options}
+      promptOptions={prompt}
+      searchOptions={search}
+      open={open}
+      onOpenChange={setOpen}
+      {...dialogProps}
     >
-      <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
-        <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
-          <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
-        </AccessibleIcon.Root>
-      </BaseMarkprompt.DialogTrigger>
+      {trigger?.floating ? (
+        <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
+          <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+            <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
+          </AccessibleIcon.Root>
+        </BaseMarkprompt.DialogTrigger>
+      ) : (
+        <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+      )}
 
       <BaseMarkprompt.Portal>
         <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
@@ -82,7 +102,12 @@ function Markprompt(props: MarkpromptProps): ReactElement {
           <BaseMarkprompt.Form className="MarkpromptForm">
             <BaseMarkprompt.Prompt
               className="MarkpromptPrompt"
-              placeholder={prompt?.placeholder ?? 'Search or ask a question…'}
+              placeholder={
+                prompt?.placeholder ??
+                (search?.enable
+                  ? 'Search or ask a question…'
+                  : 'Ask me anything…')
+              }
               labelClassName="MarkpromptPromptLabel"
               label={
                 <AccessibleIcon.Root
@@ -191,6 +216,56 @@ const Transition = (props: TransitionProps): ReactElement => {
     </animated.div>
   );
 };
+
+interface SearchBoxTriggerProps {
+  trigger: MarkpromptOptions['trigger'];
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
+  const { trigger, setOpen, open } = props;
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (open) return;
+      if (
+        (event.key === 'Enter' && event.ctrlKey) ||
+        (event.key === 'Enter' && event.metaKey)
+      ) {
+        event.preventDefault();
+        setOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open, setOpen]);
+
+  return (
+    <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
+      <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+        <span className="MarkpromptSearchBoxTriggerContent">
+          <span className="MarkPromptSearchBoxTriggerText">
+            <SearchIcon width={16} height={16} /> Search{' '}
+          </span>
+          <kbd>
+            {navigator.platform.indexOf('Mac') === 0 ||
+            navigator.platform === 'iPhone' ? (
+              <CommandIcon className="MarkpromptKeyboardKey" />
+            ) : (
+              <ChevronUpIcon className="MarkpromptKeyboardKey" />
+            )}
+            <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
+          </kbd>
+        </span>
+      </AccessibleIcon.Root>
+    </BaseMarkprompt.DialogTrigger>
+  );
+}
 
 type SearchResultsContainerProps = {
   getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
