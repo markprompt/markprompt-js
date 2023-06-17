@@ -767,7 +767,7 @@
     .MarkpromptReferences[data-loading-state='streaming-answer'],
     .MarkpromptReferences[data-loading-state='done']
   ) {
-  height: 95px;
+  height: auto;
 }
 
 :where(.MarkpromptReferences[data-loading-state='indeterminate']) {
@@ -784,15 +784,13 @@
 :where(.MarkpromptReferences ul) {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   padding-left: 0;
   padding-bottom: 20px;
   list-style-type: none;
-  overflow-x: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  margin-bottom: 0;
 }
 
 :where(.MarkpromptReferences ul::-webkit-scrollbar) {
