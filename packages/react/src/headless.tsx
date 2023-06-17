@@ -33,13 +33,7 @@ import type {
 import { useMarkprompt } from './useMarkprompt.js';
 import { type UseMarkpromptOptions } from './useMarkprompt.js';
 
-type RootProps = ComponentPropsWithoutRef<typeof Dialog.Root> &
-  UseMarkpromptOptions & {
-    children: ReactNode;
-    projectKey: string;
-    isSearchEnabled?: boolean;
-    isSearchActive?: boolean;
-  } & SubmitPromptOptions;
+type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 
 /**
  * The Markprompt context provider and dialog root.

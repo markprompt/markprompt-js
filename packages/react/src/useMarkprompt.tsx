@@ -24,17 +24,20 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
-export type UseMarkpromptOptions = SubmitPromptOptions &
-  SubmitSearchQueryOptions & {
-    /** Project key, required */
-    projectKey: string;
-    /** Enable search functionality */
-    isSearchEnabled?: boolean;
-    /** Is search currently active */
-    isSearchActive?: boolean;
+export interface UseMarkpromptOptions {
+  /** Project key, required */
+  projectKey: string;
+  /** Is search currently active */
+  isSearchActive?: boolean;
+  /** Enable and configure prompt functionality */
+  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  /** Enable and configure search functionality */
+  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
+    enable?: boolean;
   };
+}
 
-export type UseMarkpromptResult = {
+export interface UseMarkpromptResult {
   /** The currently active search result */
   activeSearchResult: string | undefined;
   /** The latest answer */
@@ -61,7 +64,7 @@ export type UseMarkpromptResult = {
   submitPrompt: () => Promise<void>;
   /** Submit search query */
   submitSearchQuery: (query: string) => void;
-};
+}
 
 /**
  * A React hook with all the functionality you need to create an interactive
@@ -69,19 +72,9 @@ export type UseMarkpromptResult = {
  */
 export function useMarkprompt({
   projectKey,
-  isSearchEnabled,
   isSearchActive,
-  completionsUrl,
-  frequencyPenalty,
-  iDontKnowMessage,
-  maxTokens,
-  model,
-  presencePenalty,
-  promptTemplate,
-  sectionsMatchCount,
-  sectionsMatchThreshold,
-  temperature,
-  topP,
+  searchOptions,
+  promptOptions,
 }: UseMarkpromptOptions): UseMarkpromptResult {
   if (!projectKey) {
     throw new Error(
@@ -163,18 +156,8 @@ export function useMarkprompt({
         console.error(error);
       },
       {
-        completionsUrl,
-        frequencyPenalty,
-        iDontKnowMessage,
-        maxTokens,
-        model,
-        presencePenalty,
-        promptTemplate,
-        sectionsMatchCount,
-        sectionsMatchThreshold,
+        ...promptOptions,
         signal: controller.signal,
-        temperature,
-        topP,
       },
     );
 
@@ -188,27 +171,11 @@ export function useMarkprompt({
         controllerRef.current = undefined;
       }
     });
-  }, [
-    abort,
-    completionsUrl,
-    frequencyPenalty,
-    iDontKnowMessage,
-    maxTokens,
-    model,
-    presencePenalty,
-    projectKey,
-    prompt,
-    promptTemplate,
-    sectionsMatchCount,
-    sectionsMatchThreshold,
-    state,
-    temperature,
-    topP,
-  ]);
+  }, [abort, projectKey, prompt, promptOptions, state]);
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
-      if (!isSearchEnabled) return;
+      if (!searchOptions?.enable) return;
 
       abort();
 
@@ -227,6 +194,7 @@ export function useMarkprompt({
       controllerRef.current = controller;
 
       const promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+        ...searchOptions,
         signal: controller.signal,
       });
 
@@ -267,14 +235,14 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, isSearchEnabled, projectKey],
+    [abort, projectKey, searchOptions?.enable],
   );
 
   return useMemo(
     () => ({
       answer,
       activeSearchResult,
-      isSearchEnabled: !!isSearchEnabled,
+      isSearchEnabled: !!searchOptions?.enable,
       isSearchActive: !!isSearchActive,
       prompt,
       references,
@@ -289,7 +257,7 @@ export function useMarkprompt({
     [
       answer,
       activeSearchResult,
-      isSearchEnabled,
+      searchOptions?.enable,
       isSearchActive,
       prompt,
       references,

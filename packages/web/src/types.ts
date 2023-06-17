@@ -1,7 +1,10 @@
-import { type SubmitPromptOptions } from '@markprompt/core';
-import type { FlattenedSearchResult } from '@markprompt/react';
+import {
+  type SubmitPromptOptions,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
+import type { FlattenedSearchResult, RootProps } from '@markprompt/react';
 
-type MarkpromptOptions = SubmitPromptOptions & {
+type MarkpromptOptions = Omit<RootProps, 'children'> & {
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -20,16 +23,7 @@ type MarkpromptOptions = SubmitPromptOptions & {
      **/
     text?: string;
   };
-  search?: {
-    /**
-     * Enable search
-     * @default false
-     **/
-    enable?: boolean;
-    /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
-  };
-  prompt?: {
+  prompt?: SubmitPromptOptions & {
     /**
      * Label for the prompt input
      * @default "Ask me anything…"
@@ -56,6 +50,18 @@ type MarkpromptOptions = SubmitPromptOptions & {
      * @default "Answer generated from the following sources:"
      **/
     referencesText?: string;
+  };
+  /**
+   * Enable and configure search functionality
+   */
+  search?: SubmitSearchQueryOptions & {
+    /**
+     * Enable search
+     * @default false
+     **/
+    enable?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (result: FlattenedSearchResult) => string;
   };
   trigger?: {
     /**

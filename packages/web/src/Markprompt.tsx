@@ -45,7 +45,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     trigger,
     search,
     showBranding = true,
-    ...options
+    ...dialogProps
   } = props;
 
   const [showSearch, toggle] = useToggle(search?.enable ?? false);
@@ -53,9 +53,10 @@ function Markprompt(props: MarkpromptProps): ReactElement {
   return (
     <BaseMarkprompt.Root
       projectKey={projectKey}
-      isSearchEnabled={search?.enable}
       isSearchActive={showSearch}
-      {...options}
+      promptOptions={prompt}
+      searchOptions={search}
+      {...dialogProps}
     >
       <BaseMarkprompt.DialogTrigger className="MarkpromptTrigger">
         <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
