@@ -42,7 +42,7 @@ Include the CSS on your page, via a link tag or by importing it in your JavaScri
 
 ```html
 <!-- load from a CDN: -->
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.0.2?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.2.0?css" />
 ```
 
 ```js
@@ -132,7 +132,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.1.1/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
 />
 <script>
   window.markprompt = {
@@ -150,7 +150,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 </script>
 <script
   async
-  src="https://unpkg.com/@markprompt/web@0.4.1/dist/init.js"
+  src="https://unpkg.com/@markprompt/web@0.5.0/dist/init.js"
 ></script>
 ```
 
@@ -195,7 +195,7 @@ Render a Markprompt dialog button.
 
 ## Documentation
 
-The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#%40markprompt%2Fweb).
+The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#javascript).
 
 ## Community
 
