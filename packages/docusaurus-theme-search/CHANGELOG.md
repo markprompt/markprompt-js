@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.3.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Don't allow search in docusaurus-theme-search until we have a chance to update the SearchBar component
+
+### Patch Changes
+
+- Updated dependencies [[`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd)]:
+  - @markprompt/react@0.6.0
+
 ## 0.2.1
 
 ### Patch Changes

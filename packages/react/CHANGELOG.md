@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.6.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Update types and the way options are passed, fix a bug where a search result was clicked when Cmd/Ctrl+Enter was pressed instead of navigating to the Prompt view
+
 ## 0.5.0
 
 ### Minor Changes

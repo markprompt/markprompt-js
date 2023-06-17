@@ -1,5 +1,11 @@
 # @markprompt/web
 
+## 0.6.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Add a new type of trigger that has the appearance of a search input, update types and the way that we pass options into Markprompt.Root
+
 ## 0.5.0
 
 ### Minor Changes
