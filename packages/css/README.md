@@ -14,14 +14,16 @@ Common CSS for [Markprompt](https://markprompt.com) components.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-  - [CSS Classes](#css-classes)
-  - [CSS Variables](#css-variables)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/css`](#markpromptcss)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [API](#api)
+    - [CSS Classes](#css-classes)
+    - [CSS Variables](#css-variables)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 
@@ -95,13 +97,12 @@ Styling can be customized using the following CSS variables.
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
 
 ## License
 

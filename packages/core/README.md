@@ -16,16 +16,18 @@ It contains core functionality for Markprompt and allows you to build abstractio
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-  - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-    - [Returns](#returns)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/core`](#markpromptcore)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [API](#api)
+    - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
+      - [Arguments](#arguments)
+      - [Options](#options)
+      - [Returns](#returns)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 
@@ -114,13 +116,12 @@ A promise that resolves when the response is fully handled.
 ## Community
 
 - [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
 
 ## License
 

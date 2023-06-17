@@ -14,13 +14,16 @@ A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusauru
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Swizzling](#swizzling)
-- [Example](#example)
-- [Community](#community)
-- [Authors](#authors)
+- [Markprompt Docusaurus plugin](#markprompt-docusaurus-plugin)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Basic Usage](#basic-usage)
+    - [Swizzling](#swizzling)
+  - [Example](#example)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 
@@ -95,3 +98,7 @@ An example is available on <https://github.com/motifland/markprompt-js/tree/main
 
 This library is created by the team behind [Markprompt](https://markprompt.com)
 ([@markprompt](https://twitter.com/markprompt)).
+
+## License
+
+[MIT](./LICENSE) © [Motif](https://motif.land)
