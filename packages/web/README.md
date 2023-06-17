@@ -10,24 +10,23 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
   <a aria-label="License" href="https://github.com/motifland/markprompt/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fweb">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Usage via `<script>` tag](#usage-via-script-tag)
-- [API](#api)
-  - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-- [Documentation](#documentation)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/web`](#markpromptweb)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Usage via `<script>` tag](#usage-via-script-tag)
+  - [API](#api)
+    - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
+      - [Arguments](#arguments)
+      - [Options](#options)
+  - [Documentation](#documentation)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 

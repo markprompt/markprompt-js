@@ -12,23 +12,22 @@ It contains core functionality for Markprompt and allows you to build abstractio
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/core/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/core">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fcore">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-  - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-    - [Returns](#returns)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
+- [`@markprompt/core`](#markpromptcore)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [API](#api)
+    - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
+      - [Arguments](#arguments)
+      - [Options](#options)
+      - [Returns](#returns)
+  - [Community](#community)
+  - [Authors](#authors)
+  - [License](#license)
 
 ## Installation
 

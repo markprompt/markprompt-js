@@ -1,41 +1,21 @@
-# Website
+# Example with Docusaurus swizzled search plugin
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+This example shows you how to use Markprompt in [Docusaurus 2](https://docusaurus.io/) while using another theme search plugin, such as [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
 
-### Installation
-
-```
-$ yarn
-```
-
-### Local Development
+## Installation
 
 ```
-$ yarn start
+$ npm install
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
+## Local development
 
 ```
-$ yarn build
+$ npm start
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+This command starts a local development server. Most changes are reflected live without having to restart the server.
 
-### Deployment
+## Notes
 
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+If you don't have an existing search plugin installed in your Docusaurus project, you can use the Markprompt Docusaurus plugin without swizzling. Please refer to the [Docusaurus example](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus) for a simpler configuration-based setup using the `@markprompt/docusaurus-theme-search` plugin.

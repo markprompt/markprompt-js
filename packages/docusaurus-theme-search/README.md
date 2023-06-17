@@ -10,20 +10,19 @@ A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusauru
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/docusaurus-theme-search/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/docusaurus-theme-search">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fdocusaurus-theme-search">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Swizzling](#swizzling)
-- [Example](#example)
-- [Community](#community)
-- [Authors](#authors)
+- [Markprompt Docusaurus plugin](#markprompt-docusaurus-plugin)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Basic Usage](#basic-usage)
+    - [Swizzling](#swizzling)
+  - [Example](#example)
+  - [Community](#community)
+  - [Authors](#authors)
 
 ## Installation
 
@@ -70,6 +69,8 @@ Choose `Wrap`, and confirm.
 This is useful for example if you want to add another search provider in addition to Markprompt. Typically you will want to wrap `<Markprompt.Root>` in a fragment and add your custom search provider.
 
 ```tsx
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+
 export default function SearchBar() {
   const { siteConfig } = useDocusaurusContext();
   const markpromptConfig = siteConfig.themeConfig.markprompt;

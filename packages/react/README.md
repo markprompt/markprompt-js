@@ -10,9 +10,6 @@ The [Markprompt](https://markprompt.com) React component is a headless component
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/react/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/react">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Freact">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
 
 ## Installation

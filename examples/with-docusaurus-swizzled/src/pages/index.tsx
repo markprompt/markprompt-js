@@ -5,13 +5,14 @@ import styles from './index.module.css';
 
 export default function Home(): ReactElement {
   return (
-    <Layout description="A demo showing Markprompt in Docusaurus">
+    <Layout description="A demo showing Markprompt in Docusaurus with swizzling">
       <main className={styles.main}>
-        <h1>Markprompt demo</h1>
+        <h1>Markprompt + Algolia demo with swizzling</h1>
         <p>
-          This is the demo for <code>@markprompt/docusaurus-theme-search</code>.
+          This demo features Markprompt with a swizzled{' '}
+          <code>@docusaurus/theme-search-algolia</code> plugin.
         </p>
-        <p>Click the button on the bottom right to open a Markprompt dialog.</p>
+        <p>Click the button at the bottom right to open Markprompt.</p>
       </main>
     </Layout>
   );

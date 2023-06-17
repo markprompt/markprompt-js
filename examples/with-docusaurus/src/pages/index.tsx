@@ -9,9 +9,10 @@ export default function Home(): ReactElement {
       <main className={styles.main}>
         <h1>Markprompt demo</h1>
         <p>
-          This is the demo for <code>@markprompt/docusaurus-theme-search</code>.
+          This is the demo of the{' '}
+          <code>@markprompt/docusaurus-theme-search</code> plugin.
         </p>
-        <p>Click the button on the bottom right to open a Markprompt dialog.</p>
+        <p>Click the button at the bottom right to open Markprompt.</p>
       </main>
     </Layout>
   );

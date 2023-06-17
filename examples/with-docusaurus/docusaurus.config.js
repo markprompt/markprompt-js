@@ -36,24 +36,26 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       markprompt: {
-        projectKey: 'Your Markprompt project key',
+        // Get your project key in the Markprompt dashboard, under
+        // project settings.
+        projectKey: 'YOUR_MARKPROMPT_PROJECT_KEY',
       },
       navbar: {
-        title: 'My Site',
+        title: 'Markprompt',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
         items: [
           {
-            href: 'https://github.com/motifland/markprompt-js',
+            href: 'https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus',
             label: 'GitHub',
             position: 'right',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: 'light',
         copyright: `Copyright © ${new Date().getFullYear()} Markprompt. Built with Docusaurus.`,
       },
       prism: {
