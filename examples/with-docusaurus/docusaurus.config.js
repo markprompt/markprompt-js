@@ -4,6 +4,8 @@
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 
+require('dotenv').config();
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Markprompt demo',
@@ -36,9 +38,10 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       markprompt: {
-        // Get your project key in the Markprompt dashboard, under
+        // Set the project key here, on in a `.env` file. You can obtain
+        // the project key in the Markprompt dashboard, under
         // project settings.
-        projectKey: 'YOUR_MARKPROMPT_PROJECT_KEY',
+        projectKey: process.env.MARKPROMPT_PROJECT_KEY,
       },
       navbar: {
         title: 'Markprompt',
