@@ -2,7 +2,8 @@ import * as Markprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
-import useMeasure from 'react-use-measure';
+
+import { useElementSize } from './useElementSize.js';
 
 const capitalize = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -73,7 +74,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     transformReferenceId,
   } = props;
   const { state, references } = useMarkpromptContext();
-  const [ref, { height }] = useMeasure();
+  const [ref, { height }] = useElementSize<HTMLDivElement>();
 
   const ReferenceComponent = useCallback(
     (props: { referenceId: string; index: number }) => (
