@@ -2,4 +2,4 @@
 '@markprompt/css': patch
 ---
 
-Fix for references overflowing horizontally with a hidden scrollbar, now they wrap instead
+Make the scrollability of the prompt references container easier to discover by adding a small drop shadow when the container overflows.
