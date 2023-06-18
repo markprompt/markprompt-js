@@ -759,14 +759,53 @@
 }
 
 :where(.MarkpromptReferences ul) {
+  --transparent: rgba(255, 255, 255, 0);
+  --shadow-size: 0.5rem;
+  --shadow-color: var(--markprompt-border);
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
   padding-left: 0;
+  padding: 0.25rem 0;
   list-style-type: none;
   margin-bottom: 0;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: linear-gradient(
+      to right,
+      var(--markprompt-muted),
+      var(--markprompt-muted),
+      var(--transparent) calc(var(--shadow-size) * 2)
+    ),
+    radial-gradient(
+      farthest-side at 0 50%,
+      var(--shadow-color),
+      var(--transparent)
+    ),
+    linear-gradient(
+      to left,
+      var(--markprompt-muted),
+      var(--markprompt-muted),
+      var(--transparent) calc(var(--shadow-size) * 2)
+    ),
+    radial-gradient(
+        farthest-side at 100% 50%,
+        var(--shadow-color),
+        var(--transparent)
+      )
+      100%;
+  background-color: var(--markprompt-muted);
+  background-repeat: no-repeat;
+  background-attachment: local, scroll, local, scroll;
+  background-size: 100% 100%, var(--shadow-size) 100%, 100% 100%,
+    var(--shadow-size) 100%;
+}
+
+:where(.MarkpromptReferences ul::-webkit-scrollbar) {
+  width: 0;
 }
 
 :where(.MarkpromptReference) {
