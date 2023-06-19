@@ -769,7 +769,8 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
-  padding: 0rem 2rem 0.5rem 2rem;
+  padding: 0.25rem 2rem 0.5rem 2rem;
+  margin-top: -0.25rem;
   list-style-type: none;
   margin-bottom: 0;
   overflow-x: scroll;

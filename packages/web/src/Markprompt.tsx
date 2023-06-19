@@ -1,7 +1,7 @@
 import * as BaseMarkprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { animated, useSpring } from '@react-spring/web';
+import { animated, useSpring, config } from '@react-spring/web';
 import React, {
   useEffect,
   useMemo,
@@ -197,6 +197,10 @@ const Transition = (props: TransitionProps): ReactElement => {
   const styles = useSpring({
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
+    config: {
+      tension: 640,
+      friction: 60,
+    },
     onStart: () => {
       if (!isVisible) return;
       setDisplay('block');
