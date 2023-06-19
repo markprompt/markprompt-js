@@ -163,7 +163,7 @@ function AnswerOrSearchResults(
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
           getResultHref={search?.getResultHref}
