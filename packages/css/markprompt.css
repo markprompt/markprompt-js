@@ -902,10 +902,11 @@
 
 :where(.MarkpromptSearchAnswerButton:focus) {
   background-color: var(--markprompt-primary);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchAnswerButton:focus .MarkpromptSearchIcon) {
-  color: var(--markprompt-foreground);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchAnswerButton :last-child) {
@@ -918,6 +919,10 @@
   flex-direction: row;
   gap: 4px;
   color: var(--markprompt-mutedForeground);
+}
+
+.MarkpromptSearchAnswerButton:focus kbd svg {
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptKeyboardKey) {
