@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.3.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Add MarkpromptSearchBoxTrigger styles
+
 ## 0.2.0
 
 ### Minor Changes
