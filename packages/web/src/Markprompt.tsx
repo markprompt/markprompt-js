@@ -123,6 +123,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             search={search}
             references={references}
             showSearch={showSearch}
+            promptCTA={prompt?.cta}
             toggleSearchAnswer={toggle}
           />
 
@@ -141,13 +142,15 @@ type AnswerOrSearchResultsProps = {
   references: MarkpromptOptions['references'];
   search?: MarkpromptOptions['search'];
   showSearch: boolean;
+  promptCTA?: string;
   toggleSearchAnswer: () => void;
 };
 
 function AnswerOrSearchResults(
   props: AnswerOrSearchResultsProps,
 ): ReactElement {
-  const { search, showSearch, toggleSearchAnswer, references } = props;
+  const { search, showSearch, promptCTA, toggleSearchAnswer, references } =
+    props;
 
   if (!search?.enable) {
     return (
@@ -165,6 +168,7 @@ function AnswerOrSearchResults(
         <SearchResultsContainer
           getResultHref={search?.getResultHref}
           showSearch={showSearch}
+          promptCTA={promptCTA}
           toggleSearchAnswer={toggleSearchAnswer}
         />
       </Transition>
@@ -271,13 +275,14 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 type SearchResultsContainerProps = {
   getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
   showSearch: boolean;
+  promptCTA?: string;
   toggleSearchAnswer: () => void;
 };
 
 function SearchResultsContainer(
   props: SearchResultsContainerProps,
 ): ReactElement {
-  const { showSearch, toggleSearchAnswer, getResultHref } = props;
+  const { showSearch, promptCTA, toggleSearchAnswer, getResultHref } = props;
 
   const btn = useRef<HTMLButtonElement>(null);
 
@@ -346,7 +351,7 @@ function SearchResultsContainer(
         <span aria-hidden className="MarkpromptSearchResultIconWrapper">
           <SparklesIcon focusable={false} className="MarkpromptSearchIcon" />
         </span>
-        <span>Ask Docs AI… </span>
+        <span>{promptCTA || 'Ask Docs AI…'}</span>
         <kbd>
           {navigator.platform.indexOf('Mac') === 0 ||
           navigator.platform === 'iPhone' ? (

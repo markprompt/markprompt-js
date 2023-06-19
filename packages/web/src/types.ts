@@ -34,6 +34,12 @@ type MarkpromptOptions = {
      * @default "Ask me anything…"
      **/
     placeholder?: string;
+    /**
+     * When search is enabled, this label is used for the CTA button
+     * that opens the prompt.
+     * @default "Ask Docs AI…"
+     **/
+    cta?: string;
   };
   references?: {
     /**
