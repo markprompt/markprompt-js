@@ -70,6 +70,11 @@ type MarkpromptOptions = {
      **/
     label?: string;
     /**
+     * Placeholder text for non-floating element.
+     * @default "Ask docs"
+     **/
+    placeholder?: string;
+    /**
      * Should the trigger button be displayed as a floating button at the bottom right of the page?
      * Setting this to false will display a trigger button in the element passed
      * to the `markprompt` function.

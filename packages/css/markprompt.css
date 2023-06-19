@@ -98,7 +98,7 @@
   width: 100%;
 }
 
-:where(.MarkPromptSearchBoxTriggerText) {
+:where(.MarkpromptSearchBoxTriggerText) {
   display: flex;
   align-items: center;
   gap: 0.25rem;

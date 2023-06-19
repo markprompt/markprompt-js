@@ -73,7 +73,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       onOpenChange={setOpen}
       {...dialogProps}
     >
-      {trigger?.floating ? (
+      {trigger?.floating !== false ? (
         <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
           <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
             <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
@@ -249,8 +249,9 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
     <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
       <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
         <span className="MarkpromptSearchBoxTriggerContent">
-          <span className="MarkPromptSearchBoxTriggerText">
-            <SearchIcon width={16} height={16} /> Search{' '}
+          <span className="MarkpromptSearchBoxTriggerText">
+            <SearchIcon width={16} height={16} />{' '}
+            {trigger?.placeholder || 'Search'}{' '}
           </span>
           <kbd>
             {navigator.platform.indexOf('Mac') === 0 ||
