@@ -33,7 +33,7 @@ export interface UseMarkpromptOptions {
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
-    enable?: boolean;
+    enabled?: boolean;
   };
 }
 
@@ -175,7 +175,7 @@ export function useMarkprompt({
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
-      if (!searchOptions?.enable) return;
+      if (!searchOptions?.enabled) return;
 
       abort();
 
@@ -235,14 +235,14 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, projectKey, searchOptions?.enable],
+    [abort, projectKey, searchOptions?.enabled],
   );
 
   return useMemo(
     () => ({
       answer,
       activeSearchResult,
-      isSearchEnabled: !!searchOptions?.enable,
+      isSearchEnabled: !!searchOptions?.enabled,
       isSearchActive: !!isSearchActive,
       prompt,
       references,
@@ -257,7 +257,7 @@ export function useMarkprompt({
     [
       answer,
       activeSearchResult,
-      searchOptions?.enable,
+      searchOptions?.enabled,
       isSearchActive,
       prompt,
       references,

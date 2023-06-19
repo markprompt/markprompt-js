@@ -88,7 +88,7 @@ type Options = {
   };
   search?: {
     /** Enable search **/
-    enable?: boolean;
+    enabled?: boolean;
     /** Callback to transform a search result into an href */
     getResultHref?: (result: FlattenedSearchResult) => string;
   };

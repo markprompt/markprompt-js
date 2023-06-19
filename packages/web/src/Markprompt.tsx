@@ -61,7 +61,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [open, setOpen] = useState(false);
 
-  const [showSearch, toggle] = useToggle(search?.enable ?? false);
+  const [showSearch, toggle] = useToggle(search?.enabled ?? false);
 
   return (
     <BaseMarkprompt.Root
@@ -104,7 +104,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               className="MarkpromptPrompt"
               placeholder={
                 prompt?.placeholder ??
-                (search?.enable
+                (search?.enabled
                   ? 'Search or ask a question…'
                   : 'Ask me anything…')
               }
@@ -152,10 +152,10 @@ function AnswerOrSearchResults(
   const { search, showSearch, promptCTA, toggleSearchAnswer, references } =
     props;
 
-  if (!search?.enable) {
+  if (!search?.enabled) {
     return (
       <AnswerContainer
-        isSearchEnabled={search?.enable}
+        isSearchEnabled={search?.enabled}
         references={references}
         toggleSearchAnswer={toggleSearchAnswer}
       />
@@ -174,7 +174,7 @@ function AnswerOrSearchResults(
       </Transition>
       <Transition isVisible={!showSearch} isFlipped>
         <AnswerContainer
-          isSearchEnabled={search?.enable}
+          isSearchEnabled={search?.enabled}
           references={references}
           toggleSearchAnswer={toggleSearchAnswer}
         />
