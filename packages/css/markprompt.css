@@ -744,8 +744,8 @@
 
 :where(.MarkpromptReferences) {
   position: relative;
-  padding-block: 1rem;
-  padding-inline: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   font-size: 0.75rem;
@@ -756,6 +756,8 @@
   animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-weight: 600;
   margin: 0;
+  padding-inline: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 :where(.MarkpromptReferences ul) {
@@ -767,45 +769,52 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
-  padding-left: 0;
-  padding: 0.25rem 0;
+  padding: 0rem 2rem 0.5rem 2rem;
   list-style-type: none;
   margin-bottom: 0;
   overflow-x: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: linear-gradient(
-      to right,
-      var(--markprompt-muted),
-      var(--markprompt-muted),
-      var(--transparent) calc(var(--shadow-size) * 2)
-    ),
-    radial-gradient(
-      farthest-side at 0 50%,
-      var(--shadow-color),
-      var(--transparent)
-    ),
-    linear-gradient(
-      to left,
-      var(--markprompt-muted),
-      var(--markprompt-muted),
-      var(--transparent) calc(var(--shadow-size) * 2)
-    ),
-    radial-gradient(
-        farthest-side at 100% 50%,
-        var(--shadow-color),
-        var(--transparent)
-      )
-      100%;
   background-color: var(--markprompt-muted);
-  background-repeat: no-repeat;
-  background-attachment: local, scroll, local, scroll;
-  background-size: 100% 100%, var(--shadow-size) 100%, 100% 100%,
-    var(--shadow-size) 100%;
 }
 
-:where(.MarkpromptReferences ul::-webkit-scrollbar) {
-  width: 0;
+.MarkpromptReferences ul::-webkit-scrollbar {
+  display: none;
+}
+
+.MarkpromptReferences {
+  position: relative;
+  overflow: auto;
+}
+
+.MarkpromptReferences::before,
+.MarkpromptReferences::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: 0;
+  width: 2rem;
+  pointer-events: none;
+}
+
+.MarkpromptReferences::before {
+  z-index: 10;
+  left: 0;
+  background-image: linear-gradient(
+    to right,
+    var(--markprompt-muted),
+    transparent
+  );
+}
+
+.MarkpromptReferences::after {
+  z-index: 10;
+  right: 0;
+  background-image: linear-gradient(
+    to left,
+    var(--markprompt-muted),
+    transparent
+  );
 }
 
 :where(.MarkpromptReference) {
