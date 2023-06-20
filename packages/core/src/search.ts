@@ -6,7 +6,7 @@ export const DEFAULT_SEARCH_LIMIT = 8;
 export interface SubmitSearchQueryOptions {
   /**
    * Maximum amount of results to return
-   * @default 5
+   * @default 8
    **/
   limit?: number;
   /**

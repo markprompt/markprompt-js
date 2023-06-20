@@ -569,6 +569,14 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
 );
 SearchResults.displayName = 'Markprompt.SearchResults';
 
+const removeFileExtension = (path: string): string => {
+  const lastDotIndex = path.lastIndexOf('.');
+  if (lastDotIndex === -1) {
+    return path;
+  }
+  return path.substring(0, lastDotIndex);
+};
+
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   FlattenedSearchResult & {
@@ -584,7 +592,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       path,
       score,
       tag,
-      getHref = (result) => result.path,
+      getHref = (result) => removeFileExtension(result.path),
       ...rest
     } = props;
     return (
