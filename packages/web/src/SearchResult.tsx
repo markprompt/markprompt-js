@@ -1,7 +1,7 @@
 import {
   useMarkpromptContext,
+  getHref as getDefaultHref,
   type SearchResultProps,
-  type FlattenedSearchResult,
 } from '@markprompt/react';
 import { clsx } from 'clsx';
 import React, { Fragment, forwardRef, memo } from 'react';
@@ -57,7 +57,10 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       tag,
       isParent,
       hasParent,
-      getHref = (result: FlattenedSearchResult) => result.path,
+      getHref,
+      path,
+      sectionHeading,
+      source,
       ...rest
     } = props;
     const { prompt } = useMarkpromptContext();
@@ -70,7 +73,13 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
           MarkpromptSearchResultIndented: hasParent,
         })}
       >
-        <a href={getHref(props)} className="MarkpromptSearchResultLink">
+        <a
+          href={
+            getHref?.(path, sectionHeading, source) ||
+            getDefaultHref(path, sectionHeading)
+          }
+          className="MarkpromptSearchResultLink"
+        >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
               {!isParent ? (

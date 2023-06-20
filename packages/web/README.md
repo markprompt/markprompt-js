@@ -90,7 +90,7 @@ type Options = {
     /** Enable search **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
+    getResultHref?: (path: string) => string;
   };
   /** Props for the trigger */
   trigger?: {

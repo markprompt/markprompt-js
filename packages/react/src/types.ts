@@ -1,3 +1,4 @@
+import type { Source } from '@markprompt/core';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
@@ -30,11 +31,18 @@ export type PolymorphicComponentPropWithRef<
 export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
 
-export type FlattenedSearchResult = {
+export type SectionHeading = {
+  value: string | undefined;
+  id: string | undefined;
+};
+
+export type SearchResultWithMetadata = {
   isParent: boolean;
   hasParent: boolean;
   path: string;
+  sectionHeading?: SectionHeading | undefined;
   score: number;
   tag?: string;
   title: string;
+  source: Source;
 };

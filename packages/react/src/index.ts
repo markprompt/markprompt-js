@@ -38,5 +38,6 @@ export {
 } from './headless.js';
 
 export { useMarkpromptContext } from './context.js';
+export { getHref } from './utils.js';
 
 export * from './types.js';

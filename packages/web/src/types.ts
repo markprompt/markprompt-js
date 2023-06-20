@@ -1,8 +1,9 @@
 import {
+  type Source,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
-import type { FlattenedSearchResult } from '@markprompt/react';
+import type { SectionHeading } from '@markprompt/react';
 
 type MarkpromptOptions = {
   close?: {
@@ -67,7 +68,11 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
+    getResultHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   };
   trigger?: {
     /**

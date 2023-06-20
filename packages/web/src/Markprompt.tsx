@@ -1,7 +1,8 @@
+import type { Source } from '@markprompt/core';
 import * as BaseMarkprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { animated, useSpring, config } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import React, {
   useEffect,
   useMemo,
@@ -166,7 +167,7 @@ function AnswerOrSearchResults(
     <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
-          getResultHref={search?.getResultHref}
+          getResultHref={search.getResultHref}
           showSearch={showSearch}
           promptCTA={promptCTA}
           toggleSearchAnswer={toggleSearchAnswer}
@@ -277,7 +278,11 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
-  getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
+  getResultHref?: (
+    path: string,
+    sectionHeading: BaseMarkprompt.SectionHeading | undefined,
+    source: Source,
+  ) => string;
   showSearch: boolean;
   promptCTA?: string;
   toggleSearchAnswer: () => void;

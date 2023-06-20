@@ -28,6 +28,7 @@ export type SearchResultSection = {
   content: string;
   meta?: {
     leadHeading?: {
+      id?: string;
       depth: number;
       value: string;
     };
@@ -35,18 +36,27 @@ export type SearchResultSection = {
   score: number;
 };
 
+export type SourceType =
+  | 'github'
+  | 'motif'
+  | 'website'
+  | 'file-upload'
+  | 'api-upload';
+
+export type Source = {
+  type: SourceType;
+  data: {
+    url?: string;
+    domain?: string;
+  };
+};
+
 export type SearchResult = {
   path: string;
   meta: {
     title: string;
   };
-  source: {
-    type: 'github' | 'motif' | 'website' | 'file-upload' | 'api-upload';
-    data: {
-      url?: string;
-      domain?: string;
-    };
-  };
+  source: Source;
   sections: SearchResultSection[];
 };
 

@@ -2,10 +2,9 @@ import {
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
   type SubmitPromptOptions,
-  type SearchResult,
   type SubmitSearchQueryOptions,
+  type SearchResult,
 } from '@markprompt/core';
-import Slugger from 'github-slugger';
 import {
   useCallback,
   useEffect,
@@ -16,7 +15,7 @@ import {
   type SetStateAction,
 } from 'react';
 
-import type { FlattenedSearchResult } from './types.js';
+import type { SearchResultWithMetadata } from './types.js';
 
 export type LoadingState =
   | 'indeterminate'
@@ -51,7 +50,7 @@ export interface UseMarkpromptResult {
   /** The references that belong to the latest answer */
   references: string[];
   /** Search results */
-  searchResults: FlattenedSearchResult[];
+  searchResults: SearchResultWithMetadata[];
   /** The current loading state */
   state: LoadingState;
   /** Abort a pending request */
@@ -83,9 +82,9 @@ export function useMarkprompt({
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
-  const [searchResults, setSearchResults] = useState<FlattenedSearchResult[]>(
-    [],
-  );
+  const [searchResults, setSearchResults] = useState<
+    SearchResultWithMetadata[]
+  >([]);
   const [activeSearchResult, setActiveSearchResult] = useState<
     string | undefined
   >();
@@ -172,6 +171,208 @@ export function useMarkprompt({
       }
     });
   }, [abort, projectKey, prompt, promptOptions, state]);
+
+  useEffect(() => {
+    setSearchResults(
+      flattenSearchResults('Cloud', [
+        {
+          path: 'doc/admin/audit_log.md',
+          meta: {
+            title: 'Audit Log',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 3,
+                  value: 'Cloud',
+                },
+              },
+              content: 'To be done soon. ',
+              score: 1,
+            },
+          ],
+        },
+        {
+          path: 'doc/admin/auth/index.md',
+          meta: {
+            title: 'User authentication',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 1,
+                  value: 'User authentication',
+                },
+              },
+              content:
+                'Sourcegraph supports the following ways for users to sign in: Builtin password authentication GitHub GitLab Bitbucket Cloud Gerrit&#x20; SAML OpenID Connect Google Workspace (Google accounts) HTTP aut',
+              score: 1,
+            },
+            {
+              meta: {
+                leadHeading: {
+                  depth: 2,
+                  value: 'Bitbucket Cloud',
+                },
+              },
+              content:
+                'Create a Bitbucket Cloud OAuth consumer. Set the following values, replacing with the IP or hostname of your Sourcegraph instance: Callback URL:&#x20; Permissions: :&#x20; : (more information in repos',
+              score: 1,
+            },
+            {
+              meta: {
+                leadHeading: {
+                  depth: 2,
+                  value: 'HTTP authentication proxies',
+                },
+              },
+              content:
+                "You can wrap Sourcegraph in an authentication proxy that authenticates the user and passes the user's username or email (or both) to Sourcegraph via HTTP headers. The most popular such authentication ",
+              score: 1,
+            },
+          ],
+        },
+        {
+          path: 'doc/admin/auth/saml/index.md',
+          meta: {
+            title: 'SAML',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 2,
+                  value: 'Identity Providers',
+                },
+              },
+              content:
+                'Select your SAML identity provider for setup instructions: Okta Azure Active Directory (Azure AD) Microsoft Active Directory Federation Services (ADFS) Auth0 OneLogin Ping Identity Salesforce Identity',
+              score: 1,
+            },
+          ],
+        },
+        {
+          path: 'doc/admin/auth/troubleshooting.md',
+          meta: {
+            title: 'Troubleshooting user authentication (SSO)',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 3,
+                  value: 'Things to collect for async analysis',
+                },
+              },
+              content:
+                '&#x20;portion of the Sourcegraph site configuration. Example: "auth.providers" site config A screenshot of the Sourcegraph OAuth application on the GitHub instance. Example: OAuth application settings',
+              score: 1,
+            },
+          ],
+        },
+        {
+          path: 'doc/admin/config/authorization_and_authentication.md',
+          meta: {
+            title: 'Authentication and authorization',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 3,
+                  value:
+                    'GitHub Enterprise or GitHub Cloud authentication and authorization',
+                },
+              },
+              content:
+                'We support both authentication and permissions syncing (through OAuth) for GitHub. If you use GitHub as your code host, we do not officially support using another authentication mechanism (SAML, etc.)',
+              score: 1,
+            },
+            {
+              meta: {
+                leadHeading: {
+                  depth: 3,
+                  value:
+                    'GitLab Enterprise or GitLab Cloud authentication and authorization',
+                },
+              },
+              content:
+                'We support both authentication and permissions syncing (through OAuth) for GitLab. If you use GitLab as your code host, you have two available authentication flows: ',
+              score: 1,
+            },
+          ],
+        },
+        {
+          path: 'doc/admin/config/batch_changes.md',
+          meta: {
+            title: 'Batch Changes site admin configuration reference',
+          },
+          source: {
+            type: 'github',
+            data: {
+              url: 'https://github.com/sourcegraph/sourcegraph',
+            },
+          },
+          sections: [
+            {
+              meta: {
+                leadHeading: {
+                  depth: 3,
+                  value: 'Avoiding hitting rate limits',
+                },
+              },
+              content:
+                "Keep in mind that if you configure a rollout window that is too aggressive, you risk exceeding your code hosts' API rate limits. We recommend maintaining a rate that is no faster than ; however, you c",
+              score: 1,
+            },
+            {
+              meta: {
+                leadHeading: {
+                  depth: 2,
+                  value: 'Automatically delete branches on merge/close',
+                },
+              },
+              content:
+                'Sourcegraph 5.1+ Sourcegraph can be configured to automatically delete branches created for Batch Changes changesets when changesets are merged or closed by enabling the site configuration option. Whe',
+              score: 1,
+            },
+          ],
+        },
+      ]),
+    );
+  }, []);
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
@@ -328,12 +529,10 @@ const isMatching = (
   return text.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
 };
 
-const slugger = new Slugger();
-
 function flattenSearchResults(
   searchQuery: string,
   searchResults: SearchResult[],
-): FlattenedSearchResult[] {
+): SearchResultWithMetadata[] {
   const sortedSearchResults = [...searchResults].sort((a, b) => {
     const aTopSectionScore = Math.max(...a.sections.map((s) => s.score));
     const bTopSectionScore = Math.max(...b.sections.map((s) => s.score));
@@ -367,7 +566,7 @@ function flattenSearchResults(
             return undefined;
           }
 
-          const isMatchingLeadHeading = isMatching(
+          const isKeywordMatchingLeadHeading = isMatching(
             s.meta?.leadHeading?.value,
             normalizedSearchQuery,
           );
@@ -377,28 +576,35 @@ function flattenSearchResults(
             normalizedSearchQuery,
           );
 
-          if (!isMatchingLeadHeading && !isMatchingContent) {
+          if (!isKeywordMatchingLeadHeading && !isMatchingContent) {
             // If this is a result because of the title only, omit
             // it from here.
             return undefined;
           }
 
-          if (isMatchingLeadHeading) {
-            // If matching lead heading, show that as title
+          if (isKeywordMatchingLeadHeading) {
+            // Title is made of lead heading
             return {
               isParent: false,
               hasParent: isMatchingTitle,
+              tag: isMatchingTitle ? null : f.meta.title,
               title: createKWICSnippet(
                 trimContent(s.meta?.leadHeading?.value || ''),
                 normalizedSearchQuery,
               ),
               score: s.score,
-              path: `${f.path}#${slugger.slug(
-                s.meta?.leadHeading?.value || '',
-              )}`,
+              path: f.path,
+              sectionHeading: s.meta?.leadHeading
+                ? {
+                    id: s.meta?.leadHeading?.id,
+                    value: s.meta?.leadHeading?.value,
+                  }
+                : undefined,
+              source: f.source,
             };
           }
 
+          // Title is made of content snippet
           return {
             isParent: false,
             hasParent: isMatchingTitle,
@@ -406,6 +612,13 @@ function flattenSearchResults(
             title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
             score: s.score,
             path: f.path,
+            sectionHeading: s.meta?.leadHeading
+              ? {
+                  id: s.meta?.leadHeading?.id,
+                  value: s.meta?.leadHeading?.value,
+                }
+              : undefined,
+            source: f.source,
           };
         })
         .filter(isPresent),
@@ -423,6 +636,7 @@ function flattenSearchResults(
           title: createKWICSnippet(f.meta.title, searchQuery),
           score: topSectionScore,
           path: f.path,
+          source: f.source,
         },
       ].concat(sectionResults);
     } else {

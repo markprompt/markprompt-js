@@ -1,4 +1,4 @@
-import type { SubmitPromptOptions } from '@markprompt/core';
+import type { Source } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import debounce from 'p-debounce';
 import React, {
@@ -7,7 +7,6 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
   type ChangeEventHandler,
   type ComponentPropsWithoutRef,
   type ComponentPropsWithRef,
@@ -26,12 +25,14 @@ import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
 import type {
-  FlattenedSearchResult,
+  SearchResultWithMetadata,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
+  SectionHeading,
 } from './types.js';
 import { useMarkprompt } from './useMarkprompt.js';
 import { type UseMarkpromptOptions } from './useMarkprompt.js';
+import { getHref as getDefaultHref } from './utils.js';
 
 type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 
@@ -507,7 +508,7 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
     label?: string;
-    SearchResultComponent?: ElementType<FlattenedSearchResult>;
+    SearchResultComponent?: ElementType<SearchResultWithMetadata>;
   }
 >;
 
@@ -571,25 +572,31 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
-  FlattenedSearchResult & {
-    getHref?: (result: FlattenedSearchResult) => string;
+  SearchResultWithMetadata & {
+    getHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   }
 >;
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const {
       title,
-      isParent,
-      hasParent,
       path,
       score,
-      tag,
-      getHref = (result) => result.path,
+      sectionHeading,
+      source,
+      getHref = (path, sectionHeading) => getDefaultHref(path, sectionHeading),
       ...rest
     } = props;
     return (
       <li ref={ref} {...rest}>
-        <a href={getHref(props)} data-markprompt-score={score}>
+        <a
+          href={getHref(path, sectionHeading, source)}
+          data-markprompt-score={score}
+        >
           {title}
         </a>
       </li>
