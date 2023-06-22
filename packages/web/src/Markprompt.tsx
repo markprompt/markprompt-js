@@ -167,7 +167,7 @@ function AnswerOrSearchResults(
     <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
-          getResultHref={search.getResultHref}
+          getResultHref={search?.getResultHref}
           showSearch={showSearch}
           promptCTA={promptCTA}
           toggleSearchAnswer={toggleSearchAnswer}
