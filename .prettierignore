@@ -1,4 +1,5 @@
 .docusaurus/
 .next/
-dist/
+build/
 coverage/
+dist/
