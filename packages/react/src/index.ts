@@ -37,6 +37,8 @@ export {
   type TitleProps,
 } from './headless.js';
 
+export { Markprompt } from './Markprompt.js';
+
 export { useMarkpromptContext } from './context.js';
 export { getHref } from './utils.js';
 
