@@ -29,9 +29,9 @@ import type {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SectionHeading,
-} from './types.js';
-import { useMarkprompt, type UseMarkpromptOptions } from './useMarkprompt.js';
-import { getHref as getDefaultHref } from './utils.js';
+} from '../types.js';
+import { useMarkprompt, type UseMarkpromptOptions } from '../useMarkprompt.js';
+import { getHref as getDefaultHref } from '../utils.js';
 
 type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 

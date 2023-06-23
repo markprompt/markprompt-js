@@ -112,9 +112,13 @@ type MarkpromptOptions = {
      * Enable search
      * @default false
      **/
-    enable?: boolean;
+    enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
+    getResultHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   };
   trigger?: {
     /**
