@@ -17,6 +17,7 @@
     "src/theme"
   ],
   "scripts": {
+    "build": "tsc --build --clean && tsc --build",
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
