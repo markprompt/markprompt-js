@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.7.0
+
+### Minor Changes
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Move the Markprompt component from @markprompt/web to @markprompt/react, allowing React and Docusaurus users to use the prebuilt component
+
 ## 0.6.0
 
 ### Minor Changes

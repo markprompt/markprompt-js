@@ -1,5 +1,17 @@
 # @markprompt/css
 
+## 0.4.0
+
+### Minor Changes
+
+- [#45](https://github.com/motifland/markprompt-js/pull/45) [`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85) Thanks [@michaelfester](https://github.com/michaelfester)! - Move References height animations to JS so we can avoid specifying static heights in CSS
+
+### Patch Changes
+
+- [#45](https://github.com/motifland/markprompt-js/pull/45) [`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85) Thanks [@michaelfester](https://github.com/michaelfester)! - Make the scrollability of the prompt references container easier to discover by adding a small drop shadow when the container overflows.
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Make sure dark/light themes work for Docusaurus
+
 ## 0.3.0
 
 ### Minor Changes
