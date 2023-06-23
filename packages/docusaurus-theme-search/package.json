@@ -17,12 +17,12 @@
     "src/theme"
   ],
   "scripts": {
-    "prepack": "tsc --build --clean && tsc --build && cpy 'src/**/*.css' dist"
+    "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
     "@docusaurus/types": "^2.0.0",
-    "@markprompt/react": "0.6.0",
-    "@radix-ui/react-visually-hidden": "^1.0.3"
+    "@markprompt/css": "^0.3.0",
+    "@markprompt/react": "0.6.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0",

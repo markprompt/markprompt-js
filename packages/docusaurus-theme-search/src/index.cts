@@ -1,13 +1,13 @@
 import { type PluginModule } from '@docusaurus/types';
 // @ts-ignore TypeScript doesn’t allows us to import types from an ESM file in a CJS file.
 // Apart from that, TypeScript does recognize the type.
-import type { RootProps } from '@markprompt/react';
+import type { MarkpromptProps } from '@markprompt/react';
 
 declare namespace themeSearchMarkprompt {
-  export type MarkpromptConfig = Omit<RootProps, 'children'>;
+  export type MarkpromptConfig = MarkpromptProps;
 
   export interface ThemeConfig {
-    markprompt?: Omit<MarkpromptConfig, 'isSearchActive' | 'searchOptions'>;
+    markprompt?: MarkpromptConfig;
   }
 }
 
