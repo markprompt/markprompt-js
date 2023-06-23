@@ -5,7 +5,7 @@ import {
   type Dispatch,
 } from 'react';
 
-import type { FlattenedSearchResult } from './types.js';
+import type { SearchResultWithMetadata } from './types.js';
 import { type LoadingState } from './useMarkprompt.js';
 
 type State = {
@@ -15,7 +15,7 @@ type State = {
   isSearchActive: boolean;
   prompt: string;
   references: string[];
-  searchResults: FlattenedSearchResult[];
+  searchResults: SearchResultWithMetadata[];
   state: LoadingState;
 };
 

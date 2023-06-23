@@ -268,7 +268,7 @@
 }
 
 :where(.MarkpromptAutoScroller) {
-  flex-grow: 1;
+  flex: 1 1 auto;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -732,71 +732,90 @@
   transition: opacity 200ms ease;
 }
 
-:where([data-loading-state='preload'] .MarkpromptProgress) {
-  opacity: 1;
-}
-
 :where(
     [data-loading-state]:not([data-loading-state='preload']) .MarkpromptProgress
   ) {
   opacity: 0;
 }
 
+:where([data-loading-state='preload'] .MarkpromptProgress) {
+  opacity: 1;
+}
+
 :where(.MarkpromptReferences) {
   position: relative;
   padding-top: 1rem;
-  padding-inline: 2rem;
+  padding-bottom: 0.5rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   font-size: 0.75rem;
   color: var(--markprompt-mutedForeground);
-  transition: height 500ms ease;
-  transform: translateY(100%);
-  opacity: 0;
-  animation: markprompt-popup 200ms ease-out forwards;
-  overflow: hidden;
-  box-sizing: border-box;
-  flex: none;
-}
-
-:where(.MarkpromptReferences[data-loading-state='preload']) {
-  height: 50px;
-}
-
-:where(
-    .MarkpromptReferences[data-loading-state='streaming-answer'],
-    .MarkpromptReferences[data-loading-state='done']
-  ) {
-  height: 95px;
-}
-
-:where(.MarkpromptReferences[data-loading-state='indeterminate']) {
-  display: none;
-  height: 0;
 }
 
 :where(.MarkpromptReferences p) {
   animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-weight: 600;
   margin: 0;
+  padding-inline: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 :where(.MarkpromptReferences ul) {
+  --transparent: rgba(255, 255, 255, 0);
+  --shadow-size: 0.5rem;
+  --shadow-color: var(--markprompt-border);
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
-  padding-left: 0;
-  padding-bottom: 20px;
+  padding: 0.25rem 2rem 0.5rem 2rem;
+  margin-top: -0.25rem;
   list-style-type: none;
-  overflow-x: auto;
-  -ms-overflow-style: none;
+  margin-bottom: 0;
+  overflow-x: scroll;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+  background-color: var(--markprompt-muted);
 }
 
-:where(.MarkpromptReferences ul::-webkit-scrollbar) {
+.MarkpromptReferences ul::-webkit-scrollbar {
   display: none;
+}
+
+.MarkpromptReferences {
+  position: relative;
+  overflow: auto;
+}
+
+.MarkpromptReferences::before,
+.MarkpromptReferences::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: 0;
+  width: 2rem;
+  pointer-events: none;
+}
+
+.MarkpromptReferences::before {
+  z-index: 10;
+  left: 0;
+  background-image: linear-gradient(
+    to right,
+    var(--markprompt-muted),
+    transparent
+  );
+}
+
+.MarkpromptReferences::after {
+  z-index: 10;
+  right: 0;
+  background-image: linear-gradient(
+    to left,
+    var(--markprompt-muted),
+    transparent
+  );
 }
 
 :where(.MarkpromptReference) {
@@ -884,10 +903,11 @@
 
 :where(.MarkpromptSearchAnswerButton:focus) {
   background-color: var(--markprompt-primary);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchAnswerButton:focus .MarkpromptSearchIcon) {
-  color: var(--markprompt-foreground);
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptSearchAnswerButton :last-child) {
@@ -900,6 +920,10 @@
   flex-direction: row;
   gap: 4px;
   color: var(--markprompt-mutedForeground);
+}
+
+.MarkpromptSearchAnswerButton:focus kbd svg {
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptKeyboardKey) {
@@ -982,7 +1006,7 @@
 
 :where(.MarkpromptSearchResultIconWrapperBordered) {
   background-color: #fff;
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
   border-style: solid;
   border-color: var(--markprompt-border);
 }
@@ -1102,17 +1126,6 @@
   }
   to {
     opacity: 0;
-  }
-}
-
-@keyframes markprompt-popup {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
   }
 }
 

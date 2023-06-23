@@ -88,9 +88,13 @@ type Options = {
   };
   search?: {
     /** Enable search **/
-    enable?: boolean;
+    enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
+    getResultHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   };
   /** Props for the trigger */
   trigger?: {

@@ -1,3 +1,4 @@
+import type { Source } from '@markprompt/core';
 import * as BaseMarkprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
@@ -61,7 +62,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [open, setOpen] = useState(false);
 
-  const [showSearch, toggle] = useToggle(search?.enable ?? false);
+  const [showSearch, toggle] = useToggle(search?.enabled ?? false);
 
   return (
     <BaseMarkprompt.Root
@@ -104,7 +105,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               className="MarkpromptPrompt"
               placeholder={
                 prompt?.placeholder ??
-                (search?.enable
+                (search?.enabled
                   ? 'Search or ask a question…'
                   : 'Ask me anything…')
               }
@@ -152,10 +153,10 @@ function AnswerOrSearchResults(
   const { search, showSearch, promptCTA, toggleSearchAnswer, references } =
     props;
 
-  if (!search?.enable) {
+  if (!search?.enabled) {
     return (
       <AnswerContainer
-        isSearchEnabled={search?.enable}
+        isSearchEnabled={search?.enabled}
         references={references}
         toggleSearchAnswer={toggleSearchAnswer}
       />
@@ -163,7 +164,7 @@ function AnswerOrSearchResults(
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
           getResultHref={search?.getResultHref}
@@ -174,7 +175,7 @@ function AnswerOrSearchResults(
       </Transition>
       <Transition isVisible={!showSearch} isFlipped>
         <AnswerContainer
-          isSearchEnabled={search?.enable}
+          isSearchEnabled={search?.enabled}
           references={references}
           toggleSearchAnswer={toggleSearchAnswer}
         />
@@ -197,6 +198,10 @@ const Transition = (props: TransitionProps): ReactElement => {
   const styles = useSpring({
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
+    config: {
+      tension: 640,
+      friction: 60,
+    },
     onStart: () => {
       if (!isVisible) return;
       setDisplay('block');
@@ -273,7 +278,11 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
-  getResultHref?: (result: BaseMarkprompt.FlattenedSearchResult) => string;
+  getResultHref?: (
+    path: string,
+    sectionHeading: BaseMarkprompt.SectionHeading | undefined,
+    source: Source,
+  ) => string;
   showSearch: boolean;
   promptCTA?: string;
   toggleSearchAnswer: () => void;
