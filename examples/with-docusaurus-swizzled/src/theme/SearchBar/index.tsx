@@ -1,37 +1,29 @@
+import '@markprompt/css';
+
 import type { WrapperProps } from '@docusaurus/types';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { markprompt } from '@markprompt/web';
+import { type MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
 import type SearchBarType from '@theme/SearchBar';
 import SearchBar from '@theme-original/SearchBar';
-import React, { useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 
-import '@markprompt/css';
+// import Markprompt lazily as Docusaurus does not currently support ESM
+const Markprompt = lazy(() =>
+  import('@markprompt/react').then((mod) => ({ default: mod.Markprompt })),
+);
 
 type Props = WrapperProps<typeof SearchBarType>;
 
 export default function SearchBarWrapper(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
-
-  useEffect(() => {
-    const { projectKey, ...config } = siteConfig.themeConfig.markprompt as any;
-    markprompt(projectKey, '#markprompt', {
-      ...config,
-      references: {
-        transformReferenceId: (referenceId) => {
-          // Sample code that transforms a reference path to a link.
-          // Remove file extension
-          const href = referenceId.replace(/\.[^.]+$/, '');
-          // Use last part of path for label
-          const text = href.split('/').slice(-1)[0];
-          return { text, href };
-        },
-      },
-    });
-  }, [siteConfig.themeConfig.markprompt]);
+  const { projectKey, ...config } = siteConfig.themeConfig
+    .markprompt as MarkpromptConfig;
 
   return (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <div id="markprompt" />
+      <Suspense fallback={null}>
+        <Markprompt projectKey={projectKey} {...config} />
+      </Suspense>
       <SearchBar {...props} />
     </div>
   );

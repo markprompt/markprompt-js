@@ -64,3 +64,25 @@
   --markprompt-overlay: #00000040;
   --markprompt-ring: #ffffff;
 }
+
+/*
+  Unset styles from @docusaurus/preset-classic
+  that interfere with Markprompt styles
+*/
+.MarkpromptClose kbd,
+.MarkpromptSearchBoxTrigger kbd {
+  border: unset;
+  box-shadow: unset;
+  background-color: unset;
+  border-radius: unset;
+  padding: unset;
+  color: var(--markprompt-mutedForeground);
+  font-size: 0.8rem;
+}
+
+.MarkpromptClose kbd {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: unset;
+}

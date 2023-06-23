@@ -37,6 +37,7 @@ const config = {
     /** @type {import('@markprompt/docusaurus-theme-search').ThemeConfig} */ ({
       markprompt: {
         projectKey: 'Your Markprompt key',
+        trigger: { floating: true },
       },
     }),
 };
@@ -54,10 +55,10 @@ To swizzle your current search plugin, run:
 npx docusaurus swizzle
 ```
 
-Choose `Wrap`, and confirm. This will create a `SearchBar` wrapper component in `/src/theme/SearchBar`. Next, install the standalone Markprompt web component and CSS:
+Choose `Wrap`, and confirm. This will create a `SearchBar` wrapper component in `/src/theme/SearchBar`. Next, install the standalone Markprompt component and CSS:
 
 ```
-npm install @markprompt/web @markprompt/css
+npm install @markprompt/react @markprompt/css
 ```
 
 Edit `/src/theme/SearchBar/index.tsx` to include Markprompt next to your existing search bar. Here is an example:
@@ -65,10 +66,15 @@ Edit `/src/theme/SearchBar/index.tsx` to include Markprompt next to your existin
 ```tsx
 import type { WrapperProps } from '@docusaurus/types';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { markprompt } from '@markprompt/web';
+import { type MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
 import type SearchBarType from '@theme/SearchBar';
 import SearchBar from '@theme-original/SearchBar';
-import React, { useEffect } from 'react';
+import React, { lazy } from 'react';
+
+// import Markprompt lazily as Docusaurus does not currently support ESM
+const Markprompt = lazy(() =>
+  import('@markprompt/react').then((mod) => ({ default: mod.Markprompt })),
+);
 
 import '@markprompt/css';
 
@@ -77,26 +83,12 @@ type Props = WrapperProps<typeof SearchBarType>;
 export default function SearchBarWrapper(props: Props): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
 
-  useEffect(() => {
-    const { projectKey, ...config } = siteConfig.themeConfig.markprompt as any;
-    markprompt(projectKey, '#markprompt', {
-      ...config,
-      references: {
-        transformReferenceId: (referenceId) => {
-          // Sample code that transforms a reference path to a link.
-          // Remove file extension
-          const href = referenceId.replace(/\.[^.]+$/, '');
-          // Use last part of path for label
-          const text = href.split('/').slice(-1)[0];
-          return { text, href };
-        },
-      },
-    });
-  }, [siteConfig.themeConfig.markprompt]);
+  const { projectKey, ...config } = siteConfig.themeConfig
+    .markprompt as MarkpromptConfig;
 
   return (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <div id="markprompt" />
+      <Markprompt projectKey={projectKey} {...config} />
       <SearchBar {...props} />
     </div>
   );
