@@ -1,8 +1,6 @@
 import type { Source } from '@markprompt/core';
-import * as BaseMarkprompt from '@markprompt/react';
-import { useMarkpromptContext } from '@markprompt/react';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { animated, useSpring } from '@react-spring/web';
+import * as web from '@react-spring/web';
 import React, {
   useEffect,
   useMemo,
@@ -15,6 +13,7 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
+import { useMarkpromptContext } from './context.js';
 import {
   ChatIcon,
   ChevronLeftIcon,
@@ -24,9 +23,10 @@ import {
   SearchIcon,
   SparklesIcon,
 } from './icons.js';
+import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
-import { type MarkpromptOptions } from './types.js';
+import { type MarkpromptOptions, type SectionHeading } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -195,7 +195,7 @@ const Transition = (props: TransitionProps): ReactElement => {
 
   const [display, setDisplay] = useState(isVisible ? 'block' : 'none');
 
-  const styles = useSpring({
+  const styles = web.useSpring({
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
     config: {
@@ -213,7 +213,7 @@ const Transition = (props: TransitionProps): ReactElement => {
   });
 
   return (
-    <animated.div
+    <web.animated.div
       style={{
         position: 'absolute',
         inset: 0,
@@ -222,7 +222,7 @@ const Transition = (props: TransitionProps): ReactElement => {
       }}
     >
       {children}
-    </animated.div>
+    </web.animated.div>
   );
 };
 
@@ -280,7 +280,7 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 type SearchResultsContainerProps = {
   getResultHref?: (
     path: string,
-    sectionHeading: BaseMarkprompt.SectionHeading | undefined,
+    sectionHeading: SectionHeading | undefined,
     source: Source,
   ) => string;
   showSearch: boolean;
@@ -434,4 +434,4 @@ function AnswerContainer({
   );
 }
 
-export { Markprompt };
+export { Markprompt, type MarkpromptProps };

@@ -15,6 +15,10 @@
     "skipLibCheck": true,
     "target": "es2021",
     "isolatedModules": true,
-    "types": ["@docusaurus/module-type-aliases"]
+    "types": ["@docusaurus/module-type-aliases"],
+    "paths": {
+      "@markprompt/core": ["../core/src"],
+      "@markprompt/react": ["../react/src"]
+    }
   }
 }

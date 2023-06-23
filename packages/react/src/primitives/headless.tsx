@@ -8,8 +8,8 @@ import React, {
   useMemo,
   useRef,
   type ChangeEventHandler,
-  type ComponentPropsWithoutRef,
   type ComponentPropsWithRef,
+  type ComponentPropsWithoutRef,
   type ElementType,
   type FormEventHandler,
   type KeyboardEventHandler,
@@ -21,18 +21,17 @@ import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
-import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
-import { MarkpromptContext, useMarkpromptContext } from './context.js';
 import { Footer } from './footer.js';
+import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
+import { MarkpromptContext, useMarkpromptContext } from '../context.js';
 import type {
   SearchResultWithMetadata,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SectionHeading,
-} from './types.js';
-import { useMarkprompt } from './useMarkprompt.js';
-import { type UseMarkpromptOptions } from './useMarkprompt.js';
-import { getHref as getDefaultHref } from './utils.js';
+} from '../types.js';
+import { useMarkprompt, type UseMarkpromptOptions } from '../useMarkprompt.js';
+import { getHref as getDefaultHref } from '../utils.js';
 
 type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 

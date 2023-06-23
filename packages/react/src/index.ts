@@ -35,7 +35,9 @@ export {
   type SearchResultProps,
   type SearchResultsProps,
   type TitleProps,
-} from './headless.js';
+} from './primitives/headless.js';
+
+export { Markprompt, type MarkpromptProps } from './Markprompt.js';
 
 export { useMarkpromptContext } from './context.js';
 export { getHref } from './utils.js';

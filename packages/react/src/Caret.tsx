@@ -1,5 +1,6 @@
-import { useMarkpromptContext } from '@markprompt/react';
 import React, { type ReactElement } from 'react';
+
+import { useMarkpromptContext } from './index.js';
 
 export const Caret = (): ReactElement | null => {
   const { answer } = useMarkpromptContext();

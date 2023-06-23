@@ -1,8 +1,8 @@
-import * as Markprompt from '@markprompt/react';
-import { useMarkpromptContext } from '@markprompt/react';
 import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
+import { useMarkpromptContext } from './index.js';
+import * as Markprompt from './index.js';
 import { useElementSize } from './useElementSize.js';
 
 const capitalize = (text: string): string => {

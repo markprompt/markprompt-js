@@ -22,8 +22,11 @@
   },
   "dependencies": {
     "@markprompt/core": "^0.5.0",
+    "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-visually-hidden": "^1.0.3",
+    "@react-spring/web": "^9.7.2",
+    "clsx": "^1.2.1",
     "github-slugger": "^2.0.0",
     "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
