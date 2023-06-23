@@ -1,6 +1,12 @@
 # Markprompt React
 
-The [Markprompt](https://markprompt.com) React component is a headless component that offers you a simple, accessible and fully customizable way to add a prompt UI to your React applications. It is based off of [Radix UI's](https://www.radix-ui.com/) [Dialog component](https://www.radix-ui.com/docs/primitives/components/dialog), and presents a similar API.
+[Markprompt](https://markprompt.com)'s `@markprompt/react` library offers you both a simple, accessible, prebuilt React component that you can include in your codebase, as well as a set of React primitives that you can use to build your own custom Markprompt UI.
+
+The `<Markprompt />` component is built with [Radix'](https://www.radix-ui.com/) [`Dialog component`](https://www.radix-ui.com/docs/primitives/components/dialog) and allows for limited control over the Markprompt UI, mostly offering you the ability to change texts as well as how prompt references and search results are linked to your website.
+
+The `Markprompt.*` primitives offer you a fully customizable way to build your own UI and have full control.
+
+In combination with [`@markprompt/css`](https://github.com/motifland/markprompt-js/tree/main/packages/css), the `<Markprompt />` component is a drop-in solution for most websites. You can also opt to provide your own styles, or override ours to your liking.
 
 <br />
 <p align="center">
@@ -14,13 +20,17 @@ The [Markprompt](https://markprompt.com) React component is a headless component
 
 ## Installation
 
-Install the `@markprompt/react` package via NPM or Yarn:
+Install the `@markprompt/react` package via `npm`, `yarn` or `pnpm`:
 
 ```sh
-# NPM
+# npm
 npm install @markprompt/react
-# Yarn
+
+# yarn
 yarn add @markprompt/react
+
+# pnpm
+pnpm add @markprompt/react
 ```
 
 ## Usage
@@ -28,120 +38,62 @@ yarn add @markprompt/react
 Example:
 
 ```jsx
+import `@markprompt/css`;
 import { Markprompt } from '@markprompt/react';
-import { ChatIcon, CloseIcon, SearchIcon, Caret } from './icons';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useContext } from 'react';
 
-function Component() {
-  return (
-    <Markprompt.Root projectKey="YOUR-PROJECT-KEY">
-      <Markprompt.DialogTrigger
-        aria-label="Open Markprompt"
-        className="MarkpromptButton"
-      >
-        <ChatIcon className="MarkpromptIcon" />
-      </Markprompt.DialogTrigger>
-      <Markprompt.Portal>
-        <Markprompt.Overlay className="MarkpromptOverlay" />
-        <Markprompt.Content className="MarkpromptContent">
-          <Markprompt.Close className="MarkpromptClose">
-            <CloseIcon />
-          </Markprompt.Close>
-
-          {/* Markprompt.Title is required for accessibility reasons. It can be hidden using an accessible content hiding technique. */}
-          <VisuallyHidden asChild>
-            <Markprompt.Title>
-              Ask me anything about Markprompt
-            </Markprompt.Title>
-          </VisuallyHidden>
-
-          {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}
-          <VisuallyHidden asChild>
-            <Markprompt.Description>
-              I can answer your questions about Markprompt's client-side
-              libraries, onboarding, API's and more.
-            </Markprompt.Description>
-          </VisuallyHidden>
-
-          <Markprompt.Form>
-            <SearchIcon className="MarkpromptSearchIcon" />
-            <Markprompt.Prompt
-              className="MarkpromptPrompt"
-              placeholder="Ask me anything…"
-            />
-          </Markprompt.Form>
-
-          <Markprompt.AutoScroller className="MarkpromptAnswer">
-            <Caret />
-            <Markprompt.Answer />
-          </Markprompt.AutoScroller>
-
-          <References />
-        </Markprompt.Content>
-      </Markprompt.Portal>
-    </Markprompt.Root>
-  );
+export function Component() {
+  return <Markprompt projectKey="YOUR-PROJECT-KEY" />;
 }
-
-const capitalize = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
-
-const removeFileExtension = (fileName: string) => {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  if (lastDotIndex === -1) {
-    return fileName;
-  }
-  return fileName.substring(0, lastDotIndex);
-};
-
-const Reference = ({
-  referenceId,
-  index,
-}: {
-  referenceId: string,
-  index: number,
-}) => {
-  return (
-    <li
-      key={referenceId}
-      className="reference"
-      style={{
-        animationDelay: `${100 * index}ms`,
-      }}
-    >
-      <a href={removeFileExtension(referenceId)}>
-        {capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0]))}
-      </a>
-    </li>
-  );
-};
-
-const References = () => {
-  const { state, references } = useContext(Markprompt.Context);
-
-  if (state === 'indeterminate') return null;
-
-  let adjustedState: string = state;
-  if (state === 'done' && references.length === 0) {
-    adjustedState = 'indeterminate';
-  }
-
-  return (
-    <div data-loading-state={adjustedState} className={styles.references}>
-      <div className={styles.progress} />
-      <p>Fetching relevant pages…</p>
-      <p>Answer generated from the following sources:</p>
-      <Markprompt.References RootElement="ul" ReferenceElement={Reference} />
-    </div>
-  );
-};
 ```
 
-replacing `YOUR-PROJECT-KEY` with the key associated to your project. It can be obtained in the project settings under "Project key".
+replacing `YOUR-PROJECT-KEY` with the key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
 
 ## API
+
+### `<Markprompt />`
+
+The pre-built Markprompt component. It accepts the following props:
+
+- `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
+- `close` (`object`): Options for the close modal button
+- `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
+- `description` (`object`): Options for the description
+- `description.hide` (`boolean`): Visually hide the description (Default: `true`)
+- `description.text` (`string`): Description text
+- `prompt` (`object`): Options for the prompt
+- `prompt.label` (`string`): Label for the prompt input (Default: `Ask me anything…`)
+- `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask me anything…`)
+- `prompt.cta` (`string`): When search is enabled, this label is used for the CTA button that opens the prompt (Default: `Ask Docs AI…`)
+- `prompt.completionsUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
+- `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
+- `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
+- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
+- `prompt.topP` (`number`): The model top P. (Default: `1`)
+- `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
+- `prompt.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
+- `prompt.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
+- `prompt.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
+- `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
+- `prompt.signal` (`AbortSignal`): AbortController signal.
+- `references` (`object`): Options for the references
+- `references.transformReferenceId` (`function`): Callback to transform a reference id into an href and text
+- `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
+- `references.referencesText` (`string`): References title (Default: `Answer generated from the following sources:`)
+- `search` (`object`): Options for search
+- `search.enable` (`boolean`): Enable search (Default: `false`)
+- `search.getResultHref` (`function`): Callback to transform a search result into an href
+- `search.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
+- `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
+- `search.searchUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `search.signal` (`AbortSignal`): AbortController signal.
+- `trigger` (`object`): Options for the trigger
+- `trigger.label` (`string`): `aria-label` for the open button (Default: `Open Markprompt`)
+- `trigger.placeholder` (`string`): Placeholder text for non-floating element (Default: `Ask docs`)
+- `title` (`object`): Options for the title
+- `title.hide` (`boolean`): Visually hide the title (Default: `true`)
+- `title.text` (`string`): Title text (Default: `Ask me anything`)
+- `showBranding` (`boolean`): Show Markprompt branding (Default: `true`)
 
 ### `<Answer />`
 
@@ -214,7 +166,28 @@ A button to open the Markprompt dialog. It accepts the same props as [Radix UI `
 
 ### `useMarkprompt(options)`
 
-Create an interactive stateful Markprompt prompt. It takes the same options as [`submitPrompt()`](https://github.com/motifland/markprompt-js/tree/main/packages/core#options), and the project key.
+Create an interactive stateful Markprompt prompt and search experience, it takes the following options:
+
+- `projectKey` (`string`): The project key for the Markprompt project.
+- `isSearchActive` (`boolean`): Whether or not search is currently active. (Default: `false`)
+- `promptOptions` (`object`): Options for the prompt.
+- `promptOptions.completionsUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
+- `promptOptions.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
+- `promptOptions.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
+- `promptOptions.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `promptOptions.temperature` (`number`): The model temperature. (Default: `0.1`)
+- `promptOptions.topP` (`number`): The model top P. (Default: `1`)
+- `promptOptions.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
+- `promptOptions.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
+- `promptOptions.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
+- `promptOptions.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
+- `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
+- `promptOptions.signal` (`AbortSignal`): AbortController signal.
+- `searchOptions` (`object`): Options for search.
+- `searchOptions.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
+- `searchOptions.limit` (`number`): Maximum amount of results to return. (Default: `5`)
+- `searchOptions.searchUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `searchOptions.signal` (`AbortSignal`): AbortController signal.
 
 ## Documentation
 
