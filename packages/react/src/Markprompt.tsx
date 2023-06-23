@@ -15,6 +15,7 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
+import { useMarkpromptContext } from './context.js';
 import {
   ChatIcon,
   ChevronLeftIcon,
@@ -24,9 +25,10 @@ import {
   SearchIcon,
   SparklesIcon,
 } from './icons.js';
+import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
-import { type MarkpromptOptions } from './types.js';
+import { type FlattenedSearchResult, type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
