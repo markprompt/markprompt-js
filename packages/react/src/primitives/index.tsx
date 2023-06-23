@@ -1,10 +1,4 @@
 export {
-  useMarkprompt,
-  type UseMarkpromptOptions,
-  type UseMarkpromptResult,
-} from './useMarkprompt.js';
-
-export {
   Answer,
   AutoScroller,
   Close,
@@ -35,11 +29,6 @@ export {
   type SearchResultProps,
   type SearchResultsProps,
   type TitleProps,
-} from './primitives/headless.js';
+} from './headless.js';
 
-export { Markprompt } from './Markprompt.js';
-
-export { useMarkpromptContext } from './context.js';
-export { getHref } from './utils.js';
-
-export * from './types.js';
+export { Footer } from './footer.js';
