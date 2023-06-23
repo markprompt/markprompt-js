@@ -1,12 +1,12 @@
-import {
-  useMarkpromptContext,
-  getHref as getDefaultHref,
-  type SearchResultProps,
-} from '@markprompt/react';
 import { clsx } from 'clsx';
 import React, { Fragment, forwardRef, memo } from 'react';
 
 import { FileTextIcon, HashIcon } from './icons.js';
+import {
+  useMarkpromptContext,
+  getHref as getDefaultHref,
+  type SearchResultProps,
+} from './index.js';
 
 type HighlightMatchesProps = {
   value?: string;

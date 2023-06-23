@@ -59,7 +59,7 @@ import {
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
-import type { FlattenedSearchResult } from '@markprompt/react';
+import type { SearchResultWithMetadata } from '@markprompt/react';
 
 type MarkpromptOptions = {
   close?: {
