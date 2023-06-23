@@ -52,58 +52,115 @@ markprompt('YOUR-PROJECT-KEY', markpromptEl, {
 
 where `YOUR-PROJECT-KEY` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
+Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation and `getResultHref` to transform search result paths into links to your documentation.
 
 ```ts
-type Options = {
-  /** Props for the close modal button */
+import {
+  type SubmitPromptOptions,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
+import type { FlattenedSearchResult } from '@markprompt/react';
+
+type MarkpromptOptions = {
   close?: {
-    /** Aria-label for the close modal button */
+    /**
+     * `aria-label` for the close modal button
+     * @default "Close Markprompt"
+     **/
     label?: string;
   };
-  /** Props for the description */
   description?: {
-    /** Whether to hide the description, default: `true` */
+    /**
+     * Visually hide the description
+     * @default true
+     **/
     hide?: boolean;
-    /** Text for the description */
+    /**
+     * Description text
+     **/
     text?: string;
   };
-  /** Props for the prompt */
-  prompt?: {
-    /** Label for the prompt input, default: `Ask me anything…` */
+  prompt?: SubmitPromptOptions & {
+    /**
+     * Label for the prompt input
+     * @default "Ask me anything…"
+     **/
     label?: string;
-    /** Placeholder for the prompt input, default: `Ask me anything…` */
+    /**
+     * Placeholder for the prompt input
+     * @default "Ask me anything…"
+     **/
     placeholder?: string;
+    /**
+     * When search is enabled, this label is used for the CTA button
+     * that opens the prompt.
+     * @default "Ask Docs AI…"
+     **/
+    cta?: string;
   };
   references?: {
-    /** Callback to transform a reference id into an href and text */
-    transformReferenceId?: (referenceId: string) => {
+    /**
+     * Callback to transform a reference id into an href and text
+     **/
+    transformReferenceId: (referenceId: string) => {
       href: string;
       text: string;
     };
     /** Loading text, default: `Fetching relevant pages…` */
     loadingText?: string;
-    /** References title, default: `Answer generated from the following sources:` */
+    /**
+     * References title
+     * @default "Answer generated from the following sources:"
+     **/
     referencesText?: string;
   };
-  search?: {
-    /** Enable search **/
+  /**
+   * Enable and configure search functionality
+   */
+  search?: SubmitSearchQueryOptions & {
+    /**
+     * Enable search
+     * @default false
+     **/
     enable?: boolean;
     /** Callback to transform a search result into an href */
     getResultHref?: (result: FlattenedSearchResult) => string;
   };
-  /** Props for the trigger */
   trigger?: {
-    /** Aria-label for the trigger button */
+    /**
+     * `aria-label` for the open button
+     * @default "Open Markprompt"
+     **/
     label?: string;
+    /**
+     * Placeholder text for non-floating element.
+     * @default "Ask docs"
+     **/
+    placeholder?: string;
+    /**
+     * Should the trigger button be displayed as a floating button at the bottom right of the page?
+     * Setting this to false will display a trigger button in the element passed
+     * to the `markprompt` function.
+     */
+    floating?: boolean;
   };
-  /** Props for the title */
   title?: {
-    /** Whether to hide the title, default: `true` */
+    /**
+     * Visually hide the title
+     * @default true
+     **/
     hide?: boolean;
-    /** Text for the title: default `Ask me anything` */
+    /**
+     * Text for the title
+     * @default "Ask me anything"
+     **/
     text?: string;
   };
+  /**
+   * Show Markprompt branding
+   * @default true
+   **/
+  showBranding?: boolean;
 };
 ```
 
