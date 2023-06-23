@@ -434,4 +434,4 @@ function AnswerContainer({
   );
 }
 
-export { Markprompt };
+export { Markprompt, type MarkpromptProps };
