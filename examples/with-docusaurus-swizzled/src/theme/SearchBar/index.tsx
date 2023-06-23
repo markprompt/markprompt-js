@@ -21,9 +21,12 @@ export default function SearchBarWrapper(props: Props): JSX.Element {
 
   return (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <Suspense fallback={null}>
-        <Markprompt projectKey={projectKey} {...config} />
-      </Suspense>
+      {/* Docusaurus' version of `ReactDOMServer` doesn't support Suspense yet, so we can only render the component on the client. */}
+      {typeof window !== 'undefined' && (
+        <Suspense fallback={null}>
+          <Markprompt projectKey={projectKey} {...config} />
+        </Suspense>
+      )}
       <SearchBar {...props} />
     </div>
   );
