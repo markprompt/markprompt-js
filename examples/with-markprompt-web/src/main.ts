@@ -11,7 +11,7 @@ if (el && el instanceof HTMLElement) {
       floating: true,
     },
     search: {
-      enabled: true,
+      enabled: false,
     },
   });
 }
