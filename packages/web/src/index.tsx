@@ -1,7 +1,7 @@
+import { Markprompt } from '@markprompt/react';
 import React from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
-import { Markprompt } from './Markprompt.js';
 import { type MarkpromptOptions } from './types.js';
 
 function getHTMLElement(
