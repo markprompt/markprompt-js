@@ -12,23 +12,7 @@ It contains core functionality for Markprompt and allows you to build abstractio
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/core/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/core">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fcore">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-  - [`submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`](#submitpromptprompt-projectkey-onanswerchunk-onreferences-onerror-options)
-    - [Arguments](#arguments)
-    - [Options](#options)
-    - [Returns](#returns)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
 
 ## Installation
 
@@ -52,7 +36,7 @@ import { submitPrompt } from '@markprompt/core';
 // user input
 const prompt = 'Hello, Markprompt!';
 // can be obtained in your project settings on markprompt.com
-const projectKey = '<project-key>';
+const projectKey = 'YOUR-PROJECT-KEY';
 
 // called when a new answer chunk is available
 // should be concatenated to previous chunks
@@ -116,14 +100,13 @@ A promise that resolves when the response is fully handled.
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
 
 ## License
 

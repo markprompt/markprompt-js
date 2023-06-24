@@ -10,26 +10,7 @@ A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
   <a aria-label="License" href="https://github.com/motifland/markprompt/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
   </a>
-  <a aria-label="Coverage" href="https://app.codecov.io/gh/motifland/markprompt-js/tree/main/packages%2Fweb">
-    <img alt="" src="https://codecov.io/gh/motifland/markprompt-js/branch/main/graph/badge.svg" />
-  </a>
 </p>
-
-## Table of Contents
-
-- [`@markprompt/web`](#markpromptweb)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Usage via `<script>` tag](#usage-via-script-tag)
-  - [API](#api)
-    - [`markprompt(projectKey, container, options?)`](#markpromptprojectkey-container-options)
-      - [Arguments](#arguments)
-      - [Options](#options)
-  - [Documentation](#documentation)
-  - [Community](#community)
-  - [Authors](#authors)
-  - [License](#license)
 
 ## Installation
 
@@ -45,7 +26,7 @@ Include the CSS on your page, via a link tag or by importing it in your JavaScri
 
 ```html
 <!-- load from a CDN: -->
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.1.1?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.2.0?css" />
 ```
 
 ```js
@@ -59,7 +40,7 @@ import { markprompt } from '@markprompt/web';
 
 const markpromptEl = document.querySelector('#markprompt');
 
-markprompt('<project-key>', markpromptEl, {
+markprompt('YOUR-PROJECT-KEY', markpromptEl, {
   references: {
     transformReferenceId: (referenceId) => ({
       text: referenceId.replace('-', ' '),
@@ -69,54 +50,121 @@ markprompt('<project-key>', markpromptEl, {
 });
 ```
 
-where `project-key` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
+where `YOUR-PROJECT-KEY` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure texts the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation.
+Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation and `getResultHref` to transform search result paths into links to your documentation.
 
 ```ts
-type Options = {
-  /** Props for the close modal button */
+import {
+  type SubmitPromptOptions,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
+import type { SearchResultWithMetadata } from '@markprompt/react';
+
+type MarkpromptOptions = {
   close?: {
-    /** Aria-label for the close modal button */
+    /**
+     * `aria-label` for the close modal button
+     * @default "Close Markprompt"
+     **/
     label?: string;
   };
-  /** Props for the description */
   description?: {
-    /** Whether to hide the description, default: `true` */
+    /**
+     * Visually hide the description
+     * @default true
+     **/
     hide?: boolean;
-    /** Text for the description */
+    /**
+     * Description text
+     **/
     text?: string;
   };
-  /** Props for the prompt */
-  prompt?: {
-    /** Label for the prompt input, default: `Your prompt` */
+  prompt?: SubmitPromptOptions & {
+    /**
+     * Label for the prompt input
+     * @default "Ask me anything…"
+     **/
     label?: string;
-    /** Placeholder for the prompt input, default: `Ask me anything…` */
+    /**
+     * Placeholder for the prompt input
+     * @default "Ask me anything…"
+     **/
     placeholder?: string;
+    /**
+     * When search is enabled, this label is used for the CTA button
+     * that opens the prompt.
+     * @default "Ask Docs AI…"
+     **/
+    cta?: string;
   };
   references?: {
-    /** Callback to transform a reference id into an href and text */
-    transformReferenceId?: (referenceId: string) => {
+    /**
+     * Callback to transform a reference id into an href and text
+     **/
+    transformReferenceId: (referenceId: string) => {
       href: string;
       text: string;
     };
     /** Loading text, default: `Fetching relevant pages…` */
     loadingText?: string;
-    /** References title, default: `Answer generated from the following sources:` */
+    /**
+     * References title
+     * @default "Answer generated from the following sources:"
+     **/
     referencesText?: string;
   };
-  /** Props for the trigger */
-  trigger?: {
-    /** Aria-label for the trigger button */
-    label?: string;
+  /**
+   * Enable and configure search functionality
+   */
+  search?: SubmitSearchQueryOptions & {
+    /**
+     * Enable search
+     * @default false
+     **/
+    enabled?: boolean;
+    /** Callback to transform a search result into an href */
+    getResultHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   };
-  /** Props for the title */
+  trigger?: {
+    /**
+     * `aria-label` for the open button
+     * @default "Open Markprompt"
+     **/
+    label?: string;
+    /**
+     * Placeholder text for non-floating element.
+     * @default "Ask docs"
+     **/
+    placeholder?: string;
+    /**
+     * Should the trigger button be displayed as a floating button at the bottom right of the page?
+     * Setting this to false will display a trigger button in the element passed
+     * to the `markprompt` function.
+     */
+    floating?: boolean;
+  };
   title?: {
-    /** Whether to hide the title, default: `true` */
+    /**
+     * Visually hide the title
+     * @default true
+     **/
     hide?: boolean;
-    /** Text for the title: default `Ask me anything` */
+    /**
+     * Text for the title
+     * @default "Ask me anything"
+     **/
     text?: string;
   };
+  /**
+   * Show Markprompt branding
+   * @default true
+   **/
+  showBranding?: boolean;
 };
 ```
 
@@ -129,11 +177,11 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.1.1/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
 />
 <script>
   window.markprompt = {
-    projectKey: `<your-project-key>`,
+    projectKey: `YOUR-PROJECT-KEY`,
     container: `#markprompt`,
     options: {
       references: {
@@ -147,7 +195,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 </script>
 <script
   async
-  src="https://unpkg.com/@markprompt/web@0.4.1/dist/init.js"
+  src="https://unpkg.com/@markprompt/web@0.5.0/dist/init.js"
 ></script>
 ```
 
@@ -192,11 +240,11 @@ Render a Markprompt dialog button.
 
 ## Documentation
 
-The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#%40markprompt%2Fweb).
+The full documentation for `@markprompt/web` can be found on the [Markprompt docs](https://markprompt.com/docs#javascript).
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors

@@ -4,6 +4,8 @@
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 
+require('dotenv').config();
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Markprompt demo',
@@ -11,7 +13,7 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://markprompt-docusaurus.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -36,24 +38,38 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       markprompt: {
-        projectKey: 'Your Markprompt project key',
+        // Set the project key here, on in a `.env` file. You can obtain
+        // the project key in the Markprompt dashboard, under
+        // project settings.
+        projectKey: process.env.MARKPROMPT_PROJECT_KEY,
+        trigger: { floating: true },
+        references: {
+          transformReferenceId: (referenceId) => {
+            // Sample code that transforms a reference path to a link.
+            // Remove file extension
+            const href = referenceId.replace(/\.[^.]+$/, '');
+            // Use last part of path for label
+            const text = href.split('/').slice(-1)[0];
+            return { text, href };
+          },
+        },
       },
       navbar: {
-        title: 'My Site',
+        title: 'Markprompt',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
         items: [
           {
-            href: 'https://github.com/motifland/markprompt-js',
+            href: 'https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus',
             label: 'GitHub',
             position: 'right',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: 'light',
         copyright: `Copyright © ${new Date().getFullYear()} Markprompt. Built with Docusaurus.`,
       },
       prism: {

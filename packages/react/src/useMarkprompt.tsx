@@ -1,17 +1,9 @@
-import { type Options } from '@markprompt/core';
 import {
-  DEFAULT_FREQUENCY_PENALTY,
-  DEFAULT_I_DONT_KNOW_MESSAGE,
-  DEFAULT_MAX_TOKENS,
-  DEFAULT_MODEL,
-  DEFAULT_PRESENCE_PENALTY,
-  DEFAULT_PROMPT_TEMPLATE,
-  DEFAULT_SECTIONS_MATCH_COUNT,
-  DEFAULT_SECTIONS_MATCH_THRESHOLD,
-  DEFAULT_TEMPERATURE,
-  DEFAULT_TOP_P,
-  MARKPROMPT_COMPLETIONS_URL,
-  submitPrompt,
+  submitPrompt as submitPromptToMarkprompt,
+  submitSearchQuery as submitSearchQueryToMarkprompt,
+  type SubmitPromptOptions,
+  type SubmitSearchQueryOptions,
+  type SearchResult,
 } from '@markprompt/core';
 import {
   useCallback,
@@ -23,58 +15,79 @@ import {
   type SetStateAction,
 } from 'react';
 
+import type { SearchResultWithMetadata } from './types.js';
+
 export type LoadingState =
   | 'indeterminate'
   | 'preload'
   | 'streaming-answer'
   | 'done';
 
-export type UseMarkpromptOptions = Options & {
+export interface UseMarkpromptOptions {
   /** Project key, required */
   projectKey: string;
-};
+  /** Is search currently active */
+  isSearchActive?: boolean;
+  /** Enable and configure prompt functionality */
+  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  /** Enable and configure search functionality */
+  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
+    enabled?: boolean;
+  };
+}
 
-export type UseMarkpromptResult = {
+export interface UseMarkpromptResult {
+  /** The currently active search result */
+  activeSearchResult: string | undefined;
   /** The latest answer */
   answer: string;
+  /** Enable search functionality */
+  isSearchEnabled: boolean;
+  /** Is search currently active */
+  isSearchActive: boolean;
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
   references: string[];
+  /** Search results */
+  searchResults: SearchResultWithMetadata[];
   /** The current loading state */
   state: LoadingState;
   /** Abort a pending request */
   abort: () => void;
+  /** Update the currently active search result */
+  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   /** Set a new value for the prompt */
   updatePrompt: Dispatch<SetStateAction<string>>;
   /** Submit the prompt */
-  submit: () => Promise<void>;
-};
+  submitPrompt: () => Promise<void>;
+  /** Submit search query */
+  submitSearchQuery: (query: string) => void;
+}
 
 /**
- * Create an interactive stateful Markprompt prompt
+ * A React hook with all the functionality you need to create an interactive
+ * stateful Markprompt prompt with search and a prompt.
  */
 export function useMarkprompt({
   projectKey,
-  completionsUrl = MARKPROMPT_COMPLETIONS_URL,
-  frequencyPenalty = DEFAULT_FREQUENCY_PENALTY,
-  iDontKnowMessage = DEFAULT_I_DONT_KNOW_MESSAGE,
-  maxTokens = DEFAULT_MAX_TOKENS,
-  model = DEFAULT_MODEL,
-  presencePenalty = DEFAULT_PRESENCE_PENALTY,
-  promptTemplate = DEFAULT_PROMPT_TEMPLATE,
-  sectionsMatchCount = DEFAULT_SECTIONS_MATCH_COUNT,
-  sectionsMatchThreshold = DEFAULT_SECTIONS_MATCH_THRESHOLD,
-  temperature = DEFAULT_TEMPERATURE,
-  topP = DEFAULT_TOP_P,
+  isSearchActive,
+  searchOptions,
+  promptOptions,
 }: UseMarkpromptOptions): UseMarkpromptResult {
   if (!projectKey) {
     throw new Error(
-      'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
+      'Markprompt: a project key is required. Make sure to pass the projectKey to useMarkprompt.',
     );
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
+  const [searchResults, setSearchResults] = useState<
+    SearchResultWithMetadata[]
+  >([]);
+  const [activeSearchResult, setActiveSearchResult] = useState<
+    string | undefined
+  >();
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
@@ -93,7 +106,7 @@ export function useMarkprompt({
     return () => abort();
   }, [abort]);
 
-  const submit = useCallback(async () => {
+  const submitPrompt = useCallback(async () => {
     abort();
 
     if (state === 'preload' || state === 'streaming-answer') {
@@ -116,7 +129,7 @@ export function useMarkprompt({
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const promise = submitPrompt(
+    const promise = submitPromptToMarkprompt(
       prompt,
       projectKey,
       (chunk) => {
@@ -126,25 +139,29 @@ export function useMarkprompt({
       },
       (refs) => setReferences(refs),
       (error) => {
+        if (
+          error instanceof Error &&
+          typeof error.cause === 'object' &&
+          error.cause !== null &&
+          'name' in error.cause &&
+          error.cause?.name === 'AbortError'
+        ) {
+          // Ignore abort errors
+          return;
+        }
+
+        // todo: surface errors to the user
+        // eslint-disable-next-line no-console
         console.error(error);
       },
       {
-        completionsUrl,
-        frequencyPenalty,
-        iDontKnowMessage,
-        maxTokens,
-        model,
-        presencePenalty,
-        promptTemplate,
-        sectionsMatchCount,
-        sectionsMatchThreshold,
+        ...promptOptions,
         signal: controller.signal,
-        temperature,
-        topP,
       },
     );
 
     promise.then(() => {
+      if (controller.signal.aborted) return;
       setState('done');
     });
 
@@ -153,34 +170,275 @@ export function useMarkprompt({
         controllerRef.current = undefined;
       }
     });
-  }, [
-    abort,
-    completionsUrl,
-    frequencyPenalty,
-    iDontKnowMessage,
-    maxTokens,
-    model,
-    presencePenalty,
-    projectKey,
-    prompt,
-    promptTemplate,
-    sectionsMatchCount,
-    sectionsMatchThreshold,
-    state,
-    temperature,
-    topP,
-  ]);
+  }, [abort, projectKey, prompt, promptOptions, state]);
 
-  return useMemo<UseMarkpromptResult>(
+  const submitSearchQuery = useCallback(
+    (searchQuery: string) => {
+      if (!searchOptions?.enabled) return;
+
+      abort();
+
+      // reset state if the query was set (back) to empty
+      if (searchQuery === '') {
+        if (controllerRef.current) controllerRef.current.abort();
+        setSearchResults([]);
+        setActiveSearchResult(undefined);
+        setState('indeterminate');
+        return;
+      }
+
+      setState('preload');
+
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      const promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+        ...searchOptions,
+        signal: controller.signal,
+      });
+
+      promise.then((searchResults) => {
+        // const searchResults = { data: mockData };
+
+        if (controller.signal.aborted) return;
+        if (!searchResults?.data) return;
+
+        setSearchResults(
+          flattenSearchResults(searchQuery, searchResults.data) ?? [],
+        );
+        // initially focus the first result
+        setActiveSearchResult(`markprompt-result-0`);
+        setState('done');
+      });
+
+      promise.catch((error) => {
+        if (
+          error instanceof Error &&
+          typeof error.cause === 'object' &&
+          error.cause !== null &&
+          'name' in error.cause &&
+          error.cause?.name === 'AbortError'
+        ) {
+          // Ignore abort errors
+          return;
+        }
+
+        // todo: surface errors to the user
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+
+      promise.finally(() => {
+        if (controllerRef.current === controller) {
+          controllerRef.current = undefined;
+        }
+      });
+    },
+    [abort, projectKey, searchOptions?.enabled],
+  );
+
+  return useMemo(
     () => ({
       answer,
+      activeSearchResult,
+      isSearchEnabled: !!searchOptions?.enabled,
+      isSearchActive: !!isSearchActive,
       prompt,
       references,
+      searchResults,
       state,
       abort,
+      updateActiveSearchResult: setActiveSearchResult,
       updatePrompt: setPrompt,
-      submit,
+      submitPrompt,
+      submitSearchQuery,
     }),
-    [answer, references, state, prompt, abort, submit],
+    [
+      answer,
+      activeSearchResult,
+      searchOptions?.enabled,
+      isSearchActive,
+      prompt,
+      references,
+      searchResults,
+      state,
+      abort,
+      submitPrompt,
+      submitSearchQuery,
+    ],
   );
+}
+
+function isPresent<T>(t: T | undefined | null | void): t is T {
+  return t !== undefined && t !== null;
+}
+
+function removeLeadHeading(text: string, heading?: string): string {
+  // This needs to be revised. When returning the search result, the endpoint
+  // provides a snippet of the content around the search term (to avoid sending
+  // entire sections). This snippet may contain the start of the section
+  // content, and this content may start with a heading (the leadHeading).
+  // We don't want this leadHeading to be part of the content snippet.
+  // Since it's a snippet, we can't assume that the leadHeading will always be
+  // the first line. Instead, we have to check it in the string itself.
+  const trimmedContent = trimContent(text);
+  if (!heading) {
+    return trimmedContent;
+  }
+  const pattern = new RegExp(`^#{1,}\\s${heading}\\s?`);
+  return trimContent(trimmedContent.replace(pattern, ''));
+}
+
+function trimContent(text: string): string {
+  // we don't use String.prototype.trim() because we
+  // don't want to remove line terminators from Markdown
+  return text.trimStart().trimEnd();
+}
+
+function createKWICSnippet(
+  content: string,
+  normalizedSearchQuery: string,
+): string {
+  const trimmedContent = content.trim().replace(/\n/g, ' ');
+  const index = trimmedContent
+    .toLocaleLowerCase()
+    .indexOf(normalizedSearchQuery);
+
+  if (index === -1) {
+    return trimmedContent.slice(0, 200);
+  }
+
+  const rawSnippet = trimmedContent.slice(Math.max(0, index - 50), index + 150);
+
+  const words = rawSnippet.split(/\s+/);
+  if (words.length > 3) {
+    return words.slice(1, words.length - 1).join(' ');
+  }
+  return words.join(' ');
+}
+
+const isMatching = (
+  text: string | undefined,
+  normalizedSearchQuery: string,
+): boolean => {
+  if (!text || text.length === 0) {
+    return false;
+  }
+  return text.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
+};
+
+function flattenSearchResults(
+  searchQuery: string,
+  searchResults: SearchResult[],
+): SearchResultWithMetadata[] {
+  const sortedSearchResults = [...searchResults].sort((a, b) => {
+    const aTopSectionScore = Math.max(...a.sections.map((s) => s.score));
+    const bTopSectionScore = Math.max(...b.sections.map((s) => s.score));
+    return aTopSectionScore - bTopSectionScore;
+  });
+
+  // The final list is built as follows:
+  // - If the title matches the search term, include a search result
+  //   with the title itself, and no sections
+  // - If the title matches the search term, we may also get a bunch of
+  //   sections without the search term, because of the title match.
+  //   So we remove all the sections that don't include the search term
+  //   in the content and meta.leadHeading
+  // - All other sections (with matches on search term) are added
+  const normalizedSearchQuery = searchQuery.toLowerCase();
+
+  return sortedSearchResults.flatMap((f) => {
+    const isMatchingTitle = isMatching(f.meta?.title, normalizedSearchQuery);
+
+    const sectionResults = [
+      ...f.sections
+        .map((s) => {
+          // Fast and hacky way to remove the lead heading from
+          // the content, which we don't want to be part of the snippet
+          const trimmedContent = removeLeadHeading(
+            s.content,
+            s.meta?.leadHeading?.value,
+          );
+
+          if (!trimmedContent) {
+            return undefined;
+          }
+
+          const isKeywordMatchingLeadHeading = isMatching(
+            s.meta?.leadHeading?.value,
+            normalizedSearchQuery,
+          );
+
+          const isMatchingContent = isMatching(
+            trimmedContent,
+            normalizedSearchQuery,
+          );
+
+          if (!isKeywordMatchingLeadHeading && !isMatchingContent) {
+            // If this is a result because of the title only, omit
+            // it from here.
+            return undefined;
+          }
+
+          if (isKeywordMatchingLeadHeading) {
+            // Title is made of lead heading
+            return {
+              isParent: false,
+              hasParent: isMatchingTitle,
+              tag: isMatchingTitle ? null : f.meta.title,
+              title: createKWICSnippet(
+                trimContent(s.meta?.leadHeading?.value || ''),
+                normalizedSearchQuery,
+              ),
+              score: s.score,
+              path: f.path,
+              sectionHeading: s.meta?.leadHeading
+                ? {
+                    id: s.meta?.leadHeading?.id,
+                    value: s.meta?.leadHeading?.value,
+                  }
+                : undefined,
+              source: f.source,
+            };
+          }
+
+          // Title is made of content snippet
+          return {
+            isParent: false,
+            hasParent: isMatchingTitle,
+            tag: f.meta.title,
+            title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
+            score: s.score,
+            path: f.path,
+            sectionHeading: s.meta?.leadHeading
+              ? {
+                  id: s.meta?.leadHeading?.id,
+                  value: s.meta?.leadHeading?.value,
+                }
+              : undefined,
+            source: f.source,
+          };
+        })
+        .filter(isPresent),
+    ].sort((s1, s2) => s2.score - s1.score);
+
+    if (isMatchingTitle) {
+      // Set the score of the title result to the same score as the
+      // highest scored section. Since the section in sectionResults are
+      // already ranked by score, just take the first one.
+      const topSectionScore = sectionResults[0]?.score;
+      return [
+        {
+          isParent: true,
+          hasParent: false,
+          title: createKWICSnippet(f.meta.title, searchQuery),
+          score: topSectionScore,
+          path: f.path,
+          source: f.source,
+        },
+      ].concat(sectionResults);
+    } else {
+      return sectionResults;
+    }
+  });
 }

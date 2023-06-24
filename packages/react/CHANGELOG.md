@@ -1,5 +1,30 @@
 # @markprompt/react
 
+## 0.7.0
+
+### Minor Changes
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Move the Markprompt component from @markprompt/web to @markprompt/react, allowing React and Docusaurus users to use the prebuilt component
+
+## 0.6.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Update types and the way options are passed, fix a bug where a search result was clicked when Cmd/Ctrl+Enter was pressed instead of navigating to the Prompt view
+
+## 0.5.0
+
+### Minor Changes
+
+- [#31](https://github.com/motifland/markprompt-js/pull/31) [`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e) Thanks [@nickrttn](https://github.com/nickrttn)! - Add search functionality to Markprompt
+
+### Patch Changes
+
+- [#40](https://github.com/motifland/markprompt-js/pull/40) [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2) Thanks [@remcohaszing](https://github.com/remcohaszing)! - Define explicit return types
+
+- Updated dependencies [[`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e), [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2)]:
+  - @markprompt/core@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes

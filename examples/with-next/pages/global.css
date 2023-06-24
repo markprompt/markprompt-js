@@ -19,6 +19,7 @@
   --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
   --markprompt-primaryForeground: #fff;
+  --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
   --markprompt-primaryHighlight: #ec4899;
@@ -28,6 +29,7 @@
   --markprompt-radius: 8px;
   --markprompt-text-size: 0.875rem;
   --markprompt-button-icon-size: 1rem;
+  --markprompt-icon-stroke-width: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +42,7 @@
     --markprompt-input: #fff;
     --markprompt-primary: #6366f1;
     --markprompt-primaryForeground: #fff;
+    --markprompt-primaryMuted: #8285f4;
     --markprompt-secondary: #0e0e0e;
     --markprompt-secondaryForeground: #fff;
     --markprompt-primaryHighlight: #ec4899;

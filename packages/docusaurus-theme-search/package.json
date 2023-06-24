@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/docusaurus-theme-search",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "A Markprompt search theme for Docusaurus",
   "repository": {
     "type": "git",
@@ -17,12 +17,13 @@
     "src/theme"
   ],
   "scripts": {
-    "prepack": "tsc --build --clean && tsc --build && cpy 'src/**/*.css' dist"
+    "build": "tsc --build --clean && tsc --build",
+    "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
     "@docusaurus/types": "^2.0.0",
-    "@markprompt/react": "0.4.0",
-    "@radix-ui/react-visually-hidden": "^1.0.3"
+    "@markprompt/css": "^0.4.0",
+    "@markprompt/react": "0.7.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0",

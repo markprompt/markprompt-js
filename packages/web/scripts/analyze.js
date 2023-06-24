@@ -10,4 +10,5 @@ const result = await esbuild.build({ ...config, minify: true, metafile: true });
 fs.writeFile('meta.json', JSON.stringify(result.metafile));
 
 // outputs an analysis to the console
+// eslint-disable-next-line no-console
 console.log(await esbuild.analyzeMetafile(result.metafile));

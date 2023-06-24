@@ -1,5 +1,39 @@
 # @markprompt/web
 
+## 0.7.0
+
+### Minor Changes
+
+- [#45](https://github.com/motifland/markprompt-js/pull/45) [`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85) Thanks [@michaelfester](https://github.com/michaelfester)! - Move References height animations to JS so we can avoid specifying static heights in CSS
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Move the Markprompt component from @markprompt/web to @markprompt/react, allowing React and Docusaurus users to use the prebuilt component
+
+### Patch Changes
+
+- Updated dependencies [[`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06)]:
+  - @markprompt/react@0.7.0
+
+## 0.6.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Add a new type of trigger that has the appearance of a search input, update types and the way that we pass options into Markprompt.Root
+
+## 0.5.0
+
+### Minor Changes
+
+- [#31](https://github.com/motifland/markprompt-js/pull/31) [`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e) Thanks [@nickrttn](https://github.com/nickrttn)! - Add search functionality to Markprompt
+
+### Patch Changes
+
+- [#34](https://github.com/motifland/markprompt-js/pull/34) [`8eb9d01`](https://github.com/motifland/markprompt-js/commit/8eb9d01253ec624338cb16523bd5585ef1f9e203) Thanks [@nickrttn](https://github.com/nickrttn)! - Update README
+
+- [#40](https://github.com/motifland/markprompt-js/pull/40) [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2) Thanks [@remcohaszing](https://github.com/remcohaszing)! - Define explicit return types
+
+- Updated dependencies [[`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e), [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2)]:
+  - @markprompt/core@0.5.0
+
 ## 0.4.1
 
 ### Patch Changes

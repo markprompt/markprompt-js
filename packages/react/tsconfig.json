@@ -3,6 +3,7 @@
   "include": ["src/"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/vitest.setup.ts"],
   "compilerOptions": {
+    "lib": ["dom", "es2022"],
     "composite": true,
     "module": "node16",
     "declaration": true,
@@ -15,6 +16,9 @@
     "skipLibCheck": true,
     "target": "es2021",
     "isolatedModules": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "@markprompt/core": ["../core/src"]
+    }
   }
 }

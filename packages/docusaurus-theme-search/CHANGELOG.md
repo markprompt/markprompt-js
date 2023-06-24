@@ -1,5 +1,37 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.4.0
+
+### Minor Changes
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Use the prebuilt Markprompt component from `@markprompt/react` in `@markprompt/docusaurus-theme-search`
+
+### Patch Changes
+
+- Updated dependencies [[`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85), [`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85), [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06), [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06)]:
+  - @markprompt/css@0.4.0
+  - @markprompt/react@0.7.0
+
+## 0.3.0
+
+### Minor Changes
+
+- [#42](https://github.com/motifland/markprompt-js/pull/42) [`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd) Thanks [@nickrttn](https://github.com/nickrttn)! - Don't allow search in docusaurus-theme-search until we have a chance to update the SearchBar component
+
+### Patch Changes
+
+- Updated dependencies [[`210cf40`](https://github.com/motifland/markprompt-js/commit/210cf40dc66bb720af44eac14bc26d075c3042bd)]:
+  - @markprompt/react@0.6.0
+
+## 0.2.1
+
+### Patch Changes
+
+- [#31](https://github.com/motifland/markprompt-js/pull/31) [`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e) Thanks [@nickrttn](https://github.com/nickrttn)! - Update import name
+
+- Updated dependencies [[`df37791`](https://github.com/motifland/markprompt-js/commit/df377911ef009c9e41d647febc291a674ddc9d8e), [`c772430`](https://github.com/motifland/markprompt-js/commit/c77243035121001d544dd061d86835a424b2adb2)]:
+  - @markprompt/react@0.5.0
+
 ## 0.2.0
 
 ### Minor Changes

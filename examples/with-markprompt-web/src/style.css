@@ -29,3 +29,8 @@ main {
   min-height: 100vh;
   min-height: 100dvh;
 }
+
+.centered {
+  display: grid;
+  place-items: center;
+}

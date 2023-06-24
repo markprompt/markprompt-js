@@ -12,17 +12,6 @@ Common CSS for [Markprompt](https://markprompt.com) components.
   </a>
 </p>
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-  - [CSS Classes](#css-classes)
-  - [CSS Variables](#css-variables)
-- [Community](#community)
-- [Authors](#authors)
-- [License](#license)
-
 ## Installation
 
 ```sh
@@ -42,7 +31,7 @@ With a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.1.0/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
 />
 ```
 
@@ -94,14 +83,13 @@ Styling can be customized using the following CSS variables.
 
 ## Community
 
-- [Twitter @markprompt](https://twitter.com/markprompt)
-- [Twitter @motifland](https://twitter.com/motifland)
+- [Twitter](https://twitter.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
-This library is created by the team behind [Motif](https://motif.land)
-([@motifland](https://twitter.com/motifland)).
+This library is created by the team behind [Markprompt](https://markprompt.com)
+([@markprompt](https://twitter.com/markprompt)).
 
 ## License
 
