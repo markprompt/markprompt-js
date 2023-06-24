@@ -42,8 +42,12 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
   };
 
-const emitter = new Emittery();
+const emitter = new Emittery<{ open: undefined }>();
 
+/**
+ * Open Markprompt programmatically. Useful for building a custom trigger or opening the
+ * Markprompt dialog in response to other user actions.
+ */
 function openMarkprompt(): void {
   emitter.emit('open');
 }
@@ -65,6 +69,8 @@ function Markprompt(props: MarkpromptProps): ReactElement {
   const [open, setOpen] = useState(false);
 
   const [showSearch, toggle] = useToggle(search?.enabled ?? false);
+
+  console.log(trigger, !trigger?.customElement);
 
   useEffect(() => {
     if (!trigger?.customElement) return;
