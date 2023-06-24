@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.8.0
+
+### Minor Changes
+
+- [#50](https://github.com/motifland/markprompt-js/pull/50) [`b562aa4`](https://github.com/motifland/markprompt-js/commit/b562aa4e8a2b181596a0ead6867e5d820efe9cd4) Thanks [@nickrttn](https://github.com/nickrttn)! - Add functionality to use a custom trigger for Markprompt
+
+### Patch Changes
+
+- Updated dependencies [[`b562aa4`](https://github.com/motifland/markprompt-js/commit/b562aa4e8a2b181596a0ead6867e5d820efe9cd4), [`642e3a1`](https://github.com/motifland/markprompt-js/commit/642e3a1fecb4d09e9b0269a5009b0a2952880e3a)]:
+  - @markprompt/react@0.8.0
+  - @markprompt/core@0.6.0
+
 ## 0.7.0
 
 ### Minor Changes

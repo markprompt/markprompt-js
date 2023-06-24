@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.6.0
+
+### Minor Changes
+
+- [#52](https://github.com/motifland/markprompt-js/pull/52) [`642e3a1`](https://github.com/motifland/markprompt-js/commit/642e3a1fecb4d09e9b0269a5009b0a2952880e3a) Thanks [@nickrttn](https://github.com/nickrttn)! - Add text-embedding-ada-002 to allowed models
+
 ## 0.5.0
 
 ### Minor Changes
