@@ -20,7 +20,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w @markprompt/core -w @markprompt/docusaurus-theme-search -w @markprompt/react -w @markprompt/web
-      - run: npm run build -w with-css-modules -w with-docusaurus -w with-docusaurus-swizzled -w with-next -w with-markprompt-web
+      - run: |
+          npm run build \
+          -w with-css-modules \
+          -w with-custom-trigger \
+          -w with-custom-trigger-react \
+          -w with-docusaurus \
+          -w with-docusaurus-swizzled \
+          -w with-markprompt-web
+          -w with-next \
         env:
           MARKPROMPT_PROJECT_KEY: ${{ secrets.MARKPROMPT_PROJECT_KEY }}
       - run: npm run lint
