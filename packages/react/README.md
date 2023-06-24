@@ -88,6 +88,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `search.searchUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `search.signal` (`AbortSignal`): AbortController signal.
 - `trigger` (`object`): Options for the trigger
+- `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)
 - `trigger.label` (`string`): `aria-label` for the open button (Default: `Open Markprompt`)
 - `trigger.placeholder` (`string`): Placeholder text for non-floating element (Default: `Ask docs`)
 - `title` (`object`): Options for the title
@@ -98,7 +99,7 @@ The pre-built Markprompt component. It accepts the following props:
 When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
 
 - set `trigger.floating = true` to render a floating button
-- `import { openMarkprompt } from '@markprompt/react'` and call `openMarkprompt()` from your code. This gives you the flexibility to render your own trigger element and attach whatever event handlers you would like and/or open the Markprompt dialog programmatically.
+- set `trigger.customElement = true`, then `import { openMarkprompt } from '@markprompt/react'` and call `openMarkprompt()` from your code. This gives you the flexibility to render your own trigger element and attach whatever event handlers you would like and/or open the Markprompt dialog programmatically.
 
 ### `openMarkprompt()`
 

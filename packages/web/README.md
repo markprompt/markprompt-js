@@ -213,30 +213,52 @@ Render a Markprompt dialog button.
 
 #### Options
 
-- `completionsUrl` (`string`): URL at which to fetch completions
-- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
-- `model` (`OpenAIModelId`): The OpenAI model to use
-- `promptTemplate` (`string`): The prompt template
-- `temperature` (`number`): The model temperature
-- `topP` (`number`): The model top P
-- `frequencyPenalty` (`number`): The model frequency penalty
-- `presencePenalty` (`number`): The model present penalty
-- `maxTokens` (`number`): The max number of tokens to include in the response
-- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
-- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
-- `signal` (`AbortSignal`): AbortController signal
-- `close.label` (`string`): `aria-label` for the close modal button. (Default: `"Close Markprompt"`)
-- `decription.hide` (`boolean`): Visually hide the description. (Default `true`)
-- `decription.text` (`string`): Description text.
-- `prompt.label` )`string`): Label for the prompt input. (Default `"Your prompt"`)
-- `prompt.placeholder` )`string`): Placeholder for the prompt input. (Default `"Ask me anything…"`)
-- `references.transformReferenceId` (`Function`): Callback to transform a reference id into an href and text.
-- `references.loadingText` (`string`) Loading text. (Default: `Fetching relevant pages…`)
-- `references.referencesText` (`string`): References title. (Default: `"Answer generated from the following sources:"`)
-- `trigger.label` (`string`): `aria-label` for the open button. (Default: `"Open Markprompt"`)
-- `title.hide` (`boolean`): Visually hide the title. (Default: `true`)
-- `title.text` (`string`): Text for the title. (Default: `"Ask me anything"`)
-- `showBranding` (`boolean`): Show Markprompt branding. (Default: `true`)
+- `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
+- `close` (`object`): Options for the close modal button
+- `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
+- `description` (`object`): Options for the description
+- `description.hide` (`boolean`): Visually hide the description (Default: `true`)
+- `description.text` (`string`): Description text
+- `prompt` (`object`): Options for the prompt
+- `prompt.label` (`string`): Label for the prompt input (Default: `Ask me anything…`)
+- `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask me anything…`)
+- `prompt.cta` (`string`): When search is enabled, this label is used for the CTA button that opens the prompt (Default: `Ask Docs AI…`)
+- `prompt.completionsUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
+- `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
+- `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
+- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
+- `prompt.topP` (`number`): The model top P. (Default: `1`)
+- `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
+- `prompt.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
+- `prompt.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
+- `prompt.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
+- `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
+- `prompt.signal` (`AbortSignal`): AbortController signal.
+- `references` (`object`): Options for the references
+- `references.transformReferenceId` (`function`): Callback to transform a reference id into an href and text
+- `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
+- `references.referencesText` (`string`): References title (Default: `Answer generated from the following sources:`)
+- `search` (`object`): Options for search
+- `search.enable` (`boolean`): Enable search (Default: `false`)
+- `search.getResultHref` (`function`): Callback to transform a search result into an href
+- `search.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
+- `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
+- `search.searchUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `search.signal` (`AbortSignal`): AbortController signal.
+- `trigger` (`object`): Options for the trigger
+- `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)
+- `trigger.label` (`string`): `aria-label` for the open button (Default: `Open Markprompt`)
+- `trigger.placeholder` (`string`): Placeholder text for non-floating element (Default: `Ask docs`)
+- `title` (`object`): Options for the title
+- `title.hide` (`boolean`): Visually hide the title (Default: `true`)
+- `title.text` (`string`): Title text (Default: `Ask me anything`)
+- `showBranding` (`boolean`): Show Markprompt branding (Default: `true`)
+
+When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
+
+- set `trigger.floating = true` to render a floating button
+- set `trigger.customElement = true`, then `import { openMarkprompt } from '@markprompt/react'` and call `openMarkprompt()` from your code. This gives you the flexibility to render your own trigger element and attach whatever event handlers you would like and/or open the Markprompt dialog programmatically.
 
 ## Documentation
 
