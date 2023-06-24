@@ -1,8 +1,8 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { animated, useSpring } from '@react-spring/web';
+import mitt from 'mitt';
 import React, {
   useEffect,
-  useMemo,
   useRef,
   useState,
   type ReactElement,
@@ -26,6 +26,7 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
 import { type FlattenedSearchResult, type MarkpromptOptions } from './types.js';
+import { useToggle } from './useToggle.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -40,9 +41,10 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
   };
 
-function useToggle(initial: boolean): [on: boolean, toggle: () => void] {
-  const [on, set] = useState(initial);
-  return useMemo(() => [on, () => set((prev) => !prev)], [on]);
+const emitter = mitt();
+
+function openMarkprompt(): void {
+  emitter.emit('open');
 }
 
 function Markprompt(props: MarkpromptProps): ReactElement {
@@ -63,6 +65,13 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [showSearch, toggle] = useToggle(search?.enable ?? false);
 
+  useEffect(() => {
+    if (!trigger?.customElement) return;
+    const onOpen = (): void => setOpen(true);
+    emitter.on('open', onOpen);
+    return () => emitter.off('open', onOpen);
+  }, [trigger?.customElement]);
+
   return (
     <BaseMarkprompt.Root
       projectKey={projectKey}
@@ -73,14 +82,22 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       onOpenChange={setOpen}
       {...dialogProps}
     >
-      {trigger?.floating !== false ? (
-        <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-          <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
-            <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
-          </AccessibleIcon.Root>
-        </BaseMarkprompt.DialogTrigger>
-      ) : (
-        <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+      {!trigger?.customElement && (
+        <>
+          {trigger?.floating !== false ? (
+            <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
+              <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+                <ChatIcon
+                  className="MarkpromptChatIcon"
+                  width="24"
+                  height="24"
+                />
+              </AccessibleIcon.Root>
+            </BaseMarkprompt.DialogTrigger>
+          ) : (
+            <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+          )}
+        </>
       )}
 
       <BaseMarkprompt.Portal>
@@ -425,4 +442,4 @@ function AnswerContainer({
   );
 }
 
-export { Markprompt, type MarkpromptProps };
+export { Markprompt, type MarkpromptProps, openMarkprompt };
