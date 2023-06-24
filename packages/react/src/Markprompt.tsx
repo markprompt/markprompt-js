@@ -70,8 +70,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [showSearch, toggle] = useToggle(search?.enabled ?? false);
 
-  console.log(trigger, !trigger?.customElement);
-
   useEffect(() => {
     if (!trigger?.customElement) return;
     const onOpen = (): void => setOpen(true);
