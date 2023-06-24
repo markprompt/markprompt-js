@@ -1,5 +1,18 @@
 # @markprompt/web
 
+## 0.7.0
+
+### Minor Changes
+
+- [#45](https://github.com/motifland/markprompt-js/pull/45) [`b607149`](https://github.com/motifland/markprompt-js/commit/b60714904c2481da40801e16acc2a3c4b0717f85) Thanks [@michaelfester](https://github.com/michaelfester)! - Move References height animations to JS so we can avoid specifying static heights in CSS
+
+- [#49](https://github.com/motifland/markprompt-js/pull/49) [`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06) Thanks [@michaelfester](https://github.com/michaelfester)! - Move the Markprompt component from @markprompt/web to @markprompt/react, allowing React and Docusaurus users to use the prebuilt component
+
+### Patch Changes
+
+- Updated dependencies [[`54af915`](https://github.com/motifland/markprompt-js/commit/54af9150ea22da96ec4cf3d283d6d8a485696a06)]:
+  - @markprompt/react@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes

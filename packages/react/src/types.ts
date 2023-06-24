@@ -1,4 +1,5 @@
 import {
+  type Source,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -34,13 +35,20 @@ export type PolymorphicComponentPropWithRef<
 export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
 
-export type FlattenedSearchResult = {
+export type SectionHeading = {
+  value: string | undefined;
+  id: string | undefined;
+};
+
+export type SearchResultWithMetadata = {
   isParent: boolean;
   hasParent: boolean;
   path: string;
+  sectionHeading?: SectionHeading | undefined;
   score: number;
   tag?: string;
   title: string;
+  source: Source;
 };
 
 type MarkpromptOptions = {
@@ -104,9 +112,13 @@ type MarkpromptOptions = {
      * Enable search
      * @default false
      **/
-    enable?: boolean;
+    enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (result: FlattenedSearchResult) => string;
+    getResultHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
   };
   trigger?: {
     /**

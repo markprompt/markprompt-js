@@ -2,10 +2,9 @@ import {
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
   type SubmitPromptOptions,
-  type SearchResult,
   type SubmitSearchQueryOptions,
+  type SearchResult,
 } from '@markprompt/core';
-import Slugger from 'github-slugger';
 import {
   useCallback,
   useEffect,
@@ -16,7 +15,7 @@ import {
   type SetStateAction,
 } from 'react';
 
-import type { FlattenedSearchResult } from './types.js';
+import type { SearchResultWithMetadata } from './types.js';
 
 export type LoadingState =
   | 'indeterminate'
@@ -33,7 +32,7 @@ export interface UseMarkpromptOptions {
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
-    enable?: boolean;
+    enabled?: boolean;
   };
 }
 
@@ -51,7 +50,7 @@ export interface UseMarkpromptResult {
   /** The references that belong to the latest answer */
   references: string[];
   /** Search results */
-  searchResults: FlattenedSearchResult[];
+  searchResults: SearchResultWithMetadata[];
   /** The current loading state */
   state: LoadingState;
   /** Abort a pending request */
@@ -83,9 +82,9 @@ export function useMarkprompt({
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
-  const [searchResults, setSearchResults] = useState<FlattenedSearchResult[]>(
-    [],
-  );
+  const [searchResults, setSearchResults] = useState<
+    SearchResultWithMetadata[]
+  >([]);
   const [activeSearchResult, setActiveSearchResult] = useState<
     string | undefined
   >();
@@ -175,7 +174,7 @@ export function useMarkprompt({
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
-      if (!searchOptions?.enable) return;
+      if (!searchOptions?.enabled) return;
 
       abort();
 
@@ -235,14 +234,14 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, projectKey, searchOptions?.enable],
+    [abort, projectKey, searchOptions?.enabled],
   );
 
   return useMemo(
     () => ({
       answer,
       activeSearchResult,
-      isSearchEnabled: !!searchOptions?.enable,
+      isSearchEnabled: !!searchOptions?.enabled,
       isSearchActive: !!isSearchActive,
       prompt,
       references,
@@ -257,7 +256,7 @@ export function useMarkprompt({
     [
       answer,
       activeSearchResult,
-      searchOptions?.enable,
+      searchOptions?.enabled,
       isSearchActive,
       prompt,
       references,
@@ -328,12 +327,10 @@ const isMatching = (
   return text.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
 };
 
-const slugger = new Slugger();
-
 function flattenSearchResults(
   searchQuery: string,
   searchResults: SearchResult[],
-): FlattenedSearchResult[] {
+): SearchResultWithMetadata[] {
   const sortedSearchResults = [...searchResults].sort((a, b) => {
     const aTopSectionScore = Math.max(...a.sections.map((s) => s.score));
     const bTopSectionScore = Math.max(...b.sections.map((s) => s.score));
@@ -367,7 +364,7 @@ function flattenSearchResults(
             return undefined;
           }
 
-          const isMatchingLeadHeading = isMatching(
+          const isKeywordMatchingLeadHeading = isMatching(
             s.meta?.leadHeading?.value,
             normalizedSearchQuery,
           );
@@ -377,28 +374,35 @@ function flattenSearchResults(
             normalizedSearchQuery,
           );
 
-          if (!isMatchingLeadHeading && !isMatchingContent) {
+          if (!isKeywordMatchingLeadHeading && !isMatchingContent) {
             // If this is a result because of the title only, omit
             // it from here.
             return undefined;
           }
 
-          if (isMatchingLeadHeading) {
-            // If matching lead heading, show that as title
+          if (isKeywordMatchingLeadHeading) {
+            // Title is made of lead heading
             return {
               isParent: false,
               hasParent: isMatchingTitle,
+              tag: isMatchingTitle ? null : f.meta.title,
               title: createKWICSnippet(
                 trimContent(s.meta?.leadHeading?.value || ''),
                 normalizedSearchQuery,
               ),
               score: s.score,
-              path: `${f.path}#${slugger.slug(
-                s.meta?.leadHeading?.value || '',
-              )}`,
+              path: f.path,
+              sectionHeading: s.meta?.leadHeading
+                ? {
+                    id: s.meta?.leadHeading?.id,
+                    value: s.meta?.leadHeading?.value,
+                  }
+                : undefined,
+              source: f.source,
             };
           }
 
+          // Title is made of content snippet
           return {
             isParent: false,
             hasParent: isMatchingTitle,
@@ -406,6 +410,13 @@ function flattenSearchResults(
             title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
             score: s.score,
             path: f.path,
+            sectionHeading: s.meta?.leadHeading
+              ? {
+                  id: s.meta?.leadHeading?.id,
+                  value: s.meta?.leadHeading?.value,
+                }
+              : undefined,
+            source: f.source,
           };
         })
         .filter(isPresent),
@@ -423,6 +434,7 @@ function flattenSearchResults(
           title: createKWICSnippet(f.meta.title, searchQuery),
           score: topSectionScore,
           path: f.path,
+          source: f.source,
         },
       ].concat(sectionResults);
     } else {

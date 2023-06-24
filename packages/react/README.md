@@ -95,6 +95,15 @@ The pre-built Markprompt component. It accepts the following props:
 - `title.text` (`string`): Title text (Default: `Ask me anything`)
 - `showBranding` (`boolean`): Show Markprompt branding (Default: `true`)
 
+When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
+
+- set `trigger.floating = true` to render a floating button
+- `import { openMarkprompt } from '@markprompt/react'` and call `openMarkprompt()` from your code. This gives you the flexibility to render your own trigger element and attach whatever event handlers you would like and/or open the Markprompt dialog programmatically.
+
+### `openMarkprompt()`
+
+A function to open the Markprompt dialog programmatically. Takes no arguments.
+
 ### `<Answer />`
 
 Render the markdown answer from the Markprompt API. It accepts the same props as [`react-markdown`](https://github.com/remarkjs/react-markdown#props), except `children`.

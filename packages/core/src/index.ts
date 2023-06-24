@@ -24,4 +24,6 @@ export {
   type SearchResult,
   type SearchResultSection,
   type SearchResultsResponse,
+  type Source,
+  type SourceType,
 } from './types.js';

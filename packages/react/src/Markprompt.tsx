@@ -1,13 +1,14 @@
+import type { Source } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { animated, useSpring } from '@react-spring/web';
-import mitt from 'mitt';
+import Emittery from 'emittery';
 import React, {
   useEffect,
   useRef,
   useState,
+  type Dispatch,
   type ReactElement,
   type ReactNode,
-  type Dispatch,
   type SetStateAction,
 } from 'react';
 
@@ -25,7 +26,7 @@ import {
 import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
-import { type FlattenedSearchResult, type MarkpromptOptions } from './types.js';
+import { type MarkpromptOptions, type SectionHeading } from './types.js';
 import { useToggle } from './useToggle.js';
 
 type MarkpromptProps = MarkpromptOptions &
@@ -41,7 +42,7 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
   };
 
-const emitter = mitt();
+const emitter = new Emittery();
 
 function openMarkprompt(): void {
   emitter.emit('open');
@@ -63,7 +64,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [open, setOpen] = useState(false);
 
-  const [showSearch, toggle] = useToggle(search?.enable ?? false);
+  const [showSearch, toggle] = useToggle(search?.enabled ?? false);
 
   useEffect(() => {
     if (!trigger?.customElement) return;
@@ -121,7 +122,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               className="MarkpromptPrompt"
               placeholder={
                 prompt?.placeholder ??
-                (search?.enable
+                (search?.enabled
                   ? 'Search or ask a question…'
                   : 'Ask me anything…')
               }
@@ -169,10 +170,10 @@ function AnswerOrSearchResults(
   const { search, showSearch, promptCTA, toggleSearchAnswer, references } =
     props;
 
-  if (!search?.enable) {
+  if (!search?.enabled) {
     return (
       <AnswerContainer
-        isSearchEnabled={search?.enable}
+        isSearchEnabled={search?.enabled}
         references={references}
         toggleSearchAnswer={toggleSearchAnswer}
       />
@@ -180,7 +181,7 @@ function AnswerOrSearchResults(
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
           getResultHref={search?.getResultHref}
@@ -191,7 +192,7 @@ function AnswerOrSearchResults(
       </Transition>
       <Transition isVisible={!showSearch} isFlipped>
         <AnswerContainer
-          isSearchEnabled={search?.enable}
+          isSearchEnabled={search?.enabled}
           references={references}
           toggleSearchAnswer={toggleSearchAnswer}
         />
@@ -214,6 +215,10 @@ const Transition = (props: TransitionProps): ReactElement => {
   const styles = useSpring({
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
+    config: {
+      tension: 640,
+      friction: 60,
+    },
     onStart: () => {
       if (!isVisible) return;
       setDisplay('block');
@@ -290,7 +295,11 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
-  getResultHref?: (result: FlattenedSearchResult) => string;
+  getResultHref?: (
+    path: string,
+    sectionHeading: SectionHeading | undefined,
+    source: Source,
+  ) => string;
   showSearch: boolean;
   promptCTA?: string;
   toggleSearchAnswer: () => void;
@@ -442,4 +451,4 @@ function AnswerContainer({
   );
 }
 
-export { Markprompt, type MarkpromptProps, openMarkprompt };
+export { Markprompt, openMarkprompt, type MarkpromptProps };

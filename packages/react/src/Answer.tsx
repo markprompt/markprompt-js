@@ -1,8 +1,8 @@
-import * as BaseMarkprompt from '@markprompt/react';
-import { useMarkpromptContext } from '@markprompt/react';
 import React, { type ReactElement } from 'react';
 
 import { Caret } from './Caret.js';
+import * as BaseMarkprompt from './index.js';
+import { useMarkpromptContext } from './index.js';
 
 export function Answer(): ReactElement {
   const { state } = useMarkpromptContext();

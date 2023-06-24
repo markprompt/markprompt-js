@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/react",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A headless React component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@react-spring/web": "^9.7.2",
     "clsx": "^1.2.1",
+    "emittery": "^1.0.1",
     "github-slugger": "^2.0.0",
     "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
