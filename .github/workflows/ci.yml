@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w @markprompt/core -w @markprompt/docusaurus-theme-search -w @markprompt/react -w @markprompt/web
-      - run: |
+      - run: >
           npm run build \
           -w with-css-modules \
           -w with-custom-trigger \
