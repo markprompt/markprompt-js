@@ -1,8 +1,10 @@
-import { Markprompt } from '@markprompt/react';
+import {
+  Markprompt,
+  openMarkprompt,
+  type MarkpromptOptions,
+} from '@markprompt/react';
 import React from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-
-import { type MarkpromptOptions } from './types.js';
 
 function getHTMLElement(
   value: HTMLElement | string,
@@ -23,7 +25,7 @@ let root: Root;
  * @param container The element or selector to render Markprompt into
  * @param options Options for customizing Markprompt
  */
-export function markprompt(
+function markprompt(
   projectKey: string,
   container: HTMLElement | string,
   options?: MarkpromptOptions,
@@ -31,3 +33,5 @@ export function markprompt(
   if (!root) root = createRoot(getHTMLElement(container));
   root.render(<Markprompt projectKey={projectKey} {...options} />);
 }
+
+export { markprompt, openMarkprompt };

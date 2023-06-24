@@ -1,14 +1,14 @@
 import type { Source } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import * as web from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
+import Emittery from 'emittery';
 import React, {
   useEffect,
-  useMemo,
   useRef,
   useState,
+  type Dispatch,
   type ReactElement,
   type ReactNode,
-  type Dispatch,
   type SetStateAction,
 } from 'react';
 
@@ -27,6 +27,7 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { SearchResult } from './SearchResult.js';
 import { type MarkpromptOptions, type SectionHeading } from './types.js';
+import { useToggle } from './useToggle.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -41,9 +42,14 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
   };
 
-function useToggle(initial: boolean): [on: boolean, toggle: () => void] {
-  const [on, set] = useState(initial);
-  return useMemo(() => [on, () => set((prev) => !prev)], [on]);
+const emitter = new Emittery<{ open: undefined }>();
+
+/**
+ * Open Markprompt programmatically. Useful for building a custom trigger or opening the
+ * Markprompt dialog in response to other user actions.
+ */
+function openMarkprompt(): void {
+  emitter.emit('open');
 }
 
 function Markprompt(props: MarkpromptProps): ReactElement {
@@ -64,6 +70,13 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [showSearch, toggle] = useToggle(search?.enabled ?? false);
 
+  useEffect(() => {
+    if (!trigger?.customElement) return;
+    const onOpen = (): void => setOpen(true);
+    emitter.on('open', onOpen);
+    return () => emitter.off('open', onOpen);
+  }, [trigger?.customElement]);
+
   return (
     <BaseMarkprompt.Root
       projectKey={projectKey}
@@ -74,14 +87,22 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       onOpenChange={setOpen}
       {...dialogProps}
     >
-      {trigger?.floating !== false ? (
-        <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-          <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
-            <ChatIcon className="MarkpromptChatIcon" width="24" height="24" />
-          </AccessibleIcon.Root>
-        </BaseMarkprompt.DialogTrigger>
-      ) : (
-        <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+      {!trigger?.customElement && (
+        <>
+          {trigger?.floating !== false ? (
+            <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
+              <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+                <ChatIcon
+                  className="MarkpromptChatIcon"
+                  width="24"
+                  height="24"
+                />
+              </AccessibleIcon.Root>
+            </BaseMarkprompt.DialogTrigger>
+          ) : (
+            <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+          )}
+        </>
       )}
 
       <BaseMarkprompt.Portal>
@@ -195,7 +216,7 @@ const Transition = (props: TransitionProps): ReactElement => {
 
   const [display, setDisplay] = useState(isVisible ? 'block' : 'none');
 
-  const styles = web.useSpring({
+  const styles = useSpring({
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
     config: {
@@ -213,7 +234,7 @@ const Transition = (props: TransitionProps): ReactElement => {
   });
 
   return (
-    <web.animated.div
+    <animated.div
       style={{
         position: 'absolute',
         inset: 0,
@@ -222,7 +243,7 @@ const Transition = (props: TransitionProps): ReactElement => {
       }}
     >
       {children}
-    </web.animated.div>
+    </animated.div>
   );
 };
 
@@ -434,4 +455,4 @@ function AnswerContainer({
   );
 }
 
-export { Markprompt, type MarkpromptProps };
+export { Markprompt, openMarkprompt, type MarkpromptProps };

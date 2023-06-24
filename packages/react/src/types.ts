@@ -137,6 +137,8 @@ type MarkpromptOptions = {
      * to the `markprompt` function.
      */
     floating?: boolean;
+    /** Do you use a custom element as the dialog trigger? */
+    customElement?: boolean;
   };
   title?: {
     /**

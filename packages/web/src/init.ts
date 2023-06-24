@@ -1,5 +1,6 @@
+import type { MarkpromptOptions } from '@markprompt/react';
+
 import { markprompt } from './index.js';
-import type { MarkpromptOptions } from './types.js';
 
 declare global {
   interface Window {
