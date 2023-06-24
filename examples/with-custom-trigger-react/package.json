@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@markprompt/css": "*",
+    "@markprompt/react": "*",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },

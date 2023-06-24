@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@markprompt/css": "^0.4.0",
-    "@markprompt/web": "^0.7.0"
+    "@markprompt/css": "*",
+    "@markprompt/web": "*"
   },
   "devDependencies": {
     "typescript": "^4.9.3",
