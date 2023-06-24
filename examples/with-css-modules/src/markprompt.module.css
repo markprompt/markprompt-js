@@ -1,14 +1,14 @@
 /* style.css */
 
 :root {
-  --markprompt-background: #ffffff;
+  --markprompt-background: #fff;
   --markprompt-foreground: #171717;
   --markprompt-muted: #fafafa;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #e5e5e5;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
@@ -28,16 +28,16 @@
   --markprompt-muted: #171717;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #262626;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #0e0e0e;
-  --markprompt-secondaryForeground: #ffffff;
+  --markprompt-secondaryForeground: #fff;
   --markprompt-primaryHighlight: #ec4899;
   --markprompt-secondaryHighlight: #a855f7;
   --markprompt-overlay: #00000040;
-  --markprompt-ring: #ffffff;
+  --markprompt-ring: #fff;
 }
 
 button {
@@ -78,8 +78,8 @@ button {
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
-    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  box-shadow: hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -149,10 +149,7 @@ button {
   border-bottom: 1px solid var(--markprompt-border);
   box-shadow: none;
   width: 100%;
-  padding-left: 3.5rem;
-  padding-right: 3.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem 3.5rem;
   font-size: var(--markprompt-text-size);
   background-color: var(--markprompt-background);
   color: var(--markprompt-foreground);
@@ -160,17 +157,13 @@ button {
 }
 
 .MarkpromptPrompt:focus {
-  outline: 2px solid transparent;
+  outline: 2px solid var(--markprompt-mutedForeground);
   outline-offset: 2px;
   box-shadow: none;
 }
 
 .MarkpromptPrompt::placeholder {
   color: var(--markprompt-mutedForeground);
-}
-
-.MarkpromptPrompt:focus {
-  outline: 2px solid var(--markprompt-mutedForeground);
 }
 
 .MarkpromptReferences {
@@ -188,92 +181,100 @@ button {
   -ms-overflow-style: none;
   scrollbar-width: none;
   font-size: var(--markprompt-text-size);
+  color: var(--markprompt-foreground);
+  max-width: 65ch;
+  line-height: 1.7142857;
 }
+
 .MarkpromptAnswer::-webkit-scrollbar {
   display: none;
 }
-.MarkpromptAnswer :not(:last-child) .caret {
-  display: none;
-}
-.MarkpromptAnswer {
-  color: var(--markprompt-foreground);
-  max-width: 65ch;
-  font-size: 0.875rem;
-  line-height: 1.7142857;
-}
+
 .MarkpromptAnswer p {
   margin-top: 1.1428571em;
   margin-bottom: 1.1428571em;
 }
+
 .MarkpromptAnswer a {
   color: var(--markprompt-primary);
   text-decoration: underline;
   font-weight: 500;
 }
+
 .MarkpromptAnswer strong {
   font-weight: 600;
 }
+
 .MarkpromptAnswer a strong {
   color: inherit;
 }
-.MarkpromptAnswer blockquote strong {
-  color: inherit;
-}
-.MarkpromptAnswer thead th strong {
-  color: inherit;
-}
+
 .MarkpromptAnswer ol {
   list-style-type: decimal;
   margin-top: 1.1428571em;
   margin-bottom: 1.1428571em;
   padding-left: 1.5714286em;
 }
+
 .MarkpromptAnswer ol[type='A'] {
   list-style-type: upper-alpha;
 }
+
 .MarkpromptAnswer ol[type='a'] {
   list-style-type: lower-alpha;
 }
+
 .MarkpromptAnswer ol[type='A' s] {
   list-style-type: upper-alpha;
 }
+
 .MarkpromptAnswer ol[type='a' s] {
   list-style-type: lower-alpha;
 }
+
 .MarkpromptAnswer ol[type='I'] {
   list-style-type: upper-roman;
 }
+
 .MarkpromptAnswer ol[type='i'] {
   list-style-type: lower-roman;
 }
+
 .MarkpromptAnswer ol[type='I' s] {
   list-style-type: upper-roman;
 }
+
 .MarkpromptAnswer ol[type='i' s] {
   list-style-type: lower-roman;
 }
+
 .MarkpromptAnswer ol[type='1'] {
   list-style-type: decimal;
 }
+
 .MarkpromptAnswer ul {
   list-style-type: disc;
   margin-top: 1.1428571em;
   margin-bottom: 1.1428571em;
   padding-left: 1.5714286em;
 }
+
 .MarkpromptAnswer ol > li::marker {
   font-weight: 400;
   color: var(--markprompt-foreground);
 }
+
 .MarkpromptAnswer ul > li::marker {
   color: var(--markprompt-mutedForeground);
 }
+
 .MarkpromptAnswer hr {
   border-color: var(--markprompt-border);
   border-top-width: 1;
   margin-top: 2.8571429em;
   margin-bottom: 2.8571429em;
 }
+
 .MarkpromptAnswer blockquote {
   font-weight: 500;
   font-style: italic;
@@ -285,12 +286,15 @@ button {
   margin-bottom: 1.3333333em;
   padding-left: 1.1111111em;
 }
+
 .MarkpromptAnswer blockquote p:first-of-type::before {
   content: open-quote;
 }
+
 .MarkpromptAnswer blockquote p:last-of-type::after {
   content: close-quote;
 }
+
 .MarkpromptAnswer h1 {
   color: var(--markprompt-foreground);
   font-weight: 800;
@@ -299,10 +303,7 @@ button {
   margin-bottom: 0.8em;
   line-height: 1.2;
 }
-.MarkpromptAnswer h1 strong {
-  font-weight: 900;
-  color: inherit;
-}
+
 .MarkpromptAnswer h2 {
   color: var(--markprompt-foreground);
   font-weight: 700;
@@ -311,10 +312,7 @@ button {
   margin-bottom: 0.8em;
   line-height: 1.4;
 }
-.MarkpromptAnswer h2 strong {
-  font-weight: 800;
-  color: inherit;
-}
+
 .MarkpromptAnswer h3 {
   color: var(--markprompt-foreground);
   font-weight: 600;
@@ -323,10 +321,7 @@ button {
   margin-bottom: 0.4444444em;
   line-height: 1.5555556;
 }
-.MarkpromptAnswer h3 strong {
-  font-weight: 700;
-  color: inherit;
-}
+
 .MarkpromptAnswer h4 {
   color: var(--markprompt-foreground);
   font-weight: 600;
@@ -334,58 +329,88 @@ button {
   margin-bottom: 0.5714286em;
   line-height: 1.4285714;
 }
+
+.MarkpromptAnswer h1 strong {
+  font-weight: 900;
+  color: inherit;
+}
+
+.MarkpromptAnswer h2 strong {
+  font-weight: 800;
+  color: inherit;
+}
+
+.MarkpromptAnswer h3 strong {
+  font-weight: 700;
+  color: inherit;
+}
+
 .MarkpromptAnswer h4 strong {
   font-weight: 700;
   color: inherit;
 }
+
+.MarkpromptAnswer blockquote strong {
+  color: inherit;
+}
+
+.MarkpromptAnswer thead th strong {
+  color: inherit;
+}
+
 .MarkpromptAnswer img {
   margin-top: 1.7142857em;
   margin-bottom: 1.7142857em;
 }
+
 .MarkpromptAnswer figure > * {
   margin-top: 0;
   margin-bottom: 0;
 }
+
 .MarkpromptAnswer figcaption {
   color: var(--markprompt-mutedForeground);
   font-size: 0.8571429em;
   line-height: 1.3333333;
   margin-top: 0.6666667em;
 }
+
 .MarkpromptAnswer code {
   color: var(--markprompt-foreground);
   font-weight: 600;
   font-size: 0.8571429em;
 }
+
 .MarkpromptAnswer code::before {
   content: '`';
 }
+
 .MarkpromptAnswer code::after {
   content: '`';
 }
+
 .MarkpromptAnswer a code {
   color: inherit;
 }
+
 .MarkpromptAnswer h1 code {
   color: inherit;
 }
+
 .MarkpromptAnswer h2 code {
   color: inherit;
   font-size: 0.9em;
 }
+
 .MarkpromptAnswer h3 code {
   color: inherit;
   font-size: 0.8888889em;
 }
+
 .MarkpromptAnswer h4 code {
   color: inherit;
 }
-.MarkpromptAnswer blockquote code {
-  color: inherit;
-}
-.MarkpromptAnswer thead th code {
-  color: inherit;
-}
+
 .MarkpromptAnswer pre {
   color: var(--markprompt-foreground);
   background-color: var(--markprompt-muted);
@@ -397,11 +422,9 @@ button {
   margin-top: 1.6666667em;
   margin-bottom: 1.6666667em;
   border-radius: 0.25rem;
-  padding-top: 0.6666667em;
-  padding-right: 1em;
-  padding-bottom: 0.6666667em;
-  padding-left: 1em;
+  padding: 0.6666667em 1em;
 }
+
 .MarkpromptAnswer pre code {
   background-color: transparent;
   border-width: 0;
@@ -413,12 +436,15 @@ button {
   font-family: inherit;
   line-height: inherit;
 }
+
 .MarkpromptAnswer pre code::before {
   content: none;
 }
+
 .MarkpromptAnswer pre code::after {
   content: none;
 }
+
 .MarkpromptAnswer table {
   width: 100%;
   table-layout: auto;
@@ -428,10 +454,12 @@ button {
   font-size: 0.8571429em;
   line-height: 1.5;
 }
+
 .MarkpromptAnswer thead {
   border-bottom-width: 1px;
   border-bottom-color: var(--markprompt-border);
 }
+
 .MarkpromptAnswer thead th {
   color: var(--markprompt-foreground);
   font-weight: 600;
@@ -440,96 +468,74 @@ button {
   padding-bottom: 0.6666667em;
   padding-left: 1em;
 }
+
+.MarkpromptAnswer blockquote code {
+  color: inherit;
+}
+
+.MarkpromptAnswer thead th code {
+  color: inherit;
+}
+
 .MarkpromptAnswer tbody tr {
   border-bottom-width: 1px;
   border-bottom-color: var(--markprompt-border);
 }
+
 .MarkpromptAnswer tbody tr:last-child {
   border-bottom-width: 0;
 }
+
 .MarkpromptAnswer tbody td {
   vertical-align: baseline;
 }
+
 .MarkpromptAnswer tfoot {
   border-top-width: 1px;
   border-top-color: var(--markprompt-border);
 }
+
 .MarkpromptAnswer tfoot td {
   vertical-align: top;
 }
+
 .MarkpromptAnswer video {
   margin-top: 1.7142857em;
   margin-bottom: 1.7142857em;
 }
+
 .MarkpromptAnswer figure {
   margin-top: 1.7142857em;
   margin-bottom: 1.7142857em;
 }
+
+.MarkpromptAnswer hr + * {
+  margin-top: 0;
+}
+
+.MarkpromptAnswer h2 + * {
+  margin-top: 0;
+}
+
+.MarkpromptAnswer h3 + * {
+  margin-top: 0;
+}
+
+.MarkpromptAnswer h4 + * {
+  margin-top: 0;
+}
+
 .MarkpromptAnswer li {
   margin-top: 0.2857143em;
   margin-bottom: 0.2857143em;
 }
+
 .MarkpromptAnswer ol > li {
   padding-left: 0.4285714em;
 }
+
 .MarkpromptAnswer ul > li {
   padding-left: 0.4285714em;
-}
-.MarkpromptAnswer > ul > li p {
-  margin-top: 0.5714286em;
-  margin-bottom: 0.5714286em;
-}
-.MarkpromptAnswer > ul > li > *:first-child {
-  margin-top: 1.1428571em;
-}
-.MarkpromptAnswer > ul > li > *:last-child {
-  margin-bottom: 1.1428571em;
-}
-.MarkpromptAnswer > ol > li > *:first-child {
-  margin-top: 1.1428571em;
-}
-.MarkpromptAnswer > ol > li > *:last-child {
-  margin-bottom: 1.1428571em;
-}
-.MarkpromptAnswer ul ul,
-.MarkpromptAnswer ul ol,
-.MarkpromptAnswer ol ul,
-.MarkpromptAnswer ol ol {
-  margin-top: 0.5714286em;
-  margin-bottom: 0.5714286em;
-}
-.MarkpromptAnswer hr + * {
-  margin-top: 0;
-}
-.MarkpromptAnswer h2 + * {
-  margin-top: 0;
-}
-.MarkpromptAnswer h3 + * {
-  margin-top: 0;
-}
-.MarkpromptAnswer h4 + * {
-  margin-top: 0;
-}
-.MarkpromptAnswer thead th:first-child {
-  padding-left: 0;
-}
-.MarkpromptAnswer thead th:last-child {
-  padding-right: 0;
-}
-.MarkpromptAnswer tbody td,
-.MarkpromptAnswer tfoot td {
-  padding-top: 0.6666667em;
-  padding-right: 1em;
-  padding-bottom: 0.6666667em;
-  padding-left: 1em;
-}
-.MarkpromptAnswer tbody td:first-child,
-.MarkpromptAnswer tfoot td:first-child {
-  padding-left: 0;
-}
-.MarkpromptAnswer tbody td:last-child,
-.MarkpromptAnswer tfoot td:last-child {
-  padding-right: 0;
 }
 
 .caret {
@@ -556,6 +562,10 @@ button {
   display: none;
 }
 
+.MarkpromptAnswer :not(:last-child) .caret {
+  display: none;
+}
+
 [data-loading-state='preload'] .progress {
   position: absolute;
   top: -2px;
@@ -570,12 +580,12 @@ button {
   animation-duration: 2s;
   animation-fill-mode: none;
   animation-iteration-count: infinite;
+  transition-property: opacity;
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
-  transition: opacity 200ms ease;
-}
-[data-loading-state='preload'] .progress {
+  transition-duration: 200ms;
   opacity: 1;
 }
+
 [data-loading-state]:not([data-loading-state='preload']) .progress {
   opacity: 0;
 }
@@ -594,13 +604,16 @@ button {
   width: 100%;
   box-sizing: border-box;
 }
+
 .references[data-loading-state='preload'] {
   height: 50px;
 }
+
 .references[data-loading-state='streaming-answer'],
 .references[data-loading-state='done'] {
   height: 95px;
 }
+
 .references[data-loading-state='indeterminate'] {
   display: none;
   height: 0;
@@ -617,24 +630,31 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.MarkpromptAnswer > ul > li p {
+  margin-top: 0.5714286em;
+  margin-bottom: 0.5714286em;
+}
+
 .references[data-loading-state='preload'] > p:first-of-type {
   opacity: 1;
 }
+
 .references[data-loading-state='preload'] > p:last-of-type {
   opacity: 0;
 }
+
 [data-loading-state]:not([data-loading-state='preload']) > p:first-of-type {
   opacity: 0 !important;
 }
+
 [data-loading-state]:not([data-loading-state='preload']) > p:last-of-type {
   opacity: 1;
 }
 
 .references ul {
-  width: 100%;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-flow: row nowrap;
   align-items: center;
   gap: 0.5rem;
   list-style-type: none;
@@ -678,15 +698,64 @@ button {
   opacity: 0.8;
 }
 
+.MarkpromptAnswer > ul > li > *:first-child {
+  margin-top: 1.1428571em;
+}
+
+.MarkpromptAnswer > ul > li > *:last-child {
+  margin-bottom: 1.1428571em;
+}
+
+.MarkpromptAnswer > ol > li > *:first-child {
+  margin-top: 1.1428571em;
+}
+
+.MarkpromptAnswer > ol > li > *:last-child {
+  margin-bottom: 1.1428571em;
+}
+
+.MarkpromptAnswer ul ul,
+.MarkpromptAnswer ul ol,
+.MarkpromptAnswer ol ul,
+.MarkpromptAnswer ol ol {
+  margin-top: 0.5714286em;
+  margin-bottom: 0.5714286em;
+}
+
+.MarkpromptAnswer thead th:first-child {
+  padding-left: 0;
+}
+
+.MarkpromptAnswer thead th:last-child {
+  padding-right: 0;
+}
+
+.MarkpromptAnswer tbody td,
+.MarkpromptAnswer tfoot td {
+  padding: 0.6666667em 1em;
+}
+
+.MarkpromptAnswer tbody td:first-child,
+.MarkpromptAnswer tfoot td:first-child {
+  padding-left: 0;
+}
+
+.MarkpromptAnswer tbody td:last-child,
+.MarkpromptAnswer tfoot td:last-child {
+  padding-right: 0;
+}
+
 @keyframes contentShow {
-  from {
+  0% {
     opacity: 0;
     transform: translate(-50%, -46%) scale(0.98);
   }
+
   50% {
     transform: translate(-50%, -51%) scale(1.02);
   }
-  to {
+
+  100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -696,6 +765,7 @@ button {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -705,6 +775,7 @@ button {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -715,6 +786,7 @@ button {
     transform: translateY(100%);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -726,10 +798,12 @@ button {
     width: 0;
     transform: translateX(0);
   }
+
   50% {
     width: 100%;
     transform: translateX(0);
   }
+
   100% {
     width: 100%;
     transform: translateX(100%);
@@ -741,6 +815,7 @@ button {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -1,12 +1,12 @@
 :root {
-  --markprompt-background: #ffffff;
+  --markprompt-background: #fff;
   --markprompt-foreground: #171717;
   --markprompt-muted: #fafafa;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #e5e5e5;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
@@ -28,16 +28,16 @@
     --markprompt-muted: #171717;
     --markprompt-mutedForeground: #737373;
     --markprompt-border: #262626;
-    --markprompt-input: #ffffff;
+    --markprompt-input: #fff;
     --markprompt-primary: #6366f1;
-    --markprompt-primaryForeground: #ffffff;
+    --markprompt-primaryForeground: #fff;
     --markprompt-primaryMuted: #8285f4;
     --markprompt-secondary: #0e0e0e;
-    --markprompt-secondaryForeground: #ffffff;
+    --markprompt-secondaryForeground: #fff;
     --markprompt-primaryHighlight: #ec4899;
     --markprompt-secondaryHighlight: #a855f7;
     --markprompt-overlay: #00000040;
-    --markprompt-ring: #ffffff;
+    --markprompt-ring: #fff;
   }
 }
 
@@ -48,16 +48,16 @@
   --markprompt-muted: #171717;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #262626;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #0e0e0e;
-  --markprompt-secondaryForeground: #ffffff;
+  --markprompt-secondaryForeground: #fff;
   --markprompt-primaryHighlight: #ec4899;
   --markprompt-secondaryHighlight: #a855f7;
   --markprompt-overlay: #00000040;
-  --markprompt-ring: #ffffff;
+  --markprompt-ring: #fff;
 }
 
 :where([class^='Markprompt']) {
@@ -66,8 +66,8 @@
 
 :where(
     [class^='Markprompt'] *,
-    [class^='Markprompt'] *:before,
-    [class^='Markprompt'] *:after
+    [class^='Markprompt'] *::before,
+    [class^='Markprompt'] *::after
   ) {
   box-sizing: inherit;
 }
@@ -146,8 +146,8 @@
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
-    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  box-shadow: hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -268,11 +268,13 @@
   width: 0;
   height: 0;
 }
+
 .MarkpromptPrompt[type='search']::-ms-reveal {
   display: none;
   width: 0;
   height: 0;
 }
+
 .MarkpromptPrompt[type='search']::-webkit-search-decoration,
 .MarkpromptPrompt[type='search']::-webkit-search-cancel-button,
 .MarkpromptPrompt[type='search']::-webkit-search-results-button,
@@ -548,10 +550,7 @@
   margin-top: 1.6666667em;
   margin-bottom: 1.6666667em;
   border-radius: 0.25rem;
-  padding-top: 0.6666667em;
-  padding-right: 1em;
-  padding-bottom: 0.6666667em;
-  padding-left: 1em;
+  padding: 0.6666667em 1em;
 }
 
 :where(.MarkpromptAnswer pre code) {
@@ -663,9 +662,9 @@
   margin-bottom: 1.1428571em;
 }
 
-:where(.MarkpromptAnswer ul u)l,
-:where(.MarkpromptAnswer ul o)l,
-:where(.MarkpromptAnswer ol u)l,
+:where(.MarkpromptAnswer ul ul),
+:where(.MarkpromptAnswer ul ol),
+:where(.MarkpromptAnswer ol ul),
 :where(.MarkpromptAnswer ol ol) {
   margin-top: 0.5714286em;
   margin-bottom: 0.5714286em;
@@ -695,20 +694,17 @@
   padding-right: 0;
 }
 
-:where(.MarkpromptAnswer tbody t)d,
+:where(.MarkpromptAnswer tbody td),
 :where(.MarkpromptAnswer tfoot td) {
-  padding-top: 0.6666667em;
-  padding-right: 1em;
-  padding-bottom: 0.6666667em;
-  padding-left: 1em;
+  padding: 0.6666667em 1em;
 }
 
-:where(.MarkpromptAnswer tbody td:first-chil)d,
+:where(.MarkpromptAnswer tbody td:first-child),
 :where(.MarkpromptAnswer tfoot td:first-child) {
   padding-left: 0;
 }
 
-:where(.MarkpromptAnswer tbody td:last-chil)d,
+:where(.MarkpromptAnswer tbody td:last-child),
 :where(.MarkpromptAnswer tfoot td:last-child) {
   padding-right: 0;
 }
@@ -749,17 +745,15 @@
   animation-fill-mode: none;
   animation-iteration-count: infinite;
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
-  transition: opacity 200ms ease;
+  transition-property: opacity;
+  transition-duration: 200ms;
+  opacity: 1;
 }
 
 :where(
     [data-loading-state]:not([data-loading-state='preload']) .MarkpromptProgress
   ) {
   opacity: 0;
-}
-
-:where([data-loading-state='preload'] .MarkpromptProgress) {
-  opacity: 1;
 }
 
 :where(.MarkpromptReferences) {
@@ -781,15 +775,15 @@
 }
 
 :where(.MarkpromptReferences ul) {
-  --transparent: rgba(255, 255, 255, 0);
+  --transparent: rgb(255 255 255 / 0%);
   --shadow-size: 0.5rem;
   --shadow-color: var(--markprompt-border);
+
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-flow: row nowrap;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 2rem 0.5rem 2rem;
+  padding: 0.25rem 2rem 0.5rem;
   margin-top: -0.25rem;
   list-style-type: none;
   margin-bottom: 0;
@@ -902,7 +896,6 @@
 }
 
 :where(.MarkpromptSearchAnswerButton) {
-  display: block;
   box-sizing: border-box;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -966,7 +959,7 @@
 }
 
 :where(.MarkpromptSearchResults) {
-  padding: 0rem 0rem;
+  padding: 0;
 }
 
 :where(.MarkpromptSearchSubResults) {
@@ -1084,9 +1077,7 @@
 :where(.MarkpromptMatch) {
   font-weight: 600;
   color: var(--markprompt-primary);
-  border-bottom-color: var(--markprompt-primary);
-  border-bottom-width: 0.1rem;
-  border-bottom-style: solid;
+  border-bottom: 0.1rem solid var(--markprompt-primary);
 }
 
 [aria-selected='true'] .MarkpromptSearchResultTag .MarkpromptMatch,
@@ -1118,14 +1109,16 @@
 }
 
 @keyframes markprompt-show-content {
-  from {
+  0% {
     opacity: 0;
     transform: translate(-50%, -46%) scale(0.98);
   }
+
   50% {
     transform: translate(-50%, -51%) scale(1.02);
   }
-  to {
+
+  100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -1135,6 +1128,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -1144,6 +1138,7 @@
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -1154,10 +1149,12 @@
     width: 0;
     transform: translateX(0);
   }
+
   50% {
     width: 100%;
     transform: translateX(0);
   }
+
   100% {
     width: 100%;
     transform: translateX(100%);
@@ -1169,6 +1166,7 @@
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1180,6 +1178,7 @@
     opacity: 0;
     transform: translateX(-100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -1191,6 +1190,7 @@
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);

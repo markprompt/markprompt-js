@@ -14,16 +14,15 @@
   --ifm-color-primary-lighter: #359962;
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-
-  --markprompt-background: #ffffff;
+  --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 10%);
+  --markprompt-background: #fff;
   --markprompt-foreground: #171717;
   --markprompt-muted: #fafafa;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #e5e5e5;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
@@ -46,23 +45,22 @@
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-
+  --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 30%);
   --markprompt-background: #050505;
   --markprompt-foreground: #d4d4d4;
   --markprompt-muted: #171717;
   --markprompt-mutedForeground: #737373;
   --markprompt-border: #262626;
-  --markprompt-input: #ffffff;
+  --markprompt-input: #fff;
   --markprompt-primary: #6366f1;
-  --markprompt-primaryForeground: #ffffff;
+  --markprompt-primaryForeground: #fff;
   --markprompt-primaryMuted: #8285f4;
   --markprompt-secondary: #0e0e0e;
-  --markprompt-secondaryForeground: #ffffff;
+  --markprompt-secondaryForeground: #fff;
   --markprompt-primaryHighlight: #ec4899;
   --markprompt-secondaryHighlight: #a855f7;
   --markprompt-overlay: #00000040;
-  --markprompt-ring: #ffffff;
+  --markprompt-ring: #fff;
 }
 
 /*

@@ -8,6 +8,7 @@
   "scripts": {
     "build": "npm pack --workspaces",
     "lint": "run-p lint:format lint:js lint:md lint:ts",
+    "lint:css": "npx stylelint \"**/*.css\"",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:md": "remark . --frail",
@@ -47,7 +48,10 @@
   },
   "devDependencies": {
     "husky": "^8.0.0",
-    "path-exists-cli": "^2.0.0"
+    "path-exists-cli": "^2.0.0",
+    "stylelint": "^15.6.2",
+    "stylelint-config-standard": "^33.0.0",
+    "stylelint-formatter-github": "^1.0.1"
   },
   "overrides": {
     "react": "^17.0.0",
