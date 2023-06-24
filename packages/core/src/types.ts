@@ -17,9 +17,12 @@ type OpenAICompletionsModelId =
   | 'babbage'
   | 'ada';
 
+type OpenAIEmbeddingsModelId = 'text-embedding-ada-002';
+
 export type OpenAIModelId =
   | OpenAIChatCompletionsModelId
-  | OpenAICompletionsModelId;
+  | OpenAICompletionsModelId
+  | OpenAIEmbeddingsModelId;
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
