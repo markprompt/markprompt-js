@@ -2,10 +2,7 @@
   "name": "markprompt",
   "private": true,
   "workspaces": [
-    "packages/core",
-    "packages/css",
-    "packages/react",
-    "packages/web"
+    "packages/*"
   ],
   "scripts": {
     "build": "npm pack --workspaces",
