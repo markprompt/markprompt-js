@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.9.0
+
+### Minor Changes
+
+- [#53](https://github.com/motifland/markprompt-js/pull/53) [`9f6fe21`](https://github.com/motifland/markprompt-js/commit/9f6fe213c1de9e3e1c8c5750c6a02d0bb8b1b3cb) Thanks [@michaelfester](https://github.com/michaelfester)! - Upgrade to React 18
+
 ## 0.8.0
 
 ### Minor Changes
