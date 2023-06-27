@@ -2,8 +2,15 @@
   "name": "markprompt",
   "private": true,
   "workspaces": [
-    "examples/*",
-    "packages/*"
+    "examples/with-css-modules",
+    "examples/with-custom-trigger",
+    "examples/with-custom-trigger-react",
+    "examples/with-markprompt-web",
+    "examples/with-next",
+    "packages/core",
+    "packages/css",
+    "packages/react",
+    "packages/web"
   ],
   "scripts": {
     "build": "npm pack --workspaces",
