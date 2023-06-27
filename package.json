@@ -2,8 +2,10 @@
   "name": "markprompt",
   "private": true,
   "workspaces": [
-    "examples/*",
-    "packages/*"
+    "packages/core",
+    "packages/css",
+    "packages/react",
+    "packages/web"
   ],
   "scripts": {
     "build": "npm pack --workspaces",
@@ -54,9 +56,9 @@
     "stylelint-formatter-github": "^1.0.1"
   },
   "overrides": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
   }
 }
