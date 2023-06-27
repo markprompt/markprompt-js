@@ -220,7 +220,7 @@ const Transition = (props: TransitionProps): ReactElement => {
     opacity: isVisible ? 1 : 0,
     x: isVisible ? '0%' : isFlipped ? '100%' : '-100%',
     config: {
-      tension: 640,
+      tension: 800,
       friction: 60,
     },
     onStart: () => {
