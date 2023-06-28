@@ -899,6 +899,7 @@
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   background-color: var(--markprompt-muted);
+  color: var(--markprompt-foreground);
   font-size: var(--markprompt-text-size);
   display: flex;
   align-items: center;

@@ -327,6 +327,7 @@ function SearchResultsContainer(
   } = useMarkpromptContext();
 
   const hasActiveSearchResult = activeSearchResult !== undefined;
+
   useEffect(() => {
     if (hasActiveSearchResult) {
       btn.current?.blur();
