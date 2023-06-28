@@ -63,31 +63,21 @@ export type SubmitPromptOptions = {
   signal?: AbortSignal;
 };
 
-export const MARKPROMPT_COMPLETIONS_URL =
-  'https://api.markprompt.com/v1/completions';
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
-export const DEFAULT_MODEL: OpenAIModelId = 'gpt-3.5-turbo';
-export const DEFAULT_I_DONT_KNOW_MESSAGE =
-  'Sorry, I am not sure how to answer that.';
-export const DEFAULT_REFERENCES_HEADING =
-  'Answer generated from the following pages:';
-export const DEFAULT_LOADING_HEADING = 'Fetching relevant pages...';
-export const DEFAULT_PROMPT_TEMPLATE = `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
 
-Context sections:
----
-{{CONTEXT}}
-
-Question: "{{PROMPT}}"
-
-Answer (including related code snippets if available):`;
-export const DEFAULT_TEMPERATURE = 0.1;
-export const DEFAULT_TOP_P = 1;
-export const DEFAULT_FREQUENCY_PENALTY = 0;
-export const DEFAULT_PRESENCE_PENALTY = 0;
-export const DEFAULT_MAX_TOKENS = 500;
-export const DEFAULT_SECTIONS_MATCH_COUNT = 10;
-export const DEFAULT_SECTIONS_MATCH_THRESHOLD = 0.5;
+export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
+  completionsUrl: 'https://api.markprompt.com/v1/completions',
+  iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
+  model: 'gpt-3.5-turbo',
+  promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: "{{PROMPT}}"\n\nAnswer (including related code snippets if available):`,
+  temperature: 0.1,
+  topP: 1,
+  frequencyPenalty: 0,
+  presencePenalty: 0,
+  maxTokens: 500,
+  sectionsMatchCount: 10,
+  sectionsMatchThreshold: 0.5,
+};
 
 /**
  * Submit a prompt the the Markprompt API.
@@ -114,11 +104,11 @@ export async function submitPrompt(
   if (!prompt) return;
 
   const iDontKnowMessage =
-    options.iDontKnowMessage ?? DEFAULT_I_DONT_KNOW_MESSAGE;
+    options.iDontKnowMessage ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage!;
 
   try {
     const res = await fetch(
-      options.completionsUrl ?? MARKPROMPT_COMPLETIONS_URL,
+      options.completionsUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
       {
         method: 'POST',
         headers: {
@@ -128,18 +118,27 @@ export async function submitPrompt(
           prompt: prompt,
           projectKey: projectKey,
           iDontKnowMessage,
-          model: options?.model ?? DEFAULT_MODEL,
-          promptTemplate: options.promptTemplate ?? DEFAULT_PROMPT_TEMPLATE,
-          temperature: options.temperature ?? DEFAULT_TEMPERATURE,
-          topP: options.topP ?? DEFAULT_TOP_P,
+          model: options?.model ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.model,
+          promptTemplate:
+            options.promptTemplate ??
+            DEFAULT_SUBMIT_PROMPT_OPTIONS.promptTemplate,
+          temperature:
+            options.temperature ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.temperature,
+          topP: options.topP ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.topP,
           frequencyPenalty:
-            options.frequencyPenalty ?? DEFAULT_FREQUENCY_PENALTY,
-          presencePenalty: options.presencePenalty ?? DEFAULT_PRESENCE_PENALTY,
-          maxTokens: options.maxTokens ?? DEFAULT_MAX_TOKENS,
+            options.frequencyPenalty ??
+            DEFAULT_SUBMIT_PROMPT_OPTIONS.frequencyPenalty,
+          presencePenalty:
+            options.presencePenalty ??
+            DEFAULT_SUBMIT_PROMPT_OPTIONS.presencePenalty,
+          maxTokens:
+            options.maxTokens ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.maxTokens,
           sectionsMatchCount:
-            options.sectionsMatchCount ?? DEFAULT_SECTIONS_MATCH_COUNT,
+            options.sectionsMatchCount ??
+            DEFAULT_SUBMIT_PROMPT_OPTIONS.sectionsMatchCount,
           sectionsMatchThreshold:
-            options.sectionsMatchThreshold ?? DEFAULT_SECTIONS_MATCH_THRESHOLD,
+            options.sectionsMatchThreshold ??
+            DEFAULT_SUBMIT_PROMPT_OPTIONS.sectionsMatchThreshold,
         }),
         signal: options.signal,
       },

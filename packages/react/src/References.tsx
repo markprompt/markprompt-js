@@ -1,21 +1,10 @@
 import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './index.js';
 import * as Markprompt from './index.js';
 import { useElementSize } from './useElementSize.js';
-
-const capitalize = (text: string): string => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
-
-const removeFileExtension = (fileName: string): string => {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  if (lastDotIndex === -1) {
-    return fileName;
-  }
-  return fileName.substring(0, lastDotIndex);
-};
 
 type ReferenceProps = {
   transformReferenceId?: (referenceId: string) => {
@@ -26,16 +15,10 @@ type ReferenceProps = {
   index: number;
 };
 
-const defaultTransformReferenceId: ReferenceProps['transformReferenceId'] = (
-  referenceId,
-) => ({
-  href: removeFileExtension(referenceId),
-  text: capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0])),
-});
-
 const Reference = (props: ReferenceProps): ReactElement => {
   const {
-    transformReferenceId = defaultTransformReferenceId,
+    transformReferenceId = DEFAULT_MARKPROMPT_OPTIONS.references!
+      .transformReferenceId!,
     index,
     referenceId,
   } = props;
@@ -69,8 +52,8 @@ type ReferencesProps = {
 
 const References = (props: ReferencesProps): ReactElement | null => {
   const {
-    loadingText = 'Fetching relevant pages…',
-    referencesText = 'Answer generated from the following sources:',
+    loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
+    referencesText = DEFAULT_MARKPROMPT_OPTIONS.references!.referencesText,
     transformReferenceId,
   } = props;
   const { state, references } = useMarkpromptContext();

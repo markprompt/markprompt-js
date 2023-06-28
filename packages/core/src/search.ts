@@ -1,8 +1,5 @@
 import type { SearchResultsResponse } from './types.js';
 
-export const DEFAULT_SEARCH_URL = 'https://api.markprompt.com/v1/search';
-export const DEFAULT_SEARCH_LIMIT = 8;
-
 export interface SubmitSearchQueryOptions {
   /**
    * Maximum amount of results to return
@@ -21,6 +18,11 @@ export interface SubmitSearchQueryOptions {
   signal?: AbortSignal;
 }
 
+export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
+  limit: 8,
+  searchUrl: 'https://api.markprompt.com/v1/search',
+};
+
 /**
  * Submit a search query to the Markprompt Search API endpoint.
  * @param query - Search query
@@ -33,8 +35,10 @@ export async function submitSearchQuery(
   projectKey: string,
   options?: SubmitSearchQueryOptions,
 ): Promise<SearchResultsResponse | undefined> {
-  const { limit = DEFAULT_SEARCH_LIMIT, searchUrl = DEFAULT_SEARCH_URL } =
-    options ?? {};
+  const {
+    limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit,
+    searchUrl = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.searchUrl,
+  } = options ?? {};
 
   const params = new URLSearchParams({
     query,

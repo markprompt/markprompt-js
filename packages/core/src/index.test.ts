@@ -11,7 +11,7 @@ import {
 } from 'vitest';
 
 import { submitPrompt } from './index.js';
-import { MARKPROMPT_COMPLETIONS_URL, STREAM_SEPARATOR } from './prompt.js';
+import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
 
 const encoder = new TextEncoder();
 let response: string[] = [];
@@ -19,18 +19,21 @@ let status = 200;
 let request: RestRequest;
 let stream: ReadableStream;
 const server = setupServer(
-  rest.post(MARKPROMPT_COMPLETIONS_URL, async (req, res, ctx) => {
-    request = req;
-    stream = new ReadableStream({
-      start(controller) {
-        for (const chunk of response) {
-          controller.enqueue(encoder.encode(chunk));
-        }
-        controller?.close();
-      },
-    });
-    return res(ctx.status(status), ctx.body(stream));
-  }),
+  rest.post(
+    DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
+    async (req, res, ctx) => {
+      request = req;
+      stream = new ReadableStream({
+        start(controller) {
+          for (const chunk of response) {
+            controller.enqueue(encoder.encode(chunk));
+          }
+          controller?.close();
+        },
+      });
+      return res(ctx.status(status), ctx.body(stream));
+    },
+  ),
 );
 
 beforeAll(() => {
@@ -148,7 +151,7 @@ describe('submitPrompt', () => {
 
     expect(request).toBeDefined();
     expect(onAnswerChunk.mock.calls).toStrictEqual([
-      ['Sorry, I am not sure how to answer that.'],
+      [DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage],
     ]);
     expect(onReferences).not.toHaveBeenCalled();
     expect(onError.mock.calls).toStrictEqual([

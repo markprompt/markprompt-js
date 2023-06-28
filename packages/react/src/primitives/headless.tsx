@@ -23,6 +23,7 @@ import remarkGfm from 'remark-gfm';
 
 import { Footer } from './footer.js';
 import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { MarkpromptContext, useMarkpromptContext } from '../context.js';
 import type {
   SearchResultWithMetadata,
@@ -31,7 +32,6 @@ import type {
   SectionHeading,
 } from '../types.js';
 import { useMarkprompt, type UseMarkpromptOptions } from '../useMarkprompt.js';
-import { getHref as getDefaultHref } from '../utils.js';
 
 type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 
@@ -269,7 +269,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
     label,
     labelClassName,
     onChange,
-    placeholder = 'Ask me anything…',
+    placeholder = DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!,
     spellCheck = false,
     type = 'search',
     ...rest
@@ -588,7 +588,14 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       score,
       sectionHeading,
       source,
-      getHref = (path, sectionHeading) => getDefaultHref(path, sectionHeading),
+      getHref = (path, sectionHeading) => {
+        return (
+          DEFAULT_MARKPROMPT_OPTIONS.search!.getResultHref?.(
+            path,
+            sectionHeading,
+          ) || path
+        );
+      },
       ...rest
     } = props;
     return (

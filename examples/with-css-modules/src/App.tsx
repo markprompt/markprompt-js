@@ -44,9 +44,7 @@ function Component(): ReactElement {
 
           {/* Markprompt.Title is required for accessibility reasons. It can be hidden using an accessible content hiding technique. */}
           <VisuallyHidden asChild>
-            <Markprompt.Title>
-              Ask me anything about Markprompt
-            </Markprompt.Title>
+            <Markprompt.Title>Ask me anything</Markprompt.Title>
           </VisuallyHidden>
 
           {/* Markprompt.Description is included for accessibility reasons. It is optional and can be hidden using an accessible content hiding technique. */}

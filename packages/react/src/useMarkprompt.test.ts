@@ -1,4 +1,7 @@
-import { MARKPROMPT_COMPLETIONS_URL, STREAM_SEPARATOR } from '@markprompt/core';
+import {
+  DEFAULT_SUBMIT_PROMPT_OPTIONS,
+  STREAM_SEPARATOR,
+} from '@markprompt/core';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { rest } from 'msw';
@@ -12,17 +15,20 @@ let response: string[] = [];
 let status = 200;
 let stream: ReadableStream;
 const server = setupServer(
-  rest.post(MARKPROMPT_COMPLETIONS_URL, async (req, res, ctx) => {
-    stream = new ReadableStream({
-      start(controller) {
-        for (const chunk of response) {
-          controller.enqueue(encoder.encode(chunk));
-        }
-        controller?.close();
-      },
-    });
-    return res(ctx.status(status), ctx.body(stream));
-  }),
+  rest.post(
+    DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
+    async (req, res, ctx) => {
+      stream = new ReadableStream({
+        start(controller) {
+          for (const chunk of response) {
+            controller.enqueue(encoder.encode(chunk));
+          }
+          controller?.close();
+        },
+      });
+      return res(ctx.status(status), ctx.body(stream));
+    },
+  ),
 );
 
 beforeAll(() => {
