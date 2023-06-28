@@ -326,6 +326,13 @@ function SearchResultsContainer(
     updateActiveSearchResult,
   } = useMarkpromptContext();
 
+  const hasActiveSearchResult = activeSearchResult !== undefined;
+  useEffect(() => {
+    if (hasActiveSearchResult) {
+      btn.current?.blur();
+    }
+  }, [hasActiveSearchResult]);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (
@@ -376,6 +383,10 @@ function SearchResultsContainer(
           abort();
           toggleSearchAnswer();
           submitPrompt();
+        }}
+        onMouseOver={() => {
+          btn.current?.focus();
+          updateActiveSearchResult(undefined);
         }}
       >
         <span aria-hidden className="MarkpromptSearchResultIconWrapper">

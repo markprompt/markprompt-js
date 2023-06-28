@@ -164,6 +164,8 @@
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 :where(.MarkpromptClose) {

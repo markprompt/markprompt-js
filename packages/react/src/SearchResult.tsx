@@ -61,6 +61,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       path,
       sectionHeading,
       source,
+      onMouseOver,
       ...rest
     } = props;
     const { prompt } = useMarkpromptContext();
@@ -79,6 +80,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
             getDefaultHref(path, sectionHeading)
           }
           className="MarkpromptSearchResultLink"
+          onMouseOver={onMouseOver}
         >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
