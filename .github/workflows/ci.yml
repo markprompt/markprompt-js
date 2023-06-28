@@ -19,12 +19,14 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: npm run build -w @markprompt/core -w @markprompt/react -w @markprompt/web
+      - run: npm run build -w @markprompt/core -w @markprompt/docusaurus-theme-search -w @markprompt/react -w @markprompt/web
       - run: >
           npm run build
           -w with-css-modules
           -w with-custom-trigger
           -w with-custom-trigger-react
+          -w with-docusaurus
+          -w with-docusaurus-swizzled
           -w with-markprompt-web
           -w with-next
         env:
