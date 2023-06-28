@@ -577,6 +577,7 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
       sectionHeading: SectionHeading | undefined,
       source: Source,
     ) => string;
+    onMouseOver?: () => void;
   }
 >;
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(

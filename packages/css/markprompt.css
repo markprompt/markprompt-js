@@ -164,12 +164,11 @@
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 :where(.MarkpromptClose) {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.75rem;
   color: var(--markprompt-mutedForeground);
   background-color: var(--markprompt-muted);
   padding: 0.25rem;
@@ -910,15 +909,13 @@
   outline: none;
 }
 
-:where(.MarkpromptSearchAnswerButton:hover) {
-  background-color: var(--markprompt-muted);
-}
-
+:where(.MarkpromptSearchAnswerButton:hover),
 :where(.MarkpromptSearchAnswerButton:focus) {
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
 }
 
+:where(.MarkpromptSearchAnswerButton:hover .MarkpromptSearchIcon),
 :where(.MarkpromptSearchAnswerButton:focus .MarkpromptSearchIcon) {
   color: var(--markprompt-primaryForeground);
 }
@@ -935,6 +932,7 @@
   color: var(--markprompt-mutedForeground);
 }
 
+.MarkpromptSearchAnswerButton:hover kbd svg,
 .MarkpromptSearchAnswerButton:focus kbd svg {
   color: var(--markprompt-primaryForeground);
 }
@@ -1018,7 +1016,7 @@
 }
 
 :where(.MarkpromptSearchResultIconWrapperBordered) {
-  background-color: #fff;
+  background-color: var(--markprompt-background);
   border-radius: 0.375rem;
   border-style: solid;
   border-color: var(--markprompt-border);
@@ -1062,7 +1060,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
-  background-color: #fff;
+  background-color: var(--markprompt-background);
   border-radius: 9999px;
   padding: 1px 8px;
   font-size: calc(var(--markprompt-text-size) * 0.85);
@@ -1100,12 +1098,13 @@
 
 :where(.MarkpromptNoSearchResults p) {
   color: var(--markprompt-mutedForeground);
-  padding: 1rem;
+  padding: 2rem;
   text-align: center;
 }
 
 :where(.MarkpromptNoSearchResults span) {
   color: var(--markprompt-foreground);
+  font-weight: 600;
 }
 
 @keyframes markprompt-show-content {
