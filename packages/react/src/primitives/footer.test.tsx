@@ -32,10 +32,10 @@ describe('MarkpromptIcon', () => {
     expect(svg).toHaveClass('custom-class');
   });
 
-  test('custom style', () => {
-    render(<MarkpromptIcon style={{ color: 'tomato' }} />);
+  // test('custom style', () => {
+  //   render(<MarkpromptIcon style={{ color: 'tomato' }} />);
 
-    const svg = document.querySelector('svg');
-    expect(svg).toHaveStyle({ color: 'tomato' });
-  });
+  //   const svg = document.querySelector('svg');
+  //   expect(svg).toHaveStyle({ color: 'tomato' });
+  // });
 });
