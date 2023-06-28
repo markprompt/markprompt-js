@@ -69,7 +69,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       <li
         {...rest}
         ref={ref}
-        className={clsx(`MarkpromptSearchResult`, {
+        className={clsx('MarkpromptSearchResult', {
           MarkpromptSearchResultIndented: hasParent,
         })}
       >

@@ -139,6 +139,12 @@ function Markprompt(props: MarkpromptProps): ReactElement {
                 </AccessibleIcon.Root>
               }
             />
+
+            <BaseMarkprompt.Close className="MarkpromptClose">
+              <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
+                <kbd>Esc</kbd>
+              </AccessibleIcon.Root>
+            </BaseMarkprompt.Close>
           </BaseMarkprompt.Form>
 
           <AnswerOrSearchResults
@@ -148,12 +154,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             promptCTA={prompt?.cta}
             toggleSearchAnswer={toggle}
           />
-
-          <BaseMarkprompt.Close className="MarkpromptClose">
-            <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
-              <kbd>Esc</kbd>
-            </AccessibleIcon.Root>
-          </BaseMarkprompt.Close>
         </BaseMarkprompt.Content>
       </BaseMarkprompt.Portal>
     </BaseMarkprompt.Root>
