@@ -71,6 +71,7 @@ Styling can be customized using the following CSS variables.
 - `--markprompt-input`: (Default: `#ffffff`, Default dark: `#ffffff`)
 - `--markprompt-primary`: (Default: `#6366f1`, Default dark: `#6366f1`)
 - `--markprompt-primaryForeground`: (Default: `#ffffff`, Default dark: `#ffffff`)
+- `--markprompt-primaryMuted`: (Default: `#8285f4`, Default dark: `#8285f4`)
 - `--markprompt-secondary`: (Default: `#fafafa`, Default dark: `#0e0e0e`)
 - `--markprompt-secondaryForeground`: (Default: `#171717`, Default dark: `#ffffff`)
 - `--markprompt-primaryHighlight`: (Default: `#ec4899`, Default dark: `#ec4899`)
