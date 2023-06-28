@@ -44,6 +44,5 @@ export {
 } from './Markprompt.js';
 
 export { useMarkpromptContext } from './context.js';
-export { getHref } from './utils.js';
 
 export * from './types.js';

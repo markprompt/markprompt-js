@@ -117,7 +117,7 @@ type MarkpromptOptions = {
     getResultHref?: (
       path: string,
       sectionHeading: SectionHeading | undefined,
-      source: Source,
+      source?: Source | undefined,
     ) => string;
   };
   trigger?: {

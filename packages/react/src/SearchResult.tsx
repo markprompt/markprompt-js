@@ -1,12 +1,9 @@
 import { clsx } from 'clsx';
 import React, { Fragment, forwardRef, memo } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { FileTextIcon, HashIcon } from './icons.js';
-import {
-  useMarkpromptContext,
-  getHref as getDefaultHref,
-  type SearchResultProps,
-} from './index.js';
+import { useMarkpromptContext, type SearchResultProps } from './index.js';
 
 type HighlightMatchesProps = {
   value?: string;
@@ -77,7 +74,12 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
         <a
           href={
             getHref?.(path, sectionHeading, source) ||
-            getDefaultHref(path, sectionHeading)
+            DEFAULT_MARKPROMPT_OPTIONS.search!.getResultHref?.(
+              path,
+              sectionHeading,
+              source,
+            ) ||
+            ''
           }
           className="MarkpromptSearchResultLink"
           onMouseOver={onMouseOver}

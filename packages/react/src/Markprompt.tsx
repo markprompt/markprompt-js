@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
 import {
   ChatIcon,
@@ -91,7 +92,11 @@ function Markprompt(props: MarkpromptProps): ReactElement {
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-              <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+              <AccessibleIcon.Root
+                label={
+                  trigger?.label ?? DEFAULT_MARKPROMPT_OPTIONS.trigger!.label!
+                }
+              >
                 <ChatIcon
                   className="MarkpromptChatIcon"
                   width="24"
@@ -112,7 +117,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
           showBranding={showBranding}
         >
           <BaseMarkprompt.Title hide={title?.hide ?? true}>
-            {title?.text ?? 'Ask me anything'}
+            {title?.text ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label}
           </BaseMarkprompt.Title>
 
           {description?.text && (
@@ -128,12 +133,14 @@ function Markprompt(props: MarkpromptProps): ReactElement {
                 prompt?.placeholder ??
                 (search?.enabled
                   ? 'Search or ask a question…'
-                  : 'Ask me anything…')
+                  : DEFAULT_MARKPROMPT_OPTIONS.prompt!.label)
               }
               labelClassName="MarkpromptPromptLabel"
               label={
                 <AccessibleIcon.Root
-                  label={prompt?.label ?? 'Ask me anything…'}
+                  label={
+                    prompt?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
+                  }
                 >
                   <SearchIcon className="MarkpromptSearchIcon" />
                 </AccessibleIcon.Root>
@@ -141,7 +148,9 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             />
 
             <BaseMarkprompt.Close className="MarkpromptClose">
-              <AccessibleIcon.Root label={close?.label ?? 'Close Markprompt'}>
+              <AccessibleIcon.Root
+                label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
+              >
                 <kbd>Esc</kbd>
               </AccessibleIcon.Root>
             </BaseMarkprompt.Close>
@@ -277,7 +286,9 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 
   return (
     <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
-      <AccessibleIcon.Root label={trigger?.label ?? 'Open Markprompt'}>
+      <AccessibleIcon.Root
+        label={trigger?.label ?? DEFAULT_MARKPROMPT_OPTIONS.trigger!.label!}
+      >
         <span className="MarkpromptSearchBoxTriggerContent">
           <span className="MarkpromptSearchBoxTriggerText">
             <SearchIcon width={16} height={16} />{' '}
@@ -393,7 +404,7 @@ function SearchResultsContainer(
         <span aria-hidden className="MarkpromptSearchResultIconWrapper">
           <SparklesIcon focusable={false} className="MarkpromptSearchIcon" />
         </span>
-        <span>{promptCTA || 'Ask Docs AI…'}</span>
+        <span>{promptCTA || DEFAULT_MARKPROMPT_OPTIONS.prompt!.cta!}</span>
         <kbd>
           {navigator.platform.indexOf('Mac') === 0 ||
           navigator.platform === 'iPhone' ? (
