@@ -1,5 +1,18 @@
 # @markprompt/react
 
+## 0.10.3
+
+### Patch Changes
+
+- [#62](https://github.com/motifland/markprompt-js/pull/62) [`144bad4`](https://github.com/motifland/markprompt-js/commit/144bad4e88fbff68c5349a1128b29cbb4ee96616) Thanks [@michaelfester](https://github.com/michaelfester)! - Centralize default configuration
+
+- [`a0908bb`](https://github.com/motifland/markprompt-js/commit/a0908bbf651767a28cc5a3435dde5ce567bd36d2) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix button foreground color
+
+- [`5f1bd3c`](https://github.com/motifland/markprompt-js/commit/5f1bd3cb049cb34689f36ea9139007e4b220e81a) Thanks [@michaelfester](https://github.com/michaelfester)! - CSS fixes for dark mode, handle focus state for Ask AI button
+
+- Updated dependencies [[`144bad4`](https://github.com/motifland/markprompt-js/commit/144bad4e88fbff68c5349a1128b29cbb4ee96616)]:
+  - @markprompt/core@0.6.1
+
 ## 0.10.2
 
 ### Patch Changes
