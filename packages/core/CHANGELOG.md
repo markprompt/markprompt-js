@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.6.1
+
+### Patch Changes
+
+- [#62](https://github.com/motifland/markprompt-js/pull/62) [`144bad4`](https://github.com/motifland/markprompt-js/commit/144bad4e88fbff68c5349a1128b29cbb4ee96616) Thanks [@michaelfester](https://github.com/michaelfester)! - Centralize default configuration
+
 ## 0.6.0
 
 ### Minor Changes
