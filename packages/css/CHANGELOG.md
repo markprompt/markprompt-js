@@ -1,5 +1,13 @@
 # @markprompt/css
 
+## 0.4.2
+
+### Patch Changes
+
+- [#59](https://github.com/motifland/markprompt-js/pull/59) [`1593c0b`](https://github.com/motifland/markprompt-js/commit/1593c0be12ad08aabf9b1822a06c4b5a6311882f) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix button foreground color
+
+- [#59](https://github.com/motifland/markprompt-js/pull/59) [`1593c0b`](https://github.com/motifland/markprompt-js/commit/1593c0be12ad08aabf9b1822a06c4b5a6311882f) Thanks [@michaelfester](https://github.com/michaelfester)! - CSS fixes for dark mode, handle focus state for Ask AI button
+
 ## 0.4.1
 
 ### Patch Changes
