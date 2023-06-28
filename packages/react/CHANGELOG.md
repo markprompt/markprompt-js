@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.10.0
+
+### Minor Changes
+
+- [#55](https://github.com/motifland/markprompt-js/pull/55) [`c396109`](https://github.com/motifland/markprompt-js/commit/c3961092a1a5f34173274990d1e90d3216d2fde0) Thanks [@michaelfester](https://github.com/michaelfester)! - Revert to React 17
+
 ## 0.9.0
 
 ### Minor Changes
