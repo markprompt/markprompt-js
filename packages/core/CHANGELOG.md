@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.6.4
+
+### Patch Changes
+
+- [#72](https://github.com/motifland/markprompt-js/pull/72) [`ad10a87`](https://github.com/motifland/markprompt-js/commit/ad10a87ead941b13626746dbb5fbef882fc8c0e8) Thanks [@michaelfester](https://github.com/michaelfester)! - Export model types
+
+- [#72](https://github.com/motifland/markprompt-js/pull/72) [`ad10a87`](https://github.com/motifland/markprompt-js/commit/ad10a87ead941b13626746dbb5fbef882fc8c0e8) Thanks [@michaelfester](https://github.com/michaelfester)! - Update READMEs
+
 ## 0.6.3
 
 ### Patch Changes
