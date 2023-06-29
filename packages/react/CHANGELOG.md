@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.11.2
+
+### Patch Changes
+
+- [#74](https://github.com/motifland/markprompt-js/pull/74) [`9f8f55f`](https://github.com/motifland/markprompt-js/commit/9f8f55f202dabaece243a29415de0f024c7d9c60) Thanks [@michaelfester](https://github.com/michaelfester)! - Export plain content, remove unsupported OpenAI keys
+
 ## 0.11.1
 
 ### Patch Changes
