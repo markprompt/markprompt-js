@@ -41,7 +41,7 @@ type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 function Root(props: RootProps): ReactElement {
   const {
     children,
-    display,
+    display = 'dialog',
     defaultOpen,
     modal,
     onOpenChange,
