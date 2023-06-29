@@ -37,7 +37,7 @@ function Component(): ReactElement {
       </Markprompt.DialogTrigger>
       <Markprompt.Portal>
         <Markprompt.Overlay className={styles.MarkpromptOverlay} />
-        <Markprompt.Content className={styles.MarkpromptContent}>
+        <Markprompt.Content className={styles.MarkpromptContentDialog}>
           <Markprompt.Close className={styles.MarkpromptClose}>
             <CloseIcon />
           </Markprompt.Close>

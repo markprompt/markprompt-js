@@ -142,7 +142,7 @@
   background-color: var(--markprompt-overlay);
 }
 
-:where(.MarkpromptContent) {
+:where(.MarkpromptContentDialog) {
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
@@ -160,6 +160,18 @@
   animation-duration: 300ms;
   animation-fill-mode: both;
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
+  color: var(--markprompt-foreground);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+:where(.MarkpromptContentPlain) {
+  background-color: var(--markprompt-background);
+  width: 100%;
+  height: 100%;
   color: var(--markprompt-foreground);
   overflow: hidden;
   display: grid;

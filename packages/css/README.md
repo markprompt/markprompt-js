@@ -47,7 +47,8 @@ The package adds styling using the following classes.
 - `MarkpromptAutoScroller`
 - `MarkpromptCaret`
 - `MarkpromptClose`
-- `MarkpromptContent`
+- `MarkpromptContentDialog`
+- `MarkpromptContentPlain`
 - `MarkpromptForm`
 - `MarkpromptIcon`
 - `MarkpromptOverlay`
