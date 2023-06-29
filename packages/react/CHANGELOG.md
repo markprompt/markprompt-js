@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.10.4
+
+### Patch Changes
+
+- [#63](https://github.com/motifland/markprompt-js/pull/63) [`9c9a169`](https://github.com/motifland/markprompt-js/commit/9c9a1699a85a891f64805b2c6799772e8c388b5c) Thanks [@michaelfester](https://github.com/michaelfester)! - Export default options
+
 ## 0.10.3
 
 ### Patch Changes
