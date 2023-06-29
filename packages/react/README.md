@@ -95,7 +95,6 @@ The pre-built Markprompt component. It accepts the following props:
 - `title` (`object`): Options for the title
 - `title.hide` (`boolean`): Visually hide the title (Default: `true`)
 - `title.text` (`string`): Title text (Default: `Ask me anything`)
-- `showBranding` (`boolean`): Show Markprompt branding (Default: `true`)
 
 When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
 
@@ -126,8 +125,6 @@ A button to close the Markprompt dialog and abort an ongoing request. It accepts
 ### `<Content />`
 
 The Markprompt dialog content. It accepts the same props as [Radix UI `Dialog.Content`](https://www.radix-ui.com/docs/primitives/components/dialog#content), with the following additional prop:
-
-- `showBranding` (`boolean`): Show the Markprompt footer.
 
 ### `<Description />`
 

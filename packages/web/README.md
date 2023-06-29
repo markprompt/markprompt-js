@@ -165,11 +165,6 @@ type MarkpromptOptions = {
      **/
     text?: string;
   };
-  /**
-   * Show Markprompt branding
-   * @default true
-   **/
-  showBranding?: boolean;
 };
 ```
 
@@ -258,7 +253,6 @@ Render a Markprompt dialog button.
 - `title` (`object`): Options for the title
 - `title.hide` (`boolean`): Visually hide the title (Default: `true`)
 - `title.text` (`string`): Title text (Default: `Ask me anything`)
-- `showBranding` (`boolean`): Show Markprompt branding (Default: `true`)
 
 When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
 
