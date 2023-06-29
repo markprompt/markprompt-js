@@ -45,4 +45,6 @@ export {
 
 export { useMarkpromptContext } from './context.js';
 
+export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+
 export * from './types.js';
