@@ -13,6 +13,9 @@ export {
 
 export {
   type OpenAIModelId,
+  type OpenAIChatCompletionsModelId,
+  type OpenAICompletionsModelId,
+  type OpenAIEmbeddingsModelId,
   type SearchResult,
   type SearchResultSection,
   type SearchResultsResponse,
