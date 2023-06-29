@@ -15,7 +15,7 @@ import {
   type SetStateAction,
 } from 'react';
 
-import type { SearchResultWithMetadata } from './types.js';
+import type { MarkpromptOptions, SearchResultWithMetadata } from './types.js';
 
 export type LoadingState =
   | 'indeterminate'
@@ -26,6 +26,8 @@ export type LoadingState =
 export interface UseMarkpromptOptions {
   /** Project key, required */
   projectKey: string;
+  /** Project key, required */
+  display?: MarkpromptOptions['display'];
   /** Is search currently active */
   isSearchActive?: boolean;
   /** Enable and configure prompt functionality */

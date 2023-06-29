@@ -41,6 +41,7 @@ type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
 function Root(props: RootProps): ReactElement {
   const {
     children,
+    display = 'dialog',
     defaultOpen,
     modal,
     onOpenChange,
@@ -58,14 +59,17 @@ function Root(props: RootProps): ReactElement {
 
   return (
     <MarkpromptContext.Provider value={contextValue}>
-      <DialogRootWithAbort
-        defaultOpen={defaultOpen}
-        modal={modal}
-        onOpenChange={onOpenChange}
-        open={open}
-      >
-        {children}
-      </DialogRootWithAbort>
+      {display === 'dialog' && (
+        <DialogRootWithAbort
+          defaultOpen={defaultOpen}
+          modal={modal}
+          onOpenChange={onOpenChange}
+          open={open}
+        >
+          {children}
+        </DialogRootWithAbort>
+      )}
+      {display === 'plain' && children}
     </MarkpromptContext.Provider>
   );
 }
@@ -144,6 +148,31 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   );
 });
 Content.displayName = 'Markprompt.Content';
+
+type PlainContentProps = ComponentPropsWithRef<'div'> & {
+  /**
+   * Show the Markprompt footer.
+   */
+  showBranding?: boolean;
+};
+
+/**
+ * The Markprompt plain content.
+ */
+const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
+  function PlainContent(props, ref) {
+    const { showBranding = true } = props;
+    const { state } = useMarkpromptContext();
+
+    return (
+      <div {...props} ref={ref} data-loading-state={state}>
+        {props.children}
+        {showBranding && <Footer />}
+      </div>
+    );
+  },
+);
+PlainContent.displayName = 'Markprompt.PlainContent';
 
 type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
 /**
@@ -617,6 +646,7 @@ export {
   AutoScroller,
   Close,
   Content,
+  PlainContent,
   Description,
   DialogTrigger,
   Form,

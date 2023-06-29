@@ -74,7 +74,7 @@ button {
   background-color: var(--markprompt-overlay);
 }
 
-.MarkpromptContent {
+.MarkpromptContentDialog {
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);

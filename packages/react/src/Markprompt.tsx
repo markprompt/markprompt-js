@@ -55,32 +55,34 @@ function openMarkprompt(): void {
 
 function Markprompt(props: MarkpromptProps): ReactElement {
   const {
-    close,
-    description,
+    display = 'dialog',
     projectKey,
     prompt,
-    references,
-    title,
     trigger,
     search,
-    showBranding = true,
+    showBranding,
+    title,
+    description,
     ...dialogProps
   } = props;
 
   const [open, setOpen] = useState(false);
 
-  const [showSearch, toggle] = useToggle(search?.enabled ?? false);
+  const [showSearch, toggleSearch] = useToggle(search?.enabled ?? false);
 
   useEffect(() => {
-    if (!trigger?.customElement) return;
+    if (!trigger?.customElement || display !== 'dialog') {
+      return;
+    }
     const onOpen = (): void => setOpen(true);
     emitter.on('open', onOpen);
     return () => emitter.off('open', onOpen);
-  }, [trigger?.customElement]);
+  }, [trigger?.customElement, display]);
 
   return (
     <BaseMarkprompt.Root
       projectKey={projectKey}
+      display={display}
       isSearchActive={showSearch}
       promptOptions={prompt}
       searchOptions={search}
@@ -88,7 +90,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       onOpenChange={setOpen}
       {...dialogProps}
     >
-      {!trigger?.customElement && (
+      {!trigger?.customElement && display === 'dialog' && (
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
@@ -110,62 +112,108 @@ function Markprompt(props: MarkpromptProps): ReactElement {
         </>
       )}
 
-      <BaseMarkprompt.Portal>
-        <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
-        <BaseMarkprompt.Content
-          className="MarkpromptContent"
-          showBranding={showBranding}
-        >
-          <BaseMarkprompt.Title hide={title?.hide ?? true}>
-            {title?.text ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label}
-          </BaseMarkprompt.Title>
+      {display === 'dialog' && (
+        <BaseMarkprompt.Portal>
+          <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+          <BaseMarkprompt.Content
+            className="MarkpromptContentDialog"
+            showBranding={showBranding}
+          >
+            <BaseMarkprompt.Title hide={title?.hide ?? true}>
+              {title?.text ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label}
+            </BaseMarkprompt.Title>
 
-          {description?.text && (
-            <BaseMarkprompt.Description hide={description?.hide ?? true}>
-              {description?.text}
-            </BaseMarkprompt.Description>
-          )}
+            {description?.text && (
+              <BaseMarkprompt.Description hide={description?.hide ?? true}>
+                {description?.text}
+              </BaseMarkprompt.Description>
+            )}
 
-          <BaseMarkprompt.Form className="MarkpromptForm">
-            <BaseMarkprompt.Prompt
-              className="MarkpromptPrompt"
-              placeholder={
-                prompt?.placeholder ??
-                (search?.enabled
-                  ? 'Search or ask a question…'
-                  : DEFAULT_MARKPROMPT_OPTIONS.prompt!.label)
-              }
-              labelClassName="MarkpromptPromptLabel"
-              label={
-                <AccessibleIcon.Root
-                  label={
-                    prompt?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
-                  }
-                >
-                  <SearchIcon className="MarkpromptSearchIcon" />
-                </AccessibleIcon.Root>
-              }
+            <MarkpromptContent
+              {...props}
+              showSearch={showSearch}
+              toggleSearch={toggleSearch}
             />
-
-            <BaseMarkprompt.Close className="MarkpromptClose">
-              <AccessibleIcon.Root
-                label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
-              >
-                <kbd>Esc</kbd>
-              </AccessibleIcon.Root>
-            </BaseMarkprompt.Close>
-          </BaseMarkprompt.Form>
-
-          <AnswerOrSearchResults
-            search={search}
-            references={references}
+          </BaseMarkprompt.Content>
+        </BaseMarkprompt.Portal>
+      )}
+      {display === 'plain' && (
+        <BaseMarkprompt.PlainContent className="MarkpromptContentPlain">
+          <MarkpromptContent
+            {...props}
             showSearch={showSearch}
-            promptCTA={prompt?.cta}
-            toggleSearchAnswer={toggle}
+            toggleSearch={toggleSearch}
+            includeClose={false}
           />
-        </BaseMarkprompt.Content>
-      </BaseMarkprompt.Portal>
+        </BaseMarkprompt.PlainContent>
+      )}
     </BaseMarkprompt.Root>
+  );
+}
+
+type MarkpromptContentProps = Pick<
+  MarkpromptProps,
+  'close' | 'prompt' | 'references' | 'search'
+> & {
+  showSearch?: boolean;
+  toggleSearch?: () => void;
+  includeClose?: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = (): void => {};
+
+function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
+  const {
+    close,
+    prompt,
+    references,
+    search,
+    showSearch = false,
+    toggleSearch = noop,
+    includeClose = true,
+  } = props;
+
+  return (
+    <>
+      <BaseMarkprompt.Form className="MarkpromptForm">
+        <BaseMarkprompt.Prompt
+          className="MarkpromptPrompt"
+          placeholder={
+            prompt?.placeholder ??
+            (search?.enabled
+              ? 'Search or ask a question…'
+              : DEFAULT_MARKPROMPT_OPTIONS.prompt!.label)
+          }
+          labelClassName="MarkpromptPromptLabel"
+          label={
+            <AccessibleIcon.Root
+              label={prompt?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!}
+            >
+              <SearchIcon className="MarkpromptSearchIcon" />
+            </AccessibleIcon.Root>
+          }
+        />
+
+        {includeClose && (
+          <BaseMarkprompt.Close className="MarkpromptClose">
+            <AccessibleIcon.Root
+              label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
+            >
+              <kbd>Esc</kbd>
+            </AccessibleIcon.Root>
+          </BaseMarkprompt.Close>
+        )}
+      </BaseMarkprompt.Form>
+
+      <AnswerOrSearchResults
+        search={search}
+        references={references}
+        showSearch={showSearch}
+        promptCTA={prompt?.cta}
+        toggleSearchAnswer={toggleSearch}
+      />
+    </>
   );
 }
 

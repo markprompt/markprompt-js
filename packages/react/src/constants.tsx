@@ -57,6 +57,7 @@ const defaultGetResultHref = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
+  display: 'dialog',
   close: {
     label: 'Close Markprompt',
   },

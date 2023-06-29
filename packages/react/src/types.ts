@@ -52,6 +52,11 @@ export type SearchResultWithMetadata = {
 };
 
 type MarkpromptOptions = {
+  /**
+   * Display format.
+   * @default "dialog"
+   **/
+  display?: 'plain' | 'dialog';
   close?: {
     /**
      * `aria-label` for the close modal button

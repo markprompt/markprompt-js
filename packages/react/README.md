@@ -55,6 +55,7 @@ replacing `YOUR-PROJECT-KEY` with the key associated to your project. It can be 
 The pre-built Markprompt component. It accepts the following props:
 
 - `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
+- `display` (`plain | dialog`): The way to display the prompt (Default: `dialog`)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
 - `description` (`object`): Options for the description
