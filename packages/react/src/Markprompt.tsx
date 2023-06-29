@@ -138,7 +138,10 @@ function Markprompt(props: MarkpromptProps): ReactElement {
         </BaseMarkprompt.Portal>
       )}
       {display === 'plain' && (
-        <BaseMarkprompt.PlainContent className="MarkpromptContentPlain">
+        <BaseMarkprompt.PlainContent
+          className="MarkpromptContentPlain"
+          showBranding={showBranding}
+        >
           <MarkpromptContent
             {...props}
             showSearch={showSearch}
