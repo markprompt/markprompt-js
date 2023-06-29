@@ -220,4 +220,4 @@ This library is created by the team behind [Markprompt](https://markprompt.com)
 
 ## License
 
-[MIT](./LICENSE) © [Motif](https://motif.land)
+[MIT](./LICENSE) © [Markprompt](https://markprompt.com)

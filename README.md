@@ -21,8 +21,8 @@ Markprompt is a platform for building GPT-powered prompts. It takes Markdown, Ma
 This repo contains various UI libraries for building prompts based on the Markprompt API:
 
 - [`@markprompt/core`](packages/core#readme) — shared utility functions to speak with the Markprompt API.
-- [`@markprompt/react`](packages/react#readme) — a headless React component.
-- [`@markprompt/web`](packages/web#readme) — a pre-built Markprompt dialog, based on `@markprompt/react`, built with Preact for bundle-size savings. Viable for use with vanilla JavaScript or any framework.
+- [`@markprompt/react`](packages/react#readme) — a React component.
+- [`@markprompt/web`](packages/web#readme) — a pre-built Markprompt component, based on `@markprompt/react`, built with Preact for bundle-size savings. Viable for use with vanilla JavaScript or any framework.
 - [`@markprompt/docusaurus-theme-search`](packages/docusaurus-theme-search#readme) — a Markprompt search theme for Docusaurus.
 
 and some example implementations:
@@ -49,4 +49,4 @@ This library is created by the team behind [Markprompt](https://markprompt.com)
 
 ## License
 
-[MIT](./LICENSE) © [Motif](https://motif.land)
+[MIT](./LICENSE) © [Markprompt](https://markprompt.com)
