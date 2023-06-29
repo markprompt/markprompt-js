@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.10.6
+
+### Patch Changes
+
+- [#67](https://github.com/motifland/markprompt-js/pull/67) [`df494a4`](https://github.com/motifland/markprompt-js/commit/df494a422fb770bca1f2fc56d55039e009718655) Thanks [@michaelfester](https://github.com/michaelfester)! - Add model exports
+
+- [#67](https://github.com/motifland/markprompt-js/pull/67) [`df494a4`](https://github.com/motifland/markprompt-js/commit/df494a422fb770bca1f2fc56d55039e009718655) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix optional config
+
+- Updated dependencies [[`df494a4`](https://github.com/motifland/markprompt-js/commit/df494a422fb770bca1f2fc56d55039e009718655)]:
+  - @markprompt/core@0.6.2
+
 ## 0.10.5
 
 ### Patch Changes
