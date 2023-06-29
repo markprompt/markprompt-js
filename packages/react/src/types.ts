@@ -92,7 +92,7 @@ type MarkpromptOptions = {
     /**
      * Callback to transform a reference id into an href and text
      **/
-    transformReferenceId: (referenceId: string) => {
+    transformReferenceId?: (referenceId: string) => {
       href: string;
       text: string;
     };
