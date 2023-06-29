@@ -63,6 +63,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     showBranding,
     title,
     description,
+    close,
     ...dialogProps
   } = props;
 
@@ -133,6 +134,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               {...props}
               showSearch={showSearch}
               toggleSearch={toggleSearch}
+              includeClose={close?.visible !== false}
             />
           </BaseMarkprompt.Content>
         </BaseMarkprompt.Portal>
@@ -146,7 +148,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             {...props}
             showSearch={showSearch}
             toggleSearch={toggleSearch}
-            includeClose={false}
+            includeClose={close?.visible !== false}
           />
         </BaseMarkprompt.PlainContent>
       )}

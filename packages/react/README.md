@@ -58,6 +58,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `display` (`plain | dialog`): The way to display the prompt (Default: `dialog`)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
+- `close.visible` (`boolean`): Show the close button (Default: `true`)
 - `description` (`object`): Options for the description
 - `description.hide` (`boolean`): Visually hide the description (Default: `true`)
 - `description.text` (`string`): Description text
