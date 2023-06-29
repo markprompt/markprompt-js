@@ -9,6 +9,7 @@ export {
   AutoScroller,
   Close,
   Content,
+  PlainContent,
   Description,
   DialogTrigger,
   Form,
