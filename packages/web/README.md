@@ -216,6 +216,7 @@ Render a Markprompt dialog button.
 - `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
+- `close.visible` (`boolean`): Show the close button (Default: `true`)
 - `description` (`object`): Options for the description
 - `description.hide` (`boolean`): Visually hide the description (Default: `true`)
 - `description.text` (`string`): Description text

@@ -63,6 +63,11 @@ type MarkpromptOptions = {
      * @default "Close Markprompt"
      **/
     label?: string;
+    /**
+     * Show the close button
+     * @default true
+     **/
+    visible?: boolean;
   };
   description?: {
     /**
