@@ -26,7 +26,7 @@ Include the CSS on your page, via a link tag or by importing it in your JavaScri
 
 ```html
 <!-- load from a CDN: -->
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.2.0?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.5.1?css" />
 ```
 
 ```js
