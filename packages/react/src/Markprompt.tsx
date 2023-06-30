@@ -148,7 +148,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             {...props}
             showSearch={showSearch}
             toggleSearch={toggleSearch}
-            includeClose={close?.visible !== false}
+            includeClose={false}
           />
         </BaseMarkprompt.PlainContent>
       )}
