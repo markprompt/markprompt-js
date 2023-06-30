@@ -177,7 +177,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.5.1/markprompt.css"
 />
 <script>
   window.markprompt = {
@@ -195,7 +195,7 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 </script>
 <script
   async
-  src="https://unpkg.com/@markprompt/web@0.5.0/dist/init.js"
+  src="https://unpkg.com/@markprompt/web@0.9.3/dist/init.js"
 ></script>
 ```
 
