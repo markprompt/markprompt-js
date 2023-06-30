@@ -10,5 +10,5 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 `;
 
-await import('@markprompt/css');
-await import('@markprompt/web/init');
+import('@markprompt/css');
+import('@markprompt/web/init');
