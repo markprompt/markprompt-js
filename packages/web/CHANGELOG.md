@@ -1,5 +1,11 @@
 # @markprompt/web
 
+## 0.9.4
+
+### Patch Changes
+
+- [#78](https://github.com/motifland/markprompt-js/pull/78) [`14afcbc`](https://github.com/motifland/markprompt-js/commit/14afcbcf8b00cbc9bf538cbb3671d682f31d3902) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove useless IIFE from `@markprompt/web`'s init script
+
 ## 0.9.3
 
 ### Patch Changes
