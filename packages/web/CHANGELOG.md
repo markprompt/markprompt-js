@@ -1,5 +1,14 @@
 # @markprompt/web
 
+## 0.9.3
+
+### Patch Changes
+
+- [#76](https://github.com/motifland/markprompt-js/pull/76) [`bcbf7f5`](https://github.com/motifland/markprompt-js/commit/bcbf7f54fbc2fadfb89bd04a7be09eca14df4743) Thanks [@michaelfester](https://github.com/michaelfester)! - Include close option
+
+- Updated dependencies [[`bcbf7f5`](https://github.com/motifland/markprompt-js/commit/bcbf7f54fbc2fadfb89bd04a7be09eca14df4743), [`bcbf7f5`](https://github.com/motifland/markprompt-js/commit/bcbf7f54fbc2fadfb89bd04a7be09eca14df4743)]:
+  - @markprompt/react@0.11.3
+
 ## 0.9.2
 
 ### Patch Changes
