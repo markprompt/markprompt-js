@@ -1,6 +1,6 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { createContext } from 'react';
+import React from 'react';
 import { describe, expect, test, vitest } from 'vitest';
 
 import { MarkpromptContext } from './context';
