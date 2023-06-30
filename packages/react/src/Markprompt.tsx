@@ -15,6 +15,7 @@ import React, {
 import { Answer } from './Answer.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
+import { Feedback } from './Feedback.js';
 import {
   ChatIcon,
   ChevronLeftIcon,
@@ -160,7 +161,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
 type MarkpromptContentProps = Pick<
   MarkpromptProps,
-  'close' | 'prompt' | 'references' | 'search'
+  'close' | 'feedback' | 'prompt' | 'references' | 'search'
 > & {
   showSearch?: boolean;
   toggleSearch?: () => void;
@@ -173,12 +174,13 @@ export const noop = (): void => {};
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
     close,
+    feedback,
+    includeClose = true,
     prompt,
     references,
     search,
     showSearch = false,
     toggleSearch = noop,
-    includeClose = true,
   } = props;
 
   return (
@@ -214,6 +216,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
       </BaseMarkprompt.Form>
 
       <AnswerOrSearchResults
+        feedback={feedback}
         search={search}
         references={references}
         showSearch={showSearch}
@@ -225,22 +228,30 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
 }
 
 type AnswerOrSearchResultsProps = {
+  feedback?: MarkpromptOptions['feedback'];
+  promptCTA?: string;
   references: MarkpromptOptions['references'];
   search?: MarkpromptOptions['search'];
   showSearch: boolean;
-  promptCTA?: string;
   toggleSearchAnswer: () => void;
 };
 
 function AnswerOrSearchResults(
   props: AnswerOrSearchResultsProps,
 ): ReactElement {
-  const { search, showSearch, promptCTA, toggleSearchAnswer, references } =
-    props;
+  const {
+    feedback,
+    promptCTA,
+    references,
+    search,
+    showSearch,
+    toggleSearchAnswer,
+  } = props;
 
   if (!search?.enabled) {
     return (
       <AnswerContainer
+        feedback={feedback}
         isSearchEnabled={search?.enabled}
         references={references}
         toggleSearchAnswer={toggleSearchAnswer}
@@ -260,6 +271,7 @@ function AnswerOrSearchResults(
       </Transition>
       <Transition isVisible={!showSearch} isFlipped>
         <AnswerContainer
+          feedback={feedback}
           isSearchEnabled={search?.enabled}
           references={references}
           toggleSearchAnswer={toggleSearchAnswer}
@@ -491,6 +503,7 @@ function SearchResultsContainer(
 }
 
 type AnswerContainerProps = {
+  feedback?: MarkpromptOptions['feedback'];
   isSearchEnabled?: boolean;
   references: MarkpromptOptions['references'];
   toggleSearchAnswer: () => void;
@@ -499,9 +512,10 @@ type AnswerContainerProps = {
 function AnswerContainer({
   isSearchEnabled,
   references,
+  feedback,
   toggleSearchAnswer,
 }: AnswerContainerProps): ReactElement {
-  const { abort } = useMarkpromptContext();
+  const { abort, state } = useMarkpromptContext();
 
   return (
     <div className="MarkpromptPromptContainer">
@@ -522,6 +536,10 @@ function AnswerContainer({
 
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
         <Answer />
+        <Feedback className="MarkpromptPromptFeedback" />
+        {feedback?.enabled && state === 'done' && (
+          <Feedback className="MarkpromptPromptFeedback" />
+        )}
       </BaseMarkprompt.AutoScroller>
 
       <References
