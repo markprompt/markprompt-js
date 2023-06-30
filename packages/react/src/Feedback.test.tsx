@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import React, { createContext } from 'react';
 import { describe, expect, test, vitest } from 'vitest';
 
-import { MarkpromptContext } from './context.js';
-import { Feedback } from './feedback.js';
+import { MarkpromptContext } from './context';
+import { Feedback } from './Feedback';
 
 const submitFeedback = vitest.fn((helpful: boolean) => Promise.resolve());
 
