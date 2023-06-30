@@ -536,7 +536,6 @@ function AnswerContainer({
 
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
         <Answer />
-        <Feedback className="MarkpromptPromptFeedback" />
         {feedback?.enabled && state === 'done' && (
           <Feedback className="MarkpromptPromptFeedback" />
         )}

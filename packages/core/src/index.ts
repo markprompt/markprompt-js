@@ -1,4 +1,11 @@
 export {
+  submitFeedback,
+  type SubmitFeedbackOptions,
+  type SubmitFeedbackBody,
+  DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+} from './feedback.js';
+
+export {
   submitPrompt,
   type SubmitPromptOptions,
   DEFAULT_SUBMIT_PROMPT_OPTIONS,

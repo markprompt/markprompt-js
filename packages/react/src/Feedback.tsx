@@ -4,16 +4,18 @@ import React, {
   type ComponentPropsWithoutRef,
 } from 'react';
 
+import { useMarkpromptContext } from './context.js';
 import { ThumbsDownIcon, ThumbsUpIcon } from './icons.js';
 
 export function Feedback(
   props: ComponentPropsWithoutRef<'aside'>,
 ): ReactElement {
+  const { submitFeedback } = useMarkpromptContext();
   const [feedback, setFeedback] = useState<boolean>();
 
   async function handleFeedback(helpful: boolean): Promise<void> {
-    // TODO: Send feedback to server
     setFeedback(helpful);
+    await submitFeedback(helpful);
   }
 
   return (

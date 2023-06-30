@@ -1,10 +1,18 @@
-interface SubmitFeedbackBody {
+export interface SubmitFeedbackBody {
+  /**
+   * Whether the prompt was helpful or not.
+   */
   helpful: boolean;
+  /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
 }
 
-interface SubmitFeedbackOptions {
-  feedbackUrl: 'https://api.markprompt.com/v1/feedback';
+export interface SubmitFeedbackOptions {
+  /**
+   * URL to submit feedback to.
+   * @default 'https://api.markprompt.com/v1/feedback'
+   */
+  feedbackUrl?: string;
   signal?: AbortSignal;
 }
 

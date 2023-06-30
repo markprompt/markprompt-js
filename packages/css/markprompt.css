@@ -758,7 +758,6 @@
 }
 
 :where(.MarkpromptPromptFeedback p) {
-  background-color: var(--markprompt-muted);
   font-size: var(--markprompt-text-size);
   margin-top: 0;
   margin-bottom: 0.5rem;
