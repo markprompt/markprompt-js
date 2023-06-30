@@ -1,5 +1,11 @@
 # @markprompt/web
 
+## 0.9.5
+
+### Patch Changes
+
+- [#83](https://github.com/motifland/markprompt-js/pull/83) [`5cbac37`](https://github.com/motifland/markprompt-js/commit/5cbac374351b9e26d877d5d540193f2699715d5c) Thanks [@nickrttn](https://github.com/nickrttn)! - Update README to load @markprompt/web from esm.sh in the init example
+
 ## 0.9.4
 
 ### Patch Changes
