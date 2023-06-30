@@ -14,8 +14,8 @@ export function Feedback(
   const [feedback, setFeedback] = useState<boolean>();
 
   async function handleFeedback(helpful: boolean): Promise<void> {
-    setFeedback(helpful);
     await submitFeedback(helpful);
+    setFeedback(helpful);
   }
 
   return (
