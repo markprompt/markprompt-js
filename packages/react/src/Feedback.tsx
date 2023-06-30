@@ -24,10 +24,10 @@ export function Feedback(
 
       {typeof feedback !== 'boolean' && (
         <div>
-          <button onClick={() => handleFeedback(true)}>
+          <button aria-label="Yes" onClick={() => handleFeedback(true)}>
             <ThumbsUpIcon width={16} height={16} />
           </button>
-          <button onClick={() => handleFeedback(false)}>
+          <button aria-label="No" onClick={() => handleFeedback(false)}>
             <ThumbsDownIcon width={16} height={16} />
           </button>
         </div>
