@@ -175,10 +175,7 @@ Styles are easily overridable for customization via targeting classes. Additiona
 Besides initializing the Markprompt component yourselves from JavaScript, you can load the script from a CDN. You can attach the options for the Markprompt component to the window prior to loading our script:
 
 ```html
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.5.1/markprompt.css"
-/>
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.5.1?css" />
 <script>
   window.markprompt = {
     projectKey: `YOUR-PROJECT-KEY`,
@@ -195,7 +192,8 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
 </script>
 <script
   async
-  src="https://unpkg.com/@markprompt/web@0.9.4/dist/init.js"
+  type="module"
+  src="https://esm.sh/@markprompt/web@0.9.4/init"
 ></script>
 ```
 
