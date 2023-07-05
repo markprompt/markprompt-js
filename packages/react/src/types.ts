@@ -42,11 +42,11 @@ export type SectionHeading = {
 };
 
 export type SearchResultComponentProps = {
+  isSection?: boolean;
   path: string;
+  reference: FileSectionReference;
   tag?: string;
   title: string;
-  isSection?: boolean;
-  reference: FileSectionReference;
 };
 
 type MarkpromptOptions = {

@@ -495,47 +495,28 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
 
     const { searchResults } = useMarkpromptContext();
 
-    useEffect(() => {
-      if (!activeSearchResult) {
-        return;
-      }
-
-      const element = document.getElementById(activeSearchResult);
-      if (!element) {
-        return;
-      }
-
-      element.focus();
-      element.scrollIntoView({
-        block: 'nearest',
-      });
-    }, [activeSearchResult, searchResults]);
-
     return (
-      <>
-        <Component
-          {...rest}
-          ref={ref}
-          role="listbox"
-          id="markprompt-search-results"
-          tabIndex={0}
-          aria-label={label}
-        >
-          {searchResults.map((result, index) => {
-            const id = `markprompt-result-${index}`;
-            return (
-              <SearchResultComponent
-                role="option"
-                id={id}
-                onMouseOver={() => updateActiveSearchResult(id)}
-                aria-selected={id === activeSearchResult}
-                key={`${result.path}:${result.title}`}
-                {...result}
-              />
-            );
-          })}
-        </Component>
-      </>
+      <Component
+        {...rest}
+        ref={ref}
+        role="listbox"
+        id="markprompt-search-results"
+        tabIndex={0}
+        aria-label={label}
+      >
+        {searchResults.map((result, index) => {
+          const id = `markprompt-result-${index}`;
+          return (
+            <SearchResultComponent
+              role="option"
+              index={index}
+              id={id}
+              key={`${result.path}:${result.title}`}
+              {...result}
+            />
+          );
+        })}
+      </Component>
     );
   },
 );
@@ -545,9 +526,11 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
     getHref?: (reference: FileSectionReference) => string;
+    index: number;
     onMouseOver?: () => void;
   }
 >;
+
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const {

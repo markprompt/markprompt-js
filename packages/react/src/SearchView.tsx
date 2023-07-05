@@ -144,13 +144,10 @@ function SearchResultsContainer(
   const { abort, submitPrompt, state, searchResults, prompt } =
     useMarkpromptContext();
 
-  const hasActiveSearchResult = activeSearchResult !== undefined;
-
   useEffect(() => {
-    if (hasActiveSearchResult) {
-      btn.current?.blur();
-    }
-  }, [hasActiveSearchResult]);
+    if (!activeSearchResult) return;
+    btn.current?.blur();
+  }, [activeSearchResult]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -192,6 +189,22 @@ function SearchResultsContainer(
     setActiveSearchResult,
   ]);
 
+  useEffect(() => {
+    if (!activeSearchResult) {
+      return;
+    }
+
+    const element = document.getElementById(activeSearchResult);
+    if (!element) {
+      return;
+    }
+
+    element.focus();
+    element.scrollIntoView({
+      block: 'nearest',
+    });
+  }, [activeSearchResult, searchResults]);
+
   return (
     <div className="MarkpromptSearchResultsContainer">
       <button
@@ -210,7 +223,9 @@ function SearchResultsContainer(
         <span aria-hidden className="MarkpromptSearchResultIconWrapper">
           <SparklesIcon focusable={false} className="MarkpromptSearchIcon" />
         </span>
+
         <span>{promptCTA || DEFAULT_MARKPROMPT_OPTIONS.prompt!.cta!}</span>
+
         <kbd>
           {navigator.platform.indexOf('Mac') === 0 ||
           navigator.platform === 'iPhone' ? (
@@ -221,6 +236,7 @@ function SearchResultsContainer(
           <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
         </kbd>
       </button>
+
       {state === 'done' && searchResults.length === 0 && (
         <div className="MarkpromptNoSearchResults">
           <p>
@@ -232,9 +248,18 @@ function SearchResultsContainer(
       {searchResults.length > 0 && (
         <BaseMarkprompt.SearchResults
           className="MarkpromptSearchResults"
-          SearchResultComponent={(props) => (
-            <SearchResult {...props} getHref={getResultHref} />
-          )}
+          SearchResultComponent={({ index, ...rest }) => {
+            const id = `markprompt-result-${index}`;
+            return (
+              <SearchResult
+                {...rest}
+                id={id}
+                getHref={getResultHref}
+                onMouseOver={() => setActiveSearchResult(id)}
+                aria-selected={id === activeSearchResult}
+              />
+            );
+          }}
         />
       )}
     </div>
