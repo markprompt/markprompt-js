@@ -22,7 +22,8 @@ export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
 export type SearchResultSection = {
-  content: string;
+  content?: string;
+  snippet: string;
   meta?: {
     leadHeading?: {
       id?: string;
@@ -30,7 +31,6 @@ export type SearchResultSection = {
       value: string;
     };
   };
-  score: number;
 };
 
 export type SourceType =
@@ -49,15 +49,19 @@ export type Source = {
 };
 
 export type SearchResult = {
+  file: SearchResultFileData;
+  matchType: 'title' | 'leadHeading' | 'content';
+} & SearchResultSection;
+
+export type SearchResultFileData = {
+  title?: string;
   path: string;
-  meta: {
-    title: string;
-  };
+  meta: any;
   source: Source;
-  sections: SearchResultSection[];
 };
 
 export type SearchResultsResponse = {
+  debug?: any;
   project_id: string;
   data: SearchResult[];
 };

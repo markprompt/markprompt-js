@@ -52,10 +52,9 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     const {
       title,
       tag,
-      isParent,
-      hasParent,
       getHref,
       path,
+      isSection,
       sectionHeading,
       source,
       onMouseOver,
@@ -64,13 +63,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     const { prompt } = useMarkpromptContext();
 
     return (
-      <li
-        {...rest}
-        ref={ref}
-        className={clsx('MarkpromptSearchResult', {
-          MarkpromptSearchResultIndented: hasParent,
-        })}
-      >
+      <li {...rest} ref={ref} className="MarkpromptSearchResult">
         <a
           href={
             getHref?.(path, sectionHeading, source) ||
@@ -86,7 +79,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
         >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
-              {!isParent ? (
+              {isSection ? (
                 <HashIcon className="MarkpromptSearchResultIcon" />
               ) : (
                 <FileTextIcon className="MarkpromptSearchResultIcon" />

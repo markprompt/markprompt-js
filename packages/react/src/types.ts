@@ -37,17 +37,15 @@ export type PolymorphicRef<C extends ElementType> =
 
 export type SectionHeading = {
   value: string | undefined;
-  id: string | undefined;
+  id?: string | undefined;
 };
 
-export type SearchResultWithMetadata = {
-  isParent: boolean;
-  hasParent: boolean;
+export type SearchResultComponentProps = {
   path: string;
-  sectionHeading?: SectionHeading | undefined;
-  score: number;
   tag?: string;
   title: string;
+  isSection?: boolean;
+  sectionHeading?: SectionHeading | undefined;
   source: Source;
 };
 
@@ -167,6 +165,11 @@ type MarkpromptOptions = {
    * @default true
    **/
   showBranding?: boolean;
+  /**
+   * Display debug info
+   * @default false
+   **/
+  debug?: boolean;
 };
 
 export type { MarkpromptOptions };

@@ -64,6 +64,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     title,
     description,
     close,
+    debug,
     ...dialogProps
   } = props;
 
@@ -89,6 +90,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       searchOptions={search}
       open={open}
       onOpenChange={setOpen}
+      debug={debug}
       {...dialogProps}
     >
       {!trigger?.customElement && display === 'dialog' && (
