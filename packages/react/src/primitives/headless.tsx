@@ -12,7 +12,6 @@ import React, {
   type ComponentPropsWithoutRef,
   type ElementType,
   type FormEventHandler,
-  type KeyboardEventHandler,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
@@ -238,8 +237,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   const { onSubmit, ...rest } = props;
 
   const {
+    activeView,
     isSearchEnabled,
-    isSearchActive,
     submitPrompt,
     submitSearchQuery,
     prompt,
@@ -255,7 +254,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
       }
 
       // submit search query if search is enabled
-      if (isSearchEnabled && isSearchActive) {
+      if (isSearchEnabled && activeView === 'search') {
         await submitSearchQuery(prompt);
       } else {
         // submit prompt if search is disabled
@@ -263,8 +262,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
       }
     },
     [
+      activeView,
       isSearchEnabled,
-      isSearchActive,
       onSubmit,
       prompt,
       submitPrompt,
@@ -305,13 +304,12 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
   } = props;
 
   const {
-    activeSearchResult,
-    isSearchActive,
+    activeView,
     prompt,
-    searchResults,
+    searchQuery,
     submitSearchQuery,
-    updateActiveSearchResult,
-    updatePrompt,
+    setPrompt,
+    setSearchQuery,
   } = useMarkpromptContext();
 
   const debouncedSubmitSearchQuery = useMemo(
@@ -324,76 +322,25 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       const value = event.target.value;
       // We use the input value directly instead of using the prompt state
       // to avoid an off-by-one-bug when querying.
-      if (isSearchActive) {
+      if (activeView === 'search') {
+        setSearchQuery(value);
         debouncedSubmitSearchQuery(value);
       }
 
-      updatePrompt(value);
+      if (activeView === 'prompt') {
+        setPrompt(value);
+      }
 
       if (onChange) {
         onChange(event);
       }
     },
-    [isSearchActive, updatePrompt, onChange, debouncedSubmitSearchQuery],
-  );
-
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      if (!isSearchActive) return;
-
-      switch (event.key) {
-        case 'ArrowDown': {
-          if (!activeSearchResult) return;
-          if (activeSearchResult.endsWith(`${searchResults.length - 1}`)) {
-            return;
-          }
-          event.preventDefault();
-          const nextActiveSearchResult = activeSearchResult.replace(
-            /\d+$/,
-            (match) => String(Number(match) + 1),
-          );
-          updateActiveSearchResult(nextActiveSearchResult);
-          const el: HTMLAnchorElement | null = document.querySelector(
-            `#${nextActiveSearchResult} > a`,
-          );
-          if (!el) return;
-          break;
-        }
-        case 'ArrowUp': {
-          if (!activeSearchResult) return;
-          if (activeSearchResult.endsWith('0')) return;
-          event.preventDefault();
-          const nextActiveSearchResult = activeSearchResult.replace(
-            /\d+$/,
-            (match) => String(Number(match) - 1),
-          );
-          updateActiveSearchResult(nextActiveSearchResult);
-          const el: HTMLAnchorElement | null = document.querySelector(
-            `#${nextActiveSearchResult} > a`,
-          );
-          if (!el) return;
-          break;
-        }
-        case 'Enter': {
-          if (event.ctrlKey || event.metaKey) return;
-          if (!activeSearchResult) return;
-          event.preventDefault();
-          // assumption here is that the search result will always contain an a element
-          const el: HTMLAnchorElement | null = document.querySelector(
-            `#${activeSearchResult} a`,
-          );
-          // todo: reset search query and result
-          if (!el) return;
-          el?.click();
-          break;
-        }
-      }
-    },
     [
-      activeSearchResult,
-      isSearchActive,
-      searchResults.length,
-      updateActiveSearchResult,
+      activeView,
+      onChange,
+      setSearchQuery,
+      debouncedSubmitSearchQuery,
+      setPrompt,
     ],
   );
 
@@ -405,20 +352,17 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
       <input
         {...rest}
         id={name}
+        type={type}
         name={name}
         placeholder={placeholder}
         ref={ref}
-        type={type}
-        value={prompt}
+        value={activeView === 'search' ? searchQuery : prompt}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
         autoCorrect={autoCorrect}
         autoFocus={autoFocus}
         spellCheck={spellCheck}
-        aria-controls={isSearchActive ? 'markprompt-search-results' : undefined}
-        aria-activedescendant={isSearchActive ? activeSearchResult : undefined}
       />
     </>
   );
@@ -549,8 +493,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       ...rest
     } = props;
 
-    const { activeSearchResult, searchResults, updateActiveSearchResult } =
-      useMarkpromptContext();
+    const { searchResults } = useMarkpromptContext();
 
     useEffect(() => {
       if (!activeSearchResult) {

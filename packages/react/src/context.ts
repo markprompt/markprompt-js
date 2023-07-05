@@ -7,46 +7,47 @@ import {
 } from 'react';
 
 import type { SearchResultComponentProps } from './types.js';
-import { type LoadingState } from './useMarkprompt.js';
+import { type LoadingState, type Views } from './useMarkprompt.js';
 
 type State = {
-  activeSearchResult: string | undefined;
+  activeView: Views;
   answer: string | undefined;
   isSearchEnabled: boolean;
-  isSearchActive: boolean;
   prompt: string;
   references: FileSectionReference[];
   searchResults: SearchResultComponentProps[];
+  searchQuery: string;
+  searchResults: SearchResultWithMetadata[];
   state: LoadingState;
 };
 
 type Actions = {
   abort: () => void;
+  setPrompt: Dispatch<SetStateAction<string>>;
+  setSearchQuery: Dispatch<SetStateAction<string>>;
   submitFeedback: (helpful: boolean) => void;
   submitPrompt: () => void;
   submitSearchQuery: (searchQuery: string) => void;
-  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
-  updatePrompt: (nextPrompt: string) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = (): void => {};
 
 const MarkpromptContext = createContext<State & Actions>({
-  activeSearchResult: undefined,
+  activeView: 'prompt',
   answer: undefined,
   isSearchEnabled: false,
-  isSearchActive: false,
   prompt: '',
   references: [],
+  searchQuery: '',
   searchResults: [],
   state: 'indeterminate',
   abort: noop,
+  setPrompt: noop,
+  setSearchQuery: noop,
   submitFeedback: noop,
   submitPrompt: noop,
   submitSearchQuery: noop,
-  updateActiveSearchResult: noop,
-  updatePrompt: noop,
 });
 
 function useMarkpromptContext(): State & Actions {

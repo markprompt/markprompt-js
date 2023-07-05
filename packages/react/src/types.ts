@@ -108,8 +108,8 @@ type MarkpromptOptions = {
      **/
     placeholder?: string;
     /**
-     * When search is enabled, this label is used for the CTA button
-     * that opens the prompt.
+     * When search is enabled, this label is used for the call-to-action button
+     * that switches to the prompt view that is shown in the search view.
      * @default "Ask Docs AI…"
      **/
     cta?: string;
@@ -150,6 +150,21 @@ type MarkpromptOptions = {
     enabled?: boolean;
     /** Callback to transform a search result into an href */
     getHref?: (reference: FileSectionReference) => string;
+    /**
+     * When search is enabled, this label is used for the call-to-action button
+     * that switches to the search view that is shown in the prompt view.
+     */
+    cta?: string;
+    /**
+     * Label for the search input, not shown but used for `aria-label`
+     * @default "Search docs…"
+     **/
+    label?: string;
+    /**
+     * Placeholder for the search input
+     * @default "Search docs…"
+     */
+    placeholder?: string;
   };
   trigger?: {
     /**

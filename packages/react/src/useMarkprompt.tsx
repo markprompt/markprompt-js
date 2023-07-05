@@ -25,13 +25,15 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
+export type Views = 'prompt' | 'search';
+
 export interface UseMarkpromptOptions {
+  /** The currently active view */
+  activeView: Views;
   /** Project key, required */
   projectKey: string;
   /** Project key, required */
   display?: MarkpromptOptions['display'];
-  /** Is search currently active */
-  isSearchActive?: boolean;
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
@@ -43,28 +45,28 @@ export interface UseMarkpromptOptions {
 }
 
 export interface UseMarkpromptResult {
-  /** The currently active search result */
-  activeSearchResult: string | undefined;
-  /** The latest answer */
+  /** The currently active view */
+  activeView: Views;
+  /** The most recent answer */
   answer: string;
   /** Enable search functionality */
   isSearchEnabled: boolean;
-  /** Is search currently active */
-  isSearchActive: boolean;
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
   references: FileSectionReference[];
   /** Search results */
   searchResults: SearchResultComponentProps[];
-  /** The current loading state */
+  /** The current search query */
+  searchQuery: string;
+  /** The current state of request(s) */
   state: LoadingState;
   /** Abort a pending request */
   abort: () => void;
-  /** Update the currently active search result */
-  updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   /** Set a new value for the prompt */
-  updatePrompt: Dispatch<SetStateAction<string>>;
+  setPrompt: Dispatch<SetStateAction<string>>;
+  /** Set a new value for the search query */
+  setSearchQuery: Dispatch<SetStateAction<string>>;
   /** Submit user feedback */
   submitFeedback: (helpful: boolean) => Promise<void>;
   /** Submit the prompt */
@@ -78,8 +80,8 @@ export interface UseMarkpromptResult {
  * stateful Markprompt prompt with search and a prompt.
  */
 export function useMarkprompt({
+  activeView,
   projectKey,
-  isSearchActive,
   searchOptions,
   promptOptions,
   debug,
@@ -94,13 +96,11 @@ export function useMarkprompt({
   const [searchResults, setSearchResults] = useState<
     SearchResultComponentProps[]
   >([]);
-  const [activeSearchResult, setActiveSearchResult] = useState<
-    string | undefined
-  >();
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<FileSectionReference[]>([]);
   const [prompt, setPrompt] = useState<string>('');
   const [promptId, setPromptId] = useState<string>();
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const controllerRef = useRef<AbortController>();
 
@@ -224,7 +224,6 @@ export function useMarkprompt({
       if (searchQuery === '') {
         if (controllerRef.current) controllerRef.current.abort();
         setSearchResults([]);
-        setActiveSearchResult(undefined);
         setState('indeterminate');
         return;
       }
@@ -251,8 +250,8 @@ export function useMarkprompt({
         setSearchResults(
           flattenSearchResults(searchQuery, searchResults.data) ?? [],
         );
+
         // initially focus the first result
-        setActiveSearchResult(`markprompt-result-0`);
         setState('done');
       });
 
@@ -285,27 +284,27 @@ export function useMarkprompt({
   return useMemo(
     () => ({
       answer,
-      activeSearchResult,
       isSearchEnabled: !!searchOptions?.enabled,
-      isSearchActive: !!isSearchActive,
+      activeView,
       prompt,
       references,
+      searchQuery,
       searchResults,
       state,
       abort,
-      updateActiveSearchResult: setActiveSearchResult,
-      updatePrompt: setPrompt,
+      setPrompt,
+      setSearchQuery,
       submitFeedback,
       submitPrompt,
       submitSearchQuery,
     }),
     [
+      activeView,
       answer,
-      activeSearchResult,
-      searchOptions?.enabled,
-      isSearchActive,
       prompt,
       references,
+      searchOptions?.enabled,
+      searchQuery,
       searchResults,
       state,
       abort,
