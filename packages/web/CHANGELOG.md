@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.10.0
+
+### Minor Changes
+
+- [#87](https://github.com/motifland/markprompt-js/pull/87) [`c5102c5`](https://github.com/motifland/markprompt-js/commit/c5102c5937e72d6796f885dab9410ed1f5dc36ed) Thanks [@michaelfester](https://github.com/michaelfester)! - Upgrade to new search API
+
+### Patch Changes
+
+- Updated dependencies [[`c5102c5`](https://github.com/motifland/markprompt-js/commit/c5102c5937e72d6796f885dab9410ed1f5dc36ed)]:
+  - @markprompt/react@0.12.0
+  - @markprompt/core@0.7.0
+
 ## 0.9.6
 
 ### Patch Changes
