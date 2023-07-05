@@ -26,7 +26,7 @@ import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { MarkpromptContext, useMarkpromptContext } from '../context.js';
 import type {
-  SearchResultWithMetadata,
+  SearchResultComponentProps,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SectionHeading,
@@ -536,7 +536,7 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
     label?: string;
-    SearchResultComponent?: ElementType<SearchResultWithMetadata>;
+    SearchResultComponent?: ElementType<SearchResultComponentProps>;
   }
 >;
 
@@ -600,7 +600,7 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
-  SearchResultWithMetadata & {
+  SearchResultComponentProps & {
     getHref?: (
       path: string,
       sectionHeading: SectionHeading | undefined,
@@ -614,7 +614,6 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     const {
       title,
       path,
-      score,
       sectionHeading,
       source,
       getHref = (path, sectionHeading) => {
@@ -629,12 +628,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     } = props;
     return (
       <li ref={ref} {...rest}>
-        <a
-          href={getHref(path, sectionHeading, source)}
-          data-markprompt-score={score}
-        >
-          {title}
-        </a>
+        <a href={getHref(path, sectionHeading, source)}>{title}</a>
       </li>
     );
   },

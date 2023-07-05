@@ -15,7 +15,7 @@ import {
   type SetStateAction,
 } from 'react';
 
-import type { MarkpromptOptions, SearchResultWithMetadata } from './types.js';
+import type { MarkpromptOptions, SearchResultComponentProps } from './types.js';
 
 export type LoadingState =
   | 'indeterminate'
@@ -36,6 +36,8 @@ export interface UseMarkpromptOptions {
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
     enabled?: boolean;
   };
+  /** Display debug info */
+  debug?: boolean;
 }
 
 export interface UseMarkpromptResult {
@@ -52,7 +54,7 @@ export interface UseMarkpromptResult {
   /** The references that belong to the latest answer */
   references: string[];
   /** Search results */
-  searchResults: SearchResultWithMetadata[];
+  searchResults: SearchResultComponentProps[];
   /** The current loading state */
   state: LoadingState;
   /** Abort a pending request */
@@ -76,6 +78,7 @@ export function useMarkprompt({
   isSearchActive,
   searchOptions,
   promptOptions,
+  debug,
 }: UseMarkpromptOptions): UseMarkpromptResult {
   if (!projectKey) {
     throw new Error(
@@ -85,7 +88,7 @@ export function useMarkprompt({
 
   const [state, setState] = useState<LoadingState>('indeterminate');
   const [searchResults, setSearchResults] = useState<
-    SearchResultWithMetadata[]
+    SearchResultComponentProps[]
   >([]);
   const [activeSearchResult, setActiveSearchResult] = useState<
     string | undefined
@@ -200,7 +203,10 @@ export function useMarkprompt({
       });
 
       promise.then((searchResults) => {
-        // const searchResults = { data: mockData };
+        if (debug) {
+          // eslint-disable-next-line no-console
+          console.debug(JSON.stringify(searchResults?.debug, null, 2));
+        }
 
         if (controller.signal.aborted) return;
         if (!searchResults?.data) return;
@@ -236,7 +242,7 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, projectKey, searchOptions?.enabled],
+    [abort, projectKey, searchOptions, debug],
   );
 
   return useMemo(
@@ -269,10 +275,6 @@ export function useMarkprompt({
       submitSearchQuery,
     ],
   );
-}
-
-function isPresent<T>(t: T | undefined | null | void): t is T {
-  return t !== undefined && t !== null;
 }
 
 function removeLeadHeading(text: string, heading?: string): string {
@@ -319,128 +321,48 @@ function createKWICSnippet(
   return words.join(' ');
 }
 
-const isMatching = (
-  text: string | undefined,
-  normalizedSearchQuery: string,
-): boolean => {
-  if (!text || text.length === 0) {
-    return false;
-  }
-  return text.toLowerCase().indexOf(normalizedSearchQuery) >= 0;
-};
-
 function flattenSearchResults(
   searchQuery: string,
   searchResults: SearchResult[],
-): SearchResultWithMetadata[] {
-  const sortedSearchResults = [...searchResults].sort((a, b) => {
-    const aTopSectionScore = Math.max(...a.sections.map((s) => s.score));
-    const bTopSectionScore = Math.max(...b.sections.map((s) => s.score));
-    return aTopSectionScore - bTopSectionScore;
-  });
-
-  // The final list is built as follows:
-  // - If the title matches the search term, include a search result
-  //   with the title itself, and no sections
-  // - If the title matches the search term, we may also get a bunch of
-  //   sections without the search term, because of the title match.
-  //   So we remove all the sections that don't include the search term
-  //   in the content and meta.leadHeading
-  // - All other sections (with matches on search term) are added
-  const normalizedSearchQuery = searchQuery.toLowerCase();
-
-  return sortedSearchResults.flatMap((f) => {
-    const isMatchingTitle = isMatching(f.meta?.title, normalizedSearchQuery);
-
-    const sectionResults = [
-      ...f.sections
-        .map((s) => {
-          // Fast and hacky way to remove the lead heading from
-          // the content, which we don't want to be part of the snippet
-          const trimmedContent = removeLeadHeading(
-            s.content,
-            s.meta?.leadHeading?.value,
-          );
-
-          if (!trimmedContent) {
-            return undefined;
-          }
-
-          const isKeywordMatchingLeadHeading = isMatching(
-            s.meta?.leadHeading?.value,
-            normalizedSearchQuery,
-          );
-
-          const isMatchingContent = isMatching(
-            trimmedContent,
-            normalizedSearchQuery,
-          );
-
-          if (!isKeywordMatchingLeadHeading && !isMatchingContent) {
-            // If this is a result because of the title only, omit
-            // it from here.
-            return undefined;
-          }
-
-          if (isKeywordMatchingLeadHeading) {
-            // Title is made of lead heading
-            return {
-              isParent: false,
-              hasParent: isMatchingTitle,
-              tag: isMatchingTitle ? null : f.meta.title,
-              title: createKWICSnippet(
-                trimContent(s.meta?.leadHeading?.value || ''),
-                normalizedSearchQuery,
-              ),
-              score: s.score,
-              path: f.path,
-              sectionHeading: s.meta?.leadHeading
-                ? {
-                    id: s.meta?.leadHeading?.id,
-                    value: s.meta?.leadHeading?.value,
-                  }
-                : undefined,
-              source: f.source,
-            };
-          }
-
-          // Title is made of content snippet
-          return {
-            isParent: false,
-            hasParent: isMatchingTitle,
-            tag: f.meta.title,
-            title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
-            score: s.score,
-            path: f.path,
-            sectionHeading: s.meta?.leadHeading
-              ? {
-                  id: s.meta?.leadHeading?.id,
-                  value: s.meta?.leadHeading?.value,
-                }
-              : undefined,
-            source: f.source,
-          };
-        })
-        .filter(isPresent),
-    ].sort((s1, s2) => s2.score - s1.score);
-
-    if (isMatchingTitle) {
-      // Set the score of the title result to the same score as the
-      // highest scored section. Since the section in sectionResults are
-      // already ranked by score, just take the first one.
-      const topSectionScore = sectionResults[0]?.score;
-      return [
-        {
-          isParent: true,
-          hasParent: false,
-          title: createKWICSnippet(f.meta.title, searchQuery),
-          score: topSectionScore,
-          path: f.path,
-          source: f.source,
-        },
-      ].concat(sectionResults);
+): SearchResultComponentProps[] {
+  return searchResults.map((result) => {
+    if (result.matchType === 'title') {
+      return {
+        path: result.file.path,
+        tag: undefined,
+        title: result.file.title || 'Untitled',
+        isSection: false,
+        sectionHeading: undefined,
+        source: result.file.source,
+      };
     } else {
-      return sectionResults;
+      const leadHeading = result.meta?.leadHeading;
+      if (result.matchType === 'leadHeading' && leadHeading?.value) {
+        return {
+          path: result.file.path,
+          tag: result.file.title,
+          title: leadHeading.value,
+          isSection: true,
+          sectionHeading: result.meta?.leadHeading,
+          source: result.file.source,
+        };
+      } else {
+        const normalizedSearchQuery = searchQuery.toLowerCase();
+        // Fast and hacky way to remove the lead heading from
+        // the content, which we don't want to be part of the snippet.
+        const trimmedContent = removeLeadHeading(
+          result.snippet,
+          result.meta?.leadHeading?.value,
+        );
+        return {
+          path: result.file.path,
+          tag: leadHeading?.value || result.file.title,
+          title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
+          isSection: true,
+          sectionHeading: undefined,
+          source: result.file.source,
+        };
+      }
     }
   });
 }

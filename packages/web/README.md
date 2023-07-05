@@ -59,7 +59,6 @@ import {
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
-import type { SearchResultWithMetadata } from '@markprompt/react';
 
 type MarkpromptOptions = {
   /**

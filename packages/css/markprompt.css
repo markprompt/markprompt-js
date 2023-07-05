@@ -1076,6 +1076,9 @@
   max-width: 100%;
   background-color: var(--markprompt-background);
   border-radius: 9999px;
+  border-color: var(--markprompt-border);
+  border-style: solid;
+  border-width: 1px;
   padding: 1px 8px;
   font-size: calc(var(--markprompt-text-size) * 0.85);
   font-weight: 500;
