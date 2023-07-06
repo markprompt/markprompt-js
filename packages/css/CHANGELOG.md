@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.6.1
+
+### Patch Changes
+
+- [#89](https://github.com/motifland/markprompt-js/pull/89) [`672ffc5`](https://github.com/motifland/markprompt-js/commit/672ffc5b3af28d12c5eeeb1e39fafed20a494803) Thanks [@michaelfester](https://github.com/michaelfester)! - Add text size
+
 ## 0.6.0
 
 ### Minor Changes
