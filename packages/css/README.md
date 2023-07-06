@@ -81,6 +81,7 @@ Styling can be customized using the following CSS variables.
 - `--markprompt-ring`: (Default: `#0ea5e9`, Default dark: `#ffffff`)
 - `--markprompt-radius`: (Default: `8px`)
 - `--markprompt-text-size`-(Default: `0.875rem`)
+- `--markprompt-text-size-xs`-(Default: `0.75rem`)
 - `--markprompt-button-icon-size`-(Default: `: 1rem`)
 
 ## Community

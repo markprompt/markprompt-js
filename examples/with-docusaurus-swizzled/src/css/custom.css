@@ -32,6 +32,7 @@
   --markprompt-ring: #0ea5e9;
   --markprompt-radius: 8px;
   --markprompt-text-size: 0.875rem;
+  --markprompt-text-size-xs: 0.75rem;
   --markprompt-button-icon-size: 1rem;
   --markprompt-icon-stroke-width: 2px;
 }
