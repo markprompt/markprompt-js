@@ -1057,7 +1057,7 @@
   flex-grow: 1;
   font-size: var(--markprompt-text-size);
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
   overflow: hidden;
 }
 
