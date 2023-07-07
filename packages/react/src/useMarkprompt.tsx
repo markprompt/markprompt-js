@@ -396,7 +396,7 @@ function flattenSearchResults(
           tag: leadHeading?.value || result.file.title,
           title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
           isSection: true,
-          sectionHeading: undefined,
+          sectionHeading: result.meta?.leadHeading,
           source: result.file.source,
         };
       }

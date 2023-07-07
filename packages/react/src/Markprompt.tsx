@@ -404,6 +404,8 @@ function SearchResultsContainer(
     updateActiveSearchResult,
   } = useMarkpromptContext();
 
+  console.log('searchResults', JSON.stringify(searchResults, null, 2));
+
   const hasActiveSearchResult = activeSearchResult !== undefined;
 
   useEffect(() => {

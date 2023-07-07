@@ -3,7 +3,6 @@ import {
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
   type Source,
 } from '@markprompt/core';
-import Slugger from 'github-slugger';
 
 import type { MarkpromptOptions, SectionHeading } from './types.js';
 
@@ -46,17 +45,14 @@ const defaultGetHref = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _source: Source,
 ): string => {
-  const p = pathToHref(filePath);
+  const path = pathToHref(filePath);
+  console.log('In here', path, JSON.stringify(sectionHeading));
   if (sectionHeading?.id) {
-    return `${p}#${sectionHeading.id}`;
+    return `${path}#${sectionHeading.id}`;
   } else if (sectionHeading?.value) {
-    // Do not reuse a Slugger instance, as it will
-    // append `-1`, `-2`, ... to links if it encounters the
-    // same link twice.
-    const slugger = new Slugger();
-    return `${p}#${slugger.slug(sectionHeading.value)}`;
+    return `${path}#${sectionHeading.slug}`;
   }
-  return p;
+  return path;
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {

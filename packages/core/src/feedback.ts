@@ -12,12 +12,12 @@ export interface SubmitFeedbackOptions {
    * URL to submit feedback to.
    * @default 'https://api.markprompt.com/v1/feedback'
    */
-  feedbackUrl?: string;
+  apiUrl?: string;
   signal?: AbortSignal;
 }
 
 export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
-  feedbackUrl: 'https://api.markprompt.com/v1/feedback',
+  apiUrl: 'https://api.markprompt.com/v1/feedback',
 } satisfies SubmitFeedbackOptions;
 
 export async function submitFeedback(
@@ -25,7 +25,7 @@ export async function submitFeedback(
   body: SubmitFeedbackBody,
   options?: SubmitFeedbackOptions,
 ): Promise<void> {
-  const { feedbackUrl = DEFAULT_SUBMIT_FEEDBACK_OPTIONS.feedbackUrl, signal } =
+  const { apiUrl = DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, signal } =
     options ?? {};
 
   const params = new URLSearchParams({
@@ -33,7 +33,7 @@ export async function submitFeedback(
   });
 
   try {
-    const response = await fetch(feedbackUrl + `?${params}`, {
+    const response = await fetch(apiUrl + `?${params}`, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
