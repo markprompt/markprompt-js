@@ -111,9 +111,9 @@ export async function submitPrompt(
       options.completionsUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
       {
         method: 'POST',
-        headers: {
+        headers: new Headers({
           'Content-Type': 'application/json',
-        },
+        }),
         body: JSON.stringify({
           prompt: prompt,
           projectKey: projectKey,

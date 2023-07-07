@@ -78,6 +78,14 @@ type MarkpromptOptions = {
      **/
     text?: string;
   };
+  feedback?: {
+    /**
+     * Enable feedback functionality, shows a thumbs up/down button after a
+     * prompt was submitted.
+     * @default false
+     * */
+    enabled?: boolean;
+  };
   prompt?: SubmitPromptOptions & {
     /**
      * Label for the prompt input

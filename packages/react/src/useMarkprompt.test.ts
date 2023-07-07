@@ -61,6 +61,7 @@ describe('useMarkprompt', () => {
       references: [],
       searchResults: [],
       state: 'indeterminate',
+      submitFeedback: expect.any(Function),
       submitPrompt: expect.any(Function),
       submitSearchQuery: expect.any(Function),
       updateActiveSearchResult: expect.any(Function),

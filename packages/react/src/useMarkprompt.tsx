@@ -1,4 +1,5 @@
 import {
+  submitFeedback as submitFeedbackToMarkprompt,
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
   type SubmitPromptOptions,
@@ -63,6 +64,8 @@ export interface UseMarkpromptResult {
   updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   /** Set a new value for the prompt */
   updatePrompt: Dispatch<SetStateAction<string>>;
+  /** Submit user feedback */
+  submitFeedback: (helpful: boolean) => Promise<void>;
   /** Submit the prompt */
   submitPrompt: () => Promise<void>;
   /** Submit search query */
@@ -96,6 +99,7 @@ export function useMarkprompt({
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>('');
+  const [promptId, setPromptId] = useState<string>();
 
   const controllerRef = useRef<AbortController>();
 
@@ -110,6 +114,37 @@ export function useMarkprompt({
   useEffect(() => {
     return () => abort();
   }, [abort]);
+
+  const submitFeedback = useCallback(
+    async (helpful: boolean) => {
+      abort();
+
+      // only submit feedback when we are done loading the answer
+      if (state !== 'done') return;
+      // we need to be able to associate the feedback to a prompt
+      if (!promptId) return;
+
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      const promise = submitFeedbackToMarkprompt(
+        projectKey,
+        { helpful, promptId },
+        { signal: controller.signal },
+      );
+
+      promise.catch(() => {
+        // ignore submitFeedback errors
+      });
+
+      promise.finally(() => {
+        if (controllerRef.current === controller) {
+          controllerRef.current = undefined;
+        }
+      });
+    },
+    [abort, projectKey, promptId, state],
+  );
 
   const submitPrompt = useCallback(async () => {
     abort();
@@ -258,6 +293,7 @@ export function useMarkprompt({
       abort,
       updateActiveSearchResult: setActiveSearchResult,
       updatePrompt: setPrompt,
+      submitFeedback,
       submitPrompt,
       submitSearchQuery,
     }),
@@ -271,6 +307,7 @@ export function useMarkprompt({
       searchResults,
       state,
       abort,
+      submitFeedback,
       submitPrompt,
       submitSearchQuery,
     ],

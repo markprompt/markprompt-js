@@ -742,6 +742,52 @@
   display: inline-block;
 }
 
+:where(.MarkpromptPromptFeedback) {
+  /* background-color: var(--markprompt-muted); */
+  margin: 0 2rem 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--markprompt-border);
+  border-radius: 0.25rem;
+}
+
+:where(.MarkpromptPromptFeedback h3) {
+  font-size: var(--markprompt-text-size);
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+:where(.MarkpromptPromptFeedback p) {
+  font-size: var(--markprompt-text-size);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+:where(.MarkpromptPromptFeedback div) {
+  display: flex;
+  gap: 0.25rem;
+}
+
+:where(.MarkpromptPromptFeedback button) {
+  cursor: pointer;
+  color: var(--markprompt-mutedForeground);
+  border: 1px solid var(--markprompt-border);
+  background-color: var(--markprompt-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+:where(.MarkpromptPromptFeedback button svg) {
+  display: block;
+}
+
+:where(.MarkpromptPromptFeedback button:hover) {
+  opacity: 0.8;
+}
+
 :where([data-loading-state='preload'] .MarkpromptProgress) {
   position: absolute;
   top: -1px;

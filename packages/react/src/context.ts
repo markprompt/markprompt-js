@@ -21,6 +21,7 @@ type State = {
 
 type Actions = {
   abort: () => void;
+  submitFeedback: (helpful: boolean) => void;
   submitPrompt: () => void;
   submitSearchQuery: (searchQuery: string) => void;
   updateActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
@@ -40,6 +41,7 @@ const MarkpromptContext = createContext<State & Actions>({
   searchResults: [],
   state: 'indeterminate',
   abort: noop,
+  submitFeedback: noop,
   submitPrompt: noop,
   submitSearchQuery: noop,
   updateActiveSearchResult: noop,

@@ -462,7 +462,7 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
   (props, ref) => {
     const { autoScroll = true, scrollBehavior = 'smooth' } = props;
     const localRef = useRef<HTMLDivElement>(null);
-    const { answer } = useMarkpromptContext();
+    const { answer, state } = useMarkpromptContext();
 
     useEffect(() => {
       if (!localRef.current) return;
@@ -471,7 +471,7 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
         top: localRef.current.scrollHeight,
         behavior: scrollBehavior,
       });
-    }, [answer, autoScroll, scrollBehavior]);
+    }, [answer, state, autoScroll, scrollBehavior]);
 
     return <div ref={mergeRefs([ref, localRef])} {...props} />;
   },
