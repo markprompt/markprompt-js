@@ -38,6 +38,7 @@ export type PolymorphicRef<C extends ElementType> =
 export type SectionHeading = {
   value: string | undefined;
   id?: string | undefined;
+  slug?: string | undefined;
 };
 
 export type SearchResultComponentProps = {
@@ -105,20 +106,37 @@ type MarkpromptOptions = {
     cta?: string;
   };
   references?: {
+    /** Loading text, default: `Fetching relevant pages…` */
+    loadingText?: string;
     /**
-     * Callback to transform a reference id into an href and text
+     * Heading above the references
+     * @default "Answer generated from the following sources:"
+     **/
+    heading?: string;
+    /** Callback to transform a reference into an href */
+    getHref?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
+    /** Callback to transform a reference into a label */
+    getLabel?: (
+      path: string,
+      sectionHeading: SectionHeading | undefined,
+      source: Source,
+    ) => string;
+    /**
+     * [DEPRECATED] References title
+     * @default "Answer generated from the following sources:"
+     **/
+    referencesText?: string;
+    /**
+     * [DEPRECATED] Callback to transform a reference id into an href and text
      **/
     transformReferenceId?: (referenceId: string) => {
       href: string;
       text: string;
     };
-    /** Loading text, default: `Fetching relevant pages…` */
-    loadingText?: string;
-    /**
-     * References title
-     * @default "Answer generated from the following sources:"
-     **/
-    referencesText?: string;
   };
   /**
    * Enable and configure search functionality
@@ -130,10 +148,10 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (
+    getHref?: (
       path: string,
       sectionHeading: SectionHeading | undefined,
-      source?: Source | undefined,
+      source: Source,
     ) => string;
   };
   trigger?: {

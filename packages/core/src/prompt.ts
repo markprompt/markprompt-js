@@ -5,7 +5,7 @@ export type SubmitPromptOptions = {
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/completions"
    * */
-  completionsUrl?: string;
+  apiUrl?: string;
   /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
@@ -66,7 +66,7 @@ export type SubmitPromptOptions = {
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
 export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
-  completionsUrl: 'https://api.markprompt.com/v1/completions',
+  apiUrl: 'https://api.markprompt.com/v1/completions',
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   model: 'gpt-3.5-turbo',
   promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: "{{PROMPT}}"\n\nAnswer (including related code snippets if available):`,
@@ -108,7 +108,7 @@ export async function submitPrompt(
 
   try {
     const res = await fetch(
-      options.completionsUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
+      options.apiUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!,
       {
         method: 'POST',
         headers: new Headers({

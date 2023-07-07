@@ -618,9 +618,10 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       source,
       getHref = (path, sectionHeading) => {
         return (
-          DEFAULT_MARKPROMPT_OPTIONS.search!.getResultHref?.(
+          DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(
             path,
             sectionHeading,
+            props.source,
           ) || path
         );
       },

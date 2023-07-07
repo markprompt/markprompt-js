@@ -1,6 +1,7 @@
 import {
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  type Source,
 } from '@markprompt/core';
 import Slugger from 'github-slugger';
 
@@ -39,9 +40,11 @@ const pathToHref = (path: string): string => {
   return cleanPath;
 };
 
-const defaultGetResultHref = (
+const defaultGetHref = (
   filePath: string,
   sectionHeading: SectionHeading | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _source: Source,
 ): string => {
   const p = pathToHref(filePath);
   if (sectionHeading?.id) {
@@ -72,14 +75,14 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     cta: 'Ask Docs AI…',
   },
   references: {
-    transformReferenceId: defaultTransformReferenceId,
     loadingText: 'Fetching relevant pages…',
-    referencesText: 'Answer generated from the following sources:',
+    heading: 'Answer generated from the following sources:',
+    transformReferenceId: defaultTransformReferenceId,
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
     enabled: false,
-    getResultHref: defaultGetResultHref,
+    getHref: defaultGetHref,
   },
   trigger: {
     label: 'Open Markprompt',

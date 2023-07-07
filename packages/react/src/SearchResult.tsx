@@ -67,7 +67,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
         <a
           href={
             getHref?.(path, sectionHeading, source) ||
-            DEFAULT_MARKPROMPT_OPTIONS.search!.getResultHref?.(
+            DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(
               path,
               sectionHeading,
               source,

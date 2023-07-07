@@ -58,7 +58,7 @@ const onError(error) {
 const options = {
   model: 'gpt-3.5-turbo', // supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  completionsUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
+  apiUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
 };
 
 await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
@@ -81,7 +81,7 @@ Submit a prompt the the Markprompt API.
 
 #### Options
 
-- `completionsUrl` (`string`): URL at which to fetch completions
+- `apiUrl` (`string`): URL at which to fetch completions
 - `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
 - `promptTemplate` (`string`): The prompt template

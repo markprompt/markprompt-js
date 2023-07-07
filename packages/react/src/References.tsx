@@ -43,7 +43,7 @@ const Reference = (props: ReferenceProps): ReactElement => {
 
 type ReferencesProps = {
   loadingText?: string;
-  referencesText?: string;
+  heading?: string;
   transformReferenceId?: (referenceId: string) => {
     href: string;
     text: string;
@@ -53,7 +53,7 @@ type ReferencesProps = {
 const References = (props: ReferencesProps): ReactElement | null => {
   const {
     loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
-    referencesText = DEFAULT_MARKPROMPT_OPTIONS.references!.referencesText,
+    heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
     transformReferenceId,
   } = props;
   const { state, references } = useMarkpromptContext();
@@ -100,7 +100,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
           </>
         )}
 
-        {state !== 'preload' && <p>{referencesText}</p>}
+        {state !== 'preload' && <p>{heading}</p>}
 
         {(state === 'streaming-answer' || state === 'done') && (
           <Markprompt.References ReferenceComponent={ReferenceComponent} />

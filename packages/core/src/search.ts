@@ -1,4 +1,5 @@
 import type { SearchResultsResponse } from './types.js';
+import { getErrorMessage } from './utils.js';
 
 export interface SubmitSearchQueryOptions {
   /**
@@ -10,7 +11,7 @@ export interface SubmitSearchQueryOptions {
    * URL at which to fetch search results
    * @default "https://api.markprompt.com/v1/search"
    **/
-  searchUrl?: string;
+  apiUrl?: string;
   /**
    * AbortController signal
    * @default undefined
@@ -20,7 +21,7 @@ export interface SubmitSearchQueryOptions {
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
   limit: 8,
-  searchUrl: 'https://api.markprompt.com/v1/search',
+  apiUrl: 'https://api.markprompt.com/v1/search',
 };
 
 /**
@@ -37,7 +38,7 @@ export async function submitSearchQuery(
 ): Promise<SearchResultsResponse | undefined> {
   const {
     limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit,
-    searchUrl = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.searchUrl,
+    apiUrl = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl,
   } = options ?? {};
 
   const params = new URLSearchParams({
@@ -47,19 +48,19 @@ export async function submitSearchQuery(
   });
 
   try {
-    const response = await fetch(`${searchUrl}?${params.toString()}`, {
+    const res = await fetch(`${apiUrl}?${params.toString()}`, {
       method: 'GET',
       signal: options?.signal,
     });
 
-    if (!response.ok) {
-      const error = (await response.json())?.error;
+    if (!res.ok) {
+      const message = await getErrorMessage(res);
       throw new Error(
-        `Failed to fetch search results: ${error || 'Unknown error'}`,
+        `Failed to fetch search results: ${message || 'Unknown error'}`,
       );
     }
 
-    return response.json();
+    return res.json();
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
       // do nothing on AbortError's, this is expected
