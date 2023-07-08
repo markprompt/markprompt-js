@@ -542,6 +542,7 @@ function AnswerContainer({
         heading={references?.heading || references?.referencesText}
         getHref={references?.getHref}
         getLabel={references?.getLabel}
+        // Backwards compatibility
         transformReferenceId={references?.transformReferenceId}
       />
     </div>

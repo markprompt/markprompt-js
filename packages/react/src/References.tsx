@@ -12,7 +12,7 @@ type ReferenceProps = {
   getLabel?: (reference: FileSectionReference) => string;
   reference: FileSectionReference;
   index: number;
-  // Deprecated
+  // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;
     text: string;
@@ -29,7 +29,7 @@ const Reference = (props: ReferenceProps): ReactElement => {
   } = props;
 
   const referenceHrefLabel = useMemo(() => {
-    // Backwards compatibility - will be deprecated
+    // Backwards compatibility
     if (transformReferenceId) {
       const t = transformReferenceId(reference.file.path);
       return { href: t.href, label: t.text };
@@ -58,7 +58,7 @@ type ReferencesProps = {
   heading?: string;
   getHref?: (reference: FileSectionReference) => string;
   getLabel?: (reference: FileSectionReference) => string;
-  // [DEPRECATED]
+  // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;
     text: string;
@@ -81,6 +81,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
       <Reference
         getHref={getHref}
         getLabel={getLabel}
+        // Backwards compatibility
         transformReferenceId={transformReferenceId}
         {...props}
       />
