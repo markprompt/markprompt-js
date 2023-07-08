@@ -49,29 +49,16 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const {
-      title,
-      tag,
-      getHref,
-      path,
-      isSection,
-      sectionHeading,
-      source,
-      onMouseOver,
-      ...rest
-    } = props;
+    const { title, tag, getHref, isSection, reference, onMouseOver, ...rest } =
+      props;
     const { prompt } = useMarkpromptContext();
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
         <a
           href={
-            getHref?.(path, sectionHeading, source) ||
-            DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(
-              path,
-              sectionHeading,
-              source,
-            ) ||
+            getHref?.(reference) ||
+            DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(reference) ||
             ''
           }
           className="MarkpromptSearchResultLink"

@@ -44,13 +44,9 @@ const config = {
         projectKey: process.env.MARKPROMPT_PROJECT_KEY,
         trigger: { floating: true },
         references: {
-          transformReferenceId: (referenceId) => {
-            // Sample code that transforms a reference path to a link.
-            // Remove file extension
-            const href = referenceId.replace(/\.[^.]+$/, '');
-            // Use last part of path for label
-            const text = href.split('/').slice(-1)[0];
-            return { text, href };
+          getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
+          getLabel: (reference) => {
+            return reference.meta?.leadHeading?.value || reference.file?.title;
           },
         },
       },

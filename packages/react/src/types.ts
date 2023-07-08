@@ -1,4 +1,5 @@
 import {
+  type FileSectionReference,
   type Source,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
@@ -36,7 +37,7 @@ export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
 
 export type SectionHeading = {
-  value: string | undefined;
+  value?: string | undefined;
   id?: string | undefined;
   slug?: string | undefined;
 };
@@ -46,8 +47,7 @@ export type SearchResultComponentProps = {
   tag?: string;
   title: string;
   isSection?: boolean;
-  sectionHeading?: SectionHeading | undefined;
-  source: Source;
+  reference: FileSectionReference;
 };
 
 type MarkpromptOptions = {
@@ -114,17 +114,9 @@ type MarkpromptOptions = {
      **/
     heading?: string;
     /** Callback to transform a reference into an href */
-    getHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
     /** Callback to transform a reference into a label */
-    getLabel?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getLabel?: (reference: FileSectionReference) => string;
     /**
      * [DEPRECATED] References title
      * @default "Answer generated from the following sources:"
@@ -148,11 +140,7 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
   };
   trigger?: {
     /**

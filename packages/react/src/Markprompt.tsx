@@ -1,4 +1,4 @@
-import type { Source } from '@markprompt/core';
+import type { FileSectionReference, Source } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { animated, useSpring } from '@react-spring/web';
 import Emittery from 'emittery';
@@ -377,11 +377,7 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
-  getHref?: (
-    path: string,
-    sectionHeading: SectionHeading | undefined,
-    source: Source,
-  ) => string;
+  getHref?: (reference: FileSectionReference) => string;
   showSearch: boolean;
   promptCTA?: string;
   toggleSearchAnswer: () => void;
@@ -403,8 +399,6 @@ function SearchResultsContainer(
     activeSearchResult,
     updateActiveSearchResult,
   } = useMarkpromptContext();
-
-  console.log('searchResults', JSON.stringify(searchResults, null, 2));
 
   const hasActiveSearchResult = activeSearchResult !== undefined;
 
@@ -546,6 +540,8 @@ function AnswerContainer({
       <References
         loadingText={references?.loadingText}
         heading={references?.heading || references?.referencesText}
+        getHref={references?.getHref}
+        getLabel={references?.getLabel}
         transformReferenceId={references?.transformReferenceId}
       />
     </div>

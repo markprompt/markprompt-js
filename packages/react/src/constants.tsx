@@ -1,6 +1,7 @@
 import {
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  type FileSectionReference,
   type Source,
 } from '@markprompt/core';
 
@@ -18,15 +19,6 @@ const removeFileExtension = (fileName: string): string => {
   return fileName.substring(0, lastDotIndex);
 };
 
-const defaultTransformReferenceId = (
-  referenceId: string,
-): { href: string; text: string } => {
-  return {
-    href: removeFileExtension(referenceId),
-    text: capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0])),
-  };
-};
-
 const pathToHref = (path: string): string => {
   const lastDotIndex = path.lastIndexOf('.');
   let cleanPath = path;
@@ -39,20 +31,22 @@ const pathToHref = (path: string): string => {
   return cleanPath;
 };
 
-const defaultGetHref = (
-  filePath: string,
-  sectionHeading: SectionHeading | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _source: Source,
-): string => {
-  const path = pathToHref(filePath);
-  console.log('In here', path, JSON.stringify(sectionHeading));
-  if (sectionHeading?.id) {
-    return `${path}#${sectionHeading.id}`;
-  } else if (sectionHeading?.value) {
-    return `${path}#${sectionHeading.slug}`;
+const defaultGetHref = (reference: FileSectionReference): string => {
+  const path = pathToHref(reference.file.path);
+  if (reference.meta?.leadHeading?.id) {
+    return `${path}#${reference.meta.leadHeading.id}`;
+  } else if (reference.meta?.leadHeading?.value) {
+    return `${path}#${reference.meta.leadHeading.slug}`;
   }
   return path;
+};
+
+const defaultPromptGetLabel = (reference: FileSectionReference): string => {
+  return (
+    reference.meta?.leadHeading?.value ||
+    reference.file?.title ||
+    removeFileExtension(reference.file.path.split('/').slice(-1)[0])
+  );
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
@@ -73,7 +67,8 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   references: {
     loadingText: 'Fetching relevant pages…',
     heading: 'Answer generated from the following sources:',
-    transformReferenceId: defaultTransformReferenceId,
+    getHref: defaultGetHref,
+    getLabel: defaultPromptGetLabel,
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,

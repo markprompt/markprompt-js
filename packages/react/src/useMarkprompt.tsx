@@ -5,6 +5,7 @@ import {
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
   type SearchResult,
+  type FileSectionReference,
 } from '@markprompt/core';
 import {
   useCallback,
@@ -53,7 +54,7 @@ export interface UseMarkpromptResult {
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
-  references: string[];
+  references: FileSectionReference[];
   /** Search results */
   searchResults: SearchResultComponentProps[];
   /** The current loading state */
@@ -97,7 +98,7 @@ export function useMarkprompt({
     string | undefined
   >();
   const [answer, setAnswer] = useState('');
-  const [references, setReferences] = useState<string[]>([]);
+  const [references, setReferences] = useState<FileSectionReference[]>([]);
   const [prompt, setPrompt] = useState<string>('');
   const [promptId, setPromptId] = useState<string>();
 
@@ -198,6 +199,7 @@ export function useMarkprompt({
         ...promptOptions,
         signal: controller.signal,
       },
+      debug,
     );
 
     promise.then(() => {
@@ -369,8 +371,10 @@ function flattenSearchResults(
         tag: undefined,
         title: result.file.title || 'Untitled',
         isSection: false,
-        sectionHeading: undefined,
-        source: result.file.source,
+        reference: {
+          file: result.file,
+          meta: undefined,
+        },
       };
     } else {
       const leadHeading = result.meta?.leadHeading;
@@ -380,8 +384,7 @@ function flattenSearchResults(
           tag: result.file.title,
           title: leadHeading.value,
           isSection: true,
-          sectionHeading: result.meta?.leadHeading,
-          source: result.file.source,
+          reference: result,
         };
       } else {
         const normalizedSearchQuery = searchQuery.toLowerCase();
@@ -396,8 +399,7 @@ function flattenSearchResults(
           tag: leadHeading?.value || result.file.title,
           title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
           isSection: true,
-          sectionHeading: result.meta?.leadHeading,
-          source: result.file.source,
+          reference: result,
         };
       }
     }

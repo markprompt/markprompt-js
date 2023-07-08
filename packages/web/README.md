@@ -42,17 +42,17 @@ const markpromptEl = document.querySelector('#markprompt');
 
 markprompt('YOUR-PROJECT-KEY', markpromptEl, {
   references: {
-    transformReferenceId: (referenceId) => ({
-      text: referenceId.replace('-', ' '),
-      href: `/docs/${referenceId}`,
-    }),
+    getHref: (reference) => reference.file.path.replace(/\.[^.]+$/, '');
+    getLabel: (reference) => {
+      return reference.meta?.leadHeading?.value || reference.file?.title;
+    }
   },
 });
 ```
 
 where `YOUR-PROJECT-KEY` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your prompt references into links to your corresponding documentation and `search.getHref` to transform search result paths into links to your documentation.
+Options are optional and allow you to configure the texts and links used in the component to some extent. You will most likely want to pass `references.getHref` and `reference.getLabel` to transform your prompt references into links to your corresponding documentation, and `search.getHref` to transform search result paths into links to your documentation.
 
 ```ts
 import {
@@ -103,13 +103,10 @@ type MarkpromptOptions = {
     cta?: string;
   };
   references?: {
-    /**
-     * Callback to transform a reference id into an href and text
-     **/
-    transformReferenceId: (referenceId: string) => {
-      href: string;
-      text: string;
-    };
+    /** Callback to transform a reference into an href */
+    getHref?: (reference: FileSectionReference) => string;
+    /** Callback to transform a reference into a label */
+    getLabel?: (reference: FileSectionReference) => string;
     /** Loading text, default: `Fetching relevant pages…` */
     loadingText?: string;
     /**
@@ -128,11 +125,7 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
   };
   trigger?: {
     /**
@@ -181,10 +174,10 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
     container: `#markprompt`,
     options: {
       references: {
-        transformReferenceId: (referenceId) => ({
-          text: referenceId.replace('-', ' '),
-          href: `/docs/${referenceId}`,
-        }),
+        getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
+        getLabel: (reference) => {
+          return reference.meta?.leadHeading?.value || reference.file?.title;
+        },
       },
     },
   };
@@ -234,9 +227,10 @@ Render a Markprompt dialog button.
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
 - `prompt.signal` (`AbortSignal`): AbortController signal.
 - `references` (`object`): Options for the references
-- `references.transformReferenceId` (`function`): Callback to transform a reference id into an href and text
+- `references.getHref` (`function`): Callback to transform a reference into an href
+- `references.getLabel` (`function`): Callback to transform a reference into an label for the link
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
-- `references.referencesText` (`string`): References title (Default: `Answer generated from the following sources:`)
+- `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
 - `search.enable` (`boolean`): Enable search (Default: `false`)
 - `search.getHref` (`function`): Callback to transform a search result into an href

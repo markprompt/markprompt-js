@@ -21,18 +21,6 @@ export type OpenAIModelId =
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
-export type SearchResultSection = {
-  content?: string;
-  snippet: string;
-  meta?: {
-    leadHeading?: {
-      id?: string;
-      depth: number;
-      value: string;
-    };
-  };
-};
-
 export type SourceType =
   | 'github'
   | 'motif'
@@ -42,21 +30,41 @@ export type SourceType =
 
 export type Source = {
   type: SourceType;
-  data: {
+  data?: {
     url?: string;
     domain?: string;
   };
 };
 
 export type SearchResult = {
-  file: SearchResultFileData;
+  file: FileReferenceFileData;
   matchType: 'title' | 'leadHeading' | 'content';
 } & SearchResultSection;
 
-export type SearchResultFileData = {
+export type SearchResultSection = {
+  content?: string;
+  snippet: string;
+} & FileSectionReferenceSectionData;
+
+export type FileSectionReference = {
+  file: FileReferenceFileData;
+} & FileSectionReferenceSectionData;
+
+export type FileSectionReferenceSectionData = {
+  meta?: {
+    leadHeading?: {
+      id?: string;
+      depth?: number;
+      value?: string;
+      slug?: string;
+    };
+  };
+};
+
+export type FileReferenceFileData = {
   title?: string;
   path: string;
-  meta: any;
+  meta?: any;
   source: Source;
 };
 

@@ -79,9 +79,10 @@ The pre-built Markprompt component. It accepts the following props:
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
 - `prompt.signal` (`AbortSignal`): AbortController signal.
 - `references` (`object`): Options for the references
-- `references.transformReferenceId` (`function`): Callback to transform a reference id into an href and text
+- `references.getHref` (`function`): Callback to transform a reference into an href
+- `references.getLabel` (`function`): Callback to transform a reference into an label to show for the link
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
-- `references.heading` (`string`): Heading above the references (Default: `Answer generated from the following sources:`)
+- `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
 - `search.enable` (`boolean`): Enable search (Default: `false`)
 - `search.getHref` (`function`): Callback to transform a search result into an href

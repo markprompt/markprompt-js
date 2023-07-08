@@ -75,7 +75,7 @@ Submit a prompt the the Markprompt API.
 - `prompt` (`string`): Prompt to submit to the model
 - `projectKey` (`string`): The key of your project
 - `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
-- `onReferences` (`function`): This function is called when a chunk includes references.
+- `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`object`): Optional options object
 
