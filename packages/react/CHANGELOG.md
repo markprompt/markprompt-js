@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.13.0
+
+### Minor Changes
+
+- [#80](https://github.com/motifland/markprompt-js/pull/80) [`9bd2123`](https://github.com/motifland/markprompt-js/commit/9bd212354ab9d8e79d8c34335f9a0dd8e76176d0) Thanks [@nickrttn](https://github.com/nickrttn)! - Add feedback functionality to the prompt, allowing users to give feedback on the usefulness of prompt answers
+
+### Patch Changes
+
+- Updated dependencies [[`9bd2123`](https://github.com/motifland/markprompt-js/commit/9bd212354ab9d8e79d8c34335f9a0dd8e76176d0)]:
+  - @markprompt/core@0.8.0
+
 ## 0.12.0
 
 ### Minor Changes
