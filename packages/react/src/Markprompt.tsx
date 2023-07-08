@@ -1,4 +1,4 @@
-import type { Source } from '@markprompt/core';
+import type { FileSectionReference, Source } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { animated, useSpring } from '@react-spring/web';
 import Emittery from 'emittery';
@@ -263,7 +263,7 @@ function AnswerOrSearchResults(
     <div style={{ position: 'relative', overflowY: 'auto' }}>
       <Transition isVisible={showSearch}>
         <SearchResultsContainer
-          getResultHref={search?.getResultHref}
+          getHref={search?.getHref}
           showSearch={showSearch}
           promptCTA={promptCTA}
           toggleSearchAnswer={toggleSearchAnswer}
@@ -377,11 +377,7 @@ function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 }
 
 type SearchResultsContainerProps = {
-  getResultHref?: (
-    path: string,
-    sectionHeading: SectionHeading | undefined,
-    source: Source,
-  ) => string;
+  getHref?: (reference: FileSectionReference) => string;
   showSearch: boolean;
   promptCTA?: string;
   toggleSearchAnswer: () => void;
@@ -390,7 +386,7 @@ type SearchResultsContainerProps = {
 function SearchResultsContainer(
   props: SearchResultsContainerProps,
 ): ReactElement {
-  const { showSearch, promptCTA, toggleSearchAnswer, getResultHref } = props;
+  const { showSearch, promptCTA, toggleSearchAnswer, getHref } = props;
 
   const btn = useRef<HTMLButtonElement>(null);
 
@@ -494,7 +490,7 @@ function SearchResultsContainer(
         <BaseMarkprompt.SearchResults
           className="MarkpromptSearchResults"
           SearchResultComponent={(props) => (
-            <SearchResult {...props} getHref={getResultHref} />
+            <SearchResult {...props} getHref={getHref} />
           )}
         />
       )}
@@ -537,13 +533,20 @@ function AnswerContainer({
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
         <Answer />
         {feedback?.enabled && state === 'done' && (
-          <Feedback className="MarkpromptPromptFeedback" />
+          <Feedback
+            className="MarkpromptPromptFeedback"
+            heading={feedback?.heading}
+            confirmationMessage={feedback?.confirmationMessage}
+          />
         )}
       </BaseMarkprompt.AutoScroller>
 
       <References
         loadingText={references?.loadingText}
-        referencesText={references?.referencesText}
+        heading={references?.heading || references?.referencesText}
+        getHref={references?.getHref}
+        getLabel={references?.getLabel}
+        // Backwards compatibility
         transformReferenceId={references?.transformReferenceId}
       />
     </div>

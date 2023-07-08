@@ -58,7 +58,7 @@ const onError(error) {
 const options = {
   model: 'gpt-3.5-turbo', // supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  completionsUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
+  apiUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
 };
 
 await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
@@ -75,13 +75,13 @@ Submit a prompt the the Markprompt API.
 - `prompt` (`string`): Prompt to submit to the model
 - `projectKey` (`string`): The key of your project
 - `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
-- `onReferences` (`function`): This function is called when a chunk includes references.
+- `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`object`): Optional options object
 
 #### Options
 
-- `completionsUrl` (`string`): URL at which to fetch completions
+- `apiUrl` (`string`): URL at which to fetch completions
 - `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
 - `promptTemplate` (`string`): The prompt template

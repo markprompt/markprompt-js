@@ -1,4 +1,4 @@
-import type { Source } from '@markprompt/core';
+import type { FileSectionReference, Source } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import debounce from 'p-debounce';
 import React, {
@@ -481,7 +481,7 @@ AutoScroller.displayName = 'Markprompt.AutoScroller';
 type ReferencesProps<
   TRoot extends ElementType,
   TReference extends ElementType<{
-    referenceId: string;
+    reference: FileSectionReference;
     index: number;
   }>,
 > = {
@@ -504,7 +504,7 @@ type ReferencesProps<
 const References = function References<
   TRoot extends ElementType,
   TReference extends ElementType<{
-    referenceId: string;
+    reference: FileSectionReference;
     index: number;
   }>,
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -517,8 +517,8 @@ const References = function References<
       {references.map((reference, index) => {
         return (
           <ReferenceComponent
-            key={reference}
-            referenceId={reference}
+            key={`${reference.file.path}-${index}`}
+            reference={reference}
             index={index}
           />
         );
@@ -601,11 +601,7 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
-    getHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
     onMouseOver?: () => void;
   }
 >;
@@ -613,22 +609,15 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const {
       title,
-      path,
-      sectionHeading,
-      source,
-      getHref = (path, sectionHeading) => {
-        return (
-          DEFAULT_MARKPROMPT_OPTIONS.search!.getResultHref?.(
-            path,
-            sectionHeading,
-          ) || path
-        );
+      reference,
+      getHref = (reference) => {
+        return DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(reference);
       },
       ...rest
     } = props;
     return (
       <li ref={ref} {...rest}>
-        <a href={getHref(path, sectionHeading, source)}>{title}</a>
+        <a href={getHref(reference)}>{title}</a>
       </li>
     );
   },

@@ -1,11 +1,12 @@
-import type { OpenAIModelId } from './types.js';
+import type { FileSectionReference, OpenAIModelId } from './types.js';
+import { parseEncodedJSONHeader } from './utils.js';
 
 export type SubmitPromptOptions = {
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/completions"
    * */
-  completionsUrl?: string;
+  apiUrl?: string;
   /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
@@ -66,7 +67,7 @@ export type SubmitPromptOptions = {
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
 export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
-  completionsUrl: 'https://api.markprompt.com/v1/completions',
+  apiUrl: 'https://api.markprompt.com/v1/completions',
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   model: 'gpt-3.5-turbo',
   promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: "{{PROMPT}}"\n\nAnswer (including related code snippets if available):`,
@@ -93,9 +94,10 @@ export async function submitPrompt(
   prompt: string,
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
-  onReferences: (references: string[]) => void,
+  onReferences: (references: FileSectionReference[]) => void,
   onError: (error: Error) => void,
   options: SubmitPromptOptions = {},
+  debug?: boolean,
 ): Promise<void> {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
@@ -108,7 +110,7 @@ export async function submitPrompt(
 
   try {
     const res = await fetch(
-      options.completionsUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
+      options.apiUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!,
       {
         method: 'POST',
         headers: new Headers({
@@ -151,31 +153,41 @@ export async function submitPrompt(
       return;
     }
 
+    const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
+    const debugInfo = parseEncodedJSONHeader(res, 'x-markprompt-debug-info');
+
+    if (debug && debugInfo) {
+      // eslint-disable-next-line no-console
+      console.debug(JSON.stringify(debugInfo, null, 2));
+    }
+
+    if (data?.references) {
+      onReferences(data?.references);
+    }
+
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
 
     let done = false;
     let startText = '';
-    let didHandleHeader = false;
+    let hasPassedStreamSeparator = false;
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
 
-      if (!didHandleHeader) {
+      if (!hasPassedStreamSeparator) {
         startText = startText + chunkValue;
+        // For backwards compatibility, we still stream the response
+        // with reference ids first followed by the response, the two
+        // parts being separated by `STREAM_SEPARATOR`.
         if (startText.includes(STREAM_SEPARATOR)) {
           const parts = startText.split(STREAM_SEPARATOR);
-          try {
-            onReferences(JSON.parse(parts[0]));
-          } catch {
-            // do nothing
-          }
           if (parts[1]) {
             onAnswerChunk(parts[1]);
           }
-          didHandleHeader = true;
+          hasPassedStreamSeparator = true;
         }
       } else if (chunkValue) {
         const shouldContinue = onAnswerChunk(chunkValue);

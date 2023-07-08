@@ -1,5 +1,5 @@
 import {
-  type Source,
+  type FileSectionReference,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -36,8 +36,9 @@ export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
 
 export type SectionHeading = {
-  value: string | undefined;
+  value?: string | undefined;
   id?: string | undefined;
+  slug?: string | undefined;
 };
 
 export type SearchResultComponentProps = {
@@ -45,8 +46,7 @@ export type SearchResultComponentProps = {
   tag?: string;
   title: string;
   isSection?: boolean;
-  sectionHeading?: SectionHeading | undefined;
-  source: Source;
+  reference: FileSectionReference;
 };
 
 type MarkpromptOptions = {
@@ -85,6 +85,16 @@ type MarkpromptOptions = {
      * @default false
      * */
     enabled?: boolean;
+    /**
+     * Heading above the form
+     * @default "Was this response helpful?"
+     **/
+    heading?: string;
+    /**
+     * Confirmation message
+     * @default "Thank you!"
+     **/
+    confirmationMessage?: string;
   };
   prompt?: SubmitPromptOptions & {
     /**
@@ -105,20 +115,29 @@ type MarkpromptOptions = {
     cta?: string;
   };
   references?: {
+    /** Loading text, default: `Fetching relevant pages…` */
+    loadingText?: string;
     /**
-     * Callback to transform a reference id into an href and text
+     * Heading above the references
+     * @default "Answer generated from the following sources:"
+     **/
+    heading?: string;
+    /** Callback to transform a reference into an href */
+    getHref?: (reference: FileSectionReference) => string;
+    /** Callback to transform a reference into a label */
+    getLabel?: (reference: FileSectionReference) => string;
+    /**
+     * [DEPRECATED] References title
+     * @default "Answer generated from the following sources:"
+     **/
+    referencesText?: string;
+    /**
+     * [DEPRECATED] Callback to transform a reference id into an href and text
      **/
     transformReferenceId?: (referenceId: string) => {
       href: string;
       text: string;
     };
-    /** Loading text, default: `Fetching relevant pages…` */
-    loadingText?: string;
-    /**
-     * References title
-     * @default "Answer generated from the following sources:"
-     **/
-    referencesText?: string;
   };
   /**
    * Enable and configure search functionality
@@ -130,11 +149,7 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source?: Source | undefined,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
   };
   trigger?: {
     /**

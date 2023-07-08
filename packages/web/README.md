@@ -42,17 +42,17 @@ const markpromptEl = document.querySelector('#markprompt');
 
 markprompt('YOUR-PROJECT-KEY', markpromptEl, {
   references: {
-    transformReferenceId: (referenceId) => ({
-      text: referenceId.replace('-', ' '),
-      href: `/docs/${referenceId}`,
-    }),
+    getHref: (reference) => reference.file.path.replace(/\.[^.]+$/, '');
+    getLabel: (reference) => {
+      return reference.meta?.leadHeading?.value || reference.file?.title;
+    }
   },
 });
 ```
 
 where `YOUR-PROJECT-KEY` can be obtained in your project settings on [Markprompt.com](https://markprompt.com/).
 
-Options are optional and allow you to configure the texts used in the component to some extent. You will most likely want to pass `transformReferenceId` to transform your reference ids into links to your corresponding documentation and `getResultHref` to transform search result paths into links to your documentation.
+Options are optional and allow you to configure the texts and links used in the component to some extent. You will most likely want to pass `references.getHref` and `reference.getLabel` to transform your prompt references into links to your corresponding documentation, and `search.getHref` to transform search result paths into links to your documentation.
 
 ```ts
 import {
@@ -103,20 +103,17 @@ type MarkpromptOptions = {
     cta?: string;
   };
   references?: {
-    /**
-     * Callback to transform a reference id into an href and text
-     **/
-    transformReferenceId: (referenceId: string) => {
-      href: string;
-      text: string;
-    };
+    /** Callback to transform a reference into an href */
+    getHref?: (reference: FileSectionReference) => string;
+    /** Callback to transform a reference into a label */
+    getLabel?: (reference: FileSectionReference) => string;
     /** Loading text, default: `Fetching relevant pages…` */
     loadingText?: string;
     /**
-     * References title
+     * Heading above the references
      * @default "Answer generated from the following sources:"
      **/
-    referencesText?: string;
+    heading?: string;
   };
   /**
    * Enable and configure search functionality
@@ -128,11 +125,7 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getResultHref?: (
-      path: string,
-      sectionHeading: SectionHeading | undefined,
-      source: Source,
-    ) => string;
+    getHref?: (reference: FileSectionReference) => string;
   };
   trigger?: {
     /**
@@ -181,10 +174,10 @@ Besides initializing the Markprompt component yourselves from JavaScript, you ca
     container: `#markprompt`,
     options: {
       references: {
-        transformReferenceId: (referenceId) => ({
-          text: referenceId.replace('-', ' '),
-          href: `/docs/${referenceId}`,
-        }),
+        getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
+        getLabel: (reference) => {
+          return reference.meta?.leadHeading?.value || reference.file?.title;
+        },
       },
     },
   };
@@ -221,7 +214,7 @@ Render a Markprompt dialog button.
 - `prompt.label` (`string`): Label for the prompt input (Default: `Ask me anything…`)
 - `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask me anything…`)
 - `prompt.cta` (`string`): When search is enabled, this label is used for the CTA button that opens the prompt (Default: `Ask Docs AI…`)
-- `prompt.completionsUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
+- `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
 - `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
@@ -234,15 +227,16 @@ Render a Markprompt dialog button.
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
 - `prompt.signal` (`AbortSignal`): AbortController signal.
 - `references` (`object`): Options for the references
-- `references.transformReferenceId` (`function`): Callback to transform a reference id into an href and text
+- `references.getHref` (`function`): Callback to transform a reference into an href
+- `references.getLabel` (`function`): Callback to transform a reference into an label for the link
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
-- `references.referencesText` (`string`): References title (Default: `Answer generated from the following sources:`)
+- `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
 - `search.enable` (`boolean`): Enable search (Default: `false`)
-- `search.getResultHref` (`function`): Callback to transform a search result into an href
+- `search.getHref` (`function`): Callback to transform a search result into an href
 - `search.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
-- `search.searchUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `search.signal` (`AbortSignal`): AbortController signal.
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)

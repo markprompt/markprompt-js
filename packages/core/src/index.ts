@@ -19,6 +19,7 @@ export {
 } from './search.js';
 
 export {
+  type FileSectionReference,
   type OpenAIModelId,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,

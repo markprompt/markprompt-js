@@ -56,8 +56,6 @@ describe('Feedback', () => {
 
     await waitFor(() => expect(submitFeedback).toHaveBeenCalledWith(true));
 
-    expect(
-      screen.getByText(/Thanks for helping us improve our responses./),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Thank you!/)).toBeInTheDocument();
   });
 });

@@ -1,8 +1,9 @@
 import {
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  type FileSectionReference,
+  type Source,
 } from '@markprompt/core';
-import Slugger from 'github-slugger';
 
 import type { MarkpromptOptions, SectionHeading } from './types.js';
 
@@ -18,15 +19,6 @@ const removeFileExtension = (fileName: string): string => {
   return fileName.substring(0, lastDotIndex);
 };
 
-const defaultTransformReferenceId = (
-  referenceId: string,
-): { href: string; text: string } => {
-  return {
-    href: removeFileExtension(referenceId),
-    text: capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0])),
-  };
-};
-
 const pathToHref = (path: string): string => {
   const lastDotIndex = path.lastIndexOf('.');
   let cleanPath = path;
@@ -39,21 +31,22 @@ const pathToHref = (path: string): string => {
   return cleanPath;
 };
 
-const defaultGetResultHref = (
-  filePath: string,
-  sectionHeading: SectionHeading | undefined,
-): string => {
-  const p = pathToHref(filePath);
-  if (sectionHeading?.id) {
-    return `${p}#${sectionHeading.id}`;
-  } else if (sectionHeading?.value) {
-    // Do not reuse a Slugger instance, as it will
-    // append `-1`, `-2`, ... to links if it encounters the
-    // same link twice.
-    const slugger = new Slugger();
-    return `${p}#${slugger.slug(sectionHeading.value)}`;
+const defaultGetHref = (reference: FileSectionReference): string => {
+  const path = pathToHref(reference.file.path);
+  if (reference.meta?.leadHeading?.id) {
+    return `${path}#${reference.meta.leadHeading.id}`;
+  } else if (reference.meta?.leadHeading?.value) {
+    return `${path}#${reference.meta.leadHeading.slug}`;
   }
-  return p;
+  return path;
+};
+
+const defaultPromptGetLabel = (reference: FileSectionReference): string => {
+  return (
+    reference.meta?.leadHeading?.value ||
+    reference.file?.title ||
+    removeFileExtension(reference.file.path.split('/').slice(-1)[0])
+  );
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
@@ -65,6 +58,11 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Markprompt',
   },
+  feedback: {
+    enabled: false,
+    heading: 'Was this response helpful?',
+    confirmationMessage: 'Thank you!',
+  },
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,
     label: 'Ask me anything…',
@@ -72,14 +70,15 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     cta: 'Ask Docs AI…',
   },
   references: {
-    transformReferenceId: defaultTransformReferenceId,
     loadingText: 'Fetching relevant pages…',
-    referencesText: 'Answer generated from the following sources:',
+    heading: 'Answer generated from the following sources:',
+    getHref: defaultGetHref,
+    getLabel: defaultPromptGetLabel,
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
     enabled: false,
-    getResultHref: defaultGetResultHref,
+    getHref: defaultGetHref,
   },
   trigger: {
     label: 'Open Markprompt',

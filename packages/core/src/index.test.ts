@@ -19,21 +19,18 @@ let status = 200;
 let request: RestRequest;
 let stream: ReadableStream;
 const server = setupServer(
-  rest.post(
-    DEFAULT_SUBMIT_PROMPT_OPTIONS.completionsUrl!,
-    async (req, res, ctx) => {
-      request = req;
-      stream = new ReadableStream({
-        start(controller) {
-          for (const chunk of response) {
-            controller.enqueue(encoder.encode(chunk));
-          }
-          controller?.close();
-        },
-      });
-      return res(ctx.status(status), ctx.body(stream));
-    },
-  ),
+  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+    request = req;
+    stream = new ReadableStream({
+      start(controller) {
+        for (const chunk of response) {
+          controller.enqueue(encoder.encode(chunk));
+        }
+        controller?.close();
+      },
+    });
+    return res(ctx.status(status), ctx.body(stream));
+  }),
 );
 
 beforeAll(() => {
@@ -96,9 +93,6 @@ describe('submitPrompt', () => {
       ['According to my calculator '],
       ['1 + 2 = 3'],
     ]);
-    expect(onReferences.mock.calls).toStrictEqual([
-      [['https://calculator.example']],
-    ]);
     expect(onError).not.toHaveBeenCalled();
   });
 
@@ -126,9 +120,6 @@ describe('submitPrompt', () => {
     expect(onAnswerChunk.mock.calls).toStrictEqual([
       ['According to my calculator '],
       ['1 + 2 = 3'],
-    ]);
-    expect(onReferences.mock.calls).toStrictEqual([
-      [['https://calculator.example']],
     ]);
     expect(onError).not.toHaveBeenCalled();
   });

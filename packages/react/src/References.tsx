@@ -1,3 +1,4 @@
+import type { FileSectionReference } from '@markprompt/core';
 import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
@@ -7,43 +8,57 @@ import * as Markprompt from './index.js';
 import { useElementSize } from './useElementSize.js';
 
 type ReferenceProps = {
+  getHref?: (reference: FileSectionReference) => string;
+  getLabel?: (reference: FileSectionReference) => string;
+  reference: FileSectionReference;
+  index: number;
+  // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;
     text: string;
   };
-  referenceId: string;
-  index: number;
 };
 
 const Reference = (props: ReferenceProps): ReactElement => {
   const {
-    transformReferenceId = DEFAULT_MARKPROMPT_OPTIONS.references!
-      .transformReferenceId!,
+    getHref = DEFAULT_MARKPROMPT_OPTIONS.references!.getHref!,
+    getLabel = DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel,
     index,
-    referenceId,
+    reference,
+    transformReferenceId,
   } = props;
 
-  const reference = useMemo(
-    () => transformReferenceId(referenceId),
-    [referenceId, transformReferenceId],
-  );
+  const referenceHrefLabel = useMemo(() => {
+    // Backwards compatibility
+    if (transformReferenceId) {
+      const t = transformReferenceId(reference.file.path);
+      return { href: t.href, label: t.text };
+    }
+    return {
+      href: getHref?.(reference),
+      label: getLabel?.(reference),
+    };
+  }, [transformReferenceId, getHref, reference, getLabel]);
 
   return (
     <li
-      key={referenceId}
+      key={referenceHrefLabel.href}
       className="MarkpromptReference"
       style={{
         animationDelay: `${100 * index}ms`,
       }}
     >
-      <a href={reference.href}>{reference.text}</a>
+      <a href={referenceHrefLabel.href}>{referenceHrefLabel.label}</a>
     </li>
   );
 };
 
 type ReferencesProps = {
   loadingText?: string;
-  referencesText?: string;
+  heading?: string;
+  getHref?: (reference: FileSectionReference) => string;
+  getLabel?: (reference: FileSectionReference) => string;
+  // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;
     text: string;
@@ -53,17 +68,25 @@ type ReferencesProps = {
 const References = (props: ReferencesProps): ReactElement | null => {
   const {
     loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
-    referencesText = DEFAULT_MARKPROMPT_OPTIONS.references!.referencesText,
+    heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
+    getHref,
+    getLabel,
     transformReferenceId,
   } = props;
   const { state, references } = useMarkpromptContext();
   const [ref, { height }] = useElementSize<HTMLDivElement>();
 
   const ReferenceComponent = useCallback(
-    (props: { referenceId: string; index: number }) => (
-      <Reference transformReferenceId={transformReferenceId} {...props} />
+    (props: { reference: FileSectionReference; index: number }) => (
+      <Reference
+        getHref={getHref}
+        getLabel={getLabel}
+        // Backwards compatibility
+        transformReferenceId={transformReferenceId}
+        {...props}
+      />
     ),
-    [transformReferenceId],
+    [transformReferenceId, getHref, getLabel],
   );
 
   let adjustedState: string = state;
@@ -100,7 +123,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
           </>
         )}
 
-        {state !== 'preload' && <p>{referencesText}</p>}
+        {state !== 'preload' && <p>{heading}</p>}
 
         {(state === 'streaming-answer' || state === 'done') && (
           <Markprompt.References ReferenceComponent={ReferenceComponent} />

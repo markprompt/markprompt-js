@@ -1,3 +1,4 @@
+import type { FileSectionReference } from '@markprompt/core';
 import {
   createContext,
   useContext,
@@ -14,7 +15,7 @@ type State = {
   isSearchEnabled: boolean;
   isSearchActive: boolean;
   prompt: string;
-  references: string[];
+  references: FileSectionReference[];
   searchResults: SearchResultComponentProps[];
   state: LoadingState;
 };
