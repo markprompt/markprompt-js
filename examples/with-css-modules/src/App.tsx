@@ -1,3 +1,4 @@
+import { FileSectionReference } from '@markprompt/core';
 import * as Markprompt from '@markprompt/react';
 import { useMarkpromptContext } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
@@ -95,22 +96,23 @@ const removeFileExtension = (fileName: string): string => {
 };
 
 const Reference = ({
-  referenceId,
+  reference,
   index,
 }: {
-  referenceId: string;
+  reference: FileSectionReference;
   index: number;
 }): ReactElement => {
   return (
     <li
-      key={referenceId}
+      key={`${reference.file?.path}-${index}`}
       className={styles.reference}
       style={{
         animationDelay: `${100 * index}ms`,
       }}
     >
-      <a href={removeFileExtension(referenceId)}>
-        {capitalize(removeFileExtension(referenceId.split('/').slice(-1)[0]))}
+      <a href={removeFileExtension(reference.file.path)}>
+        {reference.file.title ||
+          capitalize(removeFileExtension(reference.file.path))}
       </a>
     </li>
   );

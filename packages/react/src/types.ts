@@ -1,6 +1,5 @@
 import {
   type FileSectionReference,
-  type Source,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
