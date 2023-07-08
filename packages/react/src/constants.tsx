@@ -58,6 +58,11 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Markprompt',
   },
+  feedback: {
+    enabled: false,
+    heading: 'Was this response helpful?',
+    thankYouMessage: 'Thank you!',
+  },
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,
     label: 'Ask me anything…',

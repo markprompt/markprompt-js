@@ -85,6 +85,16 @@ type MarkpromptOptions = {
      * @default false
      * */
     enabled?: boolean;
+    /**
+     * Heading above the form
+     * @default "Was this response helpful?"
+     **/
+    heading?: string;
+    /**
+     * Thank you message
+     * @default "Thank you!"
+     **/
+    thankYouMessage?: string;
   };
   prompt?: SubmitPromptOptions & {
     /**

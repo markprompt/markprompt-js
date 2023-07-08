@@ -4,12 +4,21 @@ import React, {
   type ComponentPropsWithoutRef,
 } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
 import { ThumbsDownIcon, ThumbsUpIcon } from './icons.js';
 
-export function Feedback(
-  props: ComponentPropsWithoutRef<'aside'>,
-): ReactElement {
+type FeedbackProps = {
+  heading?: string;
+  thankYouMessage?: string;
+} & ComponentPropsWithoutRef<'aside'>;
+
+export function Feedback(props: FeedbackProps): ReactElement {
+  const {
+    heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
+    thankYouMessage = DEFAULT_MARKPROMPT_OPTIONS.feedback!.thankYouMessage,
+  } = props;
+
   const { submitFeedback } = useMarkpromptContext();
   const [feedback, setFeedback] = useState<boolean>();
 
@@ -20,7 +29,7 @@ export function Feedback(
 
   return (
     <aside {...props}>
-      <h3>Was this response helpful?</h3>
+      <h3>{heading}</h3>
 
       {typeof feedback !== 'boolean' && (
         <div>
@@ -33,9 +42,7 @@ export function Feedback(
         </div>
       )}
 
-      {typeof feedback === 'boolean' && (
-        <p>Thanks for helping us improve our responses.</p>
-      )}
+      {typeof feedback === 'boolean' && <p>{thankYouMessage}</p>}
     </aside>
   );
 }
