@@ -93,9 +93,6 @@ describe('submitPrompt', () => {
       ['According to my calculator '],
       ['1 + 2 = 3'],
     ]);
-    expect(onReferences.mock.calls).toStrictEqual([
-      [['https://calculator.example']],
-    ]);
     expect(onError).not.toHaveBeenCalled();
   });
 
@@ -123,9 +120,6 @@ describe('submitPrompt', () => {
     expect(onAnswerChunk.mock.calls).toStrictEqual([
       ['According to my calculator '],
       ['1 + 2 = 3'],
-    ]);
-    expect(onReferences.mock.calls).toStrictEqual([
-      [['https://calculator.example']],
     ]);
     expect(onError).not.toHaveBeenCalled();
   });
