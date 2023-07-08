@@ -10,13 +10,14 @@ import { ThumbsDownIcon, ThumbsUpIcon } from './icons.js';
 
 type FeedbackProps = {
   heading?: string;
-  thankYouMessage?: string;
+  confirmationMessage?: string;
 } & ComponentPropsWithoutRef<'aside'>;
 
 export function Feedback(props: FeedbackProps): ReactElement {
   const {
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
-    thankYouMessage = DEFAULT_MARKPROMPT_OPTIONS.feedback!.thankYouMessage,
+    confirmationMessage = DEFAULT_MARKPROMPT_OPTIONS.feedback!
+      .confirmationMessage,
   } = props;
 
   const { submitFeedback } = useMarkpromptContext();
@@ -42,7 +43,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
         </div>
       )}
 
-      {typeof feedback === 'boolean' && <p>{thankYouMessage}</p>}
+      {typeof feedback === 'boolean' && <p>{confirmationMessage}</p>}
     </aside>
   );
 }

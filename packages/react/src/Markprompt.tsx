@@ -536,7 +536,7 @@ function AnswerContainer({
           <Feedback
             className="MarkpromptPromptFeedback"
             heading={feedback?.heading}
-            thankYouMessage={feedback?.thankYouMessage}
+            confirmationMessage={feedback?.confirmationMessage}
           />
         )}
       </BaseMarkprompt.AutoScroller>

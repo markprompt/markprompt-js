@@ -91,10 +91,10 @@ type MarkpromptOptions = {
      **/
     heading?: string;
     /**
-     * Thank you message
+     * Confirmation message
      * @default "Thank you!"
      **/
-    thankYouMessage?: string;
+    confirmationMessage?: string;
   };
   prompt?: SubmitPromptOptions & {
     /**
