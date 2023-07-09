@@ -28,18 +28,18 @@ export type LoadingState =
 export type Views = 'prompt' | 'search';
 
 export interface UseMarkpromptOptions {
+  /** Render in a dialog or plain? */
+  display?: MarkpromptOptions['display'];
+  /** Display debug info */
+  debug?: boolean;
   /** Project key, required */
   projectKey: string;
-  /** Project key, required */
-  display?: MarkpromptOptions['display'];
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
     enabled?: boolean;
   };
-  /** Display debug info */
-  debug?: boolean;
 }
 
 export interface UseMarkpromptResult {
