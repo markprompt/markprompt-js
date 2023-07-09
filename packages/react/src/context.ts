@@ -15,9 +15,8 @@ type State = {
   isSearchEnabled: boolean;
   prompt: string;
   references: FileSectionReference[];
-  searchResults: SearchResultComponentProps[];
   searchQuery: string;
-  searchResults: SearchResultWithMetadata[];
+  searchResults: SearchResultComponentProps[];
   state: LoadingState;
 };
 

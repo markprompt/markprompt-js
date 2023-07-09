@@ -72,7 +72,6 @@ function AnswerContainer({
 
       <References
         loadingText={references?.loadingText}
-        referencesText={references?.referencesText}
         transformReferenceId={references?.transformReferenceId}
       />
     </div>

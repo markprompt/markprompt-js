@@ -111,7 +111,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
-        getResultHref={search?.getResultHref}
+        getHref={search?.getHref}
         handleViewChange={handleViewChange}
         promptCTA={prompt?.cta}
         setActiveSearchResult={setActiveSearchResult}
@@ -125,7 +125,7 @@ interface SearchResultsContainerProps {
   setActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   handleViewChange: () => void;
   promptCTA?: string;
-  getResultHref?: NonNullable<MarkpromptOptions['search']>['getResultHref'];
+  getHref?: NonNullable<MarkpromptOptions['search']>['getHref'];
 }
 
 function SearchResultsContainer(
@@ -133,7 +133,7 @@ function SearchResultsContainer(
 ): ReactElement {
   const {
     activeSearchResult,
-    getResultHref,
+    getHref,
     handleViewChange,
     promptCTA,
     setActiveSearchResult,
@@ -254,7 +254,7 @@ function SearchResultsContainer(
               <SearchResult
                 {...rest}
                 id={id}
-                getHref={getResultHref}
+                getHref={getHref}
                 onMouseOver={() => setActiveSearchResult(id)}
                 aria-selected={id === activeSearchResult}
               />

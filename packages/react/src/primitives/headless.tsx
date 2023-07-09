@@ -480,7 +480,9 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
     label?: string;
-    SearchResultComponent?: ElementType<SearchResultComponentProps>;
+    SearchResultComponent?: ElementType<
+      SearchResultComponentProps & { index?: number }
+    >;
   }
 >;
 
@@ -526,7 +528,6 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
     getHref?: (reference: FileSectionReference) => string;
-    index: number;
     onMouseOver?: () => void;
   }
 >;
