@@ -10,11 +10,12 @@ interface MarkpromptFormProps {
   inputProps?: ComponentPropsWithoutRef<typeof BaseMarkprompt.Prompt>;
 }
 export function MarkpromptForm(props: MarkpromptFormProps): ReactElement {
-  const { placeholder, label } = props;
+  const { inputProps, label, placeholder } = props;
 
   return (
     <BaseMarkprompt.Form className="MarkpromptForm">
       <BaseMarkprompt.Prompt
+        {...inputProps}
         className="MarkpromptPrompt"
         placeholder={placeholder}
         labelClassName="MarkpromptPromptLabel"

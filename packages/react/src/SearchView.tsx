@@ -35,7 +35,18 @@ export function SearchView(props: SearchViewProps): ReactElement {
     string | undefined
   >();
 
-  const { activeView, searchResults } = useMarkpromptContext();
+  const { activeView, searchResults, searchQuery } = useMarkpromptContext();
+
+  useEffect(() => {
+    // if the search query changes, unset the active search result
+    setActiveSearchResult(undefined);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    // if the search results change, set the active search result to the first result
+    if (searchResults.length === 0) return;
+    setActiveSearchResult('markprompt-result-0');
+  }, [searchResults]);
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -141,7 +152,7 @@ function SearchResultsContainer(
 
   const btn = useRef<HTMLButtonElement>(null);
 
-  const { abort, submitPrompt, state, searchResults, prompt } =
+  const { abort, searchQuery, searchResults, state, submitPrompt } =
     useMarkpromptContext();
 
   useEffect(() => {
@@ -240,7 +251,7 @@ function SearchResultsContainer(
       {state === 'done' && searchResults.length === 0 && (
         <div className="MarkpromptNoSearchResults">
           <p>
-            No results for “<span>{prompt}</span>”
+            No results for “<span>{searchQuery}</span>”
           </p>
         </div>
       )}

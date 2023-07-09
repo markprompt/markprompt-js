@@ -75,6 +75,157 @@ export interface UseMarkpromptResult {
   submitSearchQuery: (query: string) => void;
 }
 
+const mockData: SearchResultComponentProps[] = [
+  {
+    isSection: true,
+    path: '/getting-started',
+    reference: {
+      file: {
+        title: 'Getting Started',
+        path: '/path/to/getting-started.md',
+        source: {
+          type: 'github',
+        },
+      },
+      meta: {
+        leadHeading: {
+          id: 'introduction',
+          depth: 1,
+          value: 'Introduction',
+          slug: 'introduction',
+        },
+      },
+    },
+    tag: 'getting-started',
+    title: 'Getting Started',
+  },
+  {
+    isSection: false,
+    path: '/api-reference',
+    reference: {
+      file: {
+        title: 'API Reference',
+        path: '/path/to/api-reference.md',
+        source: {
+          type: 'github',
+        },
+      },
+    },
+    title: 'API Reference',
+  },
+  {
+    isSection: true,
+    path: '/guides',
+    reference: {
+      file: {
+        title: 'Guides',
+        path: '/path/to/guides.md',
+        source: {
+          type: 'github',
+        },
+      },
+      meta: {
+        leadHeading: {
+          id: 'getting-started',
+          depth: 1,
+          value: 'Getting Started',
+          slug: 'getting-started',
+        },
+      },
+    },
+    tag: 'guides',
+    title: 'Guides',
+  },
+  {
+    isSection: false,
+    path: '/examples',
+    reference: {
+      file: {
+        title: 'Examples',
+        path: '/path/to/examples.md',
+        source: {
+          type: 'github',
+        },
+      },
+    },
+    title: 'Examples',
+  },
+  {
+    isSection: true,
+    path: '/tutorials',
+    reference: {
+      file: {
+        title: 'Tutorials',
+        path: '/path/to/tutorials.md',
+        source: {
+          type: 'github',
+        },
+      },
+      meta: {
+        leadHeading: {
+          id: 'getting-started',
+          depth: 1,
+          value: 'Getting Started',
+          slug: 'getting-started',
+        },
+      },
+    },
+    tag: 'tutorials',
+    title: 'Tutorials',
+  },
+  {
+    isSection: false,
+    path: '/faq',
+    reference: {
+      file: {
+        title: 'FAQ',
+        path: '/path/to/faq.md',
+        source: {
+          type: 'github',
+        },
+      },
+    },
+    title: 'FAQ',
+  },
+  {
+    isSection: true,
+    path: '/blog',
+    reference: {
+      file: {
+        title: 'Blog',
+        path: '/path/to/blog.md',
+        source: {
+          type: 'github',
+        },
+      },
+      meta: {
+        leadHeading: {
+          id: 'latest-posts',
+          depth: 1,
+          value: 'Latest Posts',
+          slug: 'latest-posts',
+        },
+      },
+    },
+    tag: 'blog',
+    title: 'Blog',
+  },
+  {
+    isSection: false,
+    path: '/contact',
+    reference: {
+      file: {
+        title: 'Contact Us',
+        path: '/path/to/contact.md',
+        source: {
+          type: 'github',
+        },
+      },
+    },
+    title: 'Contact Us',
+  },
+];
+
 /**
  * A React hook with all the functionality you need to create an interactive
  * stateful Markprompt prompt with search and a prompt.
@@ -93,9 +244,8 @@ export function useMarkprompt({
   }
 
   const [state, setState] = useState<LoadingState>('indeterminate');
-  const [searchResults, setSearchResults] = useState<
-    SearchResultComponentProps[]
-  >([]);
+  const [searchResults, setSearchResults] =
+    useState<SearchResultComponentProps[]>(mockData);
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<FileSectionReference[]>([]);
   const [prompt, setPrompt] = useState<string>('');
