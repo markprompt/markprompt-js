@@ -35,7 +35,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
     string | undefined
   >();
 
-  const { activeView, searchResults, searchQuery } = useMarkpromptContext();
+  const { searchResults, searchQuery } = useMarkpromptContext();
 
   useEffect(() => {
     // if the search query changes, unset the active search result
@@ -50,8 +50,6 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
     (event) => {
-      if (activeView !== 'search') return;
-
       switch (event.key) {
         case 'ArrowDown': {
           if (!activeSearchResult) return;
@@ -100,7 +98,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
         }
       }
     },
-    [activeSearchResult, activeView, searchResults.length],
+    [activeSearchResult, searchResults.length],
   );
 
   return (

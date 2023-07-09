@@ -1,4 +1,4 @@
-import type { FileSectionReference, Source } from '@markprompt/core';
+import type { FileSectionReference } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
 import debounce from 'p-debounce';
 import React, {
@@ -25,10 +25,9 @@ import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { MarkpromptContext, useMarkpromptContext } from '../context.js';
 import type {
-  SearchResultComponentProps,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-  SectionHeading,
+  SearchResultComponentProps,
 } from '../types.js';
 import { useMarkprompt, type UseMarkpromptOptions } from '../useMarkprompt.js';
 
@@ -556,11 +555,11 @@ export {
   AutoScroller,
   Close,
   Content,
-  PlainContent,
   Description,
   DialogTrigger,
   Form,
   Overlay,
+  PlainContent,
   Portal,
   Prompt,
   ForwardedReferences as References,

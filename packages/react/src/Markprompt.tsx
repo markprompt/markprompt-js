@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { useMarkpromptContext } from './context.js';
 import { ChatIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './PromptView.js';
@@ -16,7 +17,7 @@ import { SearchBoxTrigger } from './SearchBoxTrigger.js';
 import { SearchView } from './SearchView.js';
 import { Transition } from './Transition.js';
 import { type MarkpromptOptions } from './types.js';
-import type { Views } from './useMarkprompt.js';
+import { useMarkprompt, type Views } from './useMarkprompt.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -59,10 +60,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
   const [open, setOpen] = useState(false);
 
-  const [activeView, setActiveView] = useState<Views>(
-    search?.enabled ? 'search' : 'prompt',
-  );
-
   useEffect(() => {
     if (!trigger?.customElement || display !== 'dialog') {
       return;
@@ -76,7 +73,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     <BaseMarkprompt.Root
       projectKey={projectKey}
       display={display}
-      activeView={activeView}
       promptOptions={prompt}
       searchOptions={search}
       open={open}
@@ -125,11 +121,9 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               )}
 
               <MarkpromptContent
-                activeView={activeView}
                 prompt={prompt}
                 references={references}
                 search={search}
-                setActiveView={setActiveView}
               />
 
               {close?.visible !== false && (
@@ -157,8 +151,6 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             prompt={prompt}
             search={search}
             references={references}
-            activeView={activeView}
-            setActiveView={setActiveView}
           />
         </BaseMarkprompt.PlainContent>
       )}
@@ -167,15 +159,15 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 }
 
 type MarkpromptContentProps = {
-  activeView: Views;
   prompt: MarkpromptOptions['prompt'];
   references: MarkpromptOptions['references'];
   search: MarkpromptOptions['search'];
-  setActiveView: Dispatch<SetStateAction<Views>>;
 };
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
-  const { activeView, prompt, references, search, setActiveView } = props;
+  const { prompt, references, search } = props;
+
+  const { activeView, setActiveView } = useMarkpromptContext();
 
   return (
     <div className="MarkpromptViews">

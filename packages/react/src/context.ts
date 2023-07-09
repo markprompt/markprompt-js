@@ -22,6 +22,7 @@ type State = {
 
 type Actions = {
   abort: () => void;
+  setActiveView: Dispatch<SetStateAction<Views>>;
   setPrompt: Dispatch<SetStateAction<string>>;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   submitFeedback: (helpful: boolean) => void;
@@ -42,6 +43,7 @@ const MarkpromptContext = createContext<State & Actions>({
   searchResults: [],
   state: 'indeterminate',
   abort: noop,
+  setActiveView: noop,
   setPrompt: noop,
   setSearchQuery: noop,
   submitFeedback: noop,
