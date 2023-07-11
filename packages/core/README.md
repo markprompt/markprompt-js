@@ -33,32 +33,32 @@ In browsers with [esm.sh](https://esm.sh):
 ```js
 import { submitPrompt } from '@markprompt/core';
 
-// user input
-const prompt = 'Hello, Markprompt!';
-// can be obtained in your project settings on markprompt.com
+// User input
+const prompt = 'What is Markprompt?';
+// Can be obtained in your project settings on markprompt.com
 const projectKey = 'YOUR-PROJECT-KEY';
 
-// called when a new answer chunk is available
-// should be concatenated to previous chunks
+// Called when a new answer chunk is available
+// Should be concatenated to previous chunks
 function onAnswerChunk(chunk) {
-  // process an answer chunk
+  // Process an answer chunk
 }
 
-// called when references are available
+// Called when references are available
 function onReferences(references) {
-  // process references
+  // Process references
 }
 
-// called when submitPrompt encounters an error
+// Called when submitPrompt encounters an error
 const onError(error) {
-  // handle errors
+  // Handle errors
 }
 
-// optional options, defaults displayed
+// Optional parameters, defaults displayed
 const options = {
-  model: 'gpt-3.5-turbo', // supports all OpenAI models
+  model: 'gpt-3.5-turbo', // Supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  apiUrl: 'https://api.markprompt.com/v1/completions', // or your own completions API endpoint,
+  apiUrl: 'https://api.markprompt.com/v1/completions', // Or your own completions API endpoint
 };
 
 await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
@@ -68,16 +68,16 @@ await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, opt
 
 ### `submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
 
-Submit a prompt the the Markprompt API.
+Submit a prompt to the Markprompt Completions API.
 
 #### Arguments
 
 - `prompt` (`string`): Prompt to submit to the model
-- `projectKey` (`string`): The key of your project
+- `projectKey` (`string`): Project key for the project
 - `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
 - `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
 - `onError` (`function`): called when an error occurs
-- [`options`](#options) (`object`): Optional options object
+- [`options`](#options) (`object`): Optional parameters
 
 #### Options
 
@@ -97,6 +97,26 @@ Submit a prompt the the Markprompt API.
 #### Returns
 
 A promise that resolves when the response is fully handled.
+
+### `submitSearchQuery(query, projectKey, options?)`
+
+Submit a search query to the Markprompt Search API.
+
+#### Arguments
+
+- `query` (`string`): Search query
+- `projectKey` (`string`): Project key for the project
+- [`options`](#options) (`object`): Optional parameters
+
+#### Options
+
+- `apiUrl` (`string`): URL at which to fetch search results
+- `limit` (`number`): Maximum amount of results to return
+- `signal` (`AbortSignal`): AbortController signal
+
+#### Returns
+
+A list of search results.
 
 ## Community
 

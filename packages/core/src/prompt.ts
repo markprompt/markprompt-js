@@ -81,14 +81,14 @@ export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
 };
 
 /**
- * Submit a prompt the the Markprompt API.
+ * Submit a prompt to the Markprompt Completions API.
  *
  * @param prompt - Prompt to submit to the model
- * @param projectKey - The key of your project
+ * @param projectKey - Project key for the project
  * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
  * @param onReferences - This function is called when a chunk includes references.
- * @param onError - called when an error occurs
- * @param [options] - Optional options object
+ * @param onError - Called when an error occurs
+ * @param [options] - Optional parameters
  */
 export async function submitPrompt(
   prompt: string,

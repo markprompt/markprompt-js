@@ -232,9 +232,8 @@ Render a Markprompt dialog button.
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
 - `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
-- `search.enable` (`boolean`): Enable search (Default: `false`)
+- `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
-- `search.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `search.signal` (`AbortSignal`): AbortController signal.

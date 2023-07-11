@@ -36,7 +36,7 @@ const config = {
   themeConfig:
     /** @type {import('@markprompt/docusaurus-theme-search').ThemeConfig} */ ({
       markprompt: {
-        projectKey: 'Your Markprompt key',
+        projectKey: 'YOUR-PROJECT-KEY',
         trigger: { floating: true },
       },
     }),

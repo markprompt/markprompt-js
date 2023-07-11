@@ -24,6 +24,9 @@ export default function IndexPage(): ReactElement {
         sectionsMatchCount: 10,
         sectionsMatchThreshold: 0.5,
       }}
+      search={{
+        enabled: false,
+      }}
     />
   );
 }

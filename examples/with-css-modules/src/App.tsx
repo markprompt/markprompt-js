@@ -29,6 +29,9 @@ function Component(): ReactElement {
         sectionsMatchCount: 10,
         sectionsMatchThreshold: 0.5,
       }}
+      searchOptions={{
+        enabled: false,
+      }}
     >
       <Markprompt.DialogTrigger
         aria-label="Open Markprompt"
