@@ -49,6 +49,9 @@ const config = {
             return reference.meta?.leadHeading?.value || reference.file?.title;
           },
         },
+        search: {
+          enabled: false,
+        },
       },
       navbar: {
         title: 'Markprompt',

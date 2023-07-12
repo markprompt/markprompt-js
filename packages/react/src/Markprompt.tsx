@@ -543,6 +543,7 @@ function AnswerContainer({
 
       <References
         loadingText={references?.loadingText}
+        // referencesText is for backwards compatibility
         heading={references?.heading || references?.referencesText}
         getHref={references?.getHref}
         getLabel={references?.getLabel}

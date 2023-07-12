@@ -69,7 +69,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n`)
 - `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
 - `prompt.topP` (`number`): The model top P. (Default: `1`)
 - `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
@@ -84,9 +84,8 @@ The pre-built Markprompt component. It accepts the following props:
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
 - `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
-- `search.enable` (`boolean`): Enable search (Default: `false`)
+- `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
-- `search.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `search.signal` (`AbortSignal`): AbortController signal.
@@ -184,7 +183,7 @@ Create an interactive stateful Markprompt prompt and search experience, it takes
 - `promptOptions.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `promptOptions.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `promptOptions.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `promptOptions.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `promptOptions.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n`)
 - `promptOptions.temperature` (`number`): The model temperature. (Default: `0.1`)
 - `promptOptions.topP` (`number`): The model top P. (Default: `1`)
 - `promptOptions.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
@@ -194,7 +193,7 @@ Create an interactive stateful Markprompt prompt and search experience, it takes
 - `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
 - `promptOptions.signal` (`AbortSignal`): AbortController signal.
 - `searchOptions` (`object`): Options for search.
-- `searchOptions.enable` (`boolean`): Whether or not to enable search. (Default: `true`)
+- `searchOptions.enabled` (`boolean`): Whether or not to enable search. (Default: `false`)
 - `searchOptions.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `searchOptions.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `searchOptions.signal` (`AbortSignal`): AbortController signal.

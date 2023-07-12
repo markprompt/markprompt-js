@@ -19,7 +19,7 @@ export type SubmitPromptOptions = {
   model?: OpenAIModelId;
   /**
    * The prompt template
-   * @default "You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model.""
+   * @default "You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n"
    **/
   promptTemplate?: string;
   /**
@@ -81,14 +81,14 @@ export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
 };
 
 /**
- * Submit a prompt the the Markprompt API.
+ * Submit a prompt to the Markprompt Completions API.
  *
  * @param prompt - Prompt to submit to the model
- * @param projectKey - The key of your project
+ * @param projectKey - Project key for the project
  * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
  * @param onReferences - This function is called when a chunk includes references.
- * @param onError - called when an error occurs
- * @param [options] - Optional options object
+ * @param onError - Called when an error occurs
+ * @param [options] - Optional parameters
  */
 export async function submitPrompt(
   prompt: string,

@@ -25,10 +25,10 @@ export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
 };
 
 /**
- * Submit a search query to the Markprompt Search API endpoint.
+ * Submit a search query to the Markprompt Search API.
  * @param query - Search query
- * @param projectKey - Project key for the project to search
- * @param options - Optional parameters
+ * @param projectKey - Project key for the project
+ * @param [options] - Optional parameters
  * @returns Search results
  */
 export async function submitSearchQuery(
