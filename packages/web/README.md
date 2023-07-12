@@ -217,7 +217,7 @@ Render a Markprompt dialog button.
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, you can say 'I don't know' and the question will be passed to the OpenAI model to answer.\n\n# Sections\n\n{{#each sections}}\n## {{this.id}}\n\n{{this.content}}\n\n{{/each}}\n\n# Question\n\n{{question}}\n\n# Answer\n\n`)
+- `prompt.promptTemplate` (`string`): The prompt template. (Default: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n`)
 - `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
 - `prompt.topP` (`number`): The model top P. (Default: `1`)
 - `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default: `0`)
