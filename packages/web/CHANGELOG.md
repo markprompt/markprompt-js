@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.12.0
+
+### Minor Changes
+
+- [#86](https://github.com/motifland/markprompt-js/pull/86) [`517ffd4`](https://github.com/motifland/markprompt-js/commit/517ffd44678d87b09e3558e41c57b8389a7e0422) Thanks [@nickrttn](https://github.com/nickrttn)! - Split up search and prompt inputs to use different states
+
+### Patch Changes
+
+- Updated dependencies [[`517ffd4`](https://github.com/motifland/markprompt-js/commit/517ffd44678d87b09e3558e41c57b8389a7e0422), [`517ffd4`](https://github.com/motifland/markprompt-js/commit/517ffd44678d87b09e3558e41c57b8389a7e0422)]:
+  - @markprompt/react@0.14.0
+
 ## 0.11.0
 
 ### Minor Changes
