@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.8.2
+
+### Patch Changes
+
+- [#103](https://github.com/motifland/markprompt-js/pull/103) [`cb2d619`](https://github.com/motifland/markprompt-js/commit/cb2d619395e00342c2bb9ef5ae485f2b82ee1c3c) Thanks [@michaelfester](https://github.com/michaelfester)! - Update exposed types
+
 ## 0.8.1
 
 ### Patch Changes
