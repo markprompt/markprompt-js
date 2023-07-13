@@ -3,8 +3,8 @@ import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { useMarkpromptContext } from './index.js';
 import * as Markprompt from './index.js';
+import { useMarkpromptContext } from './index.js';
 import { useElementSize } from './useElementSize.js';
 
 type ReferenceProps = {
@@ -67,13 +67,14 @@ type ReferencesProps = {
 
 const References = (props: ReferencesProps): ReactElement | null => {
   const {
-    loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
-    heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
     getHref,
     getLabel,
+    heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
+    loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
     transformReferenceId,
   } = props;
-  const { state, references } = useMarkpromptContext();
+
+  const { references, state } = useMarkpromptContext();
   const [ref, { height }] = useElementSize<HTMLDivElement>();
 
   const ReferenceComponent = useCallback(

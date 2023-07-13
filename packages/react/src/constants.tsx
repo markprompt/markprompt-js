@@ -2,14 +2,9 @@ import {
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
   type FileSectionReference,
-  type Source,
 } from '@markprompt/core';
 
-import type { MarkpromptOptions, SectionHeading } from './types.js';
-
-const capitalize = (text: string): string => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
+import type { MarkpromptOptions } from './types.js';
 
 const removeFileExtension = (fileName: string): string => {
   const lastDotIndex = fileName.lastIndexOf('.');
@@ -53,6 +48,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   display: 'dialog',
   close: {
     label: 'Close Markprompt',
+    visible: true,
   },
   description: {
     hide: true,
@@ -77,8 +73,11 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+    cta: 'Search docs…',
     enabled: false,
     getHref: defaultGetHref,
+    label: 'Search docs…',
+    placeholder: 'Search docs…',
   },
   trigger: {
     label: 'Open Markprompt',

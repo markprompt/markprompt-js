@@ -42,11 +42,11 @@ export type SectionHeading = {
 };
 
 export type SearchResultComponentProps = {
+  isSection?: boolean;
   path: string;
+  reference: FileSectionReference;
   tag?: string;
   title: string;
-  isSection?: boolean;
-  reference: FileSectionReference;
 };
 
 type MarkpromptOptions = {
@@ -108,31 +108,27 @@ type MarkpromptOptions = {
      **/
     placeholder?: string;
     /**
-     * When search is enabled, this label is used for the CTA button
-     * that opens the prompt.
+     * When search is enabled, this label is used for the call-to-action button
+     * that switches to the prompt view that is shown in the search view.
      * @default "Ask Docs AI…"
      **/
     cta?: string;
   };
   references?: {
-    /** Loading text, default: `Fetching relevant pages…` */
-    loadingText?: string;
-    /**
-     * Heading above the references
-     * @default "Answer generated from the following sources:"
-     **/
-    heading?: string;
     /** Callback to transform a reference into an href */
     getHref?: (reference: FileSectionReference) => string;
     /** Callback to transform a reference into a label */
     getLabel?: (reference: FileSectionReference) => string;
     /**
-     * [DEPRECATED] References title
+     * Heading above the references
      * @default "Answer generated from the following sources:"
      **/
-    referencesText?: string;
+    heading?: string;
+    /** Loading text, default: `Fetching relevant pages…` */
+    loadingText?: string;
     /**
-     * [DEPRECATED] Callback to transform a reference id into an href and text
+     * Callback to transform a reference id into an href and text
+     * @deprecated Use `getHref` and `getLabel` instead
      **/
     transformReferenceId?: (referenceId: string) => {
       href: string;
@@ -144,12 +140,27 @@ type MarkpromptOptions = {
    */
   search?: SubmitSearchQueryOptions & {
     /**
+     * When search is enabled, this label is used for the call-to-action button
+     * that switches to the search view that is shown in the prompt view.
+     */
+    cta?: string;
+    /**
      * Enable search
      * @default false
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
     getHref?: (reference: FileSectionReference) => string;
+    /**
+     * Label for the search input, not shown but used for `aria-label`
+     * @default "Search docs…"
+     **/
+    label?: string;
+    /**
+     * Placeholder for the search input
+     * @default "Search docs…"
+     */
+    placeholder?: string;
   };
   trigger?: {
     /**

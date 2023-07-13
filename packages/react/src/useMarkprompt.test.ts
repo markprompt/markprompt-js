@@ -50,19 +50,20 @@ describe('useMarkprompt', () => {
 
     expect(result.current).toStrictEqual({
       abort: expect.any(Function),
-      activeSearchResult: undefined,
+      activeView: 'prompt',
       answer: '',
-      isSearchActive: false,
       isSearchEnabled: false,
       prompt: '',
       references: [],
+      searchQuery: '',
       searchResults: [],
       state: 'indeterminate',
+      setActiveView: expect.any(Function),
+      setPrompt: expect.any(Function),
+      setSearchQuery: expect.any(Function),
       submitFeedback: expect.any(Function),
       submitPrompt: expect.any(Function),
       submitSearchQuery: expect.any(Function),
-      updateActiveSearchResult: expect.any(Function),
-      updatePrompt: expect.any(Function),
     });
   });
 
@@ -72,7 +73,7 @@ describe('useMarkprompt', () => {
     );
 
     act(() => {
-      result.current.updatePrompt('How much is 1+2?');
+      result.current.setPrompt('How much is 1+2?');
     });
 
     response = [
