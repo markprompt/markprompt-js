@@ -43,7 +43,7 @@ export type SearchResult = {
 
 export type SearchResultSection = {
   content?: string;
-  snippet: string;
+  snippet?: string;
 } & FileSectionReferenceSectionData;
 
 export type FileSectionReference = {

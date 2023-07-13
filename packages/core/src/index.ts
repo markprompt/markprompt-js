@@ -20,6 +20,7 @@ export {
 
 export {
   type FileSectionReference,
+  type FileReferenceFileData,
   type OpenAIModelId,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,
