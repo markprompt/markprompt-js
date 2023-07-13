@@ -391,7 +391,7 @@ function flattenSearchResults(
         // Fast and hacky way to remove the lead heading from
         // the content, which we don't want to be part of the snippet.
         const trimmedContent = removeLeadHeading(
-          result.snippet,
+          result.snippet || '',
           result.meta?.leadHeading?.value,
         );
         return {
