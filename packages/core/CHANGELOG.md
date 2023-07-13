@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.8.1
+
+### Patch Changes
+
+- [#101](https://github.com/motifland/markprompt-js/pull/101) [`8d6b50d`](https://github.com/motifland/markprompt-js/commit/8d6b50d2e4c04917175ea851c8e0102009c3ed73) Thanks [@michaelfester](https://github.com/michaelfester)! - Expose FileReferenceFileData type
+
 ## 0.8.0
 
 ### Minor Changes
