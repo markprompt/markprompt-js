@@ -43,7 +43,7 @@ export type SearchResult = {
 
 export type SearchResultSection = {
   content?: string;
-  snippet: string;
+  snippet?: string;
 } & FileSectionReferenceSectionData;
 
 export type FileSectionReference = {
@@ -70,6 +70,5 @@ export type FileReferenceFileData = {
 
 export type SearchResultsResponse = {
   debug?: any;
-  project_id: string;
   data: SearchResult[];
 };
