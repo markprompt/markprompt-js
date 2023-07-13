@@ -1,6 +1,8 @@
 import {
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
+  DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
   STREAM_SEPARATOR,
+  SearchResult,
 } from '@markprompt/core';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
@@ -12,10 +14,20 @@ import { useMarkprompt } from './useMarkprompt.js';
 
 const encoder = new TextEncoder();
 let response: string[] = [];
+let searchResults: SearchResult[] = [];
 let status = 200;
 let stream: ReadableStream;
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+  rest.get(
+    DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
+    async (_req, res, ctx) => {
+      return res(
+        ctx.status(status),
+        ctx.body(JSON.stringify({ data: searchResults })),
+      );
+    },
+  ),
+  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response) {
@@ -38,6 +50,7 @@ afterAll(() => {
 
 afterEach(() => {
   response = [];
+  searchResults = [];
   status = 200;
   server.resetHandlers();
 });
@@ -45,7 +58,9 @@ afterEach(() => {
 describe('useMarkprompt', () => {
   test('initial state', () => {
     const { result } = renderHook(() =>
-      useMarkprompt({ projectKey: 'TEST_PROJECT_KEY' }),
+      useMarkprompt({
+        projectKey: 'TEST_PROJECT_KEY',
+      }),
     );
 
     expect(result.current).toStrictEqual({
@@ -66,7 +81,7 @@ describe('useMarkprompt', () => {
     });
   });
 
-  test('submit', async () => {
+  test('submitPrompt', async () => {
     const { result } = renderHook(() =>
       useMarkprompt({ projectKey: 'TEST_PROJECT_KEY' }),
     );
@@ -87,5 +102,65 @@ describe('useMarkprompt', () => {
         'According to my calculator 1 + 2 = 3',
       ),
     );
+  });
+
+  test('submitSearchQuery', async () => {
+    const { result } = renderHook(() =>
+      useMarkprompt({
+        projectKey: 'TEST_PROJECT_KEY',
+        searchOptions: { enabled: true },
+      }),
+    );
+
+    searchResults = [
+      {
+        matchType: 'title',
+        file: {
+          title: 'Home page',
+          path: '/',
+          source: {
+            type: 'file-upload',
+          },
+        },
+      },
+      {
+        matchType: 'leadHeading',
+        file: {
+          path: '/page1',
+          source: {
+            type: 'file-upload',
+          },
+        },
+        meta: {
+          leadHeading: { value: 'Page 1' },
+        },
+      },
+      {
+        matchType: 'content',
+        snippet: 'Page 2 snippet',
+        file: {
+          path: '/page2',
+          source: {
+            type: 'file-upload',
+          },
+        },
+      },
+    ];
+
+    await result.current.submitSearchQuery('react');
+    await waitFor(() => {
+      expect(result.current.searchResults[0]?.path).toBe(
+        searchResults[0].file.path,
+      );
+      expect(result.current.searchResults[0]?.title).toBe(
+        searchResults[0].file.title,
+      );
+      expect(result.current.searchResults[1]?.title).toBe(
+        searchResults[1].meta.leadHeading.value,
+      );
+      expect(result.current.searchResults[2]?.title).toBe(
+        searchResults[2].snippet,
+      );
+    });
   });
 });

@@ -251,6 +251,7 @@ export function useMarkprompt({
         setSearchResults(
           flattenSearchResults(searchQuery, searchResults.data) ?? [],
         );
+
         // initially focus the first result
         setActiveSearchResult(`markprompt-result-0`);
         setState('done');

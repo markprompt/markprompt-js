@@ -70,6 +70,5 @@ export type FileReferenceFileData = {
 
 export type SearchResultsResponse = {
   debug?: any;
-  project_id: string;
   data: SearchResult[];
 };
