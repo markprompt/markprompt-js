@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.15.0
+
+### Minor Changes
+
+- [#109](https://github.com/motifland/markprompt-js/pull/109) [`736b7f7`](https://github.com/motifland/markprompt-js/commit/736b7f776cc685ca5268ee527954b92c2c1c54b9) Thanks [@michaelfester](https://github.com/michaelfester)! - Add tab layout
+
 ## 0.14.0
 
 ### Minor Changes
