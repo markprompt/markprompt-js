@@ -8,8 +8,7 @@ const el = document.querySelector('#markprompt');
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     feedback: { enabled: false },
-    prompt: { apiUrl: 'http://api.localhost:3000/v1/completions' },
-    search: { enabled: true, apiUrl: 'http://api.localhost:3000/v1/search' },
+    search: { enabled: true },
     trigger: { floating: true },
     display: 'dialog',
   });
