@@ -1,7 +1,7 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import React, { useEffect, useState, type ReactElement } from 'react';
+import React, { useEffect, useState, type ReactElement, useRef } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
