@@ -10,7 +10,6 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './PromptView.js';
 import { SearchBoxTrigger } from './SearchBoxTrigger.js';
 import { SearchView } from './SearchView.js';
-import { Transition } from './Transition.js';
 import { type MarkpromptOptions } from './types.js';
 
 type MarkpromptProps = MarkpromptOptions &
@@ -198,15 +197,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         </div>
       )}
       <div className="MarkpromptViews">
-        <Transition isVisible={activeView === 'search'}>
+        <div style={{ display: activeView === 'search' ? 'block' : 'none' }}>
           <SearchView
             handleViewChange={() => setActiveView('prompt')}
             search={search}
           />
-        </Transition>
-        <Transition isVisible={activeView === 'prompt'} isFlipped>
+        </div>
+        <div style={{ display: activeView === 'prompt' ? 'block' : 'none' }}>
           <PromptView prompt={prompt} references={references} />
-        </Transition>
+        </div>
       </div>
     </div>
   );

@@ -64,6 +64,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `description.text` (`string`): Description text
 - `prompt` (`object`): Options for the prompt
 - `prompt.label` (`string`): Label for the prompt input (Default: `Ask me anything…`)
+- `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask me anything…`)
 - `prompt.cta` (`string`): When search is enabled, this label is used for the CTA button that opens the prompt (Default: `Ask Docs AI…`)
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
@@ -86,6 +87,9 @@ The pre-built Markprompt component. It accepts the following props:
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
+- `search.label` (`string`): Label for the search input, not shown but used for `aria-label` (Default: `Search docs…`)
+- `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
+- `search.placeholder` (`string`): Placeholder for the search input (Default: `Search docs…`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
 - `search.signal` (`AbortSignal`): AbortController signal.
