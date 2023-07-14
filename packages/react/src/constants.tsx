@@ -62,6 +62,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,
     label: 'Ask me anything…',
+    tabLabel: 'Ask AI',
     placeholder: 'Ask me anything…',
     cta: 'Ask Docs AI…',
   },
@@ -73,10 +74,10 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
-    cta: 'Search docs…',
     enabled: false,
     getHref: defaultGetHref,
     label: 'Search docs…',
+    tabLabel: 'Search',
     placeholder: 'Search docs…',
   },
   trigger: {

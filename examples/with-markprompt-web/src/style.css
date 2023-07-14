@@ -16,6 +16,10 @@ body {
   margin: 0;
 }
 
+button {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 body,
 #app {
   min-height: 100vh;

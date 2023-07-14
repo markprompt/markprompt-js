@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import React, { Fragment, forwardRef, memo } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';

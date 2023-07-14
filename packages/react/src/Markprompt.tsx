@@ -1,23 +1,17 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import React, {
-  useEffect,
-  useState,
-  type Dispatch,
-  type ReactElement,
-  type SetStateAction,
-} from 'react';
+import React, { useEffect, useState, type ReactElement } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
-import { ChatIcon } from './icons.js';
+import { ChatIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './PromptView.js';
 import { SearchBoxTrigger } from './SearchBoxTrigger.js';
 import { SearchView } from './SearchView.js';
 import { Transition } from './Transition.js';
 import { type MarkpromptOptions } from './types.js';
-import { useMarkprompt, type Views } from './useMarkprompt.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -167,25 +161,53 @@ type MarkpromptContentProps = {
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const { prompt, references, search } = props;
 
-  const { activeView, setActiveView } = useMarkpromptContext();
+  const { abort, activeView, setActiveView } = useMarkpromptContext();
 
   return (
-    <div className="MarkpromptViews">
-      <Transition isVisible={activeView === 'search'}>
-        <SearchView
-          handleViewChange={() => setActiveView('prompt')}
-          prompt={prompt}
-          search={search}
-        />
-      </Transition>
-      <Transition isVisible={activeView === 'prompt'} isFlipped>
-        <PromptView
-          handleViewChange={() => setActiveView('search')}
-          prompt={prompt}
-          search={search}
-          references={references}
-        />
-      </Transition>
+    <div className="MarkpromptTabsContainer">
+      {search?.enabled && (
+        <div className="MarkpromptTabsList">
+          <button
+            aria-label={search.tabLabel}
+            className="MarkpromptTab"
+            data-state={activeView === 'search' ? 'active' : ''}
+            onClick={() => {
+              abort();
+              setActiveView('search');
+            }}
+          >
+            {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
+          </button>
+          <button
+            className="MarkpromptTab"
+            data-state={activeView === 'prompt' ? 'active' : ''}
+            onClick={() => {
+              abort();
+              setActiveView('prompt');
+            }}
+          >
+            <SparklesIcon
+              focusable={false}
+              className={clsx('MarkpromptBaseIcon', {
+                MarkpromptPrimaryIcon: activeView === 'prompt',
+                MarkpromptHighlightedIcon: activeView === 'search',
+              })}
+            />
+            {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+          </button>
+        </div>
+      )}
+      <div className="MarkpromptViews">
+        <Transition isVisible={activeView === 'search'}>
+          <SearchView
+            handleViewChange={() => setActiveView('prompt')}
+            search={search}
+          />
+        </Transition>
+        <Transition isVisible={activeView === 'prompt'} isFlipped>
+          <PromptView prompt={prompt} references={references} />
+        </Transition>
+      </div>
     </div>
   );
 }

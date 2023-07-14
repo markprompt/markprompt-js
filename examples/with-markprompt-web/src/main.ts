@@ -10,5 +10,6 @@ if (el && el instanceof HTMLElement) {
     feedback: { enabled: false },
     search: { enabled: true },
     trigger: { floating: true },
+    display: 'plain',
   });
 }

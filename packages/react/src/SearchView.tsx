@@ -23,13 +23,12 @@ import { SearchResult } from './SearchResult.js';
 import { type MarkpromptOptions } from './types.js';
 
 interface SearchViewProps {
-  prompt?: MarkpromptOptions['prompt'];
   search?: MarkpromptOptions['search'];
   handleViewChange: () => void;
 }
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { prompt, search, handleViewChange } = props;
+  const { search, handleViewChange } = props;
 
   const [activeSearchResult, setActiveSearchResult] = React.useState<
     string | undefined
@@ -122,7 +121,6 @@ export function SearchView(props: SearchViewProps): ReactElement {
         activeSearchResult={activeSearchResult}
         getHref={search?.getHref}
         handleViewChange={handleViewChange}
-        promptCTA={prompt?.cta}
         setActiveSearchResult={setActiveSearchResult}
       />
     </div>
@@ -133,7 +131,6 @@ interface SearchResultsContainerProps {
   activeSearchResult?: string;
   setActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
   handleViewChange: () => void;
-  promptCTA?: string;
   getHref?: NonNullable<MarkpromptOptions['search']>['getHref'];
 }
 
@@ -144,13 +141,12 @@ function SearchResultsContainer(
     activeSearchResult,
     getHref,
     handleViewChange,
-    promptCTA,
     setActiveSearchResult,
   } = props;
 
   const btn = useRef<HTMLButtonElement>(null);
 
-  const { abort, searchQuery, searchResults, state, submitPrompt } =
+  const { searchQuery, searchResults, state, submitPrompt } =
     useMarkpromptContext();
 
   useEffect(() => {
@@ -216,36 +212,6 @@ function SearchResultsContainer(
 
   return (
     <div className="MarkpromptSearchResultsContainer">
-      <button
-        ref={btn}
-        className="MarkpromptSearchAnswerButton"
-        onClick={() => {
-          abort();
-          handleViewChange();
-          submitPrompt();
-        }}
-        onMouseOver={() => {
-          btn.current?.focus();
-          setActiveSearchResult(undefined);
-        }}
-      >
-        <span aria-hidden className="MarkpromptSearchResultIconWrapper">
-          <SparklesIcon focusable={false} className="MarkpromptSearchIcon" />
-        </span>
-
-        <span>{promptCTA || DEFAULT_MARKPROMPT_OPTIONS.prompt!.cta!}</span>
-
-        <kbd>
-          {navigator.platform.indexOf('Mac') === 0 ||
-          navigator.platform === 'iPhone' ? (
-            <CommandIcon className="MarkpromptKeyboardKey" />
-          ) : (
-            <ChevronUpIcon className="MarkpromptKeyboardKey" />
-          )}
-          <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
-        </kbd>
-      </button>
-
       {state === 'done' && searchResults.length === 0 && (
         <div className="MarkpromptNoSearchResults">
           <p>

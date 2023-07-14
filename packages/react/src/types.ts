@@ -103,6 +103,11 @@ type MarkpromptOptions = {
      **/
     label?: string;
     /**
+     * Label for the tab bar
+     * @default "Ask AI"
+     **/
+    tabLabel?: string;
+    /**
      * Placeholder for the prompt input
      * @default "Ask me anything…"
      **/
@@ -140,11 +145,6 @@ type MarkpromptOptions = {
    */
   search?: SubmitSearchQueryOptions & {
     /**
-     * When search is enabled, this label is used for the call-to-action button
-     * that switches to the search view that is shown in the prompt view.
-     */
-    cta?: string;
-    /**
      * Enable search
      * @default false
      **/
@@ -156,6 +156,11 @@ type MarkpromptOptions = {
      * @default "Search docs…"
      **/
     label?: string;
+    /**
+     * Label for the tab bar
+     * @default "Search"
+     **/
+    tabLabel?: string;
     /**
      * Placeholder for the search input
      * @default "Search docs…"
