@@ -15,10 +15,11 @@ import { type MarkpromptOptions } from './types.js';
 interface PromptViewProps {
   prompt: MarkpromptOptions['prompt'];
   references: MarkpromptOptions['references'];
+  close?: MarkpromptOptions['close'];
 }
 
 export function PromptView(props: PromptViewProps): ReactElement {
-  const { prompt, references } = props;
+  const { prompt, references, close } = props;
 
   return (
     <div className="MarkpromptPromptView">
@@ -28,6 +29,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
           prompt?.placeholder ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!
         }
         icon="prompt"
+        close={close}
       />
 
       <AnswerContainer references={references} />

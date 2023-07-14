@@ -6,18 +6,21 @@ import React, {
   useEffect,
 } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
 import { SearchIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
+import type { MarkpromptOptions } from './types.js';
 
 interface MarkpromptFormProps {
   label: string;
   placeholder: string;
   inputProps?: ComponentPropsWithoutRef<typeof BaseMarkprompt.Prompt>;
   icon?: 'search' | 'prompt' | undefined;
+  close?: MarkpromptOptions['close'];
 }
 export function MarkpromptForm(props: MarkpromptFormProps): ReactElement {
-  const { inputProps, label, placeholder, icon } = props;
+  const { inputProps, label, placeholder, icon, close } = props;
   const { activeView } = useMarkpromptContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -44,6 +47,15 @@ export function MarkpromptForm(props: MarkpromptFormProps): ReactElement {
           </AccessibleIcon.Root>
         }
       />
+      {!!close && (
+        <BaseMarkprompt.Close className="MarkpromptClose">
+          <AccessibleIcon.Root
+            label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
+          >
+            <kbd>Esc</kbd>
+          </AccessibleIcon.Root>
+        </BaseMarkprompt.Close>
+      )}
     </BaseMarkprompt.Form>
   );
 }

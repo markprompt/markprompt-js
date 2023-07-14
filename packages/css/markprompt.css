@@ -258,8 +258,6 @@
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-  position: absolute;
-  right: 0.75rem;
 }
 
 :where(.MarkpromptClose:hover) {

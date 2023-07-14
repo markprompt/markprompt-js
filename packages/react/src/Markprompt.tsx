@@ -1,7 +1,14 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import React, { useEffect, useState, type ReactElement, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  type ReactElement,
+  useRef,
+  type ReactNode,
+  useMemo,
+} from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
@@ -117,24 +124,8 @@ function Markprompt(props: MarkpromptProps): ReactElement {
                 prompt={prompt}
                 references={references}
                 search={search}
+                close={close}
               />
-
-              {close?.visible !== false && (
-                <BaseMarkprompt.Close
-                  className="MarkpromptClose"
-                  style={{
-                    top: search?.enabled ? '0.48rem' : '0.75rem',
-                  }}
-                >
-                  <AccessibleIcon.Root
-                    label={
-                      close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!
-                    }
-                  >
-                    <kbd>Esc</kbd>
-                  </AccessibleIcon.Root>
-                </BaseMarkprompt.Close>
-              )}
             </BaseMarkprompt.Content>
           </BaseMarkprompt.Portal>
         </>
@@ -149,6 +140,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
             prompt={prompt}
             search={search}
             references={references}
+            close={close}
           />
         </BaseMarkprompt.PlainContent>
       )}
@@ -160,10 +152,11 @@ type MarkpromptContentProps = {
   prompt: MarkpromptOptions['prompt'];
   references: MarkpromptOptions['references'];
   search: MarkpromptOptions['search'];
+  close: MarkpromptOptions['close'];
 };
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
-  const { prompt, references, search } = props;
+  const { prompt, references, search, close: _close } = props;
 
   const { abort, activeView, setActiveView } = useMarkpromptContext();
 
@@ -189,38 +182,68 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     };
   }, [activeView, setActiveView]);
 
+  const close = useMemo(() => {
+    return _close ?? DEFAULT_MARKPROMPT_OPTIONS.close;
+  }, [_close]);
+
   return (
     <div className="MarkpromptTabsContainer">
       {search?.enabled ? (
-        <div className="MarkpromptTabsList">
-          <button
-            aria-label={search.tabLabel}
-            className="MarkpromptTab"
-            data-state={activeView === 'search' ? 'active' : ''}
-            onClick={() => {
-              abort();
-              setActiveView('search');
-            }}
-          >
-            {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
-          </button>
-          <button
-            className="MarkpromptTab"
-            data-state={activeView === 'prompt' ? 'active' : ''}
-            onClick={() => {
-              abort();
-              setActiveView('prompt');
-            }}
-          >
-            <SparklesIcon
-              focusable={false}
-              className={clsx('MarkpromptBaseIcon', {
-                MarkpromptPrimaryIcon: activeView === 'prompt',
-                MarkpromptHighlightedIcon: activeView === 'search',
-              })}
-            />
-            {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
-          </button>
+        <div style={{ position: 'relative' }}>
+          <div className="MarkpromptTabsList">
+            <button
+              aria-label={search.tabLabel}
+              className="MarkpromptTab"
+              data-state={activeView === 'search' ? 'active' : ''}
+              onClick={() => {
+                abort();
+                setActiveView('search');
+              }}
+            >
+              {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
+            </button>
+            <button
+              className="MarkpromptTab"
+              data-state={activeView === 'prompt' ? 'active' : ''}
+              onClick={() => {
+                abort();
+                setActiveView('prompt');
+              }}
+            >
+              <SparklesIcon
+                focusable={false}
+                className={clsx('MarkpromptBaseIcon', {
+                  MarkpromptPrimaryIcon: activeView === 'prompt',
+                  MarkpromptHighlightedIcon: activeView === 'search',
+                })}
+              />
+              {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+            </button>
+          </div>
+          {/* Add close button in the tab bar */}
+          {close?.visible !== false && (
+            <div
+              style={{
+                position: 'absolute',
+                display: 'flex',
+                justifyItems: 'center',
+                alignItems: 'center',
+                right: '0.75rem',
+                top: '0rem',
+                bottom: '0rem',
+              }}
+            >
+              <BaseMarkprompt.Close className="MarkpromptClose">
+                <AccessibleIcon.Root
+                  label={
+                    close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!
+                  }
+                >
+                  <kbd>Esc</kbd>
+                </AccessibleIcon.Root>
+              </BaseMarkprompt.Close>
+            </div>
+          )}
         </div>
       ) : (
         // We still include a div to preserve the grid-template-rows rules
@@ -237,6 +260,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           <SearchView
             handleViewChange={() => setActiveView('prompt')}
             search={search}
+            close={!search?.enabled ? close : undefined}
           />
         </div>
         <div
@@ -246,7 +270,11 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             display: activeView === 'prompt' ? 'block' : 'none',
           }}
         >
-          <PromptView prompt={prompt} references={references} />
+          <PromptView
+            prompt={prompt}
+            references={references}
+            close={!search?.enabled ? close : undefined}
+          />
         </div>
       </div>
     </div>
