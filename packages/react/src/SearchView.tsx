@@ -115,6 +115,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           }),
           [activeSearchResult, handleKeyDown],
         )}
+        icon="search"
       />
 
       <SearchResultsContainer

@@ -21,6 +21,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
         placeholder={
           prompt?.placeholder ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!
         }
+        icon="prompt"
       />
 
       <AnswerContainer references={references} />
