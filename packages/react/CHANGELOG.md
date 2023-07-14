@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.15.1
+
+### Patch Changes
+
+- [#111](https://github.com/motifland/markprompt-js/pull/111) [`761acde`](https://github.com/motifland/markprompt-js/commit/761acde12dc01abb8cd4c6d3dcccc793fdb44919) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix close button alignment
+
 ## 0.15.0
 
 ### Minor Changes
