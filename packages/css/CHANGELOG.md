@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.8.1
+
+### Patch Changes
+
+- [#105](https://github.com/motifland/markprompt-js/pull/105) [`fa0b96a`](https://github.com/motifland/markprompt-js/commit/fa0b96a6cdf9320f6c588cef75a3ed8a3353c625) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix plain content CSS
+
 ## 0.8.0
 
 ### Minor Changes
