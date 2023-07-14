@@ -61,9 +61,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,
-    label: 'Ask me anything…',
-    placeholder: 'Ask me anything…',
-    cta: 'Ask Docs AI…',
+    label: 'Ask AI',
+    tabLabel: 'Ask AI',
+    placeholder: 'Ask AI…',
   },
   references: {
     loadingText: 'Fetching relevant pages…',
@@ -73,10 +73,10 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   search: {
     ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
-    cta: 'Search docs…',
     enabled: false,
     getHref: defaultGetHref,
     label: 'Search docs…',
+    tabLabel: 'Search',
     placeholder: 'Search docs…',
   },
   trigger: {
@@ -87,7 +87,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   title: {
     hide: true,
-    text: 'Ask me anything…',
+    text: 'Ask AI',
   },
   showBranding: true,
 };

@@ -1,23 +1,16 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import React, {
-  useEffect,
-  useState,
-  type Dispatch,
-  type ReactElement,
-  type SetStateAction,
-} from 'react';
+import React, { useEffect, useState, type ReactElement, useRef } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
-import { ChatIcon } from './icons.js';
+import { ChatIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './PromptView.js';
 import { SearchBoxTrigger } from './SearchBoxTrigger.js';
 import { SearchView } from './SearchView.js';
-import { Transition } from './Transition.js';
 import { type MarkpromptOptions } from './types.js';
-import { useMarkprompt, type Views } from './useMarkprompt.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -127,7 +120,12 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               />
 
               {close?.visible !== false && (
-                <BaseMarkprompt.Close className="MarkpromptClose">
+                <BaseMarkprompt.Close
+                  className="MarkpromptClose"
+                  style={{
+                    top: search?.enabled ? '0.48rem' : '0.75rem',
+                  }}
+                >
                   <AccessibleIcon.Root
                     label={
                       close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!
@@ -167,25 +165,90 @@ type MarkpromptContentProps = {
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const { prompt, references, search } = props;
 
-  const { activeView, setActiveView } = useMarkpromptContext();
+  const { abort, activeView, setActiveView } = useMarkpromptContext();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (
+        (event.key === 'Enter' && event.ctrlKey) ||
+        (event.key === 'Enter' && event.metaKey)
+      ) {
+        event.preventDefault();
+        if (activeView === 'prompt') {
+          setActiveView('search');
+        } else if (activeView === 'search') {
+          setActiveView('prompt');
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeView, setActiveView]);
 
   return (
-    <div className="MarkpromptViews">
-      <Transition isVisible={activeView === 'search'}>
-        <SearchView
-          handleViewChange={() => setActiveView('prompt')}
-          prompt={prompt}
-          search={search}
-        />
-      </Transition>
-      <Transition isVisible={activeView === 'prompt'} isFlipped>
-        <PromptView
-          handleViewChange={() => setActiveView('search')}
-          prompt={prompt}
-          search={search}
-          references={references}
-        />
-      </Transition>
+    <div className="MarkpromptTabsContainer">
+      {search?.enabled ? (
+        <div className="MarkpromptTabsList">
+          <button
+            aria-label={search.tabLabel}
+            className="MarkpromptTab"
+            data-state={activeView === 'search' ? 'active' : ''}
+            onClick={() => {
+              abort();
+              setActiveView('search');
+            }}
+          >
+            {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
+          </button>
+          <button
+            className="MarkpromptTab"
+            data-state={activeView === 'prompt' ? 'active' : ''}
+            onClick={() => {
+              abort();
+              setActiveView('prompt');
+            }}
+          >
+            <SparklesIcon
+              focusable={false}
+              className={clsx('MarkpromptBaseIcon', {
+                MarkpromptPrimaryIcon: activeView === 'prompt',
+                MarkpromptHighlightedIcon: activeView === 'search',
+              })}
+            />
+            {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+          </button>
+        </div>
+      ) : (
+        // We still include a div to preserve the grid-template-rows rules
+        <div />
+      )}
+      <div className="MarkpromptViews">
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: activeView === 'search' ? 'block' : 'none',
+          }}
+        >
+          <SearchView
+            handleViewChange={() => setActiveView('prompt')}
+            search={search}
+          />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: activeView === 'prompt' ? 'block' : 'none',
+          }}
+        >
+          <PromptView prompt={prompt} references={references} />
+        </div>
+      </div>
     </div>
   );
 }

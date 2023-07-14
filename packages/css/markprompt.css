@@ -174,11 +174,57 @@
   width: 100%;
   height: 100%;
   color: var(--markprompt-foreground);
-  overflow: hidden;
   display: grid;
   grid-template-rows: 1fr auto;
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+:where(.MarkpromptTabsContainer) {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow-y: auto;
+}
+
+:where(.MarkpromptTabsList) {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--markprompt-border);
+}
+
+:where(.MarkpromptTab) {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.25rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  font-size: var(--markprompt-text-size);
+  background-color: transparent;
+  outline: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:where(.MarkpromptTab[data-state='active']) {
+  border-top: 2px solid transparent;
+}
+
+:where(.MarkpromptTab[data-state='active']) {
+  border-bottom: 2px solid var(--markprompt-primary);
+  color: var(--markprompt-primary);
+}
+
+:where(.MarkpromptTab):not([data-state='active']) {
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+:where(.MarkpromptTab):hover {
+  color: var(--markprompt-primary);
 }
 
 :where(.MarkpromptViews) {
@@ -189,6 +235,9 @@
 }
 
 :where(.MarkpromptSearchView) {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 
 :where(.MarkpromptPromptView) {
@@ -213,7 +262,7 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
   position: absolute;
-  top: 0.75rem;
+
   right: 0.75rem;
 }
 
@@ -228,7 +277,7 @@
 
 :where(.MarkpromptClose kbd) {
   font-weight: 600;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-size: 0.5rem;
 }
 
@@ -251,8 +300,15 @@
   border-color: transparent;
 }
 
-:where(.MarkpromptHighlightedIcon) {
+:where(.MarkpromptPrimaryIcon) {
   color: var(--markprompt-primary);
+}
+
+:where(.MarkpromptHighlightedIcon) {
+  color: var(--markprompt-primaryHighlight);
+}
+
+:where(.MarkpromptBaseIcon) {
   width: var(--markprompt-button-icon-size);
   height: var(--markprompt-button-icon-size);
   stroke-width: var(--markprompt-icon-stroke-width);
@@ -1046,7 +1102,7 @@
   display: list-item;
   text-align: -webkit-match-parent;
   padding: 0;
-  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 :where(.MarkpromptSearchResult a) {
