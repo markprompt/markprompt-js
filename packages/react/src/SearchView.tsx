@@ -17,11 +17,12 @@ import { type MarkpromptOptions } from './types.js';
 
 interface SearchViewProps {
   search?: MarkpromptOptions['search'];
+  close?: MarkpromptOptions['close'];
   handleViewChange: () => void;
 }
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { search, handleViewChange } = props;
+  const { search, close, handleViewChange } = props;
 
   const [activeSearchResult, setActiveSearchResult] = React.useState<
     string | undefined
@@ -109,6 +110,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           [activeSearchResult, handleKeyDown],
         )}
         icon="search"
+        close={close}
       />
 
       <SearchResultsContainer
