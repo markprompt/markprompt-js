@@ -167,6 +167,28 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
 
   const { abort, activeView, setActiveView } = useMarkpromptContext();
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (
+        (event.key === 'Enter' && event.ctrlKey) ||
+        (event.key === 'Enter' && event.metaKey)
+      ) {
+        event.preventDefault();
+        if (activeView === 'prompt') {
+          setActiveView('search');
+        } else if (activeView === 'search') {
+          setActiveView('prompt');
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeView, setActiveView]);
+
   return (
     <div className="MarkpromptTabsContainer">
       {search?.enabled ? (

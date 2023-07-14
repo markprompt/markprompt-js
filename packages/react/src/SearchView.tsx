@@ -143,15 +143,6 @@ function SearchResultsContainer(
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
-      if (
-        (event.key === 'Enter' && event.ctrlKey) ||
-        (event.key === 'Enter' && event.metaKey)
-      ) {
-        event.preventDefault();
-        submitPrompt();
-        handleViewChange();
-      }
-
       if (event.key === 'ArrowDown') {
         if (searchResults.length > 0 && activeSearchResult === undefined) {
           setActiveSearchResult('markprompt-result-0');
