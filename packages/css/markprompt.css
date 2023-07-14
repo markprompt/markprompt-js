@@ -211,9 +211,6 @@
 
 :where(.MarkpromptTab[data-state='active']) {
   border-top: 2px solid transparent;
-}
-
-:where(.MarkpromptTab[data-state='active']) {
   border-bottom: 2px solid var(--markprompt-primary);
   color: var(--markprompt-primary);
 }
@@ -262,7 +259,6 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
   position: absolute;
-
   right: 0.75rem;
 }
 
