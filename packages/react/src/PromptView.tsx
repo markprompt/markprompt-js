@@ -1,4 +1,9 @@
-import React, { type ReactElement } from 'react';
+import React, {
+  useMemo,
+  type ReactElement,
+  type KeyboardEventHandler,
+  useCallback,
+} from 'react';
 
 import { Answer } from './Answer.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
@@ -14,6 +19,7 @@ interface PromptViewProps {
 
 export function PromptView(props: PromptViewProps): ReactElement {
   const { prompt, references } = props;
+
   return (
     <div className="MarkpromptPromptView">
       <MarkpromptForm

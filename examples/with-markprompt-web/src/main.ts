@@ -11,6 +11,6 @@ if (el && el instanceof HTMLElement) {
     prompt: { apiUrl: 'http://api.localhost:3000/v1/completions' },
     search: { enabled: true, apiUrl: 'http://api.localhost:3000/v1/search' },
     trigger: { floating: true },
-    display: 'plain',
+    display: 'dialog',
   });
 }

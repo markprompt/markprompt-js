@@ -105,6 +105,88 @@ export function useMarkprompt({
   const [promptId, setPromptId] = useState<string>();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  useEffect(() => {
+    setSearchResults([
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+      {
+        path: 'abc',
+        reference: {
+          file: {
+            path: 'abc',
+            source: {
+              type: 'file-upload',
+            },
+          },
+          meta: {},
+        },
+        title: 'title',
+      },
+    ]);
+  }, []);
   const controllerRef = useRef<AbortController>();
 
   const abort = useCallback(() => {

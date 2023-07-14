@@ -99,7 +99,7 @@ type MarkpromptOptions = {
   prompt?: SubmitPromptOptions & {
     /**
      * Label for the prompt input
-     * @default "Ask me anything…"
+     * @default "Ask AI"
      **/
     label?: string;
     /**
@@ -109,15 +109,9 @@ type MarkpromptOptions = {
     tabLabel?: string;
     /**
      * Placeholder for the prompt input
-     * @default "Ask me anything…"
+     * @default "Ask AI…"
      **/
     placeholder?: string;
-    /**
-     * When search is enabled, this label is used for the call-to-action button
-     * that switches to the prompt view that is shown in the search view.
-     * @default "Ask Docs AI…"
-     **/
-    cta?: string;
   };
   references?: {
     /** Callback to transform a reference into an href */
@@ -195,7 +189,7 @@ type MarkpromptOptions = {
     hide?: boolean;
     /**
      * Text for the title
-     * @default "Ask me anything"
+     * @default "Ask AI"
      **/
     text?: string;
   };

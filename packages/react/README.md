@@ -63,10 +63,9 @@ The pre-built Markprompt component. It accepts the following props:
 - `description.hide` (`boolean`): Visually hide the description (Default: `true`)
 - `description.text` (`string`): Description text
 - `prompt` (`object`): Options for the prompt
-- `prompt.label` (`string`): Label for the prompt input (Default: `Ask me anything…`)
+- `prompt.label` (`string`): Label for the prompt input (Default: `Ask AI`)
 - `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
-- `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask me anything…`)
-- `prompt.cta` (`string`): When search is enabled, this label is used for the CTA button that opens the prompt (Default: `Ask Docs AI…`)
+- `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask AI…`)
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
@@ -99,7 +98,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `trigger.placeholder` (`string`): Placeholder text for non-floating element (Default: `Ask docs`)
 - `title` (`object`): Options for the title
 - `title.hide` (`boolean`): Visually hide the title (Default: `true`)
-- `title.text` (`string`): Title text (Default: `Ask me anything`)
+- `title.text` (`string`): Title text (Default: `Ask AI`)
 
 When rendering the Markprompt component, it will render a search input-like button by default. You have two other options:
 

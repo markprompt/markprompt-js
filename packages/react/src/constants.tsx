@@ -61,10 +61,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,
-    label: 'Ask me anything…',
+    label: 'Ask AI',
     tabLabel: 'Ask AI',
-    placeholder: 'Ask me anything…',
-    cta: 'Ask Docs AI…',
+    placeholder: 'Ask AI…',
   },
   references: {
     loadingText: 'Fetching relevant pages…',
@@ -88,7 +87,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   },
   title: {
     hide: true,
-    text: 'Ask me anything…',
+    text: 'Ask AI',
   },
   showBranding: true,
 };

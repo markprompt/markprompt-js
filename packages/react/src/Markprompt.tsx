@@ -120,7 +120,12 @@ function Markprompt(props: MarkpromptProps): ReactElement {
               />
 
               {close?.visible !== false && (
-                <BaseMarkprompt.Close className="MarkpromptClose">
+                <BaseMarkprompt.Close
+                  className="MarkpromptClose"
+                  style={{
+                    top: search?.enabled ? '0.48rem' : '0.75rem',
+                  }}
+                >
                   <AccessibleIcon.Root
                     label={
                       close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!
@@ -164,7 +169,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
 
   return (
     <div className="MarkpromptTabsContainer">
-      {search?.enabled && (
+      {search?.enabled ? (
         <div className="MarkpromptTabsList">
           <button
             aria-label={search.tabLabel}
@@ -195,15 +200,30 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
           </button>
         </div>
+      ) : (
+        // We still include a div to preserve the grid-template-rows rules
+        <div />
       )}
       <div className="MarkpromptViews">
-        <div style={{ display: activeView === 'search' ? 'block' : 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: activeView === 'search' ? 'block' : 'none',
+          }}
+        >
           <SearchView
             handleViewChange={() => setActiveView('prompt')}
             search={search}
           />
         </div>
-        <div style={{ display: activeView === 'prompt' ? 'block' : 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: activeView === 'prompt' ? 'block' : 'none',
+          }}
+        >
           <PromptView prompt={prompt} references={references} />
         </div>
       </div>

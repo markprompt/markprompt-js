@@ -1,6 +1,5 @@
 import React, {
   useEffect,
-  useRef,
   type ReactElement,
   useCallback,
   type KeyboardEventHandler,
