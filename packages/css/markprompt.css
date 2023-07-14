@@ -176,7 +176,7 @@
   color: var(--markprompt-foreground);
   overflow: hidden;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr auto;
   outline: 2px solid transparent;
   outline-offset: 2px;
 }

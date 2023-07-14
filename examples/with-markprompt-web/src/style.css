@@ -34,3 +34,11 @@ main {
   display: grid;
   place-items: center;
 }
+
+/* We make the container fill the entire screen to accommodate for
+   the `display: "plain"` case.
+*/
+#markprompt {
+  position: absolute;
+  inset: 0;
+}
