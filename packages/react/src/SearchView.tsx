@@ -11,12 +11,6 @@ import React, {
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
-import {
-  ChevronUpIcon,
-  CommandIcon,
-  CornerDownLeftIcon,
-  SparklesIcon,
-} from './icons.js';
 import { MarkpromptForm } from './MarkpromptForm.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchResult } from './SearchResult.js';
@@ -69,7 +63,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
         }
         case 'ArrowUp': {
           if (!activeSearchResult) return;
-          if (activeSearchResult.endsWith('0')) return;
+          if (activeSearchResult.endsWith('-0')) return;
           event.preventDefault();
           const nextActiveSearchResult = activeSearchResult.replace(
             /\d+$/,
@@ -145,15 +139,8 @@ function SearchResultsContainer(
     setActiveSearchResult,
   } = props;
 
-  const btn = useRef<HTMLButtonElement>(null);
-
   const { searchQuery, searchResults, state, submitPrompt } =
     useMarkpromptContext();
-
-  useEffect(() => {
-    if (!activeSearchResult) return;
-    btn.current?.blur();
-  }, [activeSearchResult]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -164,13 +151,6 @@ function SearchResultsContainer(
         event.preventDefault();
         submitPrompt();
         handleViewChange();
-      }
-
-      if (event.key === 'ArrowUp') {
-        if (activeSearchResult === 'markprompt-result-0') {
-          btn.current?.focus();
-          setActiveSearchResult(undefined);
-        }
       }
 
       if (event.key === 'ArrowDown') {
