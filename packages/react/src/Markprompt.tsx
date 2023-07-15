@@ -15,9 +15,15 @@ import { type MarkpromptOptions } from './types.js';
 type MarkpromptProps = MarkpromptOptions &
   Omit<
     BaseMarkprompt.RootProps,
-    'activeView' | 'children' | 'open' | 'promptOptions' | 'searchOptions'
+    | 'activeView'
+    | 'children'
+    | 'open'
+    | 'onOpenChange'
+    | 'promptOptions'
+    | 'searchOptions'
   > & {
     projectKey: string;
+    onDidRequestOpenChange?: (open: boolean) => void;
   };
 
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
@@ -43,15 +49,25 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     showBranding,
     title,
     trigger,
-    onOpenChange,
+    onDidRequestOpenChange,
     ...dialogProps
   } = props;
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onOpen = (): void => setOpen(true);
-    const onClose = (): void => setOpen(false);
+    const onOpen = (): void => {
+      onDidRequestOpenChange?.(true);
+      if (display === 'dialog') {
+        setOpen(true);
+      }
+    };
+    const onClose = (): void => {
+      onDidRequestOpenChange?.(false);
+      if (display === 'dialog') {
+        setOpen(false);
+      }
+    };
 
     emitter.on('open', onOpen);
     emitter.on('close', onClose);
@@ -60,11 +76,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       emitter.off('open', onOpen);
       emitter.off('close', onClose);
     };
-  }, [trigger?.customElement, display]);
-
-  useEffect(() => {
-    onOpenChange?.(open);
-  }, [open, onOpenChange]);
+  }, [trigger?.customElement, display, onDidRequestOpenChange]);
 
   return (
     <BaseMarkprompt.Root
