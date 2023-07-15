@@ -185,13 +185,15 @@ function SearchResultsContainer(
 
   return (
     <div className="MarkpromptSearchResultsContainer">
-      {state === 'done' && searchResults.length === 0 && (
-        <div className="MarkpromptNoSearchResults">
-          <p>
-            No results for “<span>{searchQuery}</span>”
-          </p>
-        </div>
-      )}
+      {state === 'done' &&
+        searchResults.length === 0 &&
+        searchQuery.trim().length > 0 && (
+          <div className="MarkpromptNoSearchResults">
+            <p>
+              No results for “<span>{searchQuery}</span>”
+            </p>
+          </div>
+        )}
 
       {searchResults.length > 0 && (
         <BaseMarkprompt.SearchResults
