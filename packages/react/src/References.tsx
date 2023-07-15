@@ -17,6 +17,7 @@ type ReferenceProps = {
     href: string;
     text: string;
   };
+  onDidSelectReference?: () => void;
 };
 
 const Reference = (props: ReferenceProps): ReactElement => {
@@ -26,6 +27,7 @@ const Reference = (props: ReferenceProps): ReactElement => {
     index,
     reference,
     transformReferenceId,
+    onDidSelectReference,
   } = props;
 
   const referenceHrefLabel = useMemo(() => {
@@ -48,7 +50,9 @@ const Reference = (props: ReferenceProps): ReactElement => {
         animationDelay: `${100 * index}ms`,
       }}
     >
-      <a href={referenceHrefLabel.href}>{referenceHrefLabel.label}</a>
+      <a href={referenceHrefLabel.href} onClick={onDidSelectReference}>
+        {referenceHrefLabel.label}
+      </a>
     </li>
   );
 };
@@ -63,6 +67,7 @@ type ReferencesProps = {
     href: string;
     text: string;
   };
+  onDidSelectReference?: () => void;
 };
 
 const References = (props: ReferencesProps): ReactElement | null => {

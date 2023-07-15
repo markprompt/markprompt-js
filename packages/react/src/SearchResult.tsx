@@ -48,8 +48,16 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const { title, tag, getHref, isSection, reference, onMouseOver, ...rest } =
-      props;
+    const {
+      title,
+      tag,
+      getHref,
+      isSection,
+      reference,
+      onMouseOver,
+      onClick,
+      ...rest
+    } = props;
     const { searchQuery } = useMarkpromptContext();
 
     return (
@@ -62,6 +70,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
           }
           className="MarkpromptSearchResultLink"
           onMouseOver={onMouseOver}
+          onClick={onClick}
         >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">

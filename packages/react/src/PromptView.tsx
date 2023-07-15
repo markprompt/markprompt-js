@@ -16,10 +16,11 @@ interface PromptViewProps {
   prompt: MarkpromptOptions['prompt'];
   references: MarkpromptOptions['references'];
   close?: MarkpromptOptions['close'];
+  onDidSelectReference?: () => void;
 }
 
 export function PromptView(props: PromptViewProps): ReactElement {
-  const { prompt, references, close } = props;
+  const { prompt, references, close, onDidSelectReference } = props;
 
   return (
     <div className="MarkpromptPromptView">
@@ -32,16 +33,23 @@ export function PromptView(props: PromptViewProps): ReactElement {
         close={close}
       />
 
-      <AnswerContainer references={references} />
+      <AnswerContainer
+        references={references}
+        onDidSelectReference={onDidSelectReference}
+      />
     </div>
   );
 }
 
 interface AnswerContainerProps {
   references: MarkpromptOptions['references'];
+  onDidSelectReference?: () => void;
 }
 
-function AnswerContainer({ references }: AnswerContainerProps): ReactElement {
+function AnswerContainer({
+  references,
+  onDidSelectReference,
+}: AnswerContainerProps): ReactElement {
   return (
     <div className="MarkpromptAnswerContainer">
       <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
@@ -53,6 +61,7 @@ function AnswerContainer({ references }: AnswerContainerProps): ReactElement {
         transformReferenceId={references?.transformReferenceId}
         getLabel={references?.getLabel}
         getHref={references?.getHref}
+        onDidSelectReference={onDidSelectReference}
       />
     </div>
   );
