@@ -1,5 +1,13 @@
 # @markprompt/react
 
+## 0.15.6
+
+### Patch Changes
+
+- [#121](https://github.com/motifland/markprompt-js/pull/121) [`3586d8e`](https://github.com/motifland/markprompt-js/commit/3586d8e9339f3b827a5f09f78c4b8d05eb4a8afd) Thanks [@michaelfester](https://github.com/michaelfester)! - Improve keyboard navigation UX
+
+- [#121](https://github.com/motifland/markprompt-js/pull/121) [`3586d8e`](https://github.com/motifland/markprompt-js/commit/3586d8e9339f3b827a5f09f78c4b8d05eb4a8afd) Thanks [@michaelfester](https://github.com/michaelfester)! - Close modal on result click, fix empty message and dom warning
+
 ## 0.15.5
 
 ### Patch Changes

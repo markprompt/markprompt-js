@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.9.4
+
+### Patch Changes
+
+- [#121](https://github.com/motifland/markprompt-js/pull/121) [`3586d8e`](https://github.com/motifland/markprompt-js/commit/3586d8e9339f3b827a5f09f78c4b8d05eb4a8afd) Thanks [@michaelfester](https://github.com/michaelfester)! - Improve keyboard navigation UX
+
 ## 0.9.3
 
 ### Patch Changes
