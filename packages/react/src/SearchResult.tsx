@@ -50,7 +50,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const { title, tag, getHref, isSection, reference, onMouseOver, ...rest } =
       props;
-    const { prompt } = useMarkpromptContext();
+    const { searchQuery } = useMarkpromptContext();
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
@@ -74,11 +74,11 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
             <div className="MarkpromptSearchResultContentWrapper">
               {tag && (
                 <div className="MarkpromptSearchResultTag">
-                  <HighlightMatches value={tag} match={prompt} />
+                  <HighlightMatches value={tag} match={searchQuery} />
                 </div>
               )}
               <div className="MarkpromptSearchResultTitle">
-                <HighlightMatches value={title} match={prompt} />
+                <HighlightMatches value={title} match={searchQuery} />
               </div>
             </div>
           </div>
