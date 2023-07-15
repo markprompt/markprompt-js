@@ -527,7 +527,7 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
     getHref?: (reference: FileSectionReference) => string;
-    onMouseOver?: () => void;
+    onMouseMove?: () => void;
     onClick?: () => void;
   }
 >;

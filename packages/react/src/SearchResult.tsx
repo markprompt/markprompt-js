@@ -54,7 +54,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       getHref,
       isSection,
       reference,
-      onMouseOver,
+      onMouseMove,
       onClick,
       ...rest
     } = props;
@@ -69,7 +69,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
             ''
           }
           className="MarkpromptSearchResultLink"
-          onMouseOver={onMouseOver}
+          onMouseMove={onMouseMove}
           onClick={onClick}
         >
           <div className="MarkpromptSearchResultContainer">
