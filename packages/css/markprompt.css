@@ -1015,7 +1015,7 @@
 }
 
 :where(.MarkpromptSearchResultsContainer) {
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -1092,10 +1092,15 @@
   padding: 0;
 }
 
+:where(.MarkpromptSearchResult:first-of-type) {
+  padding-top: 0.5rem;
+}
+
 :where(.MarkpromptSearchResult) {
   display: list-item;
   text-align: -webkit-match-parent;
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
   padding-bottom: 0.5rem;
 }
 

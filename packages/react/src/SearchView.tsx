@@ -6,6 +6,7 @@ import React, {
   type SetStateAction,
   type Dispatch,
   useMemo,
+  useRef,
 } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
@@ -22,12 +23,16 @@ interface SearchViewProps {
   onDidSelectResult?: () => void;
 }
 
+type ActiveSearchResult = {
+  id: string | undefined;
+  trigger?: 'mouse' | 'keyboard';
+};
+
 export function SearchView(props: SearchViewProps): ReactElement {
   const { search, close, handleViewChange, onDidSelectResult } = props;
 
-  const [activeSearchResult, setActiveSearchResult] = React.useState<
-    string | undefined
-  >();
+  const [activeSearchResult, setActiveSearchResult] =
+    React.useState<ActiveSearchResult>();
 
   const { searchResults, searchQuery } = useMarkpromptContext();
 
@@ -37,9 +42,10 @@ export function SearchView(props: SearchViewProps): ReactElement {
   }, [searchQuery]);
 
   useEffect(() => {
-    // if the search results change, set the active search result to the first result
+    // if the search results change, set the active search result to the
+    // first result
     if (searchResults.length === 0) return;
-    setActiveSearchResult('markprompt-result-0');
+    setActiveSearchResult({ id: 'markprompt-result-0' });
   }, [searchResults]);
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
@@ -47,30 +53,36 @@ export function SearchView(props: SearchViewProps): ReactElement {
       switch (event.key) {
         case 'ArrowDown': {
           if (!activeSearchResult) return;
-          if (activeSearchResult.endsWith(`${searchResults.length - 1}`)) {
+          if (activeSearchResult.id?.endsWith(`${searchResults.length - 1}`)) {
             return;
           }
           event.preventDefault();
-          const nextActiveSearchResult = activeSearchResult.replace(
+          const nextActiveSearchResultId = activeSearchResult.id?.replace(
             /\d+$/,
             (match) => String(Number(match) + 1),
           );
-          setActiveSearchResult(nextActiveSearchResult);
+          setActiveSearchResult({
+            id: nextActiveSearchResultId,
+            trigger: 'keyboard',
+          });
           const el: HTMLAnchorElement | null = document.querySelector(
-            `#${nextActiveSearchResult} > a`,
+            `#${nextActiveSearchResultId} > a`,
           );
           if (!el) return;
           break;
         }
         case 'ArrowUp': {
           if (!activeSearchResult) return;
-          if (activeSearchResult.endsWith('-0')) return;
+          if (activeSearchResult.id?.endsWith('-0')) return;
           event.preventDefault();
-          const nextActiveSearchResult = activeSearchResult.replace(
+          const nextActiveSearchResult = activeSearchResult.id?.replace(
             /\d+$/,
             (match) => String(Number(match) - 1),
           );
-          setActiveSearchResult(nextActiveSearchResult);
+          setActiveSearchResult({
+            id: nextActiveSearchResult,
+            trigger: 'keyboard',
+          });
           const el: HTMLAnchorElement | null = document.querySelector(
             `#${nextActiveSearchResult} > a`,
           );
@@ -83,7 +95,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           event.preventDefault();
           // assumption here is that the search result will always contain an a element
           const el: HTMLAnchorElement | null = document.querySelector(
-            `#${activeSearchResult} a`,
+            `#${activeSearchResult.id} a`,
           );
           // todo: reset search query and result
           if (!el) return;
@@ -106,7 +118,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           () => ({
             onKeyDown: handleKeyDown,
             'aria-controls': 'markprompt-search-results',
-            'aria-activedescendant': activeSearchResult,
+            'aria-activedescendant': activeSearchResult?.id,
           }),
           [activeSearchResult, handleKeyDown],
         )}
@@ -126,8 +138,10 @@ export function SearchView(props: SearchViewProps): ReactElement {
 }
 
 interface SearchResultsContainerProps {
-  activeSearchResult?: string;
-  setActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
+  activeSearchResult?: ActiveSearchResult;
+  setActiveSearchResult: Dispatch<
+    SetStateAction<ActiveSearchResult | undefined>
+  >;
   handleViewChange?: () => void;
   onDidSelectResult?: () => void;
   getHref?: NonNullable<MarkpromptOptions['search']>['getHref'];
@@ -143,6 +157,7 @@ function SearchResultsContainer(
     setActiveSearchResult,
     onDidSelectResult,
   } = props;
+  const onMouseMovedOverSearchResult = useRef<string | null>(null);
 
   const { searchQuery, searchResults, state, submitPrompt } =
     useMarkpromptContext();
@@ -151,7 +166,10 @@ function SearchResultsContainer(
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === 'ArrowDown') {
         if (searchResults.length > 0 && activeSearchResult === undefined) {
-          setActiveSearchResult('markprompt-result-0');
+          setActiveSearchResult({
+            id: 'markprompt-result-0',
+            trigger: 'keyboard',
+          });
           const el = document.querySelector('#markprompt-prompt');
           if (el instanceof HTMLInputElement) el.focus();
         }
@@ -172,11 +190,13 @@ function SearchResultsContainer(
   ]);
 
   useEffect(() => {
-    if (!activeSearchResult) {
+    // Do not scroll into view unless using keyboard navigation.
+    // While using the mouse, we don't want movable hit targets.
+    if (!activeSearchResult?.id || activeSearchResult.trigger !== 'keyboard') {
       return;
     }
 
-    const element = document.getElementById(activeSearchResult);
+    const element = document.getElementById(activeSearchResult.id);
     if (!element) {
       return;
     }
@@ -209,8 +229,20 @@ function SearchResultsContainer(
                 {...rest}
                 id={id}
                 getHref={getHref}
+                onMouseMove={() => {
+                  // We use a mouse move event, instead of mouse over or
+                  // mouse enter. Indeed, onMouseOver and onMouseEnter will
+                  // trigger at each rerender. This is a problem when scrolling
+                  // the list using the keyboard: it will automatically reselect
+                  // the result that the mouse is over.
+                  if (onMouseMovedOverSearchResult?.current === id) {
+                    return;
+                  }
+                  onMouseMovedOverSearchResult.current = id;
+                  setActiveSearchResult({ id, trigger: 'mouse' });
+                }}
                 onClick={onDidSelectResult}
-                aria-selected={id === activeSearchResult}
+                aria-selected={id === activeSearchResult?.id}
               />
             );
           }}
