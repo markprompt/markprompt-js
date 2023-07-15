@@ -63,3 +63,34 @@ test('trigger opens the dialog', async () => {
   const close = await screen.findByText('Close');
   expect(close).toBeInTheDocument();
 });
+
+test('branding is displayed', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.Overlay />
+        <Markprompt.Content showBranding>
+          <Markprompt.Close>Close</Markprompt.Close>
+          <Markprompt.Form>
+            Search
+            <Markprompt.Prompt />
+          </Markprompt.Form>
+          <Markprompt.AutoScroller>
+            Caret
+            <Markprompt.Answer />
+          </Markprompt.AutoScroller>
+          <Markprompt.References />
+        </Markprompt.Content>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const branding = await screen.findByText('Powered by');
+  expect(branding).toBeInTheDocument();
+});
