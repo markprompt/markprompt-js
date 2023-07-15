@@ -51,6 +51,8 @@ function AnswerContainer({ references }: AnswerContainerProps): ReactElement {
       <References
         loadingText={references?.loadingText}
         transformReferenceId={references?.transformReferenceId}
+        getLabel={references?.getLabel}
+        getHref={references?.getHref}
       />
     </div>
   );
