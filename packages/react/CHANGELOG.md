@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.15.4
+
+### Patch Changes
+
+- [#117](https://github.com/motifland/markprompt-js/pull/117) [`edf4576`](https://github.com/motifland/markprompt-js/commit/edf4576eb0a2270dd184f1c8410f30e00e7f307b) Thanks [@michaelfester](https://github.com/michaelfester)! - Close modal on result click, fix empty message and dom warning
+
 ## 0.15.3
 
 ### Patch Changes
