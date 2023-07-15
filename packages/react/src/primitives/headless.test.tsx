@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 
 import * as Markprompt from './headless.js';
 
-test('initial state', async () => {
+test('Initial state', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
@@ -31,7 +31,7 @@ test('initial state', async () => {
   expect(trigger).toHaveAttribute('data-state', 'closed');
 });
 
-test('trigger opens the dialog', async () => {
+test('Trigger opens the dialog', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
@@ -64,24 +64,12 @@ test('trigger opens the dialog', async () => {
   expect(close).toBeInTheDocument();
 });
 
-test('branding is displayed', async () => {
+test('Branding is displayed in Content when set to true', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
-        <Markprompt.Overlay />
-        <Markprompt.Content showBranding>
-          <Markprompt.Close>Close</Markprompt.Close>
-          <Markprompt.Form>
-            Search
-            <Markprompt.Prompt />
-          </Markprompt.Form>
-          <Markprompt.AutoScroller>
-            Caret
-            <Markprompt.Answer />
-          </Markprompt.AutoScroller>
-          <Markprompt.References />
-        </Markprompt.Content>
+        <Markprompt.Content showBranding></Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>,
   );
@@ -93,4 +81,61 @@ test('branding is displayed', async () => {
 
   const branding = await screen.findByText('Powered by');
   expect(branding).toBeInTheDocument();
+});
+
+test('Branding is not displayed in Content when set to false', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.Content showBranding={false}></Markprompt.Content>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const branding = await screen.queryByText('Powered by');
+  expect(branding).toBeNull();
+});
+
+test('Branding is displayed in PlainContent when set to true', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.PlainContent showBranding></Markprompt.PlainContent>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const branding = await screen.findByText('Powered by');
+  expect(branding).toBeInTheDocument();
+});
+
+test('Branding is not displayed in PlainContent when set to false', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.PlainContent showBranding={false}></Markprompt.PlainContent>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const branding = await screen.queryByText('Powered by');
+  expect(branding).toBeNull();
 });
