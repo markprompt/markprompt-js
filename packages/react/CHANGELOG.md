@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.15.7
+
+### Patch Changes
+
+- [#123](https://github.com/motifland/markprompt-js/pull/123) [`09e2647`](https://github.com/motifland/markprompt-js/commit/09e2647682869673f68ab740de9879dfb9f97800) Thanks [@michaelfester](https://github.com/michaelfester)! - Catch open state change
+
 ## 0.15.6
 
 ### Patch Changes
