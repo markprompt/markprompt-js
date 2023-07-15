@@ -1,5 +1,13 @@
 # @markprompt/css
 
+## 0.9.2
+
+### Patch Changes
+
+- [#113](https://github.com/motifland/markprompt-js/pull/113) [`b29aab3`](https://github.com/motifland/markprompt-js/commit/b29aab3fe6921c11d13343c4fe805e6655c1036f) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix close button alignment
+
+- [#113](https://github.com/motifland/markprompt-js/pull/113) [`b29aab3`](https://github.com/motifland/markprompt-js/commit/b29aab3fe6921c11d13343c4fe805e6655c1036f) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix missing References params for getHref and getLabel
+
 ## 0.9.1
 
 ### Patch Changes
