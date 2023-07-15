@@ -1,14 +1,7 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import React, {
-  useEffect,
-  useState,
-  type ReactElement,
-  useRef,
-  type ReactNode,
-  useMemo,
-} from 'react';
+import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { useMarkpromptContext } from './context.js';
@@ -32,11 +25,11 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
   };
 
-const emitter = new Emittery<{ open: undefined }>();
+const emitter = new Emittery<{ open: undefined; close: undefined }>();
 
 /**
- * Open Markprompt programmatically. Useful for building a custom trigger or opening the
- * Markprompt dialog in response to other user actions.
+ * Open Markprompt programmatically. Useful for building a custom trigger
+ * or opening the Markprompt dialog in response to other user actions.
  */
 function openMarkprompt(): void {
   emitter.emit('open');
@@ -61,12 +54,20 @@ function Markprompt(props: MarkpromptProps): ReactElement {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!trigger?.customElement || display !== 'dialog') {
+    if (display !== 'dialog') {
       return;
     }
+
     const onOpen = (): void => setOpen(true);
+    const onClose = (): void => setOpen(false);
+
     emitter.on('open', onOpen);
-    return () => emitter.off('open', onOpen);
+    emitter.on('close', onClose);
+
+    return () => {
+      emitter.off('open', onOpen);
+      emitter.off('close', onClose);
+    };
   }, [trigger?.customElement, display]);
 
   return (
@@ -261,6 +262,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             handleViewChange={() => setActiveView('prompt')}
             search={search}
             close={!search?.enabled ? close : undefined}
+            onDidSelectResult={() => emitter.emit('close')}
           />
         </div>
         <div
@@ -274,6 +276,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             prompt={prompt}
             references={references}
             close={!search?.enabled ? close : undefined}
+            onDidSelectReference={() => emitter.emit('close')}
           />
         </div>
       </div>

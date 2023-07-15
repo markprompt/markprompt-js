@@ -135,11 +135,11 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   props,
   ref,
 ) {
-  const { showBranding = true } = props;
+  const { showBranding = true, ...rest } = props;
   const { state } = useMarkpromptContext();
 
   return (
-    <Dialog.Content {...props} ref={ref} data-loading-state={state}>
+    <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
       {props.children}
       {showBranding && <Footer />}
     </Dialog.Content>
@@ -159,11 +159,11 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const { showBranding = true } = props;
+    const { showBranding = true, ...rest } = props;
     const { state } = useMarkpromptContext();
 
     return (
-      <div {...props} ref={ref} data-loading-state={state}>
+      <div {...rest} ref={ref} data-loading-state={state}>
         {props.children}
         {showBranding && <Footer />}
       </div>
@@ -528,6 +528,7 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   SearchResultComponentProps & {
     getHref?: (reference: FileSectionReference) => string;
     onMouseOver?: () => void;
+    onClick?: () => void;
   }
 >;
 

@@ -18,11 +18,12 @@ import { type MarkpromptOptions } from './types.js';
 interface SearchViewProps {
   search?: MarkpromptOptions['search'];
   close?: MarkpromptOptions['close'];
-  handleViewChange: () => void;
+  handleViewChange?: () => void;
+  onDidSelectResult?: () => void;
 }
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { search, close, handleViewChange } = props;
+  const { search, close, handleViewChange, onDidSelectResult } = props;
 
   const [activeSearchResult, setActiveSearchResult] = React.useState<
     string | undefined
@@ -117,6 +118,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
         activeSearchResult={activeSearchResult}
         getHref={search?.getHref}
         handleViewChange={handleViewChange}
+        onDidSelectResult={onDidSelectResult}
         setActiveSearchResult={setActiveSearchResult}
       />
     </div>
@@ -126,7 +128,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
 interface SearchResultsContainerProps {
   activeSearchResult?: string;
   setActiveSearchResult: Dispatch<SetStateAction<string | undefined>>;
-  handleViewChange: () => void;
+  handleViewChange?: () => void;
+  onDidSelectResult?: () => void;
   getHref?: NonNullable<MarkpromptOptions['search']>['getHref'];
 }
 
@@ -138,6 +141,7 @@ function SearchResultsContainer(
     getHref,
     handleViewChange,
     setActiveSearchResult,
+    onDidSelectResult,
   } = props;
 
   const { searchQuery, searchResults, state, submitPrompt } =
@@ -185,13 +189,15 @@ function SearchResultsContainer(
 
   return (
     <div className="MarkpromptSearchResultsContainer">
-      {state === 'done' && searchResults.length === 0 && (
-        <div className="MarkpromptNoSearchResults">
-          <p>
-            No results for “<span>{searchQuery}</span>”
-          </p>
-        </div>
-      )}
+      {state === 'done' &&
+        searchResults.length === 0 &&
+        searchQuery.trim().length > 0 && (
+          <div className="MarkpromptNoSearchResults">
+            <p>
+              No results for “<span>{searchQuery}</span>”
+            </p>
+          </div>
+        )}
 
       {searchResults.length > 0 && (
         <BaseMarkprompt.SearchResults
@@ -203,7 +209,7 @@ function SearchResultsContainer(
                 {...rest}
                 id={id}
                 getHref={getHref}
-                onMouseOver={() => setActiveSearchResult(id)}
+                onClick={onDidSelectResult}
                 aria-selected={id === activeSearchResult}
               />
             );
