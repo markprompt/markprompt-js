@@ -135,11 +135,11 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   props,
   ref,
 ) {
-  const { showBranding = true } = props;
+  const { showBranding = true, ...rest } = props;
   const { state } = useMarkpromptContext();
 
   return (
-    <Dialog.Content {...props} ref={ref} data-loading-state={state}>
+    <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
       {props.children}
       {showBranding && <Footer />}
     </Dialog.Content>
