@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/docusaurus-theme-search",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "A Markprompt search theme for Docusaurus",
   "repository": {
     "type": "git",
@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "@docusaurus/types": "^2.0.0",
-    "@markprompt/css": "^0.9.2",
-    "@markprompt/react": "0.15.2"
+    "@markprompt/css": "^0.9.3",
+    "@markprompt/react": "0.15.3"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0",

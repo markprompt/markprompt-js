@@ -1,5 +1,15 @@
 # @markprompt/react
 
+## 0.15.3
+
+### Patch Changes
+
+- [#115](https://github.com/motifland/markprompt-js/pull/115) [`cf77d71`](https://github.com/motifland/markprompt-js/commit/cf77d712c4f9814e0d463870df4e45c9574b3438) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix close button alignment
+
+- [#115](https://github.com/motifland/markprompt-js/pull/115) [`cf77d71`](https://github.com/motifland/markprompt-js/commit/cf77d712c4f9814e0d463870df4e45c9574b3438) Thanks [@michaelfester](https://github.com/michaelfester)! - Minor UI fixes
+
+- [#115](https://github.com/motifland/markprompt-js/pull/115) [`cf77d71`](https://github.com/motifland/markprompt-js/commit/cf77d712c4f9814e0d463870df4e45c9574b3438) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix missing References params for getHref and getLabel
+
 ## 0.15.2
 
 ### Patch Changes
