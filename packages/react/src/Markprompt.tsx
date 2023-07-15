@@ -15,12 +15,7 @@ import { type MarkpromptOptions } from './types.js';
 type MarkpromptProps = MarkpromptOptions &
   Omit<
     BaseMarkprompt.RootProps,
-    | 'activeView'
-    | 'children'
-    | 'onOpenChange'
-    | 'open'
-    | 'promptOptions'
-    | 'searchOptions'
+    'activeView' | 'children' | 'open' | 'promptOptions' | 'searchOptions'
   > & {
     projectKey: string;
   };
@@ -48,16 +43,13 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     showBranding,
     title,
     trigger,
+    onOpenChange,
     ...dialogProps
   } = props;
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (display !== 'dialog') {
-      return;
-    }
-
     const onOpen = (): void => setOpen(true);
     const onClose = (): void => setOpen(false);
 
@@ -69,6 +61,10 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       emitter.off('close', onClose);
     };
   }, [trigger?.customElement, display]);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   return (
     <BaseMarkprompt.Root
