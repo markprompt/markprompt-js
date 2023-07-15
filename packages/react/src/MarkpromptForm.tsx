@@ -47,7 +47,7 @@ export function MarkpromptForm(props: MarkpromptFormProps): ReactElement {
           </AccessibleIcon.Root>
         }
       />
-      {!!close && (
+      {close?.visible !== false && (
         <BaseMarkprompt.Close className="MarkpromptClose">
           <AccessibleIcon.Root
             label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
