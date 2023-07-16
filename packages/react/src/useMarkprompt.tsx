@@ -2,10 +2,14 @@ import {
   submitFeedback as submitFeedbackToMarkprompt,
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
+  submitAlgoliaDocsearchQuery,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
   type SearchResult,
   type FileSectionReference,
+  type SearchResultsResponse,
+  type AlgoliaDocSearchResultsResponse,
+  type AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import {
   useCallback,
@@ -236,46 +240,65 @@ export function useMarkprompt({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
-        ...searchOptions,
-        signal: controller.signal,
-      });
+      let promise: Promise<
+        SearchResultsResponse | AlgoliaDocSearchResultsResponse | undefined
+      >;
+      if (searchOptions.provider?.name === 'algolia') {
+        promise = submitAlgoliaDocsearchQuery(searchQuery, {
+          ...searchOptions,
+          signal: controller.signal,
+        }) as Promise<AlgoliaDocSearchResultsResponse>;
 
-      promise.then((searchResults) => {
-        if (debug) {
-          // eslint-disable-next-line no-console
-          console.debug(JSON.stringify(searchResults?.debug, null, 2));
-        }
+        (promise as Promise<AlgoliaDocSearchResultsResponse>).then(
+          (searchResults) => {
+            if (controller.signal.aborted) return;
+            if (!searchResults?.hits) return;
 
-        if (controller.signal.aborted) return;
-        if (!searchResults?.data) return;
+            setSearchResults(
+              algoliaDocSearchHitsToSearchComponentProps(searchResults.hits) ??
+                [],
+            );
 
-        setSearchResults(
-          flattenSearchResults(searchQuery, searchResults.data) ?? [],
+            // initially focus the first result
+            setState('done');
+          },
         );
+      } else {
+        promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+          ...searchOptions,
+          signal: controller.signal,
+        });
 
-        // initially focus the first result
-        setState('done');
-      });
+        (promise as Promise<SearchResultsResponse>).then((searchResults) => {
+          if (debug) {
+            // eslint-disable-next-line no-console
+            console.debug(JSON.stringify(searchResults?.debug, null, 2));
+          }
 
-      promise.catch((error) => {
-        if (
-          error instanceof Error &&
-          typeof error.cause === 'object' &&
-          error.cause !== null &&
-          'name' in error.cause &&
-          error.cause?.name === 'AbortError'
-        ) {
-          // Ignore abort errors
-          return;
+          if (controller.signal.aborted) return;
+          if (!searchResults?.data) return;
+
+          setSearchResults(
+            searchResultsToSearchComponentProps(
+              searchQuery,
+              searchResults.data,
+            ) ?? [],
+          );
+
+          // initially focus the first result
+          setState('done');
+        });
+      }
+
+      promise?.catch((error) => {
+        if ((error as any).cause?.name !== 'AbortError') {
+          // todo: surface errors to the user
+          // eslint-disable-next-line no-console
+          console.error(error);
         }
-
-        // todo: surface errors to the user
-        // eslint-disable-next-line no-console
-        console.error(error);
       });
 
-      promise.finally(() => {
+      promise?.finally(() => {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
         }
@@ -363,7 +386,7 @@ function createKWICSnippet(
   return words.join(' ');
 }
 
-function flattenSearchResults(
+function searchResultsToSearchComponentProps(
   searchQuery: string,
   searchResults: SearchResult[],
 ): SearchResultComponentProps[] {
@@ -406,5 +429,28 @@ function flattenSearchResults(
         };
       }
     }
+  });
+}
+
+function algoliaDocSearchHitsToSearchComponentProps(
+  hits: AlgoliaDocSearchHit[],
+): SearchResultComponentProps[] {
+  return hits.map((result) => {
+    return {
+      path: result.url,
+      tag: result._highlightResult?.hierarchy?.lvl0?.value || undefined,
+      title: result._highlightResult?.hierarchy?.lvl1?.value || 'Untitled',
+      isSection: false,
+      reference: {
+        file: {
+          title: '',
+          path: result.url,
+          source: {
+            type: 'website',
+          },
+        },
+        meta: undefined,
+      },
+    };
   });
 }
