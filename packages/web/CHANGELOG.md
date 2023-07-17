@@ -1,5 +1,19 @@
 # @markprompt/web
 
+## 0.14.0
+
+### Minor Changes
+
+- [#129](https://github.com/motifland/markprompt-js/pull/129) [`2c61fbf`](https://github.com/motifland/markprompt-js/commit/2c61fbf65fd4d4e51093b5f3f46daf31da58d1dc) Thanks [@michaelfester](https://github.com/michaelfester)! - Add Algolia search
+
+- [#129](https://github.com/motifland/markprompt-js/pull/129) [`2c61fbf`](https://github.com/motifland/markprompt-js/commit/2c61fbf65fd4d4e51093b5f3f46daf31da58d1dc) Thanks [@michaelfester](https://github.com/michaelfester)! - Add Algolia search
+
+### Patch Changes
+
+- Updated dependencies [[`2c61fbf`](https://github.com/motifland/markprompt-js/commit/2c61fbf65fd4d4e51093b5f3f46daf31da58d1dc), [`2c61fbf`](https://github.com/motifland/markprompt-js/commit/2c61fbf65fd4d4e51093b5f3f46daf31da58d1dc)]:
+  - @markprompt/react@0.16.0
+  - @markprompt/core@0.9.0
+
 ## 0.13.8
 
 ### Patch Changes
