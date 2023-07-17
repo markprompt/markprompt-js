@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import React from 'react';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import * as Markprompt from './headless.js';
 
@@ -138,4 +138,19 @@ test('Branding is not displayed in PlainContent when set to false', async () => 
 
   const branding = await screen.queryByText('Powered by');
   expect(branding).toBeNull();
+});
+
+test('Throws if projectKey is not provided', async () => {
+  // Disable outputting the error that throws.
+  // eslint-disable-next-line no-console
+  const originalError = console.error;
+  // eslint-disable-next-line no-console
+  console.error = vi.fn();
+  try {
+    render(<Markprompt.Root projectKey={undefined as any}></Markprompt.Root>);
+  } catch (error) {
+    expect((error as Error).message).toContain('a project key is required');
+  }
+  // eslint-disable-next-line no-console
+  console.error = originalError;
 });
