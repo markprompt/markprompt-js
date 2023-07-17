@@ -48,47 +48,40 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const {
-      title,
-      tag,
-      getHref,
-      isSection,
-      reference,
-      onMouseMove,
-      onClick,
-      ...rest
-    } = props;
+    const { href, title, heading, subtitle, onMouseMove, onClick, ...rest } =
+      props;
     const { searchQuery } = useMarkpromptContext();
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
         <a
-          href={
-            getHref?.(reference) ||
-            DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(reference) ||
-            ''
-          }
+          href={href}
           className="MarkpromptSearchResultLink"
           onMouseMove={onMouseMove}
           onClick={onClick}
         >
           <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
-              {isSection ? (
+              {href?.includes('#') ? (
                 <HashIcon className="MarkpromptSearchResultIcon" />
               ) : (
                 <FileTextIcon className="MarkpromptSearchResultIcon" />
               )}
             </div>
             <div className="MarkpromptSearchResultContentWrapper">
-              {tag && (
-                <div className="MarkpromptSearchResultTag">
-                  <HighlightMatches value={tag} match={searchQuery} />
+              {heading && (
+                <div className="MarkpromptSearchResultHeading">
+                  <HighlightMatches value={heading} match={searchQuery} />
                 </div>
               )}
               <div className="MarkpromptSearchResultTitle">
                 <HighlightMatches value={title} match={searchQuery} />
               </div>
+              {subtitle && (
+                <div className="MarkpromptSearchResultSubtitle">
+                  <HighlightMatches value={subtitle} match={searchQuery} />
+                </div>
+              )}
             </div>
           </div>
         </a>

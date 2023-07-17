@@ -14,6 +14,7 @@ export {
 
 export {
   submitSearchQuery,
+  submitAlgoliaDocsearchQuery,
   type SubmitSearchQueryOptions,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
 } from './search.js';
@@ -28,6 +29,8 @@ export {
   type SearchResult,
   type SearchResultSection,
   type SearchResultsResponse,
+  type AlgoliaDocSearchHit,
+  type AlgoliaDocSearchResultsResponse,
   type Source,
   type SourceType,
 } from './types.js';

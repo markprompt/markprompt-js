@@ -72,3 +72,23 @@ export type SearchResultsResponse = {
   debug?: any;
   data: SearchResult[];
 };
+
+export type AlgoliaDocSearchHit = {
+  url: string;
+  hierarchy: {
+    lvl0: string | null;
+    lvl1: string | null;
+    lvl2: string | null;
+  };
+  _highlightResult: {
+    hierarchy: {
+      lvl0: { value: string | null };
+      lvl1: { value: string | null };
+      lvl2: { value: string | null };
+    };
+  };
+};
+
+export type AlgoliaDocSearchResultsResponse = {
+  hits: AlgoliaDocSearchHit[];
+};

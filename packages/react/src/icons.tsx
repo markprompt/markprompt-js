@@ -153,9 +153,7 @@ const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-export const ThumbsUpIcon = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     fill="currentColor"
     {...props}
@@ -166,7 +164,7 @@ export const ThumbsUpIcon = (
   </svg>
 );
 
-export const ThumbsDownIcon = (
+const ThumbsDownIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
   <svg
@@ -190,4 +188,6 @@ export {
   HashIcon,
   SearchIcon,
   SparklesIcon,
+  ThumbsUpIcon,
+  ThumbsDownIcon,
 };

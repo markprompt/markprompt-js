@@ -136,12 +136,12 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   ref,
 ) {
   const { showBranding = true, ...rest } = props;
-  const { state } = useMarkpromptContext();
+  const { state, searchProvider } = useMarkpromptContext();
 
   return (
     <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
       {props.children}
-      {showBranding && <Footer />}
+      {showBranding && <Footer includeAlgolia={searchProvider === 'algolia'} />}
     </Dialog.Content>
   );
 });
@@ -160,12 +160,14 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
     const { showBranding = true, ...rest } = props;
-    const { state } = useMarkpromptContext();
+    const { state, searchProvider } = useMarkpromptContext();
 
     return (
       <div {...rest} ref={ref} data-loading-state={state}>
         {props.children}
-        {showBranding && <Footer />}
+        {showBranding && (
+          <Footer includeAlgolia={searchProvider === 'algolia'} />
+        )}
       </div>
     );
   },
@@ -512,7 +514,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
               role="option"
               index={index}
               id={id}
-              key={`${result.path}:${result.title}`}
+              key={`${result.href}:${result.title}`}
               {...result}
             />
           );
@@ -526,7 +528,6 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
-    getHref?: (reference: FileSectionReference) => string;
     onMouseMove?: () => void;
     onClick?: () => void;
   }
@@ -534,17 +535,10 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const {
-      title,
-      reference,
-      getHref = (reference) => {
-        return DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(reference);
-      },
-      ...rest
-    } = props;
+    const { title, href, ...rest } = props;
     return (
       <li ref={ref} {...rest}>
-        <a href={getHref(reference)}>{title}</a>
+        <a href={href}>{title}</a>
       </li>
     );
   },

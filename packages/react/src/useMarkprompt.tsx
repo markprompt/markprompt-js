@@ -2,10 +2,13 @@ import {
   submitFeedback as submitFeedbackToMarkprompt,
   submitPrompt as submitPromptToMarkprompt,
   submitSearchQuery as submitSearchQueryToMarkprompt,
+  submitAlgoliaDocsearchQuery,
   type SubmitPromptOptions,
-  type SubmitSearchQueryOptions,
   type SearchResult,
   type FileSectionReference,
+  type SearchResultsResponse,
+  type AlgoliaDocSearchResultsResponse,
+  type AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import {
   useCallback,
@@ -17,6 +20,7 @@ import {
   type SetStateAction,
 } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import type { MarkpromptOptions, SearchResultComponentProps } from './types.js';
 
 export type LoadingState =
@@ -25,7 +29,7 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
-export type Views = 'prompt' | 'search';
+export type View = 'prompt' | 'search';
 
 export interface UseMarkpromptOptions {
   /** Render in a dialog or plain? */
@@ -37,18 +41,18 @@ export interface UseMarkpromptOptions {
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
-  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
-    enabled?: boolean;
-  };
+  searchOptions?: MarkpromptOptions['search'];
 }
 
-export interface UseMarkpromptResult {
+export type UseMarkpromptResult = {
   /** The currently active view */
-  activeView: Views;
+  activeView: View;
   /** The most recent answer */
-  answer: string;
+  answer: string | undefined;
   /** Enable search functionality */
   isSearchEnabled: boolean;
+  /** Custom search provider, e.g. 'algolia' */
+  searchProvider: string | undefined;
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
@@ -62,7 +66,7 @@ export interface UseMarkpromptResult {
   /** Abort a pending request */
   abort: () => void;
   /** Switch the active view between search and prompt */
-  setActiveView: Dispatch<SetStateAction<Views>>;
+  setActiveView: Dispatch<SetStateAction<View>>;
   /** Set a new value for the prompt */
   setPrompt: Dispatch<SetStateAction<string>>;
   /** Set a new value for the search query */
@@ -73,7 +77,7 @@ export interface UseMarkpromptResult {
   submitPrompt: () => Promise<void>;
   /** Submit search query */
   submitSearchQuery: (query: string) => void;
-}
+};
 
 /**
  * A React hook with all the functionality you need to create an interactive
@@ -91,7 +95,7 @@ export function useMarkprompt({
     );
   }
 
-  const [activeView, setActiveView] = useState<Views>(
+  const [activeView, setActiveView] = useState<View>(
     searchOptions?.enabled ? 'search' : 'prompt',
   );
 
@@ -215,7 +219,7 @@ export function useMarkprompt({
         controllerRef.current = undefined;
       }
     });
-  }, [abort, projectKey, prompt, promptOptions, state]);
+  }, [abort, debug, projectKey, prompt, promptOptions, state]);
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
@@ -236,46 +240,57 @@ export function useMarkprompt({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
-        ...searchOptions,
-        signal: controller.signal,
-      });
+      let promise: Promise<SearchResult[] | AlgoliaDocSearchHit[] | undefined>;
 
+      if (searchOptions.provider?.name === 'algolia') {
+        promise = (
+          submitAlgoliaDocsearchQuery(searchQuery, {
+            ...searchOptions,
+            signal: controller.signal,
+          }) as Promise<AlgoliaDocSearchResultsResponse>
+        ).then((result) => result?.hits || []) as Promise<
+          AlgoliaDocSearchHit[]
+        >;
+      } else {
+        promise = (
+          submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+            ...searchOptions,
+            signal: controller.signal,
+          }) as Promise<SearchResultsResponse>
+        ).then((result) => {
+          if (debug) {
+            // Show debug info return from Markprompt search API
+            // eslint-disable-next-line no-console
+            console.debug(JSON.stringify(result?.debug, null, 2));
+          }
+          return result?.data || [];
+        });
+      }
       promise.then((searchResults) => {
-        if (debug) {
-          // eslint-disable-next-line no-console
-          console.debug(JSON.stringify(searchResults?.debug, null, 2));
-        }
-
         if (controller.signal.aborted) return;
-        if (!searchResults?.data) return;
+        if (!searchResults) return;
 
         setSearchResults(
-          flattenSearchResults(searchQuery, searchResults.data) ?? [],
+          searchResultsToSearchComponentProps(
+            searchQuery,
+            searchResults,
+            searchOptions,
+          ) ?? [],
         );
 
         // initially focus the first result
         setState('done');
       });
 
-      promise.catch((error) => {
-        if (
-          error instanceof Error &&
-          typeof error.cause === 'object' &&
-          error.cause !== null &&
-          'name' in error.cause &&
-          error.cause?.name === 'AbortError'
-        ) {
-          // Ignore abort errors
-          return;
+      promise?.catch((error) => {
+        if ((error as any).cause?.name !== 'AbortError') {
+          // todo: surface errors to the user
+          // eslint-disable-next-line no-console
+          console.error(error);
         }
-
-        // todo: surface errors to the user
-        // eslint-disable-next-line no-console
-        console.error(error);
       });
 
-      promise.finally(() => {
+      promise?.finally(() => {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
         }
@@ -288,6 +303,7 @@ export function useMarkprompt({
     () => ({
       answer,
       isSearchEnabled: !!searchOptions?.enabled,
+      searchProvider: searchOptions?.provider?.name,
       activeView,
       prompt,
       references,
@@ -319,92 +335,27 @@ export function useMarkprompt({
   );
 }
 
-function removeLeadHeading(text: string, heading?: string): string {
-  // This needs to be revised. When returning the search result, the endpoint
-  // provides a snippet of the content around the search term (to avoid sending
-  // entire sections). This snippet may contain the start of the section
-  // content, and this content may start with a heading (the leadHeading).
-  // We don't want this leadHeading to be part of the content snippet.
-  // Since it's a snippet, we can't assume that the leadHeading will always be
-  // the first line. Instead, we have to check it in the string itself.
-  const trimmedContent = trimContent(text);
-  if (!heading) {
-    return trimmedContent;
-  }
-  const pattern = new RegExp(`^#{1,}\\s${heading}\\s?`);
-  return trimContent(trimmedContent.replace(pattern, ''));
-}
-
-function trimContent(text: string): string {
-  // we don't use String.prototype.trim() because we
-  // don't want to remove line terminators from Markdown
-  return text.trimStart().trimEnd();
-}
-
-function createKWICSnippet(
-  content: string,
-  normalizedSearchQuery: string,
-): string {
-  const trimmedContent = content.trim().replace(/\n/g, ' ');
-  const index = trimmedContent
-    .toLocaleLowerCase()
-    .indexOf(normalizedSearchQuery);
-
-  if (index === -1) {
-    return trimmedContent.slice(0, 200);
-  }
-
-  const rawSnippet = trimmedContent.slice(Math.max(0, index - 50), index + 150);
-
-  const words = rawSnippet.split(/\s+/);
-  if (words.length > 3) {
-    return words.slice(1, words.length - 1).join(' ');
-  }
-  return words.join(' ');
-}
-
-function flattenSearchResults(
-  searchQuery: string,
-  searchResults: SearchResult[],
+function searchResultsToSearchComponentProps(
+  query: string,
+  searchResults: SearchResult[] | AlgoliaDocSearchHit[],
+  searchOptions: MarkpromptOptions['search'],
 ): SearchResultComponentProps[] {
   return searchResults.map((result) => {
-    if (result.matchType === 'title') {
-      return {
-        path: result.file.path,
-        tag: undefined,
-        title: result.file.title || 'Untitled',
-        isSection: false,
-        reference: {
-          file: result.file,
-          meta: undefined,
-        },
-      };
-    } else {
-      const leadHeading = result.meta?.leadHeading;
-      if (result.matchType === 'leadHeading' && leadHeading?.value) {
-        return {
-          path: result.file.path,
-          tag: result.file.title,
-          title: leadHeading.value,
-          isSection: true,
-          reference: result,
-        };
-      } else {
-        const normalizedSearchQuery = searchQuery.toLowerCase();
-        // Fast and hacky way to remove the lead heading from
-        // the content, which we don't want to be part of the snippet.
-        const trimmedContent = removeLeadHeading(
-          result.snippet || '',
-          result.meta?.leadHeading?.value,
-        );
-        return {
-          path: result.file.path,
-          tag: leadHeading?.value || result.file.title,
-          title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
-          isSection: true,
-          reference: result,
-        };
-      }
-    }
+    return {
+      href: (
+        searchOptions?.getHref || DEFAULT_MARKPROMPT_OPTIONS.search!.getHref
+      )?.(result),
+      heading: (
+        searchOptions?.getHeading ||
+        DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading
+      )?.(result, query),
+      title: (
+        searchOptions?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle
+      )?.(result, query),
+      subtitle: (
+        searchOptions?.getSubtitle ||
+        DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle
+      )?.(result, query),
+    };
   });
 }
