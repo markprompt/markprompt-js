@@ -1177,18 +1177,10 @@
   flex-grow: 1;
   font-size: var(--markprompt-text-size);
   flex-direction: column;
-  gap: 0.5rem;
   overflow: hidden;
 }
 
-:where(.MarkpromptSearchResultTitle) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-:where(.MarkpromptSearchResultTag) {
+:where(.MarkpromptSearchResultHeading) {
   width: min-content;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1202,11 +1194,33 @@
   padding: 1px 8px;
   font-size: var(--markprompt-text-size-xs);
   font-weight: 600;
+  margin-bottom: 0.25rem;
 }
 
-:where([aria-selected='true'] .MarkpromptSearchResultTag) {
+:where([aria-selected='true'] .MarkpromptSearchResultHeading) {
   background-color: var(--markprompt-primaryMuted);
   border-color: var(--markprompt-primaryMuted);
+}
+
+:where(.MarkpromptSearchResultTitle) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+:where(.MarkpromptSearchResultSubtitle) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  font-size: var(--markprompt-text-size-xs);
+  margin-top: 0.25rem;
+  color: var(--markprompt-mutedForeground);
+}
+
+:where([aria-selected='true'] .MarkpromptSearchResultSubtitle) {
+  color: var(--markprompt-primaryForeground);
 }
 
 :where(.MarkpromptMatch) {
@@ -1215,8 +1229,8 @@
   border-bottom: 0.1rem solid var(--markprompt-primary);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultTag .MarkpromptMatch,
-:where(.MarkpromptSearchResultTag .MarkpromptMatch) {
+[aria-selected='true'] .MarkpromptSearchResultHeading .MarkpromptMatch,
+:where(.MarkpromptSearchResultHeading .MarkpromptMatch) {
   border-bottom-color: transparent;
 }
 

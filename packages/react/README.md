@@ -86,6 +86,10 @@ The pre-built Markprompt component. It accepts the following props:
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
+- `search.getHref` (`function`): Callback to transform a search result into an href
+- `getHeading` (`function`): Callback to transform a search result into a heading
+- `getTitle` (`function`): Callback to transform a search result into a title
+- `getSubtitle` (`function`): Callback to transform a search result into a subtitle
 - `search.label` (`string`): Label for the search input, not shown but used for `aria-label` (Default: `Search docs…`)
 - `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
 - `search.placeholder` (`string`): Placeholder for the search input (Default: `Search docs…`)

@@ -119,7 +119,24 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getHref?: (reference: FileSectionReference) => string;
+    getHref?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+    ) => string | undefined;
+    /** Callback to transform a search result into a heading */
+    getHeading?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
+    /** Callback to transform a search result into a title */
+    getTitle?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
+    /** Callback to transform a search result into a subtitle */
+    getSubtitle?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
   };
   trigger?: {
     /**

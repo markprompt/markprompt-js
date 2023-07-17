@@ -1,5 +1,7 @@
 import {
+  type AlgoliaDocSearchHit,
   type FileSectionReference,
+  type SearchResult,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -42,11 +44,10 @@ export type SectionHeading = {
 };
 
 export type SearchResultComponentProps = {
-  isSection?: boolean;
-  path: string;
-  reference: FileSectionReference;
-  tag?: string;
-  title: string;
+  href?: string;
+  heading?: string;
+  title?: string;
+  subtitle?: string;
 };
 
 type MarkpromptOptions = {
@@ -144,7 +145,24 @@ type MarkpromptOptions = {
      **/
     enabled?: boolean;
     /** Callback to transform a search result into an href */
-    getHref?: (reference: FileSectionReference) => string;
+    getHref?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+    ) => string | undefined;
+    /** Callback to transform a search result into a heading */
+    getHeading?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
+    /** Callback to transform a search result into a title */
+    getTitle?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
+    /** Callback to transform a search result into a subtitle */
+    getSubtitle?: (
+      reference: SearchResult | AlgoliaDocSearchHit,
+      query: string,
+    ) => string | undefined;
     /**
      * Label for the search input, not shown but used for `aria-label`
      * @default "Search docs…"

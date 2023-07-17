@@ -4,7 +4,6 @@ import {
   submitSearchQuery as submitSearchQueryToMarkprompt,
   submitAlgoliaDocsearchQuery,
   type SubmitPromptOptions,
-  type SubmitSearchQueryOptions,
   type SearchResult,
   type FileSectionReference,
   type SearchResultsResponse,
@@ -21,6 +20,7 @@ import {
   type SetStateAction,
 } from 'react';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import type { MarkpromptOptions, SearchResultComponentProps } from './types.js';
 
 export type LoadingState =
@@ -41,9 +41,7 @@ export interface UseMarkpromptOptions {
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
-  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'> & {
-    enabled?: boolean;
-  };
+  searchOptions?: MarkpromptOptions['search'];
 }
 
 export interface UseMarkpromptResult {
@@ -219,7 +217,7 @@ export function useMarkprompt({
         controllerRef.current = undefined;
       }
     });
-  }, [abort, projectKey, prompt, promptOptions, state]);
+  }, [abort, debug, projectKey, prompt, promptOptions, state]);
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
@@ -240,55 +238,47 @@ export function useMarkprompt({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      let promise: Promise<
-        SearchResultsResponse | AlgoliaDocSearchResultsResponse | undefined
-      >;
+      let promise: Promise<SearchResult[] | AlgoliaDocSearchHit[] | undefined>;
+
       if (searchOptions.provider?.name === 'algolia') {
-        promise = submitAlgoliaDocsearchQuery(searchQuery, {
-          ...searchOptions,
-          signal: controller.signal,
-        }) as Promise<AlgoliaDocSearchResultsResponse>;
-
-        (promise as Promise<AlgoliaDocSearchResultsResponse>).then(
-          (searchResults) => {
-            if (controller.signal.aborted) return;
-            if (!searchResults?.hits) return;
-
-            setSearchResults(
-              algoliaDocSearchHitsToSearchComponentProps(searchResults.hits) ??
-                [],
-            );
-
-            // initially focus the first result
-            setState('done');
-          },
-        );
+        promise = (
+          submitAlgoliaDocsearchQuery(searchQuery, {
+            ...searchOptions,
+            signal: controller.signal,
+          }) as Promise<AlgoliaDocSearchResultsResponse>
+        ).then((result) => result?.hits || []) as Promise<
+          AlgoliaDocSearchHit[]
+        >;
       } else {
-        promise = submitSearchQueryToMarkprompt(searchQuery, projectKey, {
-          ...searchOptions,
-          signal: controller.signal,
-        });
-
-        (promise as Promise<SearchResultsResponse>).then((searchResults) => {
+        promise = (
+          submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+            ...searchOptions,
+            signal: controller.signal,
+          }) as Promise<SearchResultsResponse>
+        ).then((result) => {
           if (debug) {
+            // Show debug info return from Markprompt search API
             // eslint-disable-next-line no-console
-            console.debug(JSON.stringify(searchResults?.debug, null, 2));
+            console.debug(JSON.stringify(result?.debug, null, 2));
           }
-
-          if (controller.signal.aborted) return;
-          if (!searchResults?.data) return;
-
-          setSearchResults(
-            searchResultsToSearchComponentProps(
-              searchQuery,
-              searchResults.data,
-            ) ?? [],
-          );
-
-          // initially focus the first result
-          setState('done');
+          return result?.data || [];
         });
       }
+      promise.then((searchResults) => {
+        if (controller.signal.aborted) return;
+        if (!searchResults) return;
+
+        setSearchResults(
+          searchResultsToSearchComponentProps(
+            searchQuery,
+            searchResults,
+            searchOptions,
+          ) ?? [],
+        );
+
+        // initially focus the first result
+        setState('done');
+      });
 
       promise?.catch((error) => {
         if ((error as any).cause?.name !== 'AbortError') {
@@ -342,115 +332,27 @@ export function useMarkprompt({
   );
 }
 
-function removeLeadHeading(text: string, heading?: string): string {
-  // This needs to be revised. When returning the search result, the endpoint
-  // provides a snippet of the content around the search term (to avoid sending
-  // entire sections). This snippet may contain the start of the section
-  // content, and this content may start with a heading (the leadHeading).
-  // We don't want this leadHeading to be part of the content snippet.
-  // Since it's a snippet, we can't assume that the leadHeading will always be
-  // the first line. Instead, we have to check it in the string itself.
-  const trimmedContent = trimContent(text);
-  if (!heading) {
-    return trimmedContent;
-  }
-  const pattern = new RegExp(`^#{1,}\\s${heading}\\s?`);
-  return trimContent(trimmedContent.replace(pattern, ''));
-}
-
-function trimContent(text: string): string {
-  // we don't use String.prototype.trim() because we
-  // don't want to remove line terminators from Markdown
-  return text.trimStart().trimEnd();
-}
-
-function createKWICSnippet(
-  content: string,
-  normalizedSearchQuery: string,
-): string {
-  const trimmedContent = content.trim().replace(/\n/g, ' ');
-  const index = trimmedContent
-    .toLocaleLowerCase()
-    .indexOf(normalizedSearchQuery);
-
-  if (index === -1) {
-    return trimmedContent.slice(0, 200);
-  }
-
-  const rawSnippet = trimmedContent.slice(Math.max(0, index - 50), index + 150);
-
-  const words = rawSnippet.split(/\s+/);
-  if (words.length > 3) {
-    return words.slice(1, words.length - 1).join(' ');
-  }
-  return words.join(' ');
-}
-
 function searchResultsToSearchComponentProps(
-  searchQuery: string,
-  searchResults: SearchResult[],
+  query: string,
+  searchResults: SearchResult[] | AlgoliaDocSearchHit[],
+  searchOptions: MarkpromptOptions['search'],
 ): SearchResultComponentProps[] {
   return searchResults.map((result) => {
-    if (result.matchType === 'title') {
-      return {
-        path: result.file.path,
-        tag: undefined,
-        title: result.file.title || 'Untitled',
-        isSection: false,
-        reference: {
-          file: result.file,
-          meta: undefined,
-        },
-      };
-    } else {
-      const leadHeading = result.meta?.leadHeading;
-      if (result.matchType === 'leadHeading' && leadHeading?.value) {
-        return {
-          path: result.file.path,
-          tag: result.file.title,
-          title: leadHeading.value,
-          isSection: true,
-          reference: result,
-        };
-      } else {
-        const normalizedSearchQuery = searchQuery.toLowerCase();
-        // Fast and hacky way to remove the lead heading from
-        // the content, which we don't want to be part of the snippet.
-        const trimmedContent = removeLeadHeading(
-          result.snippet || '',
-          result.meta?.leadHeading?.value,
-        );
-        return {
-          path: result.file.path,
-          tag: leadHeading?.value || result.file.title,
-          title: createKWICSnippet(trimmedContent, normalizedSearchQuery),
-          isSection: true,
-          reference: result,
-        };
-      }
-    }
-  });
-}
-
-function algoliaDocSearchHitsToSearchComponentProps(
-  hits: AlgoliaDocSearchHit[],
-): SearchResultComponentProps[] {
-  return hits.map((result) => {
     return {
-      path: result.url,
-      tag: result._highlightResult?.hierarchy?.lvl0?.value || undefined,
-      title: result._highlightResult?.hierarchy?.lvl1?.value || 'Untitled',
-      isSection: false,
-      reference: {
-        file: {
-          title: '',
-          path: result.url,
-          source: {
-            type: 'website',
-          },
-        },
-        meta: undefined,
-      },
+      href: (
+        searchOptions?.getHref || DEFAULT_MARKPROMPT_OPTIONS.search!.getHref
+      )?.(result),
+      heading: (
+        searchOptions?.getHeading ||
+        DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading
+      )?.(result, query),
+      title: (
+        searchOptions?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle
+      )?.(result, query),
+      subtitle: (
+        searchOptions?.getSubtitle ||
+        DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle
+      )?.(result, query),
     };
   });
 }

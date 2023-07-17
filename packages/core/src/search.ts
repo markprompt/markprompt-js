@@ -41,6 +41,10 @@ export interface AlgoliaProvider {
    * Algolia index name
    **/
   indexName: string;
+  /**
+   * Algolia search parameters, like faceFilters
+   **/
+  searchParameters?: any;
 }
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
@@ -118,8 +122,9 @@ export async function submitAlgoliaDocsearchQuery(
         method: 'POST',
         body: JSON.stringify({
           query,
-          hitsPerPage: String(limit),
-          getRankingInfo: String(1),
+          hitsPerPage: limit,
+          getRankingInfo: 1,
+          ...options?.provider?.searchParameters,
         }),
         signal: options?.signal,
         headers: {

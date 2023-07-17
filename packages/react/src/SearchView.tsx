@@ -128,7 +128,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
-        getHref={search?.getHref}
+        search={search}
         handleViewChange={handleViewChange}
         onDidSelectResult={onDidSelectResult}
         setActiveSearchResult={setActiveSearchResult}
@@ -144,7 +144,7 @@ interface SearchResultsContainerProps {
   >;
   handleViewChange?: () => void;
   onDidSelectResult?: () => void;
-  getHref?: NonNullable<MarkpromptOptions['search']>['getHref'];
+  search?: MarkpromptOptions['search'];
 }
 
 function SearchResultsContainer(
@@ -152,10 +152,10 @@ function SearchResultsContainer(
 ): ReactElement {
   const {
     activeSearchResult,
-    getHref,
     handleViewChange,
     setActiveSearchResult,
     onDidSelectResult,
+    search,
   } = props;
   const onMouseMovedOverSearchResult = useRef<string | null>(null);
 
@@ -228,7 +228,6 @@ function SearchResultsContainer(
               <SearchResult
                 {...rest}
                 id={id}
-                getHref={getHref}
                 onMouseMove={() => {
                   // We use a mouse move event, instead of mouse over or
                   // mouse enter. Indeed, onMouseOver and onMouseEnter will

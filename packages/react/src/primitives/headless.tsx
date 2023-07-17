@@ -512,7 +512,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
               role="option"
               index={index}
               id={id}
-              key={`${result.path}:${result.title}`}
+              key={`${result.href}:${result.title}`}
               {...result}
             />
           );
@@ -526,7 +526,6 @@ SearchResults.displayName = 'Markprompt.SearchResults';
 type SearchResultProps = PolymorphicComponentPropWithRef<
   'li',
   SearchResultComponentProps & {
-    getHref?: (reference: FileSectionReference) => string;
     onMouseMove?: () => void;
     onClick?: () => void;
   }
@@ -534,17 +533,10 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const {
-      title,
-      reference,
-      getHref = (reference) => {
-        return DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(reference);
-      },
-      ...rest
-    } = props;
+    const { title, href, ...rest } = props;
     return (
       <li ref={ref} {...rest}>
-        <a href={getHref(reference)}>{title}</a>
+        <a href={href}>{title}</a>
       </li>
     );
   },
