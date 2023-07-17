@@ -214,7 +214,7 @@ Render a Markprompt dialog button.
 
 #### Options
 
-- `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
+- `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key"
 - `display` (`plain | dialog`): The way to display the prompt (Default: `dialog`)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
@@ -237,7 +237,7 @@ Render a Markprompt dialog button.
 - `prompt.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
 - `prompt.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
-- `prompt.signal` (`AbortSignal`): AbortController signal.
+- `prompt.signal` (`AbortSignal`): AbortController signal
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an href
 - `references.getLabel` (`function`): Callback to transform a reference into an label to show for the link
@@ -255,8 +255,8 @@ Render a Markprompt dialog button.
 - `search.placeholder` (`string`): Placeholder for the search input (Default: `Search docs…`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
-- `search.provider` (`object`): A custom search provider configuration
-- `search.signal` (`AbortSignal`): AbortController signal.
+- `search.provider` (`object`): A custom search provider configuration, such as Algolia
+- `search.signal` (`AbortSignal`): AbortController signal
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)
 - `trigger.label` (`string`): `aria-label` for the open button (Default: `Open Markprompt`)

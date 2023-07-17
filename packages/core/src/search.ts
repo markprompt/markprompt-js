@@ -42,7 +42,7 @@ export interface AlgoliaProvider {
    **/
   indexName: string;
   /**
-   * Algolia search parameters, like faceFilters
+   * Algolia search parameters, like `faceFilters`
    **/
   searchParameters?: any;
 }
