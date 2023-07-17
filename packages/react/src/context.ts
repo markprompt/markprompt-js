@@ -7,12 +7,13 @@ import {
 } from 'react';
 
 import type { SearchResultComponentProps } from './types.js';
-import { type LoadingState, type Views } from './useMarkprompt.js';
+import { type LoadingState, type View } from './useMarkprompt.js';
 
 type State = {
-  activeView: Views;
+  activeView: View;
   answer: string | undefined;
   isSearchEnabled: boolean;
+  searchProvider: string | undefined;
   prompt: string;
   references: FileSectionReference[];
   searchQuery: string;
@@ -22,7 +23,7 @@ type State = {
 
 type Actions = {
   abort: () => void;
-  setActiveView: Dispatch<SetStateAction<Views>>;
+  setActiveView: Dispatch<SetStateAction<View>>;
   setPrompt: Dispatch<SetStateAction<string>>;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   submitFeedback: (helpful: boolean) => void;
@@ -37,6 +38,7 @@ const MarkpromptContext = createContext<State & Actions>({
   activeView: 'prompt',
   answer: undefined,
   isSearchEnabled: false,
+  searchProvider: undefined,
   prompt: '',
   references: [],
   searchQuery: '',

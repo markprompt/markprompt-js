@@ -136,12 +136,12 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
   ref,
 ) {
   const { showBranding = true, ...rest } = props;
-  const { state } = useMarkpromptContext();
+  const { state, searchProvider } = useMarkpromptContext();
 
   return (
     <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
       {props.children}
-      {showBranding && <Footer />}
+      {showBranding && <Footer includeAlgolia={searchProvider === 'algolia'} />}
     </Dialog.Content>
   );
 });
@@ -160,12 +160,14 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
     const { showBranding = true, ...rest } = props;
-    const { state } = useMarkpromptContext();
+    const { state, searchProvider } = useMarkpromptContext();
 
     return (
       <div {...rest} ref={ref} data-loading-state={state}>
         {props.children}
-        {showBranding && <Footer />}
+        {showBranding && (
+          <Footer includeAlgolia={searchProvider === 'algolia'} />
+        )}
       </div>
     );
   },

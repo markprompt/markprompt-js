@@ -29,7 +29,7 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done';
 
-export type Views = 'prompt' | 'search';
+export type View = 'prompt' | 'search';
 
 export interface UseMarkpromptOptions {
   /** Render in a dialog or plain? */
@@ -46,11 +46,13 @@ export interface UseMarkpromptOptions {
 
 export interface UseMarkpromptResult {
   /** The currently active view */
-  activeView: Views;
+  activeView: View;
   /** The most recent answer */
   answer: string;
   /** Enable search functionality */
   isSearchEnabled: boolean;
+  /** Custom search provider, e.g. 'algolia' */
+  searchProvider: string | undefined;
   /** The current prompt */
   prompt: string;
   /** The references that belong to the latest answer */
@@ -64,7 +66,7 @@ export interface UseMarkpromptResult {
   /** Abort a pending request */
   abort: () => void;
   /** Switch the active view between search and prompt */
-  setActiveView: Dispatch<SetStateAction<Views>>;
+  setActiveView: Dispatch<SetStateAction<View>>;
   /** Set a new value for the prompt */
   setPrompt: Dispatch<SetStateAction<string>>;
   /** Set a new value for the search query */
@@ -93,7 +95,7 @@ export function useMarkprompt({
     );
   }
 
-  const [activeView, setActiveView] = useState<Views>(
+  const [activeView, setActiveView] = useState<View>(
     searchOptions?.enabled ? 'search' : 'prompt',
   );
 
@@ -301,6 +303,7 @@ export function useMarkprompt({
     () => ({
       answer,
       isSearchEnabled: !!searchOptions?.enabled,
+      searchProvider: searchOptions?.provider?.name,
       activeView,
       prompt,
       references,
