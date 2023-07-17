@@ -5,20 +5,27 @@ import { describe, expect, test, vitest } from 'vitest';
 
 import { MarkpromptContext } from './context';
 import { Feedback } from './Feedback';
+import { View } from './useMarkprompt';
 
 const submitFeedback = vitest.fn((helpful: boolean) => Promise.resolve());
 
 const mockContextValue = {
+  activeView: 'prompt' as View,
   activeSearchResult: undefined,
   answer: undefined,
   isSearchEnabled: false,
+  searchProvider: undefined,
   isSearchActive: false,
   prompt: '',
   references: [],
+  searchQuery: '',
   searchResults: [],
   state: 'indeterminate' as const,
   abort: vitest.fn(),
   submitFeedback: submitFeedback,
+  setActiveView: vitest.fn(),
+  setPrompt: vitest.fn(),
+  setSearchQuery: vitest.fn(),
   submitPrompt: vitest.fn(),
   submitSearchQuery: vitest.fn(),
   updateActiveSearchResult: vitest.fn(),

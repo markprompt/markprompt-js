@@ -154,3 +154,40 @@ test('Throws if projectKey is not provided', async () => {
   // eslint-disable-next-line no-console
   console.error = originalError;
 });
+
+test('Branding is not displayed in PlainContent when set to false', async () => {
+  render(
+    <Markprompt.Root
+      projectKey="TEST_PROJECT_KEY"
+      searchOptions={{ enabled: true }}
+    >
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.Overlay />
+        <Markprompt.Content>
+          <Markprompt.Close>Close</Markprompt.Close>
+          {/* <Markprompt.Form>
+            Search
+            <Markprompt.Prompt />
+          </Markprompt.Form>
+          <Markprompt.SearchResults>
+          </Markprompt.SearchResults>
+          <Markprompt.References /> */}
+        </Markprompt.Content>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const close = await screen.findByText('Close');
+  act(() => {
+    close.click();
+  });
+
+  const branding = await screen.queryByText('Powered by');
+  expect(branding).toBeNull();
+});

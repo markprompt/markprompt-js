@@ -44,11 +44,11 @@ export interface UseMarkpromptOptions {
   searchOptions?: MarkpromptOptions['search'];
 }
 
-export interface UseMarkpromptResult {
+export type UseMarkpromptResult = {
   /** The currently active view */
   activeView: View;
   /** The most recent answer */
-  answer: string;
+  answer: string | undefined;
   /** Enable search functionality */
   isSearchEnabled: boolean;
   /** Custom search provider, e.g. 'algolia' */
@@ -77,7 +77,7 @@ export interface UseMarkpromptResult {
   submitPrompt: () => Promise<void>;
   /** Submit search query */
   submitSearchQuery: (query: string) => void;
-}
+};
 
 /**
  * A React hook with all the functionality you need to create an interactive
