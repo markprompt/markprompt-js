@@ -87,14 +87,15 @@ The pre-built Markprompt component. It accepts the following props:
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
 - `search.getHref` (`function`): Callback to transform a search result into an href
-- `getHeading` (`function`): Callback to transform a search result into a heading
-- `getTitle` (`function`): Callback to transform a search result into a title
-- `getSubtitle` (`function`): Callback to transform a search result into a subtitle
+- `search.getHeading` (`function`): Callback to transform a search result into a heading
+- `search.getTitle` (`function`): Callback to transform a search result into a title
+- `search.getSubtitle` (`function`): Callback to transform a search result into a subtitle
 - `search.label` (`string`): Label for the search input, not shown but used for `aria-label` (Default: `Search docs…`)
 - `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
 - `search.placeholder` (`string`): Placeholder for the search input (Default: `Search docs…`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `search.provider` (`object`): A custom search provider configuration
 - `search.signal` (`AbortSignal`): AbortController signal.
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)

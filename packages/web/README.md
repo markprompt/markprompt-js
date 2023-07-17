@@ -215,6 +215,7 @@ Render a Markprompt dialog button.
 #### Options
 
 - `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key".
+- `display` (`plain | dialog`): The way to display the prompt (Default: `dialog`)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default: `Close Markprompt`)
 - `close.visible` (`boolean`): Show the close button (Default: `true`)
@@ -223,6 +224,7 @@ Render a Markprompt dialog button.
 - `description.text` (`string`): Description text
 - `prompt` (`object`): Options for the prompt
 - `prompt.label` (`string`): Label for the prompt input (Default: `Ask AI`)
+- `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `prompt.placeholder` (`string`): Placeholder for the prompt input (Default: `Ask AI…`)
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default: `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
@@ -238,14 +240,22 @@ Render a Markprompt dialog button.
 - `prompt.signal` (`AbortSignal`): AbortController signal.
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an href
-- `references.getLabel` (`function`): Callback to transform a reference into an label for the link
+- `references.getLabel` (`function`): Callback to transform a reference into an label to show for the link
 - `references.loadingText` (`string`): Loading text (Default: `Fetching relevant pages…`)
 - `references.heading` (`string`): Heading for the references panel (Default: `Answer generated from the following sources:`)
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default: `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an href
+- `search.getHref` (`function`): Callback to transform a search result into an href
+- `search.getHeading` (`function`): Callback to transform a search result into a heading
+- `search.getTitle` (`function`): Callback to transform a search result into a title
+- `search.getSubtitle` (`function`): Callback to transform a search result into a subtitle
+- `search.label` (`string`): Label for the search input, not shown but used for `aria-label` (Default: `Search docs…`)
+- `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
+- `search.placeholder` (`string`): Placeholder for the search input (Default: `Search docs…`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default: `https://api.markprompt.com/v1/search`)
+- `search.provider` (`object`): A custom search provider configuration
 - `search.signal` (`AbortSignal`): AbortController signal.
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)
