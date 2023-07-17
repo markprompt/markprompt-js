@@ -68,6 +68,7 @@ describe('useMarkprompt', () => {
       activeView: 'prompt',
       answer: '',
       isSearchEnabled: false,
+      searchProvider: undefined,
       prompt: '',
       references: [],
       searchQuery: '',
@@ -150,14 +151,14 @@ describe('useMarkprompt', () => {
 
     await result.current.submitSearchQuery('react');
     await waitFor(() => {
-      expect(result.current.searchResults[0]?.path).toBe(
+      expect(result.current.searchResults[0]?.href).toBe(
         searchResults[0].file.path,
       );
       expect(result.current.searchResults[0]?.title).toBe(
         searchResults[0].file.title,
       );
       expect(result.current.searchResults[1]?.title).toBe(
-        searchResults[1].meta.leadHeading.value,
+        searchResults[1].meta?.leadHeading?.value,
       );
       expect(result.current.searchResults[2]?.title).toBe(
         searchResults[2].snippet,
