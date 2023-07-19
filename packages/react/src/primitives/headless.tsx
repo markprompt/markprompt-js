@@ -160,13 +160,15 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
     const { showBranding = true, ...rest } = props;
-    const { state, searchProvider } = useMarkpromptContext();
+    const { state, searchProvider, isSearchEnabled } = useMarkpromptContext();
 
     return (
       <div {...rest} ref={ref} data-loading-state={state}>
         {props.children}
         {showBranding && (
-          <Footer includeAlgolia={searchProvider === 'algolia'} />
+          <Footer
+            includeAlgolia={isSearchEnabled && searchProvider === 'algolia'}
+          />
         )}
       </div>
     );
