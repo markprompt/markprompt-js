@@ -49,6 +49,7 @@ export const Footer = ({
             }}
             target="_blank"
             href="https://algolia.com"
+            aria-label="Algolia"
           >
             <AlgoliaIcon style={{ height: '13px' }} aria-hidden />
           </a>
