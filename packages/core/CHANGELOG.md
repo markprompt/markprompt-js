@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.9.1
+
+### Patch Changes
+
+- [#132](https://github.com/motifland/markprompt-js/pull/132) [`4cdbfb6`](https://github.com/motifland/markprompt-js/commit/4cdbfb6c5483f3009277e803df8cbbd4e9987825) Thanks [@michaelfester](https://github.com/michaelfester)! - Support more Algolia search result formats
+
 ## 0.9.0
 
 ### Minor Changes
