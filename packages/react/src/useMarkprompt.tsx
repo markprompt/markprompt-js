@@ -270,6 +270,7 @@ export function useMarkprompt({
         if (controller.signal.aborted) return;
         if (!searchResults) return;
 
+        console.log('searchResults', JSON.stringify(searchResults, null, 2));
         setSearchResults(
           searchResultsToSearchComponentProps(
             searchQuery,
@@ -319,11 +320,12 @@ export function useMarkprompt({
       submitSearchQuery,
     }),
     [
-      activeView,
       answer,
+      searchOptions?.enabled,
+      searchOptions?.provider?.name,
+      activeView,
       prompt,
       references,
-      searchOptions?.enabled,
       searchQuery,
       searchResults,
       state,
@@ -349,9 +351,10 @@ function searchResultsToSearchComponentProps(
         searchOptions?.getHeading ||
         DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading
       )?.(result, query),
-      title: (
-        searchOptions?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle
-      )?.(result, query),
+      title:
+        (
+          searchOptions?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle
+        )?.(result, query) || 'Untitled',
       subtitle: (
         searchOptions?.getSubtitle ||
         DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle
