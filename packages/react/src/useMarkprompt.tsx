@@ -270,7 +270,6 @@ export function useMarkprompt({
         if (controller.signal.aborted) return;
         if (!searchResults) return;
 
-        console.log('searchResults', JSON.stringify(searchResults, null, 2));
         setSearchResults(
           searchResultsToSearchComponentProps(
             searchQuery,
