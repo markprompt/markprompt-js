@@ -8,8 +8,8 @@ import { useMarkpromptContext } from './index.js';
 import { useElementSize } from './useElementSize.js';
 
 type ReferenceProps = {
-  getHref?: (reference: FileSectionReference) => string;
-  getLabel?: (reference: FileSectionReference) => string;
+  getHref?: (reference: FileSectionReference) => string | undefined;
+  getLabel?: (reference: FileSectionReference) => string | undefined;
   reference: FileSectionReference;
   index: number;
   // Backwards compatibility
@@ -60,8 +60,8 @@ const Reference = (props: ReferenceProps): ReactElement => {
 type ReferencesProps = {
   loadingText?: string;
   heading?: string;
-  getHref?: (reference: FileSectionReference) => string;
-  getLabel?: (reference: FileSectionReference) => string;
+  getHref?: (reference: FileSectionReference) => string | undefined;
+  getLabel?: (reference: FileSectionReference) => string | undefined;
   // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;

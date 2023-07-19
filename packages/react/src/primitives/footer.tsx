@@ -44,11 +44,12 @@ export const Footer = ({
           <a
             style={{
               color: 'var(--markprompt-primary)',
-              marginBottom: -6,
+              marginBottom: -5,
               textDecoration: 'none',
             }}
             target="_blank"
             href="https://algolia.com"
+            aria-label="Algolia"
           >
             <AlgoliaIcon style={{ height: '13px' }} aria-hidden />
           </a>

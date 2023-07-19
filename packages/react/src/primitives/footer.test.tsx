@@ -15,6 +15,13 @@ describe('Footer', () => {
     const anchor = screen.getByText<HTMLAnchorElement>('Markprompt AI');
     expect(anchor.href).toBe('https://markprompt.com/');
   });
+
+  test('render a footer with Algolia', () => {
+    render(<Footer includeAlgolia />);
+
+    const anchor = screen.getByLabelText<HTMLAnchorElement>('Algolia');
+    expect(anchor.href).toBe('https://algolia.com/');
+  });
 });
 
 describe('MarkpromptIcon', () => {

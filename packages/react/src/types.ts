@@ -116,9 +116,9 @@ type MarkpromptOptions = {
   };
   references?: {
     /** Callback to transform a reference into an href */
-    getHref?: (reference: FileSectionReference) => string;
+    getHref?: (reference: FileSectionReference) => string | undefined;
     /** Callback to transform a reference into a label */
-    getLabel?: (reference: FileSectionReference) => string;
+    getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
      * @default "Answer generated from the following sources:"

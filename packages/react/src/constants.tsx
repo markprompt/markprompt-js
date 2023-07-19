@@ -80,10 +80,16 @@ const defaultPromptGetLabel = (reference: FileSectionReference): string => {
   );
 };
 
+const isAlgoliaSearchResult = (
+  result: SearchResult | AlgoliaDocSearchHit,
+): boolean => {
+  return !!(result as AlgoliaDocSearchHit)._highlightResult;
+};
+
 const defaultGetHref = (
   result: FileSectionReference | SearchResult | AlgoliaDocSearchHit,
-): string => {
-  if ((result as AlgoliaDocSearchHit).url) {
+): string | undefined => {
+  if (isAlgoliaSearchResult(result)) {
     return (result as AlgoliaDocSearchHit).url;
   }
 
@@ -100,8 +106,8 @@ const defaultGetHref = (
 const defaultGetSearchResultHeading = (
   result: SearchResult | AlgoliaDocSearchHit,
 ): string | undefined => {
-  if ((result as AlgoliaDocSearchHit).hierarchy) {
-    return (result as AlgoliaDocSearchHit).hierarchy.lvl0 || undefined;
+  if (isAlgoliaSearchResult(result)) {
+    return (result as AlgoliaDocSearchHit).hierarchy?.lvl0 || undefined;
   }
 
   const res = result as SearchResult;
@@ -121,8 +127,8 @@ const defaultGetSearchResultTitle = (
   result: SearchResult | AlgoliaDocSearchHit,
   query: string,
 ): string | undefined => {
-  if ((result as AlgoliaDocSearchHit).hierarchy) {
-    return (result as AlgoliaDocSearchHit).hierarchy.lvl1 || undefined;
+  if (isAlgoliaSearchResult(result)) {
+    return (result as AlgoliaDocSearchHit).hierarchy?.lvl1 || undefined;
   }
 
   const res = result as SearchResult;
@@ -149,8 +155,8 @@ const defaultGetSearchResultTitle = (
 const defaultGetSearchResultSubtitle = (
   result: SearchResult | AlgoliaDocSearchHit,
 ): string | undefined => {
-  if ((result as AlgoliaDocSearchHit).hierarchy) {
-    return (result as AlgoliaDocSearchHit).hierarchy.lvl2 || undefined;
+  if (isAlgoliaSearchResult(result)) {
+    return (result as AlgoliaDocSearchHit).hierarchy?.lvl2 || undefined;
   }
 
   return undefined;
