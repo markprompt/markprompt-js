@@ -38,6 +38,7 @@ const config = {
           appId: 'YOUR-ALGOLIA-APP-ID',
           indexName: 'YOUR-ALGOLIA-INDEX-NAME',
         },
+        // Set custom mappings between Algolia records and Markprompt results:
         getHref: (result) => result.url,
         getHeading: (result) => result.pageTitle,
         getTitle: (result) => result.pageDescription,
