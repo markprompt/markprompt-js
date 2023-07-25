@@ -8,15 +8,17 @@ require('dotenv').config();
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Markprompt with swizzling',
-  tagline: 'Markprompt with swizzling',
+  title: 'Markprompt + Algolia demo',
+  tagline: 'Markprompt in Docusaurus',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://markprompt-docusaurus.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
+
+  themes: ['@markprompt/docusaurus-theme-search'],
 
   presets: [
     [
@@ -40,7 +42,7 @@ const config = {
         // the project key in the Markprompt dashboard, under
         // project settings.
         projectKey: 'YOUR-MARKPROMPT-KEY',
-        trigger: { floating: true },
+        trigger: { floating: false },
         references: {
           getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
           getLabel: (reference) => {
@@ -62,20 +64,15 @@ const config = {
           getSubtitle: (result) => result.pageContent,
         },
       },
-      algolia: {
-        appId: 'YOUR_APP_ID',
-        apiKey: 'YOUR_SEARCH_API_KEY',
-        indexName: 'YOUR_INDEX_NAME',
-      },
       navbar: {
-        title: 'Markprompt + Algolia demo',
+        title: 'Markprompt',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
         items: [
           {
-            href: 'https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus-swizzled',
+            href: 'https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus',
             label: 'GitHub',
             position: 'right',
           },
