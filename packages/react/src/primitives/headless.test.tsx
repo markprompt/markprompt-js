@@ -191,3 +191,15 @@ test('Branding is not displayed in PlainContent when set to false', async () => 
   const branding = await screen.queryByText('Powered by');
   expect(branding).toBeNull();
 });
+
+test('SearchResult properly includes href', async () => {
+  render(
+    <Markprompt.SearchResult
+      href="https://example.com"
+      title="Example result"
+    />,
+  );
+
+  const result = await screen.findByText('Example result');
+  expect(result).toHaveAttribute('href', 'https://example.com');
+});
