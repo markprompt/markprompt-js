@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.8.0
+
+### Minor Changes
+
+- [#134](https://github.com/motifland/markprompt-js/pull/134) [`11b9200`](https://github.com/motifland/markprompt-js/commit/11b9200c545e6f7fb33916a5366c021221410328) Thanks [@michaelfester](https://github.com/michaelfester)! - Support Docusaurus default search bar
+
+### Patch Changes
+
+- Updated dependencies [[`11b9200`](https://github.com/motifland/markprompt-js/commit/11b9200c545e6f7fb33916a5366c021221410328)]:
+  - @markprompt/react@0.17.0
+
 ## 0.7.11
 
 ### Patch Changes
