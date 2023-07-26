@@ -1,8 +1,52 @@
+import {
+  DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  SearchResult,
+} from '@markprompt/core';
 import { act, render, screen } from '@testing-library/react';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 import React from 'react';
-import { expect, test, vi } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  expect,
+  test,
+  vi,
+  vitest,
+} from 'vitest';
 
 import * as Markprompt from './headless.js';
+import { MarkpromptContext } from '../context';
+import { View } from '../useMarkprompt.js';
+
+let searchResults: SearchResult[] = [];
+let status = 200;
+const server = setupServer(
+  rest.get(
+    DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
+    async (_req, res, ctx) => {
+      return res(
+        ctx.status(status),
+        ctx.body(JSON.stringify({ data: searchResults })),
+      );
+    },
+  ),
+);
+
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+});
+
+afterAll(() => {
+  server.close();
+});
+
+afterEach(() => {
+  searchResults = [];
+  status = 200;
+  server.resetHandlers();
+});
 
 test('Initial state', async () => {
   render(
@@ -190,4 +234,85 @@ test('Branding is not displayed in PlainContent when set to false', async () => 
 
   const branding = await screen.queryByText('Powered by');
   expect(branding).toBeNull();
+});
+
+test('SearchResult properly includes href', async () => {
+  render(
+    <Markprompt.SearchResult
+      href="https://example.com"
+      title="Example result"
+    />,
+  );
+
+  const result = await screen.findByText('Example result');
+  expect(result).toHaveAttribute('href', 'https://example.com');
+});
+
+test('Title and description should be visible', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.Overlay />
+        <Markprompt.Content>
+          <Markprompt.Title hide={false}>Example title</Markprompt.Title>
+          <Markprompt.Description hide={false}>
+            Example description
+          </Markprompt.Description>
+        </Markprompt.Content>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const title = await screen.findByText('Example title');
+  expect(title).toBeVisible();
+
+  const description = await screen.findByText('Example description');
+  expect(description).toBeVisible();
+});
+
+test('Title and description should be visible', async () => {
+  const mockContextValue = {
+    activeView: 'prompt' as View,
+    activeSearchResult: undefined,
+    answer: undefined,
+    isSearchEnabled: true,
+    searchProvider: undefined,
+    isSearchActive: true,
+    prompt: '',
+    references: [],
+    searchQuery: '',
+    state: 'indeterminate' as const,
+    abort: vitest.fn(),
+    submitFeedback: vitest.fn(),
+    setActiveView: vitest.fn(),
+    setPrompt: vitest.fn(),
+    setSearchQuery: vitest.fn(),
+    submitPrompt: vitest.fn(),
+    submitSearchQuery: vitest.fn(),
+    updateActiveSearchResult: vitest.fn(),
+    updatePrompt: vitest.fn(),
+    searchResults: [
+      {
+        href: 'https://example.com',
+        heading: 'Test heading',
+        title: 'Test title',
+        subtitle: 'Test subtitle',
+      },
+    ],
+  };
+
+  render(
+    <MarkpromptContext.Provider value={mockContextValue}>
+      <Markprompt.SearchResults></Markprompt.SearchResults>
+    </MarkpromptContext.Provider>,
+  );
+
+  const heading = await screen.findByText('Test title');
+  expect(heading).toBeVisible();
 });

@@ -205,10 +205,10 @@ type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
   hide?: boolean;
 };
 const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
-  const { hide } = props;
+  const { hide, ...rest } = props;
   return (
     <ConditionalVisuallyHidden hide={hide}>
-      <Dialog.Title {...props} ref={ref} />
+      <Dialog.Title {...rest} ref={ref} />
     </ConditionalVisuallyHidden>
   );
 });
@@ -222,10 +222,10 @@ type DescriptionProps = ComponentPropsWithRef<typeof Dialog.Description> & {
  */
 const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
   (props, ref) => {
-    const { hide } = props;
+    const { hide, ...rest } = props;
     return (
       <ConditionalVisuallyHidden hide={hide}>
-        <Dialog.Description {...props} ref={ref} />
+        <Dialog.Description {...rest} ref={ref} />
       </ConditionalVisuallyHidden>
     );
   },
@@ -516,7 +516,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
               role="option"
               index={index}
               id={id}
-              key={`${result.href}:${result.title}`}
+              key={id}
               {...result}
             />
           );
