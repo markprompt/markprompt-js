@@ -204,7 +204,7 @@ test('SearchResult properly includes href', async () => {
   expect(result).toHaveAttribute('href', 'https://example.com');
 });
 
-test('Title should be visible', async () => {
+test('Title and description should be visible', async () => {
   render(
     <Markprompt.Root projectKey="TEST_PROJECT_KEY">
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
@@ -212,6 +212,9 @@ test('Title should be visible', async () => {
         <Markprompt.Overlay />
         <Markprompt.Content>
           <Markprompt.Title hide={false}>Example title</Markprompt.Title>
+          <Markprompt.Description hide={false}>
+            Example description
+          </Markprompt.Description>
         </Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>,
@@ -222,6 +225,9 @@ test('Title should be visible', async () => {
     trigger.click();
   });
 
-  const result = await screen.findByText('Example title');
-  expect(result).toBeVisible();
+  const title = await screen.findByText('Example title');
+  expect(title).toBeVisible();
+
+  const description = await screen.findByText('Example description');
+  expect(description).toBeVisible();
 });
