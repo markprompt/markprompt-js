@@ -203,3 +203,25 @@ test('SearchResult properly includes href', async () => {
   const result = await screen.findByText('Example result');
   expect(result).toHaveAttribute('href', 'https://example.com');
 });
+
+test('Title should be visible', async () => {
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
+      <Markprompt.Portal>
+        <Markprompt.Overlay />
+        <Markprompt.Content>
+          <Markprompt.Title hide={false}>Example title</Markprompt.Title>
+        </Markprompt.Content>
+      </Markprompt.Portal>
+    </Markprompt.Root>,
+  );
+
+  const trigger = await screen.findByText('Trigger');
+  act(() => {
+    trigger.click();
+  });
+
+  const result = await screen.findByText('Example title');
+  expect(result).toBeVisible();
+});
