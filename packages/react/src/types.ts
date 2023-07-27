@@ -91,11 +91,6 @@ type MarkpromptOptions = {
      * @default "Was this response helpful?"
      **/
     heading?: string;
-    /**
-     * Confirmation message
-     * @default "Thank you!"
-     **/
-    confirmationMessage?: string;
   };
   prompt?: SubmitPromptOptions & {
     /**

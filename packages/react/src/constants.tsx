@@ -175,7 +175,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   feedback: {
     enabled: false,
     heading: 'Was this response helpful?',
-    confirmationMessage: 'Thank you!',
   },
   prompt: {
     ...DEFAULT_SUBMIT_PROMPT_OPTIONS,

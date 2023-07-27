@@ -95,6 +95,7 @@ export async function submitPrompt(
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
+  onPromptId: (promptId: string) => void,
   onError: (error: Error) => void,
   options: SubmitPromptOptions = {},
   debug?: boolean,
@@ -163,6 +164,10 @@ export async function submitPrompt(
 
     if (data?.references) {
       onReferences(data?.references);
+    }
+
+    if (data?.promptId) {
+      onPromptId(data?.promptId);
     }
 
     const reader = res.body.getReader();

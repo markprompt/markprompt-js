@@ -1,3 +1,4 @@
+import { PromptFeedback } from '@markprompt/core';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -7,7 +8,9 @@ import { MarkpromptContext } from './context';
 import { Feedback } from './Feedback';
 import { View } from './useMarkprompt';
 
-const submitFeedback = vitest.fn((helpful: boolean) => Promise.resolve());
+const submitFeedback = vitest.fn((feedback: PromptFeedback) =>
+  Promise.resolve(),
+);
 
 const mockContextValue = {
   activeView: 'prompt' as View,
@@ -61,8 +64,10 @@ describe('Feedback', () => {
       await user.click(yesButton);
     });
 
-    await waitFor(() => expect(submitFeedback).toHaveBeenCalledWith(true));
+    await waitFor(() =>
+      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }),
+    );
 
-    expect(screen.getByText(/Thank you!/)).toBeInTheDocument();
+    expect(yesButton).toHaveAttribute('data-active', 'true');
   });
 });

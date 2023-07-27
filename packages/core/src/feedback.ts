@@ -1,8 +1,10 @@
+import type { PromptFeedback } from './types.js';
+
 export interface SubmitFeedbackBody {
   /**
-   * Whether the prompt was helpful or not.
+   * Prompt feedback.
    */
-  helpful: boolean;
+  feedback: PromptFeedback;
   /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
 }

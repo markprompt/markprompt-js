@@ -44,6 +44,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
     display = 'dialog',
     projectKey,
     prompt,
+    feedback,
     references,
     search,
     showBranding,
@@ -84,6 +85,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
       display={display}
       promptOptions={prompt}
       searchOptions={search}
+      feedbackOptions={feedback}
       open={open}
       onOpenChange={setOpen}
       debug={debug}
@@ -131,6 +133,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
               <MarkpromptContent
                 prompt={prompt}
+                feedback={feedback}
                 references={references}
                 search={search}
                 close={close}
@@ -147,6 +150,7 @@ function Markprompt(props: MarkpromptProps): ReactElement {
         >
           <MarkpromptContent
             prompt={prompt}
+            feedback={feedback}
             search={search}
             references={references}
             close={close}
@@ -159,13 +163,14 @@ function Markprompt(props: MarkpromptProps): ReactElement {
 
 type MarkpromptContentProps = {
   prompt: MarkpromptOptions['prompt'];
+  feedback?: MarkpromptOptions['feedback'];
   references: MarkpromptOptions['references'];
   search: MarkpromptOptions['search'];
   close: MarkpromptOptions['close'];
 };
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
-  const { prompt, references, search, close: _close } = props;
+  const { prompt, feedback, references, search, close: _close } = props;
 
   const { abort, activeView, setActiveView } = useMarkpromptContext();
 
@@ -282,6 +287,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         >
           <PromptView
             prompt={prompt}
+            feedback={feedback}
             references={references}
             close={!search?.enabled ? close : undefined}
             onDidSelectReference={() => emitter.emit('close')}

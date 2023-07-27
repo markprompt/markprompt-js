@@ -61,7 +61,7 @@ const options = {
   apiUrl: 'https://api.markprompt.com/v1/completions', // Or your own completions API endpoint
 };
 
-await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options);
+await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onPromptId, onError, options);
 ```
 
 ## API
