@@ -474,7 +474,7 @@ const References = function References<
   );
 };
 /**
- * Render the references that Markprompr returned.
+ * Render the references that Markprompt returned.
  */
 const ForwardedReferences = forwardRef(References);
 ForwardedReferences.displayName = 'Markprompt.References';

@@ -9,6 +9,7 @@ import {
   type SearchResultsResponse,
   type AlgoliaDocSearchResultsResponse,
   type AlgoliaDocSearchHit,
+  type PromptFeedback,
 } from '@markprompt/core';
 import {
   useCallback,
@@ -42,6 +43,8 @@ export interface UseMarkpromptOptions {
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
   /** Enable and configure search functionality */
   searchOptions?: MarkpromptOptions['search'];
+  /** Enable and configure feedback functionality */
+  feedbackOptions?: MarkpromptOptions['feedback'];
 }
 
 export type UseMarkpromptResult = {
@@ -72,7 +75,7 @@ export type UseMarkpromptResult = {
   /** Set a new value for the search query */
   setSearchQuery: Dispatch<SetStateAction<string>>;
   /** Submit user feedback */
-  submitFeedback: (helpful: boolean) => Promise<void>;
+  submitFeedback: (feedback: PromptFeedback) => Promise<void>;
   /** Submit the prompt */
   submitPrompt: () => Promise<void>;
   /** Submit search query */
@@ -87,6 +90,7 @@ export function useMarkprompt({
   projectKey,
   searchOptions,
   promptOptions,
+  feedbackOptions,
   debug,
 }: UseMarkpromptOptions): UseMarkpromptResult {
   if (!projectKey) {
@@ -124,7 +128,7 @@ export function useMarkprompt({
   }, [abort]);
 
   const submitFeedback = useCallback(
-    async (helpful: boolean) => {
+    async (feedback: PromptFeedback) => {
       abort();
 
       // only submit feedback when we are done loading the answer
@@ -137,8 +141,8 @@ export function useMarkprompt({
 
       const promise = submitFeedbackToMarkprompt(
         projectKey,
-        { helpful, promptId },
-        { signal: controller.signal },
+        { feedback, promptId },
+        { ...feedbackOptions, signal: controller.signal },
       );
 
       promise.catch(() => {
@@ -151,7 +155,7 @@ export function useMarkprompt({
         }
       });
     },
-    [abort, projectKey, promptId, state],
+    [abort, projectKey, promptId, feedbackOptions, state],
   );
 
   const submitPrompt = useCallback(async () => {
@@ -172,6 +176,7 @@ export function useMarkprompt({
 
     setAnswer('');
     setReferences([]);
+    setPromptId(undefined);
     setState('preload');
 
     const controller = new AbortController();
@@ -186,6 +191,7 @@ export function useMarkprompt({
         return true;
       },
       (refs) => setReferences(refs),
+      (pid) => setPromptId(pid),
       (error) => {
         if (
           error instanceof Error &&

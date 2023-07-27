@@ -135,9 +135,17 @@ describe('submitPrompt', () => {
   test('don’t make requests if the prompt is empty', async () => {
     const onAnswerChunk = vi.fn();
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
-    await submitPrompt('', 'testKey', onAnswerChunk, onReferences, onError);
+    await submitPrompt(
+      '',
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onPromptId,
+      onError,
+    );
 
     expect(request).toBeUndefined();
     expect(onAnswerChunk).not.toHaveBeenCalled();
@@ -148,6 +156,7 @@ describe('submitPrompt', () => {
   test('make a request', async () => {
     const onAnswerChunk = vi.fn().mockReturnValue(true);
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
     response = [
@@ -162,6 +171,7 @@ describe('submitPrompt', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onPromptId,
       onError,
     );
 
@@ -176,6 +186,7 @@ describe('submitPrompt', () => {
   test('parse a chunk compound of the stream separator', async () => {
     const onAnswerChunk = vi.fn().mockReturnValue(true);
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
     response = [
@@ -190,6 +201,7 @@ describe('submitPrompt', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onPromptId,
       onError,
     );
 
@@ -204,6 +216,7 @@ describe('submitPrompt', () => {
   test('handle error status code', async () => {
     const onAnswerChunk = vi.fn();
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
     status = 500;
@@ -214,6 +227,7 @@ describe('submitPrompt', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onPromptId,
       onError,
     );
 
@@ -230,6 +244,7 @@ describe('submitPrompt', () => {
   test('ignore invalid references', async () => {
     const onAnswerChunk = vi.fn().mockReturnValue(true);
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
     response = [
@@ -244,6 +259,7 @@ describe('submitPrompt', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onPromptId,
       onError,
     );
 
@@ -259,6 +275,7 @@ describe('submitPrompt', () => {
   test('stop if onAnswerChunk returns false', async () => {
     const onAnswerChunk = vi.fn().mockReturnValue(false);
     const onReferences = vi.fn();
+    const onPromptId = vi.fn();
     const onError = vi.fn();
 
     response = [
@@ -273,6 +290,7 @@ describe('submitPrompt', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onPromptId,
       onError,
     );
 

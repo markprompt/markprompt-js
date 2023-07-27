@@ -1,4 +1,4 @@
-import type { FileSectionReference } from '@markprompt/core';
+import type { FileSectionReference, PromptFeedback } from '@markprompt/core';
 import {
   createContext,
   useContext,
@@ -26,7 +26,7 @@ type Actions = {
   setActiveView: Dispatch<SetStateAction<View>>;
   setPrompt: Dispatch<SetStateAction<string>>;
   setSearchQuery: Dispatch<SetStateAction<string>>;
-  submitFeedback: (helpful: boolean) => void;
+  submitFeedback: (feedback: PromptFeedback) => void;
   submitPrompt: () => void;
   submitSearchQuery: (searchQuery: string) => void;
 };

@@ -20,17 +20,18 @@ export {
 } from './search.js';
 
 export {
-  type FileSectionReference,
+  type AlgoliaDocSearchHit,
+  type AlgoliaDocSearchResultsResponse,
   type FileReferenceFileData,
-  type OpenAIModelId,
+  type FileSectionReference,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,
   type OpenAIEmbeddingsModelId,
+  type OpenAIModelId,
+  type PromptFeedback,
   type SearchResult,
   type SearchResultSection,
   type SearchResultsResponse,
-  type AlgoliaDocSearchHit,
-  type AlgoliaDocSearchResultsResponse,
   type Source,
   type SourceType,
 } from './types.js';

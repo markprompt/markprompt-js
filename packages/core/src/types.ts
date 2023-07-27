@@ -80,3 +80,7 @@ export type AlgoliaDocSearchHit = {
 export type AlgoliaDocSearchResultsResponse = {
   hits: AlgoliaDocSearchHit[];
 };
+
+export type PromptFeedback = {
+  vote: '1' | '-1';
+};
