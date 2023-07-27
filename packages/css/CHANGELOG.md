@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.11.0
+
+### Minor Changes
+
+- [#136](https://github.com/motifland/markprompt-js/pull/136) [`615d124`](https://github.com/motifland/markprompt-js/commit/615d1242efd6519079ffcb75305fed6ac5584e76) Thanks [@michaelfester](https://github.com/michaelfester)! - Integrate feedback API
+
 ## 0.10.0
 
 ### Minor Changes
