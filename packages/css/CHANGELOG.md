@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.11.1
+
+### Patch Changes
+
+- [#138](https://github.com/motifland/markprompt-js/pull/138) [`634c21a`](https://github.com/motifland/markprompt-js/commit/634c21a4e7e8b9bae4599b09d29d4f5b37101ae3) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix tab color
+
 ## 0.11.0
 
 ### Minor Changes
