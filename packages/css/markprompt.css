@@ -207,6 +207,7 @@
   outline: none;
   border: 0;
   cursor: pointer;
+  color: var(--markprompt-mutedForeground);
 }
 
 :where(.MarkpromptTab[data-state='active']) {
