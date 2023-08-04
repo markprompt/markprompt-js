@@ -19,12 +19,7 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: >
-          npm run build
-          -w @markprompt/core
-          -w @markprompt/docusaurus-theme-search
-          -w @markprompt/react
-          -w @markprompt/web
+      - run: npm run lint
       - run: >
           npm run build
           -w with-css-modules
@@ -37,7 +32,6 @@ jobs:
           -w with-next
         env:
           MARKPROMPT_PROJECT_KEY: ${{ secrets.MARKPROMPT_PROJECT_KEY }}
-      - run: npm run lint
 
   test:
     runs-on: ubuntu-latest

@@ -355,5 +355,24 @@ test('Prompt changes trigger user-defined callbacks', async () => {
     await user.type(input, 'test');
   });
 
+  expect(input).toHaveValue('test');
   expect(cb).toHaveBeenCalled();
+});
+
+test('Prompt changes updates prompt state', async () => {
+  const user = userEvent.setup();
+
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.Prompt type="text" />
+    </Markprompt.Root>,
+  );
+
+  const input = await screen.findByRole('textbox');
+
+  await act(async () => {
+    await user.type(input, 'test');
+  });
+
+  expect(input).toHaveValue('test');
 });
