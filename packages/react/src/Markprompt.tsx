@@ -36,7 +36,7 @@ function openMarkprompt(): void {
   emitter.emit('open');
 }
 
-function Markprompt(props: MarkpromptProps): ReactElement {
+function Markprompt(props: MarkpromptProps): JSX.Element {
   const {
     close,
     debug,
