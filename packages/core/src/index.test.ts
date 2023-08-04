@@ -18,6 +18,8 @@ import {
   submitSearchQuery,
   type AlgoliaDocSearchHit,
   submitAlgoliaDocsearchQuery,
+  submitFeedback,
+  DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
 } from './index.js';
 import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
 import type { AlgoliaProvider } from './search.js';
@@ -120,6 +122,9 @@ const server = setupServer(
       );
     },
   ),
+  rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (req, res, ctx) => {
+    return res(ctx.status(status), ctx.body(JSON.stringify({ status: 'ok' })));
+  }),
 );
 
 beforeAll(() => {
@@ -313,8 +318,10 @@ describe('submitPrompt', () => {
     expect(onReferences).not.toHaveBeenCalled();
     expect(onError).not.toHaveBeenCalled();
   });
+});
 
-  test('submitSearchQuery', async () => {
+describe('submitSearchQuery', () => {
+  test('submitSearchQuery gives results', async () => {
     const result = await submitSearchQuery('react', 'testKey');
     expect(result?.data).toStrictEqual(searchResults);
   });
@@ -329,5 +336,27 @@ describe('submitPrompt', () => {
       provider: algoliaProvider,
     });
     expect(result?.hits).toStrictEqual(algoliaSearchHits);
+  });
+});
+
+describe('submitFeedback', () => {
+  test('require projectKey', async () => {
+    // @ts-expect-error We test a missing project key.
+    await expect(() => submitFeedback()).rejects.toThrowError(
+      'A projectKey is required',
+    );
+  });
+
+  test('makes a request', async () => {
+    const response = await submitFeedback(
+      'testKey',
+      {
+        feedback: { vote: '1' },
+        promptId: 'test-id',
+      },
+      { apiUrl: DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl },
+    );
+
+    expect(response).toStrictEqual({ status: 'ok' });
   });
 });
