@@ -1,5 +1,20 @@
 # @markprompt/react
 
+## 0.19.0
+
+### Minor Changes
+
+- [#140](https://github.com/motifland/markprompt-js/pull/140) [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
+- [#140](https://github.com/motifland/markprompt-js/pull/140) [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix issues reported by upgraded linters
+
+### Patch Changes
+
+- [#140](https://github.com/motifland/markprompt-js/pull/140) [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea) Thanks [@nickrttn](https://github.com/nickrttn)! - Improve types
+
+- Updated dependencies [[`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea), [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea), [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea)]:
+  - @markprompt/core@0.11.0
+
 ## 0.18.0
 
 ### Minor Changes
