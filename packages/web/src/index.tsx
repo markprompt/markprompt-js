@@ -4,7 +4,7 @@ import {
   type MarkpromptOptions,
 } from '@markprompt/react';
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot, type Root } from 'react-dom/client';
 
 function getHTMLElement(
   value: HTMLElement | string,
@@ -16,7 +16,7 @@ function getHTMLElement(
   return el;
 }
 
-let node: HTMLElement;
+let root: Root;
 
 /**
  * Render a markprompt dialog.
@@ -30,8 +30,8 @@ function markprompt(
   container: HTMLElement | string,
   options?: MarkpromptOptions,
 ): void {
-  if (!node) node = getHTMLElement(container);
-  render(<Markprompt projectKey={projectKey} {...options} />, node);
+  if (!root) root = createRoot(getHTMLElement(container));
+  root.render(<Markprompt projectKey={projectKey} {...options} />);
 }
 
 export { markprompt, openMarkprompt };
