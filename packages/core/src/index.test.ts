@@ -20,7 +20,6 @@ import {
   submitAlgoliaDocsearchQuery,
   submitFeedback,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  type FileSectionReference,
 } from './index.js';
 import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
 import type { AlgoliaProvider } from './search.js';
