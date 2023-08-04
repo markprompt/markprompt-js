@@ -1,6 +1,6 @@
 import { type RestRequest, rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { type PartialDeep } from 'type-fest';
+import type { PartialDeep } from 'type-fest/index.d.ts';
 import {
   afterAll,
   afterEach,
