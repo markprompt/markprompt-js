@@ -27,9 +27,9 @@
     ]
   },
   "dependencies": {
-    "@docusaurus/core": "^2.4.0",
-    "@docusaurus/module-type-aliases": "^2.4.0",
-    "@docusaurus/preset-classic": "^2.4.0",
+    "@docusaurus/core": "^2.4.1",
+    "@docusaurus/module-type-aliases": "^2.4.1",
+    "@docusaurus/preset-classic": "^2.4.1",
     "@docusaurus/theme-search-algolia": "^2.4.1",
     "@markprompt/css": "*",
     "@markprompt/docusaurus-theme-search": "*",
@@ -40,6 +40,6 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "dotenv": "^16.3.0"
+    "dotenv": "^16.3.1"
   }
 }
