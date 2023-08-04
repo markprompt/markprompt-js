@@ -15,14 +15,26 @@
   all: unset;
   display: inline-block;
   text-transform: uppercase;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
   cursor: pointer;
-  transition: background 0.2s ease-out, color 0.2s ease-out;
+  transition:
+    background 0.2s ease-out,
+    color 0.2s ease-out;
 }
 
 .customTrigger:hover,
