@@ -3,6 +3,7 @@ import {
   SearchResult,
 } from '@markprompt/core';
 import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
@@ -316,4 +317,43 @@ test('Title and description should be visible', async () => {
 
   const heading = await screen.findByText('Test title');
   expect(heading).toBeVisible();
+});
+
+test('Form submission triggers user-defined callbacks', async () => {
+  const cb = vitest.fn();
+
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.Form onSubmit={cb}>
+        <button type="submit">submit</button>
+      </Markprompt.Form>
+    </Markprompt.Root>,
+  );
+
+  const button = await screen.findByRole('button');
+
+  await act(async () => {
+    button.click();
+  });
+
+  expect(cb).toHaveBeenCalled();
+});
+
+test('Prompt changes trigger user-defined callbacks', async () => {
+  const cb = vitest.fn();
+  const user = userEvent.setup();
+
+  render(
+    <Markprompt.Root projectKey="TEST_PROJECT_KEY">
+      <Markprompt.Prompt type="text" onChange={cb} />
+    </Markprompt.Root>,
+  );
+
+  const input = await screen.findByRole('textbox');
+
+  await act(async () => {
+    await user.type(input, 'test');
+  });
+
+  expect(cb).toHaveBeenCalled();
 });
