@@ -8,6 +8,7 @@ const config = {
   entryPoints: ['src/index.tsx', 'src/init.ts'],
   outdir: 'dist/',
   format: 'esm',
+  target: '',
   bundle: true,
   treeShaking: true,
   sourcemap: true,
