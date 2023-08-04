@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "npm pack --workspaces",
-    "lint": "run-p lint:format lint:js lint:md lint:ts",
+    "lint": "run-p lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "npx stylelint \"**/*.css\"",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
