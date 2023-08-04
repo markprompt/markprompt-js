@@ -7,7 +7,7 @@ import * as Markprompt from './index.js';
 import { useMarkpromptContext } from './index.js';
 import { useElementSize } from './useElementSize.js';
 
-type ReferenceProps = {
+interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
   getLabel?: (reference: FileSectionReference) => string | undefined;
   reference: FileSectionReference;
@@ -18,7 +18,7 @@ type ReferenceProps = {
     text: string;
   };
   onDidSelectReference?: () => void;
-};
+}
 
 const Reference = (props: ReferenceProps): ReactElement => {
   const {
@@ -57,7 +57,7 @@ const Reference = (props: ReferenceProps): ReactElement => {
   );
 };
 
-type ReferencesProps = {
+interface ReferencesProps {
   loadingText?: string;
   heading?: string;
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -68,7 +68,7 @@ type ReferencesProps = {
     text: string;
   };
   onDidSelectReference?: () => void;
-};
+}
 
 const References = (props: ReferencesProps): ReactElement | null => {
   const {

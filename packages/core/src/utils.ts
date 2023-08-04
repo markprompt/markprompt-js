@@ -1,3 +1,5 @@
+import type { FileSectionReference } from './types.js';
+
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const res2 = res.clone();
   try {
@@ -10,7 +12,7 @@ export const getErrorMessage = async (res: Response): Promise<string> => {
 export const parseEncodedJSONHeader = (
   response: Response,
   name: string,
-): any | undefined => {
+): unknown | undefined => {
   try {
     const headerValue = response.headers.get(name);
     if (headerValue) {
@@ -24,3 +26,13 @@ export const parseEncodedJSONHeader = (
   }
   return undefined;
 };
+
+export function isFileSectionReferences(
+  data: unknown,
+): data is FileSectionReference[] {
+  return (
+    Array.isArray(data) &&
+    Boolean(data[0]?.file?.path) &&
+    Boolean(data[0]?.file?.source?.type)
+  );
+}

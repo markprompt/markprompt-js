@@ -1,3 +1,8 @@
+import { type DocSearchHit } from '@docsearch/react/dist/esm/types/DocSearchHit.js';
+
+export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
+  Omit<T, K>;
+
 export type OpenAIChatCompletionsModelId = 'gpt-4' | 'gpt-3.5-turbo';
 
 export type OpenAICompletionsModelId =
@@ -18,9 +23,6 @@ export type OpenAIModelId =
   | OpenAICompletionsModelId
   | OpenAIEmbeddingsModelId;
 
-export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
-  Omit<T, K>;
-
 export type SourceType =
   | 'github'
   | 'motif'
@@ -28,29 +30,29 @@ export type SourceType =
   | 'file-upload'
   | 'api-upload';
 
-export type Source = {
+export interface Source {
   type: SourceType;
   data?: {
     url?: string;
     domain?: string;
   };
-};
+}
 
-export type SearchResult = {
+export interface SearchResult extends SearchResultSection {
   file: FileReferenceFileData;
   matchType: 'title' | 'leadHeading' | 'content';
-} & SearchResultSection;
+}
 
-export type SearchResultSection = {
+export interface SearchResultSection extends FileSectionReferenceSectionData {
   content?: string;
   snippet?: string;
-} & FileSectionReferenceSectionData;
+}
 
-export type FileSectionReference = {
+export interface FileSectionReference extends FileSectionReferenceSectionData {
   file: FileReferenceFileData;
-} & FileSectionReferenceSectionData;
+}
 
-export type FileSectionReferenceSectionData = {
+export interface FileSectionReferenceSectionData {
   meta?: {
     leadHeading?: {
       id?: string;
@@ -59,28 +61,26 @@ export type FileSectionReferenceSectionData = {
       slug?: string;
     };
   };
-};
+}
 
-export type FileReferenceFileData = {
+export interface FileReferenceFileData {
   title?: string;
   path: string;
-  meta?: any;
+  meta?: object;
   source: Source;
-};
+}
 
-export type SearchResultsResponse = {
-  debug?: any;
+export interface SearchResultsResponse {
+  debug?: unknown;
   data: SearchResult[];
-};
+}
 
-export type AlgoliaDocSearchHit = {
-  _highlightResult: any;
-} & any;
+export type AlgoliaDocSearchHit = DocSearchHit;
 
-export type AlgoliaDocSearchResultsResponse = {
+export interface AlgoliaDocSearchResultsResponse {
   hits: AlgoliaDocSearchHit[];
-};
+}
 
-export type PromptFeedback = {
+export interface PromptFeedback {
   vote: '1' | '-1';
-};
+}

@@ -191,6 +191,7 @@ test('Throws if projectKey is not provided', async () => {
   // eslint-disable-next-line no-console
   console.error = vi.fn();
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing invalid input
     render(<Markprompt.Root projectKey={undefined as any}></Markprompt.Root>);
   } catch (error) {
     expect((error as Error).message).toContain('a project key is required');

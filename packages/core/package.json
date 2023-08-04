@@ -18,5 +18,12 @@
     "build": "tsc --build --clean && tsc --build",
     "dev": "tsc --build --clean && tsc --build --watch",
     "prepack": "tsc --build --clean && tsc --build"
+  },
+  "dependencies": {
+    "@algolia/client-search": "^4.19.1",
+    "@docsearch/react": "^3.5.1"
+  },
+  "devDependencies": {
+    "type-fest": "^4.1.0"
   }
 }

@@ -47,7 +47,7 @@ export interface UseMarkpromptOptions {
   feedbackOptions?: MarkpromptOptions['feedback'];
 }
 
-export type UseMarkpromptResult = {
+export interface UseMarkpromptResult {
   /** The currently active view */
   activeView: View;
   /** The most recent answer */
@@ -80,7 +80,7 @@ export type UseMarkpromptResult = {
   submitPrompt: () => Promise<void>;
   /** Submit search query */
   submitSearchQuery: (query: string) => void;
-};
+}
 
 /**
  * A React hook with all the functionality you need to create an interactive
@@ -288,12 +288,21 @@ export function useMarkprompt({
         setState('done');
       });
 
-      promise?.catch((error) => {
-        if ((error as any).cause?.name !== 'AbortError') {
-          // todo: surface errors to the user
-          // eslint-disable-next-line no-console
-          console.error(error);
+      promise?.catch((error: unknown) => {
+        if (
+          error instanceof Error &&
+          typeof error.cause === 'object' &&
+          error.cause !== null &&
+          'name' in error.cause &&
+          error.cause?.name === 'AbortError'
+        ) {
+          // Ignore abort errors
+          return;
         }
+
+        // todo: surface errors to the user in the UI
+        // eslint-disable-next-line no-console
+        console.error(error);
       });
 
       promise?.finally(() => {

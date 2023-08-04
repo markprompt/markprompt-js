@@ -424,13 +424,13 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';
 
-type ReferencesProps<
+interface ReferencesProps<
   TRoot extends ElementType,
   TReference extends ElementType<{
     reference: FileSectionReference;
     index: number;
   }>,
-> = {
+> {
   /**
    * The wrapper component to render.
    * @default 'ul'
@@ -442,7 +442,7 @@ type ReferencesProps<
    * @default 'li'
    */
   ReferenceComponent?: TReference;
-};
+}
 
 /**
  * Render the references that Markprompt returns.

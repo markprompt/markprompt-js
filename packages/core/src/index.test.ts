@@ -1,5 +1,6 @@
 import { type RestRequest, rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { type PartialDeep } from 'type-fest';
 import {
   afterAll,
   afterEach,
@@ -42,19 +43,30 @@ const searchResults: SearchResult[] = [
   },
 ];
 
-const alogliaSearchHits: AlgoliaDocSearchHit[] = [
+const algoliaSearchHits: PartialDeep<AlgoliaDocSearchHit>[] = [
   {
     url: 'https://markprompt.com/docs/hit',
     hierarchy: {
-      lvl0: null,
-      lvl1: 'React',
-      lvl2: 'React introduction',
+      lvl0: 'React',
+      lvl1: 'React introduction',
+      lvl2: null,
+      lvl3: null,
+      lvl4: null,
+      lvl5: null,
+      lvl6: null,
     },
     _highlightResult: {
       hierarchy: {
-        lvl0: { value: null },
-        lvl1: { value: 'React' },
-        lvl2: { value: 'React introduction' },
+        lvl0: {
+          value: 'React',
+          matchLevel: 'full',
+          matchedWords: ['react'],
+        },
+        lvl1: {
+          value: 'React introduction',
+          matchLevel: 'partial',
+          matchedWords: ['react'],
+        },
       },
     },
   },
@@ -104,7 +116,7 @@ const server = setupServer(
     async (req, res, ctx) => {
       return res(
         ctx.status(status),
-        ctx.body(JSON.stringify({ hits: alogliaSearchHits })),
+        ctx.body(JSON.stringify({ hits: algoliaSearchHits })),
       );
     },
   ),
@@ -316,6 +328,6 @@ describe('submitPrompt', () => {
     const result = await submitAlgoliaDocsearchQuery('react', {
       provider: algoliaProvider,
     });
-    expect(result?.hits).toStrictEqual(alogliaSearchHits);
+    expect(result?.hits).toStrictEqual(algoliaSearchHits);
   });
 });
