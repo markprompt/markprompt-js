@@ -1,5 +1,19 @@
 # @markprompt/web
 
+## 0.15.0
+
+### Minor Changes
+
+- [#140](https://github.com/motifland/markprompt-js/pull/140) [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
+- [#140](https://github.com/motifland/markprompt-js/pull/140) [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix issues reported by upgraded linters
+
+### Patch Changes
+
+- Updated dependencies [[`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea), [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea), [`3252bfd`](https://github.com/motifland/markprompt-js/commit/3252bfd04e0b358c0ade9c1e7826806b568ca9ea)]:
+  - @markprompt/react@0.19.0
+  - @markprompt/core@0.11.0
+
 ## 0.14.3
 
 ### Patch Changes
