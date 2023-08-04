@@ -20,6 +20,7 @@ import {
   submitAlgoliaDocsearchQuery,
   submitFeedback,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  type FileSectionReference,
 } from './index.js';
 import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
 import type { AlgoliaProvider } from './search.js';
@@ -82,6 +83,7 @@ const algoliaProvider: AlgoliaProvider = {
 };
 
 const encoder = new TextEncoder();
+let markpromptData = '';
 let response: string[] = [];
 let status = 200;
 let request: RestRequest;
@@ -98,7 +100,12 @@ const server = setupServer(
         controller?.close();
       },
     });
-    return res(ctx.status(status), ctx.body(stream));
+
+    return res(
+      ctx.status(status),
+      ctx.set('x-markprompt-data', markpromptData),
+      ctx.body(stream),
+    );
   }),
   rest.get(
     DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
@@ -137,6 +144,7 @@ afterAll(() => {
 
 afterEach(() => {
   response = [];
+  markpromptData = '';
   status = 200;
   server.resetHandlers();
 });
@@ -316,6 +324,45 @@ describe('submitPrompt', () => {
       ['According to my calculator '],
     ]);
     expect(onReferences).not.toHaveBeenCalled();
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  test('calls back user-provided onReferences', async () => {
+    const onAnswerChunk = vi.fn();
+    const onReferences = vi.fn();
+    const onPromptId = vi.fn();
+    const onError = vi.fn();
+
+    const references = [
+      {
+        file: { path: '/page1', source: { type: 'file-upload' } },
+        meta: { leadHeading: { value: 'Page 1' } },
+      },
+    ];
+
+    const encoder = new TextEncoder();
+
+    markpromptData = encoder.encode(JSON.stringify({ references })).toString();
+
+    response = [
+      '["https://calculator.example"]',
+      STREAM_SEPARATOR,
+      'According to my calculator ',
+      '1 + 2 = 3',
+    ];
+
+    await submitPrompt(
+      'How much is 1+2?',
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onPromptId,
+      onError,
+    );
+
+    expect(request).toBeDefined();
+    expect(onAnswerChunk).toHaveBeenCalled();
+    expect(onReferences).toHaveBeenCalledWith(references);
     expect(onError).not.toHaveBeenCalled();
   });
 });
