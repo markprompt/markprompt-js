@@ -60,6 +60,7 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       extends: [
+        'plugin:@typescript-eslint/stylistic',
         'plugin:@typescript-eslint/recommended',
         'plugin:import/typescript',
         'plugin:prettier/recommended',
