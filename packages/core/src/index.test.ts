@@ -367,6 +367,40 @@ describe('submitPrompt', () => {
   });
 });
 
+test('calls back user-provided onPromptId', async () => {
+  const onAnswerChunk = vi.fn();
+  const onReferences = vi.fn();
+  const onPromptId = vi.fn();
+  const onError = vi.fn();
+
+  const promptId = 'test-id';
+
+  const encoder = new TextEncoder();
+
+  markpromptData = encoder.encode(JSON.stringify({ promptId })).toString();
+
+  response = [
+    '["https://calculator.example"]',
+    STREAM_SEPARATOR,
+    'According to my calculator ',
+    '1 + 2 = 3',
+  ];
+
+  await submitPrompt(
+    'How much is 1+2?',
+    'testKey',
+    onAnswerChunk,
+    onReferences,
+    onPromptId,
+    onError,
+  );
+
+  expect(request).toBeDefined();
+  expect(onAnswerChunk).toHaveBeenCalled();
+  expect(onPromptId).toHaveBeenCalledWith(promptId);
+  expect(onError).not.toHaveBeenCalled();
+});
+
 describe('submitSearchQuery', () => {
   test('submitSearchQuery gives results', async () => {
     const result = await submitSearchQuery('react', 'testKey');
