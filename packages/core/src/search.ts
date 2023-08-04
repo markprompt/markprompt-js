@@ -1,3 +1,5 @@
+import type { SearchOptions } from '@algolia/client-search';
+
 import type {
   AlgoliaDocSearchResultsResponse,
   SearchResultsResponse,
@@ -42,9 +44,9 @@ export interface AlgoliaProvider {
    **/
   indexName: string;
   /**
-   * Algolia search parameters, like `faceFilters`
+   * Algolia search parameters, like `facetFilters`
    **/
-  searchParameters?: any;
+  searchParameters?: SearchOptions;
 }
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {

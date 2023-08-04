@@ -23,10 +23,10 @@ interface SearchViewProps {
   onDidSelectResult?: () => void;
 }
 
-type ActiveSearchResult = {
+interface ActiveSearchResult {
   id: string | undefined;
   trigger?: 'mouse' | 'keyboard';
-};
+}
 
 export function SearchView(props: SearchViewProps): ReactElement {
   const { search, close, handleViewChange, onDidSelectResult } = props;
@@ -128,7 +128,6 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
-        search={search}
         handleViewChange={handleViewChange}
         onDidSelectResult={onDidSelectResult}
         setActiveSearchResult={setActiveSearchResult}
@@ -144,7 +143,6 @@ interface SearchResultsContainerProps {
   >;
   handleViewChange?: () => void;
   onDidSelectResult?: () => void;
-  search?: MarkpromptOptions['search'];
 }
 
 function SearchResultsContainer(
@@ -155,7 +153,6 @@ function SearchResultsContainer(
     handleViewChange,
     setActiveSearchResult,
     onDidSelectResult,
-    search,
   } = props;
   const onMouseMovedOverSearchResult = useRef<string | null>(null);
 

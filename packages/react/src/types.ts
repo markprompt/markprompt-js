@@ -12,9 +12,9 @@ import type {
   PropsWithChildren,
 } from 'react';
 
-type AsProp<C extends ElementType> = {
+interface AsProp<C extends ElementType> {
   as?: C;
-};
+}
 
 type PropsToOmit<C extends ElementType, P> = keyof (AsProp<C> & P);
 
@@ -37,20 +37,20 @@ export type PolymorphicComponentPropWithRef<
 export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
 
-export type SectionHeading = {
+export interface SectionHeading {
   value?: string | undefined;
   id?: string | undefined;
   slug?: string | undefined;
-};
+}
 
-export type SearchResultComponentProps = {
+export interface SearchResultComponentProps {
   href?: string;
   heading?: string;
   title?: string;
   subtitle?: string;
-};
+}
 
-type MarkpromptOptions = {
+interface MarkpromptOptions {
   /**
    * Display format.
    * @default "dialog"
@@ -216,6 +216,6 @@ type MarkpromptOptions = {
    * @default false
    **/
   debug?: boolean;
-};
+}
 
 export type { MarkpromptOptions };

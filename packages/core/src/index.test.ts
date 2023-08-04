@@ -1,5 +1,6 @@
 import { type RestRequest, rest } from 'msw';
 import { setupServer } from 'msw/node';
+import type { PartialDeep } from 'type-fest/index.d.ts';
 import {
   afterAll,
   afterEach,
@@ -17,6 +18,8 @@ import {
   submitSearchQuery,
   type AlgoliaDocSearchHit,
   submitAlgoliaDocsearchQuery,
+  submitFeedback,
+  DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
 } from './index.js';
 import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
 import type { AlgoliaProvider } from './search.js';
@@ -42,19 +45,30 @@ const searchResults: SearchResult[] = [
   },
 ];
 
-const alogliaSearchHits: AlgoliaDocSearchHit[] = [
+const algoliaSearchHits: PartialDeep<AlgoliaDocSearchHit>[] = [
   {
     url: 'https://markprompt.com/docs/hit',
     hierarchy: {
-      lvl0: null,
-      lvl1: 'React',
-      lvl2: 'React introduction',
+      lvl0: 'React',
+      lvl1: 'React introduction',
+      lvl2: null,
+      lvl3: null,
+      lvl4: null,
+      lvl5: null,
+      lvl6: null,
     },
     _highlightResult: {
       hierarchy: {
-        lvl0: { value: null },
-        lvl1: { value: 'React' },
-        lvl2: { value: 'React introduction' },
+        lvl0: {
+          value: 'React',
+          matchLevel: 'full',
+          matchedWords: ['react'],
+        },
+        lvl1: {
+          value: 'React introduction',
+          matchLevel: 'partial',
+          matchedWords: ['react'],
+        },
       },
     },
   },
@@ -68,6 +82,7 @@ const algoliaProvider: AlgoliaProvider = {
 };
 
 const encoder = new TextEncoder();
+let markpromptData = '';
 let response: string[] = [];
 let status = 200;
 let request: RestRequest;
@@ -84,7 +99,12 @@ const server = setupServer(
         controller?.close();
       },
     });
-    return res(ctx.status(status), ctx.body(stream));
+
+    return res(
+      ctx.status(status),
+      ctx.set('x-markprompt-data', markpromptData),
+      ctx.body(stream),
+    );
   }),
   rest.get(
     DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
@@ -104,10 +124,13 @@ const server = setupServer(
     async (req, res, ctx) => {
       return res(
         ctx.status(status),
-        ctx.body(JSON.stringify({ hits: alogliaSearchHits })),
+        ctx.body(JSON.stringify({ hits: algoliaSearchHits })),
       );
     },
   ),
+  rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (req, res, ctx) => {
+    return res(ctx.status(status), ctx.body(JSON.stringify({ status: 'ok' })));
+  }),
 );
 
 beforeAll(() => {
@@ -120,6 +143,7 @@ afterAll(() => {
 
 afterEach(() => {
   response = [];
+  markpromptData = '';
   status = 200;
   server.resetHandlers();
 });
@@ -302,7 +326,82 @@ describe('submitPrompt', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  test('submitSearchQuery', async () => {
+  test('calls back user-provided onReferences', async () => {
+    const onAnswerChunk = vi.fn();
+    const onReferences = vi.fn();
+    const onPromptId = vi.fn();
+    const onError = vi.fn();
+
+    const references = [
+      {
+        file: { path: '/page1', source: { type: 'file-upload' } },
+        meta: { leadHeading: { value: 'Page 1' } },
+      },
+    ];
+
+    const encoder = new TextEncoder();
+
+    markpromptData = encoder.encode(JSON.stringify({ references })).toString();
+
+    response = [
+      '["https://calculator.example"]',
+      STREAM_SEPARATOR,
+      'According to my calculator ',
+      '1 + 2 = 3',
+    ];
+
+    await submitPrompt(
+      'How much is 1+2?',
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onPromptId,
+      onError,
+    );
+
+    expect(request).toBeDefined();
+    expect(onAnswerChunk).toHaveBeenCalled();
+    expect(onReferences).toHaveBeenCalledWith(references);
+    expect(onError).not.toHaveBeenCalled();
+  });
+});
+
+test('calls back user-provided onPromptId', async () => {
+  const onAnswerChunk = vi.fn();
+  const onReferences = vi.fn();
+  const onPromptId = vi.fn();
+  const onError = vi.fn();
+
+  const promptId = 'test-id';
+
+  const encoder = new TextEncoder();
+
+  markpromptData = encoder.encode(JSON.stringify({ promptId })).toString();
+
+  response = [
+    '["https://calculator.example"]',
+    STREAM_SEPARATOR,
+    'According to my calculator ',
+    '1 + 2 = 3',
+  ];
+
+  await submitPrompt(
+    'How much is 1+2?',
+    'testKey',
+    onAnswerChunk,
+    onReferences,
+    onPromptId,
+    onError,
+  );
+
+  expect(request).toBeDefined();
+  expect(onAnswerChunk).toHaveBeenCalled();
+  expect(onPromptId).toHaveBeenCalledWith(promptId);
+  expect(onError).not.toHaveBeenCalled();
+});
+
+describe('submitSearchQuery', () => {
+  test('submitSearchQuery gives results', async () => {
     const result = await submitSearchQuery('react', 'testKey');
     expect(result?.data).toStrictEqual(searchResults);
   });
@@ -316,6 +415,28 @@ describe('submitPrompt', () => {
     const result = await submitAlgoliaDocsearchQuery('react', {
       provider: algoliaProvider,
     });
-    expect(result?.hits).toStrictEqual(alogliaSearchHits);
+    expect(result?.hits).toStrictEqual(algoliaSearchHits);
+  });
+});
+
+describe('submitFeedback', () => {
+  test('require projectKey', async () => {
+    // @ts-expect-error We test a missing project key.
+    await expect(() => submitFeedback()).rejects.toThrowError(
+      'A projectKey is required',
+    );
+  });
+
+  test('makes a request', async () => {
+    const response = await submitFeedback(
+      'testKey',
+      {
+        feedback: { vote: '1' },
+        promptId: 'test-id',
+      },
+      { apiUrl: DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl },
+    );
+
+    expect(response).toStrictEqual({ status: 'ok' });
   });
 });

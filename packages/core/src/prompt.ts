@@ -1,7 +1,7 @@
 import type { FileSectionReference, OpenAIModelId } from './types.js';
-import { parseEncodedJSONHeader } from './utils.js';
+import { isFileSectionReferences, parseEncodedJSONHeader } from './utils.js';
 
-export type SubmitPromptOptions = {
+export interface SubmitPromptOptions {
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/completions"
@@ -62,7 +62,7 @@ export type SubmitPromptOptions = {
    * @default undefined
    **/
   signal?: AbortSignal;
-};
+}
 
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
@@ -162,11 +162,21 @@ export async function submitPrompt(
       console.debug(JSON.stringify(debugInfo, null, 2));
     }
 
-    if (data?.references) {
+    if (
+      typeof data === 'object' &&
+      data !== null &&
+      'references' in data &&
+      isFileSectionReferences(data.references)
+    ) {
       onReferences(data?.references);
     }
 
-    if (data?.promptId) {
+    if (
+      typeof data === 'object' &&
+      data !== null &&
+      'promptId' in data &&
+      typeof data.promptId === 'string'
+    ) {
       onPromptId(data?.promptId);
     }
 

@@ -27,6 +27,10 @@ export async function submitFeedback(
   body: SubmitFeedbackBody,
   options?: SubmitFeedbackOptions,
 ): Promise<void> {
+  if (!projectKey) {
+    throw new Error('A projectKey is required.');
+  }
+
   const { apiUrl = DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, signal } =
     options ?? {};
 

@@ -81,25 +81,25 @@ const defaultPromptGetLabel = (reference: FileSectionReference): string => {
 };
 
 const isAlgoliaSearchResult = (
-  result: SearchResult | AlgoliaDocSearchHit,
-): boolean => {
-  return !!(result as AlgoliaDocSearchHit)._highlightResult;
+  result: FileSectionReference | SearchResult | AlgoliaDocSearchHit,
+): result is AlgoliaDocSearchHit => {
+  return '_highlightResult' in result;
 };
 
 const defaultGetHref = (
   result: FileSectionReference | SearchResult | AlgoliaDocSearchHit,
 ): string | undefined => {
   if (isAlgoliaSearchResult(result)) {
-    return (result as AlgoliaDocSearchHit).url;
+    return result.url;
   }
 
-  const reference = result as FileSectionReference;
-  const path = pathToHref(reference.file.path);
-  if (reference.meta?.leadHeading?.id) {
-    return `${path}#${reference.meta.leadHeading.id}`;
-  } else if (reference.meta?.leadHeading?.value) {
-    return `${path}#${reference.meta.leadHeading.slug}`;
+  const path = pathToHref(result.file.path);
+  if (result.meta?.leadHeading?.id) {
+    return `${path}#${result.meta.leadHeading.id}`;
+  } else if (result.meta?.leadHeading?.value) {
+    return `${path}#${result.meta.leadHeading.slug}`;
   }
+
   return path;
 };
 
@@ -107,18 +107,17 @@ const defaultGetSearchResultHeading = (
   result: SearchResult | AlgoliaDocSearchHit,
 ): string | undefined => {
   if (isAlgoliaSearchResult(result)) {
-    return (result as AlgoliaDocSearchHit).hierarchy?.lvl0 || undefined;
+    return result.hierarchy?.lvl0 || undefined;
   }
 
-  const res = result as SearchResult;
-  if (res.matchType === 'title') {
+  if (result.matchType === 'title') {
     return undefined;
   } else {
-    const leadHeading = res.meta?.leadHeading;
-    if (res.matchType === 'leadHeading' && leadHeading?.value) {
-      return res.file.title;
+    const leadHeading = result.meta?.leadHeading;
+    if (result.matchType === 'leadHeading' && leadHeading?.value) {
+      return result.file.title;
     } else {
-      return leadHeading?.value || res.file.title;
+      return leadHeading?.value || result.file.title;
     }
   }
 };
@@ -128,35 +127,34 @@ const defaultGetSearchResultTitle = (
   query: string,
 ): string | undefined => {
   if (isAlgoliaSearchResult(result)) {
-    return (result as AlgoliaDocSearchHit).hierarchy?.lvl1 || undefined;
+    return result.hierarchy?.lvl1 || undefined;
   }
 
-  const res = result as SearchResult;
-  if (res.matchType === 'title') {
-    return res.file.title;
-  } else {
-    const leadHeading = res.meta?.leadHeading;
-    if (res.matchType === 'leadHeading' && leadHeading?.value) {
-      return leadHeading.value;
-    } else {
-      // return removeLeadHeading(res.snippet || '', leadHeading?.value);
-      const normalizedSearchQuery = query.toLowerCase();
-      // Fast and hacky way to remove the lead heading from
-      // the content, which we don't want to be part of the snippet.
-      const trimmedContent = removeLeadHeading(
-        res.snippet || '',
-        res.meta?.leadHeading?.value,
-      );
-      return createKWICSnippet(trimmedContent, normalizedSearchQuery);
-    }
+  if (result.matchType === 'title') {
+    return result.file.title;
   }
+
+  const leadHeading = result.meta?.leadHeading;
+  if (result.matchType === 'leadHeading' && leadHeading?.value) {
+    return leadHeading.value;
+  }
+
+  const normalizedSearchQuery = query.toLowerCase();
+  // Fast and hacky way to remove the lead heading from
+  // the content, which we don't want to be part of the snippet.
+  const trimmedContent = removeLeadHeading(
+    result.snippet || '',
+    result.meta?.leadHeading?.value,
+  );
+
+  return createKWICSnippet(trimmedContent, normalizedSearchQuery);
 };
 
 const defaultGetSearchResultSubtitle = (
   result: SearchResult | AlgoliaDocSearchHit,
 ): string | undefined => {
   if (isAlgoliaSearchResult(result)) {
-    return (result as AlgoliaDocSearchHit).hierarchy?.lvl2 || undefined;
+    return result.hierarchy?.lvl2 || undefined;
   }
 
   return undefined;

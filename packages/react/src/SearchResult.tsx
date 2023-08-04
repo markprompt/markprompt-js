@@ -1,13 +1,12 @@
 import React, { Fragment, forwardRef, memo } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { FileTextIcon, HashIcon } from './icons.js';
 import { useMarkpromptContext, type SearchResultProps } from './index.js';
 
-type HighlightMatchesProps = {
+interface HighlightMatchesProps {
   value?: string;
   match: string;
-};
+}
 
 // Source: https://github.com/shuding/nextra/blob/main/packages/nextra-theme-docs/src/components/highlight-matches.tsx
 const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({

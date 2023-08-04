@@ -1,39 +1,31 @@
-import { PromptFeedback } from '@markprompt/core';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, expect, test, vitest } from 'vitest';
 
-import { MarkpromptContext } from './context';
+import { MarkpromptContext, type MarkpromptContextValue } from './context';
 import { Feedback } from './Feedback';
-import { View } from './useMarkprompt';
 
-const submitFeedback = vitest.fn((feedback: PromptFeedback) =>
-  Promise.resolve(),
-);
+const submitFeedback = vitest.fn(() => Promise.resolve());
 
 const mockContextValue = {
-  activeView: 'prompt' as View,
-  activeSearchResult: undefined,
+  activeView: 'prompt',
   answer: undefined,
   isSearchEnabled: false,
-  searchProvider: undefined,
-  isSearchActive: false,
   prompt: '',
   references: [],
+  searchProvider: undefined,
   searchQuery: '',
   searchResults: [],
-  state: 'indeterminate' as const,
+  state: 'indeterminate',
   abort: vitest.fn(),
-  submitFeedback: submitFeedback,
   setActiveView: vitest.fn(),
   setPrompt: vitest.fn(),
   setSearchQuery: vitest.fn(),
+  submitFeedback,
   submitPrompt: vitest.fn(),
   submitSearchQuery: vitest.fn(),
-  updateActiveSearchResult: vitest.fn(),
-  updatePrompt: vitest.fn(),
-};
+} satisfies MarkpromptContextValue;
 
 describe('Feedback', () => {
   test('render the Feedback component', () => {

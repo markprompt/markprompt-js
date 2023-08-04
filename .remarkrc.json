@@ -5,9 +5,9 @@
   },
   "plugins": [
     "remark-frontmatter",
-    ["remark-prettier", { "report": false }],
     ["remark-toc", { "tight": true }],
     "remark-validate-links",
+    "unified-prettier",
     "unified-consistency"
   ]
 }

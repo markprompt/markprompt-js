@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest';
 
-import { getErrorMessage, parseEncodedJSONHeader } from './utils.js';
+import {
+  getErrorMessage,
+  parseEncodedJSONHeader,
+  isFileSectionReferences,
+} from './utils.js';
 
 const encoder = new TextEncoder();
 const errorMessage = 'This is an error message';
@@ -74,5 +78,18 @@ describe('utils', () => {
     const parsedValue = parseEncodedJSONHeader(mockResponse, 'X-Encoded-Data');
 
     expect(parsedValue).toBeUndefined();
+  });
+
+  test('identifies FileSectionReference types', () => {
+    const references = [
+      {
+        file: {
+          path: '/docs/some-page',
+          source: { type: 'website' },
+        },
+      },
+    ];
+
+    expect(isFileSectionReferences(references)).toBe(true);
   });
 });

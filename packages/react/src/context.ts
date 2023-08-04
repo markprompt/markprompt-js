@@ -9,7 +9,7 @@ import {
 import type { SearchResultComponentProps } from './types.js';
 import { type LoadingState, type View } from './useMarkprompt.js';
 
-type State = {
+interface State {
   activeView: View;
   answer: string | undefined;
   isSearchEnabled: boolean;
@@ -19,9 +19,9 @@ type State = {
   searchQuery: string;
   searchResults: SearchResultComponentProps[];
   state: LoadingState;
-};
+}
 
-type Actions = {
+interface Actions {
   abort: () => void;
   setActiveView: Dispatch<SetStateAction<View>>;
   setPrompt: Dispatch<SetStateAction<string>>;
@@ -29,7 +29,9 @@ type Actions = {
   submitFeedback: (feedback: PromptFeedback) => void;
   submitPrompt: () => void;
   submitSearchQuery: (searchQuery: string) => void;
-};
+}
+
+export type MarkpromptContextValue = State & Actions;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = (): void => {};

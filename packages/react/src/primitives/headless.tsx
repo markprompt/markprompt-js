@@ -131,20 +131,21 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
 /**
  * The Markprompt dialog content.
  */
-const Content = forwardRef<HTMLDivElement, ContentProps>(function Content(
-  props,
-  ref,
-) {
-  const { showBranding = true, ...rest } = props;
-  const { state, searchProvider } = useMarkpromptContext();
+const Content = forwardRef<HTMLDivElement, ContentProps>(
+  function Content(props, ref) {
+    const { showBranding = true, ...rest } = props;
+    const { state, searchProvider } = useMarkpromptContext();
 
-  return (
-    <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
-      {props.children}
-      {showBranding && <Footer includeAlgolia={searchProvider === 'algolia'} />}
-    </Dialog.Content>
-  );
-});
+    return (
+      <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
+        {props.children}
+        {showBranding && (
+          <Footer includeAlgolia={searchProvider === 'algolia'} />
+        )}
+      </Dialog.Content>
+    );
+  },
+);
 Content.displayName = 'Markprompt.Content';
 
 type PlainContentProps = ComponentPropsWithRef<'div'> & {
@@ -180,25 +181,24 @@ type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
 /**
  * A button to close the Markprompt dialog and abort an ongoing request.
  */
-const Close = forwardRef<HTMLButtonElement, CloseProps>(function Close(
-  props,
-  ref,
-) {
-  const { onClick, ...rest } = props;
-  const { abort } = useMarkpromptContext();
+const Close = forwardRef<HTMLButtonElement, CloseProps>(
+  function Close(props, ref) {
+    const { onClick, ...rest } = props;
+    const { abort } = useMarkpromptContext();
 
-  const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      // abort ongoing fetch requests on close
-      abort();
-      // call user-provided onClick handler
-      if (onClick) onClick(event);
-    },
-    [abort, onClick],
-  );
+    const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+      (event) => {
+        // abort ongoing fetch requests on close
+        abort();
+        // call user-provided onClick handler
+        if (onClick) onClick(event);
+      },
+      [abort, onClick],
+    );
 
-  return <Dialog.Close {...rest} ref={ref} onClick={handleClick} />;
-});
+    return <Dialog.Close {...rest} ref={ref} onClick={handleClick} />;
+  },
+);
 Close.displayName = 'Markprompt.Close';
 
 type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
@@ -288,88 +288,87 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
  */
-const Prompt = forwardRef<HTMLInputElement, PromptProps>(function Prompt(
-  props,
-  ref,
-) {
-  const {
-    autoCapitalize = 'none',
-    autoComplete = 'off',
-    autoCorrect = 'off',
-    autoFocus = true,
-    label,
-    labelClassName,
-    onChange,
-    placeholder = DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!,
-    spellCheck = false,
-    type = 'search',
-    ...rest
-  } = props;
-
-  const {
-    activeView,
-    prompt,
-    searchQuery,
-    submitSearchQuery,
-    setPrompt,
-    setSearchQuery,
-  } = useMarkpromptContext();
-
-  const debouncedSubmitSearchQuery = useMemo(
-    () => debounce(submitSearchQuery, 220),
-    [submitSearchQuery],
-  );
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      const value = event.target.value;
-      // We use the input value directly instead of using the prompt state
-      // to avoid an off-by-one-bug when querying.
-      if (activeView === 'search') {
-        setSearchQuery(value);
-        debouncedSubmitSearchQuery(value);
-      }
-
-      if (activeView === 'prompt') {
-        setPrompt(value);
-      }
-
-      if (onChange) {
-        onChange(event);
-      }
-    },
-    [
-      activeView,
+const Prompt = forwardRef<HTMLInputElement, PromptProps>(
+  function Prompt(props, ref) {
+    const {
+      autoCapitalize = 'none',
+      autoComplete = 'off',
+      autoCorrect = 'off',
+      autoFocus = true,
+      label,
+      labelClassName,
       onChange,
-      setSearchQuery,
-      debouncedSubmitSearchQuery,
-      setPrompt,
-    ],
-  );
+      placeholder = DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!,
+      spellCheck = false,
+      type = 'search',
+      ...rest
+    } = props;
 
-  return (
-    <>
-      <label htmlFor={name} className={labelClassName}>
-        {label}
-      </label>
-      <input
-        {...rest}
-        id={name}
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        ref={ref}
-        value={activeView === 'search' ? searchQuery : prompt}
-        onChange={handleChange}
-        autoCapitalize={autoCapitalize}
-        autoComplete={autoComplete}
-        autoCorrect={autoCorrect}
-        autoFocus={autoFocus}
-        spellCheck={spellCheck}
-      />
-    </>
-  );
-});
+    const {
+      activeView,
+      prompt,
+      searchQuery,
+      submitSearchQuery,
+      setPrompt,
+      setSearchQuery,
+    } = useMarkpromptContext();
+
+    const debouncedSubmitSearchQuery = useMemo(
+      () => debounce(submitSearchQuery, 220),
+      [submitSearchQuery],
+    );
+
+    const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+      (event) => {
+        const value = event.target.value;
+        // We use the input value directly instead of using the prompt state
+        // to avoid an off-by-one-bug when querying.
+        if (activeView === 'search') {
+          setSearchQuery(value);
+          debouncedSubmitSearchQuery(value);
+        }
+
+        if (activeView === 'prompt') {
+          setPrompt(value);
+        }
+
+        if (onChange) {
+          onChange(event);
+        }
+      },
+      [
+        activeView,
+        onChange,
+        setSearchQuery,
+        debouncedSubmitSearchQuery,
+        setPrompt,
+      ],
+    );
+
+    return (
+      <>
+        <label htmlFor={name} className={labelClassName}>
+          {label}
+        </label>
+        <input
+          {...rest}
+          id={name}
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          ref={ref}
+          value={activeView === 'search' ? searchQuery : prompt}
+          onChange={handleChange}
+          autoCapitalize={autoCapitalize}
+          autoComplete={autoComplete}
+          autoCorrect={autoCorrect}
+          autoFocus={autoFocus}
+          spellCheck={spellCheck}
+        />
+      </>
+    );
+  },
+);
 Prompt.displayName = 'Markprompt.Prompt';
 
 type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
@@ -425,13 +424,13 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';
 
-type ReferencesProps<
+interface ReferencesProps<
   TRoot extends ElementType,
   TReference extends ElementType<{
     reference: FileSectionReference;
     index: number;
   }>,
-> = {
+> {
   /**
    * The wrapper component to render.
    * @default 'ul'
@@ -443,7 +442,7 @@ type ReferencesProps<
    * @default 'li'
    */
   ReferenceComponent?: TReference;
-};
+}
 
 /**
  * Render the references that Markprompt returns.
