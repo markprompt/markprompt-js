@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
-export const Footer = ({
-  includeAlgolia,
-}: {
-  includeAlgolia?: boolean;
-}): ReactElement => {
+interface FooterProps {
+  showAlgolia?: boolean;
+}
+
+export const Footer = (props: FooterProps): ReactElement => {
+  const { showAlgolia } = props;
   return (
     <p
       style={{
@@ -38,7 +39,7 @@ export const Footer = ({
         <MarkpromptIcon style={{ width: '16px', height: '16px' }} aria-hidden />
         Markprompt AI
       </a>
-      {includeAlgolia && (
+      {showAlgolia && (
         <>
           and{' '}
           <a

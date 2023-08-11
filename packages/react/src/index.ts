@@ -1,10 +1,4 @@
 export {
-  useMarkprompt,
-  type UseMarkpromptOptions,
-  type UseMarkpromptResult,
-} from './useMarkprompt.js';
-
-export {
   Answer,
   AutoScroller,
   Close,
@@ -43,8 +37,6 @@ export {
   type MarkpromptProps,
   openMarkprompt,
 } from './Markprompt.js';
-
-export { useMarkpromptContext } from './context.js';
 
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 

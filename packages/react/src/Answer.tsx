@@ -2,10 +2,16 @@ import React, { type ReactElement } from 'react';
 
 import { Caret } from './Caret.js';
 import * as BaseMarkprompt from './index.js';
-import { useMarkpromptContext } from './index.js';
+import type { LoadingState } from './usePrompt.js';
 
-export function Answer(): ReactElement {
-  const { state } = useMarkpromptContext();
+interface AnswerProps {
+  answer: string;
+  state: LoadingState;
+}
+
+export function Answer(props: AnswerProps): ReactElement {
+  const { answer, state } = props;
+
   return (
     <div
       className="MarkpromptAnswer"
@@ -13,8 +19,8 @@ export function Answer(): ReactElement {
       aria-busy={state === 'preload' || state === 'streaming-answer'}
       aria-live="polite"
     >
-      <Caret />
-      <BaseMarkprompt.Answer />
+      <Caret answer={answer} />
+      <BaseMarkprompt.Answer answer={answer} />
     </div>
   );
 }

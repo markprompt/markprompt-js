@@ -1,20 +1,15 @@
 import type { FileSectionReference } from '@markprompt/core';
 import * as Dialog from '@radix-ui/react-dialog';
-import debounce from 'p-debounce';
 import React, {
   forwardRef,
-  useCallback,
   useEffect,
-  useMemo,
   useRef,
-  type ChangeEventHandler,
   type ComponentPropsWithRef,
   type ComponentPropsWithoutRef,
   type ElementType,
-  type FormEventHandler,
-  type MouseEventHandler,
   type ReactElement,
   type ReactNode,
+  memo,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -22,16 +17,14 @@ import remarkGfm from 'remark-gfm';
 
 import { Footer } from './footer.js';
 import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import { MarkpromptContext, useMarkpromptContext } from '../context.js';
 import type {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
-import { useMarkprompt, type UseMarkpromptOptions } from '../useMarkprompt.js';
+import { type UseMarkpromptOptions } from '../useMarkprompt.js';
 
-type RootProps = Dialog.DialogProps & UseMarkpromptOptions;
+type RootProps = Dialog.DialogProps & Pick<UseMarkpromptOptions, 'display'>;
 
 /**
  * The Markprompt context provider and dialog root.
@@ -44,49 +37,28 @@ function Root(props: RootProps): ReactElement {
     modal,
     onOpenChange,
     open,
-    ...markpromptOptions
   } = props;
 
-  if (!markpromptOptions.projectKey) {
-    throw new Error(
-      'Markprompt: a project key is required. Make sure to pass the projectKey prop to Markprompt.Root.',
-    );
+  if (display === 'plain') {
+    return <>{children}</>;
   }
 
-  const contextValue = useMarkprompt(markpromptOptions);
-
   return (
-    <MarkpromptContext.Provider value={contextValue}>
-      {display === 'dialog' && (
-        <DialogRootWithAbort
-          defaultOpen={defaultOpen}
-          modal={modal}
-          onOpenChange={onOpenChange}
-          open={open}
-        >
-          {children}
-        </DialogRootWithAbort>
-      )}
-      {display === 'plain' && children}
-    </MarkpromptContext.Provider>
+    <DialogRootWithAbort
+      defaultOpen={defaultOpen}
+      modal={modal}
+      onOpenChange={onOpenChange}
+      open={open}
+    >
+      {children}
+    </DialogRootWithAbort>
   );
 }
 
 function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
-  const { onOpenChange, modal = true, ...rest } = props;
-  const { abort } = useMarkpromptContext();
-
-  const handleOpenChange: NonNullable<Dialog.DialogProps['onOpenChange']> =
-    useCallback(
-      (open) => {
-        if (!open) abort();
-        if (onOpenChange) onOpenChange(open);
-      },
-      [abort, onOpenChange],
-    );
-
+  const { modal = true, ...rest } = props;
   return (
-    <Dialog.Root {...rest} modal={modal} onOpenChange={handleOpenChange}>
+    <Dialog.Root {...rest} modal={modal}>
       {props.children}
     </Dialog.Root>
   );
@@ -126,6 +98,10 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
    * Show the Markprompt footer.
    */
   showBranding?: boolean;
+  /**
+   * Show Algolia attribution in the footer.
+   **/
+  showAlgolia?: boolean;
 };
 
 /**
@@ -133,15 +109,12 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
  */
 const Content = forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
-    const { showBranding = true, ...rest } = props;
-    const { state, searchProvider } = useMarkpromptContext();
+    const { showBranding = true, showAlgolia, ...rest } = props;
 
     return (
-      <Dialog.Content {...rest} ref={ref} data-loading-state={state}>
+      <Dialog.Content {...rest} ref={ref}>
         {props.children}
-        {showBranding && (
-          <Footer includeAlgolia={searchProvider === 'algolia'} />
-        )}
+        {showBranding && <Footer showAlgolia={showAlgolia} />}
       </Dialog.Content>
     );
   },
@@ -153,6 +126,10 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
    * Show the Markprompt footer.
    */
   showBranding?: boolean;
+  /**
+   * Show Algolia attribution in the footer.
+   **/
+  showAlgolia?: boolean;
 };
 
 /**
@@ -160,17 +137,12 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const { showBranding = true, ...rest } = props;
-    const { state, searchProvider, isSearchEnabled } = useMarkpromptContext();
+    const { showBranding = true, showAlgolia, ...rest } = props;
 
     return (
-      <div {...rest} ref={ref} data-loading-state={state}>
+      <div {...rest} ref={ref}>
         {props.children}
-        {showBranding && (
-          <Footer
-            includeAlgolia={isSearchEnabled && searchProvider === 'algolia'}
-          />
-        )}
+        {showBranding && <Footer showAlgolia={showAlgolia} />}
       </div>
     );
   },
@@ -183,20 +155,7 @@ type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
  */
 const Close = forwardRef<HTMLButtonElement, CloseProps>(
   function Close(props, ref) {
-    const { onClick, ...rest } = props;
-    const { abort } = useMarkpromptContext();
-
-    const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-      (event) => {
-        // abort ongoing fetch requests on close
-        abort();
-        // call user-provided onClick handler
-        if (onClick) onClick(event);
-      },
-      [abort, onClick],
-    );
-
-    return <Dialog.Close {...rest} ref={ref} onClick={handleClick} />;
+    return <Dialog.Close {...props} ref={ref} />;
   },
 );
 Close.displayName = 'Markprompt.Close';
@@ -237,48 +196,9 @@ type FormProps = ComponentPropsWithRef<'form'>;
  * A form which, when submitted, submits the current prompt.
  */
 const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
-  const { onSubmit, ...rest } = props;
-
-  const {
-    activeView,
-    isSearchEnabled,
-    submitPrompt,
-    submitSearchQuery,
-    prompt,
-  } = useMarkpromptContext();
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-
-      // call user-provided onSubmit handler
-      if (onSubmit) {
-        onSubmit(event);
-      }
-
-      // submit search query if search is enabled
-      if (isSearchEnabled && activeView === 'search') {
-        await submitSearchQuery(prompt);
-      } else {
-        // submit prompt if search is disabled
-        await submitPrompt();
-      }
-    },
-    [
-      activeView,
-      isSearchEnabled,
-      onSubmit,
-      prompt,
-      submitPrompt,
-      submitSearchQuery,
-    ],
-  );
-
-  return <form {...rest} ref={ref} onSubmit={handleSubmit} />;
+  return <form {...props} ref={ref} />;
 });
-Form.displayName = 'Markprompt.Form';
 
-const name = 'markprompt-prompt';
 type PromptProps = ComponentPropsWithRef<'input'> & {
   /** The label for the input. */
   label?: ReactNode;
@@ -297,53 +217,12 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       autoFocus = true,
       label,
       labelClassName,
-      onChange,
-      placeholder = DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!,
+      placeholder,
       spellCheck = false,
       type = 'search',
+      name,
       ...rest
     } = props;
-
-    const {
-      activeView,
-      prompt,
-      searchQuery,
-      submitSearchQuery,
-      setPrompt,
-      setSearchQuery,
-    } = useMarkpromptContext();
-
-    const debouncedSubmitSearchQuery = useMemo(
-      () => debounce(submitSearchQuery, 220),
-      [submitSearchQuery],
-    );
-
-    const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-      (event) => {
-        const value = event.target.value;
-        // We use the input value directly instead of using the prompt state
-        // to avoid an off-by-one-bug when querying.
-        if (activeView === 'search') {
-          setSearchQuery(value);
-          debouncedSubmitSearchQuery(value);
-        }
-
-        if (activeView === 'prompt') {
-          setPrompt(value);
-        }
-
-        if (onChange) {
-          onChange(event);
-        }
-      },
-      [
-        activeView,
-        onChange,
-        setSearchQuery,
-        debouncedSubmitSearchQuery,
-        setPrompt,
-      ],
-    );
 
     return (
       <>
@@ -357,8 +236,6 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           name={name}
           placeholder={placeholder}
           ref={ref}
-          value={activeView === 'search' ? searchQuery : prompt}
-          onChange={handleChange}
           autoCapitalize={autoCapitalize}
           autoComplete={autoComplete}
           autoCorrect={autoCorrect}
@@ -371,13 +248,17 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
 );
 Prompt.displayName = 'Markprompt.Prompt';
 
-type AnswerProps = Omit<ComponentPropsWithoutRef<typeof Markdown>, 'children'>;
+type AnswerProps = Omit<
+  ComponentPropsWithoutRef<typeof Markdown>,
+  'children'
+> & {
+  answer: string;
+};
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
-  const { remarkPlugins = [remarkGfm], ...rest } = props;
-  const { answer } = useMarkpromptContext();
+  const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
   return (
     <Markdown {...rest} remarkPlugins={remarkPlugins}>
       {answer ?? ''}
@@ -400,15 +281,28 @@ type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
    * @default 'smooth'
    */
   scrollBehavior?: ScrollBehavior;
+
+  /**
+   * The element scrolls when this prop changes
+   * @default undefined
+   * */
+  scrollTrigger?: unknown;
 };
 /**
  * A component automatically that scrolls to the bottom.
  */
-const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
-  (props, ref) => {
-    const { autoScroll = true, scrollBehavior = 'smooth' } = props;
+const AutoScroller = memo<AutoScrollerProps>(
+  forwardRef<HTMLDivElement, AutoScrollerProps>((props, ref) => {
+    const {
+      // eslint-disable-next-line react/prop-types
+      autoScroll = true,
+      // eslint-disable-next-line react/prop-types
+      scrollBehavior = 'smooth',
+      // eslint-disable-next-line react/prop-types
+      scrollTrigger,
+      ...rest
+    } = props;
     const localRef = useRef<HTMLDivElement>(null);
-    const { answer, state } = useMarkpromptContext();
 
     useEffect(() => {
       if (!localRef.current) return;
@@ -417,10 +311,10 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
         top: localRef.current.scrollHeight,
         behavior: scrollBehavior,
       });
-    }, [answer, state, autoScroll, scrollBehavior]);
+    }, [scrollTrigger, autoScroll, scrollBehavior]);
 
-    return <div ref={mergeRefs([ref, localRef])} {...props} />;
-  },
+    return <div ref={mergeRefs([ref, localRef])} {...rest} />;
+  }),
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';
 
@@ -442,6 +336,7 @@ interface ReferencesProps<
    * @default 'li'
    */
   ReferenceComponent?: TReference;
+  references: FileSectionReference[];
 }
 
 /**
@@ -454,10 +349,14 @@ const References = function References<
     index: number;
   }>,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  P extends ReferencesProps<TRoot, TReference> = {},
+  P extends ReferencesProps<TRoot, TReference> = { references: [] },
 >(props: P, ref: PolymorphicRef<TRoot>): ReactElement {
-  const { RootComponent = 'ul', ReferenceComponent = 'li' } = props;
-  const { references } = useMarkpromptContext();
+  const {
+    RootComponent = 'ul',
+    ReferenceComponent = 'li',
+    references = [],
+  } = props;
+
   return (
     <RootComponent ref={ref}>
       {references.map((reference, index) => {
@@ -482,9 +381,11 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
     label?: string;
+    searchQuery: string;
     SearchResultComponent?: ElementType<
       SearchResultComponentProps & { index?: number }
     >;
+    searchResults: SearchResultComponentProps[];
   }
 >;
 
@@ -493,11 +394,11 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
     const {
       as: Component = 'ul',
       label = 'Search results',
+      searchQuery,
       SearchResultComponent = SearchResult,
+      searchResults,
       ...rest
     } = props;
-
-    const { searchResults } = useMarkpromptContext();
 
     return (
       <Component
@@ -512,10 +413,11 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
           const id = `markprompt-result-${index}`;
           return (
             <SearchResultComponent
-              role="option"
-              index={index}
               id={id}
+              index={index}
               key={id}
+              role="option"
+              searchQuery={searchQuery}
               {...result}
             />
           );
@@ -531,6 +433,7 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   SearchResultComponentProps & {
     onMouseMove?: () => void;
     onClick?: () => void;
+    searchQuery: string;
   }
 >;
 
