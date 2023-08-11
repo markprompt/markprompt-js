@@ -56,10 +56,10 @@ jobs:
       - run: npm ci
       - run: >
           npm pack
-            --workspace @markprompt/core
-            --workspace @markprompt/docusaurus-theme-search
-            --workspace @markprompt/react
-            --workspace @markprompt/web
+          -w @markprompt/core
+          -w @markprompt/docusaurus-theme-search
+          -w @markprompt/react
+          -w @markprompt/web
       - uses: preactjs/compressed-size-action@v2
         with:
           pattern: './packages/**/dist/**/*.{cjs,js}'
