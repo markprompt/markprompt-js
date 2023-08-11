@@ -904,6 +904,10 @@
   font-size: 0.75rem;
   color: var(--markprompt-mutedForeground);
   overflow: auto;
+  flex: 0 0 auto;
+  transition-property: opacity, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 :where(.MarkpromptReferences[data-loading-state='preload']) {

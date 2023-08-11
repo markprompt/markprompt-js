@@ -1,11 +1,9 @@
 import type { FileSectionReference } from '@markprompt/core';
-import { animated, useSpring } from '@react-spring/web';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import * as Markprompt from './index.js';
 import { useMarkpromptContext } from './index.js';
-import { useElementSize } from './useElementSize.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -80,7 +78,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
   } = props;
 
   const { references, state } = useMarkpromptContext();
-  const [ref, { height }] = useElementSize<HTMLDivElement>();
 
   const ReferenceComponent = useCallback(
     (props: { reference: FileSectionReference; index: number }) => (
@@ -100,42 +97,36 @@ const References = (props: ReferencesProps): ReactElement | null => {
     adjustedState = 'indeterminate';
   }
 
-  const [style] = useSpring(
-    () => ({
-      height: adjustedState === 'indeterminate' ? 0 : height,
-      opacity: adjustedState === 'indeterminate' ? 0 : 1,
-      y: adjustedState === 'indeterminate' ? '100%' : '0%',
-    }),
-    [adjustedState, height],
-  );
-
   return (
-    <animated.div style={style}>
-      <div
-        ref={ref}
-        className="MarkpromptReferences"
-        data-loading-state={adjustedState}
-        role="status"
-      >
-        {state === 'preload' && (
-          <>
-            <div
-              className="MarkpromptProgress"
-              id="markprompt-progressbar"
-              role="progressbar"
-              aria-labelledby="markprompt-loading-text"
-            />
-            <p id="markprompt-loading-text">{loadingText}</p>
-          </>
-        )}
+    <div
+      style={{
+        opacity: adjustedState === 'indeterminate' ? 0 : 1,
+        transform: `translateY(${
+          adjustedState === 'indeterminate' ? '100%' : '0%'
+        })`,
+      }}
+      className="MarkpromptReferences"
+      data-loading-state={adjustedState}
+      role="status"
+    >
+      {state === 'preload' && (
+        <>
+          <div
+            className="MarkpromptProgress"
+            id="markprompt-progressbar"
+            role="progressbar"
+            aria-labelledby="markprompt-loading-text"
+          />
+          <p id="markprompt-loading-text">{loadingText}</p>
+        </>
+      )}
 
-        {state !== 'preload' && <p>{heading}</p>}
+      {state !== 'preload' && <p>{heading}</p>}
 
-        {(state === 'streaming-answer' || state === 'done') && (
-          <Markprompt.References ReferenceComponent={ReferenceComponent} />
-        )}
-      </div>
-    </animated.div>
+      {(state === 'streaming-answer' || state === 'done') && (
+        <Markprompt.References ReferenceComponent={ReferenceComponent} />
+      )}
+    </div>
   );
 };
 
