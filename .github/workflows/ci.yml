@@ -57,5 +57,5 @@ jobs:
       - uses: preactjs/compressed-size-action@v2
         with:
           build-script: '"build:packages"'
-          pattern: './packages/**/dist/**/*.{cjs,js}'
+          pattern: '{./packages/**/dist/**/*.{cjs,js},./packages/css/markprompt.css}'
           exclude: '{**/*.map,**/*.d.{ts,cts},**/node_modules/**,./packages/**/node_modules/**/dist/**/*}'
