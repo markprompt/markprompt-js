@@ -44,3 +44,18 @@ jobs:
       - run: npm ci
       - run: npm test
       - uses: codecov/codecov-action@v3
+
+  bundle-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          build-script: '"build:packages"'
+          pattern: '{./packages/**/dist/**/*.{cjs,js},./packages/css/markprompt.css}'
+          exclude: '{**/*.map,**/*.d.{ts,cts},**/node_modules/**,./packages/**/node_modules/**/dist/**/*}'
