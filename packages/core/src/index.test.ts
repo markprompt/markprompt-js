@@ -150,10 +150,10 @@ afterEach(() => {
 
 describe('submitPrompt', () => {
   test('require projectKey', async () => {
-    // @ts-expect-error We test a missing project key.
-    await expect(() => submitPrompt('Explain to me…')).rejects.toThrowError(
-      'A projectKey is required',
-    );
+    await expect(() =>
+      // @ts-expect-error We test a missing project key.
+      submitPrompt([{ role: 'user', message: 'Explain to me…' }]),
+    ).rejects.toThrowError('A projectKey is required');
   });
 
   test('don’t make requests if the prompt is empty', async () => {
@@ -163,7 +163,7 @@ describe('submitPrompt', () => {
     const onError = vi.fn();
 
     await submitPrompt(
-      '',
+      [],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -191,7 +191,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -221,7 +221,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -247,7 +247,7 @@ describe('submitPrompt', () => {
     response = ['Internal Server Error'];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -279,7 +279,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -310,7 +310,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -351,7 +351,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      'How much is 1+2?',
+      [{ message: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -386,7 +386,7 @@ test('calls back user-provided onPromptId', async () => {
   ];
 
   await submitPrompt(
-    'How much is 1+2?',
+    [{ message: 'How much is 1+2?', role: 'user' }],
     'testKey',
     onAnswerChunk,
     onReferences,
