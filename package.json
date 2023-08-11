@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "build": "npm pack --workspaces",
+    "build:packages": "npm run build -w @markprompt/core -w @markprompt/docusaurus-theme-search -w @markprompt/react -w @markprompt/web",
     "lint": "run-p lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "npx stylelint \"**/*.css\"",
     "lint:format": "prettier --check .",
