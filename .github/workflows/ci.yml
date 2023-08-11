@@ -54,13 +54,8 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: >
-          npm run build
-          -w @markprompt/core
-          -w @markprompt/docusaurus-theme-search
-          -w @markprompt/react
-          -w @markprompt/web
       - uses: preactjs/compressed-size-action@v2
         with:
+          build-script: 'build:packages'
           pattern: './packages/**/dist/**/*.{cjs,js}'
           exclude: '{**/*.map,**/*.d.{ts,cts},**/node_modules/**}'
