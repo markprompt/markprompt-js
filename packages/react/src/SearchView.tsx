@@ -19,8 +19,8 @@ import {
   type MarkpromptOptions,
   type SearchResultComponentProps,
 } from './types.js';
-import type { View } from './useMarkprompt.js';
 import { useSearch, type SearchLoadingState } from './useSearch.js';
+import type { View } from './useViews.js';
 
 interface SearchViewProps {
   activeView: View;

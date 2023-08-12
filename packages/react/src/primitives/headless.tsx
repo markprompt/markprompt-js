@@ -22,9 +22,8 @@ import type {
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
-import { type UseMarkpromptOptions } from '../useMarkprompt.js';
 
-type RootProps = Dialog.DialogProps & Pick<UseMarkpromptOptions, 'display'>;
+type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
 
 /**
  * The Markprompt context provider and dialog root.

@@ -15,8 +15,8 @@ import { SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { type MarkpromptOptions } from './types.js';
-import type { View } from './useMarkprompt.js';
 import { usePrompt, type PromptLoadingState } from './usePrompt.js';
+import type { View } from './useViews.js';
 
 interface PromptViewProps {
   activeView: View;
