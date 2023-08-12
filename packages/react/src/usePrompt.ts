@@ -10,7 +10,13 @@ import type { MarkpromptOptions } from './types.js';
 import { useAbortController } from './useAbortController.js';
 import { useFeedback } from './useFeedback.js';
 
-interface UsePromptOptions {
+export type PromptLoadingState =
+  | 'indeterminate'
+  | 'preload'
+  | 'streaming-answer'
+  | 'done';
+
+export interface UsePromptOptions {
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
@@ -21,11 +27,11 @@ interface UsePromptOptions {
   debug?: boolean;
 }
 
-interface usePromptResult {
+export interface UsePromptResult {
   answer: string;
   prompt: string;
   references: FileSectionReference[];
-  state: LoadingState;
+  state: PromptLoadingState;
   abort: () => void;
   setPrompt: (prompt: string) => void;
   submitFeedback: (feedback: PromptFeedback) => void;
@@ -33,25 +39,19 @@ interface usePromptResult {
   submitPrompt: () => void;
 }
 
-export type LoadingState =
-  | 'indeterminate'
-  | 'preload'
-  | 'streaming-answer'
-  | 'done';
-
 export function usePrompt({
   projectKey,
   promptOptions,
   feedbackOptions,
   debug,
-}: UsePromptOptions): usePromptResult {
+}: UsePromptOptions): UsePromptResult {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey to useMarkprompt.',
     );
   }
 
-  const [state, setState] = useState<LoadingState>('indeterminate');
+  const [state, setState] = useState<PromptLoadingState>('indeterminate');
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<FileSectionReference[]>([]);
   const [prompt, setPrompt] = useState<string>('');

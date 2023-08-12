@@ -2,11 +2,11 @@ import React, { type ReactElement } from 'react';
 
 import { Caret } from './Caret.js';
 import * as BaseMarkprompt from './index.js';
-import type { LoadingState } from './usePrompt.js';
+import type { PromptLoadingState } from './usePrompt.js';
 
 interface AnswerProps {
   answer: string;
-  state: LoadingState;
+  state: PromptLoadingState;
 }
 
 export function Answer(props: AnswerProps): ReactElement {

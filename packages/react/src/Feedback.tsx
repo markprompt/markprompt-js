@@ -19,6 +19,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
     submitFeedback,
     abortFeedbackRequest,
+    ...rest
   } = props;
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
@@ -34,7 +35,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
   }, [abortFeedbackRequest]);
 
   return (
-    <aside {...props}>
+    <aside {...rest}>
       <h3>{heading}</h3>
 
       <div>

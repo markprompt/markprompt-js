@@ -1,35 +1,21 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, expect, test, vitest } from 'vitest';
 
-import { MarkpromptContext, type MarkpromptContextValue } from './context';
 import { Feedback } from './Feedback';
 
 const submitFeedback = vitest.fn(() => Promise.resolve());
-
-const mockContextValue = {
-  activeView: 'prompt',
-  answer: undefined,
-  isSearchEnabled: false,
-  prompt: '',
-  references: [],
-  searchProvider: undefined,
-  searchQuery: '',
-  searchResults: [],
-  state: 'indeterminate',
-  abort: vitest.fn(),
-  setActiveView: vitest.fn(),
-  setPrompt: vitest.fn(),
-  setSearchQuery: vitest.fn(),
-  submitFeedback,
-  submitPrompt: vitest.fn(),
-  submitSearchQuery: vitest.fn(),
-} satisfies MarkpromptContextValue;
+const abortFeedbackRequest = vitest.fn();
 
 describe('Feedback', () => {
   test('render the Feedback component', () => {
-    render(<Feedback />);
+    render(
+      <Feedback
+        submitFeedback={submitFeedback}
+        abortFeedbackRequest={abortFeedbackRequest}
+      />,
+    );
 
     const element = screen.getByText(
       /Was this response helpful?/,
@@ -42,9 +28,10 @@ describe('Feedback', () => {
     const user = userEvent.setup();
 
     render(
-      <MarkpromptContext.Provider value={mockContextValue}>
-        <Feedback />
-      </MarkpromptContext.Provider>,
+      <Feedback
+        submitFeedback={submitFeedback}
+        abortFeedbackRequest={abortFeedbackRequest}
+      />,
     );
 
     const buttons = screen.getAllByRole('button');
@@ -52,9 +39,7 @@ describe('Feedback', () => {
 
     const yesButton = screen.getByLabelText('Yes');
 
-    await act(async () => {
-      await user.click(yesButton);
-    });
+    await user.click(yesButton);
 
     await waitFor(() =>
       expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }),

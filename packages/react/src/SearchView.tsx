@@ -302,7 +302,6 @@ function SearchResultsContainer(
 
       {searchResults.length > 0 && (
         <BaseMarkprompt.SearchResults
-          searchQuery={searchQuery}
           searchResults={searchResults}
           className="MarkpromptSearchResults"
           SearchResultComponent={({ index, ...rest }) => {

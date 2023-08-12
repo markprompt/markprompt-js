@@ -33,6 +33,25 @@ export {
 } from './primitives/headless.js';
 
 export {
+  useFeedback,
+  type UseFeedbackOptions,
+  type UseFeedbackResult,
+} from './useFeedback.js';
+
+export {
+  usePrompt,
+  type UsePromptOptions,
+  type UsePromptResult,
+} from './usePrompt.js';
+
+export {
+  useSearch,
+  type SearchLoadingState,
+  type UseSearchOptions,
+  type UseSearchResult,
+} from './useSearch.js';
+
+export {
   Markprompt,
   type MarkpromptProps,
   openMarkprompt,

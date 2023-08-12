@@ -17,7 +17,7 @@ describe('Footer', () => {
   });
 
   test('render a footer with Algolia', () => {
-    render(<Footer includeAlgolia />);
+    render(<Footer showAlgolia />);
 
     const anchor = screen.getByLabelText<HTMLAnchorElement>('Algolia');
     expect(anchor.href).toBe('https://algolia.com/');

@@ -381,7 +381,6 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
   'ul',
   {
     label?: string;
-    searchQuery: string;
     SearchResultComponent?: ElementType<
       SearchResultComponentProps & { index?: number }
     >;
@@ -394,7 +393,6 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
     const {
       as: Component = 'ul',
       label = 'Search results',
-      searchQuery,
       SearchResultComponent = SearchResult,
       searchResults,
       ...rest
@@ -417,7 +415,6 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
               index={index}
               key={id}
               role="option"
-              searchQuery={searchQuery}
               {...result}
             />
           );
@@ -433,7 +430,6 @@ type SearchResultProps = PolymorphicComponentPropWithRef<
   SearchResultComponentProps & {
     onMouseMove?: () => void;
     onClick?: () => void;
-    searchQuery: string;
   }
 >;
 

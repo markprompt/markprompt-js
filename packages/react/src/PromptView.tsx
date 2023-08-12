@@ -16,7 +16,7 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { type MarkpromptOptions } from './types.js';
 import type { View } from './useMarkprompt.js';
-import { usePrompt, type LoadingState } from './usePrompt.js';
+import { usePrompt, type PromptLoadingState } from './usePrompt.js';
 
 interface PromptViewProps {
   activeView: View;
@@ -134,7 +134,7 @@ interface AnswerContainerProps {
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
-  state: LoadingState;
+  state: PromptLoadingState;
   submitFeedback: (feedback: PromptFeedback) => void;
   abortFeedbackRequest: () => void;
 }

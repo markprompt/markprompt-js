@@ -6,19 +6,19 @@ import { useCallback } from 'react';
 
 import type { MarkpromptOptions } from './types.js';
 import { useAbortController } from './useAbortController.js';
-import type { LoadingState } from './usePrompt.js';
+import type { PromptLoadingState } from './usePrompt.js';
 
-interface UseFeedbackOptions {
+export interface UseFeedbackOptions {
   /** Markprompt project key */
   projectKey: string;
   /** ID for the current prompt */
   promptId?: string;
   /** Enable and configure feedback functionality */
   feedbackOptions?: MarkpromptOptions['feedback'];
-  state: LoadingState;
+  state: PromptLoadingState;
 }
 
-interface UseFeedbackResult {
+export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
@@ -31,6 +31,12 @@ export function useFeedback({
   feedbackOptions,
   state,
 }: UseFeedbackOptions): UseFeedbackResult {
+  if (!projectKey) {
+    throw new Error(
+      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.`,
+    );
+  }
+
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
