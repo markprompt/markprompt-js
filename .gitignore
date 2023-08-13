@@ -11,7 +11,8 @@ dist/
 build/
 
 # testing
-/coverage
+/coverage/
+**/coverage/
 
 # production
 /build/
