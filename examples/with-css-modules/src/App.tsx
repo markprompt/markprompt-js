@@ -1,6 +1,6 @@
 import { FileSectionReference } from '@markprompt/core';
 import * as Markprompt from '@markprompt/react';
-import { useMarkpromptContext } from '@markprompt/react';
+import { usePrompt } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, { ReactElement } from 'react';
 
@@ -8,31 +8,7 @@ import styles from './markprompt.module.css';
 
 function Component(): ReactElement {
   return (
-    <Markprompt.Root
-      projectKey={import.meta.env.VITE_PROJECT_API_KEY}
-      promptOptions={{
-        iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-        promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, output in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
-
-  Context sections:
-  ---
-  {{CONTEXT}}
-
-  Question: "{{PROMPT}}"
-
-  Answer (including related code snippets if available):`,
-        temperature: 0.1,
-        topP: 1,
-        frequencyPenalty: 0,
-        presencePenalty: 0,
-        maxTokens: 500,
-        sectionsMatchCount: 10,
-        sectionsMatchThreshold: 0.5,
-      }}
-      searchOptions={{
-        enabled: false,
-      }}
-    >
+    <Markprompt.Root>
       <Markprompt.DialogTrigger
         aria-label="Open Markprompt"
         className={styles.MarkpromptButton}
@@ -59,25 +35,53 @@ function Component(): ReactElement {
             </Markprompt.Description>
           </VisuallyHidden>
 
-          <Markprompt.Form>
-            <SearchIcon className={styles.MarkpromptSearchIcon} />
-            <Markprompt.Prompt className={styles.MarkpromptPrompt} />
-          </Markprompt.Form>
-
-          <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
-            <Caret />
-            <Markprompt.Answer />
-          </Markprompt.AutoScroller>
-
-          <References />
+          <PromptView projectKey={import.meta.env.VITE_PROJECT_API_KEY} />
         </Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>
   );
 }
 
-const Caret = (): ReactElement | null => {
-  const { answer } = useMarkpromptContext();
+interface PromptViewProps {
+  projectKey: string;
+}
+
+function PromptView(props: PromptViewProps): ReactElement {
+  const { projectKey } = props;
+  const { answer, submitPrompt, prompt, setPrompt, references, state } =
+    usePrompt({ projectKey });
+  return (
+    <>
+      <Markprompt.Form
+        onSubmit={(event) => {
+          event.preventDefault();
+          submitPrompt();
+        }}
+      >
+        <SearchIcon className={styles.MarkpromptSearchIcon} />
+        <Markprompt.Prompt
+          className={styles.MarkpromptPrompt}
+          onChange={(event) => setPrompt(event.target.value)}
+          value={prompt}
+        />
+      </Markprompt.Form>
+
+      <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
+        <Caret answer={answer} />
+        <Markprompt.Answer answer={answer} />
+      </Markprompt.AutoScroller>
+
+      <References references={references} state={state} />
+    </>
+  );
+}
+
+interface CaretProps {
+  answer?: string;
+}
+
+const Caret = (props: CaretProps): ReactElement | null => {
+  const { answer } = props;
 
   if (answer) {
     return null;
@@ -121,8 +125,13 @@ const Reference = ({
   );
 };
 
-const References = (): ReactElement | null => {
-  const { state, references } = useMarkpromptContext();
+interface ReferencesProps {
+  references: FileSectionReference[];
+  state: string;
+}
+
+const References = (props: ReferencesProps): ReactElement | null => {
+  const { references, state } = props;
 
   if (state === 'indeterminate') return null;
 
@@ -139,6 +148,7 @@ const References = (): ReactElement | null => {
       <Markprompt.References
         RootComponent="ul"
         ReferenceComponent={Reference}
+        references={references}
       />
     </div>
   );
