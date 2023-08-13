@@ -97,7 +97,7 @@ export function usePrompt({
     controllerRef.current = controller;
 
     const promise = submitPromptToMarkprompt(
-      prompt,
+      [{ message: prompt, role: 'user' }],
       projectKey,
       (chunk) => {
         setState('streaming-answer');

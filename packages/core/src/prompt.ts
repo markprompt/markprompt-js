@@ -64,6 +64,11 @@ export interface SubmitPromptOptions {
   signal?: AbortSignal;
 }
 
+interface PromptMessage {
+  message: string;
+  role: 'user' | 'assistant';
+}
+
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
 export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
@@ -91,7 +96,7 @@ export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
  * @param [options] - Optional parameters
  */
 export async function submitPrompt(
-  prompt: string,
+  prompt: PromptMessage[],
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
@@ -104,7 +109,7 @@ export async function submitPrompt(
     throw new Error('A projectKey is required.');
   }
 
-  if (!prompt) return;
+  if (!prompt || !Array.isArray(prompt) || prompt.length === 0) return;
 
   const iDontKnowMessage =
     options.iDontKnowMessage ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage!;
