@@ -152,7 +152,7 @@ describe('submitPrompt', () => {
   test('require projectKey', async () => {
     await expect(() =>
       // @ts-expect-error We test a missing project key.
-      submitPrompt([{ role: 'user', message: 'Explain to me…' }]),
+      submitPrompt('Explain to me…'),
     ).rejects.toThrowError('A projectKey is required');
   });
 
@@ -163,7 +163,7 @@ describe('submitPrompt', () => {
     const onError = vi.fn();
 
     await submitPrompt(
-      [],
+      '',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -191,7 +191,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -221,7 +221,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -247,7 +247,7 @@ describe('submitPrompt', () => {
     response = ['Internal Server Error'];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -279,7 +279,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -310,7 +310,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -351,7 +351,7 @@ describe('submitPrompt', () => {
     ];
 
     await submitPrompt(
-      [{ message: 'How much is 1+2?', role: 'user' }],
+      'How much is 1+2?',
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -386,7 +386,7 @@ test('calls back user-provided onPromptId', async () => {
   ];
 
   await submitPrompt(
-    [{ message: 'How much is 1+2?', role: 'user' }],
+    'How much is 1+2?',
     'testKey',
     onAnswerChunk,
     onReferences,

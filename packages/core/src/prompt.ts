@@ -64,11 +64,6 @@ export interface SubmitPromptOptions {
   signal?: AbortSignal;
 }
 
-export interface PromptMessage {
-  role: 'user' | 'assistant';
-  message: string;
-}
-
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
 export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
@@ -96,7 +91,7 @@ export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
  * @param [options] - Optional parameters
  */
 export async function submitPrompt(
-  messages: PromptMessage[],
+  prompt: string,
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
@@ -109,7 +104,7 @@ export async function submitPrompt(
     throw new Error('A projectKey is required.');
   }
 
-  if (!messages || !Array.isArray(messages) || messages.length === 0) return;
+  if (!prompt) return;
 
   const iDontKnowMessage =
     options.iDontKnowMessage ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage!;
@@ -123,7 +118,7 @@ export async function submitPrompt(
           'Content-Type': 'application/json',
         }),
         body: JSON.stringify({
-          messages: messages,
+          prompt: prompt,
           projectKey: projectKey,
           iDontKnowMessage,
           model: options?.model ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.model,
