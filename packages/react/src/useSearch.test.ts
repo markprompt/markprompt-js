@@ -1,6 +1,7 @@
 import {
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
   SearchResult,
+  AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
 import { renderHook, cleanup } from '@testing-library/react-hooks';
@@ -18,16 +19,10 @@ import {
 
 import { UseSearchResult, useSearch } from './useSearch';
 
-let searchResults: SearchResult[] = [];
+let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
-
-const submitSearchQuery = vi.fn(() => searchResults);
-const submitAlgoliaDocsearchQuery = vi.fn();
-
-vi.mock('@markprompt/core', () => ({
-  submitSearchQuery,
-  submitAlgoliaDocsearchQuery,
-}));
+let searchHits = 0;
+let algoliaHits = 0;
 
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
@@ -39,6 +34,8 @@ afterAll(() => {
 
 afterEach(() => {
   searchResults = [];
+  searchHits = 0;
+  algoliaHits = 0;
   status = 200;
   server.resetHandlers();
   cleanup();
@@ -49,6 +46,17 @@ const server = setupServer(
   rest.get(
     DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
     async (_req, res, ctx) => {
+      searchHits += 1;
+      return res(
+        ctx.status(status),
+        ctx.body(JSON.stringify({ data: searchResults })),
+      );
+    },
+  ),
+  rest.post(
+    `https://test-dsn.algolia.net/1/indexes/test/query`,
+    async (_req, res, ctx) => {
+      algoliaHits += 1;
       return res(
         ctx.status(status),
         ctx.body(JSON.stringify({ data: searchResults })),
@@ -122,22 +130,23 @@ describe('useSearch', () => {
     await result.current.submitSearchQuery('react');
 
     await waitFor(() => {
+      expect(searchHits).toBe(1);
       expect(result.current.searchResults[0]?.href).toBe(
-        searchResults[0].file.path,
+        (searchResults as SearchResult[])[0].file.path,
       );
       expect(result.current.searchResults[0]?.title).toBe(
-        searchResults[0].file.title,
+        (searchResults as SearchResult[])[0].file.title,
       );
       expect(result.current.searchResults[1]?.title).toBe(
-        searchResults[1].meta?.leadHeading?.value,
+        (searchResults as SearchResult[])[1].meta?.leadHeading?.value,
       );
       expect(result.current.searchResults[2]?.title).toBe(
-        searchResults[2].snippet,
+        (searchResults as SearchResult[])[2].snippet,
       );
     });
   });
 
-  it.skip('should allow Algolia as a search provider', async () => {
+  it('should allow Algolia as a search provider', async () => {
     const { result } = renderHook(() =>
       useSearch({
         projectKey: 'TEST_PROJECT_KEY',
@@ -155,6 +164,35 @@ describe('useSearch', () => {
 
     await result.current.submitSearchQuery('react');
 
-    await waitFor(() => expect(submitAlgoliaDocsearchQuery).toHaveBeenCalled());
+    searchResults = [
+      {
+        url: 'https://markprompt.com/docs/hit',
+        hierarchy: {
+          lvl0: 'React',
+          lvl1: 'React introduction',
+          lvl2: null,
+          lvl3: null,
+          lvl4: null,
+          lvl5: null,
+          lvl6: null,
+        },
+        _highlightResult: {
+          hierarchy: {
+            lvl0: {
+              value: 'React',
+              matchLevel: 'full',
+              matchedWords: ['react'],
+            },
+            lvl1: {
+              value: 'React introduction',
+              matchLevel: 'partial',
+              matchedWords: ['react'],
+            },
+          },
+        },
+      },
+    ] as AlgoliaDocSearchHit[];
+
+    await waitFor(() => expect(algoliaHits).toBe(1));
   });
 });

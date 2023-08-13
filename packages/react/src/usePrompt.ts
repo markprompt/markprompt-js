@@ -3,6 +3,7 @@ import {
   type SubmitPromptOptions,
   submitPrompt as submitPromptToMarkprompt,
   type PromptFeedback,
+  isAbortError,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -107,7 +108,7 @@ export function usePrompt({
       (pid) => setPromptId(pid),
       (error) => {
         // ignore abort errors
-        if (error instanceof Error && error.name === 'AbortError') return;
+        if (isAbortError(error)) return;
 
         // todo: surface errors to the user
         // eslint-disable-next-line no-console

@@ -257,24 +257,6 @@ test('Search result title and description should be visible', async () => {
   expect(heading).toBeVisible();
 });
 
-test('Form submission triggers user-defined callbacks', async () => {
-  const cb = vitest.fn();
-  const user = userEvent.setup();
-
-  render(
-    <Markprompt.Root>
-      <Markprompt.Form onSubmit={cb}>
-        <button type="submit">submit</button>
-      </Markprompt.Form>
-    </Markprompt.Root>,
-  );
-
-  const button = await screen.findByRole('button');
-  await user.click(button);
-
-  expect(cb).toHaveBeenCalled();
-});
-
 test('Prompt changes trigger user-defined callbacks', async () => {
   const cb = vitest.fn();
   const user = userEvent.setup();

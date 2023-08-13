@@ -5,6 +5,7 @@ import {
   type AlgoliaDocSearchResultsResponse,
   type SearchResult,
   type SearchResultsResponse,
+  isAbortError,
 } from '@markprompt/core';
 import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
@@ -106,7 +107,7 @@ export function useSearch({
 
       promise?.catch((error: unknown) => {
         // ignore abort errors
-        if (error instanceof Error && error.name === 'AbortError') return;
+        if (isAbortError(error)) return;
 
         // todo: surface errors to the user in the UI
         // eslint-disable-next-line no-console

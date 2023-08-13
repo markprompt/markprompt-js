@@ -35,3 +35,5 @@ export {
   type Source,
   type SourceType,
 } from './types.js';
+
+export { isAbortError } from './utils.js';
