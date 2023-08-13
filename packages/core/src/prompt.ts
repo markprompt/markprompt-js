@@ -64,7 +64,7 @@ export interface SubmitPromptOptions {
   signal?: AbortSignal;
 }
 
-interface PromptMessage {
+export interface PromptMessage {
   message: string;
   role: 'user' | 'assistant';
 }

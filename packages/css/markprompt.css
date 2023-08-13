@@ -245,6 +245,12 @@
   height: 100%;
 }
 
+:where(.MarkpromptPromptView) {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+}
+
 :where(.MarkpromptClose) {
   color: var(--markprompt-mutedForeground);
   background-color: var(--markprompt-muted);

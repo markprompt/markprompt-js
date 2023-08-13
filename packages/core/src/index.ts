@@ -7,6 +7,7 @@ export {
 
 export {
   submitPrompt,
+  type PromptMessage,
   type SubmitPromptOptions,
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   STREAM_SEPARATOR,

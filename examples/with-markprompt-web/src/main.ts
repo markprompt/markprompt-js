@@ -9,5 +9,6 @@ if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     feedback: { enabled: true },
     search: { enabled: true },
+    prompt: { enableChat: true },
   });
 }

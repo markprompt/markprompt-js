@@ -94,6 +94,12 @@ interface MarkpromptOptions {
   };
   prompt?: SubmitPromptOptions & {
     /**
+     * Show a chat-like prompt input allowing for conversation-style interaction
+     * rather than single question prompts.
+     * @default false
+     **/
+    enableChat?: boolean;
+    /**
      * Label for the prompt input
      * @default "Ask AI"
      **/
