@@ -1,10 +1,4 @@
 export {
-  useMarkprompt,
-  type UseMarkpromptOptions,
-  type UseMarkpromptResult,
-} from './useMarkprompt.js';
-
-export {
   Answer,
   AutoScroller,
   Close,
@@ -39,12 +33,32 @@ export {
 } from './primitives/headless.js';
 
 export {
+  useFeedback,
+  type UseFeedbackOptions,
+  type UseFeedbackResult,
+} from './useFeedback.js';
+
+export {
+  usePrompt,
+  type UsePromptOptions,
+  type UsePromptResult,
+} from './usePrompt.js';
+
+export {
+  useSearch,
+  type SearchLoadingState,
+  type UseSearchOptions,
+  type UseSearchResult,
+} from './useSearch.js';
+
+export {
   Markprompt,
   type MarkpromptProps,
   openMarkprompt,
 } from './Markprompt.js';
 
-export { useMarkpromptContext } from './context.js';
+export { PromptView, type PromptViewProps } from './PromptView.js';
+export { SearchView, type SearchViewProps } from './SearchView.js';
 
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 

@@ -150,10 +150,10 @@ afterEach(() => {
 
 describe('submitPrompt', () => {
   test('require projectKey', async () => {
-    // @ts-expect-error We test a missing project key.
-    await expect(() => submitPrompt('Explain to me…')).rejects.toThrowError(
-      'A projectKey is required',
-    );
+    await expect(() =>
+      // @ts-expect-error We test a missing project key.
+      submitPrompt('Explain to me…'),
+    ).rejects.toThrowError('A projectKey is required');
   });
 
   test('don’t make requests if the prompt is empty', async () => {

@@ -4,13 +4,13 @@ import Emittery from 'emittery';
 import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { useMarkpromptContext } from './context.js';
 import { ChatIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './PromptView.js';
 import { SearchBoxTrigger } from './SearchBoxTrigger.js';
 import { SearchView } from './SearchView.js';
 import { type MarkpromptOptions } from './types.js';
+import { useViews } from './useViews.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -54,6 +54,12 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     ...dialogProps
   } = props;
 
+  if (!projectKey) {
+    throw new Error(
+      'Markprompt: a project key is required. Make sure to pass the projectKey prop to <Markprompt />.',
+    );
+  }
+
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -81,14 +87,9 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
   return (
     <BaseMarkprompt.Root
-      projectKey={projectKey}
       display={display}
-      promptOptions={prompt}
-      searchOptions={search}
-      feedbackOptions={feedback}
       open={open}
       onOpenChange={setOpen}
-      debug={debug}
       {...dialogProps}
     >
       {!trigger?.customElement && display === 'dialog' && (
@@ -120,6 +121,9 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             <BaseMarkprompt.Content
               className="MarkpromptContentDialog"
               showBranding={showBranding}
+              showAlgolia={
+                search?.enabled && search.provider?.name === 'algolia'
+              }
             >
               <BaseMarkprompt.Title hide={title?.hide ?? true}>
                 {title?.text ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label}
@@ -132,11 +136,13 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               )}
 
               <MarkpromptContent
+                projectKey={projectKey}
                 prompt={prompt}
                 feedback={feedback}
                 references={references}
                 search={search}
                 close={close}
+                debug={debug}
               />
             </BaseMarkprompt.Content>
           </BaseMarkprompt.Portal>
@@ -147,13 +153,15 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         <BaseMarkprompt.PlainContent
           className="MarkpromptContentPlain"
           showBranding={showBranding}
+          showAlgolia={search?.enabled && search.provider?.name === 'algolia'}
         >
           <MarkpromptContent
-            prompt={prompt}
-            feedback={feedback}
-            search={search}
-            references={references}
             close={close}
+            feedback={feedback}
+            projectKey={projectKey}
+            prompt={prompt}
+            references={references}
+            search={search}
           />
         </BaseMarkprompt.PlainContent>
       )}
@@ -162,17 +170,27 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 }
 
 interface MarkpromptContentProps {
+  projectKey: string;
   prompt: MarkpromptOptions['prompt'];
   feedback?: MarkpromptOptions['feedback'];
   references: MarkpromptOptions['references'];
   search: MarkpromptOptions['search'];
   close: MarkpromptOptions['close'];
+  debug?: boolean;
 }
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
-  const { prompt, feedback, references, search, close: _close } = props;
+  const {
+    projectKey,
+    prompt,
+    feedback,
+    references,
+    search,
+    close: _close,
+    debug,
+  } = props;
 
-  const { abort, activeView, setActiveView } = useMarkpromptContext();
+  const { activeView, setActiveView } = useViews(search?.enabled);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -209,20 +227,14 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               aria-label={search.tabLabel}
               className="MarkpromptTab"
               data-state={activeView === 'search' ? 'active' : ''}
-              onClick={() => {
-                abort();
-                setActiveView('search');
-              }}
+              onClick={() => setActiveView('search')}
             >
               {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
             </button>
             <button
               className="MarkpromptTab"
               data-state={activeView === 'prompt' ? 'active' : ''}
-              onClick={() => {
-                abort();
-                setActiveView('prompt');
-              }}
+              onClick={() => setActiveView('prompt')}
             >
               <SparklesIcon
                 focusable={false}
@@ -272,10 +284,13 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           }}
         >
           <SearchView
+            activeView={activeView}
+            projectKey={projectKey}
             handleViewChange={() => setActiveView('prompt')}
-            search={search}
+            options={search}
             close={!search?.enabled ? close : undefined}
             onDidSelectResult={() => emitter.emit('close')}
+            debug={debug}
           />
         </div>
         <div
@@ -286,11 +301,14 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           }}
         >
           <PromptView
-            prompt={prompt}
-            feedback={feedback}
-            references={references}
+            activeView={activeView}
+            projectKey={projectKey}
+            promptOptions={prompt}
+            feedbackOptions={feedback}
+            referencesOptions={references}
             close={!search?.enabled ? close : undefined}
             onDidSelectReference={() => emitter.emit('close')}
+            debug={debug}
           />
         </div>
       </div>

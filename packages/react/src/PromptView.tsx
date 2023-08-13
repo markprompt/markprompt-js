@@ -1,73 +1,180 @@
-import React, { type ReactElement } from 'react';
+import type { FileSectionReference, PromptFeedback } from '@markprompt/core';
+import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import React, {
+  useCallback,
+  type FormEventHandler,
+  type ReactElement,
+  type ChangeEventHandler,
+  useEffect,
+} from 'react';
 
 import { Answer } from './Answer.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { useMarkpromptContext } from './context.js';
 import { Feedback } from './Feedback.js';
-import { MarkpromptForm } from './MarkpromptForm.js';
+import { SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { type MarkpromptOptions } from './types.js';
+import { usePrompt, type PromptLoadingState } from './usePrompt.js';
+import type { View } from './useViews.js';
 
-interface PromptViewProps {
-  prompt: MarkpromptOptions['prompt'];
-  feedback?: MarkpromptOptions['feedback'];
-  references: MarkpromptOptions['references'];
+export interface PromptViewProps {
+  activeView?: View;
+  projectKey: string;
+  promptOptions: MarkpromptOptions['prompt'];
+  feedbackOptions?: MarkpromptOptions['feedback'];
+  referencesOptions: MarkpromptOptions['references'];
   close?: MarkpromptOptions['close'];
   onDidSelectReference?: () => void;
+  debug?: boolean;
 }
 
 export function PromptView(props: PromptViewProps): ReactElement {
-  const { prompt, references, feedback, close, onDidSelectReference } = props;
+  const {
+    activeView,
+    promptOptions,
+    referencesOptions,
+    feedbackOptions,
+    close,
+    onDidSelectReference,
+    debug,
+    projectKey,
+  } = props;
+
+  const {
+    abort,
+    answer,
+    submitPrompt,
+    setPrompt,
+    prompt,
+    state,
+    references,
+    submitFeedback,
+    abortFeedbackRequest,
+  } = usePrompt({
+    projectKey,
+    promptOptions,
+    feedbackOptions,
+    debug,
+  });
+
+  useEffect(() => {
+    if (activeView && activeView !== 'prompt') abort();
+    return () => abort();
+  }, [activeView, abort]);
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      setPrompt(event.target.value);
+    },
+    [setPrompt],
+  );
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    async (event) => {
+      event.preventDefault();
+      submitPrompt();
+    },
+    [submitPrompt],
+  );
 
   return (
     <div className="MarkpromptPromptView">
-      <MarkpromptForm
-        label={prompt?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!}
-        placeholder={
-          prompt?.placeholder ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!
-        }
-        icon="prompt"
-        close={close}
-      />
+      <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
+        <BaseMarkprompt.Prompt
+          className="MarkpromptPrompt"
+          name="markprompt-prompt"
+          onChange={handleChange}
+          value={prompt}
+          type="text"
+          placeholder={
+            promptOptions?.placeholder ??
+            DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!
+          }
+          labelClassName="MarkpromptPromptLabel"
+          label={
+            <AccessibleIcon.Root
+              label={
+                promptOptions?.label ??
+                DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
+              }
+            >
+              <SparklesIcon className="MarkpromptSearchIcon" />
+            </AccessibleIcon.Root>
+          }
+        />
+        {close && close.visible !== false && (
+          <BaseMarkprompt.Close className="MarkpromptClose">
+            <AccessibleIcon.Root
+              label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
+            >
+              <kbd>Esc</kbd>
+            </AccessibleIcon.Root>
+          </BaseMarkprompt.Close>
+        )}
+      </BaseMarkprompt.Form>
 
       <AnswerContainer
-        feedback={feedback}
-        references={references}
+        answer={answer}
+        feedbackOptions={feedbackOptions}
         onDidSelectReference={onDidSelectReference}
+        references={references}
+        referencesOptions={referencesOptions}
+        state={state}
+        submitFeedback={submitFeedback}
+        abortFeedbackRequest={abortFeedbackRequest}
       />
     </div>
   );
 }
 
 interface AnswerContainerProps {
-  feedback?: MarkpromptOptions['feedback'];
-  references: MarkpromptOptions['references'];
+  answer: string;
+  feedbackOptions?: MarkpromptOptions['feedback'];
   onDidSelectReference?: () => void;
+  references: FileSectionReference[];
+  referencesOptions: MarkpromptOptions['references'];
+  state: PromptLoadingState;
+  submitFeedback: (feedback: PromptFeedback) => void;
+  abortFeedbackRequest: () => void;
 }
 
-function AnswerContainer({
-  feedback,
-  references,
-  onDidSelectReference,
-}: AnswerContainerProps): ReactElement {
-  const { state } = useMarkpromptContext();
+function AnswerContainer(props: AnswerContainerProps): ReactElement {
+  const {
+    answer,
+    feedbackOptions,
+    referencesOptions,
+    references,
+    onDidSelectReference,
+    state,
+    submitFeedback,
+    abortFeedbackRequest,
+  } = props;
 
   return (
-    <div className="MarkpromptAnswerContainer">
-      <BaseMarkprompt.AutoScroller className="MarkpromptAutoScroller">
-        <Answer />
-        {feedback?.enabled && state === 'done' && (
-          <Feedback className="MarkpromptPromptFeedback" />
+    <div className="MarkpromptAnswerContainer" data-loading-state={state}>
+      <BaseMarkprompt.AutoScroller
+        className="MarkpromptAutoScroller"
+        scrollTrigger={answer}
+      >
+        <Answer answer={answer} state={state} />
+        {feedbackOptions?.enabled && state === 'done' && (
+          <Feedback
+            className="MarkpromptPromptFeedback"
+            submitFeedback={submitFeedback}
+            abortFeedbackRequest={abortFeedbackRequest}
+          />
         )}
       </BaseMarkprompt.AutoScroller>
 
       <References
-        loadingText={references?.loadingText}
-        transformReferenceId={references?.transformReferenceId}
-        getLabel={references?.getLabel}
-        getHref={references?.getHref}
+        getHref={referencesOptions?.getHref}
+        getLabel={referencesOptions?.getLabel}
+        loadingText={referencesOptions?.loadingText}
         onDidSelectReference={onDidSelectReference}
+        references={references}
+        state={state}
+        transformReferenceId={referencesOptions?.transformReferenceId}
       />
     </div>
   );

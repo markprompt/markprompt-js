@@ -4,6 +4,7 @@ import {
   getErrorMessage,
   parseEncodedJSONHeader,
   isFileSectionReferences,
+  isAbortError,
 } from './utils.js';
 
 const encoder = new TextEncoder();
@@ -91,5 +92,14 @@ describe('utils', () => {
     ];
 
     expect(isFileSectionReferences(references)).toBe(true);
+  });
+
+  test('identifies AbortError', () => {
+    const err1 = new DOMException('AbortError');
+    expect(isAbortError(err1)).toBe(true);
+    const err2 = new Error('AbortError');
+    expect(isAbortError(err2)).toBe(true);
+    const err3 = new Error('Some other error');
+    expect(isAbortError(err3)).toBe(false);
   });
 });

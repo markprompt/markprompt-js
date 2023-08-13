@@ -4,7 +4,7 @@ import type {
   AlgoliaDocSearchResultsResponse,
   SearchResultsResponse,
 } from './types.js';
-import { getErrorMessage } from './utils.js';
+import { getErrorMessage, isAbortError } from './utils.js';
 
 export interface SubmitSearchQueryOptions {
   /**
@@ -145,7 +145,7 @@ export async function submitAlgoliaDocsearchQuery(
 
     return res.json();
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
+    if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
     } else {

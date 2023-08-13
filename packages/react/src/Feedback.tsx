@@ -3,28 +3,39 @@ import React, {
   useState,
   type ReactElement,
   type ComponentPropsWithoutRef,
+  useEffect,
 } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { useMarkpromptContext } from './context.js';
 
-type FeedbackProps = {
+interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   heading?: string;
-} & ComponentPropsWithoutRef<'aside'>;
+  submitFeedback: (feedback: PromptFeedback) => void;
+  abortFeedbackRequest: () => void;
+}
 
 export function Feedback(props: FeedbackProps): ReactElement {
-  const { heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading } = props;
+  const {
+    heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
+    submitFeedback,
+    abortFeedbackRequest,
+    ...rest
+  } = props;
 
-  const { submitFeedback } = useMarkpromptContext();
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
-  async function handleFeedback(feedback: PromptFeedback): Promise<void> {
-    await submitFeedback(feedback);
+  function handleFeedback(feedback: PromptFeedback): void {
+    submitFeedback(feedback);
     setFeedback(feedback);
   }
 
+  useEffect(() => {
+    // Abort feedback request on unmount
+    return () => abortFeedbackRequest();
+  }, [abortFeedbackRequest]);
+
   return (
-    <aside {...props}>
+    <aside {...rest}>
       <h3>{heading}</h3>
 
       <div>

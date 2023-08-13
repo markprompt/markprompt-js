@@ -1,7 +1,7 @@
 import React, { Fragment, forwardRef, memo } from 'react';
 
 import { FileTextIcon, HashIcon } from './icons.js';
-import { useMarkpromptContext, type SearchResultProps } from './index.js';
+import { type SearchResultProps as BaseSearchResultProps } from './index.js';
 
 interface HighlightMatchesProps {
   value?: string;
@@ -45,11 +45,22 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
   );
 });
 
+interface SearchResultProps extends BaseSearchResultProps {
+  searchQuery: string;
+}
+
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
-    const { href, title, heading, subtitle, onMouseMove, onClick, ...rest } =
-      props;
-    const { searchQuery } = useMarkpromptContext();
+    const {
+      href,
+      title,
+      heading,
+      subtitle,
+      onMouseMove,
+      onClick,
+      searchQuery,
+      ...rest
+    } = props;
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">

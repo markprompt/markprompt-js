@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, type ReactElement } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import * as Markprompt from './index.js';
-import { useMarkpromptContext } from './index.js';
+import type { PromptLoadingState } from './usePrompt.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -66,6 +66,8 @@ interface ReferencesProps {
     text: string;
   };
   onDidSelectReference?: () => void;
+  references: FileSectionReference[];
+  state: PromptLoadingState;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -75,9 +77,9 @@ const References = (props: ReferencesProps): ReactElement | null => {
     heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
     loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
     transformReferenceId,
+    references,
+    state,
   } = props;
-
-  const { references, state } = useMarkpromptContext();
 
   const ReferenceComponent = useCallback(
     (props: { reference: FileSectionReference; index: number }) => (
@@ -92,7 +94,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     [transformReferenceId, getHref, getLabel],
   );
 
-  let adjustedState: string = state;
+  let adjustedState: PromptLoadingState = state;
   if (state === 'done' && references.length === 0) {
     adjustedState = 'indeterminate';
   }
@@ -124,7 +126,10 @@ const References = (props: ReferencesProps): ReactElement | null => {
       {state !== 'preload' && <p>{heading}</p>}
 
       {(state === 'streaming-answer' || state === 'done') && (
-        <Markprompt.References ReferenceComponent={ReferenceComponent} />
+        <Markprompt.References
+          ReferenceComponent={ReferenceComponent}
+          references={references}
+        />
       )}
     </div>
   );
