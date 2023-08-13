@@ -57,6 +57,9 @@ export {
   openMarkprompt,
 } from './Markprompt.js';
 
+export { PromptView, type PromptViewProps } from './PromptView.js';
+export { SearchView, type SearchViewProps } from './SearchView.js';
+
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
 export * from './types.js';

@@ -18,8 +18,8 @@ import { type MarkpromptOptions } from './types.js';
 import { usePrompt, type PromptLoadingState } from './usePrompt.js';
 import type { View } from './useViews.js';
 
-interface PromptViewProps {
-  activeView: View;
+export interface PromptViewProps {
+  activeView?: View;
   projectKey: string;
   promptOptions: MarkpromptOptions['prompt'];
   feedbackOptions?: MarkpromptOptions['feedback'];
@@ -59,7 +59,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
   });
 
   useEffect(() => {
-    if (activeView !== 'prompt') abort();
+    if (activeView && activeView !== 'prompt') abort();
     return () => abort();
   }, [activeView, abort]);
 

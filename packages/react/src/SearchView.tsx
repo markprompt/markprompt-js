@@ -22,8 +22,8 @@ import {
 import { useSearch, type SearchLoadingState } from './useSearch.js';
 import type { View } from './useViews.js';
 
-interface SearchViewProps {
-  activeView: View;
+export interface SearchViewProps {
+  activeView?: View;
   projectKey: string;
   options: MarkpromptOptions['search'];
   debug?: boolean;
@@ -88,7 +88,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
   useEffect(() => {
     // abort search requests when the view changes to something
     // that's not search and on unmounting the component
-    if (activeView !== 'search') abort();
+    if (activeView && activeView !== 'search') abort();
     return () => abort();
   }, [abort, activeView]);
 
