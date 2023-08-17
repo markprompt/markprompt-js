@@ -43,12 +43,6 @@ const config = {
         // project settings.
         projectKey: process.env.MARKPROMPT_PROJECT_KEY,
         trigger: { floating: true },
-        references: {
-          getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
-          getLabel: (reference) => {
-            return reference.meta?.leadHeading?.value || reference.file?.title;
-          },
-        },
         search: {
           enabled: false,
         },

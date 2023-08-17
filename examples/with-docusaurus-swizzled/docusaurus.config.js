@@ -41,12 +41,6 @@ const config = {
         // project settings.
         projectKey: 'YOUR-MARKPROMPT-KEY',
         trigger: { floating: true },
-        references: {
-          getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
-          getLabel: (reference) => {
-            return reference.meta?.leadHeading?.value || reference.file?.title;
-          },
-        },
         search: {
           enabled: true,
           provider: {
@@ -55,11 +49,6 @@ const config = {
             appId: 'YOUR-ALGOLIA-APP-ID',
             indexName: 'YOUR-ALGOLIA-INDEX-NAME',
           },
-          // Set custom mappings between Algolia records and Markprompt results:
-          getHref: (result) => result.url,
-          getHeading: (result) => result.pageTitle,
-          getTitle: (result) => result.pageDescription,
-          getSubtitle: (result) => result.pageContent,
         },
       },
       algolia: {
