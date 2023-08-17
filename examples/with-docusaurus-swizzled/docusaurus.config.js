@@ -40,7 +40,7 @@ const config = {
         // the project key in the Markprompt dashboard, under
         // project settings.
         projectKey: 'YOUR-MARKPROMPT-KEY',
-        trigger: { floating: true },
+        trigger: { floating: false },
         search: {
           enabled: true,
           provider: {
@@ -50,11 +50,6 @@ const config = {
             indexName: 'YOUR-ALGOLIA-INDEX-NAME',
           },
         },
-      },
-      algolia: {
-        appId: 'YOUR_APP_ID',
-        apiKey: 'YOUR_SEARCH_API_KEY',
-        indexName: 'YOUR_INDEX_NAME',
       },
       navbar: {
         title: 'Markprompt + Algolia demo',
