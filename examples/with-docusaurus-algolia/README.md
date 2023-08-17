@@ -50,3 +50,7 @@ const config = {
 
 module.exports = config;
 ```
+
+### Custom link mapping
+
+Docusaurus serializes the theme config. Therefore, it is not possible to pass functions as configuration values. If you need to set up a custom link mapping between Algolia results and Markprompt results, you need to swizzle the `@markprompt/docusaurus-theme-search` plugin, and pass the mapping functions as props to the `Markprompt` component. You can find a working example in the [with-docusaurus-swizzled](https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus-swizzled/src/theme/SearchBar/index.tsx) example project.

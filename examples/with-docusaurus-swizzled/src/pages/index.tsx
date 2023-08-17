@@ -8,11 +8,8 @@ export default function Home(): ReactElement {
     <Layout description="A demo showing Markprompt in Docusaurus with swizzling">
       <main className={styles.main}>
         <h1>Markprompt + Algolia demo with swizzling</h1>
-        <p>
-          This demo features Markprompt with a swizzled{' '}
-          <code>@docusaurus/theme-search-algolia</code> plugin.
-        </p>
-        <p>Click the button at the bottom right to open Markprompt.</p>
+        <p>This demo features Markprompt with Algolia as a swizzled plugin.</p>
+        <p>Click the search bar at the top right to open Markprompt.</p>
       </main>
     </Layout>
   );
