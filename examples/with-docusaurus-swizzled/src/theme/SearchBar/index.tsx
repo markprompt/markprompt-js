@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '@markprompt/css';
 
 import type { WrapperProps } from '@docusaurus/types';
@@ -8,9 +9,11 @@ import SearchBar from '@theme-original/SearchBar';
 import React, { Suspense, lazy } from 'react';
 
 // import Markprompt lazily as Docusaurus does not currently support ESM
-const Markprompt = lazy(() =>
-  import('@markprompt/react').then((mod) => ({ default: mod.Markprompt }))
-);
+const Markprompt = lazy(() => {
+  return import('@markprompt/react').then((mod) => ({
+    default: mod.Markprompt,
+  }));
+});
 
 type Props = WrapperProps<typeof SearchBarType>;
 
@@ -30,9 +33,9 @@ export default function SearchBarWrapper(props: Props): JSX.Element {
   const searchConfig = {
     ...config.search,
     getHref: (result: any) => result.url,
-    getHeading: (result: any) => result.pageTitle,
-    getTitle: (result: any) => result.pageDescription,
-    getSubtitle: (result: any) => result.pageContent,
+    getHeading: (result: any) => result.hierarchy?.lvl0,
+    getTitle: (result: any) => result.hierarchy?.lvl1,
+    getSubtitle: (result: any) => result.hierarchy?.lvl2,
   };
 
   return (
