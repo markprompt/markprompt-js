@@ -318,10 +318,6 @@
   overflow: hidden;
 }
 
-:where(.MarkpromptMessageAnswer .MarkpromptAnswer) {
-  padding-right: 0.75rem;
-}
-
 :where(.MarkpromptRegenerateButton) {
   position: absolute;
   display: flex;
@@ -440,6 +436,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
   /* allow the answer container in the chat view to scroll past the floating input */
   padding-bottom: 4rem;
 }
