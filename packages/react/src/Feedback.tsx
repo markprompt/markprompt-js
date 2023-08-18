@@ -1,4 +1,5 @@
 import type { PromptFeedback } from '@markprompt/core';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import React, {
   useState,
   type ReactElement,
@@ -7,11 +8,17 @@ import React, {
 } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { ThumbsDownIcon, ThumbsUpIcon } from './icons.js';
+import type { UseFeedbackResult } from './useFeedback.js';
+import type { PromptLoadingState } from './usePrompt.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
+  state: PromptLoadingState;
   heading?: string;
-  submitFeedback: (feedback: PromptFeedback) => void;
-  abortFeedbackRequest: () => void;
+  submitFeedback: UseFeedbackResult['submitFeedback'];
+  abortFeedbackRequest: UseFeedbackResult['abort'];
+  messageIndex: number;
+  variant: 'text' | 'icons';
 }
 
 export function Feedback(props: FeedbackProps): ReactElement {
@@ -19,13 +26,16 @@ export function Feedback(props: FeedbackProps): ReactElement {
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
     submitFeedback,
     abortFeedbackRequest,
-    ...rest
+    state,
+    messageIndex,
+    variant,
+    ...asideProps
   } = props;
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
   function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback);
+    submitFeedback(feedback, state, messageIndex);
     setFeedback(feedback);
   }
 
@@ -35,24 +45,31 @@ export function Feedback(props: FeedbackProps): ReactElement {
   }, [abortFeedbackRequest]);
 
   return (
-    <aside {...rest}>
+    <aside {...asideProps} data-variant={variant}>
       <h3>{heading}</h3>
-
       <div>
         <button
-          aria-label="Yes"
           onClick={() => handleFeedback({ vote: '1' })}
           data-active={feedback?.vote === '1'}
         >
-          Yes
+          {variant === 'text' && 'Yes'}
+          {variant === 'icons' && (
+            <AccessibleIcon label="yes">
+              <ThumbsUpIcon width={15} height={15} />
+            </AccessibleIcon>
+          )}
         </button>
         <button
-          aria-label="No"
           onClick={() => handleFeedback({ vote: '-1' })}
           data-active={feedback?.vote === '-1'}
           style={{ animationDelay: '100ms' }}
         >
-          No
+          {variant === 'text' && 'No'}
+          {variant === 'icons' && (
+            <AccessibleIcon label="no">
+              <ThumbsDownIcon width={15} height={15} />
+            </AccessibleIcon>
+          )}
         </button>
       </div>
     </aside>

@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, type ReactElement } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import * as Markprompt from './index.js';
+import type { ChatLoadingState } from './useChat.js';
 import type { PromptLoadingState } from './usePrompt.js';
 
 interface ReferenceProps {
@@ -67,7 +68,7 @@ interface ReferencesProps {
   };
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
-  state: PromptLoadingState;
+  state: ChatLoadingState | PromptLoadingState;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -94,7 +95,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     [transformReferenceId, getHref, getLabel],
   );
 
-  let adjustedState: PromptLoadingState = state;
+  let adjustedState: PromptLoadingState | ChatLoadingState = state;
   if (state === 'done' && references.length === 0) {
     adjustedState = 'indeterminate';
   }

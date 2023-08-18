@@ -15,21 +15,23 @@ export interface UseFeedbackOptions {
   promptId?: string;
   /** Enable and configure feedback functionality */
   feedbackOptions?: MarkpromptOptions['feedback'];
-  state: PromptLoadingState;
 }
 
 export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (feedback: PromptFeedback) => void;
+  submitFeedback: (
+    feedback: PromptFeedback,
+    state: PromptLoadingState,
+    messageIndex: number,
+  ) => void;
 }
 
 export function useFeedback({
   projectKey,
   promptId,
   feedbackOptions,
-  state,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -40,7 +42,11 @@ export function useFeedback({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
-    async (feedback: PromptFeedback) => {
+    async (
+      feedback: PromptFeedback,
+      state: PromptLoadingState,
+      messageIndex: number,
+    ) => {
       abort();
 
       // only submit feedback when we are done loading the answer
@@ -54,7 +60,7 @@ export function useFeedback({
 
       const promise = submitFeedbackToMarkprompt(
         projectKey,
-        { feedback, promptId },
+        { feedback, promptId, messageIndex },
         { ...feedbackOptions, signal: controller.signal },
       );
 
@@ -68,7 +74,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, state, promptId, controllerRef, projectKey, feedbackOptions],
+    [abort, promptId, controllerRef, projectKey, feedbackOptions],
   );
 
   return { submitFeedback, abort };

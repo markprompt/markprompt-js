@@ -1,11 +1,11 @@
-import type { FileSectionReference, PromptFeedback } from '@markprompt/core';
+import type { FileSectionReference } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import React, {
   useCallback,
+  useEffect,
+  type ChangeEventHandler,
   type FormEventHandler,
   type ReactElement,
-  type ChangeEventHandler,
-  useEffect,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -15,6 +15,7 @@ import { SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
 import { type MarkpromptOptions } from './types.js';
+import type { UseFeedbackResult } from './useFeedback.js';
 import { usePrompt, type PromptLoadingState } from './usePrompt.js';
 import type { View } from './useViews.js';
 
@@ -135,8 +136,8 @@ interface AnswerContainerProps {
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
   state: PromptLoadingState;
-  submitFeedback: (feedback: PromptFeedback) => void;
-  abortFeedbackRequest: () => void;
+  submitFeedback: UseFeedbackResult['submitFeedback'];
+  abortFeedbackRequest: UseFeedbackResult['abort'];
 }
 
 function AnswerContainer(props: AnswerContainerProps): ReactElement {
@@ -160,9 +161,12 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
         <Answer answer={answer} state={state} />
         {feedbackOptions?.enabled && state === 'done' && (
           <Feedback
+            variant="text"
             className="MarkpromptPromptFeedback"
             submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
+            state={state}
+            messageIndex={1}
           />
         )}
       </BaseMarkprompt.AutoScroller>
