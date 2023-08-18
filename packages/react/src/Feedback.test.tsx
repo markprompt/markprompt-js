@@ -14,6 +14,9 @@ describe('Feedback', () => {
       <Feedback
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
+        state="done"
+        variant="text"
+        messageIndex={1}
       />,
     );
 
@@ -29,20 +32,23 @@ describe('Feedback', () => {
 
     render(
       <Feedback
+        variant="text"
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
+        state="done"
+        messageIndex={1}
       />,
     );
 
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(2);
 
-    const yesButton = screen.getByLabelText('Yes');
+    const yesButton = screen.getByText('Yes');
 
     await user.click(yesButton);
 
     await waitFor(() =>
-      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }),
+      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }, 'done', 1),
     );
 
     expect(yesButton).toHaveAttribute('data-active', 'true');
