@@ -433,6 +433,7 @@ describe('submitFeedback', () => {
       {
         feedback: { vote: '1' },
         promptId: 'test-id',
+        messageIndex: 1,
       },
       { apiUrl: DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl },
     );

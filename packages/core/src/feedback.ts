@@ -1,12 +1,12 @@
 import type { PromptFeedback } from './types.js';
 
 export interface SubmitFeedbackBody {
-  /**
-   * Prompt feedback.
-   */
+  /** Prompt feedback */
   feedback: PromptFeedback;
   /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
+  /** Optional: index of the specific message in an array of messages that is being given feedback */
+  messageIndex: number;
 }
 
 export interface SubmitFeedbackOptions {
