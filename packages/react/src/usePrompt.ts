@@ -2,14 +2,13 @@ import {
   type FileSectionReference,
   type SubmitPromptOptions,
   submitPrompt as submitPromptToMarkprompt,
-  type PromptFeedback,
   isAbortError,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { MarkpromptOptions } from './types.js';
 import { useAbortController } from './useAbortController.js';
-import { useFeedback } from './useFeedback.js';
+import { useFeedback, type UseFeedbackResult } from './useFeedback.js';
 
 export type PromptLoadingState =
   | 'indeterminate'
@@ -35,9 +34,9 @@ export interface UsePromptResult {
   state: PromptLoadingState;
   abort: () => void;
   setPrompt: (prompt: string) => void;
-  submitFeedback: (feedback: PromptFeedback) => void;
-  abortFeedbackRequest: () => void;
   submitPrompt: () => void;
+  submitFeedback: UseFeedbackResult['submitFeedback'];
+  abortFeedbackRequest: UseFeedbackResult['abort'];
 }
 
 export function usePrompt({
@@ -64,7 +63,6 @@ export function usePrompt({
     projectKey,
     promptId,
     feedbackOptions,
-    state,
   });
 
   // Abort ongoing fetch requests on unmount

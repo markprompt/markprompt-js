@@ -13,8 +13,10 @@ interface UseViewsResult {
 export function useViews(
   prompt?: MarkpromptOptions['prompt'],
   search?: MarkpromptOptions['search'],
+  defaultView?: MarkpromptOptions['defaultView'],
 ): UseViewsResult {
   const [activeView, setActiveView] = useState<View>(() => {
+    if (defaultView) return defaultView;
     if (search?.enabled) return 'search';
     if (prompt?.enableChat) return 'chat';
     return 'prompt';

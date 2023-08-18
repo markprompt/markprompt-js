@@ -41,6 +41,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   const {
     close,
     debug,
+    defaultView,
     description,
     display = 'dialog',
     projectKey,
@@ -137,13 +138,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               )}
 
               <MarkpromptContent
-                projectKey={projectKey}
-                prompt={prompt}
-                feedback={feedback}
-                references={references}
-                search={search}
                 close={close}
                 debug={debug}
+                defaultView={defaultView}
+                feedback={feedback}
+                projectKey={projectKey}
+                prompt={prompt}
+                references={references}
+                search={search}
               />
             </BaseMarkprompt.Content>
           </BaseMarkprompt.Portal>
@@ -158,6 +160,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         >
           <MarkpromptContent
             close={close}
+            defaultView={defaultView}
             feedback={feedback}
             projectKey={projectKey}
             prompt={prompt}
@@ -178,22 +181,25 @@ interface MarkpromptContentProps {
   search: MarkpromptOptions['search'];
   close: MarkpromptOptions['close'];
   debug?: boolean;
+  defaultView?: MarkpromptOptions['defaultView'];
 }
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
-    projectKey,
-    prompt,
-    feedback,
-    references,
-    search,
     close: _close,
     debug,
+    defaultView,
+    feedback,
+    projectKey,
+    prompt,
+    references,
+    search,
   } = props;
 
   const { activeView, setActiveView, toggleActiveView } = useViews(
     prompt,
     search,
+    defaultView,
   );
 
   useEffect(() => {

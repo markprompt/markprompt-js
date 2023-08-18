@@ -56,6 +56,11 @@ interface MarkpromptOptions {
    * @default "dialog"
    **/
   display?: 'plain' | 'dialog';
+  /**
+   * Enable and configure search functionality.
+   * @default "search"
+   * */
+  defaultView?: 'search' | 'chat' | 'prompt';
   close?: {
     /**
      * `aria-label` for the close modal button
