@@ -6,6 +6,7 @@ import { SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import type { MarkpromptOptions } from './types.js';
 import type { View } from './useViews.js';
+import { useChat } from './useChat.js';
 
 interface ChatViewProps {
   activeView: View;

@@ -9,17 +9,10 @@ import { useState } from 'react';
 
 import { useAbortController } from './useAbortController.js';
 
-interface UseChatOptions {
-  projectKey: string;
-  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
-  debug?: boolean;
-}
-
-interface UseChatResult {
-  submitChat: (prompt: string) => void;
-}
-
-interface ChatViewMessage extends PromptMessage {
+export interface ChatViewMessage {
+  prompt: string;
+  answer: string;
+  id: string;
   state?:
     | 'indeterminate'
     | 'preload'
@@ -27,6 +20,18 @@ interface ChatViewMessage extends PromptMessage {
     | 'done'
     | 'cancelled';
   references?: FileSectionReference[];
+}
+
+export interface UseChatOptions {
+  projectKey: string;
+  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  debug?: boolean;
+}
+
+export interface UseChatResult {
+  messages: ChatViewMessage[];
+  promptId?: string;
+  submitChat: (prompt: string) => void;
 }
 
 export function useChat({
@@ -40,33 +45,44 @@ export function useChat({
     );
   }
 
+  const [promptId, setPromptId] = useState<string>('');
   const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitMessagesToApi = async (
     messages: ChatViewMessage[],
+    currentMessageId: string,
   ): Promise<void> => {
     // if a user submits a new prompt while the previous prompt answer is still
     // streaming, abort the previous request, and show a message that the previous
-    // prompt answer was aborted
+    // answer request was cancelled
     abort();
 
-    const currentMessageIndex = messages.length - 1;
+    let nextMessages = [...messages];
+
+    const currentMessageIndex = messages.findIndex(
+      (message) => message.id === currentMessageId,
+    );
+    const currentMessage = messages[currentMessageIndex];
     const previousMessageIndex = currentMessageIndex - 1;
+    const previousMessage = messages[previousMessageIndex];
 
     if (
-      messages[previousMessageIndex].role === 'assistant' &&
-      (messages[previousMessageIndex].state === 'preload' ||
-        messages[previousMessageIndex].state === 'streaming-answer')
+      previousMessage &&
+      (previousMessage.state === 'preload' ||
+        previousMessage.state === 'streaming-answer')
     ) {
-      const previousMessage = {
-        ...messages[previousMessageIndex],
+      const cancelledPreviousMessage = {
+        ...previousMessage,
         state: 'cancelled',
       } satisfies ChatViewMessage;
 
-      const nextMessages = [...messages];
-      nextMessages[previousMessageIndex] = previousMessage;
+      nextMessages = nextMessages.splice(
+        previousMessageIndex,
+        1,
+        cancelledPreviousMessage,
+      );
 
       setMessages(nextMessages);
     }
@@ -74,25 +90,47 @@ export function useChat({
     const controller = new AbortController();
     controllerRef.current = controller;
 
+    const apiMessages = messages
+      .map((message) => [
+        {
+          message: message.prompt,
+          role: 'user' as const,
+        },
+        {
+          message: message.answer,
+          role: 'assistant' as const,
+        },
+      ])
+      .flat() satisfies PromptMessage[];
+
     const promise = submitPromptToMarkprompt(
-      messages,
+      apiMessages,
       projectKey,
       (chunk) => {
         // todo: handle chunked responses
         // possible that messages is out of date, use nextMessages to update state? Maintain a local copy?
         // make sure we update the answer of the correct message from the array, eg. currentMessageIndex + 1
-        // if (messages)
-        //   // setState('streaming-answer');
-        //   // setAnswer((prev) => prev + chunk);
-        //   return true;
+        nextMessages = nextMessages.splice(currentMessageIndex, 1, {
+          ...currentMessage,
+          answer: currentMessage.answer + chunk,
+          state: 'streaming-answer',
+        } satisfies ChatViewMessage);
+
+        setMessages(nextMessages);
+
+        return true;
       },
-      (refs) => {
+      (references) => {
         // references should be per assistant response
-        // setReferences(refs)
+        nextMessages = nextMessages.splice(currentMessageIndex, 1, {
+          ...currentMessage,
+          references,
+        } satisfies ChatViewMessage);
+
+        setMessages(nextMessages);
       },
       (pid) => {
-        // should we also have a onConversationId callback? or can it be merged with this?
-        // setPromptId(pid)
+        setPromptId(pid);
       },
       (error) => {
         // ignore abort errors
@@ -111,7 +149,7 @@ export function useChat({
 
     promise.then(() => {
       if (controller.signal.aborted) return;
-      // set state of next message to done
+      // set state of current message to done
       // setState('done');
     });
 
@@ -126,16 +164,24 @@ export function useChat({
   // the messages is added to the messages array with role `user`
   // then the updated messages array is sent to the server
   const submitChat = (prompt: string): void => {
+    const id = crypto.randomUUID();
+
     const nextMessages = [
       ...messages,
-      { message: prompt, role: 'user', state: 'indeterminate' },
+      {
+        prompt,
+        state: 'indeterminate',
+        id,
+        answer: '',
+        references: [],
+      },
     ] satisfies ChatViewMessage[];
 
     setMessages(nextMessages);
 
     // send messages to server
-    submitMessagesToApi(nextMessages);
+    submitMessagesToApi(nextMessages, id);
   };
 
-  return { submitChat };
+  return { submitChat, messages, promptId };
 }
