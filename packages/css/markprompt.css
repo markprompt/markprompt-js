@@ -920,10 +920,6 @@
   gap: 0.5rem;
 }
 
-:where(.MarkpromptPromptFeedback[data-variant='icons'] div) {
-  flex-direction: column;
-}
-
 :where(.MarkpromptPromptFeedback button) {
   cursor: pointer;
   color: var(--markprompt-foreground);
