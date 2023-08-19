@@ -6,13 +6,13 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: var(--markprompt-primary);
+  --ifm-color-primary-dark: var(--markprompt-primary);
+  --ifm-color-primary-darker: var(--markprompt-primary);
+  --ifm-color-primary-darkest: var(--markprompt-primary);
+  --ifm-color-primary-light: var(--markprompt-primary);
+  --ifm-color-primary-lighter: var(--markprompt-primary);
+  --ifm-color-primary-lightest: var(--markprompt-primary);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 10%);
   --markprompt-background: #fff;
@@ -39,13 +39,13 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: var(--markprompt-primary);
+  --ifm-color-primary-dark: var(--markprompt-primary);
+  --ifm-color-primary-darker: var(--markprompt-primary);
+  --ifm-color-primary-darkest: var(--markprompt-primary);
+  --ifm-color-primary-light: var(--markprompt-primary);
+  --ifm-color-primary-lighter: var(--markprompt-primary);
+  --ifm-color-primary-lightest: var(--markprompt-primary);
   --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 30%);
   --markprompt-background: #050505;
   --markprompt-foreground: #d4d4d4;
@@ -68,6 +68,7 @@
   Unset styles from @docusaurus/preset-classic
   that interfere with Markprompt styles
 */
+
 .MarkpromptClose kbd,
 .MarkpromptSearchBoxTrigger kbd {
   border: unset;
@@ -84,4 +85,19 @@
   font-size: 0.5rem;
   font-weight: 600;
   color: unset;
+}
+
+ul.MarkpromptSearchResults {
+  margin: 0 !important;
+  padding-left: 0 !important;
+}
+
+:where(.MarkpromptSearchResult a) {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+:where([aria-selected='true'] .MarkpromptSearchResultLink) {
+  background-color: var(--markprompt-primary) !important;
+  color: var(--markprompt-primaryForeground) !important;
 }

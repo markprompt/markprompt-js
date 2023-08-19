@@ -12,12 +12,15 @@ declare namespace themeSearchMarkprompt {
 }
 
 // eslint-disable-next-line no-redeclare
-const themeSearchMarkprompt: PluginModule = () => ({
-  name: '@markprompt/docusaurus-theme-search',
-  getThemePath: () => '../dist/theme',
-  getTypeScriptThemePath: () => '../src/theme',
-  getSwizzleComponentList: () => ['SearchBar'],
-});
+const themeSearchMarkprompt: PluginModule = (context, options) => {
+  console.log("options", JSON.stringify(options, null, 2));
+  return {
+    name: '@markprompt/docusaurus-theme-search',
+    getThemePath: () => '../dist/theme',
+    getTypeScriptThemePath: () => '../src/theme',
+    getSwizzleComponentList: () => ['SearchBar'],
+  }
+};
 
 themeSearchMarkprompt.validateThemeConfig = (data) => {
   return data.themeConfig;

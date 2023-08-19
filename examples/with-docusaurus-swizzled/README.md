@@ -1,6 +1,6 @@
 # Example with Docusaurus swizzled search plugin
 
-This example shows you how to use Markprompt in [Docusaurus 2](https://docusaurus.io/) while using another theme search plugin, such as [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
+This example shows you how to use Markprompt in [Docusaurus](https://docusaurus.io/) while using another theme search plugin, such as [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
 
 ## Installation
 

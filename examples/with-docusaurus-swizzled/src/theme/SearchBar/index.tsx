@@ -22,33 +22,12 @@ export default function SearchBarWrapper(props: Props): JSX.Element {
   const { projectKey, ...config } = siteConfig.themeConfig
     .markprompt as MarkpromptConfig;
 
-  const referencesConfig = {
-    ...config.references,
-    getHref: (reference: any) => reference.file?.path?.replace(/\.[^.]+$/, ''),
-    getLabel: (reference: any) => {
-      return reference.meta?.leadHeading?.value || reference.file?.title;
-    },
-  };
-
-  const searchConfig = {
-    ...config.search,
-    getHref: (result: any) => result.url,
-    getHeading: (result: any) => result.hierarchy?.lvl0,
-    getTitle: (result: any) => result.hierarchy?.lvl1,
-    getSubtitle: (result: any) => result.hierarchy?.lvl2,
-  };
-
   return (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
       {/* Docusaurus' version of `ReactDOMServer` doesn't support Suspense yet, so we can only render the component on the client. */}
       {typeof window !== 'undefined' && (
         <Suspense fallback={null}>
-          <Markprompt
-            projectKey={projectKey}
-            {...config}
-            references={referencesConfig}
-            search={searchConfig}
-          />
+          <Markprompt projectKey={projectKey} {...config} />
         </Suspense>
       )}
       <SearchBar {...props} />

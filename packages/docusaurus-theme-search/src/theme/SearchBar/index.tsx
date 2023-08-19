@@ -12,6 +12,7 @@ export default function SearchBar(): ReactElement {
   const { siteConfig } = useDocusaurusContext();
 
   const markpromptProps = siteConfig.themeConfig.markprompt as MarkpromptProps;
+  const markpromptExtras = (window as any).markprompt || {};
 
   if (markpromptProps.trigger?.floating) {
     return <Markprompt {...markpromptProps} />;
@@ -39,6 +40,14 @@ export default function SearchBar(): ReactElement {
           />
           <Markprompt
             {...markpromptProps}
+            references={{
+              ...markpromptProps.references,
+              ...markpromptExtras.references,
+            }}
+            search={{
+              ...markpromptProps.search,
+              ...markpromptExtras.search,
+            }}
             trigger={{
               ...markpromptProps.trigger,
               customElement: true,
