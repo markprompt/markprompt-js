@@ -55,7 +55,7 @@ const results: SearchResult[] = [
   },
 ];
 
-const alogliaSearchHits: AlgoliaDocSearchHit[] = [
+const algoliaSearchHits: AlgoliaDocSearchHit[] = [
   {
     url: 'https://markprompt.com/docs/hit',
     hierarchy: {
@@ -118,8 +118,8 @@ describe('constants', () => {
       `${basePath}#${headingId}`,
     );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(alogliaSearchHits[0]),
-    ).toEqual(alogliaSearchHits[0].url);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(algoliaSearchHits[0]),
+    ).toEqual(algoliaSearchHits[0].url);
   });
 
   test('default search.getHeading', async () => {
@@ -130,11 +130,11 @@ describe('constants', () => {
       DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[1], ''),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(alogliaSearchHits[0], ''),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[0], ''),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(alogliaSearchHits[1], ''),
-    ).toEqual(alogliaSearchHits[1].hierarchy.lvl0);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[1], ''),
+    ).toEqual(algoliaSearchHits[1].hierarchy.lvl0);
   });
 
   test('default search.getTitle', async () => {
@@ -151,8 +151,8 @@ describe('constants', () => {
       DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[5], 'Some'),
     ).toEqual(shortContent);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(alogliaSearchHits[0], ''),
-    ).toEqual(alogliaSearchHits[0].hierarchy.lvl1);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(algoliaSearchHits[0], ''),
+    ).toEqual(algoliaSearchHits[0].hierarchy.lvl1);
   });
 
   test('default search.getSubtitle', async () => {
@@ -161,9 +161,9 @@ describe('constants', () => {
     ).toBeUndefined();
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(
-        alogliaSearchHits[0],
+        algoliaSearchHits[0],
         '',
       ),
-    ).toEqual(alogliaSearchHits[0].hierarchy.lvl2);
+    ).toEqual(algoliaSearchHits[0].hierarchy.lvl2);
   });
 });
