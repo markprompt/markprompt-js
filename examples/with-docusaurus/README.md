@@ -32,21 +32,23 @@ If you need to set up custom link mappings between search results or prompt refe
 1. Create a JS file in your project source, e.g. in `./src/markprompt-config.js`, and paste the following:
 
 ```js
-window.markpromptConfigExtras = {
-  references: {
-    // References link mappings:
-    getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
-    getLabel: (reference) =>
-      reference.meta?.leadHeading?.value || reference.file?.title,
-  },
-  search: {
-    // Search results link mappings:
-    getHref: (result) => result.url,
-    getHeading: (result) => result.hierarchy?.lvl0,
-    getTitle: (result) => result.hierarchy?.lvl1,
-    getSubtitle: (result) => result.hierarchy?.lvl2,
-  },
-};
+if (typeof window !== 'undefined') {
+  window.markpromptConfigExtras = {
+    references: {
+      // References link mappings:
+      getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
+      getLabel: (reference) =>
+        reference.meta?.leadHeading?.value || reference.file?.title,
+    },
+    search: {
+      // Search results link mappings:
+      getHref: (result) => result.url,
+      getHeading: (result) => result.hierarchy?.lvl0,
+      getTitle: (result) => result.hierarchy?.lvl1,
+      getSubtitle: (result) => result.hierarchy?.lvl2,
+    },
+  };
+}
 ```
 
 Adapt the mapping functions to fit your needs.
