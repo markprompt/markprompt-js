@@ -9,7 +9,7 @@ if (typeof window !== 'undefined') {
     search: {
       // Example link mapping for search results (here a standard Algolia index):
       getHref: (result) => result.url,
-      getHeading: (result) => "hoho",//result.hierarchy?.lvl0,
+      getHeading: (result) => result.hierarchy?.lvl0,
       getTitle: (result) => result.hierarchy?.lvl1,
       getSubtitle: (result) => result.hierarchy?.lvl2,
     },
