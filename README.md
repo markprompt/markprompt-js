@@ -47,6 +47,6 @@ To use the Markprompt platform as is, please refer to the [Markprompt documentat
 This library is created by the team behind [Markprompt](https://markprompt.com)
 ([@markprompt](https://twitter.com/markprompt)).
 
-## License
+## Licenses
 
 [MIT](./LICENSE) © [Markprompt](https://markprompt.com)
