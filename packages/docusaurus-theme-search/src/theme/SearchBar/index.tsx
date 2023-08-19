@@ -12,6 +12,7 @@ export default function SearchBar(): ReactElement {
   const { siteConfig } = useDocusaurusContext();
 
   const markpromptProps = siteConfig.themeConfig.markprompt as MarkpromptProps;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const markpromptExtras = (window as any).markprompt || {};
 
   if (markpromptProps.trigger?.floating) {

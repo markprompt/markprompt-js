@@ -11,5 +11,5 @@ window.markprompt = {
     // getHeading: (result) => result.hierarchy?.lvl0,
     // getTitle: (result) => result.hierarchy?.lvl1,
     // getSubtitle: (result) => result.hierarchy?.lvl2,
-  }
+  },
 };
