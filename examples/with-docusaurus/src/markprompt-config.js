@@ -1,6 +1,6 @@
 // Custom link mapping functions: https://markprompt.com/docs#link-mapping
 if (typeof window !== 'undefined') {
-  window.markprompt = {
+  window.markpromptConfigExtras = {
     references: {
       // Example link mapping for references:
       // getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),

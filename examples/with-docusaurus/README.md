@@ -32,7 +32,7 @@ If you need to set up custom link mappings between search results or prompt refe
 1. Create a JS file in your project source, e.g. in `./src/markprompt-config.js`, and paste the following:
 
 ```js
-window.markprompt = {
+window.markpromptConfigExtras = {
   references: {
     // References link mappings:
     getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
