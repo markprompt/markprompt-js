@@ -13,12 +13,15 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://markprompt-docusaurus.vercel.app',
+  url: 'https://your-production-site.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   themes: ['@markprompt/docusaurus-theme-search'],
+
+  // Markprompt globals, used for link mapping functions.
+  clientModules: [require.resolve('./src/markprompt-config.js')],
 
   presets: [
     [
@@ -41,7 +44,7 @@ const config = {
         // Set the project key here, on in a `.env` file. You can obtain
         // the project key in the Markprompt dashboard, under
         // project settings.
-        projectKey: process.env.MARKPROMPT_PROJECT_KEY,
+        projectKey: 'YOUR-PROJECT-KEY',
         trigger: { floating: true },
         search: {
           enabled: false,
