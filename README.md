@@ -31,6 +31,7 @@ and some example implementations:
 - [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite.
 - [`with-css-modules`](examples/with-css-modules#readme) — a web application based on `@markprompt/react`, Vite and CSS Modules.
 - [`with-docusaurus`](examples/with-docusaurus#readme) — a Docusaurus project with `@markprompt/docusaurus-theme-search`.
+- [`with-docusaurus-algolia`](examples/with-docusaurus-algolia#readme) — a Docusaurus project with `@markprompt/docusaurus-theme-search` and our Algolia integration.
 - [`with-docusaurus-swizzled`](examples/with-docusaurus-swizzled#readme) — a Docusaurus project with Markprompt and [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
 
 ## Documentation
