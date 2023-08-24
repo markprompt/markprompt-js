@@ -6,12 +6,35 @@ import {
   type MarkpromptProps,
   openMarkprompt,
 } from '@markprompt/react';
-import React, { type ReactElement } from 'react';
+import React, { useEffect, type ReactElement, useState } from 'react';
 
 export default function SearchBar(): ReactElement {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [markpromptExtras, setMarkpromptExtras] = useState<any>({});
   const { siteConfig } = useDocusaurusContext();
 
-  const markpromptProps = siteConfig.themeConfig.markprompt as MarkpromptProps;
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setMarkpromptExtras((window as any).markpromptConfigExtras || {});
+  }, []);
+
+  const markpromptConfigProps = siteConfig.themeConfig
+    .markprompt as MarkpromptProps;
+  const markpromptProps = {
+    ...markpromptConfigProps,
+    references: {
+      ...markpromptConfigProps.references,
+      ...markpromptExtras.references,
+    },
+    search: {
+      ...markpromptConfigProps.search,
+      ...markpromptExtras.search,
+    },
+  };
 
   if (markpromptProps.trigger?.floating) {
     return <Markprompt {...markpromptProps} />;

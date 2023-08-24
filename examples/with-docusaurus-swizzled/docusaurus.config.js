@@ -39,33 +39,9 @@ const config = {
         // Set the project key here, on in a `.env` file. You can obtain
         // the project key in the Markprompt dashboard, under
         // project settings.
-        projectKey: 'YOUR-MARKPROMPT-KEY',
-        trigger: { floating: true },
-        references: {
-          getHref: (reference) => reference.file?.path?.replace(/\.[^.]+$/, ''),
-          getLabel: (reference) => {
-            return reference.meta?.leadHeading?.value || reference.file?.title;
-          },
-        },
-        search: {
-          enabled: true,
-          provider: {
-            name: 'algolia',
-            apiKey: 'YOUR-ALGOLIA-API-KEY',
-            appId: 'YOUR-ALGOLIA-APP-ID',
-            indexName: 'YOUR-ALGOLIA-INDEX-NAME',
-          },
-          // Set custom mappings between Algolia records and Markprompt results:
-          getHref: (result) => result.url,
-          getHeading: (result) => result.pageTitle,
-          getTitle: (result) => result.pageDescription,
-          getSubtitle: (result) => result.pageContent,
-        },
-      },
-      algolia: {
-        appId: 'YOUR_APP_ID',
-        apiKey: 'YOUR_SEARCH_API_KEY',
-        indexName: 'YOUR_INDEX_NAME',
+        projectKey: 'YOUR-PROJECT-KEY',
+        trigger: { floating: false },
+        search: { enabled: true },
       },
       navbar: {
         title: 'Markprompt + Algolia demo',
