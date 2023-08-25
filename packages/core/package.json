@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@algolia/client-search": "^4.19.1",
-    "@docsearch/react": "^3.5.1"
+    "@docsearch/react": "^3.5.1",
+    "defaults": "^2.0.1"
   },
   "devDependencies": {
     "type-fest": "^4.1.0"

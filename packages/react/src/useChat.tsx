@@ -1,9 +1,9 @@
 import {
   isAbortError,
-  submitPrompt as submitPromptToMarkprompt,
+  submitChat as submitChatToMarkprompt,
   type FileSectionReference,
-  type PromptMessage,
-  type SubmitPromptOptions,
+  type ChatMessage,
+  type SubmitChatOptions,
 } from '@markprompt/core';
 import { useState } from 'react';
 
@@ -240,7 +240,7 @@ export interface UseChatOptions {
   debug?: boolean;
   feedbackOptions?: MarkpromptOptions['feedback'];
   projectKey: string;
-  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  promptOptions?: Omit<SubmitChatOptions, 'signal'>;
 }
 
 export interface UseChatResult {
@@ -330,9 +330,9 @@ export function useChat({
           : undefined,
       ])
       .flat()
-      .filter(isPresent) satisfies PromptMessage[];
+      .filter(isPresent) satisfies ChatMessage[];
 
-    const promise = submitPromptToMarkprompt(
+    const promise = submitChatToMarkprompt(
       apiMessages,
       projectKey,
       (chunk) => {

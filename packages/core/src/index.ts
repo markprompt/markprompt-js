@@ -1,4 +1,11 @@
 export {
+  submitChat,
+  type SubmitChatOptions,
+  type ChatMessage,
+  DEFAULT_SUBMIT_CHAT_OPTIONS,
+} from './chat.js';
+
+export {
   submitFeedback,
   type SubmitFeedbackOptions,
   type SubmitFeedbackBody,
@@ -7,7 +14,6 @@ export {
 
 export {
   submitPrompt,
-  type PromptMessage,
   type SubmitPromptOptions,
   DEFAULT_SUBMIT_PROMPT_OPTIONS,
   STREAM_SEPARATOR,

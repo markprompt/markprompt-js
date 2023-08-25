@@ -1,16 +1,16 @@
 import defaults from 'defaults';
 
 import {
-  type CompletionsOptions,
   DEFAULT_COMPLETIONS_OPTIONS,
+  type CompletionsOptions,
 } from './constants.js';
 import type { FileSectionReference } from './types.js';
 import { isFileSectionReferences, parseEncodedJSONHeader } from './utils.js';
 
-export interface SubmitPromptOptions extends CompletionsOptions {
+export interface SubmitChatOptions extends CompletionsOptions {
   /**
    * URL at which to fetch completions
-   * @default "https://api.markprompt.com/v1/completions"
+   * @default "https://api.markprompt.com/v1/chat"
    * */
   apiUrl?: string;
   /**
@@ -20,50 +20,52 @@ export interface SubmitPromptOptions extends CompletionsOptions {
   signal?: AbortSignal;
 }
 
-type DefaultSubmitPromptOptions = Omit<
-  Required<SubmitPromptOptions>,
-  'signal'
-> &
-  Pick<SubmitPromptOptions, 'signal'>;
+type DefaultSubmitChatOptions = Omit<Required<SubmitChatOptions>, 'signal'> &
+  Pick<SubmitChatOptions, 'signal'>;
 
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
-export const DEFAULT_SUBMIT_PROMPT_OPTIONS = {
+export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   ...DEFAULT_COMPLETIONS_OPTIONS,
-  apiUrl: 'https://api.markprompt.com/v1/completions',
-} satisfies DefaultSubmitPromptOptions;
+  apiUrl: 'https://api.markprompt.com/v1/chat',
+} satisfies DefaultSubmitChatOptions;
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  message: string;
+}
 
 /**
- * Submit a prompt to the Markprompt Completions API.
+ * Submit a prompt to the Markprompt Chat API.
  *
- * @param prompt - Prompt to submit to the model
+ * @param messages - Chat messages to submit to the model
  * @param projectKey - Project key for the project
  * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
  * @param onReferences - This function is called when a chunk includes references.
  * @param onError - Called when an error occurs
  * @param [options] - Optional parameters
  */
-export async function submitPrompt(
-  prompt: string,
+export async function submitChat(
+  messages: ChatMessage[],
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
   onPromptId: (promptId: string) => void,
   onError: (error: Error) => void,
-  options: SubmitPromptOptions = {},
+  options: SubmitChatOptions = {},
   debug?: boolean,
 ): Promise<void> {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
   }
 
-  if (!prompt || prompt === '') return;
+  if (!messages || !Array.isArray(messages) || messages.length === 0) return;
 
   // todo: look into typing this properly
   const resolvedOptions = defaults(
     { ...options },
-    DEFAULT_SUBMIT_PROMPT_OPTIONS,
-  ) as DefaultSubmitPromptOptions;
+    DEFAULT_SUBMIT_CHAT_OPTIONS,
+  ) as DefaultSubmitChatOptions;
 
   try {
     const res = await fetch(resolvedOptions.apiUrl, {
@@ -72,7 +74,7 @@ export async function submitPrompt(
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
-        prompt: prompt,
+        messages: messages,
         projectKey: projectKey,
         ...resolvedOptions,
       }),
@@ -81,7 +83,7 @@ export async function submitPrompt(
 
     if (!res.ok || !res.body) {
       const text = await res.text();
-      onAnswerChunk(resolvedOptions.iDontKnowMessage);
+      onAnswerChunk(resolvedOptions.iDontKnowMessage!);
       onError(new Error(text));
       return;
     }

@@ -15,6 +15,10 @@ export interface SubmitFeedbackOptions {
    * @default 'https://api.markprompt.com/v1/feedback'
    */
   apiUrl?: string;
+  /**
+   * AbortController signal
+   * @default undefined
+   **/
   signal?: AbortSignal;
 }
 
