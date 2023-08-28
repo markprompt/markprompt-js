@@ -24,7 +24,7 @@ import type { View } from './useViews.js';
 interface ChatViewProps {
   activeView: View;
   projectKey: string;
-  promptOptions?: MarkpromptOptions['prompt'];
+  chatOptions?: MarkpromptOptions['chat'];
   feedbackOptions?: MarkpromptOptions['feedback'];
   referencesOptions?: MarkpromptOptions['references'];
   close?: MarkpromptOptions['close'];
@@ -32,7 +32,7 @@ interface ChatViewProps {
 }
 
 export function ChatView(props: ChatViewProps): ReactElement {
-  const { close, projectKey, promptOptions, feedbackOptions } = props;
+  const { close, projectKey, chatOptions, feedbackOptions } = props;
 
   const {
     abortFeedbackRequest,
@@ -41,7 +41,7 @@ export function ChatView(props: ChatViewProps): ReactElement {
     submitFeedback,
     abort: abortSubmitChat,
     regenerateLastAnswer,
-  } = useChat({ projectKey });
+  } = useChat({ projectKey, options: chatOptions });
 
   return (
     <div className="MarkpromptChatView">
@@ -53,7 +53,7 @@ export function ChatView(props: ChatViewProps): ReactElement {
       />
       <ChatViewForm
         close={close}
-        promptOptions={promptOptions}
+        chatOptions={chatOptions}
         submitChat={submitChat}
         lastMessageState={messages[messages.length - 1]?.state}
         abortSubmitChat={abortSubmitChat}
@@ -108,6 +108,9 @@ interface MessagesProps {
 function Messages(props: MessagesProps): ReactElement {
   const { feedbackOptions, messages, submitFeedback, abortFeedbackRequest } =
     props;
+
+  console.log(messages);
+
   return (
     <div className="MarkpromptMessages">
       <BaseMarkprompt.AutoScroller
@@ -146,7 +149,7 @@ function Messages(props: MessagesProps): ReactElement {
 }
 
 interface ChatViewFormProps {
-  promptOptions?: MarkpromptOptions['prompt'];
+  chatOptions?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
   submitChat: UseChatResult['submitChat'];
   lastMessageState?: ChatViewMessage['state'];
@@ -157,7 +160,7 @@ interface ChatViewFormProps {
 function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const {
     close,
-    promptOptions,
+    chatOptions,
     submitChat,
     lastMessageState,
     regenerateLastAnswer,
@@ -169,8 +172,13 @@ function ChatViewForm(props: ChatViewFormProps): ReactElement {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       const value = data.get('markprompt-prompt');
+
       if (typeof value === 'string') {
         submitChat(value);
+      }
+
+      if (event.target instanceof HTMLFormElement) {
+        event.target.reset();
       }
     },
     [submitChat],
@@ -185,15 +193,16 @@ function ChatViewForm(props: ChatViewFormProps): ReactElement {
         className="MarkpromptPrompt"
         name="markprompt-prompt"
         type="text"
+        autoFocus
         placeholder={
-          promptOptions?.placeholder ??
-          DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!
+          chatOptions?.placeholder ??
+          DEFAULT_MARKPROMPT_OPTIONS.chat!.placeholder!
         }
         labelClassName="MarkpromptPromptLabel"
         label={
           <AccessibleIcon.Root
             label={
-              promptOptions?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
+              chatOptions?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
             }
           >
             <SparklesIcon className="MarkpromptSearchIcon" />

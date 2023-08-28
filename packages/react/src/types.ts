@@ -2,6 +2,7 @@ import {
   type AlgoliaDocSearchHit,
   type FileSectionReference,
   type SearchResult,
+  type SubmitChatOptions,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -50,7 +51,7 @@ export interface SearchResultComponentProps {
   subtitle?: string;
 }
 
-interface MarkpromptOptions {
+export interface MarkpromptOptions {
   /**
    * Display format.
    * @default "dialog"
@@ -97,13 +98,37 @@ interface MarkpromptOptions {
      **/
     heading?: string;
   };
-  prompt?: SubmitPromptOptions & {
+  /**
+   * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
+   * Enabling chat functionality will disable prompt functionality.
+   */
+  chat?: SubmitChatOptions & {
     /**
      * Show a chat-like prompt input allowing for conversation-style interaction
      * rather than single question prompts.
      * @default false
      **/
-    enableChat?: boolean;
+    enabled?: boolean;
+    /**
+     * Label for the chat input
+     * @default "Ask AI"
+     **/
+    label?: string;
+    /**
+     * Label for the tab bar
+     * @default "Ask AI"
+     **/
+    tabLabel?: string;
+    /**
+     * Placeholder for the chat input
+     * @default "Ask AI…"
+     **/
+    placeholder?: string;
+  };
+  /**
+   * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
+   */
+  prompt?: SubmitPromptOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
@@ -228,5 +253,3 @@ interface MarkpromptOptions {
    **/
   debug?: boolean;
 }
-
-export type { MarkpromptOptions };

@@ -32,7 +32,7 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
-  message: string;
+  content: string;
 }
 
 /**

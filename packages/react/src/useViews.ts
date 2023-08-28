@@ -11,14 +11,15 @@ interface UseViewsResult {
 }
 
 export function useViews(
-  prompt?: MarkpromptOptions['prompt'],
-  search?: MarkpromptOptions['search'],
+  options: MarkpromptOptions,
   defaultView?: MarkpromptOptions['defaultView'],
 ): UseViewsResult {
+  const { chat, search } = options;
+
   const [activeView, setActiveView] = useState<View>(() => {
     if (defaultView) return defaultView;
     if (search?.enabled) return 'search';
-    if (prompt?.enableChat) return 'chat';
+    if (chat?.enabled) return 'chat';
     return 'prompt';
   });
 
@@ -28,9 +29,9 @@ export function useViews(
       case 'prompt':
         return setActiveView('search');
       case 'search':
-        return setActiveView(prompt?.enableChat ? 'chat' : 'prompt');
+        return setActiveView(chat?.enabled ? 'chat' : 'prompt');
     }
-  }, [activeView, prompt?.enableChat]);
+  }, [activeView, chat?.enabled]);
 
   return { activeView, setActiveView, toggleActiveView };
 }

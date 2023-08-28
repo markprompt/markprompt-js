@@ -15,6 +15,8 @@ interface AnswerProps {
 export function Answer(props: AnswerProps): ReactElement {
   const { answer, className, state } = props;
 
+  console.log(answer);
+
   return (
     <div
       className={clsx('MarkpromptAnswer', className)}

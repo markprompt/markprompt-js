@@ -40,6 +40,7 @@ function openMarkprompt(): void {
 function Markprompt(props: MarkpromptProps): JSX.Element {
   const {
     close,
+    chat,
     debug,
     defaultView,
     description,
@@ -139,6 +140,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
               <MarkpromptContent
                 close={close}
+                chat={chat}
                 debug={debug}
                 defaultView={defaultView}
                 feedback={feedback}
@@ -159,6 +161,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           showAlgolia={search?.enabled && search.provider?.name === 'algolia'}
         >
           <MarkpromptContent
+            chat={chat}
             close={close}
             defaultView={defaultView}
             feedback={feedback}
@@ -175,13 +178,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
 interface MarkpromptContentProps {
   projectKey: string;
-  prompt: MarkpromptOptions['prompt'];
-  feedback?: MarkpromptOptions['feedback'];
-  references: MarkpromptOptions['references'];
-  search: MarkpromptOptions['search'];
-  close: MarkpromptOptions['close'];
+  chat?: MarkpromptOptions['chat'];
+  close?: MarkpromptOptions['close'];
   debug?: boolean;
   defaultView?: MarkpromptOptions['defaultView'];
+  feedback?: MarkpromptOptions['feedback'];
+  prompt?: MarkpromptOptions['prompt'];
+  references?: MarkpromptOptions['references'];
+  search?: MarkpromptOptions['search'];
 }
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
@@ -191,14 +195,14 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     defaultView,
     feedback,
     projectKey,
+    chat,
     prompt,
     references,
     search,
   } = props;
 
   const { activeView, setActiveView, toggleActiveView } = useViews(
-    prompt,
-    search,
+    { search, chat },
     defaultView,
   );
 
@@ -237,7 +241,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             >
               {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
             </button>
-            {!prompt?.enableChat && (
+            {!chat?.enabled && (
               <button
                 className="MarkpromptTab"
                 data-state={activeView === 'prompt' ? 'active' : ''}
@@ -254,7 +258,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                   DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
               </button>
             )}
-            {prompt?.enableChat && (
+            {chat?.enabled && (
               <button
                 className="MarkpromptTab"
                 data-state={activeView === 'chat' ? 'active' : ''}
@@ -322,7 +326,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           </div>
         )}
 
-        {prompt?.enableChat ? (
+        {chat?.enabled ? (
           <div
             style={{
               position: 'absolute',
@@ -333,7 +337,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <ChatView
               activeView={activeView}
               projectKey={projectKey}
-              promptOptions={prompt}
+              chatOptions={chat}
               feedbackOptions={feedback}
               referencesOptions={references}
               close={!search?.enabled ? close : undefined}
