@@ -351,6 +351,8 @@
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   border-bottom: 1px solid var(--markprompt-border);
+  position: relative;
+  overflow: hidden;
 }
 
 :where(.MarkpromptMessagePrompt:first-of-type) {
@@ -975,6 +977,11 @@
     [data-loading-state]:not([data-loading-state='preload']) .MarkpromptProgress
   ) {
   opacity: 0;
+}
+
+:where(.MarkpromptMessagePrompt .MarkpromptProgress) {
+  bottom: -1px;
+  top: unset;
 }
 
 :where(.MarkpromptReferences) {

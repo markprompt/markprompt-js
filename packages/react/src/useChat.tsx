@@ -44,6 +44,20 @@ export interface UseChatResult {
   regenerateLastAnswer: () => void;
 }
 
+function updateMessageById(
+  messages: ChatViewMessage[],
+  id: string,
+  message: Partial<ChatViewMessage>,
+): ChatViewMessage[] {
+  const index = messages.findIndex((message) => message.id === id);
+  const nextMessages = [...messages];
+  nextMessages.splice(index, 1, {
+    ...nextMessages[index],
+    ...message,
+  });
+  return nextMessages;
+}
+
 export function useChat({
   debug,
   feedbackOptions,
@@ -76,32 +90,22 @@ export function useChat({
     // answer request was cancelled
     abort();
 
-    let nextMessages = [...messages];
-
     const currentMessageIndex = messages.findIndex(
       (message) => message.id === currentMessageId,
     );
-    let currentMessage = nextMessages[currentMessageIndex];
     const previousMessageIndex = currentMessageIndex - 1;
-    const previousMessage = nextMessages[previousMessageIndex];
+    const previousMessage = messages[previousMessageIndex];
 
     if (
       previousMessage &&
       (previousMessage.state === 'preload' ||
         previousMessage.state === 'streaming-answer')
     ) {
-      const cancelledPreviousMessage = {
-        ...previousMessage,
-        state: 'cancelled',
-      } satisfies ChatViewMessage;
-
-      nextMessages = nextMessages.splice(
-        previousMessageIndex,
-        1,
-        cancelledPreviousMessage,
+      setMessages((messages) =>
+        updateMessageById(messages, previousMessage.id, {
+          state: 'cancelled',
+        }),
       );
-
-      setMessages(nextMessages);
     }
 
     const controller = new AbortController();
@@ -123,40 +127,49 @@ export function useChat({
       .flat()
       .filter(isPresent) satisfies ChatMessage[];
 
+    setMessages((messages) =>
+      updateMessageById(messages, currentMessageId, {
+        state: 'preload',
+      }),
+    );
+
+    // we use callback style setState here to make sure we are using the latest
+    // messages array, and not the messages array that was passed in to this
     const promise = submitChatToMarkprompt(
       apiMessages,
       projectKey,
       (chunk) => {
-        currentMessage = {
-          ...currentMessage,
-          answer: (currentMessage.answer ?? '') + chunk,
-          state: 'streaming-answer',
-        };
-
-        nextMessages.splice(currentMessageIndex, 1, currentMessage);
-
-        setMessages(nextMessages);
+        setMessages((messages) => {
+          const currentMessage = messages.find(
+            (message) => message.id === currentMessageId,
+          );
+          return updateMessageById(messages, currentMessageId, {
+            answer: (currentMessage?.answer ?? '') + chunk,
+            state: 'streaming-answer',
+          });
+        });
 
         return true;
       },
       (references) => {
-        currentMessage = {
-          ...currentMessage,
-          references,
-        };
-
-        // references should be per assistant response
-        nextMessages.splice(currentMessageIndex, 1, currentMessage);
-        setMessages(nextMessages);
+        setMessages((messages) =>
+          updateMessageById(messages, currentMessageId, {
+            references,
+          }),
+        );
       },
       (pid) => {
         setPromptId(pid);
       },
       (error) => {
-        // ignore abort errors
+        setMessages((messages) =>
+          updateMessageById(messages, currentMessageId, {
+            state: 'cancelled',
+          }),
+        );
+
         if (isAbortError(error)) return;
 
-        // todo: surface errors to the user
         // eslint-disable-next-line no-console
         console.error(error);
       },
@@ -170,12 +183,11 @@ export function useChat({
     promise.then(() => {
       if (controller.signal.aborted) return;
       // set state of current message to done
-      currentMessage = {
-        ...currentMessage,
-        state: 'done',
-      };
-      nextMessages.splice(currentMessageIndex, 1, currentMessage);
-      setMessages(nextMessages);
+      setMessages((messages) =>
+        updateMessageById(messages, currentMessageId, {
+          state: 'done',
+        }),
+      );
     });
 
     promise.finally(() => {
@@ -208,16 +220,19 @@ export function useChat({
   };
 
   const regenerateLastAnswer = (): void => {
-    const nextMessages = [...messages].splice(messages.length - 1, 1, {
-      ...messages[messages.length - 1],
-      state: 'indeterminate',
+    const lastMessage = messages[messages.length - 1];
+
+    const nextMessages = updateMessageById(messages, lastMessage.id, {
+      ...lastMessage,
+      answer: '',
       references: [],
-    }) satisfies ChatViewMessage[];
+      state: 'indeterminate',
+    });
 
     setMessages(nextMessages);
 
     // send messages to server
-    submitMessagesToApi(nextMessages, nextMessages[nextMessages.length - 1].id);
+    submitMessagesToApi(nextMessages, lastMessage.id);
   };
 
   return {

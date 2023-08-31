@@ -11,7 +11,7 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { Feedback } from './Feedback.js';
 import { ReloadIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { References } from './References.js';
+import { Reference } from './References.js';
 import type { MarkpromptOptions } from './types.js';
 import {
   useChat,
@@ -65,13 +65,20 @@ export function ChatView(props: ChatViewProps): ReactElement {
 
 interface MessagePromptProps {
   children: string;
+  state: ChatViewMessage['state'];
 }
 
 function MessagePrompt(props: MessagePromptProps): ReactElement {
-  const { children } = props;
+  const { children, state } = props;
   return (
-    <div className="MarkpromptMessagePrompt">
+    <div className="MarkpromptMessagePrompt" data-loading-state={state}>
       <p className="MarkpromptMessagePromptText">{children}</p>
+      <div
+        className="MarkpromptProgress"
+        id="markprompt-progressbar"
+        role="progressbar"
+        aria-labelledby="markprompt-loading-text"
+      />
     </div>
   );
 }
@@ -109,8 +116,6 @@ function Messages(props: MessagesProps): ReactElement {
   const { feedbackOptions, messages, submitFeedback, abortFeedbackRequest } =
     props;
 
-  console.log(messages);
-
   return (
     <div className="MarkpromptMessages">
       <BaseMarkprompt.AutoScroller
@@ -119,7 +124,9 @@ function Messages(props: MessagesProps): ReactElement {
       >
         {messages.map((message, index) => (
           <Fragment key={message.id}>
-            <MessagePrompt>{message.prompt}</MessagePrompt>
+            <MessagePrompt state={message.state}>
+              {message.prompt}
+            </MessagePrompt>
             <div
               className="MarkpromptMessageAnswerContainer"
               data-feedback-enabled={feedbackOptions?.enabled}
@@ -140,7 +147,16 @@ function Messages(props: MessagesProps): ReactElement {
                 />
               )}
             </div>
-            <References state={message.state} references={message.references} />
+
+            <div className="MarkpromptReferences">
+              {(message.state === 'streaming-answer' ||
+                message.state === 'done') && (
+                <BaseMarkprompt.References
+                  ReferenceComponent={Reference}
+                  references={message.references}
+                />
+              )}
+            </div>
           </Fragment>
         ))}
       </BaseMarkprompt.AutoScroller>
