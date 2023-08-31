@@ -12,10 +12,15 @@ export interface CompletionsOptions {
    **/
   model?: OpenAIModelId;
   /**
-   * The prompt template
+   * [DEPRECATED] The prompt template
    * @default "You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n"
    **/
   promptTemplate?: string;
+  /**
+   * The system prompt
+   * @default "You are a very enthusiastic company representative who loves to help people!"
+   **/
+  systemPrompt?: string;
   /**
    * The model temperature
    * @default 0.1
@@ -57,6 +62,7 @@ export const DEFAULT_COMPLETIONS_OPTIONS = {
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   model: 'gpt-3.5-turbo',
   promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: "{{PROMPT}}"\n\nAnswer (including related code snippets if available):`,
+  systemPrompt: `You are a very enthusiastic company representative who loves to help people!`,
   temperature: 0.1,
   topP: 1,
   frequencyPenalty: 0,
