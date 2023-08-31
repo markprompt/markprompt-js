@@ -15,8 +15,8 @@ import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
+import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
-import { ConditionalVisuallyHidden } from '../ConditionalWrap.js';
 import type {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,

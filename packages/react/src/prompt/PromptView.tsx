@@ -9,15 +9,15 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { Feedback } from './Feedback.js';
-import { SparklesIcon } from './icons.js';
-import * as BaseMarkprompt from './primitives/headless.js';
 import { References } from './References.js';
-import { type MarkpromptOptions } from './types.js';
-import type { UseFeedbackResult } from './useFeedback.js';
 import { usePrompt, type PromptLoadingState } from './usePrompt.js';
-import type { View } from './useViews.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { Feedback } from '../feedback/Feedback.js';
+import type { UseFeedbackResult } from '../feedback/useFeedback.js';
+import { SparklesIcon } from '../icons.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
+import { type MarkpromptOptions } from '../types.js';
+import type { View } from '../useViews.js';
 
 export interface PromptViewProps {
   activeView?: View;

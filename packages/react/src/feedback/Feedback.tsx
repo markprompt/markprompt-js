@@ -7,13 +7,14 @@ import React, {
   useEffect,
 } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { ThumbsDownIcon, ThumbsUpIcon } from './icons.js';
 import type { UseFeedbackResult } from './useFeedback.js';
-import type { PromptLoadingState } from './usePrompt.js';
+import type { ChatLoadingState } from '../chat/useChat.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
+import type { PromptLoadingState } from '../prompt/usePrompt.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
-  state: PromptLoadingState;
+  state: PromptLoadingState | ChatLoadingState;
   heading?: string;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];

@@ -11,16 +11,16 @@ import React, {
   type ChangeEventHandler,
 } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { SearchIcon } from './icons.js';
-import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchResult } from './SearchResult.js';
+import { useSearch, type SearchLoadingState } from './useSearch.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { SearchIcon } from '../icons.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
 import {
   type MarkpromptOptions,
   type SearchResultComponentProps,
-} from './types.js';
-import { useSearch, type SearchLoadingState } from './useSearch.js';
-import type { View } from './useViews.js';
+} from '../types.js';
+import type { View } from '../useViews.js';
 
 export interface SearchViewProps {
   activeView?: View;

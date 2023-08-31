@@ -1,10 +1,9 @@
 import type { FileSectionReference } from '@markprompt/core';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import * as Markprompt from './index.js';
-import type { ChatLoadingState } from './useChat.js';
 import type { PromptLoadingState } from './usePrompt.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import * as Markprompt from '../primitives/headless.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -68,7 +67,7 @@ interface ReferencesProps {
   };
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
-  state: ChatLoadingState | PromptLoadingState;
+  state: PromptLoadingState;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -95,7 +94,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     [transformReferenceId, getHref, getLabel],
   );
 
-  let adjustedState: PromptLoadingState | ChatLoadingState = state;
+  let adjustedState: PromptLoadingState = state;
   if (state === 'done' && references.length === 0) {
     adjustedState = 'indeterminate';
   }

@@ -1,10 +1,23 @@
 import clsx from 'clsx';
 import React, { type ReactElement } from 'react';
 
-import { Caret } from './Caret.js';
-import * as BaseMarkprompt from './index.js';
-import type { ChatLoadingState } from './useChat.js';
 import type { PromptLoadingState } from './usePrompt.js';
+import type { ChatLoadingState } from '../chat/useChat.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
+
+interface CaretProps {
+  answer: string;
+}
+
+export function Caret(props: CaretProps): ReactElement | null {
+  const { answer } = props;
+
+  if (answer) {
+    return null;
+  }
+
+  return <span className="MarkpromptCaret" />;
+}
 
 interface AnswerProps {
   className?: string;

@@ -3,13 +3,13 @@ import { clsx } from 'clsx';
 import Emittery from 'emittery';
 import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
-import { ChatView } from './ChatView.js';
+import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { ChatIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { PromptView } from './PromptView.js';
-import { SearchBoxTrigger } from './SearchBoxTrigger.js';
-import { SearchView } from './SearchView.js';
+import { PromptView } from './prompt/PromptView.js';
+import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
+import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions } from './types.js';
 import { useViews } from './useViews.js';
 

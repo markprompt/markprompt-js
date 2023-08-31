@@ -4,9 +4,10 @@ import {
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-import { useAbortController } from './useAbortController.js';
-import type { PromptLoadingState } from './usePrompt.js';
+import type { ChatLoadingState } from '../chat/useChat.js';
+import type { PromptLoadingState } from '../prompt/usePrompt.js';
+import type { MarkpromptOptions } from '../types.js';
+import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
   /** Markprompt project key */
@@ -23,7 +24,7 @@ export interface UseFeedbackResult {
   /** Submit feedback for the current prompt */
   submitFeedback: (
     feedback: PromptFeedback,
-    state: PromptLoadingState,
+    state: PromptLoadingState | ChatLoadingState,
     messageIndex: number,
   ) => void;
 }
@@ -44,7 +45,7 @@ export function useFeedback({
   const submitFeedback = useCallback(
     async (
       feedback: PromptFeedback,
-      state: PromptLoadingState,
+      state: PromptLoadingState | ChatLoadingState,
       messageIndex: number,
     ) => {
       abort();

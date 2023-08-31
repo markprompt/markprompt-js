@@ -7,10 +7,13 @@ import {
 } from '@markprompt/core';
 import { useState } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-import { useAbortController } from './useAbortController.js';
-import { useFeedback, type UseFeedbackResult } from './useFeedback.js';
-import { isPresent } from './utils.js';
+import {
+  useFeedback,
+  type UseFeedbackResult,
+} from '../feedback/useFeedback.js';
+import type { MarkpromptOptions } from '../types.js';
+import { useAbortController } from '../useAbortController.js';
+import { isPresent } from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -221,18 +224,7 @@ export function useChat({
 
   const regenerateLastAnswer = (): void => {
     const lastMessage = messages[messages.length - 1];
-
-    const nextMessages = updateMessageById(messages, lastMessage.id, {
-      ...lastMessage,
-      answer: '',
-      references: [],
-      state: 'indeterminate',
-    });
-
-    setMessages(nextMessages);
-
-    // send messages to server
-    submitMessagesToApi(nextMessages, lastMessage.id);
+    submitChat(lastMessage.prompt);
   };
 
   return {

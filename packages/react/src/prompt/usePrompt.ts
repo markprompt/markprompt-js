@@ -6,9 +6,12 @@ import {
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-import { useAbortController } from './useAbortController.js';
-import { useFeedback, type UseFeedbackResult } from './useFeedback.js';
+import {
+  useFeedback,
+  type UseFeedbackResult,
+} from '../feedback/useFeedback.js';
+import type { MarkpromptOptions } from '../types.js';
+import { useAbortController } from '../useAbortController.js';
 
 export type PromptLoadingState =
   | 'indeterminate'

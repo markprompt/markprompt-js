@@ -10,9 +10,12 @@ import {
 import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import type { MarkpromptOptions, SearchResultComponentProps } from './types.js';
-import { useAbortController } from './useAbortController.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import type {
+  MarkpromptOptions,
+  SearchResultComponentProps,
+} from '../types.js';
+import { useAbortController } from '../useAbortController.js';
 
 export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
 
