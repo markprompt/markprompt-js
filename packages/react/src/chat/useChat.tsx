@@ -161,9 +161,7 @@ export function useChat({
           }),
         );
       },
-      (pid) => {
-        setPromptId(pid);
-      },
+      (pid) => setPromptId(pid),
       (error) => {
         setMessages((messages) =>
           updateMessageById(messages, currentMessageId, {
