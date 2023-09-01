@@ -61,13 +61,13 @@ export async function submitChat(
 
   if (!messages || !Array.isArray(messages) || messages.length === 0) return;
 
-  // todo: look into typing this properly
-  const resolvedOptions = defaults(
-    { ...options },
-    DEFAULT_SUBMIT_CHAT_OPTIONS,
-  ) as DefaultSubmitChatOptions;
-
   try {
+    // todo: look into typing this properly
+    const resolvedOptions = defaults(
+      { ...options },
+      DEFAULT_SUBMIT_CHAT_OPTIONS,
+    ) as DefaultSubmitChatOptions;
+
     const res = await fetch(resolvedOptions.apiUrl, {
       method: 'POST',
       headers: new Headers({

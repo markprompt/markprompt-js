@@ -10,8 +10,8 @@ import {
   vi,
 } from 'vitest';
 
-import { submitPrompt } from './index.js';
-import { DEFAULT_SUBMIT_PROMPT_OPTIONS, STREAM_SEPARATOR } from './prompt.js';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from './index.js';
+import { STREAM_SEPARATOR } from './prompt.js';
 
 const encoder = new TextEncoder();
 let markpromptData = '';
@@ -22,7 +22,7 @@ let request: RestRequest;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
     request = req;
     stream = new ReadableStream({
       start(controller) {
@@ -42,7 +42,7 @@ const server = setupServer(
   }),
 );
 
-describe('submitPrompt', () => {
+describe('submitChat', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const consoleMock = vi.spyOn(console, 'debug').mockImplementation(() => {});
 
@@ -65,7 +65,7 @@ describe('submitPrompt', () => {
   test('require projectKey', async () => {
     await expect(() =>
       // @ts-expect-error We test a missing project key.
-      submitPrompt('Explain to me…'),
+      submitChat([]),
     ).rejects.toThrowError('A projectKey is required');
   });
 
@@ -75,8 +75,8 @@ describe('submitPrompt', () => {
     const onPromptId = vi.fn();
     const onError = vi.fn();
 
-    await submitPrompt(
-      '',
+    await submitChat(
+      [],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -103,8 +103,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -133,8 +133,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -159,8 +159,8 @@ describe('submitPrompt', () => {
     status = 500;
     response = ['Internal Server Error'];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -170,7 +170,7 @@ describe('submitPrompt', () => {
 
     expect(request).toBeDefined();
     expect(onAnswerChunk.mock.calls).toStrictEqual([
-      [DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage],
+      [DEFAULT_SUBMIT_CHAT_OPTIONS.iDontKnowMessage],
     ]);
     expect(onReferences).not.toHaveBeenCalled();
     expect(onError.mock.calls).toStrictEqual([
@@ -191,8 +191,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -222,8 +222,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -263,8 +263,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -297,8 +297,8 @@ describe('submitPrompt', () => {
       '1 + 2 = 3',
     ];
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -320,8 +320,8 @@ describe('submitPrompt', () => {
 
     markpromptDebug = encoder.encode(JSON.stringify('test')).toString();
 
-    await submitPrompt(
-      'How much is 1+2?',
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
@@ -355,8 +355,8 @@ describe('submitPrompt', () => {
         '1 + 2 = 3',
       ];
 
-      await submitPrompt(
-        'How much is 1+2?',
+      await submitChat(
+        [{ content: 'How much is 1+2?', role: 'user' }],
         'testKey',
         onAnswerChunk,
         onReferences,
