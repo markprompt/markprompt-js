@@ -1,5 +1,47 @@
 # @markprompt/react
 
+## 0.20.0
+
+### Minor Changes
+
+- [#148](https://github.com/motifland/markprompt-js/pull/148)
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Split up useMarkprompt into
+  per-functionality hooks and remove context
+
+- [#148](https://github.com/motifland/markprompt-js/pull/148)
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Export PromptView and
+  SearchView, allowing for including the components in pages without the dialog
+
+- [#155](https://github.com/motifland/markprompt-js/pull/155)
+  [`f2874d4`](https://github.com/motifland/markprompt-js/commit/f2874d4fb7928093dd3c598a2273d38326550bf7)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Docusaurus link
+  mapping
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add ChatView, allowing for
+  a conversation rather than a single prompt
+
+- [#146](https://github.com/motifland/markprompt-js/pull/146)
+  [`82f8ac4`](https://github.com/motifland/markprompt-js/commit/82f8ac4eee7b43ed1e22ad86d211809d88601560)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Reduce bundle size by ~17kB
+
+### Patch Changes
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Change how default options
+  are passed to `@markprompt/core`
+
+- Updated dependencies
+  [[`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881),
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881),
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680),
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)]:
+  - @markprompt/core@0.12.0
+
 ## 0.19.0
 
 ### Minor Changes

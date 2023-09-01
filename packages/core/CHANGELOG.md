@@ -1,5 +1,31 @@
 # @markprompt/core
 
+## 0.12.0
+
+### Minor Changes
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add `submitChat`, allowing
+  to send conversations to the Markprompt API
+
+### Patch Changes
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Change how default options
+  are passed to `@markprompt/core`
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add an optional
+  messageIndex parameter to submitFeedback, which can be used to submit feedback
+  for messages in chat conversations
+
+- [#148](https://github.com/motifland/markprompt-js/pull/148)
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add isAbortError utility
+
 ## 0.11.0
 
 ### Minor Changes

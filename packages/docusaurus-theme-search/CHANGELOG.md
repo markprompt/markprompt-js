@@ -1,5 +1,35 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.10.0
+
+### Minor Changes
+
+- [#155](https://github.com/motifland/markprompt-js/pull/155)
+  [`f2874d4`](https://github.com/motifland/markprompt-js/commit/f2874d4fb7928093dd3c598a2273d38326550bf7)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Docusaurus link
+  mapping
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add ChatView, allowing for
+  a conversation rather than a single prompt
+
+- [#146](https://github.com/motifland/markprompt-js/pull/146)
+  [`82f8ac4`](https://github.com/motifland/markprompt-js/commit/82f8ac4eee7b43ed1e22ad86d211809d88601560)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Reduce bundle size by ~17kB
+
+### Patch Changes
+
+- Updated dependencies
+  [[`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881),
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680),
+  [`cd011ec`](https://github.com/motifland/markprompt-js/commit/cd011ecfc53325f23618554f1ace9ca9018b5680),
+  [`f2874d4`](https://github.com/motifland/markprompt-js/commit/f2874d4fb7928093dd3c598a2273d38326550bf7),
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881),
+  [`82f8ac4`](https://github.com/motifland/markprompt-js/commit/82f8ac4eee7b43ed1e22ad86d211809d88601560)]:
+  - @markprompt/react@0.20.0
+  - @markprompt/css@0.13.0
+
 ## 0.9.0
 
 ### Minor Changes
