@@ -1,5 +1,14 @@
 # @markprompt/core
 
+## 0.12.1
+
+### Patch Changes
+
+- [#157](https://github.com/motifland/markprompt-js/pull/157)
+  [`611c42c`](https://github.com/motifland/markprompt-js/commit/611c42c246387683223a5fa1234b4429843d6a2d)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Remove
+  @docsearch/react dependency from core
+
 ## 0.12.0
 
 ### Minor Changes
