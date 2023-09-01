@@ -3,6 +3,7 @@ import {
   type SubmitPromptOptions,
   submitPrompt as submitPromptToMarkprompt,
   isAbortError,
+  type SubmitFeedbackOptions,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -10,7 +11,6 @@ import {
   useFeedback,
   type UseFeedbackResult,
 } from '../feedback/useFeedback.js';
-import type { MarkpromptOptions } from '../types.js';
 import { useAbortController } from '../useAbortController.js';
 
 export type PromptLoadingState =
@@ -20,14 +20,14 @@ export type PromptLoadingState =
   | 'done';
 
 export interface UsePromptOptions {
+  /** Display debug info */
+  debug?: boolean;
+  /** Enable and configure feedback functionality */
+  feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
-  /** Enable and configure feedback functionality */
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  /** Display debug info */
-  debug?: boolean;
 }
 
 export interface UsePromptResult {
@@ -43,10 +43,10 @@ export interface UsePromptResult {
 }
 
 export function usePrompt({
+  debug,
+  feedbackOptions,
   projectKey,
   promptOptions,
-  feedbackOptions,
-  debug,
 }: UsePromptOptions): UsePromptResult {
   if (!projectKey) {
     throw new Error(

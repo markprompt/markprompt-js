@@ -18,7 +18,7 @@ export interface SubmitSearchQueryOptions {
    **/
   apiUrl?: string;
   /**
-   * Custom provider id
+   * Custom provider configuration
    * @default undefined
    **/
   provider?: AlgoliaProvider;

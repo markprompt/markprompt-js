@@ -6,6 +6,7 @@ import {
   type SearchResult,
   type SearchResultsResponse,
   isAbortError,
+  type SubmitSearchQueryOptions,
 } from '@markprompt/core';
 import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
@@ -20,24 +21,24 @@ import { useAbortController } from '../useAbortController.js';
 export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
 
 export interface UseSearchOptions {
-  projectKey: string;
-  options?: MarkpromptOptions['search'];
   debug?: boolean;
+  projectKey: string;
+  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'>;
 }
 
 export interface UseSearchResult {
-  state: SearchLoadingState;
-  searchResults: SearchResultComponentProps[];
   searchQuery: string;
+  searchResults: SearchResultComponentProps[];
+  state: SearchLoadingState;
+  abort: () => void;
   setSearchQuery: (searchQuery: string) => void;
   submitSearchQuery: (searchQuery: string) => void;
-  abort: () => void;
 }
 
 export function useSearch({
-  projectKey,
-  options,
   debug,
+  projectKey,
+  searchOptions,
 }: UseSearchOptions): UseSearchResult {
   const [state, setState] = useState<SearchLoadingState>('indeterminate');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -49,8 +50,6 @@ export function useSearch({
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
-      if (!options?.enabled) return;
-
       abort();
 
       // reset state if the query was set (back) to empty
@@ -68,10 +67,10 @@ export function useSearch({
 
       let promise: Promise<SearchResult[] | AlgoliaDocSearchHit[] | undefined>;
 
-      if (options.provider?.name === 'algolia') {
+      if (searchOptions?.provider?.name === 'algolia') {
         promise = (
           submitAlgoliaDocsearchQuery(searchQuery, {
-            ...options,
+            ...searchOptions,
             signal: controller.signal,
           }) as Promise<AlgoliaDocSearchResultsResponse>
         ).then((result) => result?.hits || []) as Promise<
@@ -80,7 +79,7 @@ export function useSearch({
       } else {
         promise = (
           submitSearchQueryToMarkprompt(searchQuery, projectKey, {
-            ...options,
+            ...searchOptions,
             signal: controller.signal,
           }) as Promise<SearchResultsResponse>
         ).then((result) => {
@@ -100,7 +99,7 @@ export function useSearch({
           searchResultsToSearchComponentProps(
             searchQuery,
             searchResults,
-            options,
+            searchOptions,
           ) ?? [],
         );
 
@@ -123,7 +122,7 @@ export function useSearch({
         }
       });
     },
-    [options, abort, controllerRef, projectKey, debug],
+    [searchOptions, abort, controllerRef, projectKey, debug],
   );
 
   return {

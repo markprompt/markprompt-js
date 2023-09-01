@@ -31,10 +31,10 @@ export interface ChatViewMessage {
 }
 
 export interface UseChatOptions {
+  chatOptions?: Omit<SubmitChatOptions, 'signal'>;
   debug?: boolean;
   feedbackOptions?: MarkpromptOptions['feedback'];
   projectKey: string;
-  options?: Omit<SubmitChatOptions, 'signal'>;
 }
 
 export interface UseChatResult {
@@ -62,10 +62,10 @@ function updateMessageById(
 }
 
 export function useChat({
+  chatOptions,
   debug,
   feedbackOptions,
   projectKey,
-  options,
 }: UseChatOptions): UseChatResult {
   if (!projectKey) {
     throw new Error(
@@ -175,7 +175,7 @@ export function useChat({
         console.error(error);
       },
       {
-        ...options,
+        ...chatOptions,
         signal: controller.signal,
       },
       debug,

@@ -3,6 +3,7 @@ import {
   type FileSectionReference,
   type SearchResult,
   type SubmitChatOptions,
+  type SubmitFeedbackOptions,
   type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -85,7 +86,7 @@ export interface MarkpromptOptions {
      **/
     text?: string;
   };
-  feedback?: {
+  feedback?: SubmitFeedbackOptions & {
     /**
      * Enable feedback functionality, shows a thumbs up/down button after a
      * prompt was submitted.

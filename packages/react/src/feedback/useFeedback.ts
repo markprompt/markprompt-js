@@ -1,21 +1,21 @@
 import {
   submitFeedback as submitFeedbackToMarkprompt,
   type PromptFeedback,
+  type SubmitFeedbackOptions,
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
 import type { ChatLoadingState } from '../chat/useChat.js';
 import type { PromptLoadingState } from '../prompt/usePrompt.js';
-import type { MarkpromptOptions } from '../types.js';
 import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
+  /** Enable and configure feedback functionality */
+  feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
   /** ID for the current prompt */
   promptId?: string;
-  /** Enable and configure feedback functionality */
-  feedbackOptions?: MarkpromptOptions['feedback'];
 }
 
 export interface UseFeedbackResult {
@@ -30,9 +30,9 @@ export interface UseFeedbackResult {
 }
 
 export function useFeedback({
+  feedbackOptions,
   projectKey,
   promptId,
-  feedbackOptions,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(

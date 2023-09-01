@@ -27,7 +27,7 @@ export function ChatView(props: ChatViewProps): ReactElement {
     submitFeedback,
     abort: abortSubmitChat,
     regenerateLastAnswer,
-  } = useChat({ projectKey, options: chatOptions });
+  } = useChat({ projectKey, chatOptions, feedbackOptions });
 
   return (
     <div className="MarkpromptChatView">

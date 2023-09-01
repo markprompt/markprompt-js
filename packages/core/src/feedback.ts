@@ -1,3 +1,5 @@
+import defaults from 'defaults';
+
 import type { PromptFeedback } from './types.js';
 
 export interface SubmitFeedbackBody {
@@ -35,21 +37,23 @@ export async function submitFeedback(
     throw new Error('A projectKey is required.');
   }
 
-  const { apiUrl = DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, signal } =
-    options ?? {};
+  const resolvedOptions = defaults(
+    { ...options },
+    DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  ) as SubmitFeedbackOptions;
 
   const params = new URLSearchParams({
     projectKey,
   });
 
   try {
-    const response = await fetch(apiUrl + `?${params}`, {
+    const response = await fetch(resolvedOptions + `?${params}`, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify(body),
-      signal,
+      signal: resolvedOptions?.signal,
     });
 
     if (!response.ok) {

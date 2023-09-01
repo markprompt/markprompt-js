@@ -77,14 +77,42 @@ Submit a prompt to the Markprompt Completions API.
 - `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
 - `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
 - `onError` (`function`): called when an error occurs
-- [`options`](#options) (`object`): Optional parameters
+- [`options`](#options) (`SubmitPromptOptions`): Optional parameters
 
 #### Options
 
 - `apiUrl` (`string`): URL at which to fetch completions
 - `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
-- `promptTemplate` (`string`): The prompt template
+- `systemPrompt` (`string`): The prompt template
+- `temperature` (`number`): The model temperature
+- `topP` (`number`): The model top P
+- `frequencyPenalty` (`number`): The model frequency penalty
+- `presencePenalty` (`number`): The model present penalty
+- `maxTokens` (`number`): The max number of tokens to include in the response
+- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
+- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
+- `signal` (`AbortSignal`): AbortController signal
+
+### `submitChat(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
+
+Submit a prompt to the Markprompt Completions API.
+
+#### Arguments
+
+- `messages` (`ChatMessage[]`): Chat messages to submit to the model
+- `projectKey` (`string`): Project key for the project
+- `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
+- `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
+- `onError` (`function`): called when an error occurs
+- [`options`](#options) (`SubmitChatOptions`): Optional parameters
+
+#### Options
+
+- `apiUrl` (`string`): URL at which to fetch completions
+- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
+- `model` (`OpenAIModelId`): The OpenAI model to use
+- `systemPrompt` (`string`): The prompt template
 - `temperature` (`number`): The model temperature
 - `topP` (`number`): The model top P
 - `frequencyPenalty` (`number`): The model frequency penalty
