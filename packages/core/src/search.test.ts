@@ -1,7 +1,15 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import type { PartialDeep } from 'type-fest/index.d.ts';
-import { afterAll, afterEach, beforeAll, describe, expect, test } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  test,
+  vi,
+} from 'vitest';
 
 import {
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
@@ -70,6 +78,7 @@ const algoliaProvider: AlgoliaProvider = {
 };
 
 let status = 200;
+const wait = 0;
 
 const server = setupServer(
   rest.get(
@@ -82,7 +91,17 @@ const server = setupServer(
       if (limit !== null) {
         data = searchResults.slice(0, parseInt(limit));
       }
-      return res(ctx.status(status), ctx.body(JSON.stringify({ data })));
+      if (wait > 0) {
+        await new Promise((resolve) => setTimeout(resolve, wait));
+      }
+      return res(
+        ctx.status(status),
+        ctx.body(
+          status === 200
+            ? JSON.stringify({ data })
+            : JSON.stringify({ error: 'Internal Server Error' }),
+        ),
+      );
     },
   ),
   rest.post(
@@ -125,5 +144,40 @@ describe('submitSearchQuery', () => {
       provider: algoliaProvider,
     });
     expect(result?.hits).toStrictEqual(algoliaSearchHits);
+  });
+
+  test('submitSearchQuery throws with unknown provider', async () => {
+    expect(
+      submitAlgoliaDocsearchQuery('react', {
+        // @ts-expect-error - provider is not a valid provider
+        provider: { name: 'test' },
+      }),
+    ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
+  });
+
+  test('throws an error on invalid status code', async () => {
+    status = 500;
+
+    try {
+      await submitSearchQuery('react', 'testKey');
+    } catch (error) {
+      expect((error as Error).message).toBe(
+        'Failed to fetch search results: Internal Server Error',
+      );
+    }
+  });
+
+  test('throws when an error occurs', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      throw new Error('test');
+    });
+
+    try {
+      expect(submitSearchQuery('react', 'testKey')).rejects.toStrictEqual(
+        new Error('test'),
+      );
+    } finally {
+      mockFetch.mockReset();
+    }
   });
 });

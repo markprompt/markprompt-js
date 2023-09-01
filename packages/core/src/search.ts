@@ -77,6 +77,7 @@ export async function submitSearchQuery(
       projectKey,
       limit: String(limit),
     });
+
     const res = await fetch(`${apiUrl}?${params.toString()}`, {
       method: 'GET',
       signal: options?.signal,
@@ -91,7 +92,7 @@ export async function submitSearchQuery(
 
     return res.json();
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
+    if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
     } else {
@@ -113,7 +114,7 @@ export async function submitAlgoliaDocsearchQuery(
   try {
     const provider = options?.provider;
     if (provider?.name !== 'algolia') {
-      throw new Error(`Missing Algolia options.`);
+      throw new Error(`Unknown provider: ${provider?.name}`);
     }
 
     const { limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit } = options ?? {};
