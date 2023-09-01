@@ -35,7 +35,9 @@ With a CDN:
 />
 ```
 
-This package adds styling for various CSS classes. All styling is applied using the [`:where()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where) pseudo class, so you can override all styling manually.
+This package adds styling for various CSS classes. All styling is applied using
+the [`:where()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where) pseudo
+class, so you can override all styling manually.
 
 ## API
 
@@ -71,12 +73,15 @@ Styling can be customized using the following CSS variables.
 - `--markprompt-border`: (Default: `#e5e5e5`, Default dark: `#262626`)
 - `--markprompt-input`: (Default: `#ffffff`, Default dark: `#ffffff`)
 - `--markprompt-primary`: (Default: `#6366f1`, Default dark: `#6366f1`)
-- `--markprompt-primaryForeground`: (Default: `#ffffff`, Default dark: `#ffffff`)
+- `--markprompt-primaryForeground`: (Default: `#ffffff`, Default dark:
+  `#ffffff`)
 - `--markprompt-primaryMuted`: (Default: `#8285f4`, Default dark: `#8285f4`)
 - `--markprompt-secondary`: (Default: `#fafafa`, Default dark: `#0e0e0e`)
-- `--markprompt-secondaryForeground`: (Default: `#171717`, Default dark: `#ffffff`)
+- `--markprompt-secondaryForeground`: (Default: `#171717`, Default dark:
+  `#ffffff`)
 - `--markprompt-primaryHighlight`: (Default: `#ec4899`, Default dark: `#ec4899`)
-- `--markprompt-secondaryHighlight`: (Default: `#a855f7`, Default dark: `#a855f7`)
+- `--markprompt-secondaryHighlight`: (Default: `#a855f7`, Default dark:
+  `#a855f7`)
 - `--markprompt-overlay`: (Default: `#00000010`, Default dark: `#00000040\`)
 - `--markprompt-ring`: (Default: `#0ea5e9`, Default dark: `#ffffff`)
 - `--markprompt-radius`: (Default: `8px`)

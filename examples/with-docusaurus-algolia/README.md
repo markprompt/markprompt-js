@@ -1,6 +1,8 @@
 # Example with Docusaurus search plugin
 
-This example shows you how to use Markprompt with Algolia in [Docusaurus 2](https://docusaurus.io/) using the `@markprompt/docusaurus-theme-search` plugin.
+This example shows you how to use Markprompt with Algolia in
+[Docusaurus 2](https://docusaurus.io/) using the
+`@markprompt/docusaurus-theme-search` plugin.
 
 ## Installation
 
@@ -14,11 +16,15 @@ $ npm install
 $ npm start
 ```
 
-This command starts a local development server. Most changes are reflected live without having to restart the server.
+This command starts a local development server. Most changes are reflected live
+without having to restart the server.
 
 ## Configuration
 
-To add Algolia to the Markprompt component, you need to add you Algolia keys to the Markprompt configuration in `docusaurus.config.js`. Furthermore, depending on the shape of your Algolia index, you may need to define custom mappings between Algolia records and Markprompt results. Here is a full example:
+To add Algolia to the Markprompt component, you need to add you Algolia keys to
+the Markprompt configuration in `docusaurus.config.js`. Furthermore, depending
+on the shape of your Algolia index, you may need to define custom mappings
+between Algolia records and Markprompt results. Here is a full example:
 
 ```js
 const config = {
@@ -48,9 +54,11 @@ module.exports = config;
 
 ### Custom link mappings
 
-If you need to set up custom link mappings between Algolia results or prompt references and your website page URLs, you need to do the following:
+If you need to set up custom link mappings between Algolia results or prompt
+references and your website page URLs, you need to do the following:
 
-1. Create a JS file in your project source, e.g. in `./src/markprompt-config.js`, and paste the following:
+1. Create a JS file in your project source, e.g. in
+   `./src/markprompt-config.js`, and paste the following:
 
 ```js
 if (typeof window !== 'undefined') {
@@ -72,7 +80,8 @@ if (typeof window !== 'undefined') {
 }
 ```
 
-Adapt the mapping functions to fit your needs. 2. Import the file as a client module in `docusaurus.config.js`:
+Adapt the mapping functions to fit your needs. 2. Import the file as a client
+module in `docusaurus.config.js`:
 
 ```js
 /** @type {import('@docusaurus/types').Config} */
@@ -87,7 +96,9 @@ module.exports = config;
 
 ### CSS
 
-To avoid interference between Markprompt styles and the default styles from `@docusaurus/preset-classic`, add the following to your custom CSS (`./src/css/custom.css`):
+To avoid interference between Markprompt styles and the default styles from
+`@docusaurus/preset-classic`, add the following to your custom CSS
+(`./src/css/custom.css`):
 
 ```css
 ul.MarkpromptSearchResults {

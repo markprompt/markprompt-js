@@ -1,8 +1,10 @@
 # `@markprompt/core`
 
-`@markprompt/core` is the core library for Markprompt, a conversational AI component for your website, trained on your data.
+`@markprompt/core` is the core library for Markprompt, a conversational AI
+component for your website, trained on your data.
 
-It contains core functionality for Markprompt and allows you to build abstractions on top of it.
+It contains core functionality for Markprompt and allows you to build
+abstractions on top of it.
 
 <br />
 <p align="center">
@@ -74,15 +76,18 @@ Submit a prompt to the Markprompt Completions API.
 
 - `prompt` (`string`): Prompt to submit to the model
 - `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
+- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
+  called when a new chunk arrives
+- `onReferences` (`function`): This function is called when receiving the list
+  of references from which the response was created.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitPromptOptions`): Optional parameters
 
 #### Options
 
 - `apiUrl` (`string`): URL at which to fetch completions
-- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
+- `iDontKnowMessage` (`string`): Message returned when the model does not have
+  an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
 - `systemPrompt` (`string`): The prompt template
 - `temperature` (`number`): The model temperature
@@ -90,8 +95,10 @@ Submit a prompt to the Markprompt Completions API.
 - `frequencyPenalty` (`number`): The model frequency penalty
 - `presencePenalty` (`number`): The model present penalty
 - `maxTokens` (`number`): The max number of tokens to include in the response
-- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
-- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
+- `sectionsMatchCount` (`number`): The number of sections to include in the
+  prompt context
+- `sectionsMatchThreshold` (`number`): The similarity threshold between the
+  input question and selected sections
 - `signal` (`AbortSignal`): AbortController signal
 
 ### `submitChat(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
@@ -102,15 +109,18 @@ Submit a prompt to the Markprompt Completions API.
 
 - `messages` (`ChatMessage[]`): Chat messages to submit to the model
 - `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list of references from which the response was created.
+- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
+  called when a new chunk arrives
+- `onReferences` (`function`): This function is called when receiving the list
+  of references from which the response was created.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitChatOptions`): Optional parameters
 
 #### Options
 
 - `apiUrl` (`string`): URL at which to fetch completions
-- `iDontKnowMessage` (`string`): Message returned when the model does not have an answer
+- `iDontKnowMessage` (`string`): Message returned when the model does not have
+  an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
 - `systemPrompt` (`string`): The prompt template
 - `temperature` (`number`): The model temperature
@@ -118,8 +128,10 @@ Submit a prompt to the Markprompt Completions API.
 - `frequencyPenalty` (`number`): The model frequency penalty
 - `presencePenalty` (`number`): The model present penalty
 - `maxTokens` (`number`): The max number of tokens to include in the response
-- `sectionsMatchCount` (`number`): The number of sections to include in the prompt context
-- `sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections
+- `sectionsMatchCount` (`number`): The number of sections to include in the
+  prompt context
+- `sectionsMatchThreshold` (`number`): The similarity threshold between the
+  input question and selected sections
 - `signal` (`AbortSignal`): AbortController signal
 
 #### Returns

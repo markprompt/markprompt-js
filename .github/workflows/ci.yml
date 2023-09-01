@@ -21,15 +21,10 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: >
-          npm run build
-          -w with-css-modules
-          -w with-custom-trigger
-          -w with-custom-trigger-react
-          -w with-docusaurus
-          -w with-docusaurus-swizzled
-          -w with-init
-          -w with-markprompt-web
-          -w with-next
+          npm run build -w with-css-modules -w with-custom-trigger -w
+          with-custom-trigger-react -w with-docusaurus -w
+          with-docusaurus-swizzled -w with-init -w with-markprompt-web -w
+          with-next
         env:
           MARKPROMPT_PROJECT_KEY: ${{ secrets.MARKPROMPT_PROJECT_KEY }}
 
