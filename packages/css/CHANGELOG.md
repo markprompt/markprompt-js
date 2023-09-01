@@ -1,5 +1,18 @@
 # @markprompt/css
 
+## 0.13.0
+
+### Minor Changes
+
+- [#149](https://github.com/motifland/markprompt-js/pull/149)
+  [`7718303`](https://github.com/motifland/markprompt-js/commit/77183036e67837680c50bd4a5c0023234c4df881)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Add ChatView, allowing for
+  a conversation rather than a single prompt
+
+- [#146](https://github.com/motifland/markprompt-js/pull/146)
+  [`82f8ac4`](https://github.com/motifland/markprompt-js/commit/82f8ac4eee7b43ed1e22ad86d211809d88601560)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Reduce bundle size by ~17kB
+
 ## 0.12.0
 
 ### Minor Changes
