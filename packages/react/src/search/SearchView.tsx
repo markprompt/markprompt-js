@@ -24,12 +24,11 @@ import type { View } from '../useViews.js';
 
 export interface SearchViewProps {
   activeView?: View;
-  projectKey: string;
-  options: MarkpromptOptions['search'];
-  debug?: boolean;
   close?: MarkpromptOptions['close'];
-  handleViewChange?: () => void;
+  debug?: boolean;
   onDidSelectResult?: () => void;
+  projectKey: string;
+  searchOptions: MarkpromptOptions['search'];
 }
 
 interface ActiveSearchResult {
@@ -44,9 +43,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
     activeView,
     close,
     debug,
-    handleViewChange,
     onDidSelectResult,
-    options,
+    searchOptions,
     projectKey,
   } = props;
 
@@ -60,9 +58,9 @@ export function SearchView(props: SearchViewProps): ReactElement {
     setSearchQuery,
     submitSearchQuery,
   } = useSearch({
-    projectKey,
-    options,
     debug,
+    projectKey,
+    searchOptions,
   });
 
   const [activeSearchResult, setActiveSearchResult] =
@@ -175,7 +173,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           className="MarkpromptPrompt"
           name={searchInputName}
           placeholder={
-            options?.placeholder ??
+            searchOptions?.placeholder ??
             DEFAULT_MARKPROMPT_OPTIONS.search!.placeholder!
           }
           labelClassName="MarkpromptPromptLabel"
@@ -187,7 +185,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
           label={
             <AccessibleIcon.Root
               label={
-                options?.label ?? DEFAULT_MARKPROMPT_OPTIONS.search!.label!
+                searchOptions?.label ??
+                DEFAULT_MARKPROMPT_OPTIONS.search!.label!
               }
             >
               <SearchIcon className="MarkpromptSearchIcon" />
@@ -207,7 +206,6 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
-        handleViewChange={handleViewChange}
         onDidSelectResult={onDidSelectResult}
         searchQuery={searchQuery}
         searchResults={searchResults}
@@ -226,7 +224,6 @@ interface SearchResultsContainerProps {
   setActiveSearchResult: Dispatch<
     SetStateAction<ActiveSearchResult | undefined>
   >;
-  handleViewChange?: () => void;
   onDidSelectResult?: () => void;
 }
 
@@ -238,7 +235,6 @@ function SearchResultsContainer(
     searchResults,
     state,
     activeSearchResult,
-    handleViewChange,
     setActiveSearchResult,
     onDidSelectResult,
   } = props;
@@ -263,12 +259,7 @@ function SearchResultsContainer(
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [
-    activeSearchResult,
-    searchResults,
-    handleViewChange,
-    setActiveSearchResult,
-  ]);
+  }, [activeSearchResult, searchResults, setActiveSearchResult]);
 
   useEffect(() => {
     // Do not scroll into view unless using keyboard navigation.

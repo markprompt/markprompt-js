@@ -162,7 +162,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         >
           <MarkpromptContent
             chat={chat}
-            close={close}
             defaultView={defaultView}
             feedback={feedback}
             projectKey={projectKey}
@@ -317,8 +316,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <SearchView
               activeView={activeView}
               projectKey={projectKey}
-              handleViewChange={() => setActiveView('prompt')}
-              options={search}
+              searchOptions={search}
               close={!search?.enabled ? close : undefined}
               onDidSelectResult={() => emitter.emit('close')}
               debug={debug}
@@ -336,12 +334,13 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             <ChatView
               activeView={activeView}
-              projectKey={projectKey}
               chatOptions={chat}
-              feedbackOptions={feedback}
-              referencesOptions={references}
               close={!search?.enabled ? close : undefined}
+              debug={debug}
+              feedbackOptions={feedback}
               onDidSelectReference={() => emitter.emit('close')}
+              projectKey={projectKey}
+              referencesOptions={references}
             />
           </div>
         ) : (
@@ -354,13 +353,13 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             <PromptView
               activeView={activeView}
+              close={!search?.enabled ? close : undefined}
+              debug={debug}
+              feedbackOptions={feedback}
+              onDidSelectReference={() => emitter.emit('close')}
               projectKey={projectKey}
               promptOptions={prompt}
-              feedbackOptions={feedback}
               referencesOptions={references}
-              close={!search?.enabled ? close : undefined}
-              onDidSelectReference={() => emitter.emit('close')}
-              debug={debug}
             />
           </div>
         )}
