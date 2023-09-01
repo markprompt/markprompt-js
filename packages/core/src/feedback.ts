@@ -47,7 +47,7 @@ export async function submitFeedback(
   });
 
   try {
-    const response = await fetch(resolvedOptions + `?${params}`, {
+    const response = await fetch(resolvedOptions.apiUrl + `?${params}`, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',

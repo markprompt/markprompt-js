@@ -17,9 +17,12 @@ const encoder = new TextEncoder();
 let response: string[] = [];
 const status = 200;
 let stream: ReadableStream;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let body: any;
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+    body = await _req.json();
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response) {
@@ -35,7 +38,12 @@ const server = setupServer(
 describe('useChat', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 
-  afterEach(() => server.resetHandlers());
+  afterEach(() => {
+    response = [];
+    body = undefined;
+
+    server.resetHandlers();
+  });
 
   afterAll(() => {
     server.close();
@@ -72,6 +80,87 @@ describe('useChat', () => {
     await waitFor(() => {
       expect(result.current.messages.length).toBe(1);
       expect(result.current.messages[0].answer).toBe('Hi! How are you?');
+    });
+  });
+
+  it('should update the state of the message as it streams', async () => {
+    const { result, waitFor } = renderHook(() =>
+      useChat({ projectKey: 'test-key' }),
+    );
+
+    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+
+    act(() => result.current.submitChat('Hello'));
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBe(1);
+      expect(result.current.messages[0].state).toBe('preload');
+    });
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBe(1);
+      expect(result.current.messages[0].state).toBe('streaming-answer');
+    });
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBe(1);
+      expect(result.current.messages[0].state).toBe('done');
+    });
+  });
+
+  it('should cancel the previous request when submitChat is called', async () => {
+    const { result, waitFor } = renderHook(() =>
+      useChat({ projectKey: 'test-key' }),
+    );
+
+    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+
+    act(() => result.current.submitChat('Hello'));
+    act(() => result.current.submitChat('Hello'));
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBe(2);
+      expect(result.current.messages[0].state).toBe('cancelled');
+    });
+  });
+
+  it('should cancel the previous request while streaming when submitChat is called', async () => {
+    const { result, waitFor } = renderHook(() =>
+      useChat({ projectKey: 'test-key' }),
+    );
+
+    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+
+    act(() => result.current.submitChat('Hello'));
+
+    waitFor(() =>
+      expect(result.current.messages[0].state).toBe('streaming-answer'),
+    );
+
+    act(() => result.current.submitChat('Hello'));
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBe(2);
+      expect(result.current.messages[0].state).toBe('cancelled');
+    });
+  });
+
+  it('should convert messages to the proper shape for the API', async () => {
+    const { result, waitFor } = renderHook(() =>
+      useChat({ projectKey: 'test-key' }),
+    );
+
+    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+
+    act(() => result.current.submitChat('Hello'));
+
+    await waitFor(() => {
+      expect(body?.messages).toEqual([
+        {
+          content: 'Hello',
+          role: 'user',
+        },
+      ]);
     });
   });
 });
