@@ -129,7 +129,14 @@ const server = setupServer(
     },
   ),
   rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (req, res, ctx) => {
-    return res(ctx.status(status), ctx.body(JSON.stringify({ status: 'ok' })));
+    return res(
+      ctx.status(status),
+      ctx.body(
+        status === 200
+          ? JSON.stringify({ status: 'ok' })
+          : JSON.stringify({ error: 'Internal Server Error' }),
+      ),
+    );
   }),
 );
 
@@ -428,16 +435,24 @@ describe('submitFeedback', () => {
   });
 
   test('makes a request', async () => {
-    const response = await submitFeedback(
-      'testKey',
-      {
+    const response = await submitFeedback('testKey', {
+      feedback: { vote: '1' },
+      promptId: 'test-id',
+      messageIndex: 1,
+    });
+
+    expect(response).toStrictEqual({ status: 'ok' });
+  });
+
+  test('throws an error on invalid status code', async () => {
+    status = 500;
+
+    await expect(
+      submitFeedback('testKey', {
         feedback: { vote: '1' },
         promptId: 'test-id',
         messageIndex: 1,
-      },
-      { apiUrl: DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl },
-    );
-
-    expect(response).toStrictEqual({ status: 'ok' });
+      }),
+    ).rejects.toThrowError('Internal Server Error');
   });
 });
