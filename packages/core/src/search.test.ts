@@ -161,7 +161,7 @@ describe('submitSearchQuery', () => {
         new Error('test'),
       );
     } finally {
-      mockFetch.mockReset();
+      mockFetch.mockRestore();
     }
   });
 });

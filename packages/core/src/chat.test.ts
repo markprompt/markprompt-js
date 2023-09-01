@@ -367,7 +367,7 @@ describe('submitChat', () => {
       expect(request).toBeDefined();
       expect(onError).toHaveBeenCalledWith(new Error('test'));
     } finally {
-      mockFetch.mockReset();
+      mockFetch.mockRestore();
     }
   });
 });
