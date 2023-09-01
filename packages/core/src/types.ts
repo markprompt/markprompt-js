@@ -1,4 +1,4 @@
-import { type DocSearchHit } from '@docsearch/react/dist/esm/types/DocSearchHit.js';
+import type { DocSearchHit } from './docsearch.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
