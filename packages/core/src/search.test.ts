@@ -129,30 +129,14 @@ afterEach(() => {
 });
 
 describe('submitSearchQuery', () => {
-  test('submitSearchQuery gives results', async () => {
+  test('gives results', async () => {
     const result = await submitSearchQuery('react', 'testKey');
     expect(result?.data).toStrictEqual(searchResults);
   });
 
-  test('submitSearchQuery with limit', async () => {
+  test('gives results equal to limit', async () => {
     const result = await submitSearchQuery('react', 'testKey', { limit: 2 });
     expect(result?.data).toStrictEqual(searchResults.slice(0, 2));
-  });
-
-  test('submitSearchQuery with Algolia provider', async () => {
-    const result = await submitAlgoliaDocsearchQuery('react', {
-      provider: algoliaProvider,
-    });
-    expect(result?.hits).toStrictEqual(algoliaSearchHits);
-  });
-
-  test('submitSearchQuery throws with unknown provider', async () => {
-    expect(
-      submitAlgoliaDocsearchQuery('react', {
-        // @ts-expect-error - provider is not a valid provider
-        provider: { name: 'test' },
-      }),
-    ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
   });
 
   test('throws an error on invalid status code', async () => {
@@ -179,5 +163,23 @@ describe('submitSearchQuery', () => {
     } finally {
       mockFetch.mockReset();
     }
+  });
+});
+
+describe('submitAlgoliaDocsearchQuery', () => {
+  test('gives results', async () => {
+    const result = await submitAlgoliaDocsearchQuery('react', {
+      provider: algoliaProvider,
+    });
+    expect(result?.hits).toStrictEqual(algoliaSearchHits);
+  });
+
+  test('throws with unknown provider', async () => {
+    expect(
+      submitAlgoliaDocsearchQuery('react', {
+        // @ts-expect-error - provider is not a valid provider
+        provider: { name: 'test' },
+      }),
+    ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
   });
 });
