@@ -8,7 +8,7 @@ export interface SubmitFeedbackBody {
   /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
   /** Optional: index of the specific message in an array of messages that is being given feedback */
-  messageIndex: number;
+  messageIndex?: number;
 }
 
 export interface SubmitFeedbackOptions {
