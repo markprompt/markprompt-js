@@ -1,62 +1,18 @@
-import type { FileSectionReference, OpenAIModelId } from './types.js';
+import defaults from 'defaults';
+
+import {
+  type CompletionsOptions,
+  DEFAULT_COMPLETIONS_OPTIONS,
+} from './constants.js';
+import type { FileSectionReference } from './types.js';
 import { isFileSectionReferences, parseEncodedJSONHeader } from './utils.js';
 
-export interface SubmitPromptOptions {
+export interface SubmitPromptOptions extends CompletionsOptions {
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/completions"
    * */
   apiUrl?: string;
-  /**
-   * Message returned when the model does not have an answer
-   * @default "Sorry, I am not sure how to answer that."
-   **/
-  iDontKnowMessage?: string;
-  /**
-   * The OpenAI model to use
-   * @default "gpt-3.5-turbo"
-   **/
-  model?: OpenAIModelId;
-  /**
-   * The prompt template
-   * @default "You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n"
-   **/
-  promptTemplate?: string;
-  /**
-   * The model temperature
-   * @default 0.1
-   **/
-  temperature?: number;
-  /**
-   * The model top P
-   * @default 1
-   **/
-  topP?: number;
-  /**
-   * The model frequency penalty
-   * @default 0
-   **/
-  frequencyPenalty?: number;
-  /**
-   * The model present penalty
-   * @default 0
-   **/
-  presencePenalty?: number;
-  /**
-   * The max number of tokens to include in the response
-   * @default 500
-   * */
-  maxTokens?: number;
-  /**
-   * The number of sections to include in the prompt context
-   * @default 10
-   * */
-  sectionsMatchCount?: number;
-  /**
-   * The similarity threshold between the input question and selected sections
-   * @default 0.5
-   * */
-  sectionsMatchThreshold?: number;
   /**
    * AbortController signal
    * @default undefined
@@ -64,21 +20,18 @@ export interface SubmitPromptOptions {
   signal?: AbortSignal;
 }
 
+type DefaultSubmitPromptOptions = Omit<
+  Required<SubmitPromptOptions>,
+  'signal'
+> &
+  Pick<SubmitPromptOptions, 'signal'>;
+
 export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
 
-export const DEFAULT_SUBMIT_PROMPT_OPTIONS: SubmitPromptOptions = {
+export const DEFAULT_SUBMIT_PROMPT_OPTIONS = {
+  ...DEFAULT_COMPLETIONS_OPTIONS,
   apiUrl: 'https://api.markprompt.com/v1/completions',
-  iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  model: 'gpt-3.5-turbo',
-  promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: "{{PROMPT}}"\n\nAnswer (including related code snippets if available):`,
-  temperature: 0.1,
-  topP: 1,
-  frequencyPenalty: 0,
-  presencePenalty: 0,
-  maxTokens: 500,
-  sectionsMatchCount: 10,
-  sectionsMatchThreshold: 0.5,
-};
+} satisfies DefaultSubmitPromptOptions;
 
 /**
  * Submit a prompt to the Markprompt Completions API.
@@ -104,52 +57,31 @@ export async function submitPrompt(
     throw new Error('A projectKey is required.');
   }
 
-  if (!prompt) return;
+  if (!prompt || prompt === '') return;
 
-  const iDontKnowMessage =
-    options.iDontKnowMessage ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.iDontKnowMessage!;
+  // todo: look into typing this properly
+  const resolvedOptions = defaults(
+    { ...options },
+    DEFAULT_SUBMIT_PROMPT_OPTIONS,
+  ) as DefaultSubmitPromptOptions;
 
   try {
-    const res = await fetch(
-      options.apiUrl ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!,
-      {
-        method: 'POST',
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify({
-          prompt: prompt,
-          projectKey: projectKey,
-          iDontKnowMessage,
-          model: options?.model ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.model,
-          promptTemplate:
-            options.promptTemplate ??
-            DEFAULT_SUBMIT_PROMPT_OPTIONS.promptTemplate,
-          temperature:
-            options.temperature ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.temperature,
-          topP: options.topP ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.topP,
-          frequencyPenalty:
-            options.frequencyPenalty ??
-            DEFAULT_SUBMIT_PROMPT_OPTIONS.frequencyPenalty,
-          presencePenalty:
-            options.presencePenalty ??
-            DEFAULT_SUBMIT_PROMPT_OPTIONS.presencePenalty,
-          maxTokens:
-            options.maxTokens ?? DEFAULT_SUBMIT_PROMPT_OPTIONS.maxTokens,
-          sectionsMatchCount:
-            options.sectionsMatchCount ??
-            DEFAULT_SUBMIT_PROMPT_OPTIONS.sectionsMatchCount,
-          sectionsMatchThreshold:
-            options.sectionsMatchThreshold ??
-            DEFAULT_SUBMIT_PROMPT_OPTIONS.sectionsMatchThreshold,
-        }),
-        signal: options.signal,
-      },
-    );
+    const res = await fetch(resolvedOptions.apiUrl, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({
+        prompt: prompt,
+        projectKey: projectKey,
+        ...resolvedOptions,
+      }),
+      signal: resolvedOptions.signal,
+    });
 
     if (!res.ok || !res.body) {
       const text = await res.text();
-      onAnswerChunk(iDontKnowMessage);
+      onAnswerChunk(resolvedOptions.iDontKnowMessage);
       onError(new Error(text));
       return;
     }

@@ -36,7 +36,6 @@ describe('useFeedback', () => {
     const { result } = renderHook(() =>
       useFeedback({
         projectKey: 'TEST_PROJECT_KEY',
-        state: 'indeterminate',
         promptId: '1',
       }),
     );
@@ -54,7 +53,6 @@ describe('useFeedback', () => {
       const { result } = renderHook(() =>
         useFeedback({
           projectKey: '',
-          state: 'indeterminate',
           promptId: '1',
         }),
       );
@@ -72,14 +70,13 @@ describe('useFeedback', () => {
     const { result } = renderHook(() =>
       useFeedback({
         projectKey: 'TEST_PROJECT_KEY',
-        state: 'done',
         promptId: '1',
       }),
     );
 
     const { submitFeedback } = result.current;
 
-    await submitFeedback({ vote: '1' });
+    await submitFeedback({ vote: '1' }, 'done', 1);
 
     await waitFor(() => expect(endpointHits).toBe(1));
   });
@@ -88,14 +85,13 @@ describe('useFeedback', () => {
     const { result } = renderHook(() =>
       useFeedback({
         projectKey: 'TEST_PROJECT_KEY',
-        state: 'done',
         promptId: '1',
       }),
     );
 
     const { submitFeedback, abort } = result.current;
 
-    const submitFeedbackPromise = submitFeedback({ vote: '1' });
+    const submitFeedbackPromise = submitFeedback({ vote: '1' }, 'done', 1);
 
     abort();
 

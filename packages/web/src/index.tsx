@@ -34,4 +34,4 @@ function markprompt(
   root.render(<Markprompt projectKey={projectKey} {...options} />);
 }
 
-export { markprompt, openMarkprompt };
+export { markprompt, openMarkprompt, type MarkpromptOptions };

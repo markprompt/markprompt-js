@@ -1,9 +1,9 @@
 import type { FileSectionReference } from '@markprompt/core';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import * as Markprompt from './index.js';
 import type { PromptLoadingState } from './usePrompt.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import * as Markprompt from '../primitives/headless.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -18,7 +18,7 @@ interface ReferenceProps {
   onDidSelectReference?: () => void;
 }
 
-const Reference = (props: ReferenceProps): ReactElement => {
+export const Reference = (props: ReferenceProps): ReactElement => {
   const {
     getHref = DEFAULT_MARKPROMPT_OPTIONS.references!.getHref!,
     getLabel = DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel,
@@ -111,17 +111,14 @@ const References = (props: ReferencesProps): ReactElement | null => {
       data-loading-state={adjustedState}
       role="status"
     >
-      {state === 'preload' && (
-        <>
-          <div
-            className="MarkpromptProgress"
-            id="markprompt-progressbar"
-            role="progressbar"
-            aria-labelledby="markprompt-loading-text"
-          />
-          <p id="markprompt-loading-text">{loadingText}</p>
-        </>
-      )}
+      <div
+        className="MarkpromptProgress"
+        id="markprompt-progressbar"
+        role="progressbar"
+        aria-labelledby="markprompt-loading-text"
+      />
+
+      {state === 'preload' && <p id="markprompt-loading-text">{loadingText}</p>}
 
       {state !== 'preload' && <p>{heading}</p>}
 

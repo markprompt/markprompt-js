@@ -1,16 +1,37 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
-export type View = 'prompt' | 'search';
+import type { MarkpromptOptions } from './types.js';
+
+export type View = 'chat' | 'prompt' | 'search';
 
 interface UseViewsResult {
   activeView: View;
   setActiveView: (view: View) => void;
+  toggleActiveView: () => void;
 }
 
-export function useViews(isSearchEnabled?: boolean): UseViewsResult {
-  const [activeView, setActiveView] = useState<View>(
-    isSearchEnabled ? 'search' : 'prompt',
-  );
+export function useViews(
+  options: MarkpromptOptions,
+  defaultView?: MarkpromptOptions['defaultView'],
+): UseViewsResult {
+  const { chat, search } = options;
 
-  return { activeView, setActiveView };
+  const [activeView, setActiveView] = useState<View>(() => {
+    if (defaultView) return defaultView;
+    if (search?.enabled) return 'search';
+    if (chat?.enabled) return 'chat';
+    return 'prompt';
+  });
+
+  const toggleActiveView = useCallback(() => {
+    switch (activeView) {
+      case 'chat':
+      case 'prompt':
+        return setActiveView('search');
+      case 'search':
+        return setActiveView(chat?.enabled ? 'chat' : 'prompt');
+    }
+  }, [activeView, chat?.enabled]);
+
+  return { activeView, setActiveView, toggleActiveView };
 }

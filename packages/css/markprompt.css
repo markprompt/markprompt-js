@@ -245,6 +245,13 @@
   height: 100%;
 }
 
+:where(.MarkpromptChatView) {
+  display: grid;
+  grid-template-rows: 1fr;
+  height: 100%;
+  position: relative;
+}
+
 :where(.MarkpromptClose) {
   color: var(--markprompt-mutedForeground);
   background-color: var(--markprompt-muted);
@@ -286,6 +293,53 @@
   gap: 0.75rem;
 }
 
+:where(.MarkpromptPromptView .MarkpromptForm) {
+  margin-bottom: 1rem;
+}
+
+:where(.MarkpromptChatView .MarkpromptForm) {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  border: 1px solid var(--markprompt-border);
+  background-color: var(--markprompt-background);
+  border-radius: 0.5rem;
+  box-shadow:
+    hsl(206deg 22% 7% / 35%) 0 10px 40px -10px,
+    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
+}
+
+:where(.MarkpromptMessageAnswerContainer) {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: first baseline;
+  max-width: 100%;
+  padding-right: 0.75rem;
+}
+
+:where(.MarkpromptMessageAnswer) {
+  overflow: hidden;
+}
+
+:where(.MarkpromptRegenerateButton) {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--markprompt-border);
+  background-color: var(--markprompt-muted);
+  color: var(--markprompt-mutedForeground);
+  cursor: pointer;
+  white-space: nowrap;
+  transform: translateY(-100%);
+  top: -0.5rem;
+  right: 0.25rem;
+}
+
 :where(.MarkpromptPromptLabel) {
   cursor: pointer;
   display: flex;
@@ -294,6 +348,20 @@
   border-width: 1px;
   border-style: solid;
   border-color: transparent;
+}
+
+:where(.MarkpromptMessagePrompt) {
+  padding-inline: 1.25rem;
+  background-color: var(--markprompt-muted);
+  border-top: 1px solid var(--markprompt-border);
+  border-bottom: 1px solid var(--markprompt-border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+:where(.MarkpromptMessagePrompt:first-of-type) {
+  border-top-color: transparent;
 }
 
 :where(.MarkpromptPrimaryIcon) {
@@ -371,6 +439,15 @@
   overflow: hidden;
 }
 
+:where(.MarkpromptMessages) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* allow the answer container in the chat view to scroll past the floating input */
+  padding-bottom: 4rem;
+}
+
 :where(.MarkpromptAutoScroller) {
   flex: 1 1 auto;
   -ms-overflow-style: none;
@@ -389,7 +466,7 @@
   font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
   line-height: 1.7142857;
-  padding: 1rem 2rem;
+  padding: 0 2rem 1rem;
 }
 
 :where(.MarkpromptAnswer p) {
@@ -791,6 +868,10 @@
   padding-right: 0;
 }
 
+:where(.MarkpromptMessageAnswer .MarkpromptAnswer) {
+  padding-right: 0.75rem;
+}
+
 :where(.MarkpromptCaret) {
   display: none;
   height: 1em;
@@ -812,13 +893,17 @@
   display: inline-block;
 }
 
-:where(.MarkpromptPromptFeedback) {
+:where(.MarkpromptPromptFeedback[data-variant='text']) {
   margin: 0 2rem 1rem;
   padding: 0.75rem 0;
   border-top: 1px solid var(--markprompt-border);
 }
 
-:where(.MarkpromptPromptFeedback h3) {
+:where(.MarkpromptPromptFeedback[data-variant='icons']) {
+  padding: 0.75rem 0;
+}
+
+:where(.MarkpromptPromptFeedback[data-variant='text'] h3) {
   animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-size: var(--markprompt-text-size-xs);
   font-weight: 600;
@@ -827,10 +912,14 @@
   margin-bottom: 0.5rem;
 }
 
-:where(.MarkpromptPromptFeedback p) {
-  font-size: var(--markprompt-text-size);
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+:where(.MarkpromptPromptFeedback[data-variant='icons'] h3) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 :where(.MarkpromptPromptFeedback div) {
@@ -869,7 +958,7 @@
   opacity: 0.7;
 }
 
-:where([data-loading-state='preload'] .MarkpromptProgress) {
+:where(.MarkpromptProgress) {
   position: absolute;
   top: -1px;
   left: 0;
@@ -886,13 +975,16 @@
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
   transition-property: opacity;
   transition-duration: 200ms;
+  opacity: 0;
+}
+
+:where([data-loading-state='preload'] .MarkpromptProgress) {
   opacity: 1;
 }
 
-:where(
-    [data-loading-state]:not([data-loading-state='preload']) .MarkpromptProgress
-  ) {
-  opacity: 0;
+:where(.MarkpromptMessagePrompt .MarkpromptProgress) {
+  bottom: -1px;
+  top: unset;
 }
 
 :where(.MarkpromptReferences) {
@@ -908,6 +1000,16 @@
   transition-property: opacity, transform;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+:where(.MarkpromptReferences[data-loading-state='cancelled']) {
+  display: none;
+}
+
+:where(.MarkpromptChatView .MarkpromptReferences) {
+  background-color: unset;
+  border-top: none;
+  padding-block: 0 1.5rem;
 }
 
 :where(.MarkpromptReferences[data-loading-state='preload']) {
@@ -939,6 +1041,10 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   background-color: var(--markprompt-muted);
+}
+
+:where(.MarkpromptChatView .MarkpromptReferences ul) {
+  background-color: unset;
 }
 
 .MarkpromptReferences ul::-webkit-scrollbar {
@@ -999,6 +1105,19 @@
 
 :where(.MarkpromptReference a:hover) {
   opacity: 0.8;
+}
+
+:where(.MarkpromptCancelled) {
+  padding-inline: 1rem;
+}
+
+:where(.MarkpromptCancelledText) {
+  background-color: var(--markprompt-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--markprompt-mutedForeground);
+  text-wrap: balance;
 }
 
 :where(.MarkpromptBackButton) {

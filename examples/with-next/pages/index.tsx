@@ -7,15 +7,7 @@ export default function IndexPage(): ReactElement {
       projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
       prompt={{
         iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-        promptTemplate: `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, output in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "{{I_DONT_KNOW}}".
-
-  Context sections:
-  ---
-  {{CONTEXT}}
-
-  Question: "{{PROMPT}}"
-
-  Answer (including related code snippets if available):`,
+        systemPrompt: `You are a very enthusiastic company representative who loves to help people!`,
         temperature: 0.1,
         topP: 1,
         frequencyPenalty: 0,

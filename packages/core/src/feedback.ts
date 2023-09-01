@@ -1,12 +1,14 @@
+import defaults from 'defaults';
+
 import type { PromptFeedback } from './types.js';
 
 export interface SubmitFeedbackBody {
-  /**
-   * Prompt feedback.
-   */
+  /** Prompt feedback */
   feedback: PromptFeedback;
   /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
+  /** Optional: index of the specific message in an array of messages that is being given feedback */
+  messageIndex?: number;
 }
 
 export interface SubmitFeedbackOptions {
@@ -15,6 +17,10 @@ export interface SubmitFeedbackOptions {
    * @default 'https://api.markprompt.com/v1/feedback'
    */
   apiUrl?: string;
+  /**
+   * AbortController signal
+   * @default undefined
+   **/
   signal?: AbortSignal;
 }
 
@@ -31,21 +37,23 @@ export async function submitFeedback(
     throw new Error('A projectKey is required.');
   }
 
-  const { apiUrl = DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, signal } =
-    options ?? {};
+  const resolvedOptions = defaults(
+    { ...options },
+    DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  ) as SubmitFeedbackOptions;
 
   const params = new URLSearchParams({
     projectKey,
   });
 
   try {
-    const response = await fetch(apiUrl + `?${params}`, {
+    const response = await fetch(resolvedOptions.apiUrl + `?${params}`, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify(body),
-      signal,
+      signal: resolvedOptions?.signal,
     });
 
     if (!response.ok) {

@@ -4,7 +4,7 @@ import {
   AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
-import { renderHook, cleanup } from '@testing-library/react-hooks';
+import { renderHook, cleanup, act } from '@testing-library/react-hooks';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import {
@@ -70,7 +70,6 @@ describe('useSearch', () => {
     const { result } = renderHook(() =>
       useSearch({
         projectKey: 'TEST_PROJECT_KEY',
-        options: { enabled: true },
       }),
     );
 
@@ -88,7 +87,6 @@ describe('useSearch', () => {
     const { result } = renderHook(() =>
       useSearch({
         projectKey: 'TEST_PROJECT_KEY',
-        options: { enabled: true },
       }),
     );
 
@@ -150,8 +148,7 @@ describe('useSearch', () => {
     const { result } = renderHook(() =>
       useSearch({
         projectKey: 'TEST_PROJECT_KEY',
-        options: {
-          enabled: true,
+        searchOptions: {
           provider: {
             name: 'algolia',
             apiKey: 'test',
@@ -161,8 +158,6 @@ describe('useSearch', () => {
         },
       }),
     );
-
-    await result.current.submitSearchQuery('react');
 
     searchResults = [
       {
@@ -193,6 +188,7 @@ describe('useSearch', () => {
       },
     ] as AlgoliaDocSearchHit[];
 
+    await act(() => result.current.submitSearchQuery('react'));
     await waitFor(() => expect(algoliaHits).toBe(1));
   });
 });

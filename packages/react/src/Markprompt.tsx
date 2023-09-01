@@ -3,12 +3,13 @@ import { clsx } from 'clsx';
 import Emittery from 'emittery';
 import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
+import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { ChatIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { PromptView } from './PromptView.js';
-import { SearchBoxTrigger } from './SearchBoxTrigger.js';
-import { SearchView } from './SearchView.js';
+import { PromptView } from './prompt/PromptView.js';
+import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
+import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions } from './types.js';
 import { useViews } from './useViews.js';
 
@@ -39,7 +40,9 @@ function openMarkprompt(): void {
 function Markprompt(props: MarkpromptProps): JSX.Element {
   const {
     close,
+    chat,
     debug,
+    defaultView,
     description,
     display = 'dialog',
     projectKey,
@@ -136,13 +139,15 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               )}
 
               <MarkpromptContent
+                close={close}
+                chat={chat}
+                debug={debug}
+                defaultView={defaultView}
+                feedback={feedback}
                 projectKey={projectKey}
                 prompt={prompt}
-                feedback={feedback}
                 references={references}
                 search={search}
-                close={close}
-                debug={debug}
               />
             </BaseMarkprompt.Content>
           </BaseMarkprompt.Portal>
@@ -156,7 +161,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           showAlgolia={search?.enabled && search.provider?.name === 'algolia'}
         >
           <MarkpromptContent
-            close={close}
+            chat={chat}
+            defaultView={defaultView}
             feedback={feedback}
             projectKey={projectKey}
             prompt={prompt}
@@ -171,26 +177,33 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
 interface MarkpromptContentProps {
   projectKey: string;
-  prompt: MarkpromptOptions['prompt'];
-  feedback?: MarkpromptOptions['feedback'];
-  references: MarkpromptOptions['references'];
-  search: MarkpromptOptions['search'];
-  close: MarkpromptOptions['close'];
+  chat?: MarkpromptOptions['chat'];
+  close?: MarkpromptOptions['close'];
   debug?: boolean;
+  defaultView?: MarkpromptOptions['defaultView'];
+  feedback?: MarkpromptOptions['feedback'];
+  prompt?: MarkpromptOptions['prompt'];
+  references?: MarkpromptOptions['references'];
+  search?: MarkpromptOptions['search'];
 }
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
-    projectKey,
-    prompt,
-    feedback,
-    references,
-    search,
     close: _close,
     debug,
+    defaultView,
+    feedback,
+    projectKey,
+    chat,
+    prompt,
+    references,
+    search,
   } = props;
 
-  const { activeView, setActiveView } = useViews(search?.enabled);
+  const { activeView, setActiveView, toggleActiveView } = useViews(
+    { search, chat },
+    defaultView,
+  );
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
@@ -199,11 +212,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         (event.key === 'Enter' && event.metaKey)
       ) {
         event.preventDefault();
-        if (activeView === 'prompt') {
-          setActiveView('search');
-        } else if (activeView === 'search') {
-          setActiveView('prompt');
-        }
+        toggleActiveView();
       }
     };
 
@@ -212,7 +221,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeView, setActiveView]);
+  }, [toggleActiveView]);
 
   const close = useMemo(() => {
     return _close ?? DEFAULT_MARKPROMPT_OPTIONS.close;
@@ -231,20 +240,40 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             >
               {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
             </button>
-            <button
-              className="MarkpromptTab"
-              data-state={activeView === 'prompt' ? 'active' : ''}
-              onClick={() => setActiveView('prompt')}
-            >
-              <SparklesIcon
-                focusable={false}
-                className={clsx('MarkpromptBaseIcon', {
-                  MarkpromptPrimaryIcon: activeView === 'prompt',
-                  MarkpromptHighlightedIcon: activeView === 'search',
-                })}
-              />
-              {prompt?.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
-            </button>
+            {!chat?.enabled && (
+              <button
+                className="MarkpromptTab"
+                data-state={activeView === 'prompt' ? 'active' : ''}
+                onClick={() => setActiveView('prompt')}
+              >
+                <SparklesIcon
+                  focusable={false}
+                  className={clsx('MarkpromptBaseIcon', {
+                    MarkpromptPrimaryIcon: activeView === 'prompt',
+                    MarkpromptHighlightedIcon: activeView === 'search',
+                  })}
+                />
+                {prompt?.tabLabel ||
+                  DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+              </button>
+            )}
+            {chat?.enabled && (
+              <button
+                className="MarkpromptTab"
+                data-state={activeView === 'chat' ? 'active' : ''}
+                onClick={() => setActiveView('chat')}
+              >
+                <SparklesIcon
+                  focusable={false}
+                  className={clsx('MarkpromptBaseIcon', {
+                    MarkpromptPrimaryIcon: activeView === 'chat',
+                    MarkpromptHighlightedIcon: activeView === 'search',
+                  })}
+                />
+                {prompt?.tabLabel ||
+                  DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+              </button>
+            )}
           </div>
           {/* Add close button in the tab bar */}
           {close?.visible !== false && (
@@ -276,41 +305,64 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         <div />
       )}
       <div className="MarkpromptViews">
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: activeView === 'search' ? 'block' : 'none',
-          }}
-        >
-          <SearchView
-            activeView={activeView}
-            projectKey={projectKey}
-            handleViewChange={() => setActiveView('prompt')}
-            options={search}
-            close={!search?.enabled ? close : undefined}
-            onDidSelectResult={() => emitter.emit('close')}
-            debug={debug}
-          />
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: activeView === 'prompt' ? 'block' : 'none',
-          }}
-        >
-          <PromptView
-            activeView={activeView}
-            projectKey={projectKey}
-            promptOptions={prompt}
-            feedbackOptions={feedback}
-            referencesOptions={references}
-            close={!search?.enabled ? close : undefined}
-            onDidSelectReference={() => emitter.emit('close')}
-            debug={debug}
-          />
-        </div>
+        {search?.enabled && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: activeView === 'search' ? 'block' : 'none',
+            }}
+          >
+            <SearchView
+              activeView={activeView}
+              projectKey={projectKey}
+              searchOptions={search}
+              close={!search?.enabled ? close : undefined}
+              onDidSelectResult={() => emitter.emit('close')}
+              debug={debug}
+            />
+          </div>
+        )}
+
+        {chat?.enabled ? (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: activeView === 'chat' ? 'block' : 'none',
+            }}
+          >
+            <ChatView
+              activeView={activeView}
+              chatOptions={chat}
+              close={!search?.enabled ? close : undefined}
+              debug={debug}
+              feedbackOptions={feedback}
+              onDidSelectReference={() => emitter.emit('close')}
+              projectKey={projectKey}
+              referencesOptions={references}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: activeView === 'prompt' ? 'block' : 'none',
+            }}
+          >
+            <PromptView
+              activeView={activeView}
+              close={!search?.enabled ? close : undefined}
+              debug={debug}
+              feedbackOptions={feedback}
+              onDidSelectReference={() => emitter.emit('close')}
+              projectKey={projectKey}
+              promptOptions={prompt}
+              referencesOptions={references}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

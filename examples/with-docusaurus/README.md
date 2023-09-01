@@ -1,6 +1,8 @@
 # Example with Docusaurus search plugin
 
-This example shows you how to use Markprompt in [Docusaurus](https://docusaurus.io/) using the `@markprompt/docusaurus-theme-search` plugin.
+This example shows you how to use Markprompt in
+[Docusaurus](https://docusaurus.io/) using the
+`@markprompt/docusaurus-theme-search` plugin.
 
 ## Installation
 
@@ -14,7 +16,8 @@ $ npm install
 $ npm start
 ```
 
-This command starts a local development server. Most changes are reflected live without having to restart the server.
+This command starts a local development server. Most changes are reflected live
+without having to restart the server.
 
 ## Configuration
 
@@ -22,14 +25,21 @@ This command starts a local development server. Most changes are reflected live 
 
 If you are using another search provider, you can:
 
-1. Use swizzling to combine both search plugins. Please refer to the [Docusaurus example with swizzling](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-swizzled) for an example with Algolia.
-2. If using Algolia specifically, use the Markprompt Algolia integration. Please refer to the [Docusaurus example with Algolia](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-algolia) for an example.
+1. Use swizzling to combine both search plugins. Please refer to the
+   [Docusaurus example with swizzling](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-swizzled)
+   for an example with Algolia.
+2. If using Algolia specifically, use the Markprompt Algolia integration. Please
+   refer to the
+   [Docusaurus example with Algolia](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-algolia)
+   for an example.
 
 ### Custom link mappings
 
-If you need to set up custom link mappings between search results or prompt references and your website page URLs, you need to do the following:
+If you need to set up custom link mappings between search results or prompt
+references and your website page URLs, you need to do the following:
 
-1. Create a JS file in your project source, e.g. in `./src/markprompt-config.js`, and paste the following:
+1. Create a JS file in your project source, e.g. in
+   `./src/markprompt-config.js`, and paste the following:
 
 ```js
 if (typeof window !== 'undefined') {
@@ -68,7 +78,9 @@ module.exports = config;
 
 ### CSS
 
-To avoid interference between Markprompt styles and the default styles from `@docusaurus/preset-classic`, add the following to your custom CSS (`./src/css/custom.css`):
+To avoid interference between Markprompt styles and the default styles from
+`@docusaurus/preset-classic`, add the following to your custom CSS
+(`./src/css/custom.css`):
 
 ```css
 ul.MarkpromptSearchResults {

@@ -1,35 +1,38 @@
 import {
   submitFeedback as submitFeedbackToMarkprompt,
   type PromptFeedback,
+  type SubmitFeedbackOptions,
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-import { useAbortController } from './useAbortController.js';
-import type { PromptLoadingState } from './usePrompt.js';
+import type { ChatLoadingState } from '../chat/useChat.js';
+import type { PromptLoadingState } from '../prompt/usePrompt.js';
+import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
+  /** Enable and configure feedback functionality */
+  feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
   /** ID for the current prompt */
   promptId?: string;
-  /** Enable and configure feedback functionality */
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  state: PromptLoadingState;
 }
 
 export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (feedback: PromptFeedback) => void;
+  submitFeedback: (
+    feedback: PromptFeedback,
+    state: PromptLoadingState | ChatLoadingState,
+    messageIndex: number,
+  ) => void;
 }
 
 export function useFeedback({
+  feedbackOptions,
   projectKey,
   promptId,
-  feedbackOptions,
-  state,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -40,7 +43,11 @@ export function useFeedback({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
-    async (feedback: PromptFeedback) => {
+    async (
+      feedback: PromptFeedback,
+      state: PromptLoadingState | ChatLoadingState,
+      messageIndex: number,
+    ) => {
       abort();
 
       // only submit feedback when we are done loading the answer
@@ -54,7 +61,7 @@ export function useFeedback({
 
       const promise = submitFeedbackToMarkprompt(
         projectKey,
-        { feedback, promptId },
+        { feedback, promptId, messageIndex },
         { ...feedbackOptions, signal: controller.signal },
       );
 
@@ -68,7 +75,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, state, promptId, controllerRef, projectKey, feedbackOptions],
+    [abort, promptId, controllerRef, projectKey, feedbackOptions],
   );
 
   return { submitFeedback, abort };

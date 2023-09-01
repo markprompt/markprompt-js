@@ -2,14 +2,16 @@ import {
   type FileSectionReference,
   type SubmitPromptOptions,
   submitPrompt as submitPromptToMarkprompt,
-  type PromptFeedback,
   isAbortError,
+  type SubmitFeedbackOptions,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-import { useAbortController } from './useAbortController.js';
-import { useFeedback } from './useFeedback.js';
+import {
+  useFeedback,
+  type UseFeedbackResult,
+} from '../feedback/useFeedback.js';
+import { useAbortController } from '../useAbortController.js';
 
 export type PromptLoadingState =
   | 'indeterminate'
@@ -18,14 +20,14 @@ export type PromptLoadingState =
   | 'done';
 
 export interface UsePromptOptions {
+  /** Display debug info */
+  debug?: boolean;
+  /** Enable and configure feedback functionality */
+  feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
   promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
-  /** Enable and configure feedback functionality */
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  /** Display debug info */
-  debug?: boolean;
 }
 
 export interface UsePromptResult {
@@ -35,16 +37,16 @@ export interface UsePromptResult {
   state: PromptLoadingState;
   abort: () => void;
   setPrompt: (prompt: string) => void;
-  submitFeedback: (feedback: PromptFeedback) => void;
-  abortFeedbackRequest: () => void;
   submitPrompt: () => void;
+  submitFeedback: UseFeedbackResult['submitFeedback'];
+  abortFeedbackRequest: UseFeedbackResult['abort'];
 }
 
 export function usePrompt({
+  debug,
+  feedbackOptions,
   projectKey,
   promptOptions,
-  feedbackOptions,
-  debug,
 }: UsePromptOptions): UsePromptResult {
   if (!projectKey) {
     throw new Error(
@@ -64,7 +66,6 @@ export function usePrompt({
     projectKey,
     promptId,
     feedbackOptions,
-    state,
   });
 
   // Abort ongoing fetch requests on unmount

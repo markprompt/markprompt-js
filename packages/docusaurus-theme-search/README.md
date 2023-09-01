@@ -1,6 +1,7 @@
 # Markprompt Docusaurus plugin
 
-A [Markprompt](https://markprompt.com) plugin for [Docusaurus](https://docusaurus.io).
+A [Markprompt](https://markprompt.com) plugin for
+[Docusaurus](https://docusaurus.io).
 
 <br />
 <p align="center">
@@ -22,7 +23,8 @@ npm install @markprompt/docusaurus-theme-search
 
 ### Basic Usage
 
-In your `docusaurus.config.js`, add `@markprompt/docusaurus-theme-search` to `themes`. Configure `markprompt` in the `themeConfig`.
+In your `docusaurus.config.js`, add `@markprompt/docusaurus-theme-search` to
+`themes`. Configure `markprompt` in the `themeConfig`.
 
 ```js
 const config = {
@@ -47,7 +49,10 @@ Now a search button will appear on your Docusaurus page.
 
 ### Usage with another search plugin
 
-If your Docusaurus project already has a search plugin, such as [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia), you need to [swizzle](https://docusaurus.io/docs/swizzling) the current search plugin, and add Markprompt as a standalone component.
+If your Docusaurus project already has a search plugin, such as
+[theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia),
+you need to [swizzle](https://docusaurus.io/docs/swizzling) the current search
+plugin, and add Markprompt as a standalone component.
 
 To swizzle your current search plugin, run:
 
@@ -55,13 +60,16 @@ To swizzle your current search plugin, run:
 npx docusaurus swizzle
 ```
 
-Choose `Wrap`, and confirm. This will create a `SearchBar` wrapper component in `/src/theme/SearchBar`. Next, install the standalone Markprompt component and CSS:
+Choose `Wrap`, and confirm. This will create a `SearchBar` wrapper component in
+`/src/theme/SearchBar`. Next, install the standalone Markprompt component and
+CSS:
 
 ```
 npm install @markprompt/react @markprompt/css
 ```
 
-Edit `/src/theme/SearchBar/index.tsx` to include Markprompt next to your existing search bar. Here is an example:
+Edit `/src/theme/SearchBar/index.tsx` to include Markprompt next to your
+existing search bar. Here is an example:
 
 ```tsx
 import type { WrapperProps } from '@docusaurus/types';

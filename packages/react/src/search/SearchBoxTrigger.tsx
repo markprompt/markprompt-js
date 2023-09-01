@@ -6,15 +6,15 @@ import React, {
   type SetStateAction,
 } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import {
   ChevronUpIcon,
   CommandIcon,
   CornerDownLeftIcon,
   SearchIcon,
-} from './icons.js';
-import * as BaseMarkprompt from './primitives/headless.js';
-import { type MarkpromptOptions } from './types.js';
+} from '../icons.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
+import { type MarkpromptOptions } from '../types.js';
 
 interface SearchBoxTriggerProps {
   trigger: MarkpromptOptions['trigger'];
