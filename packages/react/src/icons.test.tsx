@@ -11,10 +11,11 @@ import {
   CornerDownLeftIcon,
   FileTextIcon,
   HashIcon,
+  ReloadIcon,
   SearchIcon,
   SparklesIcon,
-  ThumbsUpIcon,
   ThumbsDownIcon,
+  ThumbsUpIcon,
 } from './icons.js';
 
 const allIcons = [
@@ -26,10 +27,11 @@ const allIcons = [
   CornerDownLeftIcon,
   FileTextIcon,
   HashIcon,
+  ReloadIcon,
   SearchIcon,
   SparklesIcon,
-  ThumbsUpIcon,
   ThumbsDownIcon,
+  ThumbsUpIcon,
 ];
 
 test('renders the ThumbsDownIcon component', () => {
