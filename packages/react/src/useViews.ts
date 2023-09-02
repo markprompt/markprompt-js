@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { MarkpromptOptions } from './types.js';
 
@@ -32,6 +32,14 @@ export function useViews(
         return setActiveView(chat?.enabled ? 'chat' : 'prompt');
     }
   }, [activeView, chat?.enabled]);
+
+  useEffect(() => {
+    if (options.chat?.enabled && activeView === 'prompt') {
+      setActiveView('chat');
+    } else if (!options.chat?.enabled && activeView === 'chat') {
+      setActiveView('prompt');
+    }
+  }, [options.chat?.enabled, activeView]);
 
   return { activeView, setActiveView, toggleActiveView };
 }

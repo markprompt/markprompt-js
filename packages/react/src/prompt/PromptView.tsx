@@ -6,6 +6,7 @@ import React, {
   type ChangeEventHandler,
   type FormEventHandler,
   type ReactElement,
+  useRef,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -59,10 +60,17 @@ export function PromptView(props: PromptViewProps): ReactElement {
     debug,
   });
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     if (activeView && activeView !== 'prompt') abort();
     return () => abort();
   }, [activeView, abort]);
+
+  useEffect(() => {
+    // Bring form input in focus when activeView changes.
+    inputRef.current?.focus();
+  }, [activeView]);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -83,6 +91,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
     <div className="MarkpromptPromptView">
       <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
         <BaseMarkprompt.Prompt
+          ref={inputRef}
           className="MarkpromptPrompt"
           name="markprompt-prompt"
           onChange={handleChange}

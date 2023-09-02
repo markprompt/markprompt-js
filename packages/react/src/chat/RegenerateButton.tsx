@@ -1,7 +1,7 @@
 import React, { type ReactElement, useCallback } from 'react';
 
 import { type ChatViewMessage } from './useChat.js';
-import { ReloadIcon } from '../icons.js';
+import { ReloadIcon, StopIcon } from '../icons.js';
 
 interface RegenerateButtonProps {
   abortSubmitChat: () => void;
@@ -28,12 +28,16 @@ export function RegenerateButton(props: RegenerateButtonProps): ReactElement {
     >
       {(lastMessageState === 'done' || lastMessageState === 'cancelled') && (
         <>
-          <ReloadIcon width={15} height={15} /> Regenerate
+          <ReloadIcon className="MarkpromptSearchIcon" /> Regenerate
         </>
       )}
+
       {(lastMessageState === 'preload' ||
-        lastMessageState === 'streaming-answer') &&
-        'Stop generating'}
+        lastMessageState === 'streaming-answer') && (
+        <>
+          <StopIcon className="MarkpromptSearchIcon" /> Stop generating
+        </>
+      )}
     </button>
   );
 }

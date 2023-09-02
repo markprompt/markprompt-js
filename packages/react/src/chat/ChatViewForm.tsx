@@ -3,6 +3,8 @@ import React, {
   type FormEventHandler,
   type ReactElement,
   useCallback,
+  useEffect,
+  useRef,
 } from 'react';
 
 import { RegenerateButton } from './RegenerateButton.js';
@@ -11,8 +13,10 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
+import type { View } from '../useViews.js';
 
 interface ChatViewFormProps {
+  activeView?: View;
   chatOptions?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
   submitChat: UseChatResult['submitChat'];
@@ -23,6 +27,7 @@ interface ChatViewFormProps {
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const {
+    activeView,
     close,
     chatOptions,
     submitChat,
@@ -30,6 +35,8 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     regenerateLastAnswer,
     abortSubmitChat,
   } = props;
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -48,9 +55,15 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     [submitChat],
   );
 
+  useEffect(() => {
+    // Bring form input in focus when activeView changes.
+    inputRef.current?.focus();
+  }, [activeView]);
+
   return (
     <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
       <BaseMarkprompt.Prompt
+        ref={inputRef}
         className="MarkpromptPrompt"
         name="markprompt-prompt"
         type="text"

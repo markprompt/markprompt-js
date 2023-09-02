@@ -7,7 +7,10 @@ const el = document.querySelector('#markprompt');
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+    open: true,
     feedback: { enabled: true },
     search: { enabled: true },
+    chat: { enabled: true },
+    defaultView: 'chat',
   } satisfies MarkpromptOptions);
 }

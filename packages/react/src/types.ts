@@ -125,6 +125,11 @@ export interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * Show sender info, like avatar
+     * @default true
+     **/
+    showSender?: boolean;
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant

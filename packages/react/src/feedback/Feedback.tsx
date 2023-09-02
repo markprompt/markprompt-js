@@ -56,7 +56,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
           {variant === 'text' && 'Yes'}
           {variant === 'icons' && (
             <AccessibleIcon label="yes">
-              <ThumbsUpIcon width={15} height={15} />
+              <ThumbsUpIcon width={16} height={16} />
             </AccessibleIcon>
           )}
         </button>
@@ -68,7 +68,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
           {variant === 'text' && 'No'}
           {variant === 'icons' && (
             <AccessibleIcon label="no">
-              <ThumbsDownIcon width={15} height={15} />
+              <ThumbsDownIcon width={16} height={16} />
             </AccessibleIcon>
           )}
         </button>
