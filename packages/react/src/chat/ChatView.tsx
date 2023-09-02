@@ -1,4 +1,4 @@
-import React, { useEffect, type ReactElement } from 'react';
+import React, { useEffect } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { Messages } from './Messages.js';
@@ -17,7 +17,7 @@ export interface ChatViewProps {
   debug?: boolean;
 }
 
-export function ChatView(props: ChatViewProps): ReactElement {
+export function ChatView(props: ChatViewProps): JSX.Element {
   const {
     activeView,
     chatOptions,

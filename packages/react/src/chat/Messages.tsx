@@ -58,18 +58,19 @@ export function Messages(props: MessagesProps): ReactElement {
 
             <div className="MarkpromptReferences">
               {(message.state === 'streaming-answer' ||
-                message.state === 'done') && (
-                <>
-                  <p>
-                    {referencesOptions?.heading ??
-                      DEFAULT_MARKPROMPT_OPTIONS.references?.heading}
-                  </p>
-                  <BaseMarkprompt.References
-                    ReferenceComponent={Reference}
-                    references={message.references}
-                  />
-                </>
-              )}
+                message.state === 'done') &&
+                message.references.length > 0 && (
+                  <>
+                    <p>
+                      {referencesOptions?.heading ??
+                        DEFAULT_MARKPROMPT_OPTIONS.references?.heading}
+                    </p>
+                    <BaseMarkprompt.References
+                      ReferenceComponent={Reference}
+                      references={message.references}
+                    />
+                  </>
+                )}
             </div>
           </section>
         ))}
