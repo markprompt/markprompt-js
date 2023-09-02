@@ -96,6 +96,6 @@ describe('useFeedback', () => {
     abort();
 
     await waitFor(() => expect(endpointHits).toBe(0));
-    await expect(submitFeedbackPromise).resolves.toBe(undefined);
+    await expect(submitFeedbackPromise).resolves.toBeUndefined();
   });
 });

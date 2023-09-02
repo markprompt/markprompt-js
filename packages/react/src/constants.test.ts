@@ -90,9 +90,9 @@ const algoliaSearchHits: AlgoliaDocSearchHit[] = [
 
 describe('constants', () => {
   test('default references.getHref', async () => {
-    expect(
-      DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[0]),
-    ).toEqual(`${basePath}#${headingSlug}`);
+    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[0])).toBe(
+      `${basePath}#${headingSlug}`,
+    );
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[1]),
     ).toEqual(basePath);
@@ -111,10 +111,10 @@ describe('constants', () => {
   });
 
   test('default search.getHref', async () => {
-    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[0])).toEqual(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[0])).toBe(
       `${basePath}#${headingSlug}`,
     );
-    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[6])).toEqual(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[6])).toBe(
       `${basePath}#${headingId}`,
     );
     expect(

@@ -157,7 +157,7 @@ describe('submitSearchQuery', () => {
     });
 
     try {
-      expect(submitSearchQuery('react', 'testKey')).rejects.toStrictEqual(
+      await expect(submitSearchQuery('react', 'testKey')).rejects.toStrictEqual(
         new Error('test'),
       );
     } finally {
@@ -175,7 +175,7 @@ describe('submitAlgoliaDocsearchQuery', () => {
   });
 
   test('throws with unknown provider', async () => {
-    expect(
+    await expect(
       submitAlgoliaDocsearchQuery('react', {
         // @ts-expect-error - provider is not a valid provider
         provider: { name: 'test' },

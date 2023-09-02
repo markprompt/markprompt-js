@@ -127,21 +127,20 @@ describe('useSearch', () => {
 
     await result.current.submitSearchQuery('react');
 
-    await waitFor(() => {
-      expect(searchHits).toBe(1);
-      expect(result.current.searchResults[0]?.href).toBe(
-        (searchResults as SearchResult[])[0].file.path,
-      );
-      expect(result.current.searchResults[0]?.title).toBe(
-        (searchResults as SearchResult[])[0].file.title,
-      );
-      expect(result.current.searchResults[1]?.title).toBe(
-        (searchResults as SearchResult[])[1].meta?.leadHeading?.value,
-      );
-      expect(result.current.searchResults[2]?.title).toBe(
-        (searchResults as SearchResult[])[2].snippet,
-      );
-    });
+    await waitFor(() => expect(searchHits).toBe(1));
+
+    expect(result.current.searchResults[0]?.href).toBe(
+      (searchResults as SearchResult[])[0].file.path,
+    );
+    expect(result.current.searchResults[0]?.title).toBe(
+      (searchResults as SearchResult[])[0].file.title,
+    );
+    expect(result.current.searchResults[1]?.title).toBe(
+      (searchResults as SearchResult[])[1].meta?.leadHeading?.value,
+    );
+    expect(result.current.searchResults[2]?.title).toBe(
+      (searchResults as SearchResult[])[2].snippet,
+    );
   });
 
   it('should allow Algolia as a search provider', async () => {
