@@ -360,10 +360,6 @@
   margin-bottom: 1rem;
 }
 
-:where(.MarkpromptMessagePrompt:first-of-type) {
-  border-top-color: transparent;
-}
-
 :where(.MarkpromptPrimaryIcon) {
   color: var(--markprompt-primary);
 }
@@ -457,7 +453,7 @@
   overflow-y: auto;
 }
 
-:where(.MarkpromptAutoScroller::-webkit-scrollbar) {
+:where(.MarkpromptAutoScroller)::-webkit-scrollbar {
   display: none;
 }
 
