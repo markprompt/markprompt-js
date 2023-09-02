@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, test } from 'vitest';
 
@@ -37,8 +37,8 @@ const allIcons = [
 test('renders the ThumbsDownIcon component', () => {
   for (let i = 0; i < allIcons.length; i++) {
     const Icon = allIcons[i];
-    const { getByTestId } = render(<Icon data-testid={`test-icon-${i}`} />);
-    const thumbsDownIcon = getByTestId(`test-icon-${i}`);
+    render(<Icon data-testid={`test-icon-${i}`} />);
+    const thumbsDownIcon = screen.getByTestId(`test-icon-${i}`);
     expect(thumbsDownIcon).toBeInTheDocument();
   }
 });

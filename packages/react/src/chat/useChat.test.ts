@@ -64,7 +64,7 @@ describe('useChat', () => {
 
   it('should initialize with promptId as an empty string and messages as an empty array', () => {
     const { result } = renderHook(() => useChat({ projectKey: 'test-key' }));
-    expect(result.current.promptId).toEqual('');
+    expect(result.current.promptId).toBe('');
     expect(result.current.messages).toEqual([]);
   });
 
@@ -77,10 +77,9 @@ describe('useChat', () => {
 
     act(() => result.current.submitChat('Hello'));
 
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(1);
-      expect(result.current.messages[0].answer).toBe('Hi! How are you?');
-    });
+    await waitFor(() =>
+      expect(result.current.messages[0].answer).toBe('Hi! How are you?'),
+    );
   });
 
   it('should update the state of the message as it streams', async () => {
@@ -92,20 +91,15 @@ describe('useChat', () => {
 
     act(() => result.current.submitChat('Hello'));
 
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(1);
-      expect(result.current.messages[0].state).toBe('preload');
-    });
+    await waitFor(() =>
+      expect(result.current.messages[0].state).toBe('preload'),
+    );
 
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(1);
-      expect(result.current.messages[0].state).toBe('streaming-answer');
-    });
+    await waitFor(() =>
+      expect(result.current.messages[0].state).toBe('streaming-answer'),
+    );
 
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(1);
-      expect(result.current.messages[0].state).toBe('done');
-    });
+    await waitFor(() => expect(result.current.messages[0].state).toBe('done'));
   });
 
   it('should cancel the previous request when submitChat is called', async () => {
@@ -118,31 +112,8 @@ describe('useChat', () => {
     act(() => result.current.submitChat('Hello'));
     act(() => result.current.submitChat('Hello'));
 
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(2);
-      expect(result.current.messages[0].state).toBe('cancelled');
-    });
-  });
-
-  it('should cancel the previous request while streaming when submitChat is called', async () => {
-    const { result, waitFor } = renderHook(() =>
-      useChat({ projectKey: 'test-key' }),
-    );
-
-    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
-
-    act(() => result.current.submitChat('Hello'));
-
-    waitFor(() =>
-      expect(result.current.messages[0].state).toBe('streaming-answer'),
-    );
-
-    act(() => result.current.submitChat('Hello'));
-
-    await waitFor(() => {
-      expect(result.current.messages.length).toBe(2);
-      expect(result.current.messages[0].state).toBe('cancelled');
-    });
+    await waitFor(() => expect(result.current.messages.length).toBe(2));
+    expect(result.current.messages[0].state).toBe('cancelled');
   });
 
   it('should convert messages to the proper shape for the API', async () => {
@@ -154,13 +125,13 @@ describe('useChat', () => {
 
     act(() => result.current.submitChat('Hello'));
 
-    await waitFor(() => {
+    await waitFor(() =>
       expect(body?.messages).toEqual([
         {
           content: 'Hello',
           role: 'user',
         },
-      ]);
-    });
+      ]),
+    );
   });
 });

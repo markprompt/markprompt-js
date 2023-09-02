@@ -132,8 +132,8 @@ test('Branding is not displayed in Content when set to false', async () => {
   const trigger = await screen.findByText('Trigger');
   await user.click(trigger);
 
-  const branding = await screen.queryByText('Powered by');
-  expect(branding).toBeNull();
+  const branding = screen.queryByText('Powered by');
+  expect(branding).not.toBeInTheDocument();
 });
 
 test('Branding is displayed in PlainContent when set to true', async () => {
@@ -170,8 +170,8 @@ test('Branding is not displayed in PlainContent when set to false', async () => 
   const trigger = await screen.findByText('Trigger');
   await user.click(trigger);
 
-  const branding = await screen.queryByText('Powered by');
-  expect(branding).toBeNull();
+  const branding = screen.queryByText('Powered by');
+  expect(branding).not.toBeInTheDocument();
 });
 
 test('Close button closes the dialog', async () => {

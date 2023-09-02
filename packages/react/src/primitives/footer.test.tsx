@@ -10,7 +10,7 @@ describe('Footer', () => {
 
     const element = screen.getByText(/Powered by/);
     expect(element).toBeInTheDocument();
-    expect(element.textContent).toBe('Powered by Markprompt AI');
+    expect(element).toHaveTextContent('Powered by Markprompt AI');
 
     const anchor = screen.getByText<HTMLAnchorElement>('Markprompt AI');
     expect(anchor.href).toBe('https://markprompt.com/');
@@ -26,23 +26,22 @@ describe('Footer', () => {
 
 describe('MarkpromptIcon', () => {
   test('render SVG icon', () => {
-    render(<MarkpromptIcon />);
-
-    const svg = document.querySelector('svg');
-    expect(svg).toBeInTheDocument();
+    const { container } = render(<MarkpromptIcon />);
+    expect(container).toContainHTML('svg');
   });
 
   test('custom className', () => {
-    render(<MarkpromptIcon className="custom-class" />);
-
-    const svg = document.querySelector('svg');
+    render(<MarkpromptIcon className="custom-class" data-testid="test-id" />);
+    const svg = screen.getByTestId('test-id');
     expect(svg).toHaveClass('custom-class');
   });
 
-  // test('custom style', () => {
-  //   render(<MarkpromptIcon style={{ color: 'tomato' }} />);
-
-  //   const svg = document.querySelector('svg');
-  //   expect(svg).toHaveStyle({ color: 'tomato' });
-  // });
+  test('custom style', () => {
+    render(
+      <MarkpromptIcon style={{ color: 'tomato' }} data-testid="test-id" />,
+    );
+    const svg = screen.getByTestId('test-id');
+    // html color names are converted to rgb by some step in the build process for tests
+    expect(svg).toHaveStyle({ color: 'rgb(255, 99, 71)' });
+  });
 });

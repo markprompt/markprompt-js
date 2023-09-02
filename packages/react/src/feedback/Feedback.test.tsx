@@ -17,12 +17,11 @@ describe('Feedback', () => {
         state="done"
         variant="text"
         messageIndex={1}
+        data-testid="test-feedback"
       />,
     );
 
-    const element = screen.getByText(
-      /Was this response helpful?/,
-    ).parentElement;
+    const element = screen.getByTestId('test-feedback');
 
     expect(element).toBeInTheDocument();
   });
