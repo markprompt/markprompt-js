@@ -1,2 +1,3 @@
 **/CHANGELOG.md
-.changeset/
+.changeset/*.md
+
