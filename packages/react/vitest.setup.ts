@@ -1,8 +1,6 @@
-import matchers from '@testing-library/jest-dom/matchers.js';
+import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { expect, afterEach, beforeAll } from 'vitest';
-
-expect.extend(matchers);
+import { afterEach, beforeAll } from 'vitest';
 
 beforeAll(() => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
