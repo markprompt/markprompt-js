@@ -1,6 +1,6 @@
 {
   "references": [{ "path": "../core" }],
-  "include": ["src/"],
+  "include": ["src/", "./vitest.setup.ts"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/vitest.setup.ts"],
   "compilerOptions": {
     "lib": ["dom", "es2022", "esnext"],
