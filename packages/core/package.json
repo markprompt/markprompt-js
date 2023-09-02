@@ -21,9 +21,7 @@
   },
   "dependencies": {
     "@algolia/client-search": "^4.19.1",
-    "defaults": "^2.0.2"
-  },
-  "devDependencies": {
+    "defaults": "^2.0.2",
     "type-fest": "^4.3.1"
   }
 }
