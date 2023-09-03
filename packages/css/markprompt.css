@@ -19,6 +19,9 @@
   --markprompt-text-size-xs: 0.75rem;
   --markprompt-button-icon-size: 1rem;
   --markprompt-icon-stroke-width: 2px;
+  --markprompt-shadow: 0 1px 2px 0 #0000000d;
+  --markprompt-ring-shadow: 0 0 #0000;
+  --markprompt-ring-offset-shadow: 0 0 #0000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -298,10 +301,7 @@
 }
 
 :where(.MarkpromptChatView .MarkpromptForm) {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   border-top: 1px solid var(--markprompt-border);
   border-bottom: 0;
   background-color: var(--markprompt-background);
@@ -319,20 +319,27 @@
   overflow: hidden;
 }
 
-:where(.MarkpromptRegenerateButton) {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
+:where(.MarkpromptActionButton) {
   flex-wrap: nowrap;
   font-weight: 500;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   border: 1px solid var(--markprompt-border);
   background-color: var(--markprompt-background);
   color: var(--markprompt-foreground);
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: var(--markprompt-ring-offset-shadow,0 0 #0000),var(--markprompt-ring-shadow,0 0 #0000),var(--markprompt-shadow);
+  transition-property: color,background-color,border-color,text-decoration-color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
+
+:where(.MarkpromptRegenerateButton) {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
   transform: translateY(-100%);
   top: -1rem;
   right: 1rem;
@@ -353,17 +360,19 @@
 }
 
 :where(.MarkpromptMessagePrompt) {
-  padding-inline: 1rem;
+  padding-inline: 1.5rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
   border-bottom: 1px solid var(--markprompt-border);
   position: relative;
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-:where(.MarkpromptMessagePrompt:first-of-type) {
+:where(.MarkpromptAutoScroller section:first-of-type .MarkpromptMessagePrompt) {
   border-top-color: transparent;
+  margin-top: 0;
 }
 
 :where(.MarkpromptMessagePromptText) {
@@ -449,9 +458,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
-  /* allow the answer container in the chat view to scroll past the floating input */
-  padding-bottom: 6rem;
 }
 
 :where(.MarkpromptAutoScroller) {
@@ -461,6 +467,7 @@
   scrollbar-width: none;
   overflow-x: hidden;
   overflow-y: auto;
+  padding-bottom: 3rem;
 }
 
 :where(.MarkpromptAutoScroller::-webkit-scrollbar) {
@@ -875,7 +882,7 @@
 }
 
 :where(.MarkpromptMessageAnswer .MarkpromptAnswer) {
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 :where(.MarkpromptCaret) {
@@ -935,10 +942,6 @@
 
 :where(.MarkpromptPromptFeedback button) {
   cursor: pointer;
-  color: var(--markprompt-foreground);
-  border: 1px solid var(--markprompt-border);
-  background-color: var(--markprompt-background);
-  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -948,12 +951,18 @@
   animation-duration: 1s;
   animation-fill-mode: backwards;
   transition-timing-function: ease-in-out;
+  color: var(--markprompt-mutedForeground);
+  background-color: transparent;
+  border: 0;
 }
 
 :where(.MarkpromptPromptFeedback button[data-active='true']) {
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
-  border: 1px solid var(--markprompt-primary);
+}
+
+.MarkpromptPromptFeedback button[data-active='true']:hover {
+  background-color: var(--markprompt-primary);
 }
 
 :where(.MarkpromptPromptFeedback button svg) {
@@ -1022,12 +1031,16 @@
   overflow-x: hidden;
 }
 
-:where(.MarkpromptReferences p) {
+:where(.MarkpromptChatView .MarkpromptReferences p) {
   animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-weight: 600;
   margin: 0;
-  padding-inline: 2rem;
   margin-bottom: 0.5rem;
+  padding-inline: 2rem;
+}
+
+.MarkpromptChatView .MarkpromptReferences p {
+  padding-inline: 1rem;
 }
 
 :where(.MarkpromptReferences ul) {
@@ -1051,6 +1064,7 @@
 
 :where(.MarkpromptChatView .MarkpromptReferences ul) {
   background-color: unset;
+  padding: 0.25rem 1rem 0.5rem;
 }
 
 .MarkpromptReferences ul::-webkit-scrollbar {
@@ -1063,7 +1077,7 @@
   position: absolute;
   top: 3px;
   bottom: 0;
-  width: 2rem;
+  width: 1rem;
   pointer-events: none;
 }
 

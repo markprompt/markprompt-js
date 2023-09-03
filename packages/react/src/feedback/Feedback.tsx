@@ -50,6 +50,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
       <h3>{heading}</h3>
       <div>
         <button
+          className="MarkpromptGhostThumbButton"
           onClick={() => handleFeedback({ vote: '1' })}
           data-active={feedback?.vote === '1'}
         >
@@ -61,6 +62,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
           )}
         </button>
         <button
+          className="MarkpromptGhostThumbButton"
           onClick={() => handleFeedback({ vote: '-1' })}
           data-active={feedback?.vote === '-1'}
           style={{ animationDelay: '100ms' }}

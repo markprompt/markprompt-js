@@ -10,6 +10,7 @@ if (el && el instanceof HTMLElement) {
     open: true,
     feedback: { enabled: true },
     search: { enabled: true },
+    references: { display: 'none' },
     chat: { enabled: true },
     defaultView: 'chat',
   } satisfies MarkpromptOptions);

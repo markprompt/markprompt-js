@@ -283,7 +283,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 display: 'flex',
                 justifyItems: 'center',
                 alignItems: 'center',
-                right: '0.75rem',
+                right: '0.5rem',
                 top: '0rem',
                 bottom: '0rem',
               }}

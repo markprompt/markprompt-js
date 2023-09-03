@@ -152,6 +152,13 @@ export interface MarkpromptOptions {
     placeholder?: string;
   };
   references?: {
+    /**
+     * Display mode for the references. References can either be
+     * displayed after the response, as an aside next to the response
+     * behind a toggle button, or not displayed at all.
+     * @default 'end'
+     * */
+    display?: 'none' | 'end' | 'aside';
     /** Callback to transform a reference into an href */
     getHref?: (reference: FileSectionReference) => string | undefined;
     /** Callback to transform a reference into a label */
