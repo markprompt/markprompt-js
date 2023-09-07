@@ -205,11 +205,7 @@ component to the window prior to loading our script:
     },
   };
 </script>
-<script
-  async
-  type="module"
-  src="https://esm.sh/@markprompt/web@0.16.x/init"
-></script>
+<script type="module" src="https://esm.sh/@markprompt/web@0.16.x/init"></script>
 
 <div id="markprompt"></div>
 ```
