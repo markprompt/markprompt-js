@@ -26,14 +26,18 @@ In browsers with [esm.sh](https://esm.sh):
 
 ```html
 <script type="module">
-  import { submitPrompt } from 'https://esm.sh/@markprompt/core';
+  import {
+    submitChat,
+    submitSearchQuery,
+    submitFeedback,
+  } from 'https://esm.sh/@markprompt/core';
 </script>
 ```
 
 ## Usage
 
 ```js
-import { submitPrompt } from '@markprompt/core';
+import { submitChat } from '@markprompt/core';
 
 // User input
 const prompt = 'What is Markprompt?';
@@ -63,45 +67,20 @@ const options = {
   apiUrl: 'https://api.markprompt.com/v1/completions', // Or your own completions API endpoint
 };
 
-await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onPromptId, onError, options);
+await submitChat(
+  [{ content: prompt, role: 'user' }],
+  projectKey,
+  onAnswerChunk,
+  onReferences,
+  onPromptId,
+  onError,
+  options
+);
 ```
 
 ## API
 
-### `submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
-
-Submit a prompt to the Markprompt Completions API.
-
-#### Arguments
-
-- `prompt` (`string`): Prompt to submit to the model
-- `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
-  called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list
-  of references from which the response was created.
-- `onError` (`function`): called when an error occurs
-- [`options`](#options) (`SubmitPromptOptions`): Optional parameters
-
-#### Options
-
-- `apiUrl` (`string`): URL at which to fetch completions
-- `iDontKnowMessage` (`string`): Message returned when the model does not have
-  an answer
-- `model` (`OpenAIModelId`): The OpenAI model to use
-- `systemPrompt` (`string`): The prompt template
-- `temperature` (`number`): The model temperature
-- `topP` (`number`): The model top P
-- `frequencyPenalty` (`number`): The model frequency penalty
-- `presencePenalty` (`number`): The model present penalty
-- `maxTokens` (`number`): The max number of tokens to include in the response
-- `sectionsMatchCount` (`number`): The number of sections to include in the
-  prompt context
-- `sectionsMatchThreshold` (`number`): The similarity threshold between the
-  input question and selected sections
-- `signal` (`AbortSignal`): AbortController signal
-
-### `submitChat(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
+### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onPromptId, onError, options?)`
 
 Submit a prompt to the Markprompt Completions API.
 
@@ -109,10 +88,14 @@ Submit a prompt to the Markprompt Completions API.
 
 - `messages` (`ChatMessage[]`): Chat messages to submit to the model
 - `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
-  called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list
-  of references from which the response was created.
+- `onAnswerChunk` (`function(chunk: string)`): Answers come in via streaming.
+  This function is called when a new chunk arrives. Chunks should be
+  concatenated to previous chunks of the same answer response.
+- `onReferences` (`function(references: FileSectionReference[])`): This function
+  is called when receiving the list of references from which the response was
+  created.
+- `onPromptId` (`function(promptId: string)`): This function is called with the
+  prompt ID returned by the API. Can be used to submit feedback.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitChatOptions`): Optional parameters
 
@@ -157,6 +140,25 @@ Submit a search query to the Markprompt Search API.
 #### Returns
 
 A list of search results.
+
+### `submitFeedback(projectKey, feedback, options?)`
+
+Submit feedback to the Markprompt Feedback API about a specific prompt.
+
+#### Arguments
+
+- `projectKey` (`string`): Project key for the project
+- `feedback` (`object`): Feedback to submit
+- `feedback.feedback` (`object`): Feedback data
+- `feedback.feedback.vote` (`1 | -1`): Vote
+- `feedback.promptId` (`string`): Prompt ID
+- `options` (`object`): Optional parameters
+- `options.apiUrl` (`string`): URL at which to post feedback
+- `options.signal` (`AbortSignal`): AbortController signal
+
+#### Returns
+
+A promise that resolves when the feedback is submitted. Has no return value.
 
 ## Community
 
