@@ -1,7 +1,7 @@
 import {
   type FileSectionReference,
-  type SubmitPromptOptions,
-  submitPrompt as submitPromptToMarkprompt,
+  type SubmitChatOptions,
+  submitChat,
   isAbortError,
   type SubmitFeedbackOptions,
 } from '@markprompt/core';
@@ -27,7 +27,7 @@ export interface UsePromptOptions {
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
-  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  promptOptions?: Omit<SubmitChatOptions, 'signal'>;
 }
 
 export interface UsePromptResult {
@@ -97,8 +97,8 @@ export function usePrompt({
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const promise = submitPromptToMarkprompt(
-      prompt,
+    const promise = submitChat(
+      [{ content: prompt, role: 'user' }],
       projectKey,
       (chunk) => {
         setState('streaming-answer');

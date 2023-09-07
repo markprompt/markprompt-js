@@ -4,7 +4,6 @@ import {
   type SearchResult,
   type SubmitChatOptions,
   type SubmitFeedbackOptions,
-  type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
 import type {
@@ -134,7 +133,7 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: SubmitPromptOptions & {
+  prompt?: SubmitChatOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"

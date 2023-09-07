@@ -25,7 +25,6 @@ export interface UseFeedbackResult {
   submitFeedback: (
     feedback: PromptFeedback,
     state: PromptLoadingState | ChatLoadingState,
-    messageIndex: number,
   ) => void;
 }
 
@@ -46,7 +45,6 @@ export function useFeedback({
     async (
       feedback: PromptFeedback,
       state: PromptLoadingState | ChatLoadingState,
-      messageIndex: number,
     ) => {
       abort();
 
@@ -60,8 +58,8 @@ export function useFeedback({
       controllerRef.current = controller;
 
       const promise = submitFeedbackToMarkprompt(
+        { feedback, promptId },
         projectKey,
-        { feedback, promptId, messageIndex },
         { ...feedbackOptions, signal: controller.signal },
       );
 

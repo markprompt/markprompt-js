@@ -175,7 +175,6 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
             submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
             state={state}
-            messageIndex={1}
           />
         )}
       </BaseMarkprompt.AutoScroller>

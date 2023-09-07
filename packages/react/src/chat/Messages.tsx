@@ -33,7 +33,7 @@ export function Messages(props: MessagesProps): ReactElement {
         className="MarkpromptAutoScroller"
         scrollTrigger={messages}
       >
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <section key={message.id}>
             <MessagePrompt state={message.state}>
               {message.prompt}
@@ -50,8 +50,6 @@ export function Messages(props: MessagesProps): ReactElement {
                   submitFeedback={submitFeedback}
                   abortFeedbackRequest={abortFeedbackRequest}
                   state={message.state}
-                  // convert back to the original index in the array returned from the API
-                  messageIndex={index + index + 1}
                 />
               )}
             </div>
