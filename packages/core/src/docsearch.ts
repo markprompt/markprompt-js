@@ -90,5 +90,3 @@ export interface DocSearchHit {
   };
   __autocomplete_id?: number;
 }
-
-export {};
