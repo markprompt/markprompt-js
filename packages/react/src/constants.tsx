@@ -1,4 +1,5 @@
 import {
+  DEFAULT_SUBMIT_CHAT_OPTIONS,
   type AlgoliaDocSearchHit,
   type FileSectionReference,
   type SearchResult,
@@ -160,6 +161,7 @@ const defaultGetSearchResultSubtitle = (
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   chat: {
+    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
     enabled: false,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
@@ -179,6 +181,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     heading: 'Was this response helpful?',
   },
   prompt: {
+    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
