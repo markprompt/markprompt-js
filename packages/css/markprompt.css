@@ -318,7 +318,14 @@
   overflow: hidden;
 }
 
-:where(.MarkpromptActionButton) {
+:where(.MarkpromptRegenerateButton) {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  transform: translateY(-100%);
+  top: -1rem;
+  right: 1rem;
   flex-wrap: nowrap;
   font-weight: 500;
   padding: 0.5rem 1rem;
@@ -328,20 +335,12 @@
   color: var(--markprompt-foreground);
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: var(--markprompt-ring-offset-shadow,0 0 #0000),var(--markprompt-ring-shadow,0 0 #0000),var(--markprompt-shadow);
-  transition-property: color,background-color,border-color,text-decoration-color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-    transition-duration: .15s;
-}
-
-:where(.MarkpromptRegenerateButton) {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  transform: translateY(-100%);
-  top: -1rem;
-  right: 1rem;
+  box-shadow: var(--markprompt-ring-offset-shadow, 0 0 #0000),
+    var(--markprompt-ring-shadow, 0 0 #0000), var(--markprompt-shadow);
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
 }
 
 :where(.MarkpromptRegenerateButton:hover) {

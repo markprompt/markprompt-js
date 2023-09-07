@@ -22,7 +22,7 @@ export function RegenerateButton(props: RegenerateButtonProps): ReactElement {
 
   return (
     <button
-      className="MarkpromptActionButton MarkpromptRegenerateButton"
+      className="MarkpromptRegenerateButton"
       type="button"
       onClick={handleClick}
     >
