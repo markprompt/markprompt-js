@@ -3,4 +3,4 @@
 '@markprompt/react': patch
 ---
 
-Add support for `conversationId`
+Add support for `conversationId` in `submitChat`
