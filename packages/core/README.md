@@ -55,8 +55,16 @@ function onReferences(references) {
   // Process references
 }
 
-// Called when submitPrompt encounters an error
-const onError(error) {
+function onConversationId(conversationId) {
+  // Store conversationId for future use
+}
+
+function onPromptId(promptId) {
+  // Store promptId for future use
+}
+
+// Called when submitChat encounters an error
+function onError(error) {
   // Handle errors
 }
 
@@ -64,7 +72,7 @@ const onError(error) {
 const options = {
   model: 'gpt-3.5-turbo', // Supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  apiUrl: 'https://api.markprompt.com/v1/completions', // Or your own completions API endpoint
+  apiUrl: 'https://api.markprompt.com/v1/chat', // Or your own chat API endpoint
 };
 
 await submitChat(
@@ -72,15 +80,16 @@ await submitChat(
   projectKey,
   onAnswerChunk,
   onReferences,
+  onConversationId,
   onPromptId,
   onError,
-  options
+  options,
 );
 ```
 
 ## API
 
-### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onPromptId, onError, options?)`
+### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onConversationId, onPromptId, onError, options?)`
 
 Submit a prompt to the Markprompt Completions API.
 
@@ -94,14 +103,20 @@ Submit a prompt to the Markprompt Completions API.
 - `onReferences` (`function(references: FileSectionReference[])`): This function
   is called when receiving the list of references from which the response was
   created.
+- `onConversationId` (`function(conversationId: string)`): This function is
+  called with the conversation ID returned by the API. Used to keep track of
+  conversations.
 - `onPromptId` (`function(promptId: string)`): This function is called with the
-  prompt ID returned by the API. Can be used to submit feedback.
+  prompt ID returned by the API. Used to submit feedback.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitChatOptions`): Optional parameters
 
 #### Options
 
+All options are optional.
+
 - `apiUrl` (`string`): URL at which to fetch completions
+- `conversationId` (`string`): Conversation ID
 - `iDontKnowMessage` (`string`): Message returned when the model does not have
   an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
