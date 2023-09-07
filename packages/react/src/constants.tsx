@@ -160,13 +160,6 @@ const defaultGetSearchResultSubtitle = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
-  chat: {
-    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
-    enabled: false,
-    label: 'Ask AI',
-    tabLabel: 'Ask AI',
-    placeholder: 'Ask AI…',
-  },
   close: {
     label: 'Close Markprompt',
     visible: true,
@@ -179,6 +172,13 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
   feedback: {
     enabled: false,
     heading: 'Was this response helpful?',
+  },
+  chat: {
+    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
+    enabled: false,
+    label: 'Ask AI',
+    tabLabel: 'Ask AI',
+    placeholder: 'Ask AI…',
   },
   prompt: {
     ...DEFAULT_SUBMIT_CHAT_OPTIONS,
