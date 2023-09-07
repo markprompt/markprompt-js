@@ -10,6 +10,7 @@ if (el && el instanceof HTMLElement) {
     feedback: { enabled: true },
     search: { enabled: true },
     chat: { enabled: true, apiUrl: 'http://api.localhost:3000/v1/chat' },
+    prompt: { apiUrl: 'http://api.localhost:3000/v1/chat' },
     defaultView: 'chat',
   } satisfies MarkpromptOptions);
 }
