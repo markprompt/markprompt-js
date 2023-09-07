@@ -312,7 +312,6 @@
   grid-template-columns: 1fr auto;
   align-items: first baseline;
   max-width: 100%;
-  padding-right: 1rem;
 }
 
 :where(.MarkpromptMessageAnswer) {
@@ -914,6 +913,7 @@
 
 :where(.MarkpromptPromptFeedback[data-variant='icons']) {
   padding: 0.75rem 0;
+  margin-right: 1rem;
 }
 
 :where(.MarkpromptPromptFeedback[data-variant='text'] h3) {
@@ -1128,16 +1128,12 @@
 }
 
 :where(.MarkpromptCancelled) {
-  padding-inline: 1rem;
+  padding-inline: 1.5rem;
 }
 
 :where(.MarkpromptCancelledText) {
-  background-color: var(--markprompt-muted);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--markprompt-text-size-xs);
   color: var(--markprompt-mutedForeground);
-  text-wrap: balance;
 }
 
 :where(.MarkpromptBackButton) {
