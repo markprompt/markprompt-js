@@ -190,7 +190,7 @@ can load the script from a CDN. You can attach the options for the Markprompt
 component to the window prior to loading our script:
 
 ```html
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.5.1?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.13.x?css" />
 <script>
   window.markprompt = {
     projectKey: `YOUR-PROJECT-KEY`,
@@ -208,8 +208,10 @@ component to the window prior to loading our script:
 <script
   async
   type="module"
-  src="https://esm.sh/@markprompt/web@0.9.4/init"
+  src="https://esm.sh/@markprompt/web@0.16.x/init"
 ></script>
+
+<div id="markprompt"></div>
 ```
 
 ## API
@@ -223,7 +225,7 @@ Render a Markprompt dialog button.
 - `projectKey` (`string`): Your Markprompt project key.
 - `container` (`HTMLElement | string`): The element or selector to render
   Markprompt into.
-- `options` (`object`): Options for customizing Markprompt.
+- `options` (`object`): Options for customizing Markprompt, see below.
 
 #### Options
 
@@ -232,6 +234,8 @@ Render a Markprompt dialog button.
   under "Project key"
 - `display` (`plain | dialog`): The way to display the prompt (Default:
   `dialog`)
+- `defaultView` (`chat | prompt | search`): The default view to show (Default:
+  `prompt` or `search` when search is enabled)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -240,7 +244,39 @@ Render a Markprompt dialog button.
 - `description.hide` (`boolean`): Visually hide the description (Default:
   `true`)
 - `description.text` (`string`): Description text
-- `prompt` (`object`): Options for the prompt
+- `chat` (`object`): Options for the chat view
+- `chat.enabled` (`boolean`): Whether or not to enable the chat view. Disables
+  `prompt` (Default: `false`)
+- `chat.label` (`string`): Label for the prompt input (Default: `Ask AI`)
+- `chat.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
+- `chat.placeholder` (`string`): Placeholder for the prompt input (Default:
+  `Ask AI…`)
+- `chat.apiUrl` (`string`): URL at which to fetch completions. (Default:
+  `https://api.markprompt.com/v1/chat`)
+- `chat.iDontKnowMessage` (`string`): Message returned when the model does not
+  have an answer. (Default: `Sorry, I am not sure how to answer that.`)
+- `chat.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
+- `chat.systemPrompt` (`string`): The prompt template. (Default:
+  `You are a very enthusiastic company representative who loves to help people!`)
+- `chat.temperature` (`number`): The model temperature. (Default: `0.1`)
+- `chat.topP` (`number`): The model top P. (Default: `1`)
+- `chat.frequencyPenalty` (`number`): The model frequency penalty. (Default:
+  `0`)
+- `chat.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
+- `chat.maxTokens` (`number`): The max number of tokens to include in the
+  response. (Default: `500`)
+- `chat.sectionsMatchCount` (`number`): The number of sections to include in the
+  prompt context. (Default: `10`)
+- `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the
+  input question and selected sections. (Default: `0.5`)
+- `feedback` (`object`): Options for the feedback component
+- `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
+  chat answers. (Default: `true`)
+- `feedback.apiUrl` (`string`): URL at which to deliver feedback. (Default:
+  `https://api.markprompt.com/v1/feedback`)
+- `feedback.heading` (`string`): Heading for the feedback form, only shown in
+  the prompt view (Default: `Was this response helpful?`)
+- `prompt` (`object`): Options for the prompt view
 - `prompt.label` (`string`): Label for the prompt input (Default: `Ask AI`)
 - `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `prompt.placeholder` (`string`): Placeholder for the prompt input (Default:
@@ -250,8 +286,8 @@ Render a Markprompt dialog button.
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not
   have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `prompt.promptTemplate` (`string`): The prompt template. (Default:
-  `You are a very enthusiastic company representative who loves to help people! Given the following sections from the documentation (preceded by a section id), answer the question using only that information, outputted in Markdown format. If you are unsure and the answer is not explicitly written in the documentation, say \"{{I_DONT_KNOW}}\".\n\nContext sections:\n---\n{{CONTEXT}}\n\nQuestion: \"{{PROMPT}}\"\n\nAnswer (including related code snippets if available):\n`)
+- `prompt.systemPrompt` (`string`): The prompt template. (Default:
+  `You are a very enthusiastic company representative who loves to help people!`)
 - `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
 - `prompt.topP` (`number`): The model top P. (Default: `1`)
 - `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default:
@@ -264,7 +300,6 @@ Render a Markprompt dialog button.
   the prompt context. (Default: `10`)
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
   the input question and selected sections. (Default: `0.5`)
-- `prompt.signal` (`AbortSignal`): AbortController signal
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an
   href
@@ -277,8 +312,6 @@ Render a Markprompt dialog button.
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default:
   `true`)
-- `search.getHref` (`function`): Callback to transform a search result into an
-  href
 - `search.getHref` (`function`): Callback to transform a search result into an
   href
 - `search.getHeading` (`function`): Callback to transform a search result into a
@@ -297,7 +330,6 @@ Render a Markprompt dialog button.
   `https://api.markprompt.com/v1/search`)
 - `search.provider` (`object`): A custom search provider configuration, such as
   Algolia
-- `search.signal` (`AbortSignal`): AbortController signal
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will
   disable rendering any trigger element. Use `openMarkprompt()` to trigger the
