@@ -118,27 +118,13 @@ export async function submitChat(
     const decoder = new TextDecoder();
 
     let done = false;
-    let startText = '';
-    let hasPassedStreamSeparator = false;
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
 
-      if (!hasPassedStreamSeparator) {
-        startText = startText + chunkValue;
-        // For backwards compatibility, we still stream the response
-        // with reference ids first followed by the response, the two
-        // parts being separated by `STREAM_SEPARATOR`.
-        if (startText.includes(STREAM_SEPARATOR)) {
-          const parts = startText.split(STREAM_SEPARATOR);
-          if (parts[1]) {
-            onAnswerChunk(parts[1]);
-          }
-          hasPassedStreamSeparator = true;
-        }
-      } else if (chunkValue) {
+      if (chunkValue) {
         const shouldContinue = onAnswerChunk(chunkValue);
         if (!shouldContinue) {
           // If callback returns false, it means it wishes
