@@ -13,13 +13,6 @@ export {
 } from './feedback.js';
 
 export {
-  submitPrompt,
-  type SubmitPromptOptions,
-  DEFAULT_SUBMIT_PROMPT_OPTIONS,
-  STREAM_SEPARATOR,
-} from './prompt.js';
-
-export {
   submitSearchQuery,
   submitAlgoliaDocsearchQuery,
   type SubmitSearchQueryOptions,
