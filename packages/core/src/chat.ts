@@ -10,6 +10,11 @@ export interface SubmitChatOptions {
    * */
   apiUrl?: string;
   /**
+   * Conversation ID. Returned with
+   * @default undefined
+   */
+  conversationId?: string;
+  /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
    **/
@@ -66,11 +71,6 @@ export interface SubmitChatOptions {
   signal?: AbortSignal;
 }
 
-type DefaultSubmitChatOptions = Omit<Required<SubmitChatOptions>, 'signal'> &
-  Pick<SubmitChatOptions, 'signal'>;
-
-export const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___';
-
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/v1/chat',
   frequencyPenalty: 0,
@@ -83,7 +83,12 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   systemPrompt: `You are a very enthusiastic company representative who loves to help people!`,
   temperature: 0.1,
   topP: 1,
-} satisfies DefaultSubmitChatOptions;
+} satisfies SubmitChatOptions;
+
+export interface ChatConversation {
+  conversationId?: string;
+  messages: ChatMessage[];
+}
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -93,18 +98,21 @@ export interface ChatMessage {
 /**
  * Submit a prompt to the Markprompt Chat API.
  *
- * @param messages - Chat messages to submit to the model
+ * @param conversation - Chat conversation to submit to the model
  * @param projectKey - Project key for the project
- * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives
+ * @param onAnswerChunk - Answers come in via streaming. This function is called when a new chunk arrives. Return false to interrupt the streaming, true to continue.
  * @param onReferences - This function is called when a chunk includes references.
+ * @param onConversationId - This function is called when a conversation ID is returned from the API.
+ * @param onPromptId - This function is called when a prompt ID is returned from the API.
  * @param onError - Called when an error occurs
  * @param [options] - Optional parameters
  */
 export async function submitChat(
-  messages: ChatMessage[],
+  conversation: ChatConversation,
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
+  onConversationId: (conversationId: string) => void,
   onPromptId: (promptId: string) => void,
   onError: (error: Error) => void,
   options: SubmitChatOptions = {},
@@ -114,26 +122,31 @@ export async function submitChat(
     throw new Error('A projectKey is required.');
   }
 
-  if (!messages || !Array.isArray(messages) || messages.length === 0) return;
+  if (
+    !conversation?.messages ||
+    !Array.isArray(conversation?.messages) ||
+    conversation?.messages.length === 0
+  ) {
+    return;
+  }
 
   try {
-    // todo: look into typing this properly
-    const resolvedOptions = defaults(
+    const { apiUrl, signal, ...resolvedOptions } = defaults(
       { ...options },
       DEFAULT_SUBMIT_CHAT_OPTIONS,
-    ) as DefaultSubmitChatOptions;
+    );
 
-    const res = await fetch(resolvedOptions.apiUrl, {
+    const res = await fetch(apiUrl, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
-        messages: messages,
-        projectKey: projectKey,
+        projectKey,
+        ...conversation,
         ...resolvedOptions,
       }),
-      signal: resolvedOptions.signal,
+      signal: signal,
     });
 
     if (!res.ok || !res.body) {
@@ -151,22 +164,16 @@ export async function submitChat(
       console.debug(JSON.stringify(debugInfo, null, 2));
     }
 
-    if (
-      typeof data === 'object' &&
-      data !== null &&
-      'references' in data &&
-      isFileSectionReferences(data.references)
-    ) {
-      onReferences(data?.references);
-    }
-
-    if (
-      typeof data === 'object' &&
-      data !== null &&
-      'promptId' in data &&
-      typeof data.promptId === 'string'
-    ) {
-      onPromptId(data?.promptId);
+    if (typeof data === 'object' && data !== null) {
+      if ('references' in data && isFileSectionReferences(data.references)) {
+        onReferences(data?.references);
+      }
+      if ('conversationId' in data && typeof data.conversationId === 'string') {
+        onConversationId(data?.conversationId);
+      }
+      if ('promptId' in data && typeof data.promptId === 'string') {
+        onPromptId(data?.promptId);
+      }
     }
 
     const reader = res.body.getReader();
@@ -181,11 +188,7 @@ export async function submitChat(
 
       if (chunkValue) {
         const shouldContinue = onAnswerChunk(chunkValue);
-        if (!shouldContinue) {
-          // If callback returns false, it means it wishes
-          // to interrupt the streaming.
-          done = true;
-        }
+        if (!shouldContinue) done = true;
       }
     }
   } catch (error) {

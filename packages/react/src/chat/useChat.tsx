@@ -39,6 +39,7 @@ export interface UseChatOptions {
 
 export interface UseChatResult {
   messages: ChatViewMessage[];
+  conversationId?: string;
   promptId?: string;
   abort: () => void;
   abortFeedbackRequest: UseFeedbackResult['abort'];
@@ -73,6 +74,7 @@ export function useChat({
     );
   }
 
+  const [conversationId, setConversationId] = useState<string>('');
   const [promptId, setPromptId] = useState<string>('');
   const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
@@ -139,7 +141,7 @@ export function useChat({
     // we use callback style setState here to make sure we are using the latest
     // messages array, and not the messages array that was passed in to this
     const promise = submitChatToMarkprompt(
-      apiMessages,
+      { messages: apiMessages, conversationId },
       projectKey,
       (chunk) => {
         setMessages((messages) => {
@@ -161,7 +163,8 @@ export function useChat({
           }),
         );
       },
-      (pid) => setPromptId(pid),
+      (conversationId) => setConversationId(conversationId),
+      (promptId) => setPromptId(promptId),
       (error) => {
         setMessages((messages) =>
           updateMessageById(messages, currentMessageId, {
@@ -229,6 +232,7 @@ export function useChat({
     abort,
     abortFeedbackRequest,
     messages,
+    conversationId,
     promptId,
     regenerateLastAnswer,
     submitChat,
