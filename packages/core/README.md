@@ -150,7 +150,7 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 - `projectKey` (`string`): Project key for the project
 - `feedback` (`object`): Feedback to submit
 - `feedback.feedback` (`object`): Feedback data
-- `feedback.feedback.vote` (`1 | -1`): Vote
+- `feedback.feedback.vote` (`"1" | "-1"`): Vote
 - `feedback.promptId` (`string`): Prompt ID
 - `options` (`object`): Optional parameters
 - `options.apiUrl` (`string`): URL at which to post feedback

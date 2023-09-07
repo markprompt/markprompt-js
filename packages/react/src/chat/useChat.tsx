@@ -141,7 +141,7 @@ export function useChat({
     // we use callback style setState here to make sure we are using the latest
     // messages array, and not the messages array that was passed in to this
     const promise = submitChatToMarkprompt(
-      { messages: apiMessages, conversationId },
+      apiMessages,
       projectKey,
       (chunk) => {
         setMessages((messages) => {

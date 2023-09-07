@@ -1,7 +1,4 @@
-import {
-  DEFAULT_SUBMIT_PROMPT_OPTIONS,
-  STREAM_SEPARATOR,
-} from '@markprompt/core';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
 import {
   act,
@@ -21,7 +18,7 @@ let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response) {
@@ -77,12 +74,7 @@ describe('usePrompt', () => {
 
     act(() => result.current.setPrompt('How much is 1+2?'));
 
-    response = [
-      '["https://calculator.example"]',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await result.current.submitPrompt();
 

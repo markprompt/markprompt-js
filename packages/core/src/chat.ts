@@ -10,7 +10,7 @@ export interface SubmitChatOptions {
    * */
   apiUrl?: string;
   /**
-   * Conversation ID. Returned with
+   * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
    * @default undefined
    */
   conversationId?: string;
@@ -85,11 +85,6 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   topP: 1,
 } satisfies SubmitChatOptions;
 
-export interface ChatConversation {
-  conversationId?: string;
-  messages: ChatMessage[];
-}
-
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
@@ -108,7 +103,7 @@ export interface ChatMessage {
  * @param [options] - Optional parameters
  */
 export async function submitChat(
-  conversation: ChatConversation,
+  messages: ChatMessage[],
   projectKey: string,
   onAnswerChunk: (answerChunk: string) => boolean | undefined | void,
   onReferences: (references: FileSectionReference[]) => void,
@@ -122,11 +117,7 @@ export async function submitChat(
     throw new Error('A projectKey is required.');
   }
 
-  if (
-    !conversation?.messages ||
-    !Array.isArray(conversation?.messages) ||
-    conversation?.messages.length === 0
-  ) {
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return;
   }
 
@@ -138,14 +129,8 @@ export async function submitChat(
 
     const res = await fetch(apiUrl, {
       method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      body: JSON.stringify({
-        projectKey,
-        ...conversation,
-        ...resolvedOptions,
-      }),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ projectKey, messages, ...resolvedOptions }),
       signal: signal,
     });
 

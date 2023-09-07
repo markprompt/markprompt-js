@@ -8,13 +8,10 @@ import React, {
 } from 'react';
 
 import type { UseFeedbackResult } from './useFeedback.js';
-import type { ChatLoadingState } from '../chat/useChat.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
-import type { PromptLoadingState } from '../prompt/usePrompt.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
-  state: PromptLoadingState | ChatLoadingState;
   heading?: string;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
@@ -26,7 +23,6 @@ export function Feedback(props: FeedbackProps): ReactElement {
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
     submitFeedback,
     abortFeedbackRequest,
-    state,
     variant,
     ...asideProps
   } = props;
@@ -34,7 +30,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
   function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback, state);
+    submitFeedback(feedback);
     setFeedback(feedback);
   }
 

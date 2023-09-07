@@ -1,7 +1,4 @@
-import {
-  DEFAULT_SUBMIT_CHAT_OPTIONS,
-  STREAM_SEPARATOR,
-} from '@markprompt/core';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
 import {
   act,
   renderHook,
@@ -73,7 +70,7 @@ describe('useChat', () => {
       useChat({ projectKey: 'test-key' }),
     );
 
-    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+    response = ['Hi! ', 'How are you?'];
 
     act(() => result.current.submitChat('Hello'));
 
@@ -87,7 +84,7 @@ describe('useChat', () => {
       useChat({ projectKey: 'test-key' }),
     );
 
-    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+    response = ['Hi! ', 'How are you?'];
 
     act(() => result.current.submitChat('Hello'));
 
@@ -107,7 +104,7 @@ describe('useChat', () => {
       useChat({ projectKey: 'test-key' }),
     );
 
-    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+    response = ['Hi! ', 'How are you?'];
 
     act(() => result.current.submitChat('Hello'));
     act(() => result.current.submitChat('Hello'));
@@ -121,7 +118,7 @@ describe('useChat', () => {
       useChat({ projectKey: 'test-key' }),
     );
 
-    response = ['[]', STREAM_SEPARATOR, 'Hi! ', 'How are you?'];
+    response = ['Hi! ', 'How are you?'];
 
     act(() => result.current.submitChat('Hello'));
 

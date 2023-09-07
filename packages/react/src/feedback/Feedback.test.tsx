@@ -1,22 +1,24 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { describe, expect, test, vitest } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { Feedback } from './Feedback';
 
-const submitFeedback = vitest.fn(() => Promise.resolve());
-const abortFeedbackRequest = vitest.fn();
-
 describe('Feedback', () => {
+  const submitFeedback = vi.fn(() => Promise.resolve());
+  const abortFeedbackRequest = vi.fn();
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   test('render the Feedback component', () => {
     render(
       <Feedback
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
-        state="done"
         variant="text"
-        messageIndex={1}
         data-testid="test-feedback"
       />,
     );
@@ -34,8 +36,6 @@ describe('Feedback', () => {
         variant="text"
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
-        state="done"
-        messageIndex={1}
       />,
     );
 
@@ -47,7 +47,7 @@ describe('Feedback', () => {
     await user.click(yesButton);
 
     await waitFor(() =>
-      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }, 'done', 1),
+      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }),
     );
 
     expect(yesButton).toHaveAttribute('data-active', 'true');

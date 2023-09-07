@@ -98,7 +98,7 @@ export function usePrompt({
     controllerRef.current = controller;
 
     const promise = submitChat(
-      { messages: [{ content: prompt, role: 'user' }] },
+      [{ content: prompt, role: 'user' }],
       projectKey,
       (chunk) => {
         setState('streaming-answer');
@@ -106,6 +106,7 @@ export function usePrompt({
         return true;
       },
       (refs) => setReferences(refs),
+      // conversation id's are not being used here
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       () => {},
       (promptId: string) => setPromptId(promptId),

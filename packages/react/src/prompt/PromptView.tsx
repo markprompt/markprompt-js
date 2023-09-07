@@ -174,7 +174,6 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
             className="MarkpromptPromptFeedback"
             submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
-            state={state}
           />
         )}
       </BaseMarkprompt.AutoScroller>

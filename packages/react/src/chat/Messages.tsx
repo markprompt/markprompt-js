@@ -49,7 +49,6 @@ export function Messages(props: MessagesProps): ReactElement {
                   className="MarkpromptPromptFeedback"
                   submitFeedback={submitFeedback}
                   abortFeedbackRequest={abortFeedbackRequest}
-                  state={message.state}
                 />
               )}
             </div>

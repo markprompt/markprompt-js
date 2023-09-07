@@ -5,8 +5,6 @@ import {
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
-import type { ChatLoadingState } from '../chat/useChat.js';
-import type { PromptLoadingState } from '../prompt/usePrompt.js';
 import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
@@ -22,10 +20,7 @@ export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (
-    feedback: PromptFeedback,
-    state: PromptLoadingState | ChatLoadingState,
-  ) => void;
+  submitFeedback: (feedback: PromptFeedback) => void;
 }
 
 export function useFeedback({
@@ -42,14 +37,8 @@ export function useFeedback({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
-    async (
-      feedback: PromptFeedback,
-      state: PromptLoadingState | ChatLoadingState,
-    ) => {
+    async (feedback: PromptFeedback) => {
       abort();
-
-      // only submit feedback when we are done loading the answer
-      if (state !== 'done') return;
 
       // we need to be able to associate the feedback to a prompt
       if (!promptId) return;
