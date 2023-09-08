@@ -59,6 +59,7 @@ describe('usePrompt', () => {
       answer: '',
       prompt: '',
       references: [],
+      promptId: undefined,
       state: 'indeterminate',
       setPrompt: expect.any(Function),
       submitFeedback: expect.any(Function),

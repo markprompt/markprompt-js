@@ -33,6 +33,7 @@ export interface UsePromptOptions {
 export interface UsePromptResult {
   answer: string;
   prompt: string;
+  promptId?: string;
   references: FileSectionReference[];
   state: PromptLoadingState;
   abort: () => void;
@@ -64,7 +65,6 @@ export function usePrompt({
 
   const { abort: abortFeedbackRequest, submitFeedback } = useFeedback({
     projectKey,
-    promptId,
     feedbackOptions,
   });
 
@@ -141,6 +141,7 @@ export function usePrompt({
     () => ({
       answer,
       prompt,
+      promptId,
       references,
       state,
       abort,
@@ -152,6 +153,7 @@ export function usePrompt({
     [
       answer,
       prompt,
+      promptId,
       references,
       state,
       abort,

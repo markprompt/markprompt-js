@@ -9,6 +9,8 @@ describe('Feedback', () => {
   const submitFeedback = vi.fn(() => Promise.resolve());
   const abortFeedbackRequest = vi.fn();
 
+  const promptId = 'test-prompt-id';
+
   afterEach(() => {
     vi.resetAllMocks();
   });
@@ -20,6 +22,7 @@ describe('Feedback', () => {
         abortFeedbackRequest={abortFeedbackRequest}
         variant="text"
         data-testid="test-feedback"
+        promptId={promptId}
       />,
     );
 
@@ -36,6 +39,7 @@ describe('Feedback', () => {
         variant="text"
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
+        promptId={promptId}
       />,
     );
 
@@ -47,7 +51,7 @@ describe('Feedback', () => {
     await user.click(yesButton);
 
     await waitFor(() =>
-      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }),
+      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }, promptId),
     );
 
     expect(yesButton).toHaveAttribute('data-active', 'true');

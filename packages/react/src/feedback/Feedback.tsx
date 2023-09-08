@@ -16,6 +16,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
   variant: 'text' | 'icons';
+  promptId?: string;
 }
 
 export function Feedback(props: FeedbackProps): ReactElement {
@@ -24,13 +25,14 @@ export function Feedback(props: FeedbackProps): ReactElement {
     submitFeedback,
     abortFeedbackRequest,
     variant,
+    promptId,
     ...asideProps
   } = props;
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
   function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback);
+    submitFeedback(feedback, promptId);
     setFeedback(feedback);
   }
 

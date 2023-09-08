@@ -24,6 +24,7 @@ export type ChatLoadingState =
 
 export interface ChatViewMessage {
   prompt: string;
+  promptId?: string;
   answer?: string;
   id: string;
   state: ChatLoadingState;
@@ -40,7 +41,6 @@ export interface UseChatOptions {
 export interface UseChatResult {
   messages: ChatViewMessage[];
   conversationId?: string;
-  promptId?: string;
   abort: () => void;
   abortFeedbackRequest: UseFeedbackResult['abort'];
   submitChat: (prompt: string) => void;
@@ -74,13 +74,11 @@ export function useChat({
     );
   }
 
-  const [conversationId, setConversationId] = useState<string>('');
-  const [promptId, setPromptId] = useState<string>('');
+  const [conversationId, setConversationId] = useState<string>();
   const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
-    promptId,
     feedbackOptions,
   });
 
@@ -164,7 +162,12 @@ export function useChat({
         );
       },
       (conversationId) => setConversationId(conversationId),
-      (promptId) => setPromptId(promptId),
+      (promptId) =>
+        setMessages((messages) => {
+          return updateMessageById(messages, currentMessageId, {
+            promptId,
+          });
+        }),
       (error) => {
         setMessages((messages) =>
           updateMessageById(messages, currentMessageId, {
@@ -233,7 +236,6 @@ export function useChat({
     abortFeedbackRequest,
     messages,
     conversationId,
-    promptId,
     regenerateLastAnswer,
     submitChat,
     submitFeedback,

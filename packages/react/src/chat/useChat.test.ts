@@ -59,10 +59,17 @@ describe('useChat', () => {
     }
   });
 
-  it('should initialize with promptId as an empty string and messages as an empty array', () => {
+  it('should initialize with a default state', () => {
     const { result } = renderHook(() => useChat({ projectKey: 'test-key' }));
-    expect(result.current.promptId).toBe('');
-    expect(result.current.messages).toEqual([]);
+    expect(result.current).toStrictEqual({
+      abort: expect.any(Function),
+      abortFeedbackRequest: expect.any(Function),
+      messages: [],
+      conversationId: undefined,
+      regenerateLastAnswer: expect.any(Function),
+      submitChat: expect.any(Function),
+      submitFeedback: expect.any(Function),
+    });
   });
 
   it('should add a new chat message when submitChat is called', async () => {

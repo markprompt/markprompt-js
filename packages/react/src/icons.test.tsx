@@ -2,43 +2,13 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { expect, test } from 'vitest';
 
-import {
-  ChatIcon,
-  ChevronLeftIcon,
-  ChevronUpIcon,
-  CloseIcon,
-  CommandIcon,
-  CornerDownLeftIcon,
-  FileTextIcon,
-  HashIcon,
-  ReloadIcon,
-  SearchIcon,
-  SparklesIcon,
-  ThumbsDownIcon,
-  ThumbsUpIcon,
-} from './icons.js';
-
-const allIcons = [
-  ChatIcon,
-  ChevronLeftIcon,
-  ChevronUpIcon,
-  CloseIcon,
-  CommandIcon,
-  CornerDownLeftIcon,
-  FileTextIcon,
-  HashIcon,
-  ReloadIcon,
-  SearchIcon,
-  SparklesIcon,
-  ThumbsDownIcon,
-  ThumbsUpIcon,
-];
+import * as icons from './icons.js';
 
 test('renders the ThumbsDownIcon component', () => {
-  for (let i = 0; i < allIcons.length; i++) {
-    const Icon = allIcons[i];
-    render(<Icon data-testid={`test-icon-${i}`} />);
-    const thumbsDownIcon = screen.getByTestId(`test-icon-${i}`);
-    expect(thumbsDownIcon).toBeInTheDocument();
+  for (const icon in icons) {
+    const Icon = icons[icon];
+    render(<Icon data-testid={`test-icon-${icon}`} />);
+    const el = screen.getByTestId(`test-icon-${icon}`);
+    expect(el).toBeInTheDocument();
   }
 });
