@@ -9,11 +9,12 @@ import { useFeedback } from './useFeedback.js';
 
 let status = 200;
 let endpointHits = 0;
+let response: unknown = '';
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (_req, res, ctx) => {
     endpointHits += 1;
-    return res(ctx.status(status), ctx.body(JSON.stringify('')));
+    return res(ctx.status(status), ctx.body(JSON.stringify(response)));
   }),
 );
 
@@ -28,16 +29,14 @@ afterAll(() => {
 afterEach(() => {
   status = 200;
   endpointHits = 0;
+  response = '';
   server.resetHandlers();
 });
 
 describe('useFeedback', () => {
   it('should return an initial state', () => {
     const { result } = renderHook(() =>
-      useFeedback({
-        projectKey: 'TEST_PROJECT_KEY',
-        promptId: '1',
-      }),
+      useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
     );
 
     expect(result.current).toStrictEqual({
@@ -50,12 +49,7 @@ describe('useFeedback', () => {
     const restoreConsole = suppressErrorOutput();
 
     try {
-      const { result } = renderHook(() =>
-        useFeedback({
-          projectKey: '',
-          promptId: '1',
-        }),
-      );
+      const { result } = renderHook(() => useFeedback({ projectKey: '' }));
 
       expect(result.error).toBeDefined();
       expect(result.error!.message).toBe(
@@ -68,34 +62,49 @@ describe('useFeedback', () => {
 
   it(`submitFeedback should make requests to ${DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl}`, async () => {
     const { result } = renderHook(() =>
-      useFeedback({
-        projectKey: 'TEST_PROJECT_KEY',
-        promptId: '1',
-      }),
+      useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
     );
 
     const { submitFeedback } = result.current;
 
-    await submitFeedback({ vote: '1' }, 'done', 1);
+    await submitFeedback({ vote: '1' }, 'prompt-id');
 
     await waitFor(() => expect(endpointHits).toBe(1));
   });
 
   it(`submitFeedback should be aborted when abort is called`, async () => {
     const { result } = renderHook(() =>
-      useFeedback({
-        projectKey: 'TEST_PROJECT_KEY',
-        promptId: '1',
-      }),
+      useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
     );
 
     const { submitFeedback, abort } = result.current;
 
-    const submitFeedbackPromise = submitFeedback({ vote: '1' }, 'done', 1);
+    const submitFeedbackPromise = submitFeedback({ vote: '1' }, 'prompt-id');
 
     abort();
 
     await waitFor(() => expect(endpointHits).toBe(0));
     await expect(submitFeedbackPromise).resolves.toBeUndefined();
+  });
+
+  it('should ignore errors', async () => {
+    const restoreConsole = suppressErrorOutput();
+
+    try {
+      const { result } = renderHook(() =>
+        useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
+      );
+
+      const { submitFeedback } = result.current;
+
+      response = { error: 'I will not be handled' };
+      status = 500;
+
+      await submitFeedback({ vote: '1' }, 'prompt-id');
+
+      expect(result.error).toBeUndefined();
+    } finally {
+      restoreConsole();
+    }
   });
 });

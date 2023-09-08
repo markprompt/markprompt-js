@@ -8,7 +8,6 @@ import {
 } from './utils.js';
 
 const encoder = new TextEncoder();
-const errorMessage = 'This is an error message';
 const unencodedObject = { data: 'Some text' };
 const encodedObject = encoder
   .encode(JSON.stringify(unencodedObject))
@@ -16,33 +15,21 @@ const encodedObject = encoder
 const unencodedText = 'Some text';
 const encodedText = encoder.encode(unencodedText).toString();
 
-describe('utils', () => {
-  test('returns the error message from the response', async () => {
-    const mockErrorResponse = {
-      error: errorMessage,
-    };
-
-    const mockResponse = new Response(JSON.stringify(mockErrorResponse), {
-      status: 500,
-      headers: { 'Content-type': 'application/json' },
-    });
-
-    const _errorMessage = await getErrorMessage(mockResponse);
-
-    expect(_errorMessage).toBe(errorMessage);
+describe('getErrorMessage', () => {
+  test('returns error from response if present', async () => {
+    const mockResponse = new Response(JSON.stringify({ error: 'Test error' }));
+    const result = await getErrorMessage(mockResponse);
+    expect(result).toBe('Test error');
   });
 
-  test('returns the response body as a string if parsing JSON fails', async () => {
-    const mockResponse = new Response(errorMessage, {
-      status: 500,
-      headers: { 'Content-type': 'text/plain' },
-    });
-
-    const _errorMessage = await getErrorMessage(mockResponse);
-
-    expect(_errorMessage).toBe(errorMessage);
+  test('returns text from response if error is not present', async () => {
+    const mockResponse = new Response('Test text');
+    const result = await getErrorMessage(mockResponse);
+    expect(result).toBe('Test text');
   });
+});
 
+describe('parseEncodedJSONHeader', () => {
   test('parses and returns the decoded JSON value from the header', () => {
     const mockResponse = new Response(null, {
       headers: {
@@ -80,7 +67,9 @@ describe('utils', () => {
 
     expect(parsedValue).toBeUndefined();
   });
+});
 
+describe('isFileSectionReferences', () => {
   test('identifies FileSectionReference types', () => {
     const references = [
       {
@@ -93,7 +82,9 @@ describe('utils', () => {
 
     expect(isFileSectionReferences(references)).toBe(true);
   });
+});
 
+describe('isAbortError', () => {
   test('identifies AbortError', () => {
     const err1 = new DOMException('AbortError');
     expect(isAbortError(err1)).toBe(true);

@@ -136,8 +136,6 @@ export async function submitChat(
       DEFAULT_SUBMIT_CHAT_OPTIONS,
     );
 
-    console.log({ apiUrl, signal, ...resolvedOptions });
-
     const res = await fetch(apiUrl, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),

@@ -31,6 +31,22 @@ describe('Feedback', () => {
     expect(element).toBeInTheDocument();
   });
 
+  test('render the Feedback component with the icons variant', () => {
+    render(
+      <Feedback
+        submitFeedback={submitFeedback}
+        abortFeedbackRequest={abortFeedbackRequest}
+        variant="icons"
+        data-testid="test-feedback"
+        promptId={promptId}
+      />,
+    );
+
+    const element = screen.getByTestId('test-feedback');
+
+    expect(element).toBeInTheDocument();
+  });
+
   test('thank the user when feedback was provided', async () => {
     const user = userEvent.setup();
 
