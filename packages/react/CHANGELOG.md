@@ -1,5 +1,39 @@
 # @markprompt/react
 
+## 0.21.0
+
+### Minor Changes
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for
+  `conversationId` in `submitChat`
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Use `submitChat`
+  instead of `submitPrompt`
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Focus the chat
+  view input when the view changes
+
+- Updated dependencies
+  [[`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`02b2cb0`](https://github.com/motifland/markprompt-js/commit/02b2cb080b76b85ba629a2f6d7925385feda31b5),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed),
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed),
+  [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)]:
+  - @markprompt/core@0.13.0
+
 ## 0.20.0
 
 ### Minor Changes

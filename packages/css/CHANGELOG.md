@@ -1,5 +1,19 @@
 # @markprompt/css
 
+## 0.14.0
+
+### Minor Changes
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Various style
+  refinements for chat and prompt views
+
 ## 0.13.0
 
 ### Minor Changes
