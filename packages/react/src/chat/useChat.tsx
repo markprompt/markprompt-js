@@ -63,77 +63,81 @@ function updateMessageById(
   return nextMessages;
 }
 
-export const useChatStore = create<{
+interface State {
   conversationId?: string;
   setConversationId: (conversationId: string) => void;
   messages: ChatViewMessage[];
   setMessages: (
-    nextStateOrCallback:
+    nextStateOrUpdater:
       | ChatViewMessage[]
-      | ((messages: ChatViewMessage[]) => ChatViewMessage[]),
+      | ((current: ChatViewMessage[]) => ChatViewMessage[]),
   ) => void;
   messagesByConversationId: Record<string, ChatViewMessage[]>;
-  setMessagesByConversationId: (
-    conversationId: string,
-    messages: ChatViewMessage[],
-  ) => void;
-}>()(
+}
+
+export const useChatStore = create<State>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       conversationId: undefined,
       setConversationId: (conversationId: string) => {
-        set({
-          conversationId,
-          messages: get().messagesByConversationId[conversationId] ?? [],
-        });
-      },
-      messages: [],
-      setMessages: (
-        nextStateOrCallback:
-          | ChatViewMessage[]
-          | ((messages: ChatViewMessage[]) => ChatViewMessage[]),
-      ) => {
-        if (typeof nextStateOrCallback !== 'function') {
-          const conversationId = get().conversationId;
-          if (!conversationId) return set({ messages: nextStateOrCallback });
-          return set({
-            messages: nextStateOrCallback,
-            messagesByConversationId: {
-              ...get().messagesByConversationId,
-              [conversationId]: nextStateOrCallback,
-            },
-          });
-        }
-
-        const messages = nextStateOrCallback(get().messages);
-        const conversationId = get().conversationId;
-
-        if (!conversationId) return set({ messages });
-
-        return set({
-          messages,
-          messagesByConversationId: {
-            ...get().messagesByConversationId,
-            [conversationId]: messages,
-          },
-        });
-      },
-      messagesByConversationId: {},
-      setMessagesByConversationId: (
-        conversationId: string,
-        messages: ChatViewMessage[],
-      ) => {
+        // update the conversationId, and associate the current messages with
+        // the conversationId in messagesByConversationId
         set((state) => ({
+          conversationId,
           messagesByConversationId: {
             ...state.messagesByConversationId,
-            [conversationId]: messages,
+            [conversationId]: state.messages,
           },
         }));
       },
+      messages: [],
+      setMessages: (
+        nextStateOrUpdater:
+          | ChatViewMessage[]
+          | ((current: ChatViewMessage[]) => ChatViewMessage[]),
+      ) => {
+        set((state) => {
+          const messages =
+            typeof nextStateOrUpdater === 'function'
+              ? nextStateOrUpdater(state.messages)
+              : nextStateOrUpdater;
+
+          return {
+            messages,
+            messagesByConversationId: state.conversationId
+              ? {
+                  ...state.messagesByConversationId,
+                  [state.conversationId]: messages,
+                }
+              : state.messagesByConversationId,
+          };
+        });
+      },
+      messagesByConversationId: {},
     }),
     {
       name: 'markprompt-chat-history',
       version: 1,
+      // only store messagesByConversationId in local storage
+      partialize: (state) => ({
+        conversationId: state.conversationId,
+        messagesByConversationId: state.messagesByConversationId,
+      }),
+      // rehydrate messages based on the stored conversationId
+      onRehydrateStorage: () => (state) => {
+        if (!state || typeof state !== 'object') return;
+
+        const { conversationId, messagesByConversationId } = state;
+
+        if (!conversationId || !(conversationId in messagesByConversationId))
+          return;
+
+        const messages = messagesByConversationId[conversationId];
+
+        if (!messages || messages?.length === 0) return;
+
+        state.setMessages(messages);
+      },
     },
   ),
 );
@@ -154,8 +158,6 @@ export function useChat({
   const setConversationId = useChatStore((state) => state.setConversationId);
   const messages = useChatStore((state) => state.messages);
   const setMessages = useChatStore((state) => state.setMessages);
-
-  // const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
