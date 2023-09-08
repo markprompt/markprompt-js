@@ -30,7 +30,8 @@
     "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
     "react-merge-refs": "^2.0.2",
-    "remark-gfm": "^3.0.1"
+    "remark-gfm": "^3.0.1",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.20.1",

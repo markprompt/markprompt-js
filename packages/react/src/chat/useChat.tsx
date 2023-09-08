@@ -6,6 +6,8 @@ import {
   type SubmitChatOptions,
 } from '@markprompt/core';
 import { useState } from 'react';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 import {
   useFeedback,
@@ -23,9 +25,10 @@ export type ChatLoadingState =
   | 'cancelled';
 
 export interface ChatViewMessage {
-  prompt: string;
-  answer?: string;
   id: string;
+  prompt: string;
+  promptId?: string;
+  answer?: string;
   state: ChatLoadingState;
   references: FileSectionReference[];
 }
@@ -38,9 +41,8 @@ export interface UseChatOptions {
 }
 
 export interface UseChatResult {
-  messages: ChatViewMessage[];
   conversationId?: string;
-  promptId?: string;
+  messages: ChatViewMessage[];
   abort: () => void;
   abortFeedbackRequest: UseFeedbackResult['abort'];
   submitChat: (prompt: string) => void;
@@ -62,6 +64,66 @@ function updateMessageById(
   return nextMessages;
 }
 
+export const useChatStore = create<{
+  conversationId?: string;
+  setConversationId: (conversationId: string) => void;
+  messages: ChatViewMessage[];
+  setMessages: (
+    updater: (messages: ChatViewMessage[]) => ChatViewMessage[],
+  ) => void;
+  messagesByConversationId: Record<string, ChatViewMessage[]>;
+  setMessagesByConversationId: (
+    conversationId: string,
+    messages: ChatViewMessage[],
+  ) => void;
+}>()(
+  persist(
+    (set, get) => ({
+      conversationId: undefined,
+      setConversationId: (conversationId: string) => {
+        set({
+          conversationId,
+          messages: get().messagesByConversationId[conversationId] ?? [],
+        });
+      },
+      messages: [],
+      setMessages: (
+        updater: (messages: ChatViewMessage[]) => ChatViewMessage[],
+      ) => {
+        const messages = updater(get().messages);
+
+        const conversationId = get().conversationId;
+
+        if (!conversationId) return set({ messages });
+
+        return set({
+          messages,
+          messagesByConversationId: {
+            ...get().messagesByConversationId,
+            [conversationId]: messages,
+          },
+        });
+      },
+      messagesByConversationId: {},
+      setMessagesByConversationId: (
+        conversationId: string,
+        messages: ChatViewMessage[],
+      ) => {
+        set((state) => ({
+          messagesByConversationId: {
+            ...state.messagesByConversationId,
+            [conversationId]: messages,
+          },
+        }));
+      },
+    }),
+    {
+      name: 'markprompt-chat-history',
+      version: 1,
+    },
+  ),
+);
+
 export function useChat({
   chatOptions,
   debug,
@@ -74,13 +136,15 @@ export function useChat({
     );
   }
 
-  const [conversationId, setConversationId] = useState<string>('');
-  const [promptId, setPromptId] = useState<string>('');
-  const [messages, setMessages] = useState<ChatViewMessage[]>([]);
+  const conversationId = useChatStore((state) => state.conversationId);
+  const setConversationId = useChatStore((state) => state.setConversationId);
+  const messages = useChatStore((state) => state.messages);
+  const setMessages = useChatStore((state) => state.setMessages);
+
+  // const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
-    promptId,
     feedbackOptions,
   });
 
@@ -163,8 +227,16 @@ export function useChat({
           }),
         );
       },
-      (conversationId) => setConversationId(conversationId),
-      (promptId) => setPromptId(promptId),
+      (conversationId) => {
+        setConversationId(conversationId);
+      },
+      (promptId) => {
+        setMessages((messages) =>
+          updateMessageById(messages, currentMessageId, {
+            promptId,
+          }),
+        );
+      },
       (error) => {
         setMessages((messages) =>
           updateMessageById(messages, currentMessageId, {
@@ -180,6 +252,7 @@ export function useChat({
       {
         ...chatOptions,
         signal: controller.signal,
+        conversationId,
       },
       debug,
     );
@@ -192,6 +265,13 @@ export function useChat({
           state: 'done',
         }),
       );
+
+      console.log(conversationId, messages);
+
+      if (!conversationId) return;
+
+      // save messages to local storage
+      // setMessagesByConversationId(conversationId, messages);
     });
 
     promise.finally(() => {
@@ -210,9 +290,9 @@ export function useChat({
     const nextMessages = [
       ...messages,
       {
+        id,
         prompt,
         state: 'indeterminate',
-        id,
         references: [],
       },
     ] satisfies ChatViewMessage[];
@@ -233,7 +313,6 @@ export function useChat({
     abortFeedbackRequest,
     messages,
     conversationId,
-    promptId,
     regenerateLastAnswer,
     submitChat,
     submitFeedback,

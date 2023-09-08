@@ -20,6 +20,7 @@ describe('Feedback', () => {
         abortFeedbackRequest={abortFeedbackRequest}
         variant="text"
         data-testid="test-feedback"
+        promptId="1"
       />,
     );
 
@@ -36,6 +37,7 @@ describe('Feedback', () => {
         variant="text"
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
+        promptId="1"
       />,
     );
 

@@ -12,21 +12,18 @@ export interface UseFeedbackOptions {
   feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
-  /** ID for the current prompt */
-  promptId?: string;
 }
 
 export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (feedback: PromptFeedback) => void;
+  submitFeedback: (feedback: PromptFeedback, promptId: string) => void;
 }
 
 export function useFeedback({
   feedbackOptions,
   projectKey,
-  promptId,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -37,7 +34,7 @@ export function useFeedback({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
-    async (feedback: PromptFeedback) => {
+    async (feedback: PromptFeedback, promptId: string) => {
       abort();
 
       // we need to be able to associate the feedback to a prompt
@@ -62,7 +59,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, promptId, controllerRef, projectKey, feedbackOptions],
+    [abort, controllerRef, projectKey, feedbackOptions],
   );
 
   return { submitFeedback, abort };
