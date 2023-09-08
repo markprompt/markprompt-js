@@ -1,5 +1,32 @@
 # @markprompt/web
 
+## 0.17.0
+
+### Minor Changes
+
+- [#159](https://github.com/motifland/markprompt-js/pull/159)
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Update
+  [`preact`](https://github.com/preactjs/preact/releases/tag/10.17.1)
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- Updated dependencies
+  [[`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`02b2cb0`](https://github.com/motifland/markprompt-js/commit/02b2cb080b76b85ba629a2f6d7925385feda31b5),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed),
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed),
+  [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)]:
+  - @markprompt/core@0.13.0
+  - @markprompt/react@0.21.0
+
 ## 0.16.1
 
 ### Patch Changes

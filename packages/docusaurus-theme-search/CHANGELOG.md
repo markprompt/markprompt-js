@@ -1,5 +1,23 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.11.0
+
+### Minor Changes
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- Updated dependencies
+  [[`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)]:
+  - @markprompt/react@0.21.0
+  - @markprompt/css@0.14.0
+
 ## 0.10.0
 
 ### Minor Changes
