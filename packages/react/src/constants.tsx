@@ -1,5 +1,4 @@
 import {
-  DEFAULT_SUBMIT_CHAT_OPTIONS,
   type AlgoliaDocSearchHit,
   type FileSectionReference,
   type SearchResult,
@@ -160,6 +159,8 @@ const defaultGetSearchResultSubtitle = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
+  display: 'dialog',
+  showBranding: true,
   close: {
     label: 'Close Markprompt',
     visible: true,
@@ -168,20 +169,17 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Markprompt',
   },
-  display: 'dialog',
   feedback: {
     enabled: false,
     heading: 'Was this response helpful?',
   },
   chat: {
-    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
     enabled: false,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
   },
   prompt: {
-    ...DEFAULT_SUBMIT_CHAT_OPTIONS,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
@@ -212,5 +210,4 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Ask AI',
   },
-  showBranding: true,
 };
