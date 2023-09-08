@@ -18,11 +18,13 @@ let markpromptDebug = '';
 let response: string[] = [];
 let status = 200;
 let request: RestRequest;
+let requestBody: unknown = {};
 let stream: ReadableStream;
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
     request = req;
+    requestBody = await req.json();
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response) {
@@ -62,6 +64,7 @@ describe('submitChat', () => {
 
   afterEach(() => {
     response = [];
+    requestBody = {};
     markpromptData = '';
     status = 200;
     server.resetHandlers();
@@ -90,6 +93,27 @@ describe('submitChat', () => {
     expect(onAnswerChunk).not.toHaveBeenCalled();
     expect(onReferences).not.toHaveBeenCalled();
     expect(onError).not.toHaveBeenCalled();
+  });
+
+  test('endpoint is called with the default options if none are provided', async () => {
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onConversationId,
+      onPromptId,
+      onError,
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { apiUrl, ...rest } = DEFAULT_SUBMIT_CHAT_OPTIONS;
+
+    expect(requestBody).toStrictEqual({
+      messages: [{ content: 'How much is 1+2?', role: 'user' }],
+      projectKey: 'testKey',
+      ...rest,
+    });
   });
 
   test('make a request', async () => {
@@ -241,6 +265,33 @@ describe('submitChat', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
+  test('calls back user-provided onConversationId', async () => {
+    const conversationId = 'test-id';
+
+    const encoder = new TextEncoder();
+
+    markpromptData = encoder
+      .encode(JSON.stringify({ conversationId }))
+      .toString();
+
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onConversationId,
+      onPromptId,
+      onError,
+    );
+
+    expect(request).toBeDefined();
+    expect(onAnswerChunk).toHaveBeenCalled();
+    expect(onConversationId).toHaveBeenCalledWith(conversationId);
+    expect(onError).not.toHaveBeenCalled();
+  });
+
   test('logs debug info', async () => {
     const onAnswerChunk = vi.fn();
     const onReferences = vi.fn();
@@ -270,6 +321,31 @@ describe('submitChat', () => {
   test('expect onError to be called when an error occurs', async () => {
     const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
       throw new Error('test');
+    });
+
+    try {
+      response = ['According to my calculator ', '1 + 2 = 3'];
+
+      await submitChat(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+        onAnswerChunk,
+        onConversationId,
+        onReferences,
+        onPromptId,
+        onError,
+      );
+
+      expect(request).toBeDefined();
+      expect(onError).toHaveBeenCalledWith(new Error('test'));
+    } finally {
+      mockFetch.mockRestore();
+    }
+  });
+
+  test('expect onError to be called when a non-error is thrown', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      throw 'test';
     });
 
     try {
