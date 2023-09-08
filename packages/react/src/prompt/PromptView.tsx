@@ -49,6 +49,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
     submitPrompt,
     setPrompt,
     prompt,
+    promptId,
     state,
     references,
     submitFeedback,
@@ -125,14 +126,15 @@ export function PromptView(props: PromptViewProps): ReactElement {
       </BaseMarkprompt.Form>
 
       <AnswerContainer
+        abortFeedbackRequest={abortFeedbackRequest}
         answer={answer}
         feedbackOptions={feedbackOptions}
         onDidSelectReference={onDidSelectReference}
+        promptId={promptId}
         references={references}
         referencesOptions={referencesOptions}
         state={state}
         submitFeedback={submitFeedback}
-        abortFeedbackRequest={abortFeedbackRequest}
       />
     </div>
   );
@@ -147,18 +149,20 @@ interface AnswerContainerProps {
   state: PromptLoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
+  promptId?: string;
 }
 
 function AnswerContainer(props: AnswerContainerProps): ReactElement {
   const {
+    abortFeedbackRequest,
     answer,
     feedbackOptions,
-    referencesOptions,
-    references,
     onDidSelectReference,
+    promptId,
+    references,
+    referencesOptions,
     state,
     submitFeedback,
-    abortFeedbackRequest,
   } = props;
 
   return (
@@ -174,6 +178,7 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
             className="MarkpromptPromptFeedback"
             submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
+            promptId={promptId}
           />
         )}
       </BaseMarkprompt.AutoScroller>

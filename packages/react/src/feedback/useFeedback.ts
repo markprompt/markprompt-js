@@ -18,7 +18,7 @@ export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (feedback: PromptFeedback, promptId: string) => void;
+  submitFeedback: (feedback: PromptFeedback, promptId?: string) => void;
 }
 
 export function useFeedback({
@@ -34,7 +34,7 @@ export function useFeedback({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitFeedback = useCallback(
-    async (feedback: PromptFeedback, promptId: string) => {
+    async (feedback: PromptFeedback, promptId?: string) => {
       abort();
 
       // we need to be able to associate the feedback to a prompt

@@ -156,17 +156,17 @@ Submit a search query to the Markprompt Search API.
 
 A list of search results.
 
-### `submitFeedback(projectKey, feedback, options?)`
+### `submitFeedback(feedback, projectKey, options?)`
 
 Submit feedback to the Markprompt Feedback API about a specific prompt.
 
 #### Arguments
 
-- `projectKey` (`string`): Project key for the project
 - `feedback` (`object`): Feedback to submit
 - `feedback.feedback` (`object`): Feedback data
 - `feedback.feedback.vote` (`"1" | "-1"`): Vote
 - `feedback.promptId` (`string`): Prompt ID
+- `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters
 - `options.apiUrl` (`string`): URL at which to post feedback
 - `options.signal` (`AbortSignal`): AbortController signal

@@ -16,7 +16,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
   variant: 'text' | 'icons';
-  promptId: string;
+  promptId?: string;
 }
 
 export function Feedback(props: FeedbackProps): ReactElement {
@@ -53,7 +53,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
           {variant === 'text' && 'Yes'}
           {variant === 'icons' && (
             <AccessibleIcon label="yes">
-              <ThumbsUpIcon width={16} height={16} />
+              <ThumbsUpIcon width={16} height={16} strokeWidth={2} />
             </AccessibleIcon>
           )}
         </button>

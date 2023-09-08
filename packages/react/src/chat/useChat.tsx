@@ -5,7 +5,6 @@ import {
   type ChatMessage,
   type SubmitChatOptions,
 } from '@markprompt/core';
-import { useState } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -69,7 +68,9 @@ export const useChatStore = create<{
   setConversationId: (conversationId: string) => void;
   messages: ChatViewMessage[];
   setMessages: (
-    updater: (messages: ChatViewMessage[]) => ChatViewMessage[],
+    nextStateOrCallback:
+      | ChatViewMessage[]
+      | ((messages: ChatViewMessage[]) => ChatViewMessage[]),
   ) => void;
   messagesByConversationId: Record<string, ChatViewMessage[]>;
   setMessagesByConversationId: (
@@ -88,10 +89,23 @@ export const useChatStore = create<{
       },
       messages: [],
       setMessages: (
-        updater: (messages: ChatViewMessage[]) => ChatViewMessage[],
+        nextStateOrCallback:
+          | ChatViewMessage[]
+          | ((messages: ChatViewMessage[]) => ChatViewMessage[]),
       ) => {
-        const messages = updater(get().messages);
+        if (typeof nextStateOrCallback !== 'function') {
+          const conversationId = get().conversationId;
+          if (!conversationId) return set({ messages: nextStateOrCallback });
+          return set({
+            messages: nextStateOrCallback,
+            messagesByConversationId: {
+              ...get().messagesByConversationId,
+              [conversationId]: nextStateOrCallback,
+            },
+          });
+        }
 
+        const messages = nextStateOrCallback(get().messages);
         const conversationId = get().conversationId;
 
         if (!conversationId) return set({ messages });
@@ -208,6 +222,8 @@ export function useChat({
       apiMessages,
       projectKey,
       (chunk) => {
+        if (controller.signal.aborted) return false;
+
         setMessages((messages) => {
           const currentMessage = messages.find(
             (message) => message.id === currentMessageId,
@@ -259,19 +275,17 @@ export function useChat({
 
     promise.then(() => {
       if (controller.signal.aborted) return;
-      // set state of current message to done
-      setMessages((messages) =>
-        updateMessageById(messages, currentMessageId, {
+
+      setMessages((messages) => {
+        // don't overwrite the state of cancelled messages with done when the promise resolves
+        const currentMessage = messages.find((m) => m.id === currentMessageId);
+        if (currentMessage?.state === 'cancelled') return messages;
+
+        // set state of current message to done
+        return updateMessageById(messages, currentMessageId, {
           state: 'done',
-        }),
-      );
-
-      console.log(conversationId, messages);
-
-      if (!conversationId) return;
-
-      // save messages to local storage
-      // setMessagesByConversationId(conversationId, messages);
+        });
+      });
     });
 
     promise.finally(() => {
