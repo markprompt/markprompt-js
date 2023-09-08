@@ -76,15 +76,6 @@ export function usePrompt({
   const submitPrompt = useCallback(async () => {
     abort();
 
-    if (state === 'preload' || state === 'streaming-answer') {
-      // If state is loading and fetch was aborted, wait a short delay
-      // so that the original fetch request aborts and resets the state.
-      // Otherwise, the new fetch starts (and state becomes 'preload'),
-      // and after that, the state becomes 'done', which is the wrong
-      // order.
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
-
     if (!prompt || prompt === '') {
       return;
     }
@@ -135,7 +126,7 @@ export function usePrompt({
         controllerRef.current = undefined;
       }
     });
-  }, [abort, controllerRef, debug, projectKey, prompt, promptOptions, state]);
+  }, [abort, controllerRef, debug, projectKey, prompt, promptOptions]);
 
   return useMemo(
     () => ({
