@@ -5,7 +5,7 @@ import {
   type ChatMessage,
   type SubmitChatOptions,
 } from '@markprompt/core';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import {
   useFeedback,
