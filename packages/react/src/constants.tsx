@@ -159,12 +159,8 @@ const defaultGetSearchResultSubtitle = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
-  chat: {
-    enabled: false,
-    label: 'Ask AI',
-    tabLabel: 'Ask AI',
-    placeholder: 'Ask AI…',
-  },
+  display: 'dialog',
+  showBranding: true,
   close: {
     label: 'Close Markprompt',
     visible: true,
@@ -173,10 +169,15 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Markprompt',
   },
-  display: 'dialog',
   feedback: {
     enabled: false,
     heading: 'Was this response helpful?',
+  },
+  chat: {
+    enabled: false,
+    label: 'Ask AI',
+    tabLabel: 'Ask AI',
+    placeholder: 'Ask AI…',
   },
   prompt: {
     label: 'Ask AI',
@@ -209,5 +210,4 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Ask AI',
   },
-  showBranding: true,
 };

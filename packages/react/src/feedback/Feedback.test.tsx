@@ -1,23 +1,44 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { describe, expect, test, vitest } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { Feedback } from './Feedback';
 
-const submitFeedback = vitest.fn(() => Promise.resolve());
-const abortFeedbackRequest = vitest.fn();
-
 describe('Feedback', () => {
+  const submitFeedback = vi.fn(() => Promise.resolve());
+  const abortFeedbackRequest = vi.fn();
+
+  const promptId = 'test-prompt-id';
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   test('render the Feedback component', () => {
     render(
       <Feedback
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
-        state="done"
         variant="text"
-        messageIndex={1}
         data-testid="test-feedback"
+        promptId={promptId}
+      />,
+    );
+
+    const element = screen.getByTestId('test-feedback');
+
+    expect(element).toBeInTheDocument();
+  });
+
+  test('render the Feedback component with the icons variant', () => {
+    render(
+      <Feedback
+        submitFeedback={submitFeedback}
+        abortFeedbackRequest={abortFeedbackRequest}
+        variant="icons"
+        data-testid="test-feedback"
+        promptId={promptId}
       />,
     );
 
@@ -34,8 +55,7 @@ describe('Feedback', () => {
         variant="text"
         submitFeedback={submitFeedback}
         abortFeedbackRequest={abortFeedbackRequest}
-        state="done"
-        messageIndex={1}
+        promptId={promptId}
       />,
     );
 
@@ -47,7 +67,7 @@ describe('Feedback', () => {
     await user.click(yesButton);
 
     await waitFor(() =>
-      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }, 'done', 1),
+      expect(submitFeedback).toHaveBeenCalledWith({ vote: '1' }, promptId),
     );
 
     expect(yesButton).toHaveAttribute('data-active', 'true');

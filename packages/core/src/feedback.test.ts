@@ -41,11 +41,13 @@ describe('submitFeedback', () => {
   });
 
   test('makes a request', async () => {
-    const response = await submitFeedback('testKey', {
-      feedback: { vote: '1' },
-      promptId: 'test-id',
-      messageIndex: 1,
-    });
+    const response = await submitFeedback(
+      {
+        feedback: { vote: '1' },
+        promptId: 'test-id',
+      },
+      'testKey',
+    );
 
     expect(response).toStrictEqual({ status: 'ok' });
   });
@@ -54,11 +56,13 @@ describe('submitFeedback', () => {
     status = 500;
 
     await expect(
-      submitFeedback('testKey', {
-        feedback: { vote: '1' },
-        promptId: 'test-id',
-        messageIndex: 1,
-      }),
+      submitFeedback(
+        {
+          feedback: { vote: '1' },
+          promptId: 'test-id',
+        },
+        'testKey',
+      ),
     ).rejects.toThrowError('Internal Server Error');
   });
 });

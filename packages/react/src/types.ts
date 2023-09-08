@@ -4,7 +4,6 @@ import {
   type SearchResult,
   type SubmitChatOptions,
   type SubmitFeedbackOptions,
-  type SubmitPromptOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
 import type {
@@ -125,11 +124,16 @@ export interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * Show sender info, like avatar
+     * @default true
+     **/
+    showSender?: boolean;
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: SubmitPromptOptions & {
+  prompt?: SubmitChatOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
@@ -147,6 +151,13 @@ export interface MarkpromptOptions {
     placeholder?: string;
   };
   references?: {
+    /**
+     * Display mode for the references. References can either be
+     * displayed after the response, as an aside next to the response
+     * behind a toggle button, or not displayed at all.
+     * @default 'end'
+     * */
+    display?: 'none' | 'end' | 'aside';
     /** Callback to transform a reference into an href */
     getHref?: (reference: FileSectionReference) => string | undefined;
     /** Callback to transform a reference into a label */

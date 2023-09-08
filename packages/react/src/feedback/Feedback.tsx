@@ -8,18 +8,15 @@ import React, {
 } from 'react';
 
 import type { UseFeedbackResult } from './useFeedback.js';
-import type { ChatLoadingState } from '../chat/useChat.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
-import type { PromptLoadingState } from '../prompt/usePrompt.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
-  state: PromptLoadingState | ChatLoadingState;
   heading?: string;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
-  messageIndex: number;
   variant: 'text' | 'icons';
+  promptId?: string;
 }
 
 export function Feedback(props: FeedbackProps): ReactElement {
@@ -27,16 +24,15 @@ export function Feedback(props: FeedbackProps): ReactElement {
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
     submitFeedback,
     abortFeedbackRequest,
-    state,
-    messageIndex,
     variant,
+    promptId,
     ...asideProps
   } = props;
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
   function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback, state, messageIndex);
+    submitFeedback(feedback, promptId);
     setFeedback(feedback);
   }
 
@@ -50,17 +46,19 @@ export function Feedback(props: FeedbackProps): ReactElement {
       <h3>{heading}</h3>
       <div>
         <button
+          className="MarkpromptGhostThumbButton"
           onClick={() => handleFeedback({ vote: '1' })}
           data-active={feedback?.vote === '1'}
         >
           {variant === 'text' && 'Yes'}
           {variant === 'icons' && (
             <AccessibleIcon label="yes">
-              <ThumbsUpIcon width={15} height={15} />
+              <ThumbsUpIcon width={16} height={16} strokeWidth={2} />
             </AccessibleIcon>
           )}
         </button>
         <button
+          className="MarkpromptGhostThumbButton"
           onClick={() => handleFeedback({ vote: '-1' })}
           data-active={feedback?.vote === '-1'}
           style={{ animationDelay: '100ms' }}
@@ -68,7 +66,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
           {variant === 'text' && 'No'}
           {variant === 'icons' && (
             <AccessibleIcon label="no">
-              <ThumbsDownIcon width={15} height={15} />
+              <ThumbsDownIcon width={16} height={16} />
             </AccessibleIcon>
           )}
         </button>

@@ -26,14 +26,18 @@ In browsers with [esm.sh](https://esm.sh):
 
 ```html
 <script type="module">
-  import { submitPrompt } from 'https://esm.sh/@markprompt/core';
+  import {
+    submitChat,
+    submitSearchQuery,
+    submitFeedback,
+  } from 'https://esm.sh/@markprompt/core';
 </script>
 ```
 
 ## Usage
 
 ```js
-import { submitPrompt } from '@markprompt/core';
+import { submitChat } from '@markprompt/core';
 
 // User input
 const prompt = 'What is Markprompt?';
@@ -51,8 +55,16 @@ function onReferences(references) {
   // Process references
 }
 
-// Called when submitPrompt encounters an error
-const onError(error) {
+function onConversationId(conversationId) {
+  // Store conversationId for future use
+}
+
+function onPromptId(promptId) {
+  // Store promptId for future use
+}
+
+// Called when submitChat encounters an error
+function onError(error) {
   // Handle errors
 }
 
@@ -60,48 +72,24 @@ const onError(error) {
 const options = {
   model: 'gpt-3.5-turbo', // Supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  apiUrl: 'https://api.markprompt.com/v1/completions', // Or your own completions API endpoint
+  apiUrl: 'https://api.markprompt.com/v1/chat', // Or your own chat API endpoint
 };
 
-await submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onPromptId, onError, options);
+await submitChat(
+  [{ content: prompt, role: 'user' }],
+  projectKey,
+  onAnswerChunk,
+  onReferences,
+  onConversationId,
+  onPromptId,
+  onError,
+  options,
+);
 ```
 
 ## API
 
-### `submitPrompt(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
-
-Submit a prompt to the Markprompt Completions API.
-
-#### Arguments
-
-- `prompt` (`string`): Prompt to submit to the model
-- `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
-  called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list
-  of references from which the response was created.
-- `onError` (`function`): called when an error occurs
-- [`options`](#options) (`SubmitPromptOptions`): Optional parameters
-
-#### Options
-
-- `apiUrl` (`string`): URL at which to fetch completions
-- `iDontKnowMessage` (`string`): Message returned when the model does not have
-  an answer
-- `model` (`OpenAIModelId`): The OpenAI model to use
-- `systemPrompt` (`string`): The prompt template
-- `temperature` (`number`): The model temperature
-- `topP` (`number`): The model top P
-- `frequencyPenalty` (`number`): The model frequency penalty
-- `presencePenalty` (`number`): The model present penalty
-- `maxTokens` (`number`): The max number of tokens to include in the response
-- `sectionsMatchCount` (`number`): The number of sections to include in the
-  prompt context
-- `sectionsMatchThreshold` (`number`): The similarity threshold between the
-  input question and selected sections
-- `signal` (`AbortSignal`): AbortController signal
-
-### `submitChat(prompt, projectKey, onAnswerChunk, onReferences, onError, options?)`
+### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onConversationId, onPromptId, onError, options?)`
 
 Submit a prompt to the Markprompt Completions API.
 
@@ -109,16 +97,26 @@ Submit a prompt to the Markprompt Completions API.
 
 - `messages` (`ChatMessage[]`): Chat messages to submit to the model
 - `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function`): Answers come in via streaming. This function is
-  called when a new chunk arrives
-- `onReferences` (`function`): This function is called when receiving the list
-  of references from which the response was created.
+- `onAnswerChunk` (`function(chunk: string)`): Answers come in via streaming.
+  This function is called when a new chunk arrives. Chunks should be
+  concatenated to previous chunks of the same answer response.
+- `onReferences` (`function(references: FileSectionReference[])`): This function
+  is called when receiving the list of references from which the response was
+  created.
+- `onConversationId` (`function(conversationId: string)`): This function is
+  called with the conversation ID returned by the API. Used to keep track of
+  conversations.
+- `onPromptId` (`function(promptId: string)`): This function is called with the
+  prompt ID returned by the API. Used to submit feedback.
 - `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitChatOptions`): Optional parameters
 
 #### Options
 
+All options are optional.
+
 - `apiUrl` (`string`): URL at which to fetch completions
+- `conversationId` (`string`): Conversation ID
 - `iDontKnowMessage` (`string`): Message returned when the model does not have
   an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
@@ -157,6 +155,25 @@ Submit a search query to the Markprompt Search API.
 #### Returns
 
 A list of search results.
+
+### `submitFeedback(feedback, projectKey, options?)`
+
+Submit feedback to the Markprompt Feedback API about a specific prompt.
+
+#### Arguments
+
+- `feedback` (`object`): Feedback to submit
+- `feedback.feedback` (`object`): Feedback data
+- `feedback.feedback.vote` (`"1" | "-1"`): Vote
+- `feedback.promptId` (`string`): Prompt ID
+- `projectKey` (`string`): Project key for the project
+- `options` (`object`): Optional parameters
+- `options.apiUrl` (`string`): URL at which to post feedback
+- `options.signal` (`AbortSignal`): AbortController signal
+
+#### Returns
+
+A promise that resolves when the feedback is submitted. Has no return value.
 
 ## Community
 

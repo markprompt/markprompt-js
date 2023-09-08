@@ -24,6 +24,7 @@ export type ChatLoadingState =
 
 export interface ChatViewMessage {
   prompt: string;
+  promptId?: string;
   answer?: string;
   id: string;
   state: ChatLoadingState;
@@ -39,7 +40,7 @@ export interface UseChatOptions {
 
 export interface UseChatResult {
   messages: ChatViewMessage[];
-  promptId?: string;
+  conversationId?: string;
   abort: () => void;
   abortFeedbackRequest: UseFeedbackResult['abort'];
   submitChat: (prompt: string) => void;
@@ -73,12 +74,11 @@ export function useChat({
     );
   }
 
-  const [promptId, setPromptId] = useState<string>('');
+  const [conversationId, setConversationId] = useState<string>();
   const [messages, setMessages] = useState<ChatViewMessage[]>([]);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
-    promptId,
     feedbackOptions,
   });
 
@@ -142,6 +142,8 @@ export function useChat({
       apiMessages,
       projectKey,
       (chunk) => {
+        if (controller.signal.aborted) return false;
+
         setMessages((messages) => {
           const currentMessage = messages.find(
             (message) => message.id === currentMessageId,
@@ -161,7 +163,13 @@ export function useChat({
           }),
         );
       },
-      (pid) => setPromptId(pid),
+      (conversationId) => setConversationId(conversationId),
+      (promptId) =>
+        setMessages((messages) => {
+          return updateMessageById(messages, currentMessageId, {
+            promptId,
+          });
+        }),
       (error) => {
         setMessages((messages) =>
           updateMessageById(messages, currentMessageId, {
@@ -183,12 +191,17 @@ export function useChat({
 
     promise.then(() => {
       if (controller.signal.aborted) return;
-      // set state of current message to done
-      setMessages((messages) =>
-        updateMessageById(messages, currentMessageId, {
+
+      setMessages((messages) => {
+        // don't overwrite the state of cancelled messages with done when the promise resolves
+        const currentMessage = messages.find((m) => m.id === currentMessageId);
+        if (currentMessage?.state === 'cancelled') return messages;
+
+        // set state of current message to done
+        return updateMessageById(messages, currentMessageId, {
           state: 'done',
-        }),
-      );
+        });
+      });
     });
 
     promise.finally(() => {
@@ -229,7 +242,7 @@ export function useChat({
     abort,
     abortFeedbackRequest,
     messages,
-    promptId,
+    conversationId,
     regenerateLastAnswer,
     submitChat,
     submitFeedback,

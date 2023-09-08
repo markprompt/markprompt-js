@@ -7,8 +7,6 @@ export interface SubmitFeedbackBody {
   feedback: PromptFeedback;
   /** ID of the prompt for which feedback is being submitted. */
   promptId: string;
-  /** Optional: index of the specific message in an array of messages that is being given feedback */
-  messageIndex?: number;
 }
 
 export interface SubmitFeedbackOptions {
@@ -29,8 +27,8 @@ export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
 } satisfies SubmitFeedbackOptions;
 
 export async function submitFeedback(
+  feedback: SubmitFeedbackBody,
   projectKey: string,
-  body: SubmitFeedbackBody,
   options?: SubmitFeedbackOptions,
 ): Promise<void> {
   if (!projectKey) {
@@ -52,7 +50,7 @@ export async function submitFeedback(
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
-      body: JSON.stringify(body),
+      body: JSON.stringify(feedback),
       signal: resolvedOptions?.signal,
     });
 

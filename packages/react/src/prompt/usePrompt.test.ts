@@ -1,7 +1,4 @@
-import {
-  DEFAULT_SUBMIT_PROMPT_OPTIONS,
-  STREAM_SEPARATOR,
-} from '@markprompt/core';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
 import {
   act,
@@ -11,20 +8,32 @@ import {
 } from '@testing-library/react-hooks';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 import { UsePromptResult, usePrompt } from './usePrompt';
 
 const encoder = new TextEncoder();
-let response: string[] = [];
+let response: object | string[] = [];
 let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_PROMPT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+    if (status >= 400) {
+      return res(ctx.status(status), ctx.json(response));
+    }
+
     stream = new ReadableStream({
       start(controller) {
-        for (const chunk of response) {
+        for (const chunk of response as string[]) {
           controller.enqueue(encoder.encode(chunk));
         }
         controller?.close();
@@ -34,22 +43,27 @@ const server = setupServer(
   }),
 );
 
-beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
-});
-
-afterAll(() => {
-  server.close();
-});
-
-afterEach(() => {
-  response = [];
-  status = 200;
-  server.resetHandlers();
-  cleanup();
-});
-
 describe('usePrompt', () => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const consoleMock = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+
+  afterAll(() => {
+    server.close();
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    response = [];
+    status = 200;
+    server.resetHandlers();
+    cleanup();
+    vi.resetAllMocks();
+  });
+
   it('should return a default state', () => {
     const { result } = renderHook(() =>
       usePrompt({
@@ -62,6 +76,7 @@ describe('usePrompt', () => {
       answer: '',
       prompt: '',
       references: [],
+      promptId: undefined,
       state: 'indeterminate',
       setPrompt: expect.any(Function),
       submitFeedback: expect.any(Function),
@@ -77,12 +92,7 @@ describe('usePrompt', () => {
 
     act(() => result.current.setPrompt('How much is 1+2?'));
 
-    response = [
-      '["https://calculator.example"]',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await result.current.submitPrompt();
 
@@ -125,5 +135,50 @@ describe('usePrompt', () => {
     result.current.abort();
 
     expect(result.error).toBeUndefined();
+  });
+
+  it('should log an error to console when an error is thrown', async () => {
+    const restoreConsole = suppressErrorOutput();
+
+    try {
+      const { result } = renderHook(() =>
+        usePrompt({ projectKey: 'TEST_PROJECT_KEY' }),
+      );
+
+      act(() => result.current.setPrompt('How much is 1+2?'));
+
+      response = { error: 'test' };
+      status = 500;
+
+      await act(() => result.current.submitPrompt());
+
+      expect(consoleMock).toHaveBeenCalled();
+    } finally {
+      restoreConsole();
+    }
+  });
+
+  it('should ignore AbortErrors', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      throw new DOMException('test', 'AbortError');
+    });
+
+    try {
+      const { result } = renderHook(() =>
+        usePrompt({ projectKey: 'TEST_PROJECT_KEY' }),
+      );
+
+      response = ['According to my calculator ', '1 + 2 = 3'];
+
+      act(() => result.current.setPrompt('How much is 1+2?'));
+
+      result.current.submitPrompt();
+      result.current.abort();
+
+      expect(result.error).toBeUndefined();
+      expect(consoleMock).not.toHaveBeenCalled();
+    } finally {
+      mockFetch.mockRestore();
+    }
   });
 });

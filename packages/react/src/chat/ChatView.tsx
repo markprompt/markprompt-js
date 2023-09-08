@@ -58,6 +58,7 @@ export function ChatView(props: ChatViewProps): ReactElement {
         referencesOptions={referencesOptions}
       />
       <ChatViewForm
+        activeView={activeView}
         close={close}
         chatOptions={chatOptions}
         submitChat={submitChat}

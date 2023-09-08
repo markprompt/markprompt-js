@@ -11,19 +11,20 @@ import {
 } from 'vitest';
 
 import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from './index.js';
-import { STREAM_SEPARATOR } from './prompt.js';
 
 const encoder = new TextEncoder();
-let markpromptData = '';
+let markpromptData: unknown = '';
 let markpromptDebug = '';
 let response: string[] = [];
 let status = 200;
 let request: RestRequest;
+let requestBody: unknown = {};
 let stream: ReadableStream;
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
     request = req;
+    requestBody = await req.json();
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response) {
@@ -35,8 +36,14 @@ const server = setupServer(
 
     return res(
       ctx.status(status),
-      ctx.set('x-markprompt-data', markpromptData),
-      ctx.set('x-markprompt-debug-info', markpromptDebug),
+      ctx.set(
+        'x-markprompt-data',
+        encoder.encode(JSON.stringify(markpromptData)).toString(),
+      ),
+      ctx.set(
+        'x-markprompt-debug-info',
+        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+      ),
       ctx.body(stream),
     );
   }),
@@ -46,20 +53,28 @@ describe('submitChat', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const consoleMock = vi.spyOn(console, 'debug').mockImplementation(() => {});
 
+  const onAnswerChunk = vi.fn().mockReturnValue(true);
+  const onReferences = vi.fn();
+  const onPromptId = vi.fn();
+  const onConversationId = vi.fn();
+  const onError = vi.fn();
+
   beforeAll(() => {
     server.listen({ onUnhandledRequest: 'error' });
   });
 
   afterAll(() => {
     server.close();
-    consoleMock.mockReset();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
     response = [];
+    requestBody = {};
     markpromptData = '';
     status = 200;
     server.resetHandlers();
+    vi.resetAllMocks();
   });
 
   test('require projectKey', async () => {
@@ -70,16 +85,12 @@ describe('submitChat', () => {
   });
 
   test('don’t make requests if the prompt is empty', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
     await submitChat(
       [],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -90,54 +101,38 @@ describe('submitChat', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  test('make a request', async () => {
-    const onAnswerChunk = vi.fn().mockReturnValue(true);
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
-    response = [
-      '["https://calculator.example"]',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
-
+  test('endpoint is called with the default options if none are provided', async () => {
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
 
-    expect(request).toBeDefined();
-    expect(onAnswerChunk.mock.calls).toStrictEqual([
-      ['According to my calculator '],
-      ['1 + 2 = 3'],
-    ]);
-    expect(onError).not.toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { apiUrl, ...rest } = DEFAULT_SUBMIT_CHAT_OPTIONS;
+
+    expect(requestBody).toStrictEqual({
+      messages: [{ content: 'How much is 1+2?', role: 'user' }],
+      projectKey: 'testKey',
+      ...rest,
+    });
   });
 
-  test('parse a chunk compound of the stream separator', async () => {
-    const onAnswerChunk = vi.fn().mockReturnValue(true);
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
+  test('make a request', async () => {
+    onAnswerChunk.mockReturnValue(true);
 
-    response = [
-      '["https://calculator.example"]' +
-        STREAM_SEPARATOR +
-        'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -151,11 +146,6 @@ describe('submitChat', () => {
   });
 
   test('handle error status code', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
     status = 500;
     response = ['Internal Server Error'];
 
@@ -164,6 +154,7 @@ describe('submitChat', () => {
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -179,23 +170,16 @@ describe('submitChat', () => {
   });
 
   test('ignore invalid references', async () => {
-    const onAnswerChunk = vi.fn().mockReturnValue(true);
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
+    onAnswerChunk.mockReturnValue(true);
 
-    response = [
-      'This is invalid JSON',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -210,23 +194,16 @@ describe('submitChat', () => {
   });
 
   test('stop if onAnswerChunk returns false', async () => {
-    const onAnswerChunk = vi.fn().mockReturnValue(false);
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
+    onAnswerChunk.mockReturnValue(false);
 
-    response = [
-      'This is invalid JSON',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -240,11 +217,6 @@ describe('submitChat', () => {
   });
 
   test('calls back user-provided onReferences', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
     const references = [
       {
         file: { path: '/page1', source: { type: 'file-upload' } },
@@ -252,22 +224,16 @@ describe('submitChat', () => {
       },
     ];
 
-    const encoder = new TextEncoder();
+    markpromptData = { references };
 
-    markpromptData = encoder.encode(JSON.stringify({ references })).toString();
-
-    response = [
-      '["https://calculator.example"]',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -279,29 +245,18 @@ describe('submitChat', () => {
   });
 
   test('calls back user-provided onPromptId', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
     const promptId = 'test-id';
 
-    const encoder = new TextEncoder();
+    markpromptData = { promptId };
 
-    markpromptData = encoder.encode(JSON.stringify({ promptId })).toString();
-
-    response = [
-      '["https://calculator.example"]',
-      STREAM_SEPARATOR,
-      'According to my calculator ',
-      '1 + 2 = 3',
-    ];
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
       onPromptId,
       onError,
     );
@@ -312,19 +267,43 @@ describe('submitChat', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  test('logs debug info', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
+  test('calls back user-provided onConversationId', async () => {
+    const conversationId = 'test-id';
 
-    markpromptDebug = encoder.encode(JSON.stringify('test')).toString();
+    markpromptData = { conversationId };
+
+    response = ['According to my calculator ', '1 + 2 = 3'];
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
       'testKey',
       onAnswerChunk,
       onReferences,
+      onConversationId,
+      onPromptId,
+      onError,
+    );
+
+    expect(request).toBeDefined();
+    expect(onAnswerChunk).toHaveBeenCalled();
+    expect(onConversationId).toHaveBeenCalledWith(conversationId);
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  test('logs debug info', async () => {
+    const onAnswerChunk = vi.fn();
+    const onReferences = vi.fn();
+    const onPromptId = vi.fn();
+    const onError = vi.fn();
+
+    markpromptDebug = 'test';
+
+    await submitChat(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+      onAnswerChunk,
+      onReferences,
+      onConversationId,
       onPromptId,
       onError,
       {},
@@ -338,27 +317,43 @@ describe('submitChat', () => {
   });
 
   test('expect onError to be called when an error occurs', async () => {
-    const onAnswerChunk = vi.fn();
-    const onReferences = vi.fn();
-    const onPromptId = vi.fn();
-    const onError = vi.fn();
-
     const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
       throw new Error('test');
     });
 
     try {
-      response = [
-        '["https://calculator.example"]',
-        STREAM_SEPARATOR,
-        'According to my calculator ',
-        '1 + 2 = 3',
-      ];
+      response = ['According to my calculator ', '1 + 2 = 3'];
 
       await submitChat(
         [{ content: 'How much is 1+2?', role: 'user' }],
         'testKey',
         onAnswerChunk,
+        onConversationId,
+        onReferences,
+        onPromptId,
+        onError,
+      );
+
+      expect(request).toBeDefined();
+      expect(onError).toHaveBeenCalledWith(new Error('test'));
+    } finally {
+      mockFetch.mockRestore();
+    }
+  });
+
+  test('expect onError to be called when a non-error is thrown', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      throw 'test';
+    });
+
+    try {
+      response = ['According to my calculator ', '1 + 2 = 3'];
+
+      await submitChat(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+        onAnswerChunk,
+        onConversationId,
         onReferences,
         onPromptId,
         onError,

@@ -1,7 +1,7 @@
 import {
   type FileSectionReference,
-  type SubmitPromptOptions,
-  submitPrompt as submitPromptToMarkprompt,
+  type SubmitChatOptions,
+  submitChat,
   isAbortError,
   type SubmitFeedbackOptions,
 } from '@markprompt/core';
@@ -27,12 +27,13 @@ export interface UsePromptOptions {
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
-  promptOptions?: Omit<SubmitPromptOptions, 'signal'>;
+  promptOptions?: Omit<SubmitChatOptions, 'signal'>;
 }
 
 export interface UsePromptResult {
   answer: string;
   prompt: string;
+  promptId?: string;
   references: FileSectionReference[];
   state: PromptLoadingState;
   abort: () => void;
@@ -64,7 +65,6 @@ export function usePrompt({
 
   const { abort: abortFeedbackRequest, submitFeedback } = useFeedback({
     projectKey,
-    promptId,
     feedbackOptions,
   });
 
@@ -75,15 +75,6 @@ export function usePrompt({
 
   const submitPrompt = useCallback(async () => {
     abort();
-
-    if (state === 'preload' || state === 'streaming-answer') {
-      // If state is loading and fetch was aborted, wait a short delay
-      // so that the original fetch request aborts and resets the state.
-      // Otherwise, the new fetch starts (and state becomes 'preload'),
-      // and after that, the state becomes 'done', which is the wrong
-      // order.
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
 
     if (!prompt || prompt === '') {
       return;
@@ -97,8 +88,8 @@ export function usePrompt({
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const promise = submitPromptToMarkprompt(
-      prompt,
+    const promise = submitChat(
+      [{ content: prompt, role: 'user' }],
       projectKey,
       (chunk) => {
         setState('streaming-answer');
@@ -106,7 +97,10 @@ export function usePrompt({
         return true;
       },
       (refs) => setReferences(refs),
-      (pid) => setPromptId(pid),
+      // conversation id's are not being used here
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      () => {},
+      (promptId: string) => setPromptId(promptId),
       (error) => {
         // ignore abort errors
         if (isAbortError(error)) return;
@@ -132,12 +126,13 @@ export function usePrompt({
         controllerRef.current = undefined;
       }
     });
-  }, [abort, controllerRef, debug, projectKey, prompt, promptOptions, state]);
+  }, [abort, controllerRef, debug, projectKey, prompt, promptOptions]);
 
   return useMemo(
     () => ({
       answer,
       prompt,
+      promptId,
       references,
       state,
       abort,
@@ -149,6 +144,7 @@ export function usePrompt({
     [
       answer,
       prompt,
+      promptId,
       references,
       state,
       abort,

@@ -33,7 +33,7 @@ export function Messages(props: MessagesProps): ReactElement {
         className="MarkpromptAutoScroller"
         scrollTrigger={messages}
       >
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <section key={message.id}>
             <MessagePrompt state={message.state}>
               {message.prompt}
@@ -49,28 +49,29 @@ export function Messages(props: MessagesProps): ReactElement {
                   className="MarkpromptPromptFeedback"
                   submitFeedback={submitFeedback}
                   abortFeedbackRequest={abortFeedbackRequest}
-                  state={message.state}
-                  // convert back to the original index in the array returned from the API
-                  messageIndex={index + index + 1}
+                  promptId={message.promptId}
                 />
               )}
             </div>
 
-            <div className="MarkpromptReferences">
-              {(message.state === 'streaming-answer' ||
-                message.state === 'done') && (
-                <>
-                  <p>
-                    {referencesOptions?.heading ??
-                      DEFAULT_MARKPROMPT_OPTIONS.references?.heading}
-                  </p>
-                  <BaseMarkprompt.References
-                    ReferenceComponent={Reference}
-                    references={message.references}
-                  />
-                </>
-              )}
-            </div>
+            {(!referencesOptions?.display ||
+              referencesOptions?.display === 'end') && (
+              <div className="MarkpromptReferences">
+                {(message.state === 'streaming-answer' ||
+                  message.state === 'done') && (
+                  <>
+                    <p>
+                      {referencesOptions?.heading ??
+                        DEFAULT_MARKPROMPT_OPTIONS.references?.heading}
+                    </p>
+                    <BaseMarkprompt.References
+                      ReferenceComponent={Reference}
+                      references={message.references}
+                    />
+                  </>
+                )}
+              </div>
+            )}
           </section>
         ))}
       </BaseMarkprompt.AutoScroller>
