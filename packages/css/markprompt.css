@@ -473,6 +473,13 @@
   font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
   line-height: 1.7142857;
+}
+
+:where(.MarkpromptPromptView .MarkpromptAnswer) {
+  padding: 1rem 2rem;
+}
+
+:where(.MarkpromptChatView .MarkpromptAnswer) {
   padding: 0 2rem 1rem;
 }
 
