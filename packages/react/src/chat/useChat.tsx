@@ -5,7 +5,7 @@ import {
   type ChatMessage,
   type SubmitChatOptions,
 } from '@markprompt/core';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import {
   useFeedback,
@@ -142,6 +142,8 @@ export function useChat({
       apiMessages,
       projectKey,
       (chunk) => {
+        if (controller.signal.aborted) return false;
+
         setMessages((messages) => {
           const currentMessage = messages.find(
             (message) => message.id === currentMessageId,
@@ -189,12 +191,17 @@ export function useChat({
 
     promise.then(() => {
       if (controller.signal.aborted) return;
-      // set state of current message to done
-      setMessages((messages) =>
-        updateMessageById(messages, currentMessageId, {
+
+      setMessages((messages) => {
+        // don't overwrite the state of cancelled messages with done when the promise resolves
+        const currentMessage = messages.find((m) => m.id === currentMessageId);
+        if (currentMessage?.state === 'cancelled') return messages;
+
+        // set state of current message to done
+        return updateMessageById(messages, currentMessageId, {
           state: 'done',
-        }),
-      );
+        });
+      });
     });
 
     promise.finally(() => {

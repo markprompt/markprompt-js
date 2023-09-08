@@ -121,10 +121,12 @@ beforeAll(() => {
 
 afterAll(() => {
   server.close();
+  vi.restoreAllMocks();
 });
 
 afterEach(() => {
   status = 200;
+  vi.resetAllMocks();
   server.resetHandlers();
 });
 

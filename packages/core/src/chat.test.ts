@@ -13,7 +13,7 @@ import {
 import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from './index.js';
 
 const encoder = new TextEncoder();
-let markpromptData = '';
+let markpromptData: unknown = '';
 let markpromptDebug = '';
 let response: string[] = [];
 let status = 200;
@@ -36,8 +36,14 @@ const server = setupServer(
 
     return res(
       ctx.status(status),
-      ctx.set('x-markprompt-data', markpromptData),
-      ctx.set('x-markprompt-debug-info', markpromptDebug),
+      ctx.set(
+        'x-markprompt-data',
+        encoder.encode(JSON.stringify(markpromptData)).toString(),
+      ),
+      ctx.set(
+        'x-markprompt-debug-info',
+        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+      ),
       ctx.body(stream),
     );
   }),
@@ -59,7 +65,7 @@ describe('submitChat', () => {
 
   afterAll(() => {
     server.close();
-    consoleMock.mockReset();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -218,9 +224,7 @@ describe('submitChat', () => {
       },
     ];
 
-    const encoder = new TextEncoder();
-
-    markpromptData = encoder.encode(JSON.stringify({ references })).toString();
+    markpromptData = { references };
 
     response = ['According to my calculator ', '1 + 2 = 3'];
 
@@ -243,9 +247,7 @@ describe('submitChat', () => {
   test('calls back user-provided onPromptId', async () => {
     const promptId = 'test-id';
 
-    const encoder = new TextEncoder();
-
-    markpromptData = encoder.encode(JSON.stringify({ promptId })).toString();
+    markpromptData = { promptId };
 
     response = ['According to my calculator ', '1 + 2 = 3'];
 
@@ -268,11 +270,7 @@ describe('submitChat', () => {
   test('calls back user-provided onConversationId', async () => {
     const conversationId = 'test-id';
 
-    const encoder = new TextEncoder();
-
-    markpromptData = encoder
-      .encode(JSON.stringify({ conversationId }))
-      .toString();
+    markpromptData = { conversationId };
 
     response = ['According to my calculator ', '1 + 2 = 3'];
 
@@ -298,7 +296,7 @@ describe('submitChat', () => {
     const onPromptId = vi.fn();
     const onError = vi.fn();
 
-    markpromptDebug = encoder.encode(JSON.stringify('test')).toString();
+    markpromptDebug = 'test';
 
     await submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
