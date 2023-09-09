@@ -1,5 +1,20 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.12.0
+
+### Minor Changes
+
+- [`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add conversation
+  id and metadata
+
+### Patch Changes
+
+- Updated dependencies
+  [[`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)]:
+  - @markprompt/css@0.15.0
+  - @markprompt/react@0.22.0
+
 ## 0.11.0
 
 ### Minor Changes

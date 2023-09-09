@@ -1,5 +1,19 @@
 # @markprompt/react
 
+## 0.22.0
+
+### Minor Changes
+
+- [`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add conversation
+  id and metadata
+
+### Patch Changes
+
+- Updated dependencies
+  [[`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)]:
+  - @markprompt/core@0.14.0
+
 ## 0.21.0
 
 ### Minor Changes
