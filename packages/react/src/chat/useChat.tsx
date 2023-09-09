@@ -184,6 +184,7 @@ export function useChat({
       },
       {
         ...chatOptions,
+        conversationId,
         signal: controller.signal,
       },
       debug,
