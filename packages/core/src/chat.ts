@@ -15,6 +15,12 @@ export interface SubmitChatOptions {
    */
   conversationId?: string;
   /**
+   * Conversation metadata. An arbitrary JSON payload to attach to the conversation.
+   * @default undefined
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  conversationMetadata?: any;
+  /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
    **/

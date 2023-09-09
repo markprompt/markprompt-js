@@ -10,6 +10,5 @@ if (el && el instanceof HTMLElement) {
     feedback: { enabled: true },
     search: { enabled: true },
     chat: { enabled: true },
-    references: { display: 'none' },
   } satisfies MarkpromptOptions);
 }
