@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.14.0
+
+### Minor Changes
+
+- [`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add conversation
+  id and metadata
+
 ## 0.13.0
 
 ### Minor Changes
