@@ -62,6 +62,24 @@ function updateMessageById(
   return nextMessages;
 }
 
+function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
+  return messages
+    .map((message) => [
+      {
+        content: message.prompt,
+        role: 'user' as const,
+      },
+      message.answer
+        ? {
+            content: message.answer,
+            role: 'assistant' as const,
+          }
+        : undefined,
+    ])
+    .flat()
+    .filter(isPresent) satisfies ChatMessage[];
+}
+
 export function useChat({
   chatOptions,
   debug,
@@ -80,6 +98,7 @@ export function useChat({
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
     feedbackOptions,
+    messages: toApiMessages(messages),
   });
 
   const { ref: controllerRef, abort } = useAbortController();
@@ -114,21 +133,7 @@ export function useChat({
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const apiMessages = messages
-      .map((message) => [
-        {
-          content: message.prompt,
-          role: 'user' as const,
-        },
-        message.answer
-          ? {
-              content: message.answer,
-              role: 'assistant' as const,
-            }
-          : undefined,
-      ])
-      .flat()
-      .filter(isPresent) satisfies ChatMessage[];
+    const apiMessages = toApiMessages(messages);
 
     setMessages((messages) =>
       updateMessageById(messages, currentMessageId, {
