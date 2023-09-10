@@ -1,5 +1,20 @@
 # @markprompt/react
 
+## 0.23.0
+
+### Minor Changes
+
+- [#181](https://github.com/motifland/markprompt-js/pull/181)
+  [`10a2f04`](https://github.com/motifland/markprompt-js/commit/10a2f04760f31007520763c5d6d2bb2a53ad2ff3)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add feedback
+  callback
+
+### Patch Changes
+
+- Updated dependencies
+  [[`10a2f04`](https://github.com/motifland/markprompt-js/commit/10a2f04760f31007520763c5d6d2bb2a53ad2ff3)]:
+  - @markprompt/core@0.15.0
+
 ## 0.22.0
 
 ### Minor Changes
