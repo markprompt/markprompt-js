@@ -169,6 +169,7 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 - `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters
 - `options.apiUrl` (`string`): URL at which to post feedback
+- `options.onFeedbackSubmitted` (`function`): Callback function when feedback is submitted
 - `options.signal` (`AbortSignal`): AbortController signal
 
 #### Returns
