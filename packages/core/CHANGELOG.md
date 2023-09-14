@@ -1,5 +1,66 @@
 # @markprompt/core
 
+## 0.15.0
+
+### Minor Changes
+
+- [#181](https://github.com/motifland/markprompt-js/pull/181)
+  [`10a2f04`](https://github.com/motifland/markprompt-js/commit/10a2f04760f31007520763c5d6d2bb2a53ad2ff3)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add feedback
+  callback
+
+## 0.14.0
+
+### Minor Changes
+
+- [`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add conversation
+  id and metadata
+
+## 0.13.0
+
+### Minor Changes
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for
+  `conversationId` in `submitChat`
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Fix an
+  inconsistency in `submitFeedback`, switching the `feedback` and `projectKey`
+  arguments
+
+- [#163](https://github.com/motifland/markprompt-js/pull/163)
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Remove
+  `submitPrompt` in favor of `submitChat`. To migrate single question prompt
+  implementations, instead of `submitPrompt(prompt, ...)` call
+  `submitChat([{ content: prompt, role: 'user' }], ...)` with the same
+  arguments.
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- [#169](https://github.com/motifland/markprompt-js/pull/169)
+  [`02b2cb0`](https://github.com/motifland/markprompt-js/commit/02b2cb080b76b85ba629a2f6d7925385feda31b5)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Don't distribute compiled
+  test files
+
+- [#159](https://github.com/motifland/markprompt-js/pull/159)
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Update
+  [`defaults`](https://github.com/sindresorhus/node-defaults/releases/tag/v2.0.2)
+
+- [#159](https://github.com/motifland/markprompt-js/pull/159)
+  [`90122a8`](https://github.com/motifland/markprompt-js/commit/90122a8969791af328a8dd889b3f76afa07727ed)
+  Thanks [@nickrttn](https://github.com/nickrttn)! - Update
+  [`type-fest`](https://github.com/sindresorhus/type-fest/releases/tag/v4.3.1)
+  and move it to `dependencies`
+
 ## 0.12.1
 
 ### Patch Changes

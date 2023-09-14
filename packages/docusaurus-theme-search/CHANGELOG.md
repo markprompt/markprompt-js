@@ -1,5 +1,46 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.12.1
+
+### Patch Changes
+
+- Updated dependencies
+  [[`10a2f04`](https://github.com/motifland/markprompt-js/commit/10a2f04760f31007520763c5d6d2bb2a53ad2ff3)]:
+  - @markprompt/react@0.23.0
+
+## 0.12.0
+
+### Minor Changes
+
+- [`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add conversation
+  id and metadata
+
+### Patch Changes
+
+- Updated dependencies
+  [[`afd7025`](https://github.com/motifland/markprompt-js/commit/afd7025e11930e08e28d4ff99f4c8200bef1c661)]:
+  - @markprompt/css@0.15.0
+  - @markprompt/react@0.22.0
+
+## 0.11.0
+
+### Minor Changes
+
+- [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Add chat support
+
+### Patch Changes
+
+- Updated dependencies
+  [[`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`983f098`](https://github.com/motifland/markprompt-js/commit/983f098298b391bed776bdd75be1e4f4fe9b8798),
+  [`691164c`](https://github.com/motifland/markprompt-js/commit/691164c7c13af5995ae4330388421401435b8139)]:
+  - @markprompt/react@0.21.0
+  - @markprompt/css@0.14.0
+
 ## 0.10.0
 
 ### Minor Changes

@@ -2,6 +2,7 @@ import {
   submitFeedback as submitFeedbackToMarkprompt,
   type PromptFeedback,
   type SubmitFeedbackOptions,
+  type ChatMessage,
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
@@ -12,18 +13,25 @@ export interface UseFeedbackOptions {
   feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
+  /** The current list of messages */
+  messages?: ChatMessage[];
 }
 
 export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (feedback: PromptFeedback, promptId?: string) => void;
+  submitFeedback: (
+    feedback: PromptFeedback,
+    promptId?: string,
+    messages?: ChatMessage[],
+  ) => void;
 }
 
 export function useFeedback({
   feedbackOptions,
   projectKey,
+  messages,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -46,6 +54,7 @@ export function useFeedback({
       const promise = submitFeedbackToMarkprompt(
         { feedback, promptId },
         projectKey,
+        messages,
         { ...feedbackOptions, signal: controller.signal },
       );
 
@@ -59,7 +68,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, controllerRef, projectKey, feedbackOptions],
+    [abort, controllerRef, projectKey, feedbackOptions, messages],
   );
 
   return { submitFeedback, abort };
