@@ -1,14 +1,16 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import React, {
-  type FormEventHandler,
-  type ReactElement,
   useCallback,
+  useContext,
   useEffect,
   useRef,
+  type FormEventHandler,
+  type ReactElement,
 } from 'react';
 
+import { ConversationSelect } from './ConversationSelect.js';
 import { RegenerateButton } from './RegenerateButton.js';
-import type { ChatViewMessage, UseChatResult } from './useChat.js';
+import { ChatContext, useChatStore } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -19,24 +21,18 @@ interface ChatViewFormProps {
   activeView?: View;
   chatOptions?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
-  submitChat: UseChatResult['submitChat'];
-  lastMessageState?: ChatViewMessage['state'];
-  regenerateLastAnswer: () => void;
-  abortSubmitChat: () => void;
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
-  const {
-    activeView,
-    close,
-    chatOptions,
-    submitChat,
-    lastMessageState,
-    regenerateLastAnswer,
-    abortSubmitChat,
-  } = props;
+  const { activeView, close, chatOptions } = props;
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const submitChat = useChatStore((state) => state.submitChat);
+  const lastMessageState = useChatStore(
+    (state) => state.messages[state.messages.length - 1]?.state,
+  );
+  const regenerateLastAnswer = useChatStore(
+    (state) => state.regenerateLastAnswer,
+  );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -55,13 +51,39 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     [submitChat],
   );
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     // Bring form input in focus when activeView changes.
     inputRef.current?.focus();
   }, [activeView]);
 
+  // keep abortChat up to date, but do not trigger rerenders (and effect hooks calls) when it updates
+  const store = useContext(ChatContext);
+  const abortChat = useRef(() => store?.getState().abortController?.abort());
+
+  useEffect(
+    () =>
+      store?.subscribe((state) => {
+        abortChat.current = () => state.abortController?.abort();
+      }),
+    [store],
+  );
+
+  useEffect(() => {
+    // cancel pending chat requests when the view changes.
+    if (activeView && activeView !== 'chat') {
+      abortChat.current?.();
+    }
+
+    // cancel pending chat request when the component unmounts.
+    return () => abortChat.current?.();
+  }, [activeView]);
+
   return (
     <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
+      <ConversationSelect />
+
       <BaseMarkprompt.Prompt
         ref={inputRef}
         className="MarkpromptPrompt"
@@ -87,7 +109,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
         <RegenerateButton
           lastMessageState={lastMessageState}
           regenerateLastAnswer={regenerateLastAnswer}
-          abortSubmitChat={abortSubmitChat}
+          abortSubmitChat={abortChat.current}
         />
       )}
       {close && close.visible !== false && (

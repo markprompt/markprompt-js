@@ -21,12 +21,15 @@
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.25.4",
     "@markprompt/core": "^0.15.0",
     "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "clsx": "^2.0.0",
+    "downshift": "^8.1.0",
     "emittery": "^1.0.1",
+    "immer": "^10.0.2",
     "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
     "react-merge-refs": "^2.0.2",
@@ -41,7 +44,8 @@
     "@testing-library/user-event": "^14.4.3"
   },
   "peerDependencies": {
-    "react": "^16 || ^17 || ^18"
+    "react": "^16 || ^17 || ^18",
+    "react-dom": "^16 || ^17 || ^18"
   },
   "publishConfig": {
     "access": "public"

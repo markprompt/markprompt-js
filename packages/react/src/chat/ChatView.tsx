@@ -1,8 +1,8 @@
-import React, { useEffect, type ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { Messages } from './Messages.js';
-import { useChat } from './useChat.js';
+import { ChatProvider } from './store.js';
 import type { MarkpromptOptions } from '../types.js';
 import type { View } from '../useViews.js';
 
@@ -28,44 +28,24 @@ export function ChatView(props: ChatViewProps): ReactElement {
     referencesOptions,
   } = props;
 
-  const {
-    abort: abortSubmitChat,
-    abortFeedbackRequest,
-    messages,
-    regenerateLastAnswer,
-    submitChat,
-    submitFeedback,
-  } = useChat({ projectKey, chatOptions, feedbackOptions, debug });
-
-  // Abort any pending chat requests when the view changes.
-  useEffect(() => {
-    if (activeView && activeView !== 'chat') {
-      abortSubmitChat();
-    }
-
-    return () => {
-      abortSubmitChat();
-    };
-  }, [activeView, abortSubmitChat]);
-
   return (
-    <div className="MarkpromptChatView">
-      <Messages
-        messages={messages}
-        feedbackOptions={feedbackOptions}
-        abortFeedbackRequest={abortFeedbackRequest}
-        submitFeedback={submitFeedback}
-        referencesOptions={referencesOptions}
-      />
-      <ChatViewForm
-        activeView={activeView}
-        close={close}
-        chatOptions={chatOptions}
-        submitChat={submitChat}
-        lastMessageState={messages[messages.length - 1]?.state}
-        abortSubmitChat={abortSubmitChat}
-        regenerateLastAnswer={regenerateLastAnswer}
-      />
-    </div>
+    <ChatProvider
+      chatOptions={chatOptions}
+      debug={debug}
+      projectKey={projectKey}
+    >
+      <div className="MarkpromptChatView">
+        <Messages
+          projectKey={projectKey}
+          feedbackOptions={feedbackOptions}
+          referencesOptions={referencesOptions}
+        />
+        <ChatViewForm
+          activeView={activeView}
+          close={close}
+          chatOptions={chatOptions}
+        />
+      </div>
+    </ChatProvider>
   );
 }

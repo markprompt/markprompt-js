@@ -2,30 +2,29 @@ import React, { type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
-import { type ChatViewMessage } from './useChat.js';
+import { useChatStore } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { Feedback } from '../feedback/Feedback.js';
-import type { UseFeedbackResult } from '../feedback/useFeedback.js';
+import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { Reference } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
   feedbackOptions?: MarkpromptOptions['feedback'];
-  messages: ChatViewMessage[];
-  submitFeedback: UseFeedbackResult['submitFeedback'];
-  abortFeedbackRequest: UseFeedbackResult['abort'];
   referencesOptions?: MarkpromptOptions['references'];
+  projectKey: string;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const {
+  const { feedbackOptions, referencesOptions, projectKey } = props;
+
+  const messages = useChatStore((state) => state.messages);
+
+  const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
+    projectKey,
     feedbackOptions,
-    messages,
-    submitFeedback,
-    abortFeedbackRequest,
-    referencesOptions,
-  } = props;
+  });
 
   return (
     <div className="MarkpromptMessages">

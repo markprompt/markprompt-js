@@ -1,10 +1,10 @@
 import React, { type ReactElement, useCallback } from 'react';
 
-import { type ChatViewMessage } from './useChat.js';
+import type { ChatViewMessage } from './store.js';
 import { ReloadIcon, StopIcon } from '../icons.js';
 
 interface RegenerateButtonProps {
-  abortSubmitChat: () => void;
+  abortSubmitChat?: () => void;
   lastMessageState: ChatViewMessage['state'];
   regenerateLastAnswer: () => void;
 }
@@ -16,7 +16,7 @@ export function RegenerateButton(props: RegenerateButtonProps): ReactElement {
     if (lastMessageState === 'done' || lastMessageState === 'cancelled') {
       regenerateLastAnswer();
     } else {
-      abortSubmitChat();
+      abortSubmitChat?.();
     }
   }, [lastMessageState, regenerateLastAnswer, abortSubmitChat]);
 

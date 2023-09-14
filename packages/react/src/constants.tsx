@@ -71,11 +71,20 @@ function createKWICSnippet(
 }
 
 const defaultPromptGetLabel = (reference: FileSectionReference): string => {
-  return (
-    reference.meta?.leadHeading?.value ||
-    reference.file?.title ||
-    removeFileExtension(reference.file.path.split('/').slice(-1)[0])
-  );
+  if (reference.meta?.leadHeading?.value) {
+    return reference.meta.leadHeading.value;
+  }
+
+  if (reference.file?.title) {
+    return reference.file.title;
+  }
+
+  const fileName = reference.file.path.split('/').pop();
+  if (fileName) {
+    return removeFileExtension(fileName);
+  }
+
+  return reference.file?.path;
 };
 
 const isAlgoliaSearchResult = (
@@ -158,7 +167,7 @@ const defaultGetSearchResultSubtitle = (
   return undefined;
 };
 
-export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
+export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'dialog',
   showBranding: true,
   close: {
@@ -178,6 +187,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
+    history: true,
   },
   prompt: {
     label: 'Ask AI',
@@ -210,4 +220,4 @@ export const DEFAULT_MARKPROMPT_OPTIONS: MarkpromptOptions = {
     hide: true,
     text: 'Ask AI',
   },
-};
+} satisfies MarkpromptOptions;

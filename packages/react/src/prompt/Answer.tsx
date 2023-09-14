@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { type ReactElement } from 'react';
 
 import type { PromptLoadingState } from './usePrompt.js';
-import type { ChatLoadingState } from '../chat/useChat.js';
+import type { ChatLoadingState } from '../chat/store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 
 interface CaretProps {

@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 
-import { type ChatViewMessage } from './useChat.js';
+import { type ChatViewMessage } from './store.js';
 import { Answer } from '../prompt/Answer.js';
 
 interface MessageAnswerProps {

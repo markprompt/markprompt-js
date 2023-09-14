@@ -68,6 +68,10 @@ module.exports = {
       ],
       parser: '@typescript-eslint/parser',
       rules: {
+        '@typescript-eslint/consistent-indexed-object-style': [
+          'error',
+          'index-signature',
+        ],
         '@typescript-eslint/explicit-function-return-type': [
           'error',
           { allowExpressions: true },

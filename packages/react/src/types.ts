@@ -129,6 +129,14 @@ export interface MarkpromptOptions {
      * @default true
      **/
     showSender?: boolean;
+    /**
+     * Enable chat history features
+     * - enable saving chat history to local storage
+     * - show chat history UI
+     * - resume chat conversations
+     * @default true
+     */
+    history?: boolean;
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant

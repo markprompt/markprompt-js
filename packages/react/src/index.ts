@@ -33,12 +33,6 @@ export {
 } from './primitives/headless.js';
 
 export {
-  useChat,
-  type UseChatOptions,
-  type UseChatResult,
-} from './chat/useChat.js';
-
-export {
   useFeedback,
   type UseFeedbackOptions,
   type UseFeedbackResult,
@@ -64,6 +58,14 @@ export {
 } from './Markprompt.js';
 
 export { ChatView, type ChatViewProps } from './chat/ChatView.js';
+export {
+  ChatProvider,
+  useChatStore,
+  createChatStore,
+  type CreateChatOptions,
+  type ChatViewMessage,
+  type ChatLoadingState,
+} from './chat/store.js';
 export { PromptView, type PromptViewProps } from './prompt/PromptView.js';
 export { SearchView, type SearchViewProps } from './search/SearchView.js';
 

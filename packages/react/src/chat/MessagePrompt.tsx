@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 
-import { type ChatViewMessage } from './useChat.js';
+import { type ChatViewMessage } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { MarkpromptOptions } from '../types.js';
 
