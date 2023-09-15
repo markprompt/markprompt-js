@@ -301,16 +301,12 @@
 :where(.MarkpromptChatConversationList) {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0.5rem;
   display: grid;
   grid-auto-flow: row;
   grid-auto-rows: min-content;
   overflow-y: auto;
   gap: 0.5rem;
-  padding: 0.5rem;
-}
-
-:where(.MarkpromptChatConversationList li) {
 }
 
 :where(.MarkpromptChatConversationList button) {
@@ -1562,25 +1558,20 @@
   border-radius: 0.375rem;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
-  transition-timing-function: ease-in-out;
   list-style-type: none;
   padding-left: 0;
   z-index: 2;
   box-shadow: var(--markprompt-ring-offset-shadow, 0 0 #0000),
     var(--markprompt-ring-shadow, 0 0 #0000), var(--markprompt-shadow);
   max-width: 30ch;
-  opacity: 0;
-  transition: opacity 120ms ease-in;
 }
 
 :where(.MarkpromptSelectMenu[data-open='true']) {
   display: block;
-  opacity: 1;
 }
 
 :where(.MarkpromptSelectMenu li) {
   margin-left: 0;
-  white-space: nowrap;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
   cursor: pointer;

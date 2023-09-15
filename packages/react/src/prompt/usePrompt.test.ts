@@ -18,7 +18,7 @@ import {
   vi,
 } from 'vitest';
 
-import { UsePromptResult, usePrompt } from './usePrompt';
+import { type UsePromptResult, usePrompt } from './usePrompt.js';
 
 const encoder = new TextEncoder();
 let response: object | string[] = [];

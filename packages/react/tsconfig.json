@@ -1,32 +1,22 @@
 {
   "references": [{ "path": "../core" }],
-  "include": ["src/", "./vitest.setup.ts"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/vitest.setup.ts"],
+  "include": ["src/"],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "verbatimModuleSyntax": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
-    "lib": ["es2022", "dom"],
-    "jsx": "react",
-
+    "lib": ["dom", "es2022", "esnext"],
     "composite": true,
+    "module": "node16",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-
     "rootDir": "./src",
+    "strict": true,
+    "jsx": "react",
     "outDir": "dist",
-
+    "skipLibCheck": true,
+    "target": "es2021",
     "isolatedModules": true,
-
+    "verbatimModuleSyntax": true,
+    "types": ["@testing-library/jest-dom/vitest"],
     "paths": {
       "@markprompt/core": ["../core/src"]
     }

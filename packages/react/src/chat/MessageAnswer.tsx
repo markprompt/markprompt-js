@@ -16,8 +16,8 @@ export function MessageAnswer(props: MessageAnswerProps): ReactElement {
       {state === 'cancelled' && (
         <div className="MarkpromptCancelled">
           <p className="MarkpromptCancelledText">
-            This prompt response was cancelled. Please try regenerating the
-            answer or ask another question.
+            This chat response was cancelled. Please try regenerating the answer
+            or ask another question.
           </p>
         </div>
       )}

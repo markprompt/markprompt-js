@@ -1,14 +1,51 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
-import * as icons from './icons.js';
+import {
+  ChatIcon,
+  ChevronLeftIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  CommandIcon,
+  CornerDownLeftIcon,
+  CounterClockwiseClockIcon,
+  FileTextIcon,
+  HashIcon,
+  ReloadIcon,
+  SearchIcon,
+  SparklesIcon,
+  StopIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+  PlusIcon,
+} from './icons.js';
 
-test('renders the ThumbsDownIcon component', () => {
-  for (const icon in icons) {
-    const Icon = icons[icon];
-    render(<Icon data-testid={`test-icon-${icon}`} />);
-    const el = screen.getByTestId(`test-icon-${icon}`);
-    expect(el).toBeInTheDocument();
+const icons = [
+  ChatIcon,
+  ChevronLeftIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  CommandIcon,
+  CornerDownLeftIcon,
+  CounterClockwiseClockIcon,
+  FileTextIcon,
+  HashIcon,
+  ReloadIcon,
+  SearchIcon,
+  SparklesIcon,
+  StopIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+  PlusIcon,
+];
+
+describe('icons', () => {
+  for (const Icon of icons) {
+    test(`renders the ${Icon.name} component`, () => {
+      render(<Icon data-testid={`test-icon-${Icon.name}`} />);
+      const el = screen.getByTestId(`test-icon-${Icon.name}`);
+      expect(el).toBeInTheDocument();
+    });
   }
 });

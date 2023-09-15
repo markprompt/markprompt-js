@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import React from 'react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { Feedback } from './Feedback';
+import { Feedback } from './Feedback.js';
 
 describe('Feedback', () => {
   const submitFeedback = vi.fn(() => Promise.resolve());

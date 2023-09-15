@@ -20,7 +20,7 @@
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
-    "@algolia/client-search": "^4.19.1",
+    "@algolia/client-search": "^4.20.0",
     "defaults": "^2.0.2",
     "type-fest": "^4.3.1"
   }

@@ -29,7 +29,12 @@ export function ConversationSelect(): JSX.Element {
           label: 'Start new chat',
           children: (
             <span className="MarkpromptNewChatOption">
-              <PlusIcon className="MarkpromptNewChatIcon" /> New chat
+              <PlusIcon
+                className="MarkpromptNewChatIcon"
+                aria-hidden
+                focusable={false}
+              />{' '}
+              New chat
             </span>
           ),
         },

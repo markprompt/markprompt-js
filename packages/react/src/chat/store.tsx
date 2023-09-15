@@ -271,7 +271,11 @@ export const createChatStore = ({
             );
 
             promise.then(() => {
-              if (controller.signal.aborted) return;
+              if (controller.signal.aborted) {
+                return get().setMessageByIndex(currentMessageIndex, {
+                  state: 'cancelled',
+                });
+              }
 
               // don't overwrite the state of cancelled messages with done when the promise resolves
               const currentMessage = get().messages[currentMessageIndex];
