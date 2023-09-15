@@ -80,9 +80,7 @@ const defaultPromptGetLabel = (reference: FileSectionReference): string => {
   }
 
   const fileName = reference.file.path.split('/').pop();
-  if (fileName) {
-    return removeFileExtension(fileName);
-  }
+  if (fileName) return removeFileExtension(fileName);
 
   return reference.file?.path;
 };

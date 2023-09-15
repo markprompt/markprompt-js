@@ -104,7 +104,10 @@ describe('constants', () => {
   test('default references.getLabel', async () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[0]),
-    ).toEqual(results[0].meta?.leadHeading?.value);
+    ).toEqual(heading);
+    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[1])).toBe(
+      'Home',
+    );
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[2]),
     ).toEqual(noTitleFileName);
