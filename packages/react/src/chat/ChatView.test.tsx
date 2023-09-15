@@ -165,7 +165,7 @@ describe('ChatView', () => {
     });
   });
 
-  it.skip('saves conversations', async () => {
+  it('saves conversations', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
