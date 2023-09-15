@@ -22,6 +22,12 @@ export interface ChatViewProps {
 export function ChatView(props: ChatViewProps): JSX.Element {
   const { activeView, debug, projectKey } = props;
 
+  if (!projectKey) {
+    throw new Error(
+      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to <ChatView />.`,
+    );
+  }
+
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone ChatView components also have defaults as expected.
   const chatOptions = useMemo(

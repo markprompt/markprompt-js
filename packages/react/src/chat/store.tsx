@@ -91,6 +91,12 @@ export const createChatStore = ({
   persistChatHistory,
   projectKey, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: CreateChatOptions) => {
+  if (!projectKey) {
+    throw new Error(
+      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.`,
+    );
+  }
+
   const optionalPersist = (
     persistChatHistory ? persist : (x) => x
   ) as typeof persist;
