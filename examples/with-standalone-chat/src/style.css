@@ -51,3 +51,9 @@ body {
     margin-inline: 0;
   }
 }
+
+@media screen and (prefers-color-scheme: dark) {
+  #app > aside img {
+    filter: invert(1);
+  }
+}
