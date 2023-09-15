@@ -1,5 +1,5 @@
 import defaults from 'defaults';
-import React, { useMemo, type ReactElement } from 'react';
+import React, { useMemo } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { Messages } from './Messages.js';
@@ -11,15 +11,14 @@ import type { View } from '../useViews.js';
 export interface ChatViewProps {
   activeView?: View;
   chatOptions?: MarkpromptOptions['chat'];
-
+  debug?: boolean;
   feedbackOptions?: MarkpromptOptions['feedback'];
   onDidSelectReference?: () => void;
   projectKey: string;
   referencesOptions?: MarkpromptOptions['references'];
-  debug?: boolean;
 }
 
-export function ChatView(props: ChatViewProps): ReactElement {
+export function ChatView(props: ChatViewProps): JSX.Element {
   const { activeView, debug, projectKey } = props;
 
   // we are also merging defaults in the Markprompt component, but this makes sure
