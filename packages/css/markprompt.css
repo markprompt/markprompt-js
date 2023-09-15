@@ -1094,10 +1094,10 @@
   bottom: 0;
   width: 1rem;
   pointer-events: none;
+  z-index: 1;
 }
 
 .MarkpromptReferences::before {
-  z-index: 10;
   left: 0;
   background-image: linear-gradient(
     to right,
@@ -1107,7 +1107,6 @@
 }
 
 .MarkpromptReferences::after {
-  z-index: 10;
   right: 0;
   background-image: linear-gradient(
     to left,
@@ -1472,15 +1471,17 @@
   transition-timing-function: ease-in-out;
   list-style-type: none;
   padding-left: 0;
-  will-change: auto;
-  z-index: 1;
+  z-index: 2;
   box-shadow: var(--markprompt-ring-offset-shadow, 0 0 #0000),
     var(--markprompt-ring-shadow, 0 0 #0000), var(--markprompt-shadow);
   max-width: 30ch;
+  opacity: 0;
+  transition: opacity 120ms ease-in;
 }
 
 :where(.MarkpromptSelectMenu[data-open='true']) {
   display: block;
+  opacity: 1;
 }
 
 :where(.MarkpromptSelectMenu li) {
