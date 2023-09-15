@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.24.0
+
+### Minor Changes
+
+- [#184](https://github.com/motifland/markprompt-js/pull/184)
+  [`1e2f5bc`](https://github.com/motifland/markprompt-js/commit/1e2f5bcf6bc147138bfceff4e1b0071849f684d1)
+  Thanks [@michaelfester](https://github.com/michaelfester)! - Fix missing
+  headings
+
 ## 0.23.0
 
 ### Minor Changes
