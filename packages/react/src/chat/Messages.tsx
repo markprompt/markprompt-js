@@ -11,8 +11,8 @@ import { Reference } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  referencesOptions?: MarkpromptOptions['references'];
+  feedbackOptions: MarkpromptOptions['feedback'];
+  referencesOptions: MarkpromptOptions['references'];
   projectKey: string;
 }
 

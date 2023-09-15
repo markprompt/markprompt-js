@@ -58,12 +58,13 @@ interface State {
   messages: ChatViewMessage[];
   setMessages: (messages: ChatViewMessage[]) => void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
-  conversationsByProjectKey: {
-    [projectKey: string]: {
-      conversationId?: string;
-      messagesByConversationId: {
-        [conversationId: string]: ChatViewMessage[];
-      };
+  conversationIdsByProjectKey: {
+    [projectKey: string]: string[];
+  };
+  messagesByConversationId: {
+    [conversationId: string]: {
+      lastUpdated: string;
+      messages: ChatViewMessage[];
     };
   };
   submitChat: (prompt: string) => void;
@@ -100,24 +101,28 @@ export const createChatStore = ({
         (set, get) => ({
           projectKey,
           messages: [],
-          conversationsByProjectKey: {
-            [projectKey]: {
-              messagesByConversationId: {},
-            },
+          conversationIdsByProjectKey: {
+            [projectKey]: [],
           },
+          messagesByConversationId: {},
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
               state.conversationId = conversationId;
 
               // save the conversation id for this project, for later sessions
-              // and associate it to the messages already in state
-              state.conversationsByProjectKey[projectKey]!.conversationId =
-                conversationId;
+              state.conversationIdsByProjectKey[projectKey] = [
+                ...new Set([
+                  ...state.conversationIdsByProjectKey[projectKey]!,
+                  conversationId,
+                ]),
+              ];
 
-              state.conversationsByProjectKey[
-                projectKey
-              ]!.messagesByConversationId[conversationId] = state.messages;
+              // save the messages for this conversation
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages: state.messages,
+              };
             });
           },
           selectConversation: (conversationId?: string) => {
@@ -132,8 +137,7 @@ export const createChatStore = ({
               // restore an existing conversation
               state.conversationId = conversationId;
               state.messages =
-                state.conversationsByProjectKey[projectKey]
-                  ?.messagesByConversationId[conversationId ?? ''] ?? [];
+                state.messagesByConversationId[conversationId]?.messages ?? [];
             });
           },
           setMessages: (messages: ChatViewMessage[]) => {
@@ -143,11 +147,11 @@ export const createChatStore = ({
               const conversationId = state.conversationId;
               if (!conversationId) return;
 
-              const project = state.conversationsByProjectKey[state.projectKey];
-              if (!project) return;
-
               // save the message to local storage
-              project.messagesByConversationId[conversationId] = messages;
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages,
+              };
             });
           },
           setMessageByIndex: (
@@ -165,11 +169,11 @@ export const createChatStore = ({
               const conversationId = state.conversationId;
               if (!conversationId) return;
 
-              const project = state.conversationsByProjectKey[state.projectKey];
-              if (!project) return;
-
               // save the message to local storage
-              project.messagesByConversationId[conversationId] = state.messages;
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages: state.messages,
+              };
             });
           },
           submitChat: (prompt: string) => {
@@ -213,19 +217,8 @@ export const createChatStore = ({
             // get ready to do the request
             const apiMessages = toApiMessages(get().messages);
 
-            set((state) => {
-              const currentMessage = state.messages[currentMessageIndex];
-
-              if (!currentMessage) return;
-              currentMessage.state = 'preload';
-
-              if (!state.conversationId) return;
-
-              const project = state.conversationsByProjectKey[projectKey];
-              if (!project) return;
-
-              project.messagesByConversationId[state.conversationId] =
-                state.messages;
+            get().setMessageByIndex(currentMessageIndex, {
+              state: 'preload',
             });
 
             const promise = submitChat(
@@ -306,28 +299,47 @@ export const createChatStore = ({
           version: 1,
           // only store conversationsByProjectKey in local storage
           partialize: (state) => ({
-            conversationsByProjectKey: state.conversationsByProjectKey,
+            conversationIdsByProjectKey: state.conversationIdsByProjectKey,
+            messagesByConversationId: state.messagesByConversationId,
           }),
-          // rehydrate messages based on the stored conversationId
+          // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
 
-            const { conversationsByProjectKey } = state;
+            const { conversationIdsByProjectKey, messagesByConversationId } =
+              state;
 
-            const conversationId =
-              conversationsByProjectKey?.[projectKey]?.conversationId;
+            const conversationIds =
+              conversationIdsByProjectKey?.[projectKey] ?? [];
 
-            if (!conversationId) return;
+            const projectConversations = Object.entries(
+              messagesByConversationId,
+            )
+              // filter out conversations that are not in the list of conversations for this project
+              .filter(([id]) => conversationIds.includes(id))
+              // filter out conversations older than 4 hours
+              .filter(([, { lastUpdated }]) => {
+                const lastUpdatedDate = new Date(lastUpdated);
+                const now = new Date();
+                const fourHoursAgo = new Date(
+                  now.getTime() - 4 * 60 * 60 * 1000,
+                );
+                return lastUpdatedDate > fourHoursAgo;
+              })
+              // sort by last updated date, descending
+              .sort(([, { lastUpdated: a }], [, { lastUpdated: b }]) =>
+                b.localeCompare(a),
+              );
 
-            state.setConversationId(conversationId);
-
-            const messages =
-              conversationsByProjectKey?.[projectKey]
-                ?.messagesByConversationId?.[conversationId];
-
-            if (!messages || !Array.isArray(messages) || messages.length === 0)
+            if (
+              projectConversations.length === 0 ||
+              !isPresent(projectConversations[0])
+            )
               return;
 
+            const [conversationId, { messages }] = projectConversations[0];
+
+            state.setConversationId(conversationId);
             state.setMessages(messages);
           },
         },
@@ -341,7 +353,7 @@ type ChatStore = ReturnType<typeof createChatStore>;
 export const ChatContext = createContext<ChatStore | null>(null);
 
 interface ChatProviderProps {
-  chatOptions?: MarkpromptOptions['chat'];
+  chatOptions: MarkpromptOptions['chat'];
   children: ReactNode;
   debug?: boolean;
   projectKey: string;

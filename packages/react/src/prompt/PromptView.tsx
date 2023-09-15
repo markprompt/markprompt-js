@@ -1,5 +1,6 @@
 import type { FileSectionReference } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import defaults from 'defaults';
 import React, {
   useCallback,
   useEffect,
@@ -7,6 +8,7 @@ import React, {
   type FormEventHandler,
   type ReactElement,
   useRef,
+  useMemo,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -26,22 +28,38 @@ export interface PromptViewProps {
   promptOptions: MarkpromptOptions['prompt'];
   feedbackOptions?: MarkpromptOptions['feedback'];
   referencesOptions: MarkpromptOptions['references'];
-  close?: MarkpromptOptions['close'];
   onDidSelectReference?: () => void;
   debug?: boolean;
 }
 
 export function PromptView(props: PromptViewProps): ReactElement {
-  const {
-    activeView,
-    promptOptions,
-    referencesOptions,
-    feedbackOptions,
-    close,
-    onDidSelectReference,
-    debug,
-    projectKey,
-  } = props;
+  const { activeView, onDidSelectReference, debug, projectKey } = props;
+
+  // we are also merging defaults in the Markprompt component, but this makes sure
+  // that standalone PromptView components also have defaults as expected.
+  const promptOptions = useMemo(
+    () =>
+      defaults({ ...props.promptOptions }, DEFAULT_MARKPROMPT_OPTIONS.prompt),
+    [props.promptOptions],
+  );
+
+  const feedbackOptions = useMemo(
+    () =>
+      defaults(
+        { ...props.feedbackOptions },
+        DEFAULT_MARKPROMPT_OPTIONS.feedback,
+      ),
+    [props.feedbackOptions],
+  );
+
+  const referencesOptions = useMemo(
+    () =>
+      defaults(
+        { ...props.referencesOptions },
+        DEFAULT_MARKPROMPT_OPTIONS.references,
+      ),
+    [props.referencesOptions],
+  );
 
   const {
     abort,
@@ -114,15 +132,6 @@ export function PromptView(props: PromptViewProps): ReactElement {
             </AccessibleIcon.Root>
           }
         />
-        {close && close.visible !== false && (
-          <BaseMarkprompt.Close className="MarkpromptClose">
-            <AccessibleIcon.Root
-              label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
-            >
-              <kbd>Esc</kbd>
-            </AccessibleIcon.Root>
-          </BaseMarkprompt.Close>
-        )}
       </BaseMarkprompt.Form>
 
       <AnswerContainer

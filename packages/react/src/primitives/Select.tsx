@@ -1,5 +1,4 @@
 import {
-  FloatingPortal,
   autoUpdate,
   flip,
   offset,
@@ -7,6 +6,7 @@ import {
   useFloating,
 } from '@floating-ui/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import clsx from 'clsx';
 import { useSelect, type UseSelectProps } from 'downshift';
 import React, { type ReactNode } from 'react';
 
@@ -18,9 +18,9 @@ interface Option {
 interface SelectProps<T = Option> extends UseSelectProps<T> {
   className?: string;
   items: T[];
-  itemToValue: (item: T) => string;
+  itemToChildren?: (item: T | null) => ReactNode;
   itemToString: (item: T | null) => string;
-  label?: string;
+  label?: ReactNode;
   toggle?: ReactNode;
   menuClassName?: string;
   toggleClassName?: string;
@@ -36,7 +36,7 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
     label,
     items,
     toggle,
-    itemToValue,
+    itemToChildren,
     itemToString,
     ...useSelectProps
   } = props;
@@ -59,42 +59,41 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
     open: isOpen,
     middleware: [offset(8), flip(), shift()],
     whileElementsMounted: autoUpdate,
+    placement: 'top-start',
   });
 
   return (
-    <div className={className}>
-      <div>
-        <VisuallyHidden asChild>
-          <label {...getLabelProps()}>{label}</label>
-        </VisuallyHidden>
-        <button
-          type="button"
-          className={toggleClassName}
-          {...getToggleButtonProps({ ref: refs.setReference })}
-        >
-          {toggle}
-        </button>
-      </div>
+    <div className={clsx('MarkpromptSelect', className)}>
+      <VisuallyHidden asChild>
+        <label {...getLabelProps()}>{label}</label>
+      </VisuallyHidden>
+
+      <button
+        type="button"
+        className={clsx('MarkpromptSelectToggle', toggleClassName)}
+        {...getToggleButtonProps({ ref: refs.setReference })}
+      >
+        {toggle}
+      </button>
+
       <ul
-        className={menuClassName}
+        className={clsx('MarkpromptSelectMenu', menuClassName)}
         style={floatingStyles}
+        data-open={isOpen}
         {...getMenuProps({ ref: refs.setFloating })}
       >
-        {isOpen && (
-          <FloatingPortal>
-            {items.map((item, index) => (
-              <li
-                key={itemToValue(item)}
-                className={itemClassName}
-                data-highlighted={highlightedIndex === index}
-                data-selected={selectedItem === item}
-                {...getItemProps({ item, index })}
-              >
-                {itemToString(item)}
-              </li>
-            ))}
-          </FloatingPortal>
-        )}
+        {isOpen &&
+          items.map((item, index) => (
+            <li
+              key={itemToString(item)}
+              className={itemClassName}
+              data-highlighted={highlightedIndex === index}
+              data-selected={itemToString(selectedItem) === itemToString(item)}
+              {...getItemProps({ item, index })}
+            >
+              {itemToChildren ? itemToChildren(item) : itemToString(item)}
+            </li>
+          ))}
       </ul>
     </div>
   );

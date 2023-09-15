@@ -11,7 +11,6 @@ import React, {
 import { ConversationSelect } from './ConversationSelect.js';
 import { RegenerateButton } from './RegenerateButton.js';
 import { ChatContext, useChatStore } from './store.js';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
@@ -19,12 +18,11 @@ import type { View } from '../useViews.js';
 
 interface ChatViewFormProps {
   activeView?: View;
-  chatOptions?: MarkpromptOptions['chat'];
-  close?: MarkpromptOptions['close'];
+  chatOptions: MarkpromptOptions['chat'];
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
-  const { activeView, close, chatOptions } = props;
+  const { activeView, chatOptions } = props;
 
   const submitChat = useChatStore((state) => state.submitChat);
   const lastMessageState = useChatStore(
@@ -81,46 +79,33 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   }, [activeView]);
 
   return (
-    <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
-      <ConversationSelect />
-
+    <BaseMarkprompt.Form className={'MarkpromptForm'} onSubmit={handleSubmit}>
       <BaseMarkprompt.Prompt
         ref={inputRef}
         className="MarkpromptPrompt"
         name="markprompt-prompt"
         type="text"
         autoFocus
-        placeholder={
-          chatOptions?.placeholder ??
-          DEFAULT_MARKPROMPT_OPTIONS.chat!.placeholder!
-        }
+        placeholder={chatOptions?.placeholder}
         labelClassName="MarkpromptPromptLabel"
         label={
-          <AccessibleIcon.Root
-            label={
-              chatOptions?.label ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label!
-            }
-          >
+          <AccessibleIcon.Root label={chatOptions!.label!}>
             <SparklesIcon className="MarkpromptSearchIcon" />
           </AccessibleIcon.Root>
         }
       />
-      {lastMessageState && lastMessageState !== 'indeterminate' && (
-        <RegenerateButton
-          lastMessageState={lastMessageState}
-          regenerateLastAnswer={regenerateLastAnswer}
-          abortSubmitChat={abortChat.current}
-        />
-      )}
-      {close && close.visible !== false && (
-        <BaseMarkprompt.Close className="MarkpromptClose">
-          <AccessibleIcon.Root
-            label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
-          >
-            <kbd>Esc</kbd>
-          </AccessibleIcon.Root>
-        </BaseMarkprompt.Close>
-      )}
+
+      <div className="MarkpromptChatActions">
+        {lastMessageState && lastMessageState !== 'indeterminate' && (
+          <RegenerateButton
+            lastMessageState={lastMessageState}
+            regenerateLastAnswer={regenerateLastAnswer}
+            abortSubmitChat={abortChat.current}
+          />
+        )}
+
+        {chatOptions?.history && <ConversationSelect />}
+      </div>
     </BaseMarkprompt.Form>
   );
 }

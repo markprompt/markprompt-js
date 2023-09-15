@@ -1,4 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import defaults from 'defaults';
 import React, {
   useCallback,
   useEffect,
@@ -9,6 +10,7 @@ import React, {
   type ReactElement,
   type SetStateAction,
   type ChangeEventHandler,
+  useMemo,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -24,7 +26,6 @@ import type { View } from '../useViews.js';
 
 export interface SearchViewProps {
   activeView?: View;
-  close?: MarkpromptOptions['close'];
   debug?: boolean;
   onDidSelectResult?: () => void;
   projectKey: string;
@@ -39,14 +40,15 @@ interface ActiveSearchResult {
 const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const {
-    activeView,
-    close,
-    debug,
-    onDidSelectResult,
-    searchOptions,
-    projectKey,
-  } = props;
+  const { activeView, debug, onDidSelectResult, projectKey } = props;
+
+  // we are also merging defaults in the Markprompt component, but this makes sure
+  // that standalone SearchView components also have defaults as expected.
+  const searchOptions = useMemo(
+    () =>
+      defaults({ ...props.searchOptions }, DEFAULT_MARKPROMPT_OPTIONS.search),
+    [props.searchOptions],
+  );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -193,15 +195,6 @@ export function SearchView(props: SearchViewProps): ReactElement {
             </AccessibleIcon.Root>
           }
         />
-        {close && close.visible !== false && (
-          <BaseMarkprompt.Close className="MarkpromptClose">
-            <AccessibleIcon.Root
-              label={close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!}
-            >
-              <kbd>Esc</kbd>
-            </AccessibleIcon.Root>
-          </BaseMarkprompt.Close>
-        )}
       </BaseMarkprompt.Form>
 
       <SearchResultsContainer
