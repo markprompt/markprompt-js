@@ -111,6 +111,28 @@ describe('ChatView', () => {
     });
   });
 
+  it('shows references', async () => {
+    response = ['answer'];
+    const references = [
+      {
+        file: { path: '/page1', source: { type: 'file-upload' } },
+        meta: { leadHeading: { value: 'Page 1' } },
+      },
+    ];
+    markpromptData = { references };
+
+    const user = await userEvent.setup();
+
+    render(<ChatView projectKey="test-key" />);
+
+    await user.type(screen.getByRole('textbox'), 'test');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByText('Page 1')).toBeInTheDocument();
+    });
+  });
+
   it('aborts a pending chat request when the view changes', async () => {
     response = ['testing', 'testing', 'test'];
     slowChunks = true;
