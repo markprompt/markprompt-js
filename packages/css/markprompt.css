@@ -262,13 +262,6 @@
   border-right: 1px solid var(--markprompt-border);
 }
 
-:where(.MarkpromptChatViewSidebarTitle) {
-  border-bottom: 1px solid var(--markprompt-border);
-  font-size: var(--markprompt-text-size);
-  margin: 0;
-  padding: 1em 0.75rem;
-}
-
 :where(.MarkpromptChatViewChat) {
   overflow: hidden;
   display: grid;
@@ -295,6 +288,14 @@
   :where(.MarkpromptConversationSelect) {
     display: none;
   }
+}
+
+:where(.MarkpromptChatViewSidebarTitle) {
+  border-bottom: 1px solid var(--markprompt-border);
+  font-size: var(--markprompt-text-size);
+  margin: 0;
+  padding: 1em 0.75rem;
+  color: var(--markprompt-foreground);
 }
 
 :where(.MarkpromptChatConversationList) {
@@ -330,6 +331,7 @@
 
 :where(.MarkpromptChatConversationList p:first-of-type) {
   margin: 0;
+  color: var(--markprompt-foreground);
 }
 
 :where(.MarkpromptChatConversationList p:last-of-type) {
@@ -457,6 +459,7 @@
 
 :where(.MarkpromptMessagePromptText) {
   font-size: var(--markprompt-text-size);
+  color: var(--markprompt-foreground);
 }
 
 :where(.MarkpromptPrimaryIcon) {
