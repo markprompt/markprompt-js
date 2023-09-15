@@ -53,7 +53,13 @@ function markpromptChat(
   options?: ChatOptions,
 ): void {
   if (!chatRoot) chatRoot = createRoot(getHTMLElement(container));
-  chatRoot.render(<ChatView projectKey={projectKey} {...options} />);
+  chatRoot.render(
+    <ChatView
+      projectKey={projectKey}
+      {...options}
+      chatOptions={{ ...options?.chatOptions, enabled: true }}
+    />,
+  );
 }
 
 export { markprompt, openMarkprompt, type MarkpromptOptions, markpromptChat };

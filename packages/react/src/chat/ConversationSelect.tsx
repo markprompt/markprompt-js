@@ -1,30 +1,11 @@
 import React from 'react';
 
-import { useChatStore } from './store.js';
+import { selectProjectConversations, useChatStore } from './store.js';
 import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
 import { Select } from '../primitives/Select.js';
 
 export function ConversationSelect(): JSX.Element {
-  const conversations = useChatStore((state) => {
-    const projectKey = state.projectKey;
-
-    const conversationIds = state.conversationIdsByProjectKey[projectKey];
-    if (!conversationIds || conversationIds.length === 0) return [];
-
-    const messagesByConversationId = Object.entries(
-      state.messagesByConversationId,
-    )
-      .filter(([id]) => conversationIds.includes(id))
-      // ascending order, so the newest conversation will be closest to the dropdown toggle
-      .sort(([, { lastUpdated: a }], [, { lastUpdated: b }]) =>
-        a.localeCompare(b),
-      );
-
-    if (!messagesByConversationId) return [];
-
-    return messagesByConversationId;
-  });
-
+  const conversations = useChatStore(selectProjectConversations);
   const selectConversation = useChatStore((state) => state.selectConversation);
 
   return (

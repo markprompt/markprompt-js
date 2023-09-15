@@ -2,6 +2,7 @@ import defaults from 'defaults';
 import React, { useMemo } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
+import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
 import { ChatProvider } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
@@ -53,12 +54,16 @@ export function ChatView(props: ChatViewProps): JSX.Element {
       projectKey={projectKey}
     >
       <div className="MarkpromptChatView">
-        <Messages
-          projectKey={projectKey}
-          feedbackOptions={feedbackOptions}
-          referencesOptions={referencesOptions}
-        />
-        <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
+        <ConversationSidebar />
+
+        <div className="MarkpromptChatViewChat">
+          <Messages
+            projectKey={projectKey}
+            feedbackOptions={feedbackOptions}
+            referencesOptions={referencesOptions}
+          />
+          <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
+        </div>
       </div>
     </ChatProvider>
   );

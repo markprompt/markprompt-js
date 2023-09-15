@@ -49,7 +49,7 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
     .filter(isPresent) satisfies ChatMessage[];
 }
 
-interface State {
+export interface ChatStoreState {
   abortController?: AbortController;
   projectKey: string;
   conversationId?: string;
@@ -95,7 +95,7 @@ export const createChatStore = ({
     persistChatHistory ? persist : (x) => x
   ) as typeof persist;
 
-  return createStore<State>()(
+  return createStore<ChatStoreState>()(
     immer(
       optionalPersist(
         (set, get) => ({
@@ -381,8 +381,33 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
   );
 }
 
-export function useChatStore<T>(selector: (state: State) => T): T {
+export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
   const store = useContext(ChatContext);
   if (!store) throw new Error('Missing ChatContext.Provider in the tree');
   return useStore(store, selector);
 }
+
+export const selectProjectConversations = (
+  state: ChatStoreState,
+): [
+  conversationId: string,
+  { lastUpdated: string; messages: ChatViewMessage[] },
+][] => {
+  const projectKey = state.projectKey;
+
+  const conversationIds = state.conversationIdsByProjectKey[projectKey];
+  if (!conversationIds || conversationIds.length === 0) return [];
+
+  const messagesByConversationId = Object.entries(
+    state.messagesByConversationId,
+  )
+    .filter(([id]) => conversationIds.includes(id))
+    // ascending order, so the newest conversation will be closest to the dropdown toggle
+    .sort(([, { lastUpdated: a }], [, { lastUpdated: b }]) =>
+      a.localeCompare(b),
+    );
+
+  if (!messagesByConversationId) return [];
+
+  return messagesByConversationId;
+};

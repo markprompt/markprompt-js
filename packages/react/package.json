@@ -30,6 +30,8 @@
     "downshift": "^8.1.0",
     "emittery": "^1.0.1",
     "immer": "^10.0.2",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-to-string": "^4.0.0",
     "p-debounce": "^4.0.0",
     "react-markdown": "^8.0.7",
     "react-merge-refs": "^2.0.2",
