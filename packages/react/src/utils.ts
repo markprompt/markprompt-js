@@ -9,7 +9,5 @@ export function markdownToString(markdown = '', maxLength = 200): string {
   const tree = fromMarkdown(markdown);
   const string = toString(tree);
 
-  return string.length > maxLength
-    ? `${string.slice(0, maxLength)}...`
-    : string;
+  return string.length > maxLength ? `${string.slice(0, maxLength)}…` : string;
 }
