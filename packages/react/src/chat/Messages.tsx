@@ -50,6 +50,7 @@ export function Messages(props: MessagesProps): ReactElement {
                   submitFeedback={submitFeedback}
                   abortFeedbackRequest={abortFeedbackRequest}
                   promptId={message.promptId}
+                  heading={feedbackOptions.heading}
                 />
               )}
             </div>
