@@ -1,17 +1,20 @@
 import {
+  isAbortError,
   submitChat,
   type ChatMessage,
-  isAbortError,
-  type SubmitChatOptions,
   type FileSectionReference,
+  type SubmitChatOptions,
 } from '@markprompt/core';
-import { createContext, useRef, type ReactNode, useContext } from 'react';
-import React from 'react';
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  type ReactNode,
+} from 'react';
 import { createStore, useStore } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { MarkpromptOptions } from '../types.js';
 import { isPresent } from '../utils.js';
 
