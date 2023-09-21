@@ -46,7 +46,7 @@ const server = setupServer(
       async start(controller) {
         for (const chunk of response) {
           if (slowChunks) {
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 100));
           }
           controller.enqueue(encoder.encode(chunk));
         }
