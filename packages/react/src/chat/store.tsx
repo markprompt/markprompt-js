@@ -322,6 +322,9 @@ export const createChatStore = ({
             const conversationIds =
               conversationIdsByProjectKey?.[projectKey] ?? [];
 
+            const now = new Date();
+            const fourHoursAgo = new Date(now.getTime() - 4 * 60 * 60 * 1000);
+
             const projectConversations = Object.entries(
               messagesByConversationId,
             )
@@ -330,10 +333,6 @@ export const createChatStore = ({
               // filter out conversations older than 4 hours
               .filter(([, { lastUpdated }]) => {
                 const lastUpdatedDate = new Date(lastUpdated);
-                const now = new Date();
-                const fourHoursAgo = new Date(
-                  now.getTime() - 4 * 60 * 60 * 1000,
-                );
                 return lastUpdatedDate > fourHoursAgo;
               })
               // sort by last updated date, descending
@@ -379,8 +378,7 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
       projectKey,
       chatOptions,
       debug,
-      persistChatHistory:
-        chatOptions?.history ?? DEFAULT_MARKPROMPT_OPTIONS.chat.history,
+      persistChatHistory: chatOptions?.history,
     });
   }
 

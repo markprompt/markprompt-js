@@ -38,7 +38,7 @@ function markprompt(
 
 let chatRoot: Root;
 
-type ChatOptions = Omit<ChatViewProps, 'activeView'>;
+type ChatOptions = Omit<ChatViewProps, 'activeView' | 'projectKey'>;
 
 /**
  * Render the Markprompt chat view.

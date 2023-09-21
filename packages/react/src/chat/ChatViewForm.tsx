@@ -6,6 +6,7 @@ import React, {
   useRef,
   type FormEventHandler,
   type ReactElement,
+  useState,
 } from 'react';
 
 import { ConversationSelect } from './ConversationSelect.js';
@@ -23,6 +24,8 @@ interface ChatViewFormProps {
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const { activeView, chatOptions } = props;
+
+  const [prompt, setPrompt] = useState('');
 
   const submitChat = useChatStore((state) => state.submitChat);
   const lastMessageState = useChatStore(
@@ -43,7 +46,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
       }
 
       if (event.target instanceof HTMLFormElement) {
-        event.target.reset();
+        setPrompt('');
       }
     },
     [submitChat],
@@ -88,6 +91,8 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
         autoFocus
         placeholder={chatOptions?.placeholder}
         labelClassName="MarkpromptPromptLabel"
+        value={prompt}
+        onChange={(event) => setPrompt(event.target.value)}
         label={
           <AccessibleIcon.Root label={chatOptions!.label!}>
             <SparklesIcon className="MarkpromptSearchIcon" />
