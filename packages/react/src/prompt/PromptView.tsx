@@ -145,6 +145,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
         state={state}
         submitFeedback={(feedback, promptId) => {
           submitFeedback(feedback, promptId);
+
           feedbackOptions.onFeedbackSubmit?.(
             feedback,
             [
