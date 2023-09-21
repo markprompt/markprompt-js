@@ -13,7 +13,6 @@ if (el && el instanceof HTMLElement) {
       enabled: true,
       apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
     },
-    open: true,
     defaultView: 'chat',
   } satisfies MarkpromptOptions);
 }

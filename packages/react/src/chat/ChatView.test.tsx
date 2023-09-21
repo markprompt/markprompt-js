@@ -528,6 +528,35 @@ describe('ChatView', () => {
     await user.click(screen.getByText('yes'));
   });
 
+  it('calls back after giving feedback', async () => {
+    const onSubmit = vi.fn();
+    const conversationId = crypto.randomUUID();
+    const promptId = crypto.randomUUID();
+    markpromptData = { conversationId, promptId };
+    response = ['answer'];
+
+    const user = await userEvent.setup();
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        feedbackOptions={{ enabled: true, onFeedbackSubmit: onSubmit }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'test');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Was this response helpful?'),
+      ).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('yes'));
+    expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
   it('allows users to regenerate an answer', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();

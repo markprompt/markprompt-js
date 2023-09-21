@@ -52,10 +52,6 @@ export function useFeedback({
         { ...feedbackOptions, signal: controller.signal },
       );
 
-      promise.catch(() => {
-        // ignore submitFeedback errors
-      });
-
       promise.finally(() => {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
