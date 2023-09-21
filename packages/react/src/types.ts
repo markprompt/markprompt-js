@@ -1,6 +1,7 @@
 import {
   type AlgoliaDocSearchHit,
   type FileSectionReference,
+  type PromptFeedback,
   type SearchResult,
   type SubmitChatOptions,
   type SubmitFeedbackOptions,
@@ -12,6 +13,8 @@ import type {
   ElementType,
   PropsWithChildren,
 } from 'react';
+
+import type { ChatViewMessage } from './index.js';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -97,6 +100,15 @@ export interface MarkpromptOptions {
      * @default "Was this response helpful?"
      **/
     heading?: string;
+    /**
+     * Called when feedback is submitted
+     * @default undefined
+     */
+    onFeedbackSubmit?: (
+      feedback: PromptFeedback,
+      messages: ChatViewMessage[],
+      promptId?: string,
+    ) => void;
   };
   /**
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.

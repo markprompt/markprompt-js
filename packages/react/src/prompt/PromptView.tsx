@@ -143,7 +143,23 @@ export function PromptView(props: PromptViewProps): ReactElement {
         references={references}
         referencesOptions={referencesOptions}
         state={state}
-        submitFeedback={submitFeedback}
+        submitFeedback={(feedback, promptId) => {
+          submitFeedback(feedback, promptId);
+          feedbackOptions.onFeedbackSubmit?.(
+            feedback,
+            [
+              {
+                answer,
+                id: promptId!,
+                prompt,
+                promptId,
+                references,
+                state,
+              },
+            ],
+            promptId,
+          );
+        }}
       />
     </div>
   );

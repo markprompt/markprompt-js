@@ -1,6 +1,5 @@
 import defaults from 'defaults';
 
-import type { ChatMessage } from './chat.js';
 import type { PromptFeedback } from './types.js';
 
 export interface SubmitFeedbackBody {
@@ -17,14 +16,6 @@ export interface SubmitFeedbackOptions {
    */
   apiUrl?: string;
   /**
-   * Callback when feedback is submitted.
-   * @default undefined
-   **/
-  onFeedbackSubmitted?: (
-    feedback: PromptFeedback,
-    messages?: ChatMessage[],
-  ) => void;
-  /**
    * AbortController signal
    * @default undefined
    **/
@@ -38,7 +29,6 @@ export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
 export async function submitFeedback(
   feedback: SubmitFeedbackBody,
   projectKey: string,
-  messages?: ChatMessage[],
   options?: SubmitFeedbackOptions,
 ): Promise<void> {
   if (!projectKey) {
@@ -53,8 +43,6 @@ export async function submitFeedback(
   const params = new URLSearchParams({
     projectKey,
   });
-
-  options?.onFeedbackSubmitted?.(feedback.feedback, messages || []);
 
   try {
     const response = await fetch(resolvedOptions.apiUrl + `?${params}`, {

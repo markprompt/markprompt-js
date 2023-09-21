@@ -45,7 +45,14 @@ export function Messages(props: MessagesProps): ReactElement {
                 <Feedback
                   variant="icons"
                   className="MarkpromptPromptFeedback"
-                  submitFeedback={submitFeedback}
+                  submitFeedback={(feedback, promptId) => {
+                    submitFeedback(feedback, promptId);
+                    feedbackOptions.onFeedbackSubmit?.(
+                      feedback,
+                      messages,
+                      promptId,
+                    );
+                  }}
                   abortFeedbackRequest={abortFeedbackRequest}
                   promptId={message.promptId}
                   heading={feedbackOptions.heading}
