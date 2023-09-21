@@ -188,6 +188,7 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
             submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
             promptId={promptId}
+            heading={feedbackOptions.heading}
           />
         )}
       </BaseMarkprompt.AutoScroller>
@@ -196,6 +197,7 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
         getHref={referencesOptions?.getHref}
         getLabel={referencesOptions?.getLabel}
         loadingText={referencesOptions?.loadingText}
+        heading={referencesOptions?.heading}
         onDidSelectReference={onDidSelectReference}
         references={references}
         state={state}
