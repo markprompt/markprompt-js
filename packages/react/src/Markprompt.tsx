@@ -38,6 +38,14 @@ function openMarkprompt(): void {
   emitter.emit('open');
 }
 
+/**
+ * Close Markprompt programmatically. Useful for building a custom trigger
+ * or closing the Markprompt dialog in response to other user actions.
+ */
+function closeMarkprompt(): void {
+  emitter.emit('close');
+}
+
 function Markprompt(props: MarkpromptProps): JSX.Element {
   const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
 
@@ -113,7 +121,10 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     <BaseMarkprompt.Root
       display={display}
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open) => {
+        onDidRequestOpenChange?.(open);
+        setOpen(open);
+      }}
       {...dialogProps}
     >
       {!trigger?.customElement && display === 'dialog' && (
@@ -287,7 +298,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             )}
           </div>
           {/* Add close button in the tab bar */}
-          {close?.visible !== false && (
+          {close?.visible && (
             <div
               style={{
                 position: 'absolute',
@@ -372,4 +383,4 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export { Markprompt, openMarkprompt, type MarkpromptProps };
+export { Markprompt, openMarkprompt, closeMarkprompt, type MarkpromptProps };

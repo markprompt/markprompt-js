@@ -55,6 +55,7 @@ export {
   Markprompt,
   type MarkpromptProps,
   openMarkprompt,
+  closeMarkprompt,
 } from './Markprompt.js';
 
 export { ChatView, type ChatViewProps } from './chat/ChatView.js';
