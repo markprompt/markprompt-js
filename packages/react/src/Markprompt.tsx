@@ -257,15 +257,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
       <div className="MarkpromptTabsContainer">
         {/* We still include a div to preserve the grid-template-rows rules */}
         <div></div>
+
         <div className="MarkpromptViews">
-          {chat?.enabled ? (
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: activeView === 'chat' ? 'block' : 'none',
-              }}
-            >
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+            }}
+          >
+            {chat?.enabled ? (
               <ChatView
                 activeView={activeView}
                 chatOptions={chat}
@@ -275,15 +275,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 projectKey={projectKey}
                 referencesOptions={references}
               />
-            </div>
-          ) : (
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: activeView === 'prompt' ? 'block' : 'none',
-              }}
-            >
+            ) : (
               <PromptView
                 activeView={activeView}
                 debug={debug}
@@ -293,8 +285,8 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 promptOptions={prompt}
                 referencesOptions={references}
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     );
