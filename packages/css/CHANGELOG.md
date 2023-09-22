@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.16.1
+
+### Patch Changes
+
+- [`1f3e991`](https://github.com/motifland/markprompt-js/commit/1f3e9914f47f1c10e8d1d4e01e6784622b820ca3) Thanks [@nickrttn](https://github.com/nickrttn)! - Bump to fix broken changesets, no changes
+
 ## 0.16.0
 
 ### Minor Changes
