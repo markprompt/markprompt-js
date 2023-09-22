@@ -1,6 +1,7 @@
 import {
   Markprompt,
   openMarkprompt,
+  closeMarkprompt,
   type MarkpromptOptions,
   type ChatViewProps,
   ChatView,
@@ -62,4 +63,10 @@ function markpromptChat(
   );
 }
 
-export { markprompt, openMarkprompt, type MarkpromptOptions, markpromptChat };
+export {
+  markprompt,
+  openMarkprompt,
+  closeMarkprompt,
+  type MarkpromptOptions,
+  markpromptChat,
+};
