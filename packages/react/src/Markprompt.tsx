@@ -1,4 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
 import defaults from 'defaults';
 import Emittery from 'emittery';
@@ -251,102 +252,154 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     };
   }, [toggleActiveView]);
 
-  return (
-    <div className="MarkpromptTabsContainer">
-      {search?.enabled ? (
-        <div style={{ position: 'relative' }}>
-          <div className="MarkpromptTabsList">
-            <button
-              aria-label={search.tabLabel}
-              className="MarkpromptTab"
-              data-state={activeView === 'search' ? 'active' : ''}
-              onClick={() => setActiveView('search')}
-            >
-              {search.tabLabel}
-            </button>
-            {!chat?.enabled && (
-              <button
-                className="MarkpromptTab"
-                data-state={activeView === 'prompt' ? 'active' : ''}
-                onClick={() => setActiveView('prompt')}
-              >
-                <SparklesIcon
-                  focusable={false}
-                  className={clsx('MarkpromptBaseIcon', {
-                    MarkpromptPrimaryIcon: activeView === 'prompt',
-                    MarkpromptHighlightedIcon: activeView === 'search',
-                  })}
-                />
-                {prompt!.tabLabel}
-              </button>
-            )}
-            {chat?.enabled && (
-              <button
-                className="MarkpromptTab"
-                data-state={activeView === 'chat' ? 'active' : ''}
-                onClick={() => setActiveView('chat')}
-              >
-                <SparklesIcon
-                  focusable={false}
-                  className={clsx('MarkpromptBaseIcon', {
-                    MarkpromptPrimaryIcon: activeView === 'chat',
-                    MarkpromptHighlightedIcon: activeView === 'search',
-                  })}
-                />
-                {chat?.tabLabel}
-              </button>
-            )}
-          </div>
-          {/* Add close button in the tab bar */}
-          {close?.visible && (
+  if (!search?.enabled) {
+    return (
+      <div className="MarkpromptTabsContainer">
+        {/* We still include a div to preserve the grid-template-rows rules */}
+        <div></div>
+        <div className="MarkpromptViews">
+          {chat?.enabled ? (
             <div
               style={{
                 position: 'absolute',
-                display: 'flex',
-                justifyItems: 'center',
-                alignItems: 'center',
-                right: '0.5rem',
-                top: '0rem',
-                bottom: '0rem',
+                inset: 0,
+                display: activeView === 'chat' ? 'block' : 'none',
               }}
             >
-              <BaseMarkprompt.Close className="MarkpromptClose">
-                <AccessibleIcon.Root label={close!.label!}>
-                  <kbd>Esc</kbd>
-                </AccessibleIcon.Root>
-              </BaseMarkprompt.Close>
+              <ChatView
+                activeView={activeView}
+                chatOptions={chat}
+                debug={debug}
+                feedbackOptions={feedback}
+                onDidSelectReference={() => emitter.emit('close')}
+                projectKey={projectKey}
+                referencesOptions={references}
+              />
+            </div>
+          ) : (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: activeView === 'prompt' ? 'block' : 'none',
+              }}
+            >
+              <PromptView
+                activeView={activeView}
+                debug={debug}
+                feedbackOptions={feedback}
+                onDidSelectReference={() => emitter.emit('close')}
+                projectKey={projectKey}
+                promptOptions={prompt}
+                referencesOptions={references}
+              />
             </div>
           )}
         </div>
-      ) : (
-        // We still include a div to preserve the grid-template-rows rules
-        <div />
-      )}
-      <div className="MarkpromptViews">
-        {search?.enabled && (
+      </div>
+    );
+  }
+
+  return (
+    <Tabs.Root
+      className="MarkpromptTabsContainer"
+      value={activeView}
+      onValueChange={(value) => {
+        if (value !== 'search' && value !== 'chat' && value !== 'prompt') {
+          return;
+        }
+
+        setActiveView(value);
+      }}
+    >
+      <div style={{ position: 'relative' }}>
+        <Tabs.List className="MarkpromptTabsList">
+          <Tabs.Trigger
+            value="search"
+            aria-label={search.tabLabel}
+            className="MarkpromptTab"
+          >
+            {search.tabLabel}
+          </Tabs.Trigger>
+          {!chat?.enabled && (
+            <Tabs.Trigger
+              value="prompt"
+              className="MarkpromptTab"
+              onClick={() => setActiveView('prompt')}
+            >
+              <SparklesIcon
+                focusable={false}
+                className={clsx('MarkpromptBaseIcon', {
+                  MarkpromptPrimaryIcon: activeView === 'prompt',
+                  MarkpromptHighlightedIcon: activeView === 'search',
+                })}
+              />
+              {prompt!.tabLabel}
+            </Tabs.Trigger>
+          )}
+          {chat?.enabled && (
+            <Tabs.Trigger
+              value="chat"
+              className="MarkpromptTab"
+              onClick={() => setActiveView('chat')}
+            >
+              <SparklesIcon
+                focusable={false}
+                className={clsx('MarkpromptBaseIcon', {
+                  MarkpromptPrimaryIcon: activeView === 'chat',
+                  MarkpromptHighlightedIcon: activeView === 'search',
+                })}
+              />
+              {chat?.tabLabel}
+            </Tabs.Trigger>
+          )}
+        </Tabs.List>
+
+        {/* Add close button in the tab bar */}
+        {close?.visible && (
           <div
             style={{
               position: 'absolute',
-              inset: 0,
-              display: activeView === 'search' ? 'block' : 'none',
+              display: 'flex',
+              justifyItems: 'center',
+              alignItems: 'center',
+              right: '0.5rem',
+              top: '0rem',
+              bottom: '0rem',
             }}
           >
-            <SearchView
-              activeView={activeView}
-              projectKey={projectKey}
-              searchOptions={search}
-              onDidSelectResult={() => emitter.emit('close')}
-              debug={debug}
-            />
+            <BaseMarkprompt.Close className="MarkpromptClose">
+              <AccessibleIcon.Root label={close!.label!}>
+                <kbd>Esc</kbd>
+              </AccessibleIcon.Root>
+            </BaseMarkprompt.Close>
           </div>
         )}
+      </div>
+
+      <div className="MarkpromptViews">
+        <Tabs.Content
+          value="search"
+          style={{
+            position: 'absolute',
+            inset: 0,
+          }}
+        >
+          <SearchView
+            activeView={activeView}
+            projectKey={projectKey}
+            searchOptions={search}
+            onDidSelectResult={() => emitter.emit('close')}
+            debug={debug}
+          />
+        </Tabs.Content>
 
         {chat?.enabled ? (
-          <div
+          <Tabs.Content
+            value="chat"
             style={{
               position: 'absolute',
               inset: 0,
-              display: activeView === 'chat' ? 'block' : 'none',
             }}
           >
             <ChatView
@@ -358,13 +411,13 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               projectKey={projectKey}
               referencesOptions={references}
             />
-          </div>
+          </Tabs.Content>
         ) : (
-          <div
+          <Tabs.Content
+            value="prompt"
             style={{
               position: 'absolute',
               inset: 0,
-              display: activeView === 'prompt' ? 'block' : 'none',
             }}
           >
             <PromptView
@@ -376,10 +429,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               promptOptions={prompt}
               referencesOptions={references}
             />
-          </div>
+          </Tabs.Content>
         )}
       </div>
-    </div>
+    </Tabs.Root>
   );
 }
 
