@@ -1,6 +1,7 @@
 import {
   type AlgoliaDocSearchHit,
   type FileSectionReference,
+  type PromptFeedback,
   type SearchResult,
   type SubmitChatOptions,
   type SubmitFeedbackOptions,
@@ -12,6 +13,8 @@ import type {
   ElementType,
   PropsWithChildren,
 } from 'react';
+
+import type { ChatViewMessage } from './index.js';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -97,6 +100,15 @@ export interface MarkpromptOptions {
      * @default "Was this response helpful?"
      **/
     heading?: string;
+    /**
+     * Called when feedback is submitted
+     * @default undefined
+     */
+    onFeedbackSubmit?: (
+      feedback: PromptFeedback,
+      messages: ChatViewMessage[],
+      promptId?: string,
+    ) => void;
   };
   /**
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
@@ -129,6 +141,14 @@ export interface MarkpromptOptions {
      * @default true
      **/
     showSender?: boolean;
+    /**
+     * Enable chat history features
+     * - enable saving chat history to local storage
+     * - show chat history UI
+     * - resume chat conversations
+     * @default true
+     */
+    history?: boolean;
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
@@ -153,11 +173,10 @@ export interface MarkpromptOptions {
   references?: {
     /**
      * Display mode for the references. References can either be
-     * displayed after the response, as an aside next to the response
-     * behind a toggle button, or not displayed at all.
+     * displayed after the response or not displayed at all.
      * @default 'end'
      * */
-    display?: 'none' | 'end' | 'aside';
+    display?: 'none' | 'end';
     /** Callback to transform a reference into an href */
     getHref?: (reference: FileSectionReference) => string | undefined;
     /** Callback to transform a reference into a label */

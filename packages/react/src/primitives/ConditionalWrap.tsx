@@ -13,6 +13,7 @@ export const ConditionalWrap = (props: ConditionalWrapProps): ReactElement => {
 };
 
 interface ConditionalVisuallyHiddenProps {
+  asChild?: boolean;
   children: ReactNode;
   hide?: boolean;
 }
@@ -20,11 +21,13 @@ interface ConditionalVisuallyHiddenProps {
 export const ConditionalVisuallyHidden = (
   props: ConditionalVisuallyHiddenProps,
 ): ReactElement => {
-  const { hide, children } = props;
+  const { asChild, hide, children } = props;
   return (
     <ConditionalWrap
       condition={hide}
-      wrap={(children) => <VisuallyHidden>{children}</VisuallyHidden>}
+      wrap={(children) => (
+        <VisuallyHidden asChild={asChild}>{children}</VisuallyHidden>
+      )}
     >
       {children}
     </ConditionalWrap>

@@ -1,5 +1,6 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
+import defaults from 'defaults';
 import Emittery from 'emittery';
 import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
@@ -37,31 +38,59 @@ function openMarkprompt(): void {
   emitter.emit('open');
 }
 
+/**
+ * Close Markprompt programmatically. Useful for building a custom trigger
+ * or closing the Markprompt dialog in response to other user actions.
+ */
+function closeMarkprompt(): void {
+  emitter.emit('close');
+}
+
 function Markprompt(props: MarkpromptProps): JSX.Element {
-  const {
-    close,
-    chat,
-    debug,
-    defaultView,
-    description,
-    display = 'dialog',
-    projectKey,
-    prompt,
-    feedback,
-    references,
-    search,
-    showBranding,
-    title,
-    trigger,
-    onDidRequestOpenChange,
-    ...dialogProps
-  } = props;
+  const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
 
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to <Markprompt />.',
     );
   }
+
+  const {
+    display,
+    defaultView,
+    close,
+    description,
+    feedback,
+    chat,
+    prompt,
+    references,
+    search,
+    trigger,
+    title,
+    showBranding,
+    debug,
+  }: MarkpromptOptions = useMemo(
+    () =>
+      defaults(
+        {
+          display: props.display,
+          defaultView: props.defaultView,
+          close: props.close,
+          description: props.description,
+          feedback: props.feedback,
+          chat: props.chat,
+          prompt: props.prompt,
+          references: props.references,
+          search: props.search,
+          trigger: props.trigger,
+          title: props.title,
+          showBranding: props.showBranding,
+          debug: props.debug,
+        },
+        DEFAULT_MARKPROMPT_OPTIONS,
+      ),
+    [props],
+  );
 
   const [open, setOpen] = useState(false);
 
@@ -92,18 +121,17 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     <BaseMarkprompt.Root
       display={display}
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open) => {
+        onDidRequestOpenChange?.(open);
+        setOpen(open);
+      }}
       {...dialogProps}
     >
       {!trigger?.customElement && display === 'dialog' && (
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-              <AccessibleIcon.Root
-                label={
-                  trigger?.label ?? DEFAULT_MARKPROMPT_OPTIONS.trigger!.label!
-                }
-              >
+              <AccessibleIcon.Root label={trigger.label!}>
                 <ChatIcon
                   className="MarkpromptChatIcon"
                   width="24"
@@ -128,13 +156,13 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 search?.enabled && search.provider?.name === 'algolia'
               }
             >
-              <BaseMarkprompt.Title hide={title?.hide ?? true}>
-                {title?.text ?? DEFAULT_MARKPROMPT_OPTIONS.prompt!.label}
+              <BaseMarkprompt.Title hide={title.hide ?? true}>
+                {title.text}
               </BaseMarkprompt.Title>
 
-              {description?.text && (
-                <BaseMarkprompt.Description hide={description?.hide ?? true}>
-                  {description?.text}
+              {description.text && (
+                <BaseMarkprompt.Description hide={description.hide ?? true}>
+                  {description.text}
                 </BaseMarkprompt.Description>
               )}
 
@@ -189,7 +217,7 @@ interface MarkpromptContentProps {
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
-    close: _close,
+    close,
     debug,
     defaultView,
     feedback,
@@ -223,10 +251,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     };
   }, [toggleActiveView]);
 
-  const close = useMemo(() => {
-    return _close ?? DEFAULT_MARKPROMPT_OPTIONS.close;
-  }, [_close]);
-
   return (
     <div className="MarkpromptTabsContainer">
       {search?.enabled ? (
@@ -238,7 +262,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               data-state={activeView === 'search' ? 'active' : ''}
               onClick={() => setActiveView('search')}
             >
-              {search.tabLabel || DEFAULT_MARKPROMPT_OPTIONS.search!.tabLabel}
+              {search.tabLabel}
             </button>
             {!chat?.enabled && (
               <button
@@ -253,8 +277,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                     MarkpromptHighlightedIcon: activeView === 'search',
                   })}
                 />
-                {prompt?.tabLabel ||
-                  DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+                {prompt!.tabLabel}
               </button>
             )}
             {chat?.enabled && (
@@ -270,13 +293,12 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                     MarkpromptHighlightedIcon: activeView === 'search',
                   })}
                 />
-                {prompt?.tabLabel ||
-                  DEFAULT_MARKPROMPT_OPTIONS.prompt!.tabLabel}
+                {chat?.tabLabel}
               </button>
             )}
           </div>
           {/* Add close button in the tab bar */}
-          {close?.visible !== false && (
+          {close?.visible && (
             <div
               style={{
                 position: 'absolute',
@@ -289,11 +311,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               }}
             >
               <BaseMarkprompt.Close className="MarkpromptClose">
-                <AccessibleIcon.Root
-                  label={
-                    close?.label ?? DEFAULT_MARKPROMPT_OPTIONS.close!.label!
-                  }
-                >
+                <AccessibleIcon.Root label={close!.label!}>
                   <kbd>Esc</kbd>
                 </AccessibleIcon.Root>
               </BaseMarkprompt.Close>
@@ -317,7 +335,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               activeView={activeView}
               projectKey={projectKey}
               searchOptions={search}
-              close={!search?.enabled ? close : undefined}
               onDidSelectResult={() => emitter.emit('close')}
               debug={debug}
             />
@@ -335,7 +352,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <ChatView
               activeView={activeView}
               chatOptions={chat}
-              close={!search?.enabled ? close : undefined}
               debug={debug}
               feedbackOptions={feedback}
               onDidSelectReference={() => emitter.emit('close')}
@@ -353,7 +369,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             <PromptView
               activeView={activeView}
-              close={!search?.enabled ? close : undefined}
               debug={debug}
               feedbackOptions={feedback}
               onDidSelectReference={() => emitter.emit('close')}
@@ -368,4 +383,4 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export { Markprompt, openMarkprompt, type MarkpromptProps };
+export { Markprompt, openMarkprompt, closeMarkprompt, type MarkpromptProps };

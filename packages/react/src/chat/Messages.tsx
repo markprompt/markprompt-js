@@ -2,30 +2,28 @@ import React, { type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
-import { type ChatViewMessage } from './useChat.js';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
-import type { UseFeedbackResult } from '../feedback/useFeedback.js';
+import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { Reference } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  messages: ChatViewMessage[];
-  submitFeedback: UseFeedbackResult['submitFeedback'];
-  abortFeedbackRequest: UseFeedbackResult['abort'];
-  referencesOptions?: MarkpromptOptions['references'];
+  feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
+  referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  projectKey: string;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const {
+  const { feedbackOptions, referencesOptions, projectKey } = props;
+
+  const messages = useChatStore((state) => state.messages);
+
+  const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
+    projectKey,
     feedbackOptions,
-    messages,
-    submitFeedback,
-    abortFeedbackRequest,
-    referencesOptions,
-  } = props;
+  });
 
   return (
     <div className="MarkpromptMessages">
@@ -47,7 +45,14 @@ export function Messages(props: MessagesProps): ReactElement {
                 <Feedback
                   variant="icons"
                   className="MarkpromptPromptFeedback"
-                  submitFeedback={submitFeedback}
+                  submitFeedback={(feedback, promptId) => {
+                    submitFeedback(feedback, promptId);
+                    feedbackOptions.onFeedbackSubmit?.(
+                      feedback,
+                      messages,
+                      promptId,
+                    );
+                  }}
                   abortFeedbackRequest={abortFeedbackRequest}
                   promptId={message.promptId}
                   heading={feedbackOptions.heading}
@@ -61,10 +66,7 @@ export function Messages(props: MessagesProps): ReactElement {
                 {(message.state === 'streaming-answer' ||
                   message.state === 'done') && (
                   <>
-                    <p>
-                      {referencesOptions?.heading ??
-                        DEFAULT_MARKPROMPT_OPTIONS.references?.heading}
-                    </p>
+                    <p>{referencesOptions.heading}</p>
                     <BaseMarkprompt.References
                       ReferenceComponent={Reference}
                       references={message.references}

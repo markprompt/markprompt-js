@@ -165,7 +165,7 @@ type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
 const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
   const { hide, ...rest } = props;
   return (
-    <ConditionalVisuallyHidden hide={hide}>
+    <ConditionalVisuallyHidden hide={hide} asChild>
       <Dialog.Title {...rest} ref={ref} />
     </ConditionalVisuallyHidden>
   );
@@ -182,7 +182,7 @@ const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
   (props, ref) => {
     const { hide, ...rest } = props;
     return (
-      <ConditionalVisuallyHidden hide={hide}>
+      <ConditionalVisuallyHidden hide={hide} asChild>
         <Dialog.Description {...rest} ref={ref} />
       </ConditionalVisuallyHidden>
     );

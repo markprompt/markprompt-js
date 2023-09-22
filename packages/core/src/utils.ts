@@ -1,11 +1,12 @@
 import type { FileSectionReference } from './types.js';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
-  const res2 = res.clone();
+  const text = await res.text();
   try {
-    return (await res.json())?.error;
+    const json = JSON.parse(text);
+    return json?.error ?? text;
   } catch {
-    return res2.text();
+    return text;
   }
 };
 

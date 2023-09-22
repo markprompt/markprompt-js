@@ -6,7 +6,6 @@ import React, {
   type SetStateAction,
 } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import {
   ChevronUpIcon,
   CommandIcon,
@@ -51,9 +50,7 @@ export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
 
   return (
     <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
-      <AccessibleIcon.Root
-        label={trigger?.label ?? DEFAULT_MARKPROMPT_OPTIONS.trigger!.label!}
-      >
+      <AccessibleIcon.Root label={trigger?.label ?? ''}>
         <span className="MarkpromptSearchBoxTriggerContent">
           <span className="MarkpromptSearchBoxTriggerText">
             <SearchIcon width={16} height={16} />{' '}

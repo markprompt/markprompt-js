@@ -21,17 +21,12 @@ export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current prompt */
-  submitFeedback: (
-    feedback: PromptFeedback,
-    promptId?: string,
-    messages?: ChatMessage[],
-  ) => void;
+  submitFeedback: (feedback: PromptFeedback, promptId?: string) => void;
 }
 
 export function useFeedback({
   feedbackOptions,
   projectKey,
-  messages,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -54,7 +49,6 @@ export function useFeedback({
       const promise = submitFeedbackToMarkprompt(
         { feedback, promptId },
         projectKey,
-        messages,
         { ...feedbackOptions, signal: controller.signal },
       );
 
@@ -68,7 +62,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, controllerRef, projectKey, feedbackOptions, messages],
+    [abort, controllerRef, projectKey, feedbackOptions],
   );
 
   return { submitFeedback, abort };

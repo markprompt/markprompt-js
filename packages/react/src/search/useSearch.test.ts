@@ -1,7 +1,7 @@
 import {
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
-  SearchResult,
-  AlgoliaDocSearchHit,
+  type SearchResult,
+  type AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
 import { renderHook, cleanup, act } from '@testing-library/react-hooks';
@@ -17,7 +17,7 @@ import {
   vi,
 } from 'vitest';
 
-import { UseSearchResult, useSearch } from './useSearch';
+import { type UseSearchResult, useSearch } from './useSearch.js';
 
 let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;

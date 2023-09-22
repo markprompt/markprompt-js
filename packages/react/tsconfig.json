@@ -1,7 +1,6 @@
 {
   "references": [{ "path": "../core" }],
-  "include": ["src/", "./vitest.setup.ts"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/vitest.setup.ts"],
+  "include": ["src/"],
   "compilerOptions": {
     "lib": ["dom", "es2022", "esnext"],
     "composite": true,
@@ -17,6 +16,7 @@
     "target": "es2021",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
+    "types": ["@testing-library/jest-dom/vitest"],
     "paths": {
       "@markprompt/core": ["../core/src"]
     }

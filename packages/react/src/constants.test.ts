@@ -1,5 +1,8 @@
-import type { AlgoliaDocSearchHit, SearchResult } from '@markprompt/core';
-import { Source } from '@markprompt/core';
+import type {
+  AlgoliaDocSearchHit,
+  SearchResult,
+  Source,
+} from '@markprompt/core';
 import { describe, expect, test } from 'vitest';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
@@ -55,7 +58,7 @@ const results: SearchResult[] = [
   },
 ];
 
-const algoliaSearchHits: AlgoliaDocSearchHit[] = [
+const algoliaSearchHits = [
   {
     url: 'https://markprompt.com/docs/hit',
     hierarchy: {
@@ -86,7 +89,7 @@ const algoliaSearchHits: AlgoliaDocSearchHit[] = [
       },
     },
   },
-];
+] as AlgoliaDocSearchHit[];
 
 describe('constants', () => {
   test('default references.getHref', async () => {
@@ -101,7 +104,10 @@ describe('constants', () => {
   test('default references.getLabel', async () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[0]),
-    ).toEqual(results[0].meta?.leadHeading?.value);
+    ).toEqual(heading);
+    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[1])).toBe(
+      'Home',
+    );
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[2]),
     ).toEqual(noTitleFileName);
@@ -123,17 +129,17 @@ describe('constants', () => {
   });
 
   test('default search.getHeading', async () => {
+    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[0])).toEqual(
+      results[0].file.title,
+    );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[0], ''),
-    ).toEqual(results[0].file.title);
-    expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[1], ''),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[1]),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[0], ''),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[0]),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[1], ''),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[1]),
     ).toEqual(algoliaSearchHits[1].hierarchy.lvl0);
   });
 
@@ -157,13 +163,10 @@ describe('constants', () => {
 
   test('default search.getSubtitle', async () => {
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(results[0], ''),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(results[0]),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(
-        algoliaSearchHits[0],
-        '',
-      ),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(algoliaSearchHits[0]),
     ).toEqual(algoliaSearchHits[0].hierarchy.lvl2);
   });
 });

@@ -51,7 +51,6 @@ describe('useFeedback', () => {
     try {
       const { result } = renderHook(() => useFeedback({ projectKey: '' }));
 
-      expect(result.error).toBeDefined();
       expect(result.error!.message).toBe(
         `Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.`,
       );
@@ -70,6 +69,18 @@ describe('useFeedback', () => {
     await submitFeedback({ vote: '1' }, 'prompt-id');
 
     await waitFor(() => expect(endpointHits).toBe(1));
+  });
+
+  it("doesn't submit feedback if promptId is not provided", async () => {
+    const { result } = renderHook(() =>
+      useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
+    );
+
+    const { submitFeedback } = result.current;
+
+    await submitFeedback({ vote: '1' });
+
+    await waitFor(() => expect(endpointHits).toBe(0));
   });
 
   it(`submitFeedback should be aborted when abort is called`, async () => {
