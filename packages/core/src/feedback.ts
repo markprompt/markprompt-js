@@ -38,7 +38,7 @@ export async function submitFeedback(
   const resolvedOptions = defaults(
     { ...options },
     DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  ) as SubmitFeedbackOptions;
+  );
 
   const params = new URLSearchParams({
     projectKey,

@@ -7,7 +7,15 @@ import { userEvent } from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
-import { afterAll, afterEach, beforeAll, expect, test, vitest } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  expect,
+  test,
+  vi,
+  vitest,
+} from 'vitest';
 
 import * as Markprompt from './headless.js';
 
@@ -64,6 +72,24 @@ test('Initial state', async () => {
   const trigger = await screen.findByText('Trigger');
   expect(trigger).toHaveAttribute('aria-expanded', 'false');
   expect(trigger).toHaveAttribute('data-state', 'closed');
+});
+
+test('Returns children when display is plain', async () => {
+  render(
+    <Markprompt.Root display="plain">
+      <Markprompt.Form>
+        Search
+        <Markprompt.Prompt />
+      </Markprompt.Form>
+      <Markprompt.AutoScroller>
+        Caret
+        <Markprompt.Answer answer="" />
+      </Markprompt.AutoScroller>
+      <Markprompt.References references={[]} />
+    </Markprompt.Root>,
+  );
+
+  expect(screen.getByRole('searchbox')).toBeInTheDocument();
 });
 
 test('Trigger opens the dialog', async () => {
@@ -287,4 +313,17 @@ test('Prompt changes updates prompt state', async () => {
 
   await user.type(input, 'test');
   expect(input).toHaveValue('test');
+});
+
+test('References renders the passed ReferenceComponent', () => {
+  const ReferenceComponent = vi.fn(({ reference }) => reference.file.path);
+  render(
+    <Markprompt.References
+      references={[
+        { file: { path: '/path/to/file', source: { type: 'github' } } },
+      ]}
+      ReferenceComponent={ReferenceComponent}
+    />,
+  );
+  expect(ReferenceComponent).toHaveBeenCalledOnce();
 });
