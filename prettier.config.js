@@ -6,7 +6,7 @@ module.exports = {
   proseWrap: 'never',
   overrides: [
     {
-      files: ['*.md', '*.mdx'],
+      files: ['*.md', '*.mdx', '*.yml'],
       options: {
         printWidth: 80,
         proseWrap: 'always',
