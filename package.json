@@ -15,7 +15,7 @@
     "lint:md": "remark . --frail",
     "lint:ts": "npm run build && rm *.tgz",
     "prepare": "husky install",
-    "publish": "npm run build && changeset publish",
+    "publish": "npm run build:packages && changeset publish",
     "test": "vitest run --coverage",
     "version": "changeset version && npm install"
   },
