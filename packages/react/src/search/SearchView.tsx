@@ -29,7 +29,7 @@ export interface SearchViewProps {
   debug?: boolean;
   onDidSelectResult?: () => void;
   projectKey: string;
-  searchOptions: MarkpromptOptions['search'];
+  searchOptions?: MarkpromptOptions['search'];
 }
 
 interface ActiveSearchResult {
@@ -41,6 +41,12 @@ const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
   const { activeView, debug, onDidSelectResult, projectKey } = props;
+
+  if (!projectKey) {
+    throw new Error(
+      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to <SearchView />.`,
+    );
+  }
 
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone SearchView components also have defaults as expected.
@@ -174,10 +180,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           ref={inputRef}
           className="MarkpromptPrompt"
           name={searchInputName}
-          placeholder={
-            searchOptions?.placeholder ??
-            DEFAULT_MARKPROMPT_OPTIONS.search!.placeholder!
-          }
+          placeholder={searchOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
           value={searchQuery}
           onChange={handleChange}
@@ -185,12 +188,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
           aria-controls="markprompt-search-results"
           aria-activedescendant={activeSearchResult?.id}
           label={
-            <AccessibleIcon.Root
-              label={
-                searchOptions?.label ??
-                DEFAULT_MARKPROMPT_OPTIONS.search!.label!
-              }
-            >
+            <AccessibleIcon.Root label={searchOptions?.label}>
               <SearchIcon className="MarkpromptSearchIcon" />
             </AccessibleIcon.Root>
           }
@@ -262,14 +260,9 @@ function SearchResultsContainer(
     }
 
     const element = document.getElementById(activeSearchResult.id);
-    if (!element) {
-      return;
-    }
 
-    element.focus();
-    element.scrollIntoView({
-      block: 'nearest',
-    });
+    element?.focus();
+    element?.scrollIntoView({ block: 'nearest' });
   }, [activeSearchResult, searchResults]);
 
   return (

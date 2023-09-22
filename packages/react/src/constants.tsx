@@ -101,9 +101,12 @@ const defaultGetHref = (
   }
 
   const path = pathToHref(result.file.path);
+
   if (result.meta?.leadHeading?.id) {
     return `${path}#${result.meta.leadHeading.id}`;
-  } else if (result.meta?.leadHeading?.value) {
+  }
+
+  if (result.meta?.leadHeading?.value) {
     return `${path}#${result.meta.leadHeading.slug}`;
   }
 

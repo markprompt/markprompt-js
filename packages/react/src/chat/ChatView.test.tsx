@@ -27,9 +27,10 @@ let markpromptDebug = '';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 let requestBody: any = {};
 let response: string | string[] = [];
-let slowChunks = false;
+let wait = false;
 let status = 200;
 let stream: ReadableStream;
+let timer: NodeJS.Timeout;
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
@@ -45,9 +46,6 @@ const server = setupServer(
     stream = new ReadableStream({
       async start(controller) {
         for (const chunk of response) {
-          if (slowChunks) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-          }
           controller.enqueue(encoder.encode(chunk));
         }
         controller?.close();
@@ -55,6 +53,7 @@ const server = setupServer(
     });
 
     return res(
+      ctx.delay(wait ? 50 : 0),
       ctx.status(status),
       ctx.set(
         'x-markprompt-data',
@@ -79,9 +78,10 @@ describe('ChatView', () => {
     status = 200;
     response = [];
     requestBody = {};
-    slowChunks = false;
+    wait = false;
     markpromptData = '';
     markpromptDebug = '';
+    clearTimeout(timer);
 
     server.resetHandlers();
     vi.resetAllMocks();
@@ -265,7 +265,7 @@ describe('ChatView', () => {
 
   it('aborts a pending chat request when the view changes', async () => {
     response = ['testing', 'testing', 'test'];
-    slowChunks = true;
+    wait = true;
 
     const user = await userEvent.setup();
 
@@ -287,7 +287,7 @@ describe('ChatView', () => {
 
   it('aborts a pending chat request when a new prompt is submitted', async () => {
     response = ['testing ', 'testing ', 'test'];
-    slowChunks = true;
+    wait = true;
 
     const user = await userEvent.setup();
 
@@ -301,7 +301,7 @@ describe('ChatView', () => {
     });
 
     response = ['testing ', 'testing ', 'test again'];
-    slowChunks = false;
+    wait = false;
 
     await user.type(screen.getByRole('textbox'), 'test again');
     await user.keyboard('{Enter}');
@@ -591,8 +591,8 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['testing', 'testing', 'test'];
-    slowChunks = true;
+    response = ['testing ', 'testing ', 'test'];
+    wait = true;
 
     const user = await userEvent.setup();
 
@@ -602,6 +602,8 @@ describe('ChatView', () => {
     await user.keyboard('{Enter}');
 
     await user.click(await screen.findByText('Stop generating'));
+
+    screen.debug();
 
     await waitFor(() => {
       expect(
