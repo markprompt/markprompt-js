@@ -53,7 +53,7 @@ const server = setupServer(
     });
 
     return res(
-      ctx.delay(wait ? 50 : 0),
+      ctx.delay(wait ? 100 : 0),
       ctx.status(status),
       ctx.set(
         'x-markprompt-data',
