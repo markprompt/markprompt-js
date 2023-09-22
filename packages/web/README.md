@@ -63,23 +63,34 @@ corresponding documentation, and `search.getHref` to transform search result
 paths into links to your documentation.
 
 ```ts
-import {
-  type SubmitPromptOptions,
-  type SubmitSearchQueryOptions,
+import type {
+  SubmitFeedbackOptions,
+  SubmitPromptOptions,
+  SubmitSearchQueryOptions,
 } from '@markprompt/core';
 
-type MarkpromptOptions = {
+interface MarkpromptOptions {
   /**
    * Display format.
    * @default "dialog"
    **/
   display?: 'plain' | 'dialog';
+  /**
+   * Enable and configure search functionality.
+   * @default "search"
+   * */
+  defaultView?: 'search' | 'chat' | 'prompt';
   close?: {
     /**
      * `aria-label` for the close modal button
      * @default "Close Markprompt"
      **/
     label?: string;
+    /**
+     * Show the close button
+     * @default true
+     **/
+    visible?: boolean;
   };
   description?: {
     /**
@@ -92,12 +103,82 @@ type MarkpromptOptions = {
      **/
     text?: string;
   };
-  prompt?: SubmitPromptOptions & {
+  feedback?: SubmitFeedbackOptions & {
+    /**
+     * Enable feedback functionality, shows a thumbs up/down button after a
+     * prompt was submitted.
+     * @default false
+     * */
+    enabled?: boolean;
+    /**
+     * Heading above the form
+     * @default "Was this response helpful?"
+     **/
+    heading?: string;
+    /**
+     * Called when feedback is submitted
+     * @default undefined
+     */
+    onFeedbackSubmit?: (
+      feedback: PromptFeedback,
+      messages: ChatViewMessage[],
+      promptId?: string,
+    ) => void;
+  };
+  /**
+   * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
+   * Enabling chat functionality will disable prompt functionality.
+   */
+  chat?: SubmitChatOptions & {
+    /**
+     * Show a chat-like prompt input allowing for conversation-style interaction
+     * rather than single question prompts.
+     * @default false
+     **/
+    enabled?: boolean;
+    /**
+     * Label for the chat input
+     * @default "Ask AI"
+     **/
+    label?: string;
+    /**
+     * Label for the tab bar
+     * @default "Ask AI"
+     **/
+    tabLabel?: string;
+    /**
+     * Placeholder for the chat input
+     * @default "Ask AI…"
+     **/
+    placeholder?: string;
+    /**
+     * Show sender info, like avatar
+     * @default true
+     **/
+    showSender?: boolean;
+    /**
+     * Enable chat history features
+     * - enable saving chat history to local storage
+     * - show chat history UI
+     * - resume chat conversations
+     * @default true
+     */
+    history?: boolean;
+  };
+  /**
+   * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
+   */
+  prompt?: SubmitChatOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
      **/
     label?: string;
+    /**
+     * Label for the tab bar
+     * @default "Ask AI"
+     **/
+    tabLabel?: string;
     /**
      * Placeholder for the prompt input
      * @default "Ask AI…"
@@ -105,17 +186,31 @@ type MarkpromptOptions = {
     placeholder?: string;
   };
   references?: {
+    /**
+     * Display mode for the references. References can either be
+     * displayed after the response or not displayed at all.
+     * @default 'end'
+     * */
+    display?: 'none' | 'end';
     /** Callback to transform a reference into an href */
-    getHref?: (reference: FileSectionReference) => string;
+    getHref?: (reference: FileSectionReference) => string | undefined;
     /** Callback to transform a reference into a label */
-    getLabel?: (reference: FileSectionReference) => string;
-    /** Loading text, default: `Fetching relevant pages…` */
-    loadingText?: string;
+    getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
      * @default "Answer generated from the following sources:"
      **/
     heading?: string;
+    /** Loading text, default: `Fetching relevant pages…` */
+    loadingText?: string;
+    /**
+     * Callback to transform a reference id into an href and text
+     * @deprecated Use `getHref` and `getLabel` instead
+     **/
+    transformReferenceId?: (referenceId: string) => {
+      href: string;
+      text: string;
+    };
   };
   /**
    * Enable and configure search functionality
@@ -145,6 +240,21 @@ type MarkpromptOptions = {
       reference: SearchResult | AlgoliaDocSearchHit,
       query: string,
     ) => string | undefined;
+    /**
+     * Label for the search input, not shown but used for `aria-label`
+     * @default "Search docs…"
+     **/
+    label?: string;
+    /**
+     * Label for the tab bar
+     * @default "Search"
+     **/
+    tabLabel?: string;
+    /**
+     * Placeholder for the search input
+     * @default "Search docs…"
+     */
+    placeholder?: string;
   };
   trigger?: {
     /**
@@ -163,6 +273,8 @@ type MarkpromptOptions = {
      * to the `markprompt` function.
      */
     floating?: boolean;
+    /** Do you use a custom element as the dialog trigger? */
+    customElement?: boolean;
   };
   title?: {
     /**
@@ -176,7 +288,17 @@ type MarkpromptOptions = {
      **/
     text?: string;
   };
-};
+  /**
+   * Show Markprompt branding
+   * @default true
+   **/
+  showBranding?: boolean;
+  /**
+   * Display debug info
+   * @default false
+   **/
+  debug?: boolean;
+}
 ```
 
 Styles are easily overridable for customization via targeting classes.
@@ -221,122 +343,7 @@ Render a Markprompt dialog button.
 - `projectKey` (`string`): Your Markprompt project key.
 - `container` (`HTMLElement | string`): The element or selector to render
   Markprompt into.
-- `options` (`object`): Options for customizing Markprompt, see below.
-
-#### Options
-
-- `projectKey` (`string`): The project key associated to your project. It can be
-  obtained in the project settings on [Markprompt.com](https://markprompt.com/)
-  under "Project key"
-- `display` (`plain | dialog`): The way to display the prompt (Default:
-  `dialog`)
-- `defaultView` (`chat | prompt | search`): The default view to show (Default:
-  `prompt` or `search` when search is enabled)
-- `close` (`object`): Options for the close modal button
-- `close.label` (`string`): `aria-label` for the close modal button (Default:
-  `Close Markprompt`)
-- `close.visible` (`boolean`): Show the close button (Default: `true`)
-- `description` (`object`): Options for the description
-- `description.hide` (`boolean`): Visually hide the description (Default:
-  `true`)
-- `description.text` (`string`): Description text
-- `chat` (`object`): Options for the chat view
-- `chat.enabled` (`boolean`): Whether or not to enable the chat view. Disables
-  `prompt` (Default: `false`)
-- `chat.label` (`string`): Label for the prompt input (Default: `Ask AI`)
-- `chat.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
-- `chat.placeholder` (`string`): Placeholder for the prompt input (Default:
-  `Ask AI…`)
-- `chat.apiUrl` (`string`): URL at which to fetch completions. (Default:
-  `https://api.markprompt.com/v1/chat`)
-- `chat.iDontKnowMessage` (`string`): Message returned when the model does not
-  have an answer. (Default: `Sorry, I am not sure how to answer that.`)
-- `chat.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `chat.systemPrompt` (`string`): The prompt template. (Default:
-  `You are a very enthusiastic company representative who loves to help people!`)
-- `chat.temperature` (`number`): The model temperature. (Default: `0.1`)
-- `chat.topP` (`number`): The model top P. (Default: `1`)
-- `chat.frequencyPenalty` (`number`): The model frequency penalty. (Default:
-  `0`)
-- `chat.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
-- `chat.maxTokens` (`number`): The max number of tokens to include in the
-  response. (Default: `500`)
-- `chat.sectionsMatchCount` (`number`): The number of sections to include in the
-  prompt context. (Default: `10`)
-- `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the
-  input question and selected sections. (Default: `0.5`)
-- `feedback` (`object`): Options for the feedback component
-- `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
-  chat answers. (Default: `true`)
-- `feedback.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-  `https://api.markprompt.com/v1/feedback`)
-- `feedback.heading` (`string`): Heading for the feedback form, only shown in
-  the prompt view (Default: `Was this response helpful?`)
-- `prompt` (`object`): Options for the prompt view
-- `prompt.label` (`string`): Label for the prompt input (Default: `Ask AI`)
-- `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
-- `prompt.placeholder` (`string`): Placeholder for the prompt input (Default:
-  `Ask AI…`)
-- `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default:
-  `https://api.markprompt.com/v1/completions`)
-- `prompt.iDontKnowMessage` (`string`): Message returned when the model does not
-  have an answer. (Default: `Sorry, I am not sure how to answer that.`)
-- `prompt.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `prompt.systemPrompt` (`string`): The prompt template. (Default:
-  `You are a very enthusiastic company representative who loves to help people!`)
-- `prompt.temperature` (`number`): The model temperature. (Default: `0.1`)
-- `prompt.topP` (`number`): The model top P. (Default: `1`)
-- `prompt.frequencyPenalty` (`number`): The model frequency penalty. (Default:
-  `0`)
-- `prompt.presencePenalty` (`number`): The model presence penalty. (Default:
-  `0`)
-- `prompt.maxTokens` (`number`): The max number of tokens to include in the
-  response. (Default: `500`)
-- `prompt.sectionsMatchCount` (`number`): The number of sections to include in
-  the prompt context. (Default: `10`)
-- `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
-  the input question and selected sections. (Default: `0.5`)
-- `references` (`object`): Options for the references
-- `references.getHref` (`function`): Callback to transform a reference into an
-  href
-- `references.getLabel` (`function`): Callback to transform a reference into an
-  label to show for the link
-- `references.loadingText` (`string`): Loading text (Default:
-  `Fetching relevant pages…`)
-- `references.heading` (`string`): Heading for the references panel (Default:
-  `Answer generated from the following sources:`)
-- `search` (`object`): Options for search
-- `search.enabled` (`boolean`): Whether or not to enable search. (Default:
-  `true`)
-- `search.getHref` (`function`): Callback to transform a search result into an
-  href
-- `search.getHeading` (`function`): Callback to transform a search result into a
-  heading
-- `search.getTitle` (`function`): Callback to transform a search result into a
-  title
-- `search.getSubtitle` (`function`): Callback to transform a search result into
-  a subtitle
-- `search.label` (`string`): Label for the search input, not shown but used for
-  `aria-label` (Default: `Search docs…`)
-- `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
-- `search.placeholder` (`string`): Placeholder for the search input (Default:
-  `Search docs…`)
-- `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
-- `search.apiUrl` (`string`): URL at which to fetch search results. (Default:
-  `https://api.markprompt.com/v1/search`)
-- `search.provider` (`object`): A custom search provider configuration, such as
-  Algolia
-- `trigger` (`object`): Options for the trigger
-- `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will
-  disable rendering any trigger element. Use `openMarkprompt()` to trigger the
-  Markprompt dialog. (Default: `false`)
-- `trigger.label` (`string`): `aria-label` for the open button (Default:
-  `Open Markprompt`)
-- `trigger.placeholder` (`string`): Placeholder text for non-floating element
-  (Default: `Ask docs`)
-- `title` (`object`): Options for the title
-- `title.hide` (`boolean`): Visually hide the title (Default: `true`)
-- `title.text` (`string`): Title text (Default: `Ask AI`)
+- `options` (`object`): Options for customizing Markprompt, see above.
 
 When rendering the Markprompt component, it will render a search input-like
 button by default. You have two other options:
@@ -347,6 +354,31 @@ button by default. You have two other options:
   `openMarkprompt()` from your code. This gives you the flexibility to render
   your own trigger element and attach whatever event handlers you would like
   and/or open the Markprompt dialog programmatically.
+
+  ### `markpromptOpen()`
+
+  Open the Markprompt dialog programmatically.
+
+  ### `markpromptClose()`
+
+  Close the Markprompt dialog programmatically.
+
+  ### `markpromptChat(projectKey, container, options?)`
+
+  Render the Markprompt chat view standalone, outside of a dialog.
+
+  - `projectKey` (`string`): Your Markprompt project key.
+  - `container` (`HTMLElement | string`): The element or selector to render
+    Markprompt into.
+  - `options` (`object`): Options for customizing Markprompt, see above.
+  - `options.chatOptions` (`MarkpromptOptions.chat`): Enable and configure chat
+    functionality. Allows users to have a conversation with an assistant.
+    Enabling chat functionality will disable prompt functionality. See above for options.
+  - `options.debug` (`boolean`): Display debug info
+  - `options.feedbackOptions` (`MarkpromptOptions.feedback`): Enable feedback
+    functionality, shows a thumbs up/down button after a prompt was submitted. See above for options.
+  - `options.referencesOptions` (`MarkpromptOptions.references`): Enable and
+    configure references functionality. See above for options.
 
 ## Documentation
 

@@ -85,6 +85,8 @@ The pre-built Markprompt component. It accepts the following props:
 - `chat` (`object`): Options for the chat view
 - `chat.enabled` (`boolean`): Whether or not to enable the chat view. Disables
   `prompt` (Default: `false`)
+- `chat.history` (`boolean`): Whether or not to store conversation history and show conversation selection. (Default:
+  `true`)
 - `chat.label` (`string`): Label for the prompt input (Default: `Ask AI`)
 - `chat.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `chat.placeholder` (`string`): Placeholder for the prompt input (Default:
@@ -114,6 +116,8 @@ The pre-built Markprompt component. It accepts the following props:
   `https://api.markprompt.com/v1/feedback`)
 - `feedback.heading` (`string`): Heading for the feedback form, only shown in
   the prompt view (Default: `Was this response helpful?`)
+- `feedback.onFeedbackSubmit` (`function`): Callback when feedback is
+  submitted
 - `prompt` (`object`): Options for the prompt view
 - `prompt.label` (`string`): Label for the prompt input (Default: `Ask AI`)
 - `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
