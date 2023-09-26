@@ -31,7 +31,8 @@ export type SourceType =
   | 'motif'
   | 'website'
   | 'file-upload'
-  | 'api-upload';
+  | 'api-upload'
+  | 'salesforce';
 
 export interface Source {
   type: SourceType;
