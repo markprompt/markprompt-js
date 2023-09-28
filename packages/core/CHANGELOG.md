@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.16.2
+
+### Patch Changes
+
+- [#189](https://github.com/motifland/markprompt-js/pull/189) [`23d34e2`](https://github.com/motifland/markprompt-js/commit/23d34e271a40e96b908cb012e16842d167ea8fbc) Thanks [@michaelfester](https://github.com/michaelfester)! - Add Salesforce source type
+
 ## 0.16.1
 
 ### Patch Changes
