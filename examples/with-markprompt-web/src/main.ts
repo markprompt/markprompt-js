@@ -11,6 +11,7 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
+      history: false,
       apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
     },
     defaultView: 'chat',
