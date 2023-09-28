@@ -3,6 +3,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
 import defaults from 'defaults';
 import Emittery from 'emittery';
+import cloneDeep from 'lodash/cloneDeep.js';
 import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
@@ -88,7 +89,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           showBranding: props.showBranding,
           debug: props.debug,
         },
-        DEFAULT_MARKPROMPT_OPTIONS,
+        // cloneDeep is a workaround for https://github.com/sindresorhus/node-defaults/issues/7
+        cloneDeep(DEFAULT_MARKPROMPT_OPTIONS),
       ),
     [props],
   );

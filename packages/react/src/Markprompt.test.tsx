@@ -44,14 +44,8 @@ describe('Markprompt', () => {
 
   it('renders chat view when chat is enabled', async () => {
     const user = await userEvent.setup();
-    render(
-      <Markprompt
-        projectKey="test-key"
-        chat={{ enabled: true, tabLabel: 'test label' }}
-      />,
-    );
+    render(<Markprompt projectKey="test-key" chat={{ enabled: true }} />);
     await user.click(screen.getByText('Open Markprompt'));
-    await user.click(screen.getByRole('tab', { name: 'test label' }));
     expect(screen.getByText('Chats')).toBeInTheDocument();
   });
 
