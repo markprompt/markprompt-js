@@ -49,6 +49,27 @@ describe('Markprompt', () => {
     expect(screen.getByText('Chats')).toBeInTheDocument();
   });
 
+  it('renders tabs when multiple views are enabled', async () => {
+    const user = await userEvent.setup();
+    render(
+      <Markprompt
+        projectKey="test-key"
+        chat={{ enabled: true, tabLabel: 'chattab' }}
+        search={{ enabled: true, tabLabel: 'searchtab' }}
+      />,
+    );
+    await user.click(screen.getByText('Open Markprompt'));
+
+    // tabs are rendered
+    await expect(screen.getByText('searchtab')).toBeInTheDocument();
+    await expect(screen.getByText('chattab')).toBeInTheDocument();
+
+    // tabs switching
+    await expect(screen.getByRole('searchbox')).toBeInTheDocument();
+    await user.click(screen.getByText('chattab'));
+    await expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
   it('renders algolia attribution when algolia is the search provider', async () => {
     render(
       <Markprompt
