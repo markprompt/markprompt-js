@@ -12,7 +12,7 @@ import React, {
   type ReactNode,
 } from 'react';
 import { createStore, useStore } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
@@ -100,13 +100,9 @@ export const createChatStore = ({
     );
   }
 
-  const optionalPersist = (
-    persistChatHistory ? persist : (x) => x
-  ) as typeof persist;
-
   return createStore<ChatStoreState>()(
     immer(
-      optionalPersist(
+      persist(
         (set, get) => ({
           projectKey,
           messages: [],
@@ -310,6 +306,9 @@ export const createChatStore = ({
         {
           name: 'markprompt',
           version: 1,
+          storage: createJSONStorage(() =>
+            persistChatHistory ? localStorage : sessionStorage,
+          ),
           // only store conversationsByProjectKey in local storage
           partialize: (state) => ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,
