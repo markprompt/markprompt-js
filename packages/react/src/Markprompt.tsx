@@ -14,7 +14,7 @@ import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions } from './types.js';
-import { useViews } from './useViews.js';
+import { useViews, type View } from './useViews.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<
@@ -298,13 +298,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     <Tabs.Root
       className="MarkpromptTabsContainer"
       value={activeView}
-      onValueChange={(value) => {
-        if (value !== 'search' && value !== 'chat' && value !== 'prompt') {
-          return;
-        }
-
-        setActiveView(value);
-      }}
+      onValueChange={(value) => setActiveView(value as View)}
     >
       <div style={{ position: 'relative' }}>
         <Tabs.List className="MarkpromptTabsList">
