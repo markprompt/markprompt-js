@@ -1,16 +1,14 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import defaults from 'defaults';
 import React, {
   useCallback,
   useEffect,
   useRef,
+  type ChangeEventHandler,
   type Dispatch,
   type FormEventHandler,
   type KeyboardEventHandler,
   type ReactElement,
   type SetStateAction,
-  type ChangeEventHandler,
-  useMemo,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -22,6 +20,7 @@ import {
   type MarkpromptOptions,
   type SearchResultComponentProps,
 } from '../types.js';
+import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
 export interface SearchViewProps {
@@ -50,10 +49,9 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone SearchView components also have defaults as expected.
-  const searchOptions = useMemo(
-    () =>
-      defaults({ ...props.searchOptions }, DEFAULT_MARKPROMPT_OPTIONS.search),
-    [props.searchOptions],
+  const searchOptions = useDefaults(
+    { ...props.searchOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.search,
   );
 
   const inputRef = useRef<HTMLInputElement | null>(null);

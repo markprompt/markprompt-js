@@ -1,14 +1,12 @@
 import type { FileSectionReference } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import defaults from 'defaults';
 import React, {
   useCallback,
   useEffect,
+  useRef,
   type ChangeEventHandler,
   type FormEventHandler,
   type ReactElement,
-  useRef,
-  useMemo,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -20,6 +18,7 @@ import type { UseFeedbackResult } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { type MarkpromptOptions } from '../types.js';
+import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
 export interface PromptViewProps {
@@ -37,28 +36,19 @@ export function PromptView(props: PromptViewProps): ReactElement {
 
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone PromptView components also have defaults as expected.
-  const promptOptions = useMemo(
-    () =>
-      defaults({ ...props.promptOptions }, DEFAULT_MARKPROMPT_OPTIONS.prompt),
-    [props.promptOptions],
+  const promptOptions = useDefaults(
+    { ...props.promptOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.prompt,
   );
 
-  const feedbackOptions = useMemo(
-    () =>
-      defaults(
-        { ...props.feedbackOptions },
-        DEFAULT_MARKPROMPT_OPTIONS.feedback,
-      ),
-    [props.feedbackOptions],
+  const feedbackOptions = useDefaults(
+    { ...props.feedbackOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.feedback,
   );
 
-  const referencesOptions = useMemo(
-    () =>
-      defaults(
-        { ...props.referencesOptions },
-        DEFAULT_MARKPROMPT_OPTIONS.references,
-      ),
-    [props.referencesOptions],
+  const referencesOptions = useDefaults(
+    { ...props.referencesOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.references,
   );
 
   const {

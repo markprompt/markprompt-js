@@ -1,10 +1,8 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
-import defaults from 'defaults';
 import Emittery from 'emittery';
-import cloneDeep from 'lodash/cloneDeep.js';
-import React, { useEffect, useState, type ReactElement, useMemo } from 'react';
+import React, { useEffect, useState, type ReactElement } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
@@ -14,6 +12,7 @@ import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions } from './types.js';
+import { useDefaults } from './useDefaults.js';
 import { useViews, type View } from './useViews.js';
 
 type MarkpromptProps = MarkpromptOptions &
@@ -71,28 +70,23 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     title,
     showBranding,
     debug,
-  }: MarkpromptOptions = useMemo(
-    () =>
-      defaults(
-        {
-          display: props.display,
-          defaultView: props.defaultView,
-          close: props.close,
-          description: props.description,
-          feedback: props.feedback,
-          chat: props.chat,
-          prompt: props.prompt,
-          references: props.references,
-          search: props.search,
-          trigger: props.trigger,
-          title: props.title,
-          showBranding: props.showBranding,
-          debug: props.debug,
-        },
-        // cloneDeep is a workaround for https://github.com/sindresorhus/node-defaults/issues/7
-        cloneDeep(DEFAULT_MARKPROMPT_OPTIONS),
-      ),
-    [props],
+  }: MarkpromptOptions = useDefaults(
+    {
+      display: props.display,
+      defaultView: props.defaultView,
+      close: props.close,
+      description: props.description,
+      feedback: props.feedback,
+      chat: props.chat,
+      prompt: props.prompt,
+      references: props.references,
+      search: props.search,
+      trigger: props.trigger,
+      title: props.title,
+      showBranding: props.showBranding,
+      debug: props.debug,
+    },
+    DEFAULT_MARKPROMPT_OPTIONS,
   );
 
   const [open, setOpen] = useState(false);
