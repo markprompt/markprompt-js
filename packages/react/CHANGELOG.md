@@ -1,5 +1,22 @@
 # @markprompt/react
 
+## 0.26.0
+
+### Minor Changes
+
+- [#194](https://github.com/motifland/markprompt-js/pull/194) [`40b26d6`](https://github.com/motifland/markprompt-js/commit/40b26d6094c1939572df01dbbb9e9e103ca5fbb3) Thanks [@nickrttn](https://github.com/nickrttn)! - Use `sessionStorage` if `chat.history` is disabled for persistent conversations while a session lasts
+
+- [#188](https://github.com/motifland/markprompt-js/pull/188) [`35a54d9`](https://github.com/motifland/markprompt-js/commit/35a54d9ab1b62deafe33fee24e6cbefe6681f1c3) Thanks [@nickrttn](https://github.com/nickrttn)! - The Markprompt dialog's tabs are now more accessible
+
+- [#194](https://github.com/motifland/markprompt-js/pull/194) [`40b26d6`](https://github.com/motifland/markprompt-js/commit/40b26d6094c1939572df01dbbb9e9e103ca5fbb3) Thanks [@nickrttn](https://github.com/nickrttn)! - Update the store to expose an abort callback rather than the `AbortController` itself
+
+### Patch Changes
+
+- [#193](https://github.com/motifland/markprompt-js/pull/193) [`3733e74`](https://github.com/motifland/markprompt-js/commit/3733e741e842f881642424e4eff67c136ba3096d) Thanks [@nickrttn](https://github.com/nickrttn)! - Add provenance statements
+
+- Updated dependencies [[`40b26d6`](https://github.com/motifland/markprompt-js/commit/40b26d6094c1939572df01dbbb9e9e103ca5fbb3), [`3733e74`](https://github.com/motifland/markprompt-js/commit/3733e741e842f881642424e4eff67c136ba3096d)]:
+  - @markprompt/core@0.16.4
+
 ## 0.25.1
 
 ### Patch Changes
