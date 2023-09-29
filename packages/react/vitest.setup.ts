@@ -10,5 +10,6 @@ beforeAll(() => {
 });
 
 afterEach(() => {
+  console.log('cleaning up');
   cleanup();
 });

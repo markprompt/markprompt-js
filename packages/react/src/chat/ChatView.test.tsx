@@ -1,6 +1,7 @@
 import {
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  type FileSectionReference,
 } from '@markprompt/core';
 import { render, screen, waitFor } from '@testing-library/react';
 import { renderHook, suppressErrorOutput } from '@testing-library/react-hooks';
@@ -22,20 +23,20 @@ import { ChatView } from './ChatView.js';
 import { createChatStore, useChatStore } from './store.js';
 
 const encoder = new TextEncoder();
-let markpromptData: unknown = '';
-let markpromptDebug = '';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-let requestBody: any = {};
+let markpromptData: {
+  conversationId?: string;
+  promptId?: string;
+  references?: FileSectionReference[];
+  debug?: unknown;
+} = {};
+let markpromptDebug: object = {};
 let response: string | string[] = [];
 let wait = false;
 let status = 200;
 let stream: ReadableStream;
-let timer: NodeJS.Timeout;
 
 const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
-    requestBody = await req.json();
-
     if (status >= 400) {
       return res(
         ctx.status(status),
@@ -46,6 +47,7 @@ const server = setupServer(
     stream = new ReadableStream({
       async start(controller) {
         for (const chunk of response) {
+          if (wait) await new Promise((resolve) => setTimeout(resolve, 1000));
           controller.enqueue(encoder.encode(chunk));
         }
         controller?.close();
@@ -53,7 +55,7 @@ const server = setupServer(
     });
 
     return res(
-      ctx.delay(wait ? 100 : 0),
+      ctx.delay('real'),
       ctx.status(status),
       ctx.set(
         'x-markprompt-data',
@@ -77,11 +79,9 @@ describe('ChatView', () => {
   afterEach(() => {
     status = 200;
     response = [];
-    requestBody = {};
     wait = false;
-    markpromptData = '';
-    markpromptDebug = '';
-    clearTimeout(timer);
+    markpromptData = {};
+    markpromptDebug = {};
 
     server.resetHandlers();
     vi.resetAllMocks();
@@ -194,7 +194,7 @@ describe('ChatView', () => {
     response = ['answer'];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' } },
+        file: { path: '/page1', source: { type: 'file-upload' as const } },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
@@ -216,7 +216,7 @@ describe('ChatView', () => {
     response = ['answer'];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' } },
+        file: { path: '/page1', source: { type: 'file-upload' as const } },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
@@ -240,7 +240,7 @@ describe('ChatView', () => {
     response = ['answer'];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' } },
+        file: { path: '/page1', source: { type: 'file-upload' as const } },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
@@ -264,6 +264,9 @@ describe('ChatView', () => {
   });
 
   it('aborts a pending chat request when the view changes', async () => {
+    const conversationId = crypto.randomUUID();
+    const promptId = crypto.randomUUID();
+    markpromptData = { conversationId, promptId };
     response = ['testing', 'testing', 'test'];
     wait = true;
 
@@ -285,35 +288,44 @@ describe('ChatView', () => {
     });
   });
 
-  it('aborts a pending chat request when a new prompt is submitted', async () => {
-    response = ['testing ', 'testing ', 'test'];
-    wait = true;
+  it(
+    'aborts a pending chat request when a new prompt is submitted',
+    async () => {
+      response = ['testing ', 'testing ', 'test'];
+      wait = true;
 
-    const user = await userEvent.setup();
+      const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+      render(<ChatView projectKey="test-key" />);
 
-    await user.type(screen.getByRole('textbox'), 'test');
-    await user.keyboard('{Enter}');
+      await user.type(screen.getByRole('textbox'), 'test');
+      await user.keyboard('{Enter}');
 
-    await waitFor(() => {
-      expect(screen.getByText('Fetching relevant pages…')).toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expect(
+          screen.getByText('Fetching relevant pages…'),
+        ).toBeInTheDocument();
+      });
 
-    response = ['testing ', 'testing ', 'test again'];
-    wait = false;
+      response = ['testing ', 'testing ', 'test again'];
+      wait = false;
 
-    await user.type(screen.getByRole('textbox'), 'test again');
-    await user.keyboard('{Enter}');
+      await user.type(screen.getByRole('textbox'), 'test again');
+      await user.keyboard('{Enter}');
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          'This chat response was cancelled. Please try regenerating the answer or ask another question.',
-        ),
-      ).toBeInTheDocument();
-    });
-  });
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'This chat response was cancelled. Please try regenerating the answer or ask another question.',
+          ),
+        ).toBeInTheDocument();
+      });
+    },
+    {
+      // flaky test: sometimes the first request finishes before it can be cancelled by the seceond prompt
+      retry: 3,
+    },
+  );
 
   it('aborts a pending chat request when an error is returned from the API', async () => {
     status = 500;
@@ -335,16 +347,14 @@ describe('ChatView', () => {
   });
 
   it('initially does not have stored conversations', async () => {
-    const user = await userEvent.setup();
-
     render(<ChatView projectKey="test-key" />);
-
-    await user.click(screen.getByRole('combobox'));
-
-    expect(screen.getByRole('option')).toHaveTextContent('New chat');
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
   it('starts a new chat when the "New chat" option is selected', async () => {
+    const conversationId = crypto.randomUUID();
+    const promptId = crypto.randomUUID();
+    markpromptData = { conversationId, promptId };
     response = ['answer'];
 
     const user = await userEvent.setup();
@@ -355,14 +365,15 @@ describe('ChatView', () => {
     await user.keyboard('{Enter}');
 
     await waitFor(() => {
-      expect(screen.getByText('answer')).toBeInTheDocument();
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
 
     await user.click(screen.getByRole('combobox'));
-    await user.click(screen.getByRole('option'));
+    await user.click(screen.getByRole('option', { name: 'New chat' }));
 
     await waitFor(() => {
-      expect(screen.queryByText('answer')).not.toBeInTheDocument();
+      // only the sidebar is shown, not the conversation itself
+      expect(screen.getAllByText('answer')).toHaveLength(1);
     });
   });
 

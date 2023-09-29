@@ -66,12 +66,12 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
 
   // keep abortChat up to date, but do not trigger rerenders (and effect hooks calls) when it updates
   const store = useContext(ChatContext);
-  const abortChat = useRef(() => store?.getState().abortController?.abort());
+  const abortChat = useRef(() => store?.getState().abort?.());
 
   useEffect(
     () =>
       store?.subscribe((state) => {
-        abortChat.current = () => state.abortController?.abort();
+        abortChat.current = () => state.abort?.();
       }),
     [store],
   );

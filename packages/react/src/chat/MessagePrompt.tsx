@@ -1,7 +1,6 @@
 import React, { type ReactElement } from 'react';
 
 import { type ChatViewMessage } from './store.js';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
@@ -14,7 +13,7 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
   const { children, referencesOptions, state } = props;
   return (
     <div className="MarkpromptMessagePrompt" data-loading-state={state}>
-      <p className="MarkpromptMessagePromptText">{children}</p>
+      <h3 className="MarkpromptMessagePromptText">{children}</h3>
       {(state === 'preload' || state === 'streaming-answer') && (
         <div
           className="MarkpromptProgress"
@@ -22,10 +21,7 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
           role="progressbar"
           aria-labelledby="markprompt-loading-text"
         >
-          <p id="markprompt-loading-text">
-            {referencesOptions?.loadingText ??
-              DEFAULT_MARKPROMPT_OPTIONS.references?.loadingText}
-          </p>
+          <p id="markprompt-loading-text">{referencesOptions?.loadingText}</p>
         </div>
       )}
     </div>

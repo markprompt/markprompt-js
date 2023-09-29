@@ -1,8 +1,8 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { suppressErrorOutput } from '@testing-library/react-hooks';
 import { userEvent } from '@testing-library/user-event';
 import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 
@@ -114,6 +114,16 @@ describe('Markprompt', () => {
     await user.keyboard('{Meta>}{Enter}{/Meta}');
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+    await user.keyboard('{Meta>}{Enter}{/Meta}');
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+  });
+
+  it('switches views when props change', async () => {
+    const user = await userEvent.setup();
+    const { debug } = render(<Markprompt projectKey="test-key" />);
+    await user.click(screen.getByText('Open Markprompt'));
+    debug();
   });
 
   it('calls back on open', async () => {

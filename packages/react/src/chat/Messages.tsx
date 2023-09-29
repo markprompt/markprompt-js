@@ -33,9 +33,13 @@ export function Messages(props: MessagesProps): ReactElement {
       >
         {messages.map((message) => (
           <section key={message.id}>
-            <MessagePrompt state={message.state}>
+            <MessagePrompt
+              state={message.state}
+              referencesOptions={referencesOptions}
+            >
               {message.prompt}
             </MessagePrompt>
+
             <div className="MarkpromptMessageAnswerContainer">
               <MessageAnswer state={message.state}>
                 {message.answer ?? ''}
