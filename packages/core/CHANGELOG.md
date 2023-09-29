@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.16.3
+
+### Patch Changes
+
+- [#195](https://github.com/motifland/markprompt-js/pull/195) [`a67327f`](https://github.com/motifland/markprompt-js/commit/a67327f3176f6c2d7b9084b8cea3ae99582c08bb) Thanks [@michaelfester](https://github.com/michaelfester)! - Add Nango source type
+
 ## 0.16.2
 
 ### Patch Changes
