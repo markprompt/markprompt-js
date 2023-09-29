@@ -15,7 +15,7 @@ export function useViews(
 ): UseViewsResult {
   const { chat, search } = options;
 
-  const noViewsEnabled = [chat?.enabled || true, search?.enabled].filter(
+  const numViewsEnabled = [chat?.enabled || true, search?.enabled].filter(
     Boolean,
   ).length;
 
@@ -47,7 +47,7 @@ export function useViews(
 
   // toggle the view when a hotkey is pressed
   useEffect(() => {
-    if (noViewsEnabled === 1) return;
+    if (numViewsEnabled === 1) return;
 
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (
@@ -64,7 +64,7 @@ export function useViews(
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [noViewsEnabled, toggleActiveView]);
+  }, [numViewsEnabled, toggleActiveView]);
 
   return { activeView, setActiveView };
 }
