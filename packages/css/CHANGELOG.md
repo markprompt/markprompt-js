@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.16.2
+
+### Patch Changes
+
+- [#193](https://github.com/motifland/markprompt-js/pull/193) [`3733e74`](https://github.com/motifland/markprompt-js/commit/3733e741e842f881642424e4eff67c136ba3096d) Thanks [@nickrttn](https://github.com/nickrttn)! - Add provenance statements
+
 ## 0.16.1
 
 ### Patch Changes

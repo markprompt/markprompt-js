@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.16.4
+
+### Patch Changes
+
+- [#194](https://github.com/motifland/markprompt-js/pull/194) [`40b26d6`](https://github.com/motifland/markprompt-js/commit/40b26d6094c1939572df01dbbb9e9e103ca5fbb3) Thanks [@nickrttn](https://github.com/nickrttn)! - Don't cancel the `ReadableStream` returned by `res.body.getReader()` when `submitChat` is canceled
+
+- [#193](https://github.com/motifland/markprompt-js/pull/193) [`3733e74`](https://github.com/motifland/markprompt-js/commit/3733e741e842f881642424e4eff67c136ba3096d) Thanks [@nickrttn](https://github.com/nickrttn)! - Add provenance statements
+
 ## 0.16.3
 
 ### Patch Changes
