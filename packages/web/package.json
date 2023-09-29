@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/web",
-  "version": "0.19.2",
+  "version": "0.19.3",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
-    "@markprompt/core": "0.16.2",
+    "@markprompt/core": "0.16.3",
     "@markprompt/react": "0.25.1"
   },
   "devDependencies": {

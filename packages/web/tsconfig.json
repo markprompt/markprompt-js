@@ -1,6 +1,9 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "references": [{ "path": "../core" }, { "path": "../react" }],
+  "references": [
+    { "path": "../core" },
+    { "path": "../react/tsconfig.build.json" }
+  ],
   "include": ["src/*"],
   "compilerOptions": {
     "checkJs": true,

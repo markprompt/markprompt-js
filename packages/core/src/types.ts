@@ -32,6 +32,7 @@ export type SourceType =
   | 'website'
   | 'file-upload'
   | 'api-upload'
+  | 'nango'
   | 'salesforce';
 
 export interface Source {

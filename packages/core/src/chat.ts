@@ -182,10 +182,6 @@ export async function submitChat(
     let done = false;
 
     while (!done) {
-      if (signal?.aborted) {
-        reader.cancel();
-        throw new DOMException('ReadableStream was aborted.', 'AbortError');
-      }
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);

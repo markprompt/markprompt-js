@@ -11,7 +11,11 @@ import React, {
 
 import { ConversationSelect } from './ConversationSelect.js';
 import { RegenerateButton } from './RegenerateButton.js';
-import { ChatContext, useChatStore } from './store.js';
+import {
+  ChatContext,
+  selectProjectConversations,
+  useChatStore,
+} from './store.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
@@ -34,6 +38,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const regenerateLastAnswer = useChatStore(
     (state) => state.regenerateLastAnswer,
   );
+  const conversations = useChatStore(selectProjectConversations);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -61,12 +66,12 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
 
   // keep abortChat up to date, but do not trigger rerenders (and effect hooks calls) when it updates
   const store = useContext(ChatContext);
-  const abortChat = useRef(() => store?.getState().abortController?.abort());
+  const abortChat = useRef(() => store?.getState().abort?.());
 
   useEffect(
     () =>
       store?.subscribe((state) => {
-        abortChat.current = () => state.abortController?.abort();
+        abortChat.current = () => state.abort?.();
       }),
     [store],
   );
@@ -109,7 +114,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           />
         )}
 
-        {chatOptions?.history && <ConversationSelect />}
+        {conversations.length > 0 && <ConversationSelect />}
       </div>
     </BaseMarkprompt.Form>
   );

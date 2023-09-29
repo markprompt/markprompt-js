@@ -9,5 +9,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    reporters: ['default', 'hanging-process'],
   },
 });

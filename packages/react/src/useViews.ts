@@ -7,7 +7,6 @@ export type View = 'chat' | 'prompt' | 'search';
 interface UseViewsResult {
   activeView: View;
   setActiveView: (view: View) => void;
-  toggleActiveView: () => void;
 }
 
 export function useViews(
@@ -15,6 +14,10 @@ export function useViews(
   defaultView?: MarkpromptOptions['defaultView'],
 ): UseViewsResult {
   const { chat, search } = options;
+
+  const numViewsEnabled = [chat?.enabled || true, search?.enabled].filter(
+    Boolean,
+  ).length;
 
   const [activeView, setActiveView] = useState<View>(() => {
     if (defaultView) return defaultView;
@@ -33,6 +36,7 @@ export function useViews(
     }
   }, [activeView, chat?.enabled]);
 
+  // update the active view when props change
   useEffect(() => {
     if (options.chat?.enabled && activeView === 'prompt') {
       setActiveView('chat');
@@ -41,5 +45,26 @@ export function useViews(
     }
   }, [options.chat?.enabled, activeView]);
 
-  return { activeView, setActiveView, toggleActiveView };
+  // toggle the view when a hotkey is pressed
+  useEffect(() => {
+    if (numViewsEnabled === 1) return;
+
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (
+        (event.key === 'Enter' && event.ctrlKey) ||
+        (event.key === 'Enter' && event.metaKey)
+      ) {
+        event.preventDefault();
+        toggleActiveView();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [numViewsEnabled, toggleActiveView]);
+
+  return { activeView, setActiveView };
 }

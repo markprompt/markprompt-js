@@ -22,7 +22,7 @@ export function ConversationSelect(): JSX.Element {
       items={[
         ...conversations.map(([conversationId, { messages }]) => ({
           value: conversationId,
-          label: messages[0]?.prompt ?? 'Unknown conversation',
+          label: messages[0].prompt,
         })),
         {
           value: 'new',
@@ -41,15 +41,12 @@ export function ConversationSelect(): JSX.Element {
       ]}
       itemToString={(item) => item?.label ?? ''}
       itemToChildren={(item) => {
-        if (!item) return '';
-        if ('children' in item) return item.children;
-        return item.label;
+        if ('children' in item!) return item.children;
+        return item!.label;
       }}
       onSelectedItemChange={({ selectedItem }) => {
-        if (!selectedItem) return;
-
         selectConversation(
-          selectedItem.value === 'new' ? undefined : selectedItem.value,
+          selectedItem!.value === 'new' ? undefined : selectedItem!.value,
         );
       }}
     />
