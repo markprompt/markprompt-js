@@ -25,11 +25,13 @@
     "@markprompt/core": "^0.16.1",
     "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "clsx": "^2.0.0",
     "downshift": "^8.1.0",
     "emittery": "^1.0.1",
     "immer": "^10.0.2",
+    "lodash": "^4.17.21",
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
     "p-debounce": "^4.0.0",
@@ -44,6 +46,7 @@
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.5.0",
+    "@types/lodash": "^4.14.199",
     "defaults": "^2.0.2"
   },
   "peerDependencies": {

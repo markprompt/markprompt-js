@@ -13,11 +13,15 @@ describe('Markprompt', () => {
   });
 
   it('renders a non-floating trigger', async () => {
-    const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
     expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
+  });
+
+  it('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
+    const user = await userEvent.setup();
+    render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
     await user.keyboard(`{Meta>}{Enter}{/Meta}`);
-    screen.debug();
+    await expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders no dialog when display = plain', async () => {
@@ -50,6 +54,27 @@ describe('Markprompt', () => {
     render(<Markprompt projectKey="test-key" chat={{ enabled: true }} />);
     await user.click(screen.getByText('Open Markprompt'));
     expect(screen.getByText('Chats')).toBeInTheDocument();
+  });
+
+  it('renders tabs when multiple views are enabled', async () => {
+    const user = await userEvent.setup();
+    render(
+      <Markprompt
+        projectKey="test-key"
+        chat={{ enabled: true, tabLabel: 'chattab' }}
+        search={{ enabled: true, tabLabel: 'searchtab' }}
+      />,
+    );
+    await user.click(screen.getByText('Open Markprompt'));
+
+    // tabs are rendered
+    await expect(screen.getByText('searchtab')).toBeInTheDocument();
+    await expect(screen.getByText('chattab')).toBeInTheDocument();
+
+    // tabs switching
+    await expect(screen.getByRole('searchbox')).toBeInTheDocument();
+    await user.click(screen.getByText('chattab'));
+    await expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders algolia attribution when algolia is the search provider', async () => {
