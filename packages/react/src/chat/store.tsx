@@ -12,7 +12,7 @@ import React, {
   type ReactNode,
 } from 'react';
 import { createStore, useStore } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
@@ -53,7 +53,7 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
 }
 
 export interface ChatStoreState {
-  abortController?: AbortController;
+  abort?: () => void;
   projectKey: string;
   conversationId?: string;
   setConversationId: (conversationId: string) => void;
@@ -100,13 +100,9 @@ export const createChatStore = ({
     );
   }
 
-  const optionalPersist = (
-    persistChatHistory ? persist : (x) => x
-  ) as typeof persist;
-
   return createStore<ChatStoreState>()(
     immer(
-      optionalPersist(
+      persist(
         (set, get) => ({
           projectKey,
           messages: [],
@@ -198,7 +194,7 @@ export const createChatStore = ({
             });
 
             // abort any pending or ongoing requests
-            get().abortController?.abort();
+            get().abort?.();
 
             const currentMessageIndex = get().messages.length - 1;
             const prevMessageIndex = currentMessageIndex - 1;
@@ -219,8 +215,14 @@ export const createChatStore = ({
 
             // create a new abort controller
             const controller = new AbortController();
+            const abort = (): void => {
+              controller.abort();
+              get().setMessageByIndex(currentMessageIndex, {
+                state: 'cancelled',
+              });
+            };
             set((state) => {
-              state.abortController = controller;
+              state.abort = abort;
             });
 
             // get ready to do the request
@@ -274,15 +276,11 @@ export const createChatStore = ({
             );
 
             promise.then(() => {
-              if (controller.signal.aborted) {
-                return get().setMessageByIndex(currentMessageIndex, {
-                  state: 'cancelled',
-                });
-              }
-
               // don't overwrite the state of cancelled messages with done when the promise resolves
+              // or the fetch was cancelled
               const currentMessage = get().messages[currentMessageIndex];
               if (currentMessage?.state === 'cancelled') return;
+              if (controller.signal.aborted) return;
 
               // set state of current message to done
               get().setMessageByIndex(currentMessageIndex, {
@@ -291,9 +289,9 @@ export const createChatStore = ({
             });
 
             promise.finally(() => {
-              if (get().abortController === controller) {
+              if (get().abort === abort) {
                 set((state) => {
-                  state.abortController = undefined;
+                  state.abort = undefined;
                 });
               }
             });
@@ -310,6 +308,9 @@ export const createChatStore = ({
         {
           name: 'markprompt',
           version: 1,
+          storage: createJSONStorage(() =>
+            persistChatHistory ? localStorage : sessionStorage,
+          ),
           // only store conversationsByProjectKey in local storage
           partialize: (state) => ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,

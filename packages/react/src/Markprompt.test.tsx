@@ -7,22 +7,29 @@ import { describe, expect, it, vi } from 'vitest';
 import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 
 describe('Markprompt', () => {
-  it('renders', () => {
+  it('renders', async () => {
     render(<Markprompt projectKey="test-key" />);
     expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
   });
 
-  it('renders a non-floating trigger', () => {
+  it('renders a non-floating trigger', async () => {
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
     expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
   });
 
-  it('renders no dialog when display = plain', () => {
+  it('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
+    const user = await userEvent.setup();
+    render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
+    await user.keyboard(`{Meta>}{Enter}{/Meta}`);
+    await expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  it('renders no dialog when display = plain', async () => {
     render(<Markprompt projectKey="test-key" display="plain" />);
     expect(screen.queryByText('Open Markprompt')).not.toBeInTheDocument();
   });
 
-  it('throws an error if no project key is provided', () => {
+  it('throws an error if no project key is provided', async () => {
     const restoreConsole = suppressErrorOutput();
 
     try {
@@ -135,6 +142,26 @@ describe('Markprompt', () => {
     await user.keyboard('{Meta>}{Enter}{/Meta}');
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+    await user.keyboard('{Meta>}{Enter}{/Meta}');
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+  });
+
+  it('switches views when props change', async () => {
+    const user = await userEvent.setup();
+    const { rerender } = render(
+      <Markprompt projectKey="test-key" prompt={{ label: 'promptinput' }} />,
+    );
+    await user.click(screen.getByText('Open Markprompt'));
+    expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
+    rerender(
+      <Markprompt
+        projectKey="test-key"
+        chat={{ enabled: true, label: 'chatinput' }}
+      />,
+    );
+    expect(screen.queryByLabelText('promptinput')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('chatinput')).toBeInTheDocument();
   });
 
   it('calls back on open', async () => {

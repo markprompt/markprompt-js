@@ -159,12 +159,12 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 search?.enabled && search.provider?.name === 'algolia'
               }
             >
-              <BaseMarkprompt.Title hide={title.hide ?? true}>
+              <BaseMarkprompt.Title hide={title.hide}>
                 {title.text}
               </BaseMarkprompt.Title>
 
               {description.text && (
-                <BaseMarkprompt.Description hide={description.hide ?? true}>
+                <BaseMarkprompt.Description hide={description.hide}>
                   {description.text}
                 </BaseMarkprompt.Description>
               )}
@@ -231,28 +231,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     search,
   } = props;
 
-  const { activeView, setActiveView, toggleActiveView } = useViews(
-    { search, chat },
-    defaultView,
-  );
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (
-        (event.key === 'Enter' && event.ctrlKey) ||
-        (event.key === 'Enter' && event.metaKey)
-      ) {
-        event.preventDefault();
-        toggleActiveView();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [toggleActiveView]);
+  const { activeView, setActiveView } = useViews({ search, chat }, defaultView);
 
   if (!search?.enabled) {
     return (
