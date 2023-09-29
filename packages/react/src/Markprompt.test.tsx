@@ -2,11 +2,15 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { suppressErrorOutput } from '@testing-library/react-hooks';
 import { userEvent } from '@testing-library/user-event';
 import React from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 
 describe('Markprompt', () => {
+  beforeEach(() => {
+    cleanup();
+  });
+
   it('renders', () => {
     render(<Markprompt projectKey="test-key" />);
     expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
@@ -121,9 +125,19 @@ describe('Markprompt', () => {
 
   it('switches views when props change', async () => {
     const user = await userEvent.setup();
-    const { debug } = render(<Markprompt projectKey="test-key" />);
+    const { rerender } = render(
+      <Markprompt projectKey="test-key" prompt={{ label: 'promptinput' }} />,
+    );
     await user.click(screen.getByText('Open Markprompt'));
-    debug();
+    expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
+    rerender(
+      <Markprompt
+        projectKey="test-key"
+        chat={{ enabled: true, label: 'chatinput' }}
+      />,
+    );
+    expect(screen.queryByLabelText('promptinput')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('chatinput')).toBeInTheDocument();
   });
 
   it('calls back on open', async () => {

@@ -1,6 +1,6 @@
 {
   "include": ["src"],
-  "references": [{ "path": "../react" }],
+  "references": [{ "path": "../react/tsconfig.build.json" }],
   "compilerOptions": {
     "composite": true,
     "module": "node16",
