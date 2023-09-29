@@ -162,6 +162,11 @@ describe('Markprompt', () => {
     );
     expect(screen.queryByLabelText('promptinput')).not.toBeInTheDocument();
     expect(screen.getByLabelText('chatinput')).toBeInTheDocument();
+    rerender(
+      <Markprompt projectKey="test-key" prompt={{ label: 'promptinput' }} />,
+    );
+    expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
+    expect(screen.queryByLabelText('chatinput')).not.toBeInTheDocument();
   });
 
   it('calls back on open', async () => {
