@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.16.3
+
+### Patch Changes
+
+- [`fcd9eba`](https://github.com/motifland/markprompt-js/commit/fcd9eba936005e1a0ea60eb3f200bd6ef7ad93a4) Thanks [@nickrttn](https://github.com/nickrttn)! - Add repository key to @markprompt/css package.json
+
 ## 0.16.2
 
 ### Patch Changes
