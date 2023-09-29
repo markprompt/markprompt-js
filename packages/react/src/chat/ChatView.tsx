@@ -1,5 +1,4 @@
-import defaults from 'defaults';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
@@ -7,6 +6,7 @@ import { Messages } from './Messages.js';
 import { ChatProvider } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { MarkpromptOptions } from '../types.js';
+import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
 export interface ChatViewProps {
@@ -30,27 +30,19 @@ export function ChatView(props: ChatViewProps): JSX.Element {
 
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone ChatView components also have defaults as expected.
-  const chatOptions = useMemo(
-    () => defaults({ ...props.chatOptions }, DEFAULT_MARKPROMPT_OPTIONS.chat),
-    [props.chatOptions],
+  const chatOptions = useDefaults(
+    { ...props.chatOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.chat,
   );
 
-  const feedbackOptions = useMemo(
-    () =>
-      defaults(
-        { ...props.feedbackOptions },
-        DEFAULT_MARKPROMPT_OPTIONS.feedback,
-      ),
-    [props.feedbackOptions],
+  const feedbackOptions = useDefaults(
+    { ...props.feedbackOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.feedback,
   );
 
-  const referencesOptions = useMemo(
-    () =>
-      defaults(
-        { ...props.referencesOptions },
-        DEFAULT_MARKPROMPT_OPTIONS.references,
-      ),
-    [props.referencesOptions],
+  const referencesOptions = useDefaults(
+    { ...props.referencesOptions },
+    DEFAULT_MARKPROMPT_OPTIONS.references,
   );
 
   return (
