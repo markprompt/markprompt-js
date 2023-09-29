@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.26.1
+
+### Patch Changes
+
+- [#199](https://github.com/motifland/markprompt-js/pull/199) [`901b8a2`](https://github.com/motifland/markprompt-js/commit/901b8a205f83698c5f79d7e3578c1764543685c4) Thanks [@nickrttn](https://github.com/nickrttn)! - Deep merge defaults, making sure keys in nested objects are also set
+
 ## 0.26.0
 
 ### Minor Changes
