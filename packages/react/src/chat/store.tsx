@@ -10,6 +10,7 @@ import React, {
   useContext,
   useRef,
   type ReactNode,
+  useEffect,
 } from 'react';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -71,6 +72,8 @@ export interface ChatStoreState {
     };
   };
   submitChat: (prompt: string) => void;
+  options?: Omit<SubmitChatOptions, 'signal'>;
+  setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => void;
   regenerateLastAnswer: () => void;
 }
 
@@ -270,7 +273,7 @@ export const createChatStore = ({
               {
                 conversationId: get().conversationId,
                 signal: controller.signal,
-                ...chatOptions,
+                ...get().options,
               },
               debug,
             );
@@ -294,6 +297,12 @@ export const createChatStore = ({
                   state.abort = undefined;
                 });
               }
+            });
+          },
+          options: chatOptions ?? {},
+          setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => {
+            set((state) => {
+              state.options = options;
             });
           },
           regenerateLastAnswer: () => {
@@ -385,6 +394,12 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
       persistChatHistory: chatOptions?.history,
     });
   }
+
+  // update chat options when they change
+  useEffect(() => {
+    if (!chatOptions) return;
+    store.current?.getState().setOptions(chatOptions);
+  }, [chatOptions]);
 
   return (
     <ChatContext.Provider value={store.current}>
