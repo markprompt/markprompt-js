@@ -1,5 +1,13 @@
 # @markprompt/react
 
+## 0.26.2
+
+### Patch Changes
+
+- [#203](https://github.com/motifland/markprompt-js/pull/203) [`736835a`](https://github.com/motifland/markprompt-js/commit/736835a9dd9d70dbaf909cf97b6a094a11d21f0d) Thanks [@nickrttn](https://github.com/nickrttn)! - Update encapsulated `submitChat` options when they change
+
+- [#205](https://github.com/motifland/markprompt-js/pull/205) [`bfb4c1b`](https://github.com/motifland/markprompt-js/commit/bfb4c1b85f76f27a0e63e4f8f12a03f11a34129f) Thanks [@nickrttn](https://github.com/nickrttn)! - Set state to cancelled when restoring pending/streaming messages
+
 ## 0.26.1
 
 ### Patch Changes
