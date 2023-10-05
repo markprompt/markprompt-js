@@ -362,7 +362,16 @@ export const createChatStore = ({
             const [conversationId, { messages }] = projectConversations[0];
 
             state.setConversationId(conversationId);
-            state.setMessages(messages);
+            state.setMessages(
+              messages.map((x) => ({
+                ...x,
+                state:
+                  // cancel any pending or streaming requests
+                  x.state === 'preload' || x.state === 'streaming-answer'
+                    ? 'cancelled'
+                    : x.state,
+              })),
+            );
           },
         },
       ),
