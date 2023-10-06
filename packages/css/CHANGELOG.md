@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.16.4
+
+### Patch Changes
+
+- [#207](https://github.com/motifland/markprompt-js/pull/207) [`e92eb8d`](https://github.com/motifland/markprompt-js/commit/e92eb8d261f965848afcca097687b14b28c50be8) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix text font weight
+
 ## 0.16.3
 
 ### Patch Changes
