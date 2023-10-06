@@ -456,6 +456,7 @@
 :where(.MarkpromptMessagePromptText) {
   font-size: var(--markprompt-text-size);
   color: var(--markprompt-foreground);
+  font-weight: 400;
 }
 
 :where(.MarkpromptPrimaryIcon) {
