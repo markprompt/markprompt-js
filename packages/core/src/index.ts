@@ -1,5 +1,8 @@
 export {
   submitChat,
+  submitChatGenerator,
+  type SubmitChatGeneratorReturn as SubmitChatGenReturn,
+  type SubmitChatGeneratorYield as SubmitChatGenYield,
   type SubmitChatOptions,
   type ChatMessage,
   DEFAULT_SUBMIT_CHAT_OPTIONS,

@@ -1,9 +1,9 @@
 import {
   isAbortError,
-  submitChat,
   type ChatMessage,
   type FileSectionReference,
-  type SubmitChatOptions,
+  submitChatGenerator,
+  type FunctionCall,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -28,11 +28,12 @@ export type ChatLoadingState =
 
 export interface ChatViewMessage {
   id: string;
+  answer?: string;
+  functionCall?: FunctionCall;
   prompt: string;
   promptId?: string;
-  answer?: string;
-  state: ChatLoadingState;
   references: FileSectionReference[];
+  state: ChatLoadingState;
 }
 
 function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
@@ -53,6 +54,8 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
     .filter(isPresent) satisfies ChatMessage[];
 }
 
+type Options = NonNullable<MarkpromptOptions['chat']>;
+
 export interface ChatStoreState {
   abort?: () => void;
   projectKey: string;
@@ -72,8 +75,8 @@ export interface ChatStoreState {
     };
   };
   submitChat: (prompt: string) => void;
-  options?: Omit<SubmitChatOptions, 'signal'>;
-  setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => void;
+  options: Options;
+  setOptions: (options: Options) => void;
   regenerateLastAnswer: () => void;
 }
 
@@ -81,7 +84,7 @@ export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: Omit<SubmitChatOptions, 'signal'>;
+  chatOptions?: Options;
 }
 
 /**
@@ -184,7 +187,7 @@ export const createChatStore = ({
               };
             });
           },
-          submitChat: (prompt: string) => {
+          submitChat: async (prompt: string) => {
             const id = crypto.randomUUID();
 
             set((state) => {
@@ -224,6 +227,7 @@ export const createChatStore = ({
                 state: 'cancelled',
               });
             };
+
             set((state) => {
               state.abort = abort;
             });
@@ -235,68 +239,65 @@ export const createChatStore = ({
               state: 'preload',
             });
 
-            const promise = submitChat(
-              apiMessages,
-              get().projectKey,
-              (chunk) => {
-                if (controller.signal.aborted) return false;
-
-                const currentMessage = get().messages[currentMessageIndex];
-                if (!currentMessage) return;
-
+            try {
+              for await (const value of submitChatGenerator(
+                apiMessages,
+                get().projectKey,
+                {
+                  conversationId: get().conversationId,
+                  signal: controller.signal,
+                  ...get().options,
+                  functions:
+                    get().options?.functions?.map(
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      ({ actual, ...definition }) => definition,
+                    ) ?? [],
+                },
+                debug,
+              )) {
                 get().setMessageByIndex(currentMessageIndex, {
-                  answer: (currentMessage.answer ?? '') + chunk,
+                  ...value,
                   state: 'streaming-answer',
                 });
-
-                return true;
-              },
-              (references) => {
-                get().setMessageByIndex(currentMessageIndex, { references });
-              },
-              (conversationId) => {
-                get().setConversationId(conversationId);
-              },
-              (promptId) => {
-                get().setMessageByIndex(currentMessageIndex, { promptId });
-              },
-              (error) => {
-                get().setMessageByIndex(currentMessageIndex, {
-                  state: 'cancelled',
-                });
-
-                if (isAbortError(error)) return;
-
-                // eslint-disable-next-line no-console
-                console.error(error);
-              },
-              {
-                conversationId: get().conversationId,
-                signal: controller.signal,
-                ...get().options,
-              },
-              debug,
-            );
-
-            promise.then(() => {
-              // don't overwrite the state of cancelled messages with done when the promise resolves
-              // or the fetch was cancelled
-              const currentMessage = get().messages[currentMessageIndex];
-              if (currentMessage?.state === 'cancelled') return;
-              if (controller.signal.aborted) return;
-
-              // set state of current message to done
-              get().setMessageByIndex(currentMessageIndex, {
-                state: 'done',
-              });
-            });
-
-            promise.finally(() => {
-              if (get().abort === abort) {
-                set((state) => {
-                  state.abort = undefined;
-                });
               }
+            } catch (error) {
+              get().setMessageByIndex(currentMessageIndex, {
+                state: 'cancelled',
+              });
+
+              if (isAbortError(error)) return;
+
+              // eslint-disable-next-line no-console
+              console.error(error);
+            }
+
+            // we're done, clear the abort controller
+            if (get().abort === abort) {
+              set((state) => {
+                state.abort = undefined;
+              });
+            }
+
+            const currentMessage = get().messages[currentMessageIndex];
+            if (currentMessage?.state === 'cancelled') return;
+            if (controller.signal.aborted) return;
+
+            // if the last message was a function call, call the function now
+            if (currentMessage.functionCall) {
+              const fn = get().options?.functions?.find(
+                (f) => f.name === currentMessage.functionCall?.name,
+              );
+              if (fn) {
+                const res = await fn.actual(
+                  currentMessage.functionCall.arguments,
+                );
+                console.log(res);
+              }
+            }
+
+            // set state of current message to done
+            get().setMessageByIndex(currentMessageIndex, {
+              state: 'done',
             });
           },
           options: chatOptions ?? {},

@@ -224,7 +224,7 @@ export async function submitChat(
   }
 }
 
-export interface SubmitChatGenYield {
+export interface SubmitChatGeneratorYield {
   answer?: string;
   conversationId?: string;
   functionCall?: FunctionCall;
@@ -232,7 +232,8 @@ export interface SubmitChatGenYield {
   references?: FileSectionReference[];
 }
 
-export type SubmitChatGenReturn = AsyncGenerator<SubmitChatGenYield>;
+export type SubmitChatGeneratorReturn =
+  AsyncGenerator<SubmitChatGeneratorYield>;
 
 /**
  * Submit a prompt to the Markprompt Chat API.
@@ -247,7 +248,7 @@ export async function* submitChatGenerator(
   projectKey: string,
   options: SubmitChatOptions = {},
   debug?: boolean,
-): SubmitChatGenReturn {
+): SubmitChatGeneratorReturn {
   if (!projectKey) {
     throw new Error('A projectKey is required.');
   }
@@ -326,12 +327,11 @@ export async function* submitChatGenerator(
 
   let answer = '';
   let done = false;
+  let value: Uint8Array | undefined;
 
   while (!done) {
     if (options.signal?.aborted) throw options.signal.reason;
-
-    const { value, done: doneReading } = await reader.read();
-    done = doneReading;
+    ({ value, done } = await reader.read());
     const chunk = decoder.decode(value);
 
     if (chunk) {
@@ -343,7 +343,5 @@ export async function* submitChatGenerator(
         yield { answer };
       }
     }
-
-    if (done) return;
   }
 }

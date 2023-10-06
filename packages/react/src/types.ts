@@ -1,6 +1,7 @@
 import {
   type AlgoliaDocSearchHit,
   type FileSectionReference,
+  type FunctionDefinition,
   type PromptFeedback,
   type SearchResult,
   type SubmitChatOptions,
@@ -52,6 +53,10 @@ export interface SearchResultComponentProps {
   heading?: string;
   title?: string;
   subtitle?: string;
+}
+
+export interface FunctionDefinitionWithFunction extends FunctionDefinition {
+  actual: (params: { [key: string]: unknown }) => Promise<unknown>;
 }
 
 export interface MarkpromptOptions {
@@ -114,7 +119,7 @@ export interface MarkpromptOptions {
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
    * Enabling chat functionality will disable prompt functionality.
    */
-  chat?: SubmitChatOptions & {
+  chat?: Omit<SubmitChatOptions, 'signal' | 'functions'> & {
     /**
      * Show a chat-like prompt input allowing for conversation-style interaction
      * rather than single question prompts.
@@ -149,11 +154,16 @@ export interface MarkpromptOptions {
      * @default true
      */
     history?: boolean;
+    /**
+     * A list of functions the model may generate JSON inputs for.
+     * @default []
+     */
+    functions?: FunctionDefinitionWithFunction[];
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: SubmitChatOptions & {
+  prompt?: Omit<SubmitChatOptions, 'signal' | 'functions'> & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
@@ -169,6 +179,11 @@ export interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * A list of functions the model may generate JSON inputs for.
+     * @default []
+     */
+    functions?: FunctionDefinitionWithFunction[];
   };
   references?: {
     /**

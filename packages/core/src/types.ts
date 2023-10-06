@@ -115,7 +115,7 @@ export interface FunctionDefinition {
 
 export interface FunctionCall {
   name: string;
-  arguments: string;
+  arguments: { [key: string]: unknown };
 }
 
 export interface ChatCompletionsJsonResponse {

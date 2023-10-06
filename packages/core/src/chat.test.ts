@@ -10,7 +10,7 @@ import {
   vi,
 } from 'vitest';
 
-import { submitChatGenerator, SubmitChatGenYield } from './chat.js';
+import { submitChatGenerator, SubmitChatGeneratorYield } from './chat.js';
 import {
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   FileSectionReference,
@@ -387,7 +387,7 @@ describe('submitChatGenerator', () => {
   });
 
   test('doesn’t make requests if the prompt is empty', async () => {
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (value of submitChatGenerator([], 'testKey')) {
@@ -399,7 +399,7 @@ describe('submitChatGenerator', () => {
   });
 
   test('calls endpoint with the default options if none are provided', async () => {
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (value of submitChatGenerator(
@@ -422,7 +422,7 @@ describe('submitChatGenerator', () => {
   test('makes a request', async () => {
     response = ['According to my calculator ', '1 + 2 = 3'];
 
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (value of submitChatGenerator(
@@ -440,7 +440,7 @@ describe('submitChatGenerator', () => {
     response = ['Internal Server Error'];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
 
     await expect(async () => {
       for await (value of submitChatGenerator(
@@ -456,7 +456,7 @@ describe('submitChatGenerator', () => {
     response = ['According to my calculator ', '1 + 2 = 3'];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
     let references: FileSectionReference[] | undefined = undefined;
     let conversationId: string | undefined;
     let promptId: string | undefined;
@@ -500,7 +500,7 @@ describe('submitChatGenerator', () => {
     response = ['According to my calculator ', '1 + 2 = 3'];
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
     let references: FileSectionReference[] | undefined = undefined;
     let conversationId: string | undefined = undefined;
     let promptId: string | undefined = undefined;
@@ -522,7 +522,7 @@ describe('submitChatGenerator', () => {
   test('logs debug info', async () => {
     response = ['According to my calculator ', '1 + 2 = 3'];
 
-    let value: SubmitChatGenYield | undefined = undefined;
+    let value: SubmitChatGeneratorYield | undefined = undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (value of submitChatGenerator(
