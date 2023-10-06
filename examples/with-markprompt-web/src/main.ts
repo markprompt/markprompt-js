@@ -7,12 +7,12 @@ const el = document.querySelector('#markprompt');
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+    open: true,
     feedback: { enabled: true },
     search: { enabled: true },
     chat: {
       enabled: true,
       apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
-      stream: false,
       functions: [
         {
           name: 'get_random_activity',
@@ -43,7 +43,7 @@ if (el && el instanceof HTMLElement) {
               participants: {
                 type: 'integer',
                 description:
-                  'Find a random activity with a given number of participants',
+                  'Find a random activity for a given number of participants',
               },
             },
           },

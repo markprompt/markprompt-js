@@ -1,3 +1,5 @@
+import type { JSONSchema7 } from 'json-schema';
+
 import type { DocSearchHit } from './docsearch.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
@@ -88,4 +90,38 @@ export interface AlgoliaDocSearchResultsResponse {
 
 export interface PromptFeedback {
   vote: '1' | '-1';
+}
+
+export interface FunctionDefinition {
+  /**
+   * The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.
+   */
+  name: string;
+  /**
+   * A description of what the function does, used by the model to choose when and how to call the function.
+   */
+  description?: string;
+  /**
+   * The parameters the functions accepts, described as a JSON Schema object. See OpenAI's [guide](https://platform.openai.com/docs/guides/gpt/function-calling) for examples, and the [JSON Schema reference](https://json-schema.org/understanding-json-schema) for documentation about the format.
+   *
+   * To describe a function that accepts no parameters, provide the value `{"type": "object", "properties": {}}`.
+   */
+  parameters: {
+    type: 'object';
+    properties: { [key: string]: JSONSchema7 };
+    required?: string[];
+  };
+}
+
+export interface FunctionCall {
+  name: string;
+  arguments: string;
+}
+
+export interface ChatCompletionsJsonResponse {
+  text: string | null;
+  functionCall: FunctionCall | null;
+  references: FileSectionReference[];
+  promptId: string;
+  conversationId: string;
 }

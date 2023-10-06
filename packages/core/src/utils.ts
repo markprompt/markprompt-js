@@ -1,4 +1,8 @@
-import type { FileSectionReference } from './types.js';
+import type {
+  ChatCompletionsJsonResponse,
+  FileSectionReference,
+  FunctionCall,
+} from './types.js';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
@@ -42,5 +46,28 @@ export function isAbortError(err: unknown): err is DOMException {
   return (
     (err instanceof DOMException && err.name === 'AbortError') ||
     (err instanceof Error && err.message.includes('AbortError'))
+  );
+}
+
+export function isJsonResponse(
+  json: unknown,
+): json is ChatCompletionsJsonResponse {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'text' in json &&
+    'functionCall' in json &&
+    'references' in json &&
+    'promptId' in json &&
+    'conversationId' in json
+  );
+}
+
+export function isFunctionCall(data: unknown): data is FunctionCall {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'name' in data &&
+    'arguments' in data
   );
 }
