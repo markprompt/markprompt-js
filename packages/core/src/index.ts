@@ -1,6 +1,5 @@
 export {
   submitChat,
-  type FunctionDefinition,
   type SubmitChatOptions,
   type ChatMessage,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
@@ -25,6 +24,8 @@ export {
   type AlgoliaDocSearchResultsResponse,
   type FileReferenceFileData,
   type FileSectionReference,
+  type FunctionCall,
+  type FunctionDefinition,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,
   type OpenAIEmbeddingsModelId,
