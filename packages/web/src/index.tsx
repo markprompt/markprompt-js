@@ -69,4 +69,5 @@ export {
   closeMarkprompt,
   type MarkpromptOptions,
   markpromptChat,
+  type ChatOptions,
 };

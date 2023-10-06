@@ -8,9 +8,9 @@ import {
 import React, {
   createContext,
   useContext,
+  useEffect,
   useRef,
   type ReactNode,
-  useEffect,
 } from 'react';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -300,7 +300,9 @@ export const createChatStore = ({
             });
           },
           options: chatOptions ?? {},
-          setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => {
+          setOptions: (
+            options: Omit<CreateChatOptions['chatOptions'], 'signal'>,
+          ) => {
             set((state) => {
               state.options = options;
             });

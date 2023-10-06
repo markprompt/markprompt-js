@@ -1,5 +1,6 @@
 export {
   submitChat,
+  type FunctionDefinition,
   type SubmitChatOptions,
   type ChatMessage,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
