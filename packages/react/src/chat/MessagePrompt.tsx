@@ -11,8 +11,9 @@ interface MessagePromptProps {
 
 export function MessagePrompt(props: MessagePromptProps): ReactElement {
   const { children, referencesOptions, state } = props;
+
   return (
-    <div className="MarkpromptMessagePrompt" data-loading-state={state}>
+    <div className="MarkpromptMessagePrompt">
       <h3 className="MarkpromptMessagePromptText">{children}</h3>
       {(state === 'preload' || state === 'streaming-answer') && (
         <div
@@ -20,6 +21,7 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
           id="markprompt-progressbar"
           role="progressbar"
           aria-labelledby="markprompt-loading-text"
+          data-loading-state={state}
         >
           <p id="markprompt-loading-text">{referencesOptions?.loadingText}</p>
         </div>

@@ -86,6 +86,8 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     return () => abortChat.current?.();
   }, [activeView]);
 
+  console.log(conversations);
+
   return (
     <BaseMarkprompt.Form className={'MarkpromptForm'} onSubmit={handleSubmit}>
       <BaseMarkprompt.Prompt

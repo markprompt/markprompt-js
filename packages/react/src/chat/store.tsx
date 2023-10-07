@@ -29,7 +29,7 @@ export type ChatLoadingState =
 export interface ChatViewMessage {
   id: string;
   answer?: string;
-  functionCall?: FunctionCall;
+  functionCall?: FunctionCall & { response?: string };
   prompt: string;
   promptId?: string;
   references: FileSectionReference[];
@@ -43,6 +43,13 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
         content: message.prompt,
         role: 'user' as const,
       },
+      message.functionCall
+        ? {
+            role: 'function' as const,
+            name: message.functionCall.name,
+            content: message.functionCall.response!,
+          }
+        : undefined,
       message.answer
         ? {
             content: message.answer,
@@ -106,6 +113,8 @@ export const createChatStore = ({
     );
   }
 
+  console.log(projectKey, persistChatHistory);
+
   return createStore<ChatStoreState>()(
     immer(
       persist(
@@ -122,6 +131,7 @@ export const createChatStore = ({
               state.conversationId = conversationId;
 
               // save the conversation id for this project, for later sessions
+              state.conversationIdsByProjectKey[projectKey] ??= [];
               state.conversationIdsByProjectKey[projectKey] = [
                 ...new Set([
                   ...state.conversationIdsByProjectKey[projectKey]!,
@@ -255,6 +265,10 @@ export const createChatStore = ({
                 },
                 debug,
               )) {
+                if (value.conversationId) {
+                  get().setConversationId(value.conversationId);
+                }
+
                 get().setMessageByIndex(currentMessageIndex, {
                   ...value,
                   state: 'streaming-answer',
@@ -291,8 +305,64 @@ export const createChatStore = ({
                 const res = await fn.actual(
                   currentMessage.functionCall.arguments,
                 );
-                console.log(res);
+
+                get().setMessageByIndex(currentMessageIndex, {
+                  ...currentMessage,
+                  functionCall: {
+                    ...currentMessage.functionCall,
+                    response: res,
+                  },
+                });
               }
+
+              const controller = new AbortController();
+
+              // get ready to do the request again
+              const apiMessages = toApiMessages(get().messages);
+
+              try {
+                for await (const value of submitChatGenerator(
+                  apiMessages,
+                  get().projectKey,
+                  {
+                    conversationId: get().conversationId,
+                    signal: controller.signal,
+                    ...get().options,
+                    functions:
+                      get().options?.functions?.map(
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        ({ actual, ...definition }) => definition,
+                      ) ?? [],
+                  },
+                  debug,
+                )) {
+                  get().setMessageByIndex(currentMessageIndex, {
+                    ...value,
+                    state: 'streaming-answer',
+                  });
+                }
+              } catch (error) {
+                get().setMessageByIndex(currentMessageIndex, {
+                  state: 'cancelled',
+                });
+
+                if (isAbortError(error)) return;
+
+                // eslint-disable-next-line no-console
+                console.error(error);
+              }
+
+              // we're done, clear the abort controller
+              if (get().abort === abort) {
+                set((state) => {
+                  state.abort = undefined;
+                });
+              }
+
+              const currentMessageWithFnCall =
+                get().messages[currentMessageIndex];
+              if (currentMessageWithFnCall?.state === 'cancelled') return;
+              if (controller.signal.aborted) return;
             }
 
             // set state of current message to done
@@ -329,7 +399,7 @@ export const createChatStore = ({
             messagesByConversationId: state.messagesByConversationId,
           }),
           // restore the last conversation for this project if it's < 4 hours old
-          onRehydrateStorage: () => (state) => {
+          onRehydrateStorage: (state) => {
             if (!state || typeof state !== 'object') return;
 
             const { conversationIdsByProjectKey, messagesByConversationId } =
@@ -433,6 +503,8 @@ export const selectProjectConversations = (
   { lastUpdated: string; messages: ChatViewMessage[] },
 ][] => {
   const projectKey = state.projectKey;
+
+  console.log(state.conversationIdsByProjectKey);
 
   const conversationIds = state.conversationIdsByProjectKey[projectKey];
   if (!conversationIds || conversationIds.length === 0) return [];

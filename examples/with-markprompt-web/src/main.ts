@@ -9,16 +9,14 @@ function get_random_activity(args: {
   key?: string;
   type?: string;
   participants?: number;
-}): Promise<{ activity: string }> {
-  console.log(args);
-
+}): Promise<string> {
   const url = new URL('https://www.boredapi.com/api/activity');
 
   Object.entries(args).forEach(([key, value]) => {
     if (value) url.searchParams.append(key, value.toString());
   });
 
-  return fetch(url).then((res) => res.json());
+  return fetch(url).then(async (res) => JSON.stringify(await res.json()));
 }
 
 if (el && el instanceof HTMLElement) {

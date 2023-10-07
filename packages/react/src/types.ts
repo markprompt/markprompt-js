@@ -56,7 +56,7 @@ export interface SearchResultComponentProps {
 }
 
 export interface FunctionDefinitionWithFunction extends FunctionDefinition {
-  actual: (params: { [key: string]: unknown }) => Promise<unknown>;
+  actual: (params: { [key: string]: unknown }) => Promise<string>;
 }
 
 export interface MarkpromptOptions {

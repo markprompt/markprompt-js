@@ -1083,14 +1083,15 @@
   animation-name: markprompt-progress;
   animation-duration: 2s;
   animation-fill-mode: none;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 9999;
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
   transition-property: opacity;
   transition-duration: 200ms;
   opacity: 0;
 }
 
-:where([data-loading-state='preload'] .MarkpromptProgress) {
+:where(.MarkpromptProgress[data-loading-state='preload']),
+:where(.MarkpromptProgress[data-loading-state='streaming-answer']) {
   opacity: 1;
 }
 
