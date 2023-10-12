@@ -6,7 +6,7 @@ import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { Reference } from '../prompt/References.js';
+import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
@@ -71,9 +71,13 @@ export function Messages(props: MessagesProps): ReactElement {
                   message.state === 'done') && (
                   <>
                     <p>{referencesOptions.heading}</p>
-                    <BaseMarkprompt.References
-                      ReferenceComponent={Reference}
+                    <References
                       references={message.references}
+                      getHref={referencesOptions?.getHref}
+                      getLabel={referencesOptions?.getLabel}
+                      loadingText={referencesOptions?.loadingText}
+                      heading={referencesOptions?.heading}
+                      state={message.state}
                     />
                   </>
                 )}
