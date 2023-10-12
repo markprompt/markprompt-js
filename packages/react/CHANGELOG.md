@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.26.3
+
+### Patch Changes
+
+- [#211](https://github.com/motifland/markprompt-js/pull/211) [`81f0c79`](https://github.com/motifland/markprompt-js/commit/81f0c79e7b0aac868a1f62588bb8503d2b01219f) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix references callbacks when chat is enabled
+
 ## 0.26.2
 
 ### Patch Changes

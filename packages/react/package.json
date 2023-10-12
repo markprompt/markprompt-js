@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/react",
-  "version": "0.26.2",
+  "version": "0.26.3",
   "description": "A headless React component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
