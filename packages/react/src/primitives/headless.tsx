@@ -387,7 +387,6 @@ const AutoScroller = memo<AutoScrollerProps>(
       perhapsScroll();
     }, [perhapsScroll, scrollTrigger]);
 
-
     useEffect(() => {
       // When discreteScrollTrigger changes (typically when a new message
       // is appended to the list of messages), reset the scroll lock, so
