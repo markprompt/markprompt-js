@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.26.5
+
+### Patch Changes
+
+- [#218](https://github.com/motifland/markprompt-js/pull/218) [`e35b0c2`](https://github.com/motifland/markprompt-js/commit/e35b0c2295ee8a053aef3085327a6bd2c6b3f0a5) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix auto-scrolling and reference heading
+
 ## 0.26.4
 
 ### Patch Changes
