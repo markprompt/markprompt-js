@@ -70,7 +70,6 @@ export function Messages(props: MessagesProps): ReactElement {
                 {(message.state === 'streaming-answer' ||
                   message.state === 'done') && (
                   <>
-                    <p>{referencesOptions.heading}</p>
                     <References
                       references={message.references}
                       getHref={referencesOptions?.getHref}
