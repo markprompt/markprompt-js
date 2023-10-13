@@ -11,6 +11,7 @@ import React, {
   type ReactElement,
   type ReactNode,
   memo,
+  useCallback,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -340,10 +341,17 @@ type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
   scrollBehavior?: ScrollBehavior;
 
   /**
-   * The element scrolls when this prop changes
+   * The element scrolls when this prop changes, unless scroll
+   * lock is enabled.
    * @default undefined
    * */
   scrollTrigger?: unknown;
+  /**
+   * The element scrolls when this prop changes, overriding
+   * scroll lock.
+   * @default number
+   * */
+  discreteScrollTrigger?: number;
 };
 /**
  * A component automatically that scrolls to the bottom.
@@ -357,20 +365,57 @@ const AutoScroller = memo<AutoScrollerProps>(
       scrollBehavior = 'smooth',
       // eslint-disable-next-line react/prop-types
       scrollTrigger,
+      // eslint-disable-next-line react/prop-types
+      discreteScrollTrigger,
       ...rest
     } = props;
     const localRef = useRef<HTMLDivElement>(null);
+    const scrollLockOn = useRef<boolean>(false);
 
-    useEffect(() => {
+    const perhapsScroll = useCallback(() => {
       if (!localRef.current) return;
       if (!autoScroll) return;
+      if (scrollLockOn.current) return;
       localRef.current.scrollTo({
         top: localRef.current.scrollHeight,
         behavior: scrollBehavior,
       });
-    }, [scrollTrigger, autoScroll, scrollBehavior]);
+    }, [autoScroll, scrollBehavior]);
 
-    return <div ref={mergeRefs([ref, localRef])} {...rest} />;
+    useEffect(() => {
+      // When scrollTrigger changes, potentially trigger scroll.
+      perhapsScroll();
+    }, [perhapsScroll, scrollTrigger]);
+
+    useEffect(() => {
+      // When discreteScrollTrigger changes (typically when a new message
+      // is appended to the list of messages), reset the scroll lock, so
+      // it can scroll down to the currently loading message.
+      scrollLockOn.current = false;
+      perhapsScroll();
+    }, [discreteScrollTrigger, perhapsScroll]);
+
+    const handleScroll = (): void => {
+      if (!localRef.current) {
+        return;
+      }
+
+      const element = localRef.current;
+
+      // Check if user has scrolled away from the bottom. Note that the
+      // autoscroll may leave a pixel of space, so we give it a 10 pixel
+      // buffer.
+      const relativeScrollHeight = element.scrollHeight - element.scrollTop;
+      if (Math.abs(relativeScrollHeight - element.clientHeight) > 10) {
+        scrollLockOn.current = true;
+      } else {
+        scrollLockOn.current = false;
+      }
+    };
+
+    return (
+      <div ref={mergeRefs([ref, localRef])} {...rest} onScroll={handleScroll} />
+    );
   }),
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';
