@@ -30,6 +30,8 @@ export function Messages(props: MessagesProps): ReactElement {
       <BaseMarkprompt.AutoScroller
         className="MarkpromptAutoScroller"
         scrollTrigger={messages}
+        discreteScrollTrigger={messages.length}
+
       >
         {messages.map((message) => (
           <section key={message.id}>
