@@ -1,4 +1,5 @@
 import type { FileSectionReference } from '@markprompt/core';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
 import React, {
   forwardRef,
@@ -17,6 +18,7 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
+import { CheckIcon, CopyIcon } from '../icons.js';
 import type {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
@@ -247,19 +249,75 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
 );
 Prompt.displayName = 'Markprompt.Prompt';
 
+// TODO: find the right type definition for children. There is a mismatch
+// between the type that react-markdown exposes, and what is actually
+// serves.
+interface CopyCodeButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children?: any;
+}
+
+function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
+  const [didCopy, setDidCopy] = React.useState(false);
+
+  const handleClick = (): void => {
+    navigator.clipboard.writeText(props.children[0]?.props.children[0]);
+    setDidCopy(true);
+    setTimeout(() => {
+      setDidCopy(false);
+    }, 2000);
+  };
+
+  return (
+    <button
+      className="MarkpromptCopyButton"
+      style={{ animationDelay: '100ms' }}
+      onClick={handleClick}
+    >
+      <AccessibleIcon label="copy">
+        {didCopy ? (
+          <CheckIcon width={16} height={16} strokeWidth={2} />
+        ) : (
+          <CopyIcon width={16} height={16} strokeWidth={2} />
+        )}
+      </AccessibleIcon>
+    </button>
+  );
+}
+CopyCodeButton.displayName = 'Markprompt.CopyCodeButton';
+
 type AnswerProps = Omit<
   ComponentPropsWithoutRef<typeof Markdown>,
   'children'
 > & {
   answer: string;
 };
+
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
   const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
   return (
-    <Markdown {...rest} remarkPlugins={remarkPlugins}>
+    <Markdown
+      {...rest}
+      remarkPlugins={remarkPlugins}
+      components={{
+        pre: (props) => {
+          const { children, className, ...rest } = props;
+          return (
+            <pre
+              {...rest}
+              style={{ position: 'relative' }}
+              className={className}
+            >
+              <CopyCodeButton>{children}</CopyCodeButton>
+              {children}
+            </pre>
+          );
+        },
+      }}
+    >
       {answer ?? ''}
     </Markdown>
   );
