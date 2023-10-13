@@ -1029,7 +1029,8 @@
   gap: 0.375rem;
 }
 
-:where(.MarkpromptPromptFeedback button), :where(.MarkpromptCopyButton) {
+:where(.MarkpromptPromptFeedback button),
+:where(.MarkpromptCopyButton) {
   cursor: pointer;
   display: flex;
   align-items: center;
