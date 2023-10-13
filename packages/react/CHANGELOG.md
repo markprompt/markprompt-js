@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.26.4
+
+### Patch Changes
+
+- [#216](https://github.com/motifland/markprompt-js/pull/216) [`b4dd9d7`](https://github.com/motifland/markprompt-js/commit/b4dd9d74f63f1437ad008197eb1edf6a17c040ae) Thanks [@michaelfester](https://github.com/michaelfester)! - Add copy code button
+
 ## 0.26.3
 
 ### Patch Changes
