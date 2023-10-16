@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.26.6
+
+### Patch Changes
+
+- [#220](https://github.com/motifland/markprompt-js/pull/220) [`d084a5e`](https://github.com/motifland/markprompt-js/commit/d084a5ef4010229a88a627c9897d0a60c6d78118) Thanks [@michaelfester](https://github.com/michaelfester)! - Scroll instantly on first open
+
 ## 0.26.5
 
 ### Patch Changes
