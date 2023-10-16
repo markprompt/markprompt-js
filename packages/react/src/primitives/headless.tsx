@@ -371,6 +371,7 @@ const AutoScroller = memo<AutoScrollerProps>(
     } = props;
     const localRef = useRef<HTMLDivElement>(null);
     const scrollLockOn = useRef<boolean>(false);
+    const didScrollOnce = useRef<boolean>(false);
 
     const perhapsScroll = useCallback(() => {
       if (!localRef.current) return;
@@ -378,8 +379,9 @@ const AutoScroller = memo<AutoScrollerProps>(
       if (scrollLockOn.current) return;
       localRef.current.scrollTo({
         top: localRef.current.scrollHeight,
-        behavior: scrollBehavior,
+        behavior: didScrollOnce.current ? scrollBehavior : 'instant',
       });
+      didScrollOnce.current = true;
     }, [autoScroll, scrollBehavior]);
 
     useEffect(() => {
