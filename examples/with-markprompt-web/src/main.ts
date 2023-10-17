@@ -12,6 +12,15 @@ if (el && el instanceof HTMLElement) {
     chat: {
       enabled: true,
       apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
+      defaultView: {
+        message: 'Welcome to Markprompt!',
+        promptsHeading: 'Popular questions',
+        prompts: [
+          'What is Markprompt?',
+          'How do I setup the React component?',
+          'Do you have a REST API?',
+        ],
+      },
     },
     defaultView: 'chat',
   } satisfies MarkpromptOptions);

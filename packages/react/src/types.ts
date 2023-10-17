@@ -12,6 +12,7 @@ import type {
   ComponentPropsWithoutRef,
   ElementType,
   PropsWithChildren,
+  ReactElement,
 } from 'react';
 
 import type { ChatViewMessage } from './index.js';
@@ -52,6 +53,12 @@ export interface SearchResultComponentProps {
   heading?: string;
   title?: string;
   subtitle?: string;
+}
+
+export interface DefaultViewProps {
+  message?: string | ReactElement;
+  promptsHeading?: string;
+  prompts?: string[];
 }
 
 export interface MarkpromptOptions {
@@ -149,6 +156,10 @@ export interface MarkpromptOptions {
      * @default true
      */
     history?: boolean;
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultViewProps;
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
@@ -169,6 +180,10 @@ export interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultViewProps;
   };
   references?: {
     /**

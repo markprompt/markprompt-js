@@ -6,24 +6,38 @@ import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
+import { DefaultView } from '../prompt/DefaultView.js';
 import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
   projectKey: string;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { feedbackOptions, referencesOptions, projectKey } = props;
+  const { feedbackOptions, referencesOptions, defaultView, projectKey } = props;
 
   const messages = useChatStore((state) => state.messages);
+  const submitChat = useChatStore((state) => state.submitChat);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
     feedbackOptions,
   });
+
+  if (!messages || messages.length === 0) {
+    return (
+      <DefaultView
+        message={defaultView?.message}
+        prompts={defaultView?.prompts}
+        promptsHeading={defaultView?.promptsHeading}
+        onDidSelectPrompt={submitChat}
+      />
+    );
+  }
 
   return (
     <div className="MarkpromptMessages">
