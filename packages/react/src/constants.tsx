@@ -172,7 +172,10 @@ const defaultGetSearchResultSubtitle = (
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'dialog',
-  showBranding: true,
+  branding: {
+    show: true,
+    type: 'plain',
+  },
   close: {
     label: 'Close Markprompt',
     visible: true,

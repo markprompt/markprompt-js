@@ -291,8 +291,17 @@ export interface MarkpromptOptions {
   /**
    * Show Markprompt branding
    * @default true
+   * @deprecated Use `branding` instead
    **/
   showBranding?: boolean;
+  /**
+   * Show Markprompt branding
+   * @default true
+   **/
+  branding?: {
+    show?: boolean;
+    type?: 'plain' | 'text';
+  };
   /**
    * Display debug info
    * @default false
