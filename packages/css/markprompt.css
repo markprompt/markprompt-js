@@ -1029,6 +1029,7 @@
   position: absolute;
   white-space: nowrap;
   width: 1px;
+  display: none;
 }
 
 :where(.MarkpromptPromptFeedback div) {
