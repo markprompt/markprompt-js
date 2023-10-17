@@ -164,6 +164,14 @@ interface MarkpromptOptions {
      * @default true
      */
     history?: boolean;
+    /**
+     * Default (empty) view
+     */
+    defaultView?:  {
+      message?: string | ReactElement;
+      promptsHeading?: string;
+      prompts?: string[];
+    };
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
@@ -184,6 +192,14 @@ interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * Default (empty) view
+     */
+    defaultView?:  {
+      message?: string | ReactElement;
+      promptsHeading?: string;
+      prompts?: string[];
+    };
   };
   references?: {
     /**
@@ -259,12 +275,16 @@ interface MarkpromptOptions {
   trigger?: {
     /**
      * `aria-label` for the open button
-     * @default "Open Markprompt"
+     * @default "Ask AI"
      **/
     label?: string;
     /**
-     * Placeholder text for non-floating element.
-     * @default "Ask docs"
+     * Label the open button
+     **/
+    buttonLabel?: string;
+    /**
+     * Placeholder text for non-floating element
+     * @default "Ask AI"
      **/
     placeholder?: string;
     /**
@@ -273,8 +293,14 @@ interface MarkpromptOptions {
      * to the `markprompt` function.
      */
     floating?: boolean;
-    /** Do you use a custom element as the dialog trigger? */
+    /**
+     * Do you use a custom element as the dialog trigger?
+     */
     customElement?: boolean;
+    /**
+     * Custom image icon source for the open button
+     */
+    iconSrc?: string;
   };
   title?: {
     /**

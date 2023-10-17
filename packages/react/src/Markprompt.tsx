@@ -128,12 +128,22 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
+              {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
               <AccessibleIcon.Root label={trigger.label!}>
-                <ChatIcon
-                  className="MarkpromptChatIcon"
-                  width="24"
-                  height="24"
-                />
+                {trigger.iconSrc ? (
+                  <img
+                    className="MarkpromptChatIcon"
+                    width="24"
+                    height="24"
+                    src={trigger.iconSrc}
+                  />
+                ) : (
+                  <ChatIcon
+                    className="MarkpromptChatIcon"
+                    width="24"
+                    height="24"
+                  />
+                )}
               </AccessibleIcon.Root>
             </BaseMarkprompt.DialogTrigger>
           ) : (

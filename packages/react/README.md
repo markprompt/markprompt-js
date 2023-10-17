@@ -91,6 +91,8 @@ The pre-built Markprompt component. It accepts the following props:
 - `chat.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `chat.placeholder` (`string`): Placeholder for the prompt input (Default:
   `Ask AI…`)
+- `chat.defaultView.message` (`string` or `ReactElement`): A message or React component to show when no conversation has been initiated.
+- `chat.defaultView.prompts` (`stringp[]`): A list of default prompts to show to give the user ideas of what to ask for.
 - `chat.apiUrl` (`string`): URL at which to fetch completions. (Default:
   `https://api.markprompt.com/v1/chat`)
 - `chat.iDontKnowMessage` (`string`): Message returned when the model does not
@@ -123,6 +125,8 @@ The pre-built Markprompt component. It accepts the following props:
 - `prompt.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `prompt.placeholder` (`string`): Placeholder for the prompt input (Default:
   `Ask AI…`)
+- `prompt.defaultView.message` (`string` or `ReactElement`): A message or React component to show when no conversation has been initiated.
+- `prompt.defaultView.prompts` (`stringp[]`): A list of default prompts to show to give the user ideas of what to ask for.
 - `prompt.apiUrl` (`string`): URL at which to fetch completions. (Default:
   `https://api.markprompt.com/v1/completions`)
 - `prompt.iDontKnowMessage` (`string`): Message returned when the model does not
@@ -177,9 +181,12 @@ The pre-built Markprompt component. It accepts the following props:
   disable rendering any trigger element. Use `openMarkprompt()` to trigger the
   Markprompt dialog. (Default: `false`)
 - `trigger.label` (`string`): `aria-label` for the open button (Default:
-  `Open Markprompt`)
+  `Ask AI`)
+- `trigger.buttonLabel` (`string`): Label for the open button (Default:
+  `Ask AI`)
 - `trigger.placeholder` (`string`): Placeholder text for non-floating element
-  (Default: `Ask docs`)
+  (Default: `Ask AI`)
+- `trigger.iconSrc` (`string`): Custom image icon source for the open button
 - `title` (`object`): Options for the title
 - `title.hide` (`boolean`): Visually hide the title (Default: `true`)
 - `title.text` (`string`): Title text (Default: `Ask AI`)

@@ -259,12 +259,16 @@ export interface MarkpromptOptions {
   trigger?: {
     /**
      * `aria-label` for the open button
-     * @default "Open Markprompt"
+     * @default "Ask AI"
      **/
     label?: string;
     /**
+     * Label for the open button
+     **/
+    buttonLabel?: string;
+    /**
      * Placeholder text for non-floating element.
-     * @default "Ask docs"
+     * @default "Ask AI"
      **/
     placeholder?: string;
     /**
@@ -275,6 +279,10 @@ export interface MarkpromptOptions {
     floating?: boolean;
     /** Do you use a custom element as the dialog trigger? */
     customElement?: boolean;
+    /**
+     * Custom image icon source for the open button
+     **/
+    iconSrc?: string;
   };
   title?: {
     /**

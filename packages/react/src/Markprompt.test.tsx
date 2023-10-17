@@ -9,12 +9,12 @@ import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 describe('Markprompt', () => {
   it('renders', async () => {
     render(<Markprompt projectKey="test-key" />);
-    expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
+    expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
 
   it('renders a non-floating trigger', async () => {
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
-    expect(screen.getByText('Open Markprompt')).toBeInTheDocument();
+    expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
 
   it('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
@@ -26,7 +26,7 @@ describe('Markprompt', () => {
 
   it('renders no dialog when display = plain', async () => {
     render(<Markprompt projectKey="test-key" display="plain" />);
-    expect(screen.queryByText('Open Markprompt')).not.toBeInTheDocument();
+    expect(screen.queryByText('Ask AI')).not.toBeInTheDocument();
   });
 
   it('throws an error if no project key is provided', async () => {
@@ -45,14 +45,14 @@ describe('Markprompt', () => {
   it('renders search view when search is enabled', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" search={{ enabled: true }} />);
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
     expect(screen.getByText('Search')).toBeInTheDocument();
   });
 
   it('renders chat view when chat is enabled', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" chat={{ enabled: true }} />);
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
     expect(screen.getByText('Chats')).toBeInTheDocument();
   });
 
@@ -65,7 +65,7 @@ describe('Markprompt', () => {
         search={{ enabled: true, tabLabel: 'searchtab' }}
       />,
     );
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
 
     // tabs are rendered
     await expect(screen.getByText('searchtab')).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe('Markprompt', () => {
       />,
     );
 
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
 
     expect(screen.getByRole('heading', { name: 'test title' })).toHaveStyle(
       'position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;',
@@ -137,7 +137,7 @@ describe('Markprompt', () => {
   it('switches views when the hotkey is pressed', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" search={{ enabled: true }} />);
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
     expect(screen.getByRole('searchbox')).toBeInTheDocument();
     await user.keyboard('{Meta>}{Enter}{/Meta}');
     expect(screen.getByRole('textbox')).toBeInTheDocument();
@@ -152,7 +152,7 @@ describe('Markprompt', () => {
     const { rerender } = render(
       <Markprompt projectKey="test-key" prompt={{ label: 'promptinput' }} />,
     );
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
     expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
     rerender(
       <Markprompt
@@ -173,7 +173,7 @@ describe('Markprompt', () => {
     const user = await userEvent.setup();
     const fn = vi.fn();
     render(<Markprompt projectKey="test-key" onDidRequestOpenChange={fn} />);
-    await user.click(screen.getByText('Open Markprompt'));
+    await user.click(screen.getByText('Ask AI'));
     expect(fn).toHaveBeenCalledTimes(1);
   });
 

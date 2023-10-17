@@ -217,8 +217,8 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     placeholder: 'Search docs…',
   },
   trigger: {
-    label: 'Open Markprompt',
-    placeholder: 'Ask docs',
+    label: 'Ask AI',
+    placeholder: 'Ask AI',
     floating: true,
     customElement: false,
   },
