@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
+import { DefaultView } from './DefaultView.js';
 import { References } from './References.js';
 import { usePrompt, type PromptLoadingState } from './usePrompt.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
@@ -132,10 +133,10 @@ export function PromptView(props: PromptViewProps): ReactElement {
         promptId={promptId}
         references={references}
         referencesOptions={referencesOptions}
+        defaultView={promptOptions.defaultView}
         state={state}
         submitFeedback={(feedback, promptId) => {
           submitFeedback(feedback, promptId);
-
           feedbackOptions.onFeedbackSubmit?.(
             feedback,
             [
@@ -151,6 +152,10 @@ export function PromptView(props: PromptViewProps): ReactElement {
             promptId,
           );
         }}
+        onDidSelectDefaultViewPrompt={(prompt: string) => {
+          setPrompt(prompt);
+          submitPrompt(prompt);
+        }}
       />
     </div>
   );
@@ -162,10 +167,12 @@ interface AnswerContainerProps {
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
+  defaultView: NonNullable<MarkpromptOptions['prompt']>['defaultView'];
   state: PromptLoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
   promptId?: string;
+  onDidSelectDefaultViewPrompt?: (prompt: string) => void;
 }
 
 function AnswerContainer(props: AnswerContainerProps): ReactElement {
@@ -179,7 +186,22 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
     referencesOptions,
     state,
     submitFeedback,
+    defaultView,
+    onDidSelectDefaultViewPrompt,
   } = props;
+
+  if ((!answer || answer.length === 0) && state === 'indeterminate') {
+    return (
+      <DefaultView
+        message={defaultView?.message}
+        prompts={defaultView?.prompts}
+        promptsHeading={defaultView?.promptsHeading}
+        onDidSelectPrompt={(prompt: string) =>
+          onDidSelectDefaultViewPrompt?.(prompt)
+        }
+      />
+    );
+  }
 
   return (
     <div className="MarkpromptAnswerContainer" data-loading-state={state}>

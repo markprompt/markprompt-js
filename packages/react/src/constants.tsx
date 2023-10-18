@@ -172,7 +172,10 @@ const defaultGetSearchResultSubtitle = (
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'dialog',
-  showBranding: true,
+  branding: {
+    show: true,
+    type: 'plain',
+  },
   close: {
     label: 'Close Markprompt',
     visible: true,
@@ -214,8 +217,8 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     placeholder: 'Search docs…',
   },
   trigger: {
-    label: 'Open Markprompt',
-    placeholder: 'Ask docs',
+    label: 'Ask AI',
+    placeholder: 'Ask AI',
     floating: true,
     customElement: false,
   },

@@ -99,7 +99,7 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
   /**
    * Show the Markprompt footer.
    */
-  showBranding?: boolean;
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
   /**
    * Show Algolia attribution in the footer.
    **/
@@ -111,12 +111,18 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
  */
 const Content = forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
-    const { showBranding = true, showAlgolia, ...rest } = props;
+    const {
+      branding = { show: true, type: 'plain' },
+      showAlgolia,
+      ...rest
+    } = props;
 
     return (
       <Dialog.Content {...rest} ref={ref}>
         {props.children}
-        {showBranding && <Footer showAlgolia={showAlgolia} />}
+        {branding.show && (
+          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
+        )}
       </Dialog.Content>
     );
   },
@@ -127,7 +133,7 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
   /**
    * Show the Markprompt footer.
    */
-  showBranding?: boolean;
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
   /**
    * Show Algolia attribution in the footer.
    **/
@@ -139,12 +145,18 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const { showBranding = true, showAlgolia, ...rest } = props;
+    const {
+      branding = { show: true, type: 'plain' },
+      showAlgolia,
+      ...rest
+    } = props;
 
     return (
       <div {...rest} ref={ref}>
         {props.children}
-        {showBranding && <Footer showAlgolia={showAlgolia} />}
+        {branding.show && (
+          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
+        )}
       </div>
     );
   },

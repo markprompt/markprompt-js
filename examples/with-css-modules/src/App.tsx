@@ -10,7 +10,7 @@ function Component(): ReactElement {
   return (
     <Markprompt.Root>
       <Markprompt.DialogTrigger
-        aria-label="Open Markprompt"
+        aria-label="Ask AI"
         className={styles.MarkpromptButton}
       >
         <ChatIcon className={styles.MarkpromptIcon} />

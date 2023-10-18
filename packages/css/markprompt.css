@@ -86,6 +86,7 @@
 
 :where(.MarkpromptFloatingTrigger) {
   display: flex;
+  align-items: center;
   cursor: pointer;
   border-radius: 99999px;
   color: var(--markprompt-primaryForeground);
@@ -95,12 +96,18 @@
   bottom: 2rem;
   right: 2rem;
   stroke-width: var(--markprompt-icon-stroke-width);
-  transition-property: opacity;
-  transition-duration: 200ms;
+  gap: 0.75rem;
+  transition: all 200ms;
 }
 
 :where(.MarkpromptFloatingTrigger:hover) {
-  opacity: 0.8;
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
+:where(.MarkpromptFloatingTrigger span) {
+  font-weight: 600;
+  margin-left: 0.25rem;
 }
 
 :where(.MarkpromptSearchBoxTrigger) {
@@ -1022,6 +1029,7 @@
   position: absolute;
   white-space: nowrap;
   width: 1px;
+  display: none;
 }
 
 :where(.MarkpromptPromptFeedback div) {
@@ -1073,8 +1081,8 @@
 
 :where(.MarkpromptCopyButton) {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 5px;
+  right: 5px;
   border: 0;
 }
 
@@ -1606,6 +1614,54 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+}
+
+:where(.MarkpromptDefaultView) {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  overflow-y: auto;
+}
+
+:where(.MarkpromptDefaultViewMessage) {
+  font-size: var(--markprompt-text-size);
+  padding: 1rem;
+  margin: 0.5rem 0 0;
+}
+
+:where(.MarkpromptDefaultViewMessagePromptsContainer) {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.25rem;
+  padding: 1rem;
+}
+
+:where(.MarkpromptDefaultViewMessagePromptsContainer h3) {
+  color: var(--markprompt-mutedForeground);
+  font-weight: 400;
+  font-size: var(--markprompt-text-size-xs);
+  padding: 0;
+  margin: 0 0 0.25rem;
+}
+
+:where(.MarkpromptDefaultViewMessagePromptsContainer a) {
+  font-size: var(--markprompt-text-size);
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--markprompt-border);
+  border-radius: 0.375rem;
+  color: var(--markprompt-primary);
+  font-weight: 500;
+  transition-property: opacity;
+  transition-duration: 200ms;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+:where(.MarkpromptDefaultViewMessagePromptsContainer a:hover) {
+  opacity: 0.8;
 }
 
 @keyframes markprompt-show-content {
