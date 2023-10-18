@@ -27,8 +27,5 @@ if (el && el instanceof HTMLElement) {
     trigger: {
       buttonLabel: 'Ask AI',
     },
-    branding: {
-      type: 'text',
-    },
   } satisfies MarkpromptOptions);
 }
