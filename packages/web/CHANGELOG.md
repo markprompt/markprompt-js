@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.20.0
+
+### Minor Changes
+
+- [#222](https://github.com/motifland/markprompt-js/pull/222) [`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2) Thanks [@michaelfester](https://github.com/michaelfester)! - Custom icon and label and default view
+
+### Patch Changes
+
+- Updated dependencies [[`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2)]:
+  - @markprompt/react@0.27.0
+
 ## 0.19.10
 
 ### Patch Changes
