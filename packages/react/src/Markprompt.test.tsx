@@ -12,11 +12,6 @@ describe('Markprompt', () => {
     expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
 
-  it('renders a non-floating trigger', async () => {
-    render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
-    expect(screen.getByText('Ask AI')).toBeInTheDocument();
-  });
-
   it('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
@@ -25,8 +20,14 @@ describe('Markprompt', () => {
   });
 
   it('renders no dialog when display = plain', async () => {
-    render(<Markprompt projectKey="test-key" display="plain" />);
-    expect(screen.queryByText('Ask AI')).not.toBeInTheDocument();
+    render(
+      <Markprompt
+        projectKey="test-key"
+        display="plain"
+        trigger={{ buttonLabel: 'Open prompt' }}
+      />,
+    );
+    expect(screen.queryByText('Open prompt')).not.toBeInTheDocument();
   });
 
   it('throws an error if no project key is provided', async () => {
