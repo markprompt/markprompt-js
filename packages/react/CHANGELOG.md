@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.27.1
+
+### Patch Changes
+
+- [#227](https://github.com/motifland/markprompt-js/pull/227) [`983d857`](https://github.com/motifland/markprompt-js/commit/983d8576d72756d8daa111252d9eda300f8097b2) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix responsive feedback icons
+
 ## 0.27.0
 
 ### Minor Changes
