@@ -319,14 +319,12 @@ function Answer(props: AnswerProps): ReactElement {
         pre: (props) => {
           const { children, className, ...rest } = props;
           return (
-            <pre
-              {...rest}
-              style={{ position: 'relative' }}
-              className={className}
-            >
+            <div style={{ position: 'relative' }}>
               <CopyCodeButton>{children}</CopyCodeButton>
-              {children}
-            </pre>
+              <pre {...rest} className={className}>
+                {children}
+              </pre>
+            </div>
           );
         },
       }}
