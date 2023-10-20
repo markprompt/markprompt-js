@@ -399,9 +399,6 @@
 }
 
 :where(.MarkpromptMessageAnswerContainer) {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: first baseline;
   max-width: 100%;
 }
 
@@ -1007,9 +1004,7 @@
 }
 
 :where(.MarkpromptPromptFeedback[data-variant='icons']) {
-  padding: 0.75rem 0;
-  margin-right: 1rem;
-  align-self: last baseline;
+  padding: 0 1.5rem 0.75rem;
 }
 
 :where(.MarkpromptPromptFeedback[data-variant='text'] h3) {
@@ -1034,7 +1029,12 @@
 
 :where(.MarkpromptPromptFeedback div) {
   display: flex;
+  flex-direction: row;
   gap: 0.375rem;
+}
+
+:where(.MarkpromptPromptFeedback[data-variant='icons'] div) {
+  justify-content: flex-end;
 }
 
 :where(.MarkpromptPromptFeedback button),

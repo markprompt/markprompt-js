@@ -26,7 +26,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
     abortFeedbackRequest,
     variant,
     promptId,
-    ...asideProps
+    ...divProps
   } = props;
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
@@ -42,7 +42,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
   }, [abortFeedbackRequest]);
 
   return (
-    <aside {...asideProps} data-variant={variant}>
+    <div {...divProps} data-variant={variant}>
       <h3>{heading}</h3>
       <div>
         <button
@@ -71,6 +71,6 @@ export function Feedback(props: FeedbackProps): ReactElement {
           )}
         </button>
       </div>
-    </aside>
+    </div>
   );
 }
