@@ -27,7 +27,8 @@ if (el && el instanceof HTMLElement) {
     chat: {
       enabled: true,
       history: true,
-      apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
+      // stream: false,
+      apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/chat`,
       functions: [
         {
           name: 'get_random_activity',

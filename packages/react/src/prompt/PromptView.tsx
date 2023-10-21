@@ -11,13 +11,13 @@ import React, {
 
 import { Answer } from './Answer.js';
 import { References } from './References.js';
-import { usePrompt, type PromptLoadingState } from './usePrompt.js';
+import { usePrompt } from './usePrompt.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { Feedback } from '../feedback/Feedback.js';
 import type { UseFeedbackResult } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { type MarkpromptOptions } from '../types.js';
+import { type LoadingState, type MarkpromptOptions } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
@@ -140,9 +140,8 @@ export function PromptView(props: PromptViewProps): ReactElement {
             feedback,
             [
               {
-                answer,
+                content: answer,
                 id: promptId!,
-                prompt,
                 promptId,
                 references,
                 state,
@@ -162,7 +161,7 @@ interface AnswerContainerProps {
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
-  state: PromptLoadingState;
+  state: LoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
   promptId?: string;

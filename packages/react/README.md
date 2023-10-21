@@ -503,7 +503,7 @@ And it returns:
   - `result.submitChat` (`function(prompt: string): void`): Submit a chat
     prompt.
   - `result.submitFeedback`
-    (`function(feedback: PromptFeedback, state: ChatLoadingState, messageIndex: number)`):
+    (`function(feedback: PromptFeedback, state: LoadingState, messageIndex: number)`):
     Submit feedback for the last answer.
 
 ### `useFeedback(options): UseFeedbackResult`
@@ -527,7 +527,7 @@ And it returns:
 - `result` (`UseFeedbackResult`)
   - `result.abort` (`function(): void`): Abort the current feedback request.
   - `result.submitFeedback`
-    (`function(feedback: PromptFeedback, state: ChatLoadingState, messageIndex: number)`):
+    (`function(feedback: PromptFeedback, state: LoadingState, messageIndex: number)`):
     Submit feedback for the last answer.
 
 ### `usePrompt(options): UsePromptResult`
@@ -577,7 +577,7 @@ And it returns:
   - `result.prompt` (`string`): The current prompt
   - `result.references` (`FileSectionReference[]`): References for the current
     prompt. Can be used to render a list of references.
-  - `result.state` (`PromptLoadingState`): The loading state of the current
+  - `result.state` (`LoadingState`): The loading state of the current
     completions request
   - `result.abort` (`function(): void`): Abort the current prompt completions
     request.
@@ -585,7 +585,7 @@ And it returns:
     request.
   - `result.setPrompt` (`function(prompt: string): void`): Set the prompt.
   - `result.submitFeedback`
-    (`function(feedback: PromptFeedback, state: PromptLoadingState)`): Submit
+    (`function(feedback: PromptFeedback, state: LoadingState)`): Submit
     feedback for the last answer.
   - `result.submitPrompt` (`function(): void`): Submit the prompt.
 

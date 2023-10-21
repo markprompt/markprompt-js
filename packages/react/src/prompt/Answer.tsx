@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import React, { type ReactElement } from 'react';
 
-import type { PromptLoadingState } from './usePrompt.js';
-import type { ChatLoadingState } from '../chat/store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
+import type { LoadingState } from '../types.js';
 
 interface CaretProps {
   answer: string;
@@ -22,7 +21,7 @@ export function Caret(props: CaretProps): ReactElement | null {
 interface AnswerProps {
   className?: string;
   answer: string;
-  state: PromptLoadingState | ChatLoadingState;
+  state?: LoadingState;
 }
 
 export function Answer(props: AnswerProps): ReactElement {

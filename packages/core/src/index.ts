@@ -1,8 +1,7 @@
 export {
-  submitChat,
   submitChatGenerator,
-  type SubmitChatGeneratorReturn as SubmitChatGenReturn,
-  type SubmitChatGeneratorYield as SubmitChatGenYield,
+  type SubmitChatReturn,
+  type SubmitChatYield,
   type SubmitChatOptions,
   type ChatMessage,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
@@ -25,9 +24,9 @@ export {
 export {
   type AlgoliaDocSearchHit,
   type AlgoliaDocSearchResultsResponse,
+  type ChatCompletionMetadata,
   type FileReferenceFileData,
   type FileSectionReference,
-  type FunctionCall,
   type FunctionDefinition,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,

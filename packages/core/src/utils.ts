@@ -1,8 +1,12 @@
 import type {
-  ChatCompletionsJsonResponse,
-  FileSectionReference,
-  FunctionCall,
-} from './types.js';
+  ChatCompletion,
+  ChatCompletionChunk,
+  ChatCompletionMessage,
+} from 'openai/resources/index.mjs';
+
+import type { ChatCompletionMetadata, FileSectionReference } from './types.js';
+
+import type {} from 'openai';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
@@ -49,25 +53,54 @@ export function isAbortError(err: unknown): err is DOMException {
   );
 }
 
-export function isJsonResponse(
+export function isMarkpromptMetadata(
   json: unknown,
-): json is ChatCompletionsJsonResponse {
+): json is ChatCompletionMetadata {
   return (
     typeof json === 'object' &&
     json !== null &&
-    'text' in json &&
-    'functionCall' in json &&
-    'references' in json &&
-    'promptId' in json &&
-    'conversationId' in json
+    (('conversationId' in json && typeof json.conversationId === 'string') ||
+      ('promptId' in json && typeof json.promptId === 'string') ||
+      ('references' in json && isFileSectionReferences(json.references)))
   );
 }
 
-export function isFunctionCall(data: unknown): data is FunctionCall {
+export function isChatCompletion(json: unknown): json is ChatCompletion {
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'name' in data &&
-    'arguments' in data
+    typeof json === 'object' &&
+    json !== null &&
+    'object' in json &&
+    json.object === 'chat.completion'
   );
 }
+
+export const isFunctionCall = (
+  json: unknown,
+): json is ChatCompletionMessage.FunctionCall => {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'name' in json &&
+    typeof json.name === 'string' &&
+    'arguments' in json &&
+    typeof json.arguments === 'string'
+  );
+};
+
+export const isFunctionCallKey = (
+  key: string,
+): key is keyof ChatCompletionMessage.FunctionCall => {
+  return ['name', 'arguments'].includes(key);
+};
+
+export const isChatCompletionChunk = (
+  json: unknown,
+): json is ChatCompletionChunk => {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'object' in json &&
+    typeof json.object === 'string' &&
+    json.object === 'chat.completion.chunk'
+  );
+};

@@ -1,9 +1,9 @@
 import type { FileSectionReference } from '@markprompt/core';
 import React, { useCallback, useMemo, type ReactElement } from 'react';
 
-import type { PromptLoadingState } from './usePrompt.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import * as Markprompt from '../primitives/headless.js';
+import type { LoadingState } from '../types.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
@@ -67,7 +67,7 @@ interface ReferencesProps {
   };
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
-  state: PromptLoadingState;
+  state: LoadingState;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -94,7 +94,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     [transformReferenceId, getHref, getLabel],
   );
 
-  let adjustedState: PromptLoadingState = state;
+  let adjustedState: LoadingState = state;
   if (state === 'done' && references.length === 0) {
     adjustedState = 'indeterminate';
   }

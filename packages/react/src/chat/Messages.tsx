@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React, { Fragment, type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
@@ -32,40 +32,45 @@ export function Messages(props: MessagesProps): ReactElement {
         scrollTrigger={messages}
       >
         {messages.map((message) => (
-          <section key={message.id}>
-            <MessagePrompt
-              state={message.state}
-              referencesOptions={referencesOptions}
-            >
-              {message.prompt}
-            </MessagePrompt>
+          <Fragment key={message.id}>
+            {message.role === 'user' && (
+              <MessagePrompt
+                state={message.state}
+                referencesOptions={referencesOptions}
+              >
+                {message.content ?? ''}
+              </MessagePrompt>
+            )}
 
-            <div className="MarkpromptMessageAnswerContainer">
-              <MessageAnswer state={message.state}>
-                {message.answer ?? ''}
-              </MessageAnswer>
+            {message.role === 'assistant' && message.content && (
+              <div className="MarkpromptMessageAnswerContainer">
+                <MessageAnswer state={message.state}>
+                  {message.content ?? ''}
+                </MessageAnswer>
 
-              {feedbackOptions?.enabled && message.state === 'done' && (
-                <Feedback
-                  variant="icons"
-                  className="MarkpromptPromptFeedback"
-                  submitFeedback={(feedback, promptId) => {
-                    submitFeedback(feedback, promptId);
-                    feedbackOptions.onFeedbackSubmit?.(
-                      feedback,
-                      messages,
-                      promptId,
-                    );
-                  }}
-                  abortFeedbackRequest={abortFeedbackRequest}
-                  promptId={message.promptId}
-                  heading={feedbackOptions.heading}
-                />
-              )}
-            </div>
+                {feedbackOptions?.enabled && message.state === 'done' && (
+                  <Feedback
+                    variant="icons"
+                    className="MarkpromptPromptFeedback"
+                    submitFeedback={(feedback, promptId) => {
+                      submitFeedback(feedback, promptId);
+                      feedbackOptions.onFeedbackSubmit?.(
+                        feedback,
+                        messages,
+                        promptId,
+                      );
+                    }}
+                    abortFeedbackRequest={abortFeedbackRequest}
+                    promptId={message.promptId}
+                    heading={feedbackOptions.heading}
+                  />
+                )}
+              </div>
+            )}
 
             {(!referencesOptions?.display ||
               referencesOptions?.display === 'end') &&
+              message.references &&
               message.references?.length > 0 && (
                 <div className="MarkpromptReferences">
                   {(message.state === 'streaming-answer' ||
@@ -80,7 +85,7 @@ export function Messages(props: MessagesProps): ReactElement {
                   )}
                 </div>
               )}
-          </section>
+          </Fragment>
         ))}
       </BaseMarkprompt.AutoScroller>
     </div>

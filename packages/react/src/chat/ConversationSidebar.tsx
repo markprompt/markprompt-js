@@ -32,9 +32,11 @@ export function ConversationSidebar(): JSX.Element {
           >
             <button onClick={() => selectConversation(conversationId)}>
               <p>
-                <strong>{messages[0]?.prompt ?? 'Unknown conversation'}</strong>
+                <strong>
+                  {messages[0]?.content ?? 'Unknown conversation'}
+                </strong>
               </p>
-              <p>{markdownToString(messages[0]?.answer, 70)}</p>
+              <p>{markdownToString(messages[1]?.content ?? '', 70)}</p>
             </button>
           </li>
         ))}

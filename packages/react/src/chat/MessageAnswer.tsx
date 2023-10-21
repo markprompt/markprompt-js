@@ -5,7 +5,7 @@ import { Answer } from '../prompt/Answer.js';
 
 interface MessageAnswerProps {
   children: string;
-  state: ChatViewMessage['state'];
+  state?: ChatViewMessage['state'];
 }
 
 export function MessageAnswer(props: MessageAnswerProps): ReactElement {

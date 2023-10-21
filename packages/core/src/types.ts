@@ -113,15 +113,8 @@ export interface FunctionDefinition {
   };
 }
 
-export interface FunctionCall {
-  name: string;
-  arguments: { [key: string]: unknown };
-}
-
-export interface ChatCompletionsJsonResponse {
-  text: string | null;
-  functionCall: FunctionCall | null;
-  references: FileSectionReference[];
-  promptId: string;
-  conversationId: string;
+export interface ChatCompletionMetadata {
+  conversationId?: string;
+  promptId?: string;
+  references?: FileSectionReference[];
 }

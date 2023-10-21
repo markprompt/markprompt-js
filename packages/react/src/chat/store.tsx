@@ -1,9 +1,8 @@
 import {
   isAbortError,
-  type ChatMessage,
-  type FileSectionReference,
   submitChatGenerator,
-  type FunctionCall,
+  type ChatMessage,
+  type SubmitChatYield,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -12,53 +11,31 @@ import React, {
   useRef,
   type ReactNode,
 } from 'react';
+import { hasPresentKey, isPresent } from 'ts-is-present';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import type { MarkpromptOptions } from '../types.js';
-import { isPresent } from '../utils.js';
+import type { LoadingState, MarkpromptOptions } from '../types.js';
 
-export type ChatLoadingState =
-  | 'indeterminate'
-  | 'preload'
-  | 'streaming-answer'
-  | 'done'
-  | 'cancelled';
-
-export interface ChatViewMessage {
+export interface ChatViewMessage
+  extends Omit<SubmitChatYield, 'conversationId'> {
   id: string;
-  answer?: string;
-  functionCall?: FunctionCall & { response?: string };
-  prompt: string;
-  promptId?: string;
-  references: FileSectionReference[];
-  state: ChatLoadingState;
+  state?: LoadingState;
+  name?: string;
 }
 
 function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
   return messages
-    .map((message) => [
-      {
-        content: message.prompt,
-        role: 'user' as const,
-      },
-      message.functionCall
-        ? {
-            role: 'function' as const,
-            name: message.functionCall.name,
-            content: message.functionCall.response!,
-          }
-        : undefined,
-      message.answer
-        ? {
-            content: message.answer,
-            role: 'assistant' as const,
-          }
-        : undefined,
-    ])
-    .flat()
-    .filter(isPresent) satisfies ChatMessage[];
+    .map(({ content, role, function_call, name }) => ({
+      role,
+      content: content ?? null,
+      ...(function_call ? { function_call } : {}),
+      ...(name ? { name } : {}),
+    }))
+    .filter(isPresent)
+    .filter(hasPresentKey('role'))
+    .filter(hasPresentKey('content'));
 }
 
 type Options = NonNullable<MarkpromptOptions['chat']>;
@@ -71,6 +48,7 @@ export interface ChatStoreState {
   selectConversation: (conversationId?: string) => void;
   messages: ChatViewMessage[];
   setMessages: (messages: ChatViewMessage[]) => void;
+  setMessageById: (id: string, next: Partial<ChatViewMessage>) => void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
   conversationIdsByProjectKey: {
     [projectKey: string]: string[];
@@ -112,8 +90,6 @@ export const createChatStore = ({
       `Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.`,
     );
   }
-
-  console.log(projectKey, persistChatHistory);
 
   return createStore<ChatStoreState>()(
     immer(
@@ -175,13 +151,31 @@ export const createChatStore = ({
               };
             });
           },
+          setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
+            set((state) => {
+              let index = state.messages.findIndex((m) => m.id === id);
+              index = index === -1 ? state.messages.length : index;
+
+              let currentMessage = state.messages[index] ?? {};
+              currentMessage = { ...currentMessage, ...next };
+              state.messages[index] = currentMessage;
+
+              const conversationId = state.conversationId;
+              if (!conversationId) return;
+
+              // save the message to local storage
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages: state.messages,
+              };
+            });
+          },
           setMessageByIndex: (
             index: number,
             next: Partial<ChatViewMessage>,
           ) => {
             set((state) => {
-              let currentMessage = state.messages[index];
-              if (!currentMessage) return;
+              let currentMessage = state.messages[index] ?? {};
 
               // update the current message
               currentMessage = { ...currentMessage, ...next };
@@ -198,42 +192,49 @@ export const createChatStore = ({
             });
           },
           submitChat: async (prompt: string) => {
-            const id = crypto.randomUUID();
+            const promptId = crypto.randomUUID();
+            const responseId = crypto.randomUUID();
 
             set((state) => {
-              state.messages.push({
-                id,
-                prompt,
-                state: 'indeterminate',
-                references: [],
-              });
+              state.messages.push(
+                // prompt from user
+                {
+                  id: promptId,
+                  role: 'user',
+                  content: prompt,
+                  state: 'indeterminate',
+                  references: [],
+                },
+                // response from assistant
+                {
+                  id: responseId,
+                  state: 'indeterminate',
+                },
+              );
             });
 
             // abort any pending or ongoing requests
             get().abort?.();
 
-            const currentMessageIndex = get().messages.length - 1;
-            const prevMessageIndex = currentMessageIndex - 1;
+            const prevMessageId = get().messages.findLast(
+              (m) =>
+                m.role === 'user' &&
+                m.state !== 'done' &&
+                m.state !== 'cancelled' &&
+                m.id !== promptId,
+            )?.id;
 
-            if (prevMessageIndex >= 0) {
-              const prevMessage = get().messages[prevMessageIndex];
-              if (
-                prevMessage &&
-                ['indeterminate', 'preload', 'streaming-answer'].includes(
-                  prevMessage.state,
-                )
-              ) {
-                get().setMessageByIndex(prevMessageIndex, {
-                  state: 'cancelled',
-                });
-              }
+            if (prevMessageId) {
+              get().setMessageById(prevMessageId, {
+                state: 'cancelled',
+              });
             }
 
             // create a new abort controller
             const controller = new AbortController();
             const abort = (): void => {
               controller.abort();
-              get().setMessageByIndex(currentMessageIndex, {
+              get().setMessageById(promptId, {
                 state: 'cancelled',
               });
             };
@@ -245,7 +246,11 @@ export const createChatStore = ({
             // get ready to do the request
             const apiMessages = toApiMessages(get().messages);
 
-            get().setMessageByIndex(currentMessageIndex, {
+            get().setMessageById(promptId, {
+              state: 'preload',
+            });
+
+            get().setMessageById(responseId, {
               state: 'preload',
             });
 
@@ -269,13 +274,21 @@ export const createChatStore = ({
                   get().setConversationId(value.conversationId);
                 }
 
-                get().setMessageByIndex(currentMessageIndex, {
-                  ...value,
+                get().setMessageById(promptId, {
                   state: 'streaming-answer',
+                });
+
+                get().setMessageById(responseId, {
+                  state: 'streaming-answer',
+                  ...value,
                 });
               }
             } catch (error) {
-              get().setMessageByIndex(currentMessageIndex, {
+              get().setMessageById(promptId, {
+                state: 'cancelled',
+              });
+
+              get().setMessageById(responseId, {
                 state: 'cancelled',
               });
 
@@ -292,81 +305,17 @@ export const createChatStore = ({
               });
             }
 
-            const currentMessage = get().messages[currentMessageIndex];
+            const currentMessage = get().messages.find(
+              (m) => m.id === promptId,
+            );
             if (currentMessage?.state === 'cancelled') return;
             if (controller.signal.aborted) return;
 
-            // if the last message was a function call, call the function now
-            if (currentMessage.functionCall) {
-              const fn = get().options?.functions?.find(
-                (f) => f.name === currentMessage.functionCall?.name,
-              );
-              if (fn) {
-                const res = await fn.actual(
-                  currentMessage.functionCall.arguments,
-                );
+            get().setMessageById(promptId, {
+              state: 'done',
+            });
 
-                get().setMessageByIndex(currentMessageIndex, {
-                  ...currentMessage,
-                  functionCall: {
-                    ...currentMessage.functionCall,
-                    response: res,
-                  },
-                });
-              }
-
-              const controller = new AbortController();
-
-              // get ready to do the request again
-              const apiMessages = toApiMessages(get().messages);
-
-              try {
-                for await (const value of submitChatGenerator(
-                  apiMessages,
-                  get().projectKey,
-                  {
-                    conversationId: get().conversationId,
-                    signal: controller.signal,
-                    ...get().options,
-                    functions:
-                      get().options?.functions?.map(
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        ({ actual, ...definition }) => definition,
-                      ) ?? [],
-                  },
-                  debug,
-                )) {
-                  get().setMessageByIndex(currentMessageIndex, {
-                    ...value,
-                    state: 'streaming-answer',
-                  });
-                }
-              } catch (error) {
-                get().setMessageByIndex(currentMessageIndex, {
-                  state: 'cancelled',
-                });
-
-                if (isAbortError(error)) return;
-
-                // eslint-disable-next-line no-console
-                console.error(error);
-              }
-
-              // we're done, clear the abort controller
-              if (get().abort === abort) {
-                set((state) => {
-                  state.abort = undefined;
-                });
-              }
-
-              const currentMessageWithFnCall =
-                get().messages[currentMessageIndex];
-              if (currentMessageWithFnCall?.state === 'cancelled') return;
-              if (controller.signal.aborted) return;
-            }
-
-            // set state of current message to done
-            get().setMessageByIndex(currentMessageIndex, {
+            get().setMessageById(responseId, {
               state: 'done',
             });
           },
@@ -379,12 +328,18 @@ export const createChatStore = ({
             });
           },
           regenerateLastAnswer: () => {
-            // eslint-disable-next-line prefer-const
-            let messages = [...get().messages];
-            const lastMessage = messages.pop();
-            if (!lastMessage) return;
-            get().setMessages(messages);
-            get().submitChat(lastMessage.prompt);
+            const messages = [...get().messages];
+
+            const lastUserMessageIndex = messages.findLastIndex(
+              (m) => m.role === 'user',
+            );
+            if (lastUserMessageIndex < 0) return;
+
+            const lastUserMessage = messages[lastUserMessageIndex];
+            if (!lastUserMessage.content) return;
+
+            get().setMessages(messages.slice(0, lastUserMessageIndex));
+            get().submitChat(lastUserMessage.content!);
           },
         }),
         {
@@ -503,8 +458,6 @@ export const selectProjectConversations = (
   { lastUpdated: string; messages: ChatViewMessage[] },
 ][] => {
   const projectKey = state.projectKey;
-
-  console.log(state.conversationIdsByProjectKey);
 
   const conversationIds = state.conversationIdsByProjectKey[projectKey];
   if (!conversationIds || conversationIds.length === 0) return [];

@@ -59,6 +59,13 @@ export interface FunctionDefinitionWithFunction extends FunctionDefinition {
   actual: (params: { [key: string]: unknown }) => Promise<string>;
 }
 
+export type LoadingState =
+  | 'indeterminate'
+  | 'preload'
+  | 'streaming-answer'
+  | 'done'
+  | 'cancelled';
+
 export interface MarkpromptOptions {
   /**
    * Display format.
