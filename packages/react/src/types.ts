@@ -57,6 +57,10 @@ export interface SearchResultComponentProps {
 
 export interface FunctionDefinitionWithFunction extends FunctionDefinition {
   actual: (params: { [key: string]: unknown }) => Promise<string>;
+  /**
+   * This text is presented to a user before the function is called, as a confirmation.
+   * Function call confirmation is opt-out, pass false to disable. */
+  confirmation?: false | string;
 }
 
 export type LoadingState =

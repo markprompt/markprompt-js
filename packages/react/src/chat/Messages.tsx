@@ -68,6 +68,13 @@ export function Messages(props: MessagesProps): ReactElement {
               </div>
             )}
 
+            {message.role === 'assistant' && message.function_call && (
+              <div>
+                I would like to perform an action for you:{' '}
+                {message.function_call.name}. Is that ok?
+              </div>
+            )}
+
             {(!referencesOptions?.display ||
               referencesOptions?.display === 'end') &&
               message.references &&

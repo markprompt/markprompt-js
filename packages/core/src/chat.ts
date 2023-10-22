@@ -71,7 +71,7 @@ export interface SubmitChatOptions {
    * that function. `"none"` is the default when no functions are present.
    * `"auto"` is the default if functions are present.
    */
-  function_call?: 'auto' | 'none' | { name: string };
+  function_call?: 'none' | 'auto' | { name: string };
   /**
    * The model temperature
    * @default 0.1
@@ -118,7 +118,6 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/chat',
   version: '2023-10-20',
   frequencyPenalty: 0,
-  functions: [],
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   maxTokens: 500,
   model: 'gpt-3.5-turbo',
