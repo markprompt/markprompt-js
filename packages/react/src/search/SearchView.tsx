@@ -17,7 +17,7 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { SearchIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import {
-  type MarkpromptOptions,
+  type SearchOptions,
   type SearchResultComponentProps,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
@@ -28,7 +28,7 @@ export interface SearchViewProps {
   debug?: boolean;
   onDidSelectResult?: () => void;
   projectKey: string;
-  searchOptions?: MarkpromptOptions['search'];
+  searchOptions?: SearchOptions;
 }
 
 interface ActiveSearchResult {

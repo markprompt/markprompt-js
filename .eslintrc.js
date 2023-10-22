@@ -70,7 +70,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/consistent-indexed-object-style': [
           'error',
-          'index-signature',
+          'record',
         ],
         '@typescript-eslint/explicit-function-return-type': [
           'error',

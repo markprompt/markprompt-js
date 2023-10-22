@@ -28,8 +28,6 @@ export {
   type FileReferenceFileData,
   type FileSectionReference,
   type FunctionDefinition,
-  type FunctionParameters,
-  type DefaultFunctionParameters,
   type OpenAIChatCompletionsModelId,
   type OpenAICompletionsModelId,
   type OpenAIEmbeddingsModelId,

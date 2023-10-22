@@ -246,7 +246,7 @@ accepts the following props:
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
 - `close.visible` (`boolean`): Show the close button (Default: `true`)
-- `feedbackOptions` (`MarkpromptOptions['feedback']`): Options for the feedback
+- `feedbackOptions` (`FeedbackOptions`): Options for the feedback
   component
 - `feedbackOptions.enabled` (`boolean`): Enable users to give feedback on prompt
   or chat answers. (Default: `true`)
@@ -254,7 +254,7 @@ accepts the following props:
   (Default: `https://api.markprompt.com/v1/feedback`)
 - `onDidSelectReference` (`function(reference: FileSectionReference): void`):
   Callback when a reference is selected
-- `referencesOptions` (`MarkpromptOptions['references']`): Options for the
+- `referencesOptions` (`ReferencesOptions`): Options for the
   references
 - `referencesOptions.getHref` (`function`): Callback to transform a reference
   into an href
@@ -308,7 +308,7 @@ It accepts the following props:
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
 - `close.visible` (`boolean`): Show the close button (Default: `true`)
-- `feedbackOptions` (`MarkpromptOptions['feedback']`): Options for the feedback
+- `feedbackOptions` (`FeedbackOptions`): Options for the feedback
   component
 - `feedbackOptions.enabled` (`boolean`): Enable users to give feedback on prompt
   or chat answers. (Default: `true`)
@@ -316,7 +316,7 @@ It accepts the following props:
   (Default: `https://api.markprompt.com/v1/feedback`)
 - `onDidSelectReference` (`function(reference: FileSectionReference): void`):
   Callback when a reference is selected
-- `referencesOptions` (`MarkpromptOptions['references']`): Options for the
+- `referencesOptions` (`ReferencesOptions`): Options for the
   references
 - `referencesOptions.getHref` (`function`): Callback to transform a reference
   into an href

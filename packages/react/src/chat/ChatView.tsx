@@ -1,7 +1,3 @@
-import type {
-  DefaultFunctionParameters,
-  FunctionParameters,
-} from '@markprompt/core';
 import React from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
@@ -17,11 +13,9 @@ import type {
 import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
-export interface ChatViewProps<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+export interface ChatViewProps {
   activeView?: View;
-  chatOptions?: ChatOptions<T>;
+  chatOptions?: ChatOptions;
   debug?: boolean;
   feedbackOptions?: FeedbackOptions;
   onDidSelectReference?: () => void;
@@ -29,9 +23,7 @@ export interface ChatViewProps<
   referencesOptions?: ReferencesOptions;
 }
 
-export function ChatView<
-  T extends FunctionParameters = DefaultFunctionParameters,
->(props: ChatViewProps<T>): JSX.Element {
+export function ChatView(props: ChatViewProps): JSX.Element {
   const { activeView, debug, projectKey } = props;
 
   if (!projectKey) {

@@ -23,7 +23,6 @@
     "@algolia/client-search": "^4.20.0",
     "defaults": "^2.0.2",
     "eventsource-parser": "^1.1.1",
-    "json-schema-to-ts": "^2.9.2",
     "openai": "^4.12.4",
     "type-fest": "^4.3.1"
   }

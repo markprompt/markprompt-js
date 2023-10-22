@@ -13,10 +13,10 @@ import {
   SearchIcon,
 } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { type MarkpromptOptions } from '../types.js';
+import { type TriggerOptions } from '../types.js';
 
 interface SearchBoxTriggerProps {
-  trigger: MarkpromptOptions['trigger'];
+  trigger: TriggerOptions;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }

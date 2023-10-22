@@ -18,16 +18,22 @@ import { Feedback } from '../feedback/Feedback.js';
 import type { UseFeedbackResult } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { type LoadingState, type MarkpromptOptions } from '../types.js';
+import {
+  type DefaultViewProps,
+  type FeedbackOptions,
+  type LoadingState,
+  type PromptOptions,
+  type ReferencesOptions,
+} from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
 export interface PromptViewProps {
   activeView?: View;
   projectKey: string;
-  promptOptions: MarkpromptOptions['prompt'];
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  referencesOptions: MarkpromptOptions['references'];
+  promptOptions?: PromptOptions;
+  feedbackOptions?: FeedbackOptions;
+  referencesOptions?: ReferencesOptions;
   onDidSelectReference?: () => void;
   debug?: boolean;
 }
@@ -159,13 +165,13 @@ export function PromptView(props: PromptViewProps): ReactElement {
 interface AnswerContainerProps {
   abortFeedbackRequest: UseFeedbackResult['abort'];
   answer: string;
-  defaultView: NonNullable<MarkpromptOptions['prompt']>['defaultView'];
-  feedbackOptions?: MarkpromptOptions['feedback'];
+  defaultView?: DefaultViewProps;
+  feedbackOptions?: FeedbackOptions;
   onDidSelectDefaultViewPrompt?: (prompt: string) => void;
   onDidSelectReference?: () => void;
   promptId?: string;
   references: FileSectionReference[];
-  referencesOptions: MarkpromptOptions['references'];
+  referencesOptions: ReferencesOptions;
   state: LoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
 }

@@ -12,10 +12,7 @@ import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import type {
-  MarkpromptOptions,
-  SearchResultComponentProps,
-} from '../types.js';
+import type { SearchOptions, SearchResultComponentProps } from '../types.js';
 import { useAbortController } from '../useAbortController.js';
 
 export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
@@ -138,7 +135,7 @@ export function useSearch({
 function searchResultsToSearchComponentProps(
   query: string,
   searchResults: SearchResult[] | AlgoliaDocSearchHit[],
-  options: MarkpromptOptions['search'],
+  options?: SearchOptions,
 ): SearchResultComponentProps[] {
   return searchResults.map((result) => {
     return {

@@ -4,15 +4,14 @@ import {
   type EventSourceParseCallback,
 } from 'eventsource-parser';
 import type {
+  ChatCompletionChunk,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
 } from 'openai/resources/index.mjs';
 
 import type {
   ChatCompletionMetadata,
-  DefaultFunctionParameters,
   FunctionDefinition,
-  FunctionParameters,
   OpenAIModelId,
 } from './types.js';
 import {
@@ -24,9 +23,7 @@ import {
   isFunctionCallKey,
 } from './utils.js';
 
-export interface SubmitChatOptions<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+export interface SubmitChatOptions {
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/chat"
@@ -67,7 +64,7 @@ export interface SubmitChatOptions<
    * A list of functions the model may generate JSON inputs for.
    * @default []
    */
-  functions?: FunctionDefinition<T>[];
+  functions?: FunctionDefinition[];
   /**
    * Controls how the model calls functions. `"none"` means the model will not
    * call a function and instead generates a message. `"auto"` means the model
@@ -160,7 +157,7 @@ export type SubmitChatReturn = AsyncGenerator<SubmitChatYield>;
  * @param [debug] - Enable debug logging
  */
 export async function* submitChatGenerator(
-  messages: ChatCompletionMessageParam[],
+  messages: ChatMessage[],
   projectKey: string,
   options: SubmitChatOptions = {},
   debug?: boolean,
@@ -222,7 +219,7 @@ export async function* submitChatGenerator(
   }
 
   const completion: SubmitChatYield = {};
-  const function_call: Partial<ChatCompletionMessage.FunctionCall> = {};
+  const function_call: ChatCompletionChunk.Choice.Delta.FunctionCall = {};
 
   let done = false;
   let value: string | undefined;

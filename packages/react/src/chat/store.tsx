@@ -3,8 +3,6 @@ import {
   submitChatGenerator,
   type ChatMessage,
   type SubmitChatYield,
-  type FunctionParameters,
-  type DefaultFunctionParameters,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -40,9 +38,9 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
     .filter(hasPresentKey('content'));
 }
 
-export interface ChatStoreState<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+type ConfigurableOptions = Omit<ChatOptions, 'signal'>;
+
+export interface ChatStoreState {
   abort?: () => void;
   projectKey: string;
   conversationId?: string;
@@ -52,28 +50,25 @@ export interface ChatStoreState<
   setMessages: (messages: ChatViewMessage[]) => void;
   setMessageById: (id: string, next: Partial<ChatViewMessage>) => void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
-  conversationIdsByProjectKey: {
-    [projectKey: string]: string[];
-  };
-  messagesByConversationId: {
-    [conversationId: string]: {
+  conversationIdsByProjectKey: Record<string, string[]>;
+  messagesByConversationId: Record<
+    string,
+    {
       lastUpdated: string;
       messages: ChatViewMessage[];
-    };
-  };
+    }
+  >;
   submitChat: (prompt: string) => void;
-  options: ChatOptions<T>;
-  setOptions: (options: ChatOptions<T>) => void;
+  options: ConfigurableOptions;
+  setOptions: (options: ConfigurableOptions) => void;
   regenerateLastAnswer: () => void;
 }
 
-export interface CreateChatOptions<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: ChatOptions<T>;
+  chatOptions?: ChatOptions;
 }
 
 /**
@@ -84,21 +79,19 @@ export interface CreateChatOptions<
  * @param persistChatHistory - Should chat history be persisted in local storage?
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createChatStore<
-  T extends FunctionParameters = DefaultFunctionParameters,
->({
+export function createChatStore({
   chatOptions,
   debug,
   persistChatHistory,
   projectKey,
-}: CreateChatOptions<T>) {
+}: CreateChatOptions) {
   if (!projectKey) {
     throw new Error(
       `Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.`,
     );
   }
 
-  return createStore<ChatStoreState<T>>()(
+  return createStore<ChatStoreState>()(
     immer(
       persist(
         (set, get) => ({
@@ -272,7 +265,7 @@ export function createChatStore<
                   functions:
                     get().options?.functions?.map(
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                      ({ actual, ...definition }) => definition,
+                      ({ actual, confirmation, ...definition }) => definition,
                     ) ?? [],
                 },
                 debug,
@@ -327,9 +320,7 @@ export function createChatStore<
             });
           },
           options: chatOptions ?? {},
-          setOptions: (
-            options: Omit<CreateChatOptions['chatOptions'], 'signal'>,
-          ) => {
+          setOptions: (options) => {
             set((state) => {
               state.options = options;
             });
@@ -414,29 +405,24 @@ export function createChatStore<
   );
 }
 
-type ChatStore<T extends FunctionParameters = DefaultFunctionParameters> =
-  ReturnType<typeof createChatStore<T>>;
+type ChatStore = ReturnType<typeof createChatStore>;
 
 export const ChatContext = createContext<ChatStore | null>(null);
 
-interface ChatProviderProps<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
-  chatOptions: ChatOptions<T>;
+interface ChatProviderProps {
+  chatOptions: ChatOptions;
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
 }
 
-export function ChatProvider<
-  T extends FunctionParameters = DefaultFunctionParameters,
->(props: ChatProviderProps<T>): JSX.Element {
+export function ChatProvider(props: ChatProviderProps): JSX.Element {
   const { chatOptions, children, debug, projectKey } = props;
 
-  const store = useRef<ChatStore<T>>();
+  const store = useRef<ChatStore>();
 
   if (!store.current) {
-    store.current = createChatStore<T>({
+    store.current = createChatStore({
       projectKey,
       chatOptions,
       debug,
@@ -457,21 +443,18 @@ export function ChatProvider<
   );
 }
 
-export function useChatStore<
-  T,
-  P extends FunctionParameters = DefaultFunctionParameters,
->(selector: (state: ChatStoreState<P>) => T): T {
+export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
   const store = useContext(ChatContext);
   if (!store) throw new Error('Missing ChatContext.Provider in the tree');
   return useStore(store, selector);
 }
 
-export const selectProjectConversations = (
+export function selectProjectConversations(
   state: ChatStoreState,
 ): [
   conversationId: string,
   { lastUpdated: string; messages: ChatViewMessage[] },
-][] => {
+][] {
   const projectKey = state.projectKey;
 
   const conversationIds = state.conversationIdsByProjectKey[projectKey];
@@ -489,4 +472,4 @@ export const selectProjectConversations = (
   if (!messagesByConversationId) return [];
 
   return messagesByConversationId;
-};
+}

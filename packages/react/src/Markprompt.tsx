@@ -1,7 +1,3 @@
-import type {
-  DefaultFunctionParameters,
-  FunctionParameters,
-} from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
@@ -28,20 +24,19 @@ import {
 import { useDefaults } from './useDefaults.js';
 import { useViews, type View } from './useViews.js';
 
-type MarkpromptProps<T extends FunctionParameters = DefaultFunctionParameters> =
-  MarkpromptOptions<T> &
-    Omit<
-      BaseMarkprompt.RootProps,
-      | 'activeView'
-      | 'children'
-      | 'open'
-      | 'onOpenChange'
-      | 'promptOptions'
-      | 'searchOptions'
-    > & {
-      projectKey: string;
-      onDidRequestOpenChange?: (open: boolean) => void;
-    };
+type MarkpromptProps = MarkpromptOptions &
+  Omit<
+    BaseMarkprompt.RootProps,
+    | 'activeView'
+    | 'children'
+    | 'open'
+    | 'onOpenChange'
+    | 'promptOptions'
+    | 'searchOptions'
+  > & {
+    projectKey: string;
+    onDidRequestOpenChange?: (open: boolean) => void;
+  };
 
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
 
@@ -61,9 +56,7 @@ function closeMarkprompt(): void {
   emitter.emit('close');
 }
 
-function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
-  props: MarkpromptProps<T>,
-): JSX.Element {
+function Markprompt(props: MarkpromptProps): JSX.Element {
   const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
 
   if (!projectKey) {
@@ -99,7 +92,7 @@ function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
       search: props.search,
       trigger: props.trigger,
       title: props.title,
-      branding: props.branding || { show: props.showBranding },
+      branding: props.branding,
       debug: props.debug,
     },
     DEFAULT_MARKPROMPT_OPTIONS,
@@ -140,7 +133,7 @@ function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
       }}
       {...dialogProps}
     >
-      {!trigger?.customElement && display === 'dialog' && (
+      {trigger && !trigger?.customElement && display === 'dialog' && (
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
@@ -179,11 +172,13 @@ function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
                 search?.enabled && search.provider?.name === 'algolia'
               }
             >
-              <BaseMarkprompt.Title hide={title.hide}>
-                {title.text}
-              </BaseMarkprompt.Title>
+              {title && (
+                <BaseMarkprompt.Title hide={title.hide}>
+                  {title.text}
+                </BaseMarkprompt.Title>
+              )}
 
-              {description.text && (
+              {description && description.text && (
                 <BaseMarkprompt.Description hide={description.hide}>
                   {description.text}
                 </BaseMarkprompt.Description>
@@ -226,23 +221,19 @@ function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
   );
 }
 
-interface MarkpromptContentProps<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+interface MarkpromptContentProps {
   projectKey: string;
-  chat?: ChatOptions<T>;
+  chat?: ChatOptions;
   close?: CloseOptions;
   debug?: boolean;
   defaultView?: DefaultView;
   feedback?: FeedbackOptions;
-  prompt?: PromptOptions<T>;
+  prompt?: PromptOptions;
   references?: ReferencesOptions;
   search?: SearchOptions;
 }
 
-function MarkpromptContent<
-  T extends FunctionParameters = DefaultFunctionParameters,
->(props: MarkpromptContentProps<T>): ReactElement {
+function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
     close,
     debug,

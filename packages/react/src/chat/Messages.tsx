@@ -8,13 +8,17 @@ import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { DefaultView } from '../prompt/DefaultView.js';
 import { References } from '../prompt/References.js';
-import type { MarkpromptOptions } from '../types.js';
+import type {
+  DefaultViewProps,
+  FeedbackOptions,
+  ReferencesOptions,
+} from '../types.js';
 
 interface MessagesProps {
-  feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
-  referencesOptions: NonNullable<MarkpromptOptions['references']>;
-  defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
+  defaultView?: DefaultViewProps;
+  feedbackOptions: FeedbackOptions;
   projectKey: string;
+  referencesOptions: ReferencesOptions;
 }
 
 export function Messages(props: MessagesProps): ReactElement {

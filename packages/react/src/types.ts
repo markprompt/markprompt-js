@@ -1,16 +1,13 @@
 import {
   type AlgoliaDocSearchHit,
-  type DefaultFunctionParameters,
   type FileSectionReference,
   type FunctionDefinition,
-  type FunctionParameters,
   type PromptFeedback,
   type SearchResult,
   type SubmitChatOptions,
   type SubmitFeedbackOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
-import type { FromSchema } from 'json-schema-to-ts';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
@@ -59,14 +56,12 @@ export interface SearchResultComponentProps {
   subtitle?: string;
 }
 
-export interface FunctionDefinitionWithFunction<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> extends FunctionDefinition<T> {
-  actual: (params: FromSchema<T>) => Promise<string>;
+export interface FunctionDefinitionWithFunction extends FunctionDefinition {
+  actual: (params: Record<string, unknown>) => Promise<string>;
   /**
    * This text is presented to a user before the function is called, as a confirmation.
    * Function call confirmation is opt-out, pass false to disable. */
-  confirmation?: false | string | ((params: FromSchema<T>) => string);
+  confirmation?: false | string | ((params: Record<string, unknown>) => string);
 }
 
 export type LoadingState =
@@ -130,9 +125,8 @@ export interface FeedbackOptions extends SubmitFeedbackOptions {
   ) => void;
 }
 
-export interface ChatOptions<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> extends Omit<SubmitChatOptions, 'signal' | 'functions'> {
+export interface ChatOptions
+  extends Omit<SubmitChatOptions, 'signal' | 'functions'> {
   /**
    * Show a chat-like prompt input allowing for conversation-style interaction
    * rather than single question prompts.
@@ -175,12 +169,11 @@ export interface ChatOptions<
    * A list of functions the model may generate JSON inputs for.
    * @default []
    */
-  functions?: FunctionDefinitionWithFunction<T>[];
+  functions?: FunctionDefinitionWithFunction[];
 }
 
-export interface PromptOptions<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> extends Omit<SubmitChatOptions, 'signal' | 'functions'> {
+export interface PromptOptions
+  extends Omit<SubmitChatOptions, 'signal' | 'functions'> {
   /**
    * Label for the prompt input
    * @default "Ask AI"
@@ -200,7 +193,7 @@ export interface PromptOptions<
    * A list of functions the model may generate JSON inputs for.
    * @default []
    */
-  functions?: FunctionDefinitionWithFunction<T>[];
+  functions?: FunctionDefinitionWithFunction[];
   /**
    * Default (empty) view
    */
@@ -336,9 +329,7 @@ export type DefaultView = 'chat' | 'prompt' | 'search';
 
 export type Display = 'plain' | 'dialog';
 
-export interface MarkpromptOptions<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+export interface MarkpromptOptions {
   /**
    * Display format.
    * @default "dialog"
@@ -357,11 +348,11 @@ export interface MarkpromptOptions<
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
    * Enabling chat functionality will disable prompt functionality.
    */
-  chat?: ChatOptions<T>;
+  chat?: ChatOptions;
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: PromptOptions<T>;
+  prompt?: PromptOptions;
   /**
    * Options for content related to a prompt's answer, displayed in prompt and chat views.
    */

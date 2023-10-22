@@ -1,5 +1,3 @@
-import type { JSONSchema7 } from 'json-schema-to-ts';
-
 import type { DocSearchHit } from './docsearch.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
@@ -92,21 +90,7 @@ export interface PromptFeedback {
   vote: '1' | '-1';
 }
 
-export interface FunctionParameters {
-  type: 'object';
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-  properties: Record<string, JSONSchema7>;
-}
-
-export interface DefaultFunctionParameters {
-  type: 'object';
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-  properties: Record<string, never>;
-}
-
-export interface FunctionDefinition<
-  T extends FunctionParameters = DefaultFunctionParameters,
-> {
+export interface FunctionDefinition {
   /**
    * The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.
    */
@@ -116,11 +100,16 @@ export interface FunctionDefinition<
    */
   description?: string;
   /**
-   * The parameters the functions accepts, described as a JSON Schema object. See OpenAI's [guide](https://platform.openai.com/docs/guides/gpt/function-calling) for examples, and the [JSON Schema reference](https://json-schema.org/understanding-json-schema) for documentation about the format.
+   * The parameters the functions accepts, described as a JSON Schema object. See OpenAI's
+   * [guide](https://platform.openai.com/docs/guides/gpt/function-calling) for
+   * examples, and the
+   * [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for
+   * documentation about the format.
    *
-   * To describe a function that accepts no parameters, provide the value `{"type": "object", "properties": {}}`.
+   * To describe a function that accepts no parameters, provide the value
+   * `{"type": "object", "properties": {}}`.
    */
-  parameters: T;
+  parameters: Record<string, unknown>;
 }
 
 export interface ChatCompletionMetadata {

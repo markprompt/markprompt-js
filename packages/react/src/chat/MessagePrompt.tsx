@@ -1,12 +1,12 @@
 import React, { type ReactElement } from 'react';
 
 import { type ChatViewMessage } from './store.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { ReferencesOptions } from '../types.js';
 
 interface MessagePromptProps {
   children: string;
   state: ChatViewMessage['state'];
-  referencesOptions?: MarkpromptOptions['references'];
+  referencesOptions?: ReferencesOptions;
 }
 
 export function MessagePrompt(props: MessagePromptProps): ReactElement {
