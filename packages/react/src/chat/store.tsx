@@ -58,6 +58,9 @@ export interface ChatStoreState {
       messages: ChatViewMessage[];
     }
   >;
+  submitFunctionCall: (
+    functionCall: NonNullable<ChatViewMessage['function_call']>,
+  ) => void;
   submitChat: (prompt: string) => void;
   options: ConfigurableOptions;
   setOptions: (options: ConfigurableOptions) => void;
@@ -318,6 +321,41 @@ export function createChatStore({
             get().setMessageById(responseId, {
               state: 'done',
             });
+          },
+          submitFunctionCall: async (functionCall) => {
+            const functionCallId = crypto.randomUUID();
+            const responseId = crypto.randomUUID();
+
+            set((state) => {
+              state.messages.push(
+                // prompt from user
+                {
+                  id: functionCallId,
+                  role: 'function',
+                  content: null,
+                  state: 'indeterminate',
+                  references: [],
+                },
+                // response from assistant
+                {
+                  id: responseId,
+                  state: 'indeterminate',
+                },
+              );
+            });
+
+            // call the function
+            const fn = get().options.functions?.find(
+              (f) => f.name === functionCall.name,
+            );
+
+            if (!fn) {
+              // no function could be found, how to handle?
+            }
+
+            const response = await fn?.actual(
+              JSON.parse(functionCall.arguments),
+            );
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
