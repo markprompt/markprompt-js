@@ -452,7 +452,7 @@
   margin-bottom: 0.5rem;
 }
 
-:where(.MarkpromptAutoScroller section:first-of-type .MarkpromptMessagePrompt) {
+:where(.MarkpromptAutoScroller .MarkpromptMessagePrompt:first-of-type) {
   border-top: none;
   margin-top: 0;
 }

@@ -1,8 +1,14 @@
-import React, { Fragment, type ReactElement } from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  type ReactElement,
+  useMemo,
+  useState,
+} from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
-import { useChatStore } from './store.js';
+import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -88,10 +94,7 @@ export function Messages(props: MessagesProps): ReactElement {
             )}
 
             {message.role === 'assistant' && message.function_call && (
-              <div>
-                I would like to perform an action for you:{' '}
-                {message.function_call.name}. Is that ok?
-              </div>
+              <FunctionCall functionCall={message.function_call} />
             )}
 
             {(!referencesOptions?.display ||
@@ -115,6 +118,50 @@ export function Messages(props: MessagesProps): ReactElement {
           </Fragment>
         ))}
       </BaseMarkprompt.AutoScroller>
+    </div>
+  );
+}
+
+interface FunctionCallProps {
+  functionCall: NonNullable<ChatViewMessage['function_call']>;
+}
+
+function FunctionCall(props: FunctionCallProps) {
+  const { functionCall } = props;
+
+  const functions = useChatStore((state) => state.options.functions);
+
+  const [confirmed, setConfirmed] = useState(false);
+
+  const hasConfirmationRequirement = useCallback(
+    (name: string) => {
+      return Boolean(functions?.find((f) => f.name === name)?.confirmation);
+    },
+    [functions],
+  );
+
+  const confirmation = useMemo(() => {
+    const confirmation = functions?.find((f) => f.name === functionCall.name)
+      ?.confirmation;
+
+    if (!confirmation) return null;
+
+    if (typeof confirmation === 'function') {
+      return confirmation(JSON.parse(functionCall.arguments));
+    }
+
+    return confirmation;
+  }, [functionCall, functions]);
+
+  if (!hasConfirmationRequirement || confirmed) {
+    return null;
+  }
+
+  return (
+    <div style={{ paddingInline: '1.5rem', paddingBottom: '2.5rem' }}>
+      <p>{confirmation}</p>
+      <button onClick={() => setConfirmed(true)}>Confirm</button>
+      <button onClick={() => setConfirmed(false)}>Cancel</button>
     </div>
   );
 }

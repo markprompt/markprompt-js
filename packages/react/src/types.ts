@@ -14,6 +14,7 @@ import type {
   ElementType,
   PropsWithChildren,
   ReactElement,
+  ReactNode,
 } from 'react';
 
 import type { ChatViewMessage } from './index.js';
@@ -61,7 +62,10 @@ export interface FunctionDefinitionWithFunction extends FunctionDefinition {
   /**
    * This text is presented to a user before the function is called, as a confirmation.
    * Function call confirmation is opt-out, pass false to disable. */
-  confirmation?: false | string | ((params: Record<string, unknown>) => string);
+  confirmation?:
+    | false
+    | ReactNode
+    | ((params: Record<string, unknown>) => ReactNode);
 }
 
 export type LoadingState =

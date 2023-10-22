@@ -1,6 +1,5 @@
 import '@markprompt/css';
 import './style.css';
-
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';
 
 const el = document.querySelector('#markprompt');
@@ -35,6 +34,14 @@ if (el && el instanceof HTMLElement) {
           actual: get_random_activity,
           description:
             "Finds you something to do when you're bored, get a random activity",
+          confirmation: (args) => {
+            const { key, type, participants } = args;
+            return `Are you sure you want me to find you something to do${
+              key ? ` with key ${key}` : ''
+            }${type ? ` of type ${type}` : ''}${
+              participants ? ` for ${participants} participants` : ''
+            }?`;
+          },
           parameters: {
             type: 'object',
             properties: {
@@ -63,7 +70,7 @@ if (el && el instanceof HTMLElement) {
                   'Find a random activity for a given number of participants',
               },
             },
-          } as const,
+          },
         },
       ],
       defaultView: {
