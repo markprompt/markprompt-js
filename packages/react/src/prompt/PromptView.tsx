@@ -4,9 +4,9 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  type ChangeEventHandler,
-  type FormEventHandler,
   type ReactElement,
+  useState,
+  type FormEvent,
 } from 'react';
 
 import { Answer } from './Answer.js';
@@ -35,6 +35,8 @@ export interface PromptViewProps {
 export function PromptView(props: PromptViewProps): ReactElement {
   const { activeView, onDidSelectReference, debug, projectKey } = props;
 
+  const [prompt, setPrompt] = useState('');
+
   // we are also merging defaults in the Markprompt component, but this makes sure
   // that standalone PromptView components also have defaults as expected.
   const promptOptions = useDefaults(
@@ -56,8 +58,6 @@ export function PromptView(props: PromptViewProps): ReactElement {
     abort,
     answer,
     submitPrompt,
-    setPrompt,
-    prompt,
     promptId,
     state,
     references,
@@ -82,17 +82,13 @@ export function PromptView(props: PromptViewProps): ReactElement {
     inputRef.current?.focus();
   }, [activeView]);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      setPrompt(event.target.value);
-    },
-    [setPrompt],
-  );
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      submitPrompt();
+      const data = new FormData(event.currentTarget);
+      const prompt = data.get('markprompt-prompt');
+      if (typeof prompt !== 'string') return;
+      submitPrompt(prompt);
     },
     [submitPrompt],
   );
@@ -104,9 +100,9 @@ export function PromptView(props: PromptViewProps): ReactElement {
           ref={inputRef}
           className="MarkpromptPrompt"
           name="markprompt-prompt"
-          onChange={handleChange}
-          value={prompt}
           type="text"
+          value={prompt}
+          onChange={(event) => setPrompt(event.target.value)}
           placeholder={
             promptOptions?.placeholder ??
             DEFAULT_MARKPROMPT_OPTIONS.prompt!.placeholder!

@@ -1,3 +1,7 @@
+import type {
+  DefaultFunctionParameters,
+  FunctionParameters,
+} from '@markprompt/core';
 import {
   Markprompt,
   openMarkprompt,
@@ -28,10 +32,10 @@ let root: Root;
  * @param container The element or selector to render Markprompt into
  * @param options Options for customizing Markprompt
  */
-function markprompt(
+function markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
   projectKey: string,
   container: HTMLElement | string,
-  options?: MarkpromptOptions,
+  options?: MarkpromptOptions<T>,
 ): void {
   if (!root) root = createRoot(getHTMLElement(container));
   root.render(<Markprompt projectKey={projectKey} {...options} />);
@@ -39,7 +43,8 @@ function markprompt(
 
 let chatRoot: Root;
 
-type ChatOptions = Omit<ChatViewProps, 'activeView' | 'projectKey'>;
+type ChatOptions<T extends FunctionParameters = DefaultFunctionParameters> =
+  Omit<ChatViewProps<T>, 'activeView' | 'projectKey'>;
 
 /**
  * Render the Markprompt chat view.
@@ -48,10 +53,12 @@ type ChatOptions = Omit<ChatViewProps, 'activeView' | 'projectKey'>;
  * @param container The element or selector to render the chat view into
  * @param options Options for customizing the chat view
  */
-function markpromptChat(
+function markpromptChat<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>(
   projectKey: string,
   container: HTMLElement | string,
-  options?: ChatOptions,
+  options?: ChatOptions<T>,
 ): void {
   if (!chatRoot) chatRoot = createRoot(getHTMLElement(container));
   chatRoot.render(

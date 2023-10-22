@@ -1,3 +1,7 @@
+import type {
+  DefaultFunctionParameters,
+  FunctionParameters,
+} from '@markprompt/core';
 import React from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
@@ -5,21 +9,29 @@ import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
 import { ChatProvider } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import type { MarkpromptOptions } from '../types.js';
+import type {
+  ChatOptions,
+  FeedbackOptions,
+  ReferencesOptions,
+} from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
 
-export interface ChatViewProps {
+export interface ChatViewProps<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   activeView?: View;
-  chatOptions?: MarkpromptOptions['chat'];
+  chatOptions?: ChatOptions<T>;
   debug?: boolean;
-  feedbackOptions?: MarkpromptOptions['feedback'];
+  feedbackOptions?: FeedbackOptions;
   onDidSelectReference?: () => void;
   projectKey: string;
-  referencesOptions?: MarkpromptOptions['references'];
+  referencesOptions?: ReferencesOptions;
 }
 
-export function ChatView(props: ChatViewProps): JSX.Element {
+export function ChatView<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>(props: ChatViewProps<T>): JSX.Element {
   const { activeView, debug, projectKey } = props;
 
   if (!projectKey) {

@@ -1,3 +1,7 @@
+import type {
+  DefaultFunctionParameters,
+  FunctionParameters,
+} from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import React, {
   useCallback,
@@ -18,27 +22,31 @@ import {
 } from './store.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { ChatOptions } from '../types.js';
 import type { View } from '../useViews.js';
 
-interface ChatViewFormProps {
+interface ChatViewFormProps<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   activeView?: View;
-  chatOptions: MarkpromptOptions['chat'];
+  chatOptions: ChatOptions<T>;
 }
 
-export function ChatViewForm(props: ChatViewFormProps): ReactElement {
+export function ChatViewForm<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>(props: ChatViewFormProps<T>): ReactElement {
   const { activeView, chatOptions } = props;
 
   const [prompt, setPrompt] = useState('');
 
-  const submitChat = useChatStore((state) => state.submitChat);
-  const lastMessageState = useChatStore(
+  const submitChat = useChatStore<T>((state) => state.submitChat);
+  const lastMessageState = useChatStore<T>(
     (state) => state.messages[state.messages.length - 1]?.state,
   );
-  const regenerateLastAnswer = useChatStore(
+  const regenerateLastAnswer = useChatStore<T>(
     (state) => state.regenerateLastAnswer,
   );
-  const conversations = useChatStore(selectProjectConversations);
+  const conversations = useChatStore<T>(selectProjectConversations);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {

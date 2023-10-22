@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema-to-ts';
 
 import type { DocSearchHit } from './docsearch.js';
 
@@ -92,7 +92,21 @@ export interface PromptFeedback {
   vote: '1' | '-1';
 }
 
-export interface FunctionDefinition {
+export interface FunctionParameters {
+  type: 'object';
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  properties: Record<string, JSONSchema7>;
+}
+
+export interface DefaultFunctionParameters {
+  type: 'object';
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  properties: Record<string, never>;
+}
+
+export interface FunctionDefinition<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   /**
    * The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.
    */
@@ -106,11 +120,7 @@ export interface FunctionDefinition {
    *
    * To describe a function that accepts no parameters, provide the value `{"type": "object", "properties": {}}`.
    */
-  parameters: {
-    type: 'object';
-    properties: { [key: string]: JSONSchema7 };
-    required?: string[];
-  };
+  parameters: T;
 }
 
 export interface ChatCompletionMetadata {

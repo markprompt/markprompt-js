@@ -27,12 +27,10 @@ export interface UsePromptOptions {
 
 export interface UsePromptResult {
   answer: string;
-  prompt: string;
   promptId?: string;
   references: FileSectionReference[];
   state: LoadingState;
   abort: () => void;
-  setPrompt: (prompt: string) => void;
   submitPrompt: (forcePrompt?: string) => void;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
@@ -53,7 +51,6 @@ export function usePrompt({
   const [state, setState] = useState<LoadingState>('indeterminate');
   const [answer, setAnswer] = useState('');
   const [references, setReferences] = useState<FileSectionReference[]>([]);
-  const [prompt, setPrompt] = useState<string>('');
   const [promptId, setPromptId] = useState<string>();
 
   const { ref: controllerRef, abort } = useAbortController();
@@ -69,11 +66,10 @@ export function usePrompt({
   }, [abort]);
 
   const submitPrompt = useCallback(
-    async (forcePrompt?: string) => {
+    async (prompt?: string) => {
       abort();
 
-      const _prompt = forcePrompt ?? prompt;
-      if (!_prompt || _prompt === '') return;
+      if (!prompt || prompt === '') return;
 
       setAnswer('');
       setReferences([]);
@@ -85,7 +81,7 @@ export function usePrompt({
 
       try {
         for await (const value of submitChatGenerator(
-          [{ content: _prompt, role: 'user' }],
+          [{ content: prompt, role: 'user' }],
           projectKey,
           { ...promptOptions, signal: controller.signal },
           debug,
@@ -120,25 +116,22 @@ export function usePrompt({
       setState('done');
       controllerRef.current = undefined;
     },
-    [abort, controllerRef, debug, projectKey, prompt, promptOptions],
+    [abort, controllerRef, debug, projectKey, promptOptions],
   );
 
   return useMemo(
     () => ({
       answer,
-      prompt,
       promptId,
       references,
       state,
       abort,
       abortFeedbackRequest,
-      setPrompt,
       submitFeedback,
       submitPrompt,
     }),
     [
       answer,
-      prompt,
       promptId,
       references,
       state,

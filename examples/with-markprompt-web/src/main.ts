@@ -63,7 +63,7 @@ if (el && el instanceof HTMLElement) {
                   'Find a random activity for a given number of participants',
               },
             },
-          },
+          } as const,
         },
       ],
       defaultView: {

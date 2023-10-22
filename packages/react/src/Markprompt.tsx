@@ -1,3 +1,7 @@
+import type {
+  DefaultFunctionParameters,
+  FunctionParameters,
+} from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
@@ -11,23 +15,33 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
-import { type MarkpromptOptions } from './types.js';
+import {
+  type ChatOptions,
+  type CloseOptions,
+  type DefaultView,
+  type FeedbackOptions,
+  type MarkpromptOptions,
+  type PromptOptions,
+  type ReferencesOptions,
+  type SearchOptions,
+} from './types.js';
 import { useDefaults } from './useDefaults.js';
 import { useViews, type View } from './useViews.js';
 
-type MarkpromptProps = MarkpromptOptions &
-  Omit<
-    BaseMarkprompt.RootProps,
-    | 'activeView'
-    | 'children'
-    | 'open'
-    | 'onOpenChange'
-    | 'promptOptions'
-    | 'searchOptions'
-  > & {
-    projectKey: string;
-    onDidRequestOpenChange?: (open: boolean) => void;
-  };
+type MarkpromptProps<T extends FunctionParameters = DefaultFunctionParameters> =
+  MarkpromptOptions<T> &
+    Omit<
+      BaseMarkprompt.RootProps,
+      | 'activeView'
+      | 'children'
+      | 'open'
+      | 'onOpenChange'
+      | 'promptOptions'
+      | 'searchOptions'
+    > & {
+      projectKey: string;
+      onDidRequestOpenChange?: (open: boolean) => void;
+    };
 
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
 
@@ -47,7 +61,9 @@ function closeMarkprompt(): void {
   emitter.emit('close');
 }
 
-function Markprompt(props: MarkpromptProps): JSX.Element {
+function Markprompt<T extends FunctionParameters = DefaultFunctionParameters>(
+  props: MarkpromptProps<T>,
+): JSX.Element {
   const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
 
   if (!projectKey) {
@@ -210,19 +226,23 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 }
 
-interface MarkpromptContentProps {
+interface MarkpromptContentProps<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   projectKey: string;
-  chat?: MarkpromptOptions['chat'];
-  close?: MarkpromptOptions['close'];
+  chat?: ChatOptions<T>;
+  close?: CloseOptions;
   debug?: boolean;
-  defaultView?: MarkpromptOptions['defaultView'];
-  feedback?: MarkpromptOptions['feedback'];
-  prompt?: MarkpromptOptions['prompt'];
-  references?: MarkpromptOptions['references'];
-  search?: MarkpromptOptions['search'];
+  defaultView?: DefaultView;
+  feedback?: FeedbackOptions;
+  prompt?: PromptOptions<T>;
+  references?: ReferencesOptions;
+  search?: SearchOptions;
 }
 
-function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
+function MarkpromptContent<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>(props: MarkpromptContentProps<T>): ReactElement {
   const {
     close,
     debug,
@@ -235,7 +255,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     search,
   } = props;
 
-  const { activeView, setActiveView } = useViews({ search, chat }, defaultView);
+  const { activeView, setActiveView } = useViews(
+    { search: search?.enabled, chat: chat?.enabled },
+    defaultView,
+  );
 
   if (!search?.enabled) {
     return (

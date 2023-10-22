@@ -3,6 +3,8 @@ import {
   submitChatGenerator,
   type ChatMessage,
   type SubmitChatYield,
+  type FunctionParameters,
+  type DefaultFunctionParameters,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -16,7 +18,7 @@ import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import type { LoadingState, MarkpromptOptions } from '../types.js';
+import type { ChatOptions, LoadingState } from '../types.js';
 
 export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
@@ -38,9 +40,9 @@ function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
     .filter(hasPresentKey('content'));
 }
 
-type Options = NonNullable<MarkpromptOptions['chat']>;
-
-export interface ChatStoreState {
+export interface ChatStoreState<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   abort?: () => void;
   projectKey: string;
   conversationId?: string;
@@ -60,16 +62,18 @@ export interface ChatStoreState {
     };
   };
   submitChat: (prompt: string) => void;
-  options: Options;
-  setOptions: (options: Options) => void;
+  options: ChatOptions<T>;
+  setOptions: (options: ChatOptions<T>) => void;
   regenerateLastAnswer: () => void;
 }
 
-export interface CreateChatOptions {
+export interface CreateChatOptions<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: Options;
+  chatOptions?: ChatOptions<T>;
 }
 
 /**
@@ -79,19 +83,22 @@ export interface CreateChatOptions {
  * @param projectKey - Markprompt project key
  * @param persistChatHistory - Should chat history be persisted in local storage?
  */
-export const createChatStore = ({
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function createChatStore<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>({
   chatOptions,
   debug,
   persistChatHistory,
-  projectKey, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-}: CreateChatOptions) => {
+  projectKey,
+}: CreateChatOptions<T>) {
   if (!projectKey) {
     throw new Error(
       `Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.`,
     );
   }
 
-  return createStore<ChatStoreState>()(
+  return createStore<ChatStoreState<T>>()(
     immer(
       persist(
         (set, get) => ({
@@ -405,26 +412,31 @@ export const createChatStore = ({
       ),
     ),
   );
-};
+}
 
-type ChatStore = ReturnType<typeof createChatStore>;
+type ChatStore<T extends FunctionParameters = DefaultFunctionParameters> =
+  ReturnType<typeof createChatStore<T>>;
 
 export const ChatContext = createContext<ChatStore | null>(null);
 
-interface ChatProviderProps {
-  chatOptions: MarkpromptOptions['chat'];
+interface ChatProviderProps<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
+  chatOptions: ChatOptions<T>;
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
 }
 
-export function ChatProvider(props: ChatProviderProps): JSX.Element {
+export function ChatProvider<
+  T extends FunctionParameters = DefaultFunctionParameters,
+>(props: ChatProviderProps<T>): JSX.Element {
   const { chatOptions, children, debug, projectKey } = props;
 
-  const store = useRef<ChatStore>();
+  const store = useRef<ChatStore<T>>();
 
   if (!store.current) {
-    store.current = createChatStore({
+    store.current = createChatStore<T>({
       projectKey,
       chatOptions,
       debug,
@@ -445,7 +457,10 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
   );
 }
 
-export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
+export function useChatStore<
+  T,
+  P extends FunctionParameters = DefaultFunctionParameters,
+>(selector: (state: ChatStoreState<P>) => T): T {
   const store = useContext(ChatContext);
   if (!store) throw new Error('Missing ChatContext.Provider in the tree');
   return useStore(store, selector);

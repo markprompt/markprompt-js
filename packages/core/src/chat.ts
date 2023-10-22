@@ -10,7 +10,9 @@ import type {
 
 import type {
   ChatCompletionMetadata,
+  DefaultFunctionParameters,
   FunctionDefinition,
+  FunctionParameters,
   OpenAIModelId,
 } from './types.js';
 import {
@@ -22,13 +24,16 @@ import {
   isFunctionCallKey,
 } from './utils.js';
 
-export interface SubmitChatOptions {
+export interface SubmitChatOptions<
+  T extends FunctionParameters = DefaultFunctionParameters,
+> {
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/v1/chat"
    * */
   apiUrl?: string;
-  /** API version
+  /**
+   * API version
    * @default "2023-10-20"
    */
   version?: '2023-10-20';
@@ -62,7 +67,7 @@ export interface SubmitChatOptions {
    * A list of functions the model may generate JSON inputs for.
    * @default []
    */
-  functions?: FunctionDefinition[];
+  functions?: FunctionDefinition<T>[];
   /**
    * Controls how the model calls functions. `"none"` means the model will not
    * call a function and instead generates a message. `"auto"` means the model
