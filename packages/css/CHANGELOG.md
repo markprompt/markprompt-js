@@ -1,5 +1,23 @@
 # @markprompt/css
 
+## 0.17.1
+
+### Patch Changes
+
+- [#227](https://github.com/motifland/markprompt-js/pull/227) [`983d857`](https://github.com/motifland/markprompt-js/commit/983d8576d72756d8daa111252d9eda300f8097b2) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix responsive feedback icons
+
+## 0.17.0
+
+### Minor Changes
+
+- [#222](https://github.com/motifland/markprompt-js/pull/222) [`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2) Thanks [@michaelfester](https://github.com/michaelfester)! - Custom icon and label and default view
+
+## 0.16.5
+
+### Patch Changes
+
+- [#216](https://github.com/motifland/markprompt-js/pull/216) [`b4dd9d7`](https://github.com/motifland/markprompt-js/commit/b4dd9d74f63f1437ad008197eb1edf6a17c040ae) Thanks [@michaelfester](https://github.com/michaelfester)! - Add copy code button
+
 ## 0.16.4
 
 ### Patch Changes

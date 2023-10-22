@@ -6,30 +6,45 @@ import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { Reference } from '../prompt/References.js';
+import { DefaultView } from '../prompt/DefaultView.js';
+import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
   projectKey: string;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { feedbackOptions, referencesOptions, projectKey } = props;
+  const { feedbackOptions, referencesOptions, defaultView, projectKey } = props;
 
   const messages = useChatStore((state) => state.messages);
+  const submitChat = useChatStore((state) => state.submitChat);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
     feedbackOptions,
   });
 
+  if (!messages || messages.length === 0) {
+    return (
+      <DefaultView
+        message={defaultView?.message}
+        prompts={defaultView?.prompts}
+        promptsHeading={defaultView?.promptsHeading}
+        onDidSelectPrompt={submitChat}
+      />
+    );
+  }
+
   return (
     <div className="MarkpromptMessages">
       <BaseMarkprompt.AutoScroller
         className="MarkpromptAutoScroller"
         scrollTrigger={messages}
+        discreteScrollTrigger={messages.length}
       >
         {messages.map((message) => (
           <Fragment key={message.id}>
@@ -82,13 +97,14 @@ export function Messages(props: MessagesProps): ReactElement {
                 <div className="MarkpromptReferences">
                   {(message.state === 'streaming-answer' ||
                     message.state === 'done') && (
-                    <>
-                      <p>{referencesOptions.heading}</p>
-                      <BaseMarkprompt.References
-                        ReferenceComponent={Reference}
-                        references={message.references}
-                      />
-                    </>
+                    <References
+                      references={message.references}
+                      getHref={referencesOptions?.getHref}
+                      getLabel={referencesOptions?.getLabel}
+                      loadingText={referencesOptions?.loadingText}
+                      heading={referencesOptions?.heading}
+                      state={message.state}
+                    />
                   )}
                 </div>
               )}

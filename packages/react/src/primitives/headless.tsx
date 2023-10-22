@@ -1,4 +1,5 @@
 import type { FileSectionReference } from '@markprompt/core';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
 import React, {
   forwardRef,
@@ -10,6 +11,7 @@ import React, {
   type ReactElement,
   type ReactNode,
   memo,
+  useCallback,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -17,6 +19,7 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
+import { CheckIcon, CopyIcon } from '../icons.js';
 import type {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
@@ -96,7 +99,7 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
   /**
    * Show the Markprompt footer.
    */
-  showBranding?: boolean;
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
   /**
    * Show Algolia attribution in the footer.
    **/
@@ -108,12 +111,18 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
  */
 const Content = forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
-    const { showBranding = true, showAlgolia, ...rest } = props;
+    const {
+      branding = { show: true, type: 'plain' },
+      showAlgolia,
+      ...rest
+    } = props;
 
     return (
       <Dialog.Content {...rest} ref={ref}>
         {props.children}
-        {showBranding && <Footer showAlgolia={showAlgolia} />}
+        {branding.show && (
+          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
+        )}
       </Dialog.Content>
     );
   },
@@ -124,7 +133,7 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
   /**
    * Show the Markprompt footer.
    */
-  showBranding?: boolean;
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
   /**
    * Show Algolia attribution in the footer.
    **/
@@ -136,12 +145,18 @@ type PlainContentProps = ComponentPropsWithRef<'div'> & {
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const { showBranding = true, showAlgolia, ...rest } = props;
+    const {
+      branding = { show: true, type: 'plain' },
+      showAlgolia,
+      ...rest
+    } = props;
 
     return (
       <div {...rest} ref={ref}>
         {props.children}
-        {showBranding && <Footer showAlgolia={showAlgolia} />}
+        {branding.show && (
+          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
+        )}
       </div>
     );
   },
@@ -247,19 +262,73 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
 );
 Prompt.displayName = 'Markprompt.Prompt';
 
+// TODO: find the right type definition for children. There is a mismatch
+// between the type that react-markdown exposes, and what is actually
+// serves.
+interface CopyCodeButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children?: any;
+}
+
+function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
+  const [didCopy, setDidCopy] = React.useState(false);
+
+  const handleClick = (): void => {
+    navigator.clipboard.writeText(props.children[0]?.props.children[0]);
+    setDidCopy(true);
+    setTimeout(() => {
+      setDidCopy(false);
+    }, 2000);
+  };
+
+  return (
+    <button
+      className="MarkpromptCopyButton"
+      style={{ animationDelay: '100ms' }}
+      onClick={handleClick}
+    >
+      <AccessibleIcon label="copy">
+        {didCopy ? (
+          <CheckIcon width={16} height={16} strokeWidth={2} />
+        ) : (
+          <CopyIcon width={16} height={16} strokeWidth={2} />
+        )}
+      </AccessibleIcon>
+    </button>
+  );
+}
+CopyCodeButton.displayName = 'Markprompt.CopyCodeButton';
+
 type AnswerProps = Omit<
   ComponentPropsWithoutRef<typeof Markdown>,
   'children'
 > & {
   answer: string;
 };
+
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
   const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
   return (
-    <Markdown {...rest} remarkPlugins={remarkPlugins}>
+    <Markdown
+      {...rest}
+      remarkPlugins={remarkPlugins}
+      components={{
+        pre: (props) => {
+          const { children, className, ...rest } = props;
+          return (
+            <div style={{ position: 'relative' }}>
+              <CopyCodeButton>{children}</CopyCodeButton>
+              <pre {...rest} className={className}>
+                {children}
+              </pre>
+            </div>
+          );
+        },
+      }}
+    >
       {answer ?? ''}
     </Markdown>
   );
@@ -282,10 +351,17 @@ type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
   scrollBehavior?: ScrollBehavior;
 
   /**
-   * The element scrolls when this prop changes
+   * The element scrolls when this prop changes, unless scroll
+   * lock is enabled.
    * @default undefined
    * */
   scrollTrigger?: unknown;
+  /**
+   * The element scrolls when this prop changes, overriding
+   * scroll lock.
+   * @default number
+   * */
+  discreteScrollTrigger?: number;
 };
 /**
  * A component automatically that scrolls to the bottom.
@@ -299,20 +375,59 @@ const AutoScroller = memo<AutoScrollerProps>(
       scrollBehavior = 'smooth',
       // eslint-disable-next-line react/prop-types
       scrollTrigger,
+      // eslint-disable-next-line react/prop-types
+      discreteScrollTrigger,
       ...rest
     } = props;
     const localRef = useRef<HTMLDivElement>(null);
+    const scrollLockOn = useRef<boolean>(false);
+    const didScrollOnce = useRef<boolean>(false);
 
-    useEffect(() => {
+    const perhapsScroll = useCallback(() => {
       if (!localRef.current) return;
       if (!autoScroll) return;
+      if (scrollLockOn.current) return;
       localRef.current.scrollTo({
         top: localRef.current.scrollHeight,
-        behavior: scrollBehavior,
+        behavior: didScrollOnce.current ? scrollBehavior : 'instant',
       });
-    }, [scrollTrigger, autoScroll, scrollBehavior]);
+      didScrollOnce.current = true;
+    }, [autoScroll, scrollBehavior]);
 
-    return <div ref={mergeRefs([ref, localRef])} {...rest} />;
+    useEffect(() => {
+      // When scrollTrigger changes, potentially trigger scroll.
+      perhapsScroll();
+    }, [perhapsScroll, scrollTrigger]);
+
+    useEffect(() => {
+      // When discreteScrollTrigger changes (typically when a new message
+      // is appended to the list of messages), reset the scroll lock, so
+      // it can scroll down to the currently loading message.
+      scrollLockOn.current = false;
+      perhapsScroll();
+    }, [discreteScrollTrigger, perhapsScroll]);
+
+    const handleScroll = (): void => {
+      if (!localRef.current) {
+        return;
+      }
+
+      const element = localRef.current;
+
+      // Check if user has scrolled away from the bottom. Note that the
+      // autoscroll may leave a pixel of space, so we give it a 10 pixel
+      // buffer.
+      const relativeScrollHeight = element.scrollHeight - element.scrollTop;
+      if (Math.abs(relativeScrollHeight - element.clientHeight) > 10) {
+        scrollLockOn.current = true;
+      } else {
+        scrollLockOn.current = false;
+      }
+    };
+
+    return (
+      <div ref={mergeRefs([ref, localRef])} {...rest} onScroll={handleScroll} />
+    );
   }),
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';

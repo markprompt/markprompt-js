@@ -3,40 +3,95 @@ import React, { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
 interface FooterProps {
   showAlgolia?: boolean;
+  brandingType?: 'plain' | 'text';
 }
 
 export const Footer = (props: FooterProps): ReactElement => {
-  const { showAlgolia } = props;
+  const { brandingType, showAlgolia } = props;
+
+  if (brandingType === 'plain') {
+    return (
+      <p
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.25rem',
+          justifyContent: 'center',
+          margin: 0,
+          padding: '.375rem 0.75rem',
+          backgroundColor: 'var(--markprompt-muted)',
+          color: 'var(--markprompt-mutedForeground)',
+          borderTop: '1px solid var(--markprompt-border)',
+          fontSize: '0.75rem',
+          fontWeight: 500,
+          zIndex: 1,
+        }}
+      >
+        Powered by{' '}
+        <a
+          style={{
+            color: 'var(--markprompt-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.25rem',
+            textDecoration: 'none',
+          }}
+          target="_blank"
+          href="https://markprompt.com"
+        >
+          <MarkpromptIcon
+            style={{ width: '16px', height: '16px' }}
+            aria-hidden
+          />
+          Markprompt AI
+        </a>
+        {showAlgolia && (
+          <>
+            and{' '}
+            <a
+              style={{
+                color: 'var(--markprompt-primary)',
+                marginBottom: -5,
+                textDecoration: 'none',
+              }}
+              target="_blank"
+              href="https://algolia.com"
+              aria-label="Algolia"
+            >
+              <AlgoliaIcon style={{ height: '13px' }} aria-hidden />
+            </a>
+          </>
+        )}
+      </p>
+    );
+  }
+
   return (
     <p
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: '0.25rem',
-        justifyContent: 'center',
+        justifyContent: 'end',
         margin: 0,
         padding: '.375rem 0.75rem',
         backgroundColor: 'var(--markprompt-muted)',
         color: 'var(--markprompt-mutedForeground)',
         borderTop: '1px solid var(--markprompt-border)',
         fontSize: '0.75rem',
-        fontWeight: 500,
         zIndex: 1,
       }}
     >
       Powered by{' '}
       <a
         style={{
-          color: 'var(--markprompt-primary)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.25rem',
           textDecoration: 'none',
+          color: 'var(--markprompt-mutedForeground)',
+          fontWeight: 600,
         }}
         target="_blank"
         href="https://markprompt.com"
       >
-        <MarkpromptIcon style={{ width: '16px', height: '16px' }} aria-hidden />
         Markprompt AI
       </a>
       {showAlgolia && (

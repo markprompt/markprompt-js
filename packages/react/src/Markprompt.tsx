@@ -68,7 +68,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     search,
     trigger,
     title,
-    showBranding,
+    branding,
     debug,
   }: MarkpromptOptions = useDefaults(
     {
@@ -83,7 +83,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       search: props.search,
       trigger: props.trigger,
       title: props.title,
-      showBranding: props.showBranding,
+      branding: props.branding || { show: props.showBranding },
       debug: props.debug,
     },
     DEFAULT_MARKPROMPT_OPTIONS,
@@ -128,12 +128,22 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         <>
           {trigger?.floating !== false ? (
             <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
+              {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
               <AccessibleIcon.Root label={trigger.label!}>
-                <ChatIcon
-                  className="MarkpromptChatIcon"
-                  width="24"
-                  height="24"
-                />
+                {trigger.iconSrc ? (
+                  <img
+                    className="MarkpromptChatIcon"
+                    width="24"
+                    height="24"
+                    src={trigger.iconSrc}
+                  />
+                ) : (
+                  <ChatIcon
+                    className="MarkpromptChatIcon"
+                    width="24"
+                    height="24"
+                  />
+                )}
               </AccessibleIcon.Root>
             </BaseMarkprompt.DialogTrigger>
           ) : (
@@ -148,7 +158,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
             <BaseMarkprompt.Content
               className="MarkpromptContentDialog"
-              showBranding={showBranding}
+              branding={branding}
               showAlgolia={
                 search?.enabled && search.provider?.name === 'algolia'
               }
@@ -182,7 +192,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       {display === 'plain' && (
         <BaseMarkprompt.PlainContent
           className="MarkpromptContentPlain"
-          showBranding={showBranding}
+          branding={branding}
           showAlgolia={search?.enabled && search.provider?.name === 'algolia'}
         >
           <MarkpromptContent

@@ -33,7 +33,7 @@ export interface UsePromptResult {
   state: LoadingState;
   abort: () => void;
   setPrompt: (prompt: string) => void;
-  submitPrompt: () => void;
+  submitPrompt: (forcePrompt?: string) => void;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
 }
@@ -68,58 +68,60 @@ export function usePrompt({
     return () => abort();
   }, [abort]);
 
-  const submitPrompt = useCallback(async () => {
-    abort();
+  const submitPrompt = useCallback(
+    async (forcePrompt?: string) => {
+      abort();
 
-    if (!prompt || prompt === '') {
-      return;
-    }
+      const _prompt = forcePrompt ?? prompt;
+      if (!_prompt || _prompt === '') return;
 
-    setAnswer('');
-    setReferences([]);
-    setPromptId(undefined);
-    setState('preload');
+      setAnswer('');
+      setReferences([]);
+      setPromptId(undefined);
+      setState('preload');
 
-    const controller = new AbortController();
-    controllerRef.current = controller;
+      const controller = new AbortController();
+      controllerRef.current = controller;
 
-    try {
-      for await (const value of submitChatGenerator(
-        [{ content: prompt, role: 'user' }],
-        projectKey,
-        { ...promptOptions, signal: controller.signal },
-        debug,
-      )) {
-        setState('streaming-answer');
+      try {
+        for await (const value of submitChatGenerator(
+          [{ content: _prompt, role: 'user' }],
+          projectKey,
+          { ...promptOptions, signal: controller.signal },
+          debug,
+        )) {
+          setState('streaming-answer');
 
-        if (controller.signal.aborted) return;
+          if (controller.signal.aborted) return;
 
-        if (value.content) {
-          setAnswer(value.content);
+          if (value.content) {
+            setAnswer(value.content);
+          }
+
+          if (value.promptId) {
+            setPromptId(value.promptId);
+          }
+
+          if (value.references) {
+            setReferences(value.references);
+          }
         }
+      } catch (error) {
+        setState('cancelled');
 
-        if (value.promptId) {
-          setPromptId(value.promptId);
-        }
+        // ignore abort errors
+        if (isAbortError(error)) return;
 
-        if (value.references) {
-          setReferences(value.references);
-        }
+        // todo: surface errors to the user
+        // eslint-disable-next-line no-console
+        console.error(error);
       }
-    } catch (error) {
-      setState('cancelled');
 
-      // ignore abort errors
-      if (isAbortError(error)) return;
-
-      // todo: surface errors to the user
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-
-    setState('done');
-    controllerRef.current = undefined;
-  }, [abort, controllerRef, debug, projectKey, prompt, promptOptions]);
+      setState('done');
+      controllerRef.current = undefined;
+    },
+    [abort, controllerRef, debug, projectKey, prompt, promptOptions],
+  );
 
   return useMemo(
     () => ({

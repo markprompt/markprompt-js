@@ -4,10 +4,12 @@ import { describe, expect, test } from 'vitest';
 
 import {
   ChatIcon,
+  CheckIcon,
   ChevronLeftIcon,
   ChevronUpIcon,
   CloseIcon,
   CommandIcon,
+  CopyIcon,
   CornerDownLeftIcon,
   CounterClockwiseClockIcon,
   FileTextIcon,
@@ -23,10 +25,12 @@ import {
 
 const icons = [
   ChatIcon,
+  CheckIcon,
   ChevronLeftIcon,
   ChevronUpIcon,
   CloseIcon,
   CommandIcon,
+  CopyIcon,
   CornerDownLeftIcon,
   CounterClockwiseClockIcon,
   FileTextIcon,

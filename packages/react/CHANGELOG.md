@@ -1,5 +1,41 @@
 # @markprompt/react
 
+## 0.27.1
+
+### Patch Changes
+
+- [#227](https://github.com/motifland/markprompt-js/pull/227) [`983d857`](https://github.com/motifland/markprompt-js/commit/983d8576d72756d8daa111252d9eda300f8097b2) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix responsive feedback icons
+
+## 0.27.0
+
+### Minor Changes
+
+- [#222](https://github.com/motifland/markprompt-js/pull/222) [`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2) Thanks [@michaelfester](https://github.com/michaelfester)! - Custom icon and label and default view
+
+## 0.26.6
+
+### Patch Changes
+
+- [#220](https://github.com/motifland/markprompt-js/pull/220) [`d084a5e`](https://github.com/motifland/markprompt-js/commit/d084a5ef4010229a88a627c9897d0a60c6d78118) Thanks [@michaelfester](https://github.com/michaelfester)! - Scroll instantly on first open
+
+## 0.26.5
+
+### Patch Changes
+
+- [#218](https://github.com/motifland/markprompt-js/pull/218) [`e35b0c2`](https://github.com/motifland/markprompt-js/commit/e35b0c2295ee8a053aef3085327a6bd2c6b3f0a5) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix auto-scrolling and reference heading
+
+## 0.26.4
+
+### Patch Changes
+
+- [#216](https://github.com/motifland/markprompt-js/pull/216) [`b4dd9d7`](https://github.com/motifland/markprompt-js/commit/b4dd9d74f63f1437ad008197eb1edf6a17c040ae) Thanks [@michaelfester](https://github.com/michaelfester)! - Add copy code button
+
+## 0.26.3
+
+### Patch Changes
+
+- [#211](https://github.com/motifland/markprompt-js/pull/211) [`81f0c79`](https://github.com/motifland/markprompt-js/commit/81f0c79e7b0aac868a1f62588bb8503d2b01219f) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix references callbacks when chat is enabled
+
 ## 0.26.2
 
 ### Patch Changes

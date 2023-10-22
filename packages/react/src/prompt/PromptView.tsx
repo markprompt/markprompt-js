@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 
 import { Answer } from './Answer.js';
+import { DefaultView } from './DefaultView.js';
 import { References } from './References.js';
 import { usePrompt } from './usePrompt.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
@@ -132,10 +133,10 @@ export function PromptView(props: PromptViewProps): ReactElement {
         promptId={promptId}
         references={references}
         referencesOptions={referencesOptions}
+        defaultView={promptOptions.defaultView}
         state={state}
         submitFeedback={(feedback, promptId) => {
           submitFeedback(feedback, promptId);
-
           feedbackOptions.onFeedbackSubmit?.(
             feedback,
             [
@@ -150,28 +151,36 @@ export function PromptView(props: PromptViewProps): ReactElement {
             promptId,
           );
         }}
+        onDidSelectDefaultViewPrompt={(prompt: string) => {
+          setPrompt(prompt);
+          submitPrompt(prompt);
+        }}
       />
     </div>
   );
 }
 
 interface AnswerContainerProps {
+  abortFeedbackRequest: UseFeedbackResult['abort'];
   answer: string;
+  defaultView: NonNullable<MarkpromptOptions['prompt']>['defaultView'];
   feedbackOptions?: MarkpromptOptions['feedback'];
+  onDidSelectDefaultViewPrompt?: (prompt: string) => void;
   onDidSelectReference?: () => void;
+  promptId?: string;
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
   state: LoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
-  abortFeedbackRequest: UseFeedbackResult['abort'];
-  promptId?: string;
 }
 
 function AnswerContainer(props: AnswerContainerProps): ReactElement {
   const {
     abortFeedbackRequest,
     answer,
+    defaultView,
     feedbackOptions,
+    onDidSelectDefaultViewPrompt,
     onDidSelectReference,
     promptId,
     references,
@@ -179,6 +188,19 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
     state,
     submitFeedback,
   } = props;
+
+  if ((!answer || answer.length === 0) && state === 'indeterminate') {
+    return (
+      <DefaultView
+        message={defaultView?.message}
+        prompts={defaultView?.prompts}
+        promptsHeading={defaultView?.promptsHeading}
+        onDidSelectPrompt={(prompt: string) =>
+          onDidSelectDefaultViewPrompt?.(prompt)
+        }
+      />
+    );
+  }
 
   return (
     <div className="MarkpromptAnswerContainer" data-loading-state={state}>
@@ -189,12 +211,12 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
         <Answer answer={answer} state={state} />
         {feedbackOptions?.enabled && state === 'done' && (
           <Feedback
-            variant="text"
-            className="MarkpromptPromptFeedback"
-            submitFeedback={submitFeedback}
             abortFeedbackRequest={abortFeedbackRequest}
-            promptId={promptId}
+            className="MarkpromptPromptFeedback"
             heading={feedbackOptions.heading}
+            promptId={promptId}
+            submitFeedback={submitFeedback}
+            variant="text"
           />
         )}
       </BaseMarkprompt.AutoScroller>
@@ -202,8 +224,8 @@ function AnswerContainer(props: AnswerContainerProps): ReactElement {
       <References
         getHref={referencesOptions?.getHref}
         getLabel={referencesOptions?.getLabel}
-        loadingText={referencesOptions?.loadingText}
         heading={referencesOptions?.heading}
+        loadingText={referencesOptions?.loadingText}
         onDidSelectReference={onDidSelectReference}
         references={references}
         state={state}

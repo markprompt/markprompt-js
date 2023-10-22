@@ -13,6 +13,7 @@ import type {
   ComponentPropsWithoutRef,
   ElementType,
   PropsWithChildren,
+  ReactElement,
 } from 'react';
 
 import type { ChatViewMessage } from './index.js';
@@ -69,6 +70,12 @@ export type LoadingState =
   | 'streaming-answer'
   | 'done'
   | 'cancelled';
+
+export interface DefaultViewProps {
+  message?: string | ReactElement;
+  promptsHeading?: string;
+  prompts?: string[];
+}
 
 export interface MarkpromptOptions {
   /**
@@ -166,6 +173,10 @@ export interface MarkpromptOptions {
      */
     history?: boolean;
     /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultViewProps;
+    /**
      * A list of functions the model may generate JSON inputs for.
      * @default []
      */
@@ -195,6 +206,10 @@ export interface MarkpromptOptions {
      * @default []
      */
     functions?: FunctionDefinitionWithFunction[];
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultViewProps;
   };
   references?: {
     /**
@@ -270,12 +285,16 @@ export interface MarkpromptOptions {
   trigger?: {
     /**
      * `aria-label` for the open button
-     * @default "Open Markprompt"
+     * @default "Ask AI"
      **/
     label?: string;
     /**
+     * Label for the open button
+     **/
+    buttonLabel?: string;
+    /**
      * Placeholder text for non-floating element.
-     * @default "Ask docs"
+     * @default "Ask AI"
      **/
     placeholder?: string;
     /**
@@ -286,6 +305,10 @@ export interface MarkpromptOptions {
     floating?: boolean;
     /** Do you use a custom element as the dialog trigger? */
     customElement?: boolean;
+    /**
+     * Custom image icon source for the open button
+     **/
+    iconSrc?: string;
   };
   title?: {
     /**
@@ -302,8 +325,17 @@ export interface MarkpromptOptions {
   /**
    * Show Markprompt branding
    * @default true
+   * @deprecated Use `branding` instead
    **/
   showBranding?: boolean;
+  /**
+   * Show Markprompt branding
+   * @default true
+   **/
+  branding?: {
+    show?: boolean;
+    type?: 'plain' | 'text';
+  };
   /**
    * Display debug info
    * @default false

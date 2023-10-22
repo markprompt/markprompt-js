@@ -131,7 +131,7 @@ test('Branding is displayed in Content when set to true', async () => {
     <Markprompt.Root>
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
-        <Markprompt.Content showBranding></Markprompt.Content>
+        <Markprompt.Content branding={{ show: true }}></Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>,
   );
@@ -150,7 +150,7 @@ test('Branding is not displayed in Content when set to false', async () => {
     <Markprompt.Root>
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
-        <Markprompt.Content showBranding={false}></Markprompt.Content>
+        <Markprompt.Content branding={{ show: false }}></Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>,
   );
@@ -169,7 +169,9 @@ test('Branding is displayed in PlainContent when set to true', async () => {
     <Markprompt.Root>
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
-        <Markprompt.PlainContent showBranding></Markprompt.PlainContent>
+        <Markprompt.PlainContent
+          branding={{ show: true }}
+        ></Markprompt.PlainContent>
       </Markprompt.Portal>
     </Markprompt.Root>,
   );
@@ -188,7 +190,9 @@ test('Branding is not displayed in PlainContent when set to false', async () => 
     <Markprompt.Root>
       <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
       <Markprompt.Portal>
-        <Markprompt.PlainContent showBranding={false}></Markprompt.PlainContent>
+        <Markprompt.PlainContent
+          branding={{ show: false }}
+        ></Markprompt.PlainContent>
       </Markprompt.Portal>
     </Markprompt.Root>,
   );

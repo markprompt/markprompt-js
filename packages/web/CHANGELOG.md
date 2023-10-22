@@ -1,5 +1,51 @@
 # @markprompt/web
 
+## 0.20.1
+
+### Patch Changes
+
+- Updated dependencies [[`983d857`](https://github.com/motifland/markprompt-js/commit/983d8576d72756d8daa111252d9eda300f8097b2)]:
+  - @markprompt/react@0.27.1
+
+## 0.20.0
+
+### Minor Changes
+
+- [#222](https://github.com/motifland/markprompt-js/pull/222) [`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2) Thanks [@michaelfester](https://github.com/michaelfester)! - Custom icon and label and default view
+
+### Patch Changes
+
+- Updated dependencies [[`368b166`](https://github.com/motifland/markprompt-js/commit/368b166bdfa8b7333ebe59623233cb62700bd4f2)]:
+  - @markprompt/react@0.27.0
+
+## 0.19.10
+
+### Patch Changes
+
+- Updated dependencies [[`d084a5e`](https://github.com/motifland/markprompt-js/commit/d084a5ef4010229a88a627c9897d0a60c6d78118)]:
+  - @markprompt/react@0.26.6
+
+## 0.19.9
+
+### Patch Changes
+
+- Updated dependencies [[`e35b0c2`](https://github.com/motifland/markprompt-js/commit/e35b0c2295ee8a053aef3085327a6bd2c6b3f0a5)]:
+  - @markprompt/react@0.26.5
+
+## 0.19.8
+
+### Patch Changes
+
+- Updated dependencies [[`b4dd9d7`](https://github.com/motifland/markprompt-js/commit/b4dd9d74f63f1437ad008197eb1edf6a17c040ae)]:
+  - @markprompt/react@0.26.4
+
+## 0.19.7
+
+### Patch Changes
+
+- Updated dependencies [[`81f0c79`](https://github.com/motifland/markprompt-js/commit/81f0c79e7b0aac868a1f62588bb8503d2b01219f)]:
+  - @markprompt/react@0.26.3
+
 ## 0.19.6
 
 ### Patch Changes
