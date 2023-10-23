@@ -1,7 +1,11 @@
 import defaults from 'defaults';
 
 import type { FileSectionReference, OpenAIModelId } from './types.js';
-import { isFileSectionReferences, parseEncodedJSONHeader } from './utils.js';
+import {
+  cleanNonSerializable,
+  isFileSectionReferences,
+  parseEncodedJSONHeader,
+} from './utils.js';
 
 export interface SubmitChatOptions {
   /**
@@ -145,7 +149,12 @@ export async function submitChat(
     const res = await fetch(apiUrl, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ projectKey, messages, ...resolvedOptions }),
+      body: JSON.stringify({
+        projectKey,
+        messages,
+        // We must omit non-serializable options
+        ...cleanNonSerializable(resolvedOptions),
+      }),
       signal: signal,
     });
 

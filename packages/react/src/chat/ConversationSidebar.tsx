@@ -24,9 +24,9 @@ export function ConversationSidebar(): JSX.Element {
             </p>
           </button>
         </li>
-        {conversations.map(([conversationId, { messages }]) => (
+        {conversations.map(([conversationId, { messages }], index) => (
           <li
-            key={conversationId}
+            key={`${conversationId}-${index}`}
             data-selected={selectedConversationId === conversationId}
             className="MarkpromptChatConversationListItem"
           >

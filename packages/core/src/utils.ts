@@ -44,3 +44,45 @@ export function isAbortError(err: unknown): err is DOMException {
     (err instanceof Error && err.message.includes('AbortError'))
   );
 }
+
+function isSerializable<T>(val: T, seen = new Set()): boolean {
+  if (val === null) {
+    return true;
+  }
+  if (typeof val === 'object' || typeof val === 'function') {
+    if (seen.has(val)) {
+      return false; // Detect circular references
+    }
+
+    seen.add(val);
+
+    for (const key in val) {
+      if (!isSerializable(val[key], seen)) {
+        return false;
+      }
+    }
+  }
+  if (
+    typeof val === 'function' ||
+    typeof val === 'symbol' ||
+    typeof val === 'undefined'
+  ) {
+    return false;
+  }
+  return true;
+}
+
+export function cleanNonSerializable(obj: { [key: string]: unknown }): {
+  [key: string]: unknown;
+} {
+  const cleanObj: { [key: string]: unknown } = {};
+  for (const key in obj) {
+    if (isSerializable(obj[key])) {
+      cleanObj[key] =
+        typeof obj[key] === 'object'
+          ? cleanNonSerializable(obj[key] as { [key: string]: unknown })
+          : obj[key];
+    }
+  }
+  return cleanObj;
+}
