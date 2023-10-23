@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 export default function IndexPage(): ReactElement {
   return (
     <Markprompt
-      projectKey="YOUR-PROJECT-KEY"
+      projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
       chat={{
         enabled: true,
         iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
@@ -18,7 +18,11 @@ export default function IndexPage(): ReactElement {
         sectionsMatchCount: 10,
         sectionsMatchThreshold: 0.5,
         defaultView: {
-          message: 'Welcome to the Markprompt AI chatbot!',
+          message: () => (
+            <div style={{ padding: 16, fontSize: 15 }}>
+              Welcome to the Markprompt AI chatbot!
+            </div>
+          ),
           prompts: [
             'What is Markpormpt?',
             'Is React supported?',

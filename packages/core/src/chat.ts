@@ -2,7 +2,7 @@ import defaults from 'defaults';
 
 import type { FileSectionReference, OpenAIModelId } from './types.js';
 import {
-  cleanNonSerializable,
+  safeStringify,
   isFileSectionReferences,
   parseEncodedJSONHeader,
 } from './utils.js';
@@ -149,11 +149,12 @@ export async function submitChat(
     const res = await fetch(apiUrl, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({
+      // Some properties may be non-serializable, like callback, so
+      // make sure to safely stringify the payload.
+      body: safeStringify({
         projectKey,
         messages,
-        // We must omit non-serializable options
-        ...cleanNonSerializable(resolvedOptions),
+        ...resolvedOptions,
       }),
       signal: signal,
     });

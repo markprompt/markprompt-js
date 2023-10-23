@@ -1,14 +1,15 @@
-import React, { type ReactElement } from 'react';
+import React, { type JSXElementConstructor, type ReactElement } from 'react';
 
 import type { DefaultViewProps } from '../types.js';
 
 export function DefaultMessage(props: {
-  message: string | ReactElement;
+  message: string | JSXElementConstructor<unknown>;
 }): ReactElement {
   if (typeof props.message === 'string') {
     return <p className="MarkpromptDefaultViewMessage">{props.message}</p>;
   } else {
-    return props.message;
+    const Message = props.message;
+    return <Message />;
   }
 }
 
