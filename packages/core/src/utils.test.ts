@@ -5,6 +5,7 @@ import {
   parseEncodedJSONHeader,
   isFileSectionReferences,
   isAbortError,
+  cleanNonSerializable,
 } from './utils.js';
 
 const encoder = new TextEncoder();
@@ -92,5 +93,26 @@ describe('isAbortError', () => {
     expect(isAbortError(err2)).toBe(true);
     const err3 = new Error('Some other error');
     expect(isAbortError(err3)).toBe(false);
+  });
+});
+
+describe('cleanNonSerializable', () => {
+  test('removes non-serializable entries', () => {
+    const obj = {
+      name: 'Name',
+      fn: () => {
+        return 1;
+      },
+      sub: {
+        name: 'Sub',
+        callback: () => {
+          return 0;
+        },
+      },
+    };
+    expect(cleanNonSerializable(obj)).toEqual({
+      name: 'Name',
+      sub: { name: 'Sub' },
+    });
   });
 });

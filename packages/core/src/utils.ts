@@ -44,3 +44,35 @@ export function isAbortError(err: unknown): err is DOMException {
     (err instanceof Error && err.message.includes('AbortError'))
   );
 }
+
+function isSerializable<T>(value: T): boolean {
+  return !(
+    value === undefined ||
+    typeof value === 'function' ||
+    typeof value === 'symbol' ||
+    value instanceof Date ||
+    value instanceof Map ||
+    value instanceof Set ||
+    value instanceof RegExp
+  );
+}
+
+export function cleanNonSerializable(obj: { [key: string]: unknown }): {
+  [key: string]: unknown;
+} {
+  const cleanObj: { [key: string]: unknown } = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (isSerializable(value)) {
+      if (typeof value === 'object' && value !== null) {
+        cleanObj[key] = cleanNonSerializable(
+          value as { [key: string]: unknown },
+        );
+      } else {
+        cleanObj[key] = value;
+      }
+    }
+  }
+
+  return cleanObj;
+}

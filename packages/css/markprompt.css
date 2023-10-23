@@ -1207,7 +1207,25 @@
   z-index: 1;
 }
 
-.MarkpromptReferences::before {
+.MarkpromptChatViewChat .MarkpromptReferences::before {
+  left: 0;
+  background-image: linear-gradient(
+    to right,
+    var(--markprompt-background),
+    transparent
+  );
+}
+
+.MarkpromptChatViewChat .MarkpromptReferences::after {
+  right: 0;
+  background-image: linear-gradient(
+    to left,
+    var(--markprompt-background),
+    transparent
+  );
+}
+
+.MarkpromptPromptView .MarkpromptReferences::before {
   left: 0;
   background-image: linear-gradient(
     to right,
@@ -1216,7 +1234,7 @@
   );
 }
 
-.MarkpromptReferences::after {
+.MarkpromptPromptView .MarkpromptReferences::after {
   right: 0;
   background-image: linear-gradient(
     to left,

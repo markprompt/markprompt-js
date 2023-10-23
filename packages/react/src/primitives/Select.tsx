@@ -85,7 +85,7 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
         {isOpen &&
           items.map((item, index) => (
             <li
-              key={itemToString(item)}
+              key={`${itemToString(item)}-${index}`}
               className={itemClassName}
               data-highlighted={highlightedIndex === index}
               data-selected={itemToString(selectedItem) === itemToString(item)}
