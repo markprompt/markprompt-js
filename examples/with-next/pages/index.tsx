@@ -4,7 +4,9 @@ import React, { ReactElement } from 'react';
 export default function IndexPage(): ReactElement {
   return (
     <Markprompt
-      projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
+      projectKey={
+        process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY || 'YOUR-PROJECT-KEY'
+      }
       chat={{
         enabled: true,
         iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
