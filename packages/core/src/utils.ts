@@ -45,34 +45,44 @@ export function isAbortError(err: unknown): err is DOMException {
   );
 }
 
-function isSerializable<T>(value: T): boolean {
-  return !(
-    value === undefined ||
-    typeof value === 'function' ||
-    typeof value === 'symbol' ||
-    value instanceof Date ||
-    value instanceof Map ||
-    value instanceof Set ||
-    value instanceof RegExp
-  );
+function safeStringifyReplacer(seen: WeakSet<object>) {
+  return function (key: string, value: unknown) {
+    if (value !== null && typeof value === 'object') {
+      if (seen.has(value)) {
+        return '[Circular]';
+      }
+
+      seen.add(value);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const newValue: { [s: string]: unknown } | ArrayLike<unknown> =
+        Array.isArray(value) ? [] : {};
+
+      for (const [key2, value2] of Object.entries(value)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (newValue as any)[key2] = safeStringifyReplacer(seen)(key2, value2);
+      }
+
+      seen.delete(value);
+
+      return newValue;
+    }
+
+    return value;
+  };
 }
 
-export function cleanNonSerializable(obj: { [key: string]: unknown }): {
-  [key: string]: unknown;
-} {
-  const cleanObj: { [key: string]: unknown } = {};
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (isSerializable(value)) {
-      if (typeof value === 'object' && value !== null) {
-        cleanObj[key] = cleanNonSerializable(
-          value as { [key: string]: unknown },
-        );
-      } else {
-        cleanObj[key] = value;
-      }
-    }
-  }
-
-  return cleanObj;
+// Source: https://github.com/sindresorhus/safe-stringify
+export function safeStringify(
+  object: unknown,
+  options?: {
+    indentation?: string | number;
+  },
+): string {
+  const seen = new WeakSet();
+  return JSON.stringify(
+    object,
+    safeStringifyReplacer(seen),
+    options?.indentation,
+  );
 }

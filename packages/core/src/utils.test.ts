@@ -5,7 +5,7 @@ import {
   parseEncodedJSONHeader,
   isFileSectionReferences,
   isAbortError,
-  cleanNonSerializable,
+  safeStringify,
 } from './utils.js';
 
 const encoder = new TextEncoder();
@@ -96,7 +96,7 @@ describe('isAbortError', () => {
   });
 });
 
-describe('cleanNonSerializable', () => {
+describe('safeStringify', () => {
   test('removes non-serializable entries', () => {
     const obj = {
       name: 'Name',
@@ -110,9 +110,11 @@ describe('cleanNonSerializable', () => {
         },
       },
     };
-    expect(cleanNonSerializable(obj)).toEqual({
-      name: 'Name',
-      sub: { name: 'Sub' },
-    });
+    expect(safeStringify(obj)).toEqual(
+      JSON.stringify({
+        name: 'Name',
+        sub: { name: 'Sub' },
+      }),
+    );
   });
 });

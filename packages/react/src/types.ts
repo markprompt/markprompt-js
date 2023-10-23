@@ -11,8 +11,8 @@ import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
   ElementType,
+  JSXElementConstructor,
   PropsWithChildren,
-  ReactElement,
 } from 'react';
 
 import type { ChatViewMessage } from './index.js';
@@ -56,7 +56,7 @@ export interface SearchResultComponentProps {
 }
 
 export interface DefaultViewProps {
-  message?: string | ReactElement;
+  message?: string | JSXElementConstructor<unknown>;
   promptsHeading?: string;
   prompts?: string[];
 }
