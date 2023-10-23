@@ -45,44 +45,34 @@ export function isAbortError(err: unknown): err is DOMException {
   );
 }
 
-function isSerializable<T>(val: T, seen = new Set()): boolean {
-  if (val === null) {
-    return true;
-  }
-  if (typeof val === 'object' || typeof val === 'function') {
-    if (seen.has(val)) {
-      return false; // Detect circular references
-    }
-
-    seen.add(val);
-
-    for (const key in val) {
-      if (!isSerializable(val[key], seen)) {
-        return false;
-      }
-    }
-  }
-  if (
-    typeof val === 'function' ||
-    typeof val === 'symbol' ||
-    typeof val === 'undefined'
-  ) {
-    return false;
-  }
-  return true;
+function isSerializable<T>(value: T): boolean {
+  return !(
+    value === undefined ||
+    typeof value === 'function' ||
+    typeof value === 'symbol' ||
+    value instanceof Date ||
+    value instanceof Map ||
+    value instanceof Set ||
+    value instanceof RegExp
+  );
 }
 
 export function cleanNonSerializable(obj: { [key: string]: unknown }): {
   [key: string]: unknown;
 } {
   const cleanObj: { [key: string]: unknown } = {};
-  for (const key in obj) {
-    if (isSerializable(obj[key])) {
-      cleanObj[key] =
-        typeof obj[key] === 'object'
-          ? cleanNonSerializable(obj[key] as { [key: string]: unknown })
-          : obj[key];
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (isSerializable(value)) {
+      if (typeof value === 'object' && value !== null) {
+        cleanObj[key] = cleanNonSerializable(
+          value as { [key: string]: unknown },
+        );
+      } else {
+        cleanObj[key] = value;
+      }
     }
   }
+
   return cleanObj;
 }
