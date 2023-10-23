@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.27.2
+
+### Patch Changes
+
+- [#229](https://github.com/motifland/markprompt-js/pull/229) [`b5a7cf2`](https://github.com/motifland/markprompt-js/commit/b5a7cf24999725aa8439ef23917c675c3951dd07) Thanks [@michaelfester](https://github.com/michaelfester)! - Omit non-serializable options from API calls
+
+- Updated dependencies [[`b5a7cf2`](https://github.com/motifland/markprompt-js/commit/b5a7cf24999725aa8439ef23917c675c3951dd07)]:
+  - @markprompt/core@0.16.5
+
 ## 0.27.1
 
 ### Patch Changes

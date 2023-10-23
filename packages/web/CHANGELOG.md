@@ -1,5 +1,13 @@
 # @markprompt/web
 
+## 0.20.2
+
+### Patch Changes
+
+- Updated dependencies [[`b5a7cf2`](https://github.com/motifland/markprompt-js/commit/b5a7cf24999725aa8439ef23917c675c3951dd07)]:
+  - @markprompt/react@0.27.2
+  - @markprompt/core@0.16.5
+
 ## 0.20.1
 
 ### Patch Changes
