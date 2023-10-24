@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.17.0
+
+### Minor Changes
+
+- [#231](https://github.com/motifland/markprompt-js/pull/231) [`1c56e9b`](https://github.com/motifland/markprompt-js/commit/1c56e9bebb18025905d0cd60ea488be97cc37b0a) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix infinite loop
+
 ## 0.16.5
 
 ### Patch Changes
