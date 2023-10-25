@@ -1,5 +1,13 @@
 # @markprompt/react
 
+## 0.28.1
+
+### Patch Changes
+
+- [#233](https://github.com/motifland/markprompt-js/pull/233) [`978c1d9`](https://github.com/motifland/markprompt-js/commit/978c1d9f1d61ff68a14642134e4e3a4d268a1995) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix empty conversation history
+
+- [#233](https://github.com/motifland/markprompt-js/pull/233) [`978c1d9`](https://github.com/motifland/markprompt-js/commit/978c1d9f1d61ff68a14642134e4e3a4d268a1995) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix empty conversation history
+
 ## 0.28.0
 
 ### Minor Changes
