@@ -17,7 +17,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
-import { isPresent } from '../utils.js';
+import { isIterable, isPresent } from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -118,10 +118,15 @@ export const createChatStore = ({
               // set the conversation id for this session
               state.conversationId = conversationId;
 
+              if (!isIterable(state.conversationIdsByProjectKey[projectKey])) {
+                // Backward-compatibility
+                state.conversationIdsByProjectKey[projectKey] = [];
+              }
+
               // save the conversation id for this project, for later sessions
               state.conversationIdsByProjectKey[projectKey] = [
                 ...new Set([
-                  ...(state.conversationIdsByProjectKey[projectKey] || []),
+                  ...state.conversationIdsByProjectKey[projectKey],
                   conversationId,
                 ]),
               ];

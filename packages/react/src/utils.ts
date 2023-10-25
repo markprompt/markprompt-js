@@ -11,3 +11,13 @@ export function markdownToString(markdown = '', maxLength = 200): string {
 
   return string.length > maxLength ? `${string.slice(0, maxLength)}…` : string;
 }
+
+export function isIterable(obj: unknown): boolean {
+  // Checks for null and undefined
+  if (obj == null) {
+    return false;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return typeof (obj as any)[Symbol.iterator] === 'function';
+}
