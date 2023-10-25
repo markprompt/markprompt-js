@@ -121,7 +121,7 @@ export const createChatStore = ({
               // save the conversation id for this project, for later sessions
               state.conversationIdsByProjectKey[projectKey] = [
                 ...new Set([
-                  ...state.conversationIdsByProjectKey[projectKey]!,
+                  ...(state.conversationIdsByProjectKey[projectKey] || []),
                   conversationId,
                 ]),
               ];
