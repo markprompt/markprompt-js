@@ -26,7 +26,7 @@ export default function IndexPage(): ReactElement {
             </div>
           ),
           prompts: [
-            'What is Markpormpt?',
+            'What is Markprompt?',
             'Is React supported?',
             'Is there an API?',
           ],
