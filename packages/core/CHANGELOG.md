@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.17.1
+
+### Patch Changes
+
+- [#235](https://github.com/motifland/markprompt-js/pull/235) [`a7e4f0a`](https://github.com/motifland/markprompt-js/commit/a7e4f0a2b947b76a4b691fb970d8926ba5924541) Thanks [@michaelfester](https://github.com/michaelfester)! - Add gpt-4-1106-preview
+
 ## 0.17.0
 
 ### Minor Changes
