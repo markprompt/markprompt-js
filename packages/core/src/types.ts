@@ -6,6 +6,7 @@ export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
 export type OpenAIChatCompletionsModelId =
   | 'gpt-4'
   | 'gpt-4-32k'
+  | 'gpt-4-1106-preview'
   | 'gpt-3.5-turbo';
 
 export type OpenAICompletionsModelId =
