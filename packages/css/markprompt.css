@@ -1637,7 +1637,7 @@
 :where(.MarkpromptDefaultView) {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   overflow-y: auto;
 }
 
@@ -1650,7 +1650,7 @@
 :where(.MarkpromptDefaultViewMessagePromptsContainer) {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   gap: 0.25rem;
   padding: 1rem;
 }
