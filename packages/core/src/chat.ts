@@ -25,6 +25,11 @@ export interface SubmitChatOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   conversationMetadata?: any;
   /**
+   * Enabled debug mode. This will log debug and error information to the console.
+   * @default false
+   */
+  debug?: boolean;
+  /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
    **/
@@ -172,6 +177,13 @@ export async function submitChat(
       return;
     }
 
+    if (debug) {
+      const res2 = res.clone();
+      const { debugInfo } = await res2.json();
+      // eslint-disable-next-line no-console
+      if (debugInfo) console.debug(debugInfo);
+    }
+
     const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
 
     if (typeof data === 'object' && data !== null) {
@@ -184,13 +196,6 @@ export async function submitChat(
       if ('promptId' in data && typeof data.promptId === 'string') {
         onPromptId(data?.promptId);
       }
-    }
-
-    if (debug) {
-      const res2 = res.clone();
-      const { debugInfo } = await res2.json();
-      // eslint-disable-next-line no-console
-      console.debug(debugInfo);
     }
 
     const reader = res.body.getReader();
