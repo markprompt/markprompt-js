@@ -1702,7 +1702,6 @@
   padding-inline: 1.5rem;
   padding-block: 0.75rem;
   font-size: var(--markprompt-text-size);
-  color: var(--markprompt-foreground);
   background: var(--markprompt-error-background);
   border-top: var(--markprompt-error-foreground);
   color: var(--markprompt-error-foreground);
