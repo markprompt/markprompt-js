@@ -141,8 +141,9 @@ export async function submitChat(
   }
 
   try {
-    const { apiUrl, signal, ...resolvedOptions } = defaults(
-      { ...options },
+    const { signal, ...cloneableOpts } = options;
+    const { apiUrl, ...resolvedOptions } = defaults(
+      { ...cloneableOpts },
       DEFAULT_SUBMIT_CHAT_OPTIONS,
     );
 
@@ -161,18 +162,17 @@ export async function submitChat(
 
     if (!res.ok || !res.body) {
       const text = await res.text();
+
       onAnswerChunk(resolvedOptions.iDontKnowMessage!);
       onError(new Error(text));
+
+      // eslint-disable-next-line no-console
+      if (debug) console.error(text);
+
       return;
     }
 
     const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
-    const debugInfo = parseEncodedJSONHeader(res, 'x-markprompt-debug-info');
-
-    if (debug && debugInfo) {
-      // eslint-disable-next-line no-console
-      console.debug(JSON.stringify(debugInfo, null, 2));
-    }
 
     if (typeof data === 'object' && data !== null) {
       if ('references' in data && isFileSectionReferences(data.references)) {
@@ -184,6 +184,13 @@ export async function submitChat(
       if ('promptId' in data && typeof data.promptId === 'string') {
         onPromptId(data?.promptId);
       }
+    }
+
+    if (debug) {
+      const res2 = res.clone();
+      const { debugInfo } = await res2.json();
+      // eslint-disable-next-line no-console
+      console.debug(debugInfo);
     }
 
     const reader = res.body.getReader();
