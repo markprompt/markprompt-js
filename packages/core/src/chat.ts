@@ -25,6 +25,11 @@ export interface SubmitChatOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   conversationMetadata?: any;
   /**
+   * Enabled debug mode. This will log debug and error information to the console.
+   * @default false
+   */
+  debug?: boolean;
+  /**
    * Message returned when the model does not have an answer
    * @default "Sorry, I am not sure how to answer that."
    **/
@@ -141,8 +146,9 @@ export async function submitChat(
   }
 
   try {
-    const { apiUrl, signal, ...resolvedOptions } = defaults(
-      { ...options },
+    const { signal, ...cloneableOpts } = options;
+    const { apiUrl, ...resolvedOptions } = defaults(
+      { ...cloneableOpts },
       DEFAULT_SUBMIT_CHAT_OPTIONS,
     );
 
@@ -161,18 +167,24 @@ export async function submitChat(
 
     if (!res.ok || !res.body) {
       const text = await res.text();
+
       onAnswerChunk(resolvedOptions.iDontKnowMessage!);
       onError(new Error(text));
+
+      // eslint-disable-next-line no-console
+      if (debug) console.error(text);
+
       return;
     }
 
-    const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
-    const debugInfo = parseEncodedJSONHeader(res, 'x-markprompt-debug-info');
-
-    if (debug && debugInfo) {
+    if (debug) {
+      const res2 = res.clone();
+      const { debugInfo } = await res2.json();
       // eslint-disable-next-line no-console
-      console.debug(JSON.stringify(debugInfo, null, 2));
+      if (debugInfo) console.debug(debugInfo);
     }
+
+    const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
 
     if (typeof data === 'object' && data !== null) {
       if ('references' in data && isFileSectionReferences(data.references)) {
