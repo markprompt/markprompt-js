@@ -1,5 +1,15 @@
 # @markprompt/core
 
+## 0.18.0
+
+### Minor Changes
+
+- [#240](https://github.com/motifland/markprompt-js/pull/240) [`2b97082`](https://github.com/motifland/markprompt-js/commit/2b970823f2fe23fa95cf7e13f91822fad11a2acd) Thanks [@nickrttn](https://github.com/nickrttn)! - Show configurable error messages to users when upstream outages occur
+
+### Patch Changes
+
+- [#242](https://github.com/motifland/markprompt-js/pull/242) [`98a8f5d`](https://github.com/motifland/markprompt-js/commit/98a8f5d71071114d1a8f6387f66e92617eed0e5e) Thanks [@michaelfester](https://github.com/michaelfester)! - Add sectionsScope parameter
+
 ## 0.17.1
 
 ### Patch Changes
