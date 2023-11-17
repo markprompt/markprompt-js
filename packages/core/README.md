@@ -129,7 +129,7 @@ All options are optional.
 - `sectionsMatchCount` (`number`): The number of sections to include in the
   prompt context
 - `sectionsMatchThreshold` (`number`): The similarity threshold between the
-  input question and selected sections
+- `sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file.
 - `signal` (`AbortSignal`): AbortController signal
 
 #### Returns
