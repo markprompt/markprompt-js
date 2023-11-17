@@ -111,6 +111,7 @@ The pre-built Markprompt component. It accepts the following props:
   prompt context. (Default: `10`)
 - `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the
   input question and selected sections. (Default: `0.5`)
+- `chat.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `feedback` (`object`): Options for the feedback component
 - `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
   chat answers. (Default: `true`)
@@ -146,6 +147,7 @@ The pre-built Markprompt component. It accepts the following props:
   the prompt context. (Default: `10`)
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
   the input question and selected sections. (Default: `0.5`)
+- `prompt.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an
   href
@@ -242,6 +244,7 @@ accepts the following props:
   in the prompt context. (Default: `10`)
 - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
+- `chatOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -304,6 +307,7 @@ It accepts the following props:
   include in the prompt context. (Default: `10`)
 - `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
+- `promptOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -480,6 +484,7 @@ Create a chat prompt. It accepts the following options:
       include in the prompt context. (Default: `10`)
     - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
       between the input question and selected sections. (Default: `0.5`)
+    - `chatOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
     - `chatOptions.systemPrompt` (`string`): The prompt template. (Default:
       `You are a very enthusiastic company representative who loves to help people!`)
     - `chatOptions.temperature` (`number`): The model temperature. (Default:
@@ -571,6 +576,7 @@ Create a prompt. It accepts the following options:
     - `promptOptions.sectionsMatchThreshold` (`number`): The similarity
       threshold between the input question and selected sections. (Default:
       `0.5`)
+    - `promptOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
     - `promptOptions.systemPrompt` (`string`): The prompt template. (Default:
       `You are a very enthusiastic company representative who loves to help people!`)
     - `promptOptions.temperature` (`number`): The model temperature. (Default:
