@@ -22,6 +22,8 @@
   "dependencies": {
     "@algolia/client-search": "^4.20.0",
     "defaults": "^2.0.2",
+    "eventsource-parser": "^1.1.1",
+    "openai": "^4.20.1",
     "type-fest": "^4.3.1"
   }
 }

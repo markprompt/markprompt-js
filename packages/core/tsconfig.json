@@ -15,6 +15,6 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src/*"],
+  "include": ["src/*", "src/chat/chat.ts", "src/chat/chat.test.ts"],
   "exclude": ["src/*.test.ts"]
 }

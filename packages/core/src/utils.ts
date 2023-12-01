@@ -1,4 +1,6 @@
-import type { FileSectionReference } from './types.js';
+import type { OpenAI } from 'openai';
+
+import type { ChatCompletionMetadata, FileSectionReference } from './types.js';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
@@ -86,3 +88,57 @@ export function safeStringify(
     options?.indentation,
   );
 }
+
+export function isMarkpromptMetadata(
+  json: unknown,
+): json is ChatCompletionMetadata {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    (('conversationId' in json && typeof json.conversationId === 'string') ||
+      ('promptId' in json && typeof json.promptId === 'string') ||
+      ('references' in json && isFileSectionReferences(json.references)))
+  );
+}
+
+export function isChatCompletion(json: unknown): json is OpenAI.ChatCompletion {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'object' in json &&
+    json.object === 'chat.completion'
+  );
+}
+
+export const isFunctionCall = (
+  json: unknown,
+): json is OpenAI.ChatCompletionMessageToolCall => {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'type' in json &&
+    typeof json.type === 'string' &&
+    json.type === 'function' &&
+    'function' in json &&
+    typeof json.function === 'object' &&
+    json.function !== null
+  );
+};
+
+export const isFunctionCallKey = (
+  key: string,
+): key is keyof OpenAI.ChatCompletionMessageToolCall.Function => {
+  return ['name', 'arguments'].includes(key);
+};
+
+export const isChatCompletionChunk = (
+  json: unknown,
+): json is OpenAI.ChatCompletionChunk => {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'object' in json &&
+    typeof json.object === 'string' &&
+    json.object === 'chat.completion.chunk'
+  );
+};

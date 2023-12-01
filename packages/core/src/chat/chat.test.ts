@@ -10,7 +10,7 @@ import {
   vi,
 } from 'vitest';
 
-import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from './index.js';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from '../index.js';
 
 const encoder = new TextEncoder();
 let markpromptData: unknown = '';
