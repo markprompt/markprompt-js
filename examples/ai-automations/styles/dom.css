@@ -1,0 +1,3 @@
+.base-button, .base-input {
+  @apply outline-none focus:ring-2 ring-black transition focus:border-transparent duration-200;
+}

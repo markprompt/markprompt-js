@@ -6,12 +6,12 @@ import { markprompt, type MarkpromptOptions } from '@markprompt/web';
 const el = document.querySelector('#markprompt');
 
 if (el && el instanceof HTMLElement) {
-  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+  markprompt('sk_test_NzuHFUpoYIQpX6FjLl5hfMqUzA6BR1r7', el, {
     feedback: { enabled: true },
-    search: { enabled: true },
+    search: { apiUrl: `http://api.localhost:3000/v1/search`, enabled: true },
     chat: {
       enabled: true,
-      apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
+      apiUrl: `http://api.localhost:3000/v1/chat`,
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
