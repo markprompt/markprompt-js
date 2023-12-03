@@ -21,8 +21,10 @@
   },
   "dependencies": {
     "@algolia/client-search": "^4.20.0",
+    "@types/lodash-es": "^4.17.12",
     "defaults": "^2.0.2",
     "eventsource-parser": "^1.1.1",
+    "lodash-es": "^4.17.21",
     "openai": "^4.20.1",
     "type-fest": "^4.3.1"
   }

@@ -3,7 +3,10 @@ export {
   type SubmitChatOptions,
   type ChatMessage,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
-} from './chat/chat.js';
+  submitChatGenerator,
+  type SubmitChatGeneratorOptions,
+  DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
+} from './chat.js';
 
 export {
   submitFeedback,

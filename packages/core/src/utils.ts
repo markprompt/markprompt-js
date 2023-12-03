@@ -110,25 +110,43 @@ export function isChatCompletion(json: unknown): json is OpenAI.ChatCompletion {
   );
 }
 
-export const isFunctionCall = (
-  json: unknown,
-): json is OpenAI.ChatCompletionMessageToolCall => {
+export const isChatCompletionMessage = (
+  obj: unknown,
+): obj is OpenAI.ChatCompletionMessage => {
   return (
-    typeof json === 'object' &&
-    json !== null &&
-    'type' in json &&
-    typeof json.type === 'string' &&
-    json.type === 'function' &&
-    'function' in json &&
-    typeof json.function === 'object' &&
-    json.function !== null
+    typeof obj === 'object' &&
+    obj !== null &&
+    'content' in obj &&
+    (typeof obj.content === 'string' || obj.content === null) &&
+    'role' in obj &&
+    obj.role === 'assistant'
   );
 };
 
-export const isFunctionCallKey = (
-  key: string,
-): key is keyof OpenAI.ChatCompletionMessageToolCall.Function => {
-  return ['name', 'arguments'].includes(key);
+export const isToolCall = (
+  tool_call: unknown,
+): tool_call is OpenAI.ChatCompletionMessageToolCall => {
+  return (
+    typeof tool_call === 'object' &&
+    tool_call !== null &&
+    'id' in tool_call &&
+    typeof tool_call.id === 'string' &&
+    'type' in tool_call &&
+    tool_call.type === 'function' &&
+    'function' in tool_call &&
+    typeof tool_call.function === 'object' &&
+    tool_call.function !== null &&
+    'name' in tool_call.function &&
+    typeof tool_call.function.name === 'string' &&
+    'arguments' in tool_call.function &&
+    typeof tool_call.function.arguments === 'string'
+  );
+};
+
+export const isToolCalls = (
+  tool_calls: unknown,
+): tool_calls is OpenAI.ChatCompletionMessageToolCall[] => {
+  return Array.isArray(tool_calls) && tool_calls.every(isToolCall);
 };
 
 export const isChatCompletionChunk = (
@@ -142,3 +160,8 @@ export const isChatCompletionChunk = (
     json.object === 'chat.completion.chunk'
   );
 };
+
+export const isKeyOf = <T extends object>(
+  obj: T,
+  key: PropertyKey,
+): key is keyof T => key in obj;
