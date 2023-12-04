@@ -340,6 +340,16 @@ export interface SubmitChatGeneratorOptions {
    **/
   iDontKnowMessage?: string;
   /**
+   * Whether or not to inject context relevant to the query.
+   * @default false
+   **/
+  doNotInjectContext?: boolean;
+  /**
+   * Whether or not to include message in insights.
+   * @default false
+   **/
+  excludeFromInsights?: boolean;
+  /**
    * The OpenAI model to use
    * @default "gpt-3.5-turbo"
    **/
