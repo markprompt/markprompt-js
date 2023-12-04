@@ -111,7 +111,8 @@ The pre-built Markprompt component. It accepts the following props:
   prompt context. (Default: `10`)
 - `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the
   input question and selected sections. (Default: `0.5`)
-- `chat.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
+- `chat.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `chat.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `feedback` (`object`): Options for the feedback component
 - `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
   chat answers. (Default: `true`)
@@ -244,7 +245,8 @@ accepts the following props:
   in the prompt context. (Default: `10`)
 - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
-- `chatOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
+- `chat.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `chat.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -307,7 +309,8 @@ It accepts the following props:
   include in the prompt context. (Default: `10`)
 - `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
-- `promptOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
+- `promptOption.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `promptOption.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -490,6 +493,8 @@ Create a chat prompt. It accepts the following options:
     - `chatOptions.temperature` (`number`): The model temperature. (Default:
       `0.1`)
     - `chatOptions.topP` (`number`): The model top P. (Default: `1`)
+    - `chatOptions.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+    - `chatOptions.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
   - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `useFeedback`.
@@ -655,13 +660,13 @@ For a working setup based on Next.js + Tailwind, check out the
 
 ## Community
 
-- [Twitter](https://twitter.com/markprompt)
+- [X](https://x.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
 This library is created by the team behind [Markprompt](https://markprompt.com)
-([@markprompt](https://twitter.com/markprompt)).
+([@markprompt](https://x.com/markprompt)).
 
 ## License
 
