@@ -14,8 +14,8 @@ interact with your docs.
 <br />
 
 <p align="center">
-  <a href="https://twitter.com/markprompt">
-    <img src="https://img.shields.io/twitter/follow/markprompt?style=flat&label=%40markprompt&logo=twitter&color=0bf&logoColor=fff" alt="Twitter" />
+  <a href="https://x.com/markprompt">
+    <img src="https://img.shields.io/twitter/follow/markprompt?style=flat&label=%40markprompt&logo=twitter&color=0bf&logoColor=fff" alt="X" />
   </a>
   <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
@@ -59,13 +59,13 @@ To use the Markprompt platform as is, please refer to the
 
 ## Community
 
-- [Twitter](https://twitter.com/markprompt)
+- [X](https://x.com/markprompt)
 - [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
 This library is created by the team behind [Markprompt](https://markprompt.com)
-([@markprompt](https://twitter.com/markprompt)).
+([@markprompt](https://x.com/markprompt)).
 
 ## License
 
