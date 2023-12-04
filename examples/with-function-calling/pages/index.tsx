@@ -60,8 +60,6 @@ export default function IndexPage(): ReactElement {
         ],
         process.env.NEXT_PUBLIC_PROJECT_API_KEY!,
         {
-          // TODO: remove
-          apiUrl: process.env.NEXT_PUBLIC_MARKPROMPT_API_URL + '/chat',
           tools: tools,
         },
       )) {
