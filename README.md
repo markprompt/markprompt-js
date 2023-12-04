@@ -38,20 +38,19 @@ Markprompt API:
 
 and some example implementations:
 
-- [`with-next`](examples/with-next#readme) — a web application based on
-  `@markprompt/react`, `@markprompt/web`, and Next.js.
-- [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web
-  application based on `@markprompt/web` and Vite.
-- [`with-css-modules`](examples/with-css-modules#readme) — a web application
-  based on `@markprompt/react`, Vite and CSS Modules.
-- [`with-docusaurus`](examples/with-docusaurus#readme) — a Docusaurus project
-  with `@markprompt/docusaurus-theme-search`.
-- [`with-docusaurus-algolia`](examples/with-docusaurus-algolia#readme) — a
-  Docusaurus project with `@markprompt/docusaurus-theme-search` and our Algolia
+- [`with-css-modules`](examples/with-css-modules#readme) — a web application based on `@markprompt/react`, Vite and CSS Modules.
+- [`with-custom-trigger`](examples/with-custom-trigger#readme) — a reference implementation of `@markprompt/web` using a custom trigger button.
+- [`with-custom-trigger-react`](examples/with-custom-trigger-react#readme) — a reference implementation of `@markprompt/react` using a custom trigger button.
+- [`with-docusaurus`](examples/with-docusaurus#readme) — a Docusaurus project with `@markprompt/docusaurus-theme-search`.
+- [`with-docusaurus-algolia`](examples/with-docusaurus-algolia#readme) — a Docusaurus project with `@markprompt/docusaurus-theme-search` and our Algolia
   integration.
-- [`with-docusaurus-swizzled`](examples/with-docusaurus-swizzled#readme) — a
-  Docusaurus project with Markprompt and
-  [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
+- [`with-docusaurus-swizzled`](examples/with-docusaurus-swizzled#readme) — a Docusaurus project with Markprompt and [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
+- [`with-init`](examples/with-init#readme) — a web application based on
+`@markprompt/web` using a global instance of Markprompt.
+- [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite. based on `@markprompt/react`, Vite and CSS Modules.
+- [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js.
+- [`with-standalone-chat`](examples/with-standalone-chat#readme) — a web application based on `@markprompt/web` using a standalone version of the chat component.
+- [`with-function-calling`](examples/with-function-calling#readme) — a web application based on `@markprompt/react` and Next.js showcasing the use for [OpenAI function calling](https://platform.openai.com/docs/guides/function-calling).
 
 ## Documentation
 

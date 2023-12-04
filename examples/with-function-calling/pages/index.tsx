@@ -103,7 +103,7 @@ export default function IndexPage(): ReactElement {
   return (
     <>
       <Head>
-        <title>Tools Example</title>
+        <title>Function calling</title>
         <meta charSet="utf-8" />
       </Head>
       <div className="Container">
