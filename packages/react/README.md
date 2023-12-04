@@ -111,6 +111,8 @@ The pre-built Markprompt component. It accepts the following props:
   prompt context. (Default: `10`)
 - `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the
   input question and selected sections. (Default: `0.5`)
+- `chat.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `chat.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `feedback` (`object`): Options for the feedback component
 - `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
   chat answers. (Default: `true`)
@@ -146,6 +148,8 @@ The pre-built Markprompt component. It accepts the following props:
   the prompt context. (Default: `10`)
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
   the input question and selected sections. (Default: `0.5`)
+- `prompt.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `prompt.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an
   href
@@ -242,6 +246,8 @@ accepts the following props:
   in the prompt context. (Default: `10`)
 - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
+- `chat.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `chat.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -304,6 +310,8 @@ It accepts the following props:
   include in the prompt context. (Default: `10`)
 - `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold
   between the input question and selected sections. (Default: `0.5`)
+- `promptOption.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+- `promptOption.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -485,6 +493,8 @@ Create a chat prompt. It accepts the following options:
     - `chatOptions.temperature` (`number`): The model temperature. (Default:
       `0.1`)
     - `chatOptions.topP` (`number`): The model top P. (Default: `1`)
+    - `chatOptions.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+    - `chatOptions.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
   - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `useFeedback`.
@@ -576,6 +586,8 @@ Create a prompt. It accepts the following options:
     - `promptOptions.temperature` (`number`): The model temperature. (Default:
       `0.1`)
     - `promptOptions.topP` (`number`): The model top P. (Default: `1`)
+    - `promptOptions.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
+    - `promptOptions.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
 
 And it returns:
 
