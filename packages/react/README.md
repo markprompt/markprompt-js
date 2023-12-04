@@ -148,8 +148,6 @@ The pre-built Markprompt component. It accepts the following props:
   the prompt context. (Default: `10`)
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
   the input question and selected sections. (Default: `0.5`)
-- `prompt.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
-- `prompt.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an
   href
@@ -586,8 +584,6 @@ Create a prompt. It accepts the following options:
     - `promptOptions.temperature` (`number`): The model temperature. (Default:
       `0.1`)
     - `promptOptions.topP` (`number`): The model top P. (Default: `1`)
-    - `promptOptions.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
-    - `promptOptions.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
 
 And it returns:
 
