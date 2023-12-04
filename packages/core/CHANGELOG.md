@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.19.1
+
+### Patch Changes
+
+- [#247](https://github.com/motifland/markprompt-js/pull/247) [`79494a3`](https://github.com/motifland/markprompt-js/commit/79494a3a3aea3c4644ea1d683181ad075e800f8f) Thanks [@michaelfester](https://github.com/michaelfester)! - Add doNotInjectContext and excludeFromInsights types
+
 ## 0.19.0
 
 ### Minor Changes
