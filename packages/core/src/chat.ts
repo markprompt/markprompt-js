@@ -91,6 +91,14 @@ export interface SubmitChatOptions {
    * */
   sectionsMatchThreshold?: number;
   /**
+   * When a section is matched, extend the context to the parent section. For
+   * instance, if a section has level 3 and `sectionsScope` is set to 1, include
+   * the content of the entire parent section of level 1. If 0, this includes
+   * the entire file.
+   * @default undefined
+   * */
+  sectionsScope?: number;
+  /**
    * AbortController signal
    * @default undefined
    **/
