@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.19.0
+
+### Minor Changes
+
+- [#245](https://github.com/motifland/markprompt-js/pull/245) [`5a4acfd`](https://github.com/motifland/markprompt-js/commit/5a4acfd693023ac109405a917cb13703f8778a96) Thanks [@nickrttn](https://github.com/nickrttn)! - Add a generator-based version of `submitChat`
+
 ## 0.18.0
 
 ### Minor Changes
