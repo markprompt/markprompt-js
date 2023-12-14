@@ -3,7 +3,6 @@ import {
   type FileSectionReference,
   type PromptFeedback,
   type SearchResult,
-  type SubmitChatOptions,
   type SubmitFeedbackOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -170,7 +169,7 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: SubmitChatOptions & {
+  prompt?: UserConfigurableOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
