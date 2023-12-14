@@ -3,16 +3,9 @@ import type {
   ChatCompletionChunk,
   ChatCompletionMessage,
   ChatCompletionMessageToolCall,
-} from 'openai/resources/index.mjs';
-
-import type { ChatCompletionMetadata, FileSectionReference } from './types.js';
-
-export type {
-  ChatCompletion,
-  ChatCompletionChunk,
-  ChatCompletionMessage,
-  ChatCompletionMessageToolCall,
-} from 'openai/resources/index.mjs';
+  ChatCompletionMetadata,
+  FileSectionReference,
+} from './types.js';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
