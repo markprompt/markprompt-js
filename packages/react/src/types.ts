@@ -3,7 +3,6 @@ import {
   type FileSectionReference,
   type PromptFeedback,
   type SearchResult,
-  type SubmitChatOptions,
   type SubmitFeedbackOptions,
   type SubmitSearchQueryOptions,
 } from '@markprompt/core';
@@ -15,6 +14,7 @@ import type {
   PropsWithChildren,
 } from 'react';
 
+import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
 interface AsProp<C extends ElementType> {
@@ -121,7 +121,7 @@ export interface MarkpromptOptions {
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
    * Enabling chat functionality will disable prompt functionality.
    */
-  chat?: SubmitChatOptions & {
+  chat?: UserConfigurableOptions & {
     /**
      * Show a chat-like prompt input allowing for conversation-style interaction
      * rather than single question prompts.
@@ -169,7 +169,7 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: SubmitChatOptions & {
+  prompt?: UserConfigurableOptions & {
     /**
      * Label for the prompt input
      * @default "Ask AI"

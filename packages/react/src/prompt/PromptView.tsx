@@ -150,9 +150,8 @@ export function PromptView(props: PromptViewProps): ReactElement {
             feedback,
             [
               {
-                answer,
+                content: answer,
                 id: promptId!,
-                prompt,
                 promptId,
                 references,
                 state,

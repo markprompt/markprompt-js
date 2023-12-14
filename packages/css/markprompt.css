@@ -469,7 +469,7 @@
   margin-bottom: 0.5rem;
 }
 
-:where(.MarkpromptAutoScroller section:first-of-type .MarkpromptMessagePrompt) {
+:where(.MarkpromptAutoScroller .MarkpromptMessagePrompt:first-of-type) {
   border-top: none;
   margin-top: 0;
 }
@@ -1006,7 +1006,7 @@
   animation-name: markprompt-fade-out;
   animation-duration: 1000ms;
   animation-fill-mode: both;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 9999;
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
 }
 
@@ -1120,7 +1120,7 @@
   animation-name: markprompt-progress;
   animation-duration: 2s;
   animation-fill-mode: none;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 9999;
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
   transition-property: opacity;
   transition-duration: 200ms;

@@ -11,7 +11,6 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
-      apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",

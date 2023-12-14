@@ -1,11 +1,11 @@
 import {
-  type FileSectionReference,
-  type SubmitChatOptions,
-  submitChat,
   isAbortError,
+  submitChatGenerator,
+  type FileSectionReference,
   type SubmitFeedbackOptions,
+  type SubmitChatGeneratorOptions,
 } from '@markprompt/core';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 import {
   useFeedback,
@@ -27,7 +27,7 @@ export interface UsePromptOptions {
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
-  promptOptions?: Omit<SubmitChatOptions, 'signal'>;
+  promptOptions?: Omit<SubmitChatGeneratorOptions, 'signal'>;
 }
 
 export interface UsePromptResult {
@@ -44,6 +44,31 @@ export interface UsePromptResult {
   abortFeedbackRequest: UseFeedbackResult['abort'];
 }
 
+interface UsePromptState {
+  prompt: string;
+  state: PromptLoadingState;
+  answer: string;
+  references: FileSectionReference[];
+  promptId: string | undefined;
+  error: string | undefined;
+}
+
+const initialState = {
+  answer: '',
+  error: undefined,
+  prompt: '',
+  promptId: undefined,
+  references: [],
+  state: 'indeterminate',
+} satisfies UsePromptState;
+
+function reducer(
+  state: UsePromptState,
+  action: Partial<UsePromptState>,
+): UsePromptState {
+  return { ...state, ...action };
+}
+
 export function usePrompt({
   debug,
   feedbackOptions,
@@ -56,12 +81,7 @@ export function usePrompt({
     );
   }
 
-  const [state, setState] = useState<PromptLoadingState>('indeterminate');
-  const [answer, setAnswer] = useState('');
-  const [references, setReferences] = useState<FileSectionReference[]>([]);
-  const [prompt, setPrompt] = useState<string>('');
-  const [promptId, setPromptId] = useState<string>();
-  const [error, setError] = useState<string | undefined>();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const { ref: controllerRef, abort } = useAbortController();
 
@@ -79,84 +99,61 @@ export function usePrompt({
     async (forcePrompt?: string) => {
       abort();
 
-      const _prompt = forcePrompt || prompt;
+      const _prompt = forcePrompt || state.prompt;
       if (!_prompt || _prompt === '') {
         return;
       }
 
-      setAnswer('');
-      setReferences([]);
-      setPromptId(undefined);
-      setState('preload');
-      setError(undefined);
+      dispatch({
+        answer: '',
+        state: 'preload',
+        references: [],
+        promptId: undefined,
+        error: undefined,
+      });
 
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitChat(
-        [{ content: _prompt, role: 'user' }],
-        projectKey,
-        (chunk) => {
-          setState('streaming-answer');
-          setAnswer((prev) => prev + chunk);
-          return true;
-        },
-        (refs) => setReferences(refs),
-        // conversation id's are not being used here
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        (promptId: string) => setPromptId(promptId),
-        (error) => {
-          // ignore abort errors
-          if (isAbortError(error)) return;
-          setError(error.message);
-        },
-        {
-          ...promptOptions,
-          signal: controller.signal,
-        },
-        debug,
-      );
-
-      promise.then(() => {
-        if (controller.signal.aborted) return;
-        setState('done');
-      });
-
-      promise.finally(() => {
-        if (controllerRef.current === controller) {
-          controllerRef.current = undefined;
+      try {
+        for await (const chunk of submitChatGenerator(
+          [{ content: state.prompt, role: 'user' }],
+          projectKey,
+          { ...promptOptions, signal: controller.signal, debug },
+        )) {
+          dispatch({
+            ...chunk,
+            answer: chunk.content ?? '',
+            state: 'streaming-answer',
+          });
         }
-      });
+      } catch (error) {
+        if (isAbortError(error)) return;
+        // eslint-disable-next-line no-console
+        console.error(error);
+        dispatch({
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+
+      if (controllerRef.current === controller) {
+        controllerRef.current = undefined;
+      }
+
+      dispatch({ state: 'done' });
     },
-    [abort, controllerRef, debug, projectKey, prompt, promptOptions],
+    [abort, controllerRef, debug, projectKey, promptOptions, state.prompt],
   );
 
   return useMemo(
     () => ({
-      answer,
-      error,
-      prompt,
-      promptId,
-      references,
-      state,
+      ...state,
       abort,
       abortFeedbackRequest,
-      setPrompt,
+      setPrompt: (prompt) => dispatch({ prompt }),
       submitFeedback,
       submitPrompt,
     }),
-    [
-      answer,
-      error,
-      prompt,
-      promptId,
-      references,
-      state,
-      abort,
-      abortFeedbackRequest,
-      submitFeedback,
-      submitPrompt,
-    ],
+    [state, abort, abortFeedbackRequest, submitFeedback, submitPrompt],
   );
 }
