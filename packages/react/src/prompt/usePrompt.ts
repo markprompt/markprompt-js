@@ -3,10 +3,10 @@ import {
   submitChatGenerator,
   type FileSectionReference,
   type SubmitFeedbackOptions,
-  type SubmitChatGeneratorOptions,
 } from '@markprompt/core';
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
+import type { UserConfigurableOptions } from '../chat/store.js';
 import {
   useFeedback,
   type UseFeedbackResult,
@@ -27,7 +27,7 @@ export interface UsePromptOptions {
   /** Markprompt project key */
   projectKey: string;
   /** Enable and configure prompt functionality */
-  promptOptions?: Omit<SubmitChatGeneratorOptions, 'signal'>;
+  promptOptions?: UserConfigurableOptions;
 }
 
 export interface UsePromptResult {
@@ -115,11 +115,18 @@ export function usePrompt({
       const controller = new AbortController();
       controllerRef.current = controller;
 
+      const options = {
+        ...promptOptions,
+        signal: controller.signal,
+        debug,
+        tools: promptOptions?.tools?.map((x) => x.tool),
+      };
+
       try {
         for await (const chunk of submitChatGenerator(
           [{ content: state.prompt, role: 'user' }],
           projectKey,
-          { ...promptOptions, signal: controller.signal, debug },
+          options,
         )) {
           dispatch({
             ...chunk,

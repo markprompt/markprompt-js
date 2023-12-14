@@ -8,6 +8,7 @@ import {
   type ChatCompletionToolMessageParam,
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
+  type ChatCompletionTool,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -79,10 +80,36 @@ function toApiMessages(
     .filter(isPresent);
 }
 
+export interface ChatViewTool {
+  /**
+   * OpenAI tool definition.
+   */
+  tool: ChatCompletionTool;
+  /**
+   * The actual function to call. Called with a JSON string as returned from
+   * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
+   * arguments. Must return a string to feed the result back into OpenAI.
+   **/
+  call: (args: string) => string;
+  /**
+   * A confirmation message callback that takes as the first argument the
+   * function call arguments returned by OpenAI as a JSON string, and returns
+   * a message to show to the user for confirmation.
+   */
+  getConfirmation?: (args: string) => ReactNode;
+  /**
+   * Whether user needs to confirm a call to this function or function calls
+   * will be executed right away.
+   */
+  requireConfirmation?: boolean;
+}
+
 export type UserConfigurableOptions = Omit<
   SubmitChatGeneratorOptions,
-  'signal' | 'tools' | 'tool_choice'
->;
+  'signal' | 'tools'
+> & {
+  tools?: ChatViewTool[];
+};
 
 export interface ChatStoreState {
   abort?: () => void;
@@ -310,17 +337,20 @@ export const createChatStore = ({
               });
             }
 
+            const options = {
+              conversationId: get().conversationId,
+              signal: controller.signal,
+              debug,
+              ...get().options,
+              tools: get().options?.tools?.map((x) => x.tool),
+            };
+
             // do the chat completion request
             try {
               for await (const chunk of submitChatGenerator(
                 apiMessages,
                 projectKey,
-                {
-                  conversationId: get().conversationId,
-                  signal: controller.signal,
-                  debug,
-                  ...get().options,
-                },
+                options,
               )) {
                 if (chunk.conversationId) {
                   get().setConversationId(chunk.conversationId);
