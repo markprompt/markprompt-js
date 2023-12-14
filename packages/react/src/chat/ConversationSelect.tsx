@@ -22,7 +22,7 @@ export function ConversationSelect(): JSX.Element {
       items={[
         ...conversations.map(([conversationId, { messages }]) => ({
           value: conversationId,
-          label: messages[0].prompt,
+          label: messages[0].content,
         })),
         {
           value: 'new',

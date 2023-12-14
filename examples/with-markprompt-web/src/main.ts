@@ -13,8 +13,8 @@ if (el && el instanceof HTMLElement) {
       // apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/chat`,
     },
     chat: {
-      enabled: false,
-      apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
+      enabled: true,
+      // apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/chat`,
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",

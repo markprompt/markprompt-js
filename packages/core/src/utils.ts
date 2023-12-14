@@ -1,6 +1,18 @@
-import type { OpenAI } from 'openai';
+import type {
+  ChatCompletion,
+  ChatCompletionChunk,
+  ChatCompletionMessage,
+  ChatCompletionMessageToolCall,
+} from 'openai/resources/index.mjs';
 
 import type { ChatCompletionMetadata, FileSectionReference } from './types.js';
+
+export type {
+  ChatCompletion,
+  ChatCompletionChunk,
+  ChatCompletionMessage,
+  ChatCompletionMessageToolCall,
+} from 'openai/resources/index.mjs';
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
@@ -101,7 +113,7 @@ export function isMarkpromptMetadata(
   );
 }
 
-export function isChatCompletion(json: unknown): json is OpenAI.ChatCompletion {
+export function isChatCompletion(json: unknown): json is ChatCompletion {
   return (
     typeof json === 'object' &&
     json !== null &&
@@ -112,7 +124,7 @@ export function isChatCompletion(json: unknown): json is OpenAI.ChatCompletion {
 
 export const isChatCompletionMessage = (
   obj: unknown,
-): obj is OpenAI.ChatCompletionMessage => {
+): obj is ChatCompletionMessage => {
   return (
     typeof obj === 'object' &&
     obj !== null &&
@@ -125,7 +137,7 @@ export const isChatCompletionMessage = (
 
 export const isToolCall = (
   tool_call: unknown,
-): tool_call is OpenAI.ChatCompletionMessageToolCall => {
+): tool_call is ChatCompletionMessageToolCall => {
   return (
     typeof tool_call === 'object' &&
     tool_call !== null &&
@@ -133,25 +145,19 @@ export const isToolCall = (
     typeof tool_call.id === 'string' &&
     'type' in tool_call &&
     tool_call.type === 'function' &&
-    'function' in tool_call &&
-    typeof tool_call.function === 'object' &&
-    tool_call.function !== null &&
-    'name' in tool_call.function &&
-    typeof tool_call.function.name === 'string' &&
-    'arguments' in tool_call.function &&
-    typeof tool_call.function.arguments === 'string'
+    'function' in tool_call
   );
 };
 
 export const isToolCalls = (
   tool_calls: unknown,
-): tool_calls is OpenAI.ChatCompletionMessageToolCall[] => {
+): tool_calls is ChatCompletionMessageToolCall[] => {
   return Array.isArray(tool_calls) && tool_calls.every(isToolCall);
 };
 
 export const isChatCompletionChunk = (
   json: unknown,
-): json is OpenAI.ChatCompletionChunk => {
+): json is ChatCompletionChunk => {
   return (
     typeof json === 'object' &&
     json !== null &&

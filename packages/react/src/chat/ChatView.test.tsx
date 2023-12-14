@@ -1,4 +1,5 @@
 import {
+  DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   type FileSectionReference,
@@ -20,7 +21,12 @@ import {
 } from 'vitest';
 
 import { ChatView } from './ChatView.js';
-import { createChatStore, useChatStore } from './store.js';
+import {
+  createChatStore,
+  useChatStore,
+  type ChatViewMessage,
+} from './store.js';
+import { formatEvent, getChunk } from '../prompt/usePrompt.test.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {
@@ -36,38 +42,50 @@ let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
-    if (status >= 400) {
+  rest.post(
+    DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
+    async (req, res, ctx) => {
+      if (status >= 400) {
+        return res(
+          ctx.status(status),
+          ctx.json({ error: 'Internal server error' }),
+        );
+      }
+
+      stream = new ReadableStream({
+        async start(controller) {
+          if (Array.isArray(response)) {
+            let i = 0;
+            for (const chunk of response) {
+              if (wait)
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+              controller.enqueue(
+                encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+              );
+              i++;
+            }
+            controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
+          }
+
+          controller?.close();
+        },
+      });
+
       return res(
+        ctx.delay('real'),
         ctx.status(status),
-        ctx.json({ error: 'Internal server error' }),
+        ctx.set(
+          'x-markprompt-data',
+          encoder.encode(JSON.stringify(markpromptData)).toString(),
+        ),
+        ctx.set(
+          'x-markprompt-debug-info',
+          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+        ),
+        ctx.body(stream),
       );
-    }
-
-    stream = new ReadableStream({
-      async start(controller) {
-        for (const chunk of response) {
-          if (wait) await new Promise((resolve) => setTimeout(resolve, 1000));
-          controller.enqueue(encoder.encode(chunk));
-        }
-        controller?.close();
-      },
-    });
-
-    return res(
-      ctx.delay('real'),
-      ctx.status(status),
-      ctx.set(
-        'x-markprompt-data',
-        encoder.encode(JSON.stringify(markpromptData)).toString(),
-      ),
-      ctx.set(
-        'x-markprompt-debug-info',
-        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-      ),
-      ctx.body(stream),
-    );
-  }),
+    },
+  ),
   rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl!, async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ status: 'ok' }));
   }),
@@ -272,7 +290,9 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    const { rerender } = render(<ChatView projectKey="test-key" />);
+    const { rerender } = render(
+      <ChatView projectKey="test-key" activeView="chat" />,
+    );
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -441,12 +461,19 @@ describe('ChatView', () => {
                 {
                   id: crypto.randomUUID(),
                   promptId: crypto.randomUUID(),
-                  prompt: 'test',
-                  answer: 'answer',
+                  role: 'user',
+                  content: 'test',
+                  state: 'done',
+                },
+                {
+                  id: crypto.randomUUID(),
+                  promptId: crypto.randomUUID(),
+                  role: 'assistant',
+                  content: 'answer',
                   state: 'done',
                   references: [],
                 },
-              ],
+              ] satisfies ChatViewMessage[],
             },
           },
         },
@@ -483,12 +510,19 @@ describe('ChatView', () => {
                 {
                   id: crypto.randomUUID(),
                   promptId: crypto.randomUUID(),
-                  prompt: 'test 1',
-                  answer: 'answer 1',
+                  content: 'test 1',
+                  role: 'user',
+                  state: 'done',
+                },
+                {
+                  id: crypto.randomUUID(),
+                  promptId: crypto.randomUUID(),
+                  content: 'answer 1',
+                  role: 'assistant',
                   state: 'done',
                   references: [],
                 },
-              ],
+              ] satisfies ChatViewMessage[],
             },
             [conversationId2]: {
               lastUpdated: lastUpdated2,
@@ -496,12 +530,19 @@ describe('ChatView', () => {
                 {
                   id: crypto.randomUUID(),
                   promptId: crypto.randomUUID(),
-                  prompt: 'test 2',
-                  answer: 'answer 2',
+                  content: 'test 2',
+                  role: 'user',
+                  state: 'done',
+                },
+                {
+                  id: crypto.randomUUID(),
+                  promptId: crypto.randomUUID(),
+                  content: 'answer 2',
+                  role: 'assistant',
                   state: 'done',
                   references: [],
                 },
-              ],
+              ] satisfies ChatViewMessage[],
             },
           },
         },

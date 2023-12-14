@@ -15,6 +15,7 @@ import type {
   PropsWithChildren,
 } from 'react';
 
+import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
 interface AsProp<C extends ElementType> {
@@ -121,7 +122,7 @@ export interface MarkpromptOptions {
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
    * Enabling chat functionality will disable prompt functionality.
    */
-  chat?: SubmitChatOptions & {
+  chat?: UserConfigurableOptions & {
     /**
      * Show a chat-like prompt input allowing for conversation-style interaction
      * rather than single question prompts.

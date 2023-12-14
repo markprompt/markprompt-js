@@ -1,25 +1,33 @@
 export {
-  submitChat,
-  type SubmitChatOptions,
-  type ChatMessage,
-  DEFAULT_SUBMIT_CHAT_OPTIONS,
-  submitChatGenerator,
-  type SubmitChatGeneratorOptions,
   DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
+  DEFAULT_SUBMIT_CHAT_OPTIONS,
+  submitChat,
+  submitChatGenerator,
+  type ChatCompletionAssistantMessageParam,
+  type ChatCompletionFunctionMessageParam,
+  type ChatCompletionMessageParam,
+  type ChatCompletionSystemMessageParam,
+  type ChatCompletionToolMessageParam,
+  type ChatCompletionUserMessageParam,
+  type ChatMessage,
+  type SubmitChatGeneratorOptions,
+  type SubmitChatOptions,
+  type SubmitChatReturn,
+  type SubmitChatYield,
 } from './chat.js';
 
 export {
-  submitFeedback,
-  type SubmitFeedbackOptions,
-  type SubmitFeedbackBody,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  submitFeedback,
+  type SubmitFeedbackBody,
+  type SubmitFeedbackOptions,
 } from './feedback.js';
 
 export {
-  submitSearchQuery,
-  submitAlgoliaDocsearchQuery,
-  type SubmitSearchQueryOptions,
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  submitAlgoliaDocsearchQuery,
+  submitSearchQuery,
+  type SubmitSearchQueryOptions,
 } from './search.js';
 
 export {
@@ -43,4 +51,21 @@ export {
   type SourceType,
 } from './types.js';
 
-export { isAbortError } from './utils.js';
+export {
+  getErrorMessage,
+  isAbortError,
+  isChatCompletion,
+  isChatCompletionChunk,
+  isChatCompletionMessage,
+  isFileSectionReferences,
+  isKeyOf,
+  isMarkpromptMetadata,
+  isToolCall,
+  isToolCalls,
+  parseEncodedJSONHeader,
+  safeStringify,
+  type ChatCompletion,
+  type ChatCompletionChunk,
+  type ChatCompletionMessage,
+  type ChatCompletionMessageToolCall,
+} from './utils.js';

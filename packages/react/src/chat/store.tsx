@@ -1,16 +1,20 @@
 import {
   isAbortError,
-  submitChat,
-  type ChatMessage,
-  type FileSectionReference,
-  type SubmitChatOptions,
+  isToolCalls,
+  submitChatGenerator,
+  type ChatCompletionAssistantMessageParam,
+  type ChatCompletionMessageParam,
+  type ChatCompletionSystemMessageParam,
+  type ChatCompletionToolMessageParam,
+  type SubmitChatGeneratorOptions,
+  type SubmitChatYield,
 } from '@markprompt/core';
 import React, {
   createContext,
   useContext,
+  useEffect,
   useRef,
   type ReactNode,
-  useEffect,
 } from 'react';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -26,32 +30,59 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
-export interface ChatViewMessage {
+export interface ChatViewMessage
+  extends Omit<SubmitChatYield, 'conversationId'> {
   id: string;
-  prompt: string;
-  promptId?: string;
-  answer?: string;
   state: ChatLoadingState;
-  references: FileSectionReference[];
+  name?: string;
 }
 
-function toApiMessages(messages: ChatViewMessage[]): ChatMessage[] {
+function toApiMessages(
+  messages: (ChatViewMessage & { tool_call_id?: string })[],
+): ChatCompletionMessageParam[] {
   return messages
-    .map((message) => [
-      {
-        content: message.prompt,
-        role: 'user' as const,
-      },
-      message.answer
-        ? {
-            content: message.answer,
-            role: 'assistant' as const,
-          }
-        : undefined,
-    ])
-    .flat()
-    .filter(isPresent) satisfies ChatMessage[];
+    .map(({ content, role, tool_calls, tool_call_id, name }) => {
+      switch (role) {
+        case 'assistant': {
+          const msg: ChatCompletionAssistantMessageParam = {
+            content: content ?? null,
+            role,
+          };
+
+          if (isToolCalls(tool_calls)) msg.tool_calls = tool_calls;
+
+          return msg;
+        }
+        case 'system': {
+          return {
+            content: content ?? null,
+            role,
+          } satisfies ChatCompletionSystemMessageParam;
+        }
+        case 'tool': {
+          if (!tool_call_id) throw new Error('tool_call_id is required');
+          return {
+            content: content ?? null,
+            role,
+            tool_call_id,
+          } satisfies ChatCompletionToolMessageParam;
+        }
+        case 'user': {
+          return {
+            content: content ?? null,
+            role,
+            ...(name ? { name } : {}),
+          } satisfies ChatCompletionMessageParam;
+        }
+      }
+    })
+    .filter(isPresent);
 }
+
+export type UserConfigurableOptions = Omit<
+  SubmitChatGeneratorOptions,
+  'signal' | 'tools' | 'tool_choice'
+>;
 
 export interface ChatStoreState {
   abort?: () => void;
@@ -63,6 +94,7 @@ export interface ChatStoreState {
   selectConversation: (conversationId?: string) => void;
   messages: ChatViewMessage[];
   setMessages: (messages: ChatViewMessage[]) => void;
+  setMessageById(id: string, next: Partial<ChatViewMessage>): void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
   conversationIdsByProjectKey: {
     [projectKey: string]: string[];
@@ -74,8 +106,8 @@ export interface ChatStoreState {
     };
   };
   submitChat: (prompt: string) => void;
-  options?: Omit<SubmitChatOptions, 'signal'>;
-  setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => void;
+  options?: UserConfigurableOptions;
+  setOptions: (options: UserConfigurableOptions) => void;
   regenerateLastAnswer: () => void;
 }
 
@@ -83,7 +115,7 @@ export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: Omit<SubmitChatOptions, 'signal'>;
+  chatOptions?: UserConfigurableOptions;
 }
 
 /**
@@ -124,6 +156,7 @@ export const createChatStore = ({
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
+              state.conversationIdsByProjectKey[projectKey] ??= [];
               state.conversationId = conversationId;
 
               if (!isIterable(state.conversationIdsByProjectKey[projectKey])) {
@@ -180,8 +213,7 @@ export const createChatStore = ({
             next: Partial<ChatViewMessage>,
           ) => {
             set((state) => {
-              let currentMessage = state.messages[index];
-              if (!currentMessage) return;
+              let currentMessage = state.messages[index] ?? {};
 
               // update the current message
               currentMessage = { ...currentMessage, ...next };
@@ -197,47 +229,74 @@ export const createChatStore = ({
               };
             });
           },
-          submitChat: (prompt: string) => {
-            const id = crypto.randomUUID();
+          setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
+            set((state) => {
+              let index = state.messages.findIndex((m) => m.id === id);
+              index = index === -1 ? state.messages.length : index;
+
+              let currentMessage = state.messages[index] ?? {};
+              currentMessage = { ...currentMessage, ...next };
+              state.messages[index] = currentMessage;
+
+              const conversationId = state.conversationId;
+              if (!conversationId) return;
+
+              // save the message to local storage
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages: state.messages,
+              };
+            });
+          },
+          submitChat: async (prompt: string) => {
+            const promptId = crypto.randomUUID();
+            const responseId = crypto.randomUUID();
 
             get().setError(undefined);
 
             set((state) => {
-              state.messages.push({
-                id,
-                prompt,
-                state: 'indeterminate',
-                references: [],
-              });
+              state.messages.push(
+                {
+                  id: promptId,
+                  role: 'user',
+                  content: prompt,
+                  state: 'indeterminate',
+                  references: [],
+                },
+                {
+                  id: responseId,
+                  role: 'assistant',
+                  state: 'indeterminate',
+                },
+              );
             });
 
             // abort any pending or ongoing requests
             get().abort?.();
 
-            const currentMessageIndex = get().messages.length - 1;
-            const prevMessageIndex = currentMessageIndex - 1;
+            const prevMessageId = get().messages.findLast(
+              (m) =>
+                m.role === 'user' &&
+                m.state !== 'done' &&
+                m.state !== 'cancelled' &&
+                m.id !== promptId,
+            )?.id;
 
-            if (prevMessageIndex >= 0) {
-              const prevMessage = get().messages[prevMessageIndex];
-              if (
-                prevMessage &&
-                ['indeterminate', 'preload', 'streaming-answer'].includes(
-                  prevMessage.state,
-                )
-              ) {
-                get().setMessageByIndex(prevMessageIndex, {
-                  state: 'cancelled',
-                });
-              }
+            if (prevMessageId) {
+              get().setMessageById(prevMessageId, {
+                state: 'cancelled',
+              });
             }
 
             // create a new abort controller
             const controller = new AbortController();
             const abort = (): void => {
               controller.abort();
-              get().setMessageByIndex(currentMessageIndex, {
-                state: 'cancelled',
-              });
+              for (const id of [promptId, responseId]) {
+                get().setMessageById(id, {
+                  state: 'cancelled',
+                });
+              }
             };
             set((state) => {
               state.abort = abort;
@@ -245,88 +304,88 @@ export const createChatStore = ({
 
             // get ready to do the request
             const apiMessages = toApiMessages(get().messages);
+            for (const id of [promptId, responseId]) {
+              get().setMessageById(id, {
+                state: 'preload',
+              });
+            }
 
-            get().setMessageByIndex(currentMessageIndex, {
-              state: 'preload',
-            });
-
-            const promise = submitChat(
-              apiMessages,
-              get().projectKey,
-              (chunk) => {
-                if (controller.signal.aborted) return false;
-
-                const currentMessage = get().messages[currentMessageIndex];
-                if (!currentMessage) return;
-
-                get().setMessageByIndex(currentMessageIndex, {
-                  answer: (currentMessage.answer ?? '') + chunk,
+            // do the chat completion request
+            try {
+              for await (const chunk of submitChatGenerator(
+                apiMessages,
+                projectKey,
+                {
+                  conversationId: get().conversationId,
+                  signal: controller.signal,
+                  debug,
+                  ...get().options,
+                },
+              )) {
+                if (chunk.conversationId) {
+                  get().setConversationId(chunk.conversationId);
+                }
+                get().setMessageById(promptId, {
                   state: 'streaming-answer',
                 });
-
-                return true;
-              },
-              (references) => {
-                get().setMessageByIndex(currentMessageIndex, { references });
-              },
-              (conversationId) => {
-                get().setConversationId(conversationId);
-              },
-              (promptId) => {
-                get().setMessageByIndex(currentMessageIndex, { promptId });
-              },
-              (error) => {
-                get().setMessageByIndex(currentMessageIndex, {
-                  state: 'cancelled',
-                });
-
-                if (isAbortError(error)) return;
-
-                // eslint-disable-next-line no-console
-                get().setError(error.message);
-              },
-              {
-                conversationId: get().conversationId,
-                signal: controller.signal,
-                ...get().options,
-              },
-              debug,
-            );
-
-            promise.then(() => {
-              // don't overwrite the state of cancelled messages with done when the promise resolves
-              // or the fetch was cancelled
-              const currentMessage = get().messages[currentMessageIndex];
-              if (currentMessage?.state === 'cancelled') return;
-              if (controller.signal.aborted) return;
-
-              // set state of current message to done
-              get().setMessageByIndex(currentMessageIndex, {
-                state: 'done',
-              });
-            });
-
-            promise.finally(() => {
-              if (get().abort === abort) {
-                set((state) => {
-                  state.abort = undefined;
+                get().setMessageById(responseId, {
+                  state: 'streaming-answer',
+                  ...chunk,
                 });
               }
-            });
+            } catch (error) {
+              for (const id of [promptId, responseId]) {
+                get().setMessageById(id, {
+                  state: 'cancelled',
+                });
+              }
+
+              if (isAbortError(error)) return;
+
+              // eslint-disable-next-line no-console
+              get().setError(
+                error instanceof Error ? error.message : String(error),
+              );
+            }
+
+            if (get().abort === abort) {
+              set((state) => {
+                state.abort = undefined;
+              });
+            }
+
+            const currentMessage = get().messages.find(
+              (m) => m.id === promptId,
+            );
+
+            if (currentMessage?.state === 'cancelled') return;
+            if (controller.signal.aborted) return;
+
+            for (const id of [promptId, responseId]) {
+              get().setMessageById(id, {
+                state: 'done',
+              });
+            }
           },
           options: chatOptions ?? {},
-          setOptions: (options: Omit<SubmitChatOptions, 'signal'>) => {
+          setOptions: (options) => {
             set((state) => {
               state.options = options;
             });
           },
           regenerateLastAnswer: () => {
-            // eslint-disable-next-line prefer-const
-            let messages = [...get().messages];
-            const lastMessage = messages.pop();
-            if (!lastMessage) return;
-            get().setMessages(messages);
-            get().submitChat(lastMessage.prompt);
+            const messages = [...get().messages];
+
+            const lastUserMessageIndex = messages.findLastIndex(
+              (m) => m.role === 'user',
+            );
+            if (lastUserMessageIndex < 0) return;
+
+            const lastUserMessage = messages[lastUserMessageIndex];
+            if (!lastUserMessage.content) return;
+
+            get().setMessages(messages.slice(0, lastUserMessageIndex));
+            get().submitChat(lastUserMessage.content!);
           },
         }),
         {
