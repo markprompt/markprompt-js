@@ -1,4 +1,4 @@
-import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
+import { DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS } from '@markprompt/core';
 import { waitFor } from '@testing-library/react';
 import {
   act,
@@ -22,46 +22,39 @@ import { type UsePromptResult, usePrompt } from './usePrompt.js';
 const encoder = new TextEncoder();
 let response: object | string[] = [];
 
-const getChunk = (
-  content: string | null,
-  model = 'gpt-3.5-turbo',
-  isLast?: boolean,
-): string =>
-  JSON.stringify({
-    object: 'chat.completion.chunk',
-    choices: [
-      {
-        delta: {
-          content,
-          role: 'assistant',
-        },
-        finish_reason: isLast ? 'stop' : null,
-        index: 0,
-      },
-    ],
-    created: Date.now(),
-    model,
-  });
-
 let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
-    if (status >= 400) {
-      return res(ctx.status(status), ctx.json(response));
-    }
+  rest.post(
+    DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
+    async (_req, res, ctx) => {
+      if (status >= 400) {
+        return res(ctx.status(status), ctx.json(response));
+      }
 
-    stream = new ReadableStream({
-      start(controller) {
-        for (const chunk of response as string[]) {
-          controller.enqueue(encoder.encode(getChunk(chunk)));
-        }
-        controller?.close();
-      },
-    });
-    return res(ctx.status(status), ctx.body(stream));
-  }),
+      stream = new ReadableStream({
+        start(controller) {
+          if (Array.isArray(response)) {
+            let i = 0;
+            for (const chunk of response) {
+              controller.enqueue(
+                encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+              );
+              i++;
+            }
+            controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
+          } else {
+            controller.enqueue(encoder.encode(JSON.stringify(response)));
+          }
+
+          controller?.close();
+        },
+      });
+
+      return res(ctx.status(status), ctx.body(stream));
+    },
+  ),
 );
 
 describe('usePrompt', () => {
@@ -122,8 +115,6 @@ describe('usePrompt', () => {
         'According to my calculator 1 + 2 = 3',
       ),
     );
-
-    console.log(result.current);
   });
 
   it('should throw when instantiated without projectKey', async () => {
@@ -205,3 +196,77 @@ describe('usePrompt', () => {
     }
   });
 });
+
+// Server-sent events formatting code taken from:
+// https://github.com/rexxars/eventsource-parser/blob/main/test/format.ts
+export interface SseMessage {
+  event?: string;
+  retry?: number;
+  id?: string;
+  data: string;
+}
+
+export function formatEvent(message: SseMessage | string): string {
+  const msg = typeof message === 'string' ? { data: message } : message;
+
+  let output = '';
+  if (msg.event) {
+    output += `event: ${msg.event}\n`;
+  }
+
+  if (msg.retry) {
+    output += `retry: ${msg.retry}\n`;
+  }
+
+  if (typeof msg.id === 'string' || typeof msg.id === 'number') {
+    output += `id: ${msg.id}\n`;
+  }
+
+  output += encodeData(msg.data);
+
+  return output;
+}
+
+export function formatComment(comment: string): string {
+  return `:${comment}\n\n`;
+}
+
+export function encodeData(text: string): string {
+  const data = String(text).replace(/(\r\n|\r|\n)/g, '\n');
+  const lines = data.split(/\n/);
+
+  let line = '';
+  let output = '';
+
+  for (let i = 0, l = lines.length; i < l; ++i) {
+    line = lines[i];
+
+    output += `data: ${line}`;
+    output += i + 1 === l ? '\n\n' : '\n';
+  }
+
+  return output;
+}
+
+export function getChunk(
+  content: string | null,
+  index: number,
+  model = 'gpt-3.5-turbo',
+  isLast?: boolean,
+): string {
+  return JSON.stringify({
+    object: 'chat.completion.chunk',
+    choices: [
+      {
+        delta: {
+          content,
+          role: 'assistant',
+        },
+        finish_reason: isLast ? 'stop' : null,
+        index,
+      },
+    ],
+    created: Date.now(),
+    model,
+  });
+}

@@ -614,8 +614,6 @@ describe('ChatView', () => {
 
     await user.click(await screen.findByText('Stop generating'));
 
-    screen.debug();
-
     await waitFor(() => {
       expect(
         screen.getByText('This chat response was cancelled.', { exact: false }),

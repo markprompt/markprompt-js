@@ -99,7 +99,7 @@ export function usePrompt({
     async (forcePrompt?: string) => {
       abort();
 
-      const _prompt = forcePrompt || prompt;
+      const _prompt = forcePrompt || state.prompt;
       if (!_prompt || _prompt === '') {
         return;
       }
@@ -129,6 +129,8 @@ export function usePrompt({
         }
       } catch (error) {
         if (isAbortError(error)) return;
+        // eslint-disable-next-line no-console
+        console.error(error);
         dispatch({
           error: error instanceof Error ? error.message : String(error),
         });
