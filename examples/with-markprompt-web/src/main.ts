@@ -9,8 +9,11 @@ if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     feedback: { enabled: true },
     search: { enabled: true },
+    prompt: {
+      // apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/chat`,
+    },
     chat: {
-      enabled: true,
+      enabled: false,
       apiUrl: `${import.meta.env.VITE_MARKPROMPT_API_URL}/v1/chat`,
       defaultView: {
         message:
@@ -27,5 +30,6 @@ if (el && el instanceof HTMLElement) {
     trigger: {
       buttonLabel: 'Ask AI',
     },
+    open: true,
   } satisfies MarkpromptOptions);
 }

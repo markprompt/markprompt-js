@@ -4,7 +4,6 @@ import {
   act,
   renderHook,
   suppressErrorOutput,
-  cleanup,
 } from '@testing-library/react-hooks';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -22,6 +21,28 @@ import { type UsePromptResult, usePrompt } from './usePrompt.js';
 
 const encoder = new TextEncoder();
 let response: object | string[] = [];
+
+const getChunk = (
+  content: string | null,
+  model = 'gpt-3.5-turbo',
+  isLast?: boolean,
+): string =>
+  JSON.stringify({
+    object: 'chat.completion.chunk',
+    choices: [
+      {
+        delta: {
+          content,
+          role: 'assistant',
+        },
+        finish_reason: isLast ? 'stop' : null,
+        index: 0,
+      },
+    ],
+    created: Date.now(),
+    model,
+  });
+
 let status = 200;
 let stream: ReadableStream;
 
@@ -34,7 +55,7 @@ const server = setupServer(
     stream = new ReadableStream({
       start(controller) {
         for (const chunk of response as string[]) {
-          controller.enqueue(encoder.encode(chunk));
+          controller.enqueue(encoder.encode(getChunk(chunk)));
         }
         controller?.close();
       },
@@ -60,7 +81,6 @@ describe('usePrompt', () => {
     response = [];
     status = 200;
     server.resetHandlers();
-    cleanup();
     vi.resetAllMocks();
   });
 
@@ -102,6 +122,8 @@ describe('usePrompt', () => {
         'According to my calculator 1 + 2 = 3',
       ),
     );
+
+    console.log(result.current);
   });
 
   it('should throw when instantiated without projectKey', async () => {
