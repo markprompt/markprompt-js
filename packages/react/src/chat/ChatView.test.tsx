@@ -1,6 +1,5 @@
 import {
   DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
-  DEFAULT_SUBMIT_CHAT_OPTIONS,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   type FileSectionReference,
 } from '@markprompt/core';
@@ -11,8 +10,8 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
 import {
-  afterEach,
   afterAll,
+  afterEach,
   beforeAll,
   describe,
   expect,
