@@ -3,9 +3,9 @@ import type {
   ChatCompletionChunk,
   ChatCompletionMessage,
   ChatCompletionMessageToolCall,
-} from 'openai/resources/index.mjs';
-
-import type { ChatCompletionMetadata, FileSectionReference } from './types.js';
+  ChatCompletionMetadata,
+  FileSectionReference,
+} from './types.js';
 
 export type {
   ChatCompletion,

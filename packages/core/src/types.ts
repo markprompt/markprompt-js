@@ -1,5 +1,21 @@
 import type { DocSearchHit } from './docsearch.js';
 
+export type {
+  Chat,
+  ChatCompletion,
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionChunk,
+  ChatCompletionFunctionMessageParam,
+  ChatCompletionMessage,
+  ChatCompletionMessageParam,
+  ChatCompletionMessageToolCall,
+  ChatCompletionSystemMessageParam,
+  ChatCompletionTool,
+  ChatCompletionToolChoiceOption,
+  ChatCompletionToolMessageParam,
+  ChatCompletionUserMessageParam,
+} from 'openai/resources/index.mjs';
+
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
