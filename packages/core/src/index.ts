@@ -3,6 +3,15 @@ export {
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   submitChat,
   submitChatGenerator,
+<<<<<<< HEAD
+=======
+  type ChatCompletionAssistantMessageParam,
+  type ChatCompletionFunctionMessageParam,
+  type ChatCompletionMessageParam,
+  type ChatCompletionSystemMessageParam,
+  type ChatCompletionToolMessageParam,
+  type ChatCompletionUserMessageParam,
+>>>>>>> main
   type ChatMessage,
   type SubmitChatGeneratorOptions,
   type SubmitChatOptions,

@@ -22,6 +22,15 @@ import {
   safeStringify,
 } from './utils.js';
 
+export type {
+  ChatCompletionMessageParam,
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionFunctionMessageParam,
+  ChatCompletionToolMessageParam,
+  ChatCompletionUserMessageParam,
+  ChatCompletionSystemMessageParam,
+} from 'openai/resources/index.mjs';
+
 export interface SubmitChatOptions {
   /**
    * URL at which to fetch completions
