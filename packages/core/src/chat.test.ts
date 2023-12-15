@@ -10,46 +10,54 @@ import {
   vi,
 } from 'vitest';
 
-import { DEFAULT_SUBMIT_CHAT_OPTIONS, submitChat } from './index.js';
-
-const encoder = new TextEncoder();
-let markpromptData: unknown = '';
-const markpromptDebug = '';
-let response: string[] = [];
-let status = 200;
-let request: RestRequest;
-let requestBody: unknown = {};
-let stream: ReadableStream;
-
-const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
-    request = req;
-    requestBody = await req.json();
-    stream = new ReadableStream({
-      start(controller) {
-        for (const chunk of response) {
-          controller.enqueue(encoder.encode(chunk));
-        }
-        controller?.close();
-      },
-    });
-
-    return res(
-      ctx.status(status),
-      ctx.set(
-        'x-markprompt-data',
-        encoder.encode(JSON.stringify(markpromptData)).toString(),
-      ),
-      ctx.set(
-        'x-markprompt-debug-info',
-        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-      ),
-      ctx.body(stream),
-    );
-  }),
-);
+import {
+  DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
+  DEFAULT_SUBMIT_CHAT_OPTIONS,
+  submitChat,
+  submitChatGenerator,
+  SubmitChatReturn,
+  SubmitChatYield,
+} from './index.js';
+import { formatEvent, getChunk } from '../../../test/utils.js';
 
 describe('submitChat', () => {
+  const encoder = new TextEncoder();
+  let markpromptData: unknown = '';
+  const markpromptDebug = '';
+  let response: string[] = [];
+  let status = 200;
+  let request: RestRequest;
+  let requestBody: unknown = {};
+  let stream: ReadableStream;
+
+  const server = setupServer(
+    rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+      request = req;
+      requestBody = await req.json();
+      stream = new ReadableStream({
+        start(controller) {
+          for (const chunk of response) {
+            controller.enqueue(encoder.encode(chunk));
+          }
+          controller?.close();
+        },
+      });
+
+      return res(
+        ctx.status(status),
+        ctx.set(
+          'x-markprompt-data',
+          encoder.encode(JSON.stringify(markpromptData)).toString(),
+        ),
+        ctx.set(
+          'x-markprompt-debug-info',
+          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+        ),
+        ctx.body(stream),
+      );
+    }),
+  );
+
   const onAnswerChunk = vi.fn().mockReturnValue(true);
   const onReferences = vi.fn();
   const onPromptId = vi.fn();
@@ -360,6 +368,262 @@ describe('submitChat', () => {
       expect(onError).toHaveBeenCalledWith(new Error('test'));
     } finally {
       mockFetch.mockRestore();
+    }
+  });
+});
+
+describe('submitChatGenerator', () => {
+  const encoder = new TextEncoder();
+  let markpromptData: unknown = '';
+  const markpromptDebug = '';
+  let response: string[] | string = [];
+  let request: RestRequest;
+  let requestBody: unknown = {};
+  let stream: ReadableStream;
+
+  let status = 200;
+
+  const server = setupServer(
+    rest.post(
+      DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
+      async (req, res, ctx) => {
+        request = req;
+        requestBody = await req.json();
+
+        if (status >= 400) {
+          return res(
+            ctx.status(status),
+            ctx.text(
+              Array.isArray(response) ? JSON.stringify(response) : response,
+            ),
+          );
+        }
+
+        stream = new ReadableStream({
+          start(controller) {
+            if (Array.isArray(response)) {
+              let i = 0;
+              for (const chunk of response) {
+                controller.enqueue(
+                  encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+                );
+                i++;
+              }
+              controller.enqueue(
+                encoder.encode(formatEvent({ data: '[DONE]' })),
+              );
+            } else {
+              controller.enqueue(encoder.encode(JSON.stringify(response)));
+            }
+
+            controller?.close();
+          },
+        });
+
+        return res(
+          ctx.delay('real'),
+          ctx.status(status),
+          ctx.set(
+            'x-markprompt-data',
+            encoder.encode(JSON.stringify(markpromptData)).toString(),
+          ),
+          ctx.set(
+            'x-markprompt-debug-info',
+            encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+          ),
+          ctx.body(stream),
+        );
+      },
+    ),
+  );
+
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+
+  afterAll(() => {
+    server.close();
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    response = [];
+    requestBody = {};
+    markpromptData = '';
+    status = 200;
+    server.resetHandlers();
+    vi.resetAllMocks();
+  });
+
+  test('require projectKey', async () => {
+    try {
+      // @ts-expect-error We test a missing project key.
+      for await (const _chunk of submitChatGenerator([])) {
+        // do nothing
+      }
+
+      expect.fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe('A projectKey is required.');
+    }
+  });
+
+  test('don’t make requests if the prompt is empty', async () => {
+    const chunks: unknown[] = [];
+    for await (const chunk of submitChatGenerator([], 'test-key')) {
+      chunks.push(chunk);
+    }
+
+    expect(chunks.length).toBe(0);
+  });
+
+  test('make a request', async () => {
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    const chunks: unknown[] = [];
+
+    for await (const chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      chunks.push(chunk);
+    }
+
+    const lastChunk: SubmitChatReturn = chunks[chunks.length - 1];
+    expect(request).toBeDefined();
+    expect(lastChunk.content).toBe('According to my calculator 1 + 2 = 3');
+  });
+
+  test('endpoint is called with the default options if none are provided', async () => {
+    for await (const _chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      // do nothing
+    }
+
+    const { apiUrl: _apiUrl, ...rest } = DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS;
+
+    expect(requestBody).toStrictEqual({
+      messages: [{ content: 'How much is 1+2?', role: 'user' }],
+      projectKey: 'testKey',
+      ...rest,
+    });
+  });
+
+  test('ignore invalid or missing references', async () => {
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    const chunks: SubmitChatYield[] = [];
+    for await (const chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      chunks.push(chunk);
+    }
+
+    expect(chunks.every((x) => x.references === undefined)).toBe(true);
+  });
+
+  test('yields references', async () => {
+    const references = [
+      {
+        file: { path: '/page1', source: { type: 'file-upload' } },
+        meta: { leadHeading: { value: 'Page 1' } },
+      },
+    ];
+    markpromptData = { references };
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    const chunks: SubmitChatYield[] = [];
+    for await (const chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      chunks.push(chunk);
+    }
+
+    const chunkWithReferences = chunks.find((x) => x.references);
+    expect(chunkWithReferences.references).toStrictEqual(references);
+  });
+
+  test('yields promptId', async () => {
+    const promptId = 'test-id';
+
+    markpromptData = { promptId };
+
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    const chunks: SubmitChatYield[] = [];
+    for await (const chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      // do nothing
+      chunks.push(chunk);
+    }
+
+    const chunkWithPromptId = chunks.find((x) => x.promptId);
+    expect(chunkWithPromptId.promptId).toStrictEqual(promptId);
+  });
+
+  test('yields conversationId', async () => {
+    const conversationId = 'test-id';
+
+    markpromptData = { conversationId };
+
+    response = ['According to my calculator ', '1 + 2 = 3'];
+
+    const chunks: SubmitChatYield[] = [];
+    for await (const chunk of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+    )) {
+      chunks.push(chunk);
+    }
+
+    const chunkWithConversationId = chunks.find((x) => x.conversationId);
+    expect(chunkWithConversationId.conversationId).toStrictEqual(
+      conversationId,
+    );
+  });
+
+  test('throws errors when they occur', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      throw new Error('test');
+    });
+
+    try {
+      for await (const _chunk of submitChatGenerator(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+      )) {
+        // do nothing
+      }
+
+      expect.fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe('test');
+    } finally {
+      mockFetch.mockRestore();
+    }
+  });
+
+  test('throws on error status code', async () => {
+    status = 500;
+    response = 'Internal Server Error';
+
+    try {
+      for await (const _chunk of submitChatGenerator(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+      )) {
+        // do nothing
+      }
+
+      expect.fail('Expected an error to be thrown');
+    } catch (error) {
+      expect(error.message).toBe('Internal Server Error');
     }
   });
 });
