@@ -182,7 +182,7 @@ export async function submitChat(
   try {
     const validOptions: SubmitChatOptions = Object.fromEntries(
       Object.entries(options).filter(
-        ([key]) => key in DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
+        ([key]) => key in DEFAULT_SUBMIT_CHAT_OPTIONS,
       ),
     );
     const { signal, ...cloneableOpts } = validOptions;
