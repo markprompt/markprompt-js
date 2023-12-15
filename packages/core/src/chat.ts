@@ -459,6 +459,10 @@ export async function* submitChatGenerator(
     throw new Error('A projectKey is required.');
   }
 
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    return;
+  }
+
   const validOptions: SubmitChatGeneratorOptions = Object.fromEntries(
     Object.entries(options).filter(([key]) =>
       isValidSubmitChatGeneratorOptionsKey(key),
