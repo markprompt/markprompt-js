@@ -32,11 +32,20 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
+interface ToolCall {
+  status: 'loading' | 'done' | 'error';
+  error?: string;
+  promise?: Promise<string>;
+  result?: string;
+}
+
 export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
   id: string;
   state: ChatLoadingState;
-  toolCallsByToolCallId?: { [tool_call_id: string]: Promise<string> };
+  toolCallsByToolCallId?: {
+    [tool_call_id: string]: ToolCall;
+  };
   name?: string;
 }
 
@@ -144,6 +153,11 @@ export interface ChatStoreState {
   setMessages: (messages: ChatViewMessage[]) => void;
   setMessageById(id: string, next: Partial<ChatViewMessage>): void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
+  setToolCallById: (
+    messageId: string,
+    toolCallId: string,
+    next: Partial<ToolCall>,
+  ) => void;
   conversationIdsByProjectKey: {
     [projectKey: string]: string[];
   };
@@ -153,7 +167,11 @@ export interface ChatStoreState {
       messages: ChatViewMessage[];
     };
   };
-  submitChat: (prompt: string) => void;
+  submitChat: (
+    message:
+      | { content: string; role: 'user'; name?: string }
+      | { content: string; role: 'tool'; name: string; tool_call_id: string },
+  ) => void;
   submitToolCalls: (message: ChatViewMessage) => Promise<void>;
   options?: UserConfigurableOptions;
   setOptions: (options: UserConfigurableOptions) => void;
@@ -284,7 +302,10 @@ export const createChatStore = ({
               index = index === -1 ? state.messages.length : index;
 
               let currentMessage = state.messages[index] ?? {};
-              currentMessage = { ...currentMessage, ...next };
+              currentMessage = {
+                ...currentMessage,
+                ...next,
+              };
               state.messages[index] = currentMessage;
 
               const conversationId = state.conversationId;
@@ -297,7 +318,38 @@ export const createChatStore = ({
               };
             });
           },
-          submitChat: async (prompt: string) => {
+          setToolCallById(messageId, toolCallId, next) {
+            set((state) => {
+              let index = state.messages.findIndex((m) => m.id === messageId);
+              index = index === -1 ? state.messages.length : index;
+
+              let message = state.messages[index] ?? {};
+
+              const toolCallsByToolCallId = message.toolCallsByToolCallId ?? {};
+
+              toolCallsByToolCallId[toolCallId] = {
+                ...toolCallsByToolCallId[toolCallId],
+                ...next,
+              };
+
+              message = { ...message, toolCallsByToolCallId };
+              state.messages[index] = message;
+
+              const conversationId = state.conversationId;
+              if (!conversationId) return;
+
+              // save the message to local storage
+              state.messagesByConversationId[conversationId] = {
+                lastUpdated: new Date().toISOString(),
+                messages: state.messages,
+              };
+            });
+          },
+          submitChat: async (
+            message:
+              | { content: string; role: 'user'; name?: string }
+              | { content: string; role: 'tool'; tool_call_id: string },
+          ) => {
             const promptId = crypto.randomUUID();
             const responseId = crypto.randomUUID();
 
@@ -306,12 +358,12 @@ export const createChatStore = ({
             set((state) => {
               state.messages.push(
                 {
+                  ...message,
                   id: promptId,
-                  role: 'user',
-                  content: prompt,
-                  state: 'indeterminate',
                   references: [],
+                  state: 'indeterminate',
                 },
+                // also create a placeholder message for the assistants response
                 {
                   id: responseId,
                   role: 'assistant',
@@ -386,6 +438,8 @@ export const createChatStore = ({
                 });
               }
             } catch (error) {
+              console.error(error);
+
               for (const id of [promptId, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
@@ -425,24 +479,41 @@ export const createChatStore = ({
             const tools = get().options?.tools;
             if (!tools) return;
 
-            const toolCallsByToolCallId = Object.fromEntries(
-              message.tool_calls.filter(isToolCall).map((tool_call) => {
-                const tool = tools.find(
-                  (x) => x.tool.function.name === tool_call.function?.name,
-                );
+            for (const tool_call of message.tool_calls.filter(isToolCall)) {
+              const tool = tools.find(
+                (x) => x.tool.function.name === tool_call.function?.name,
+              );
 
-                if (!tool) throw new Error('Tool not found');
+              if (!tool) throw new Error('Tool not found');
 
-                return [
-                  tool_call.id,
-                  tool.call(tool_call.function?.arguments || '{}'),
-                ];
-              }),
-            );
+              const promise = tool.call(tool_call.function?.arguments || '{}');
 
-            get().setMessageById(message.id, {
-              toolCallsByToolCallId,
-            });
+              get().setToolCallById(message.id, tool_call.id!, {
+                status: 'loading',
+                promise,
+              });
+
+              promise.then((result) => {
+                get().setToolCallById(message.id, tool_call.id!, {
+                  result,
+                  status: 'done',
+                });
+
+                get().submitChat({
+                  role: 'tool',
+                  name: tool.tool.function.name,
+                  tool_call_id: tool_call.id!,
+                  content: result,
+                });
+              });
+
+              promise.catch((error) => {
+                get().setToolCallById(message.id, tool_call.id!, {
+                  status: 'error',
+                  error: error instanceof Error ? error.message : String(error),
+                });
+              });
+            }
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
@@ -462,7 +533,10 @@ export const createChatStore = ({
             if (!lastUserMessage.content) return;
 
             get().setMessages(messages.slice(0, lastUserMessageIndex));
-            get().submitChat(lastUserMessage.content!);
+            get().submitChat({
+              role: 'user',
+              content: lastUserMessage.content,
+            });
           },
         }),
         {

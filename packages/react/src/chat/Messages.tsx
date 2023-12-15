@@ -1,8 +1,4 @@
-import {
-  isChatCompletion,
-  isToolCall,
-  type ChatCompletionMessageToolCall,
-} from '@markprompt/core';
+import { isToolCall } from '@markprompt/core';
 import React, { Fragment, useState, type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
@@ -40,7 +36,9 @@ export function Messages(props: MessagesProps): ReactElement {
         message={defaultView?.message}
         prompts={defaultView?.prompts}
         promptsHeading={defaultView?.promptsHeading}
-        onDidSelectPrompt={submitChat}
+        onDidSelectPrompt={(prompt) =>
+          submitChat({ role: 'user', content: prompt })
+        }
       />
     );
   }
@@ -118,13 +116,10 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   });
 
   const [toolCallConfirmed, setToolCallConfirmed] = useState(false);
-  const [toolCall, setToolCall] = useState<Promise<void>>();
 
-  const confirmToolCall = async () => {
+  const confirmToolCall = (): void => {
     setToolCallConfirmed(true);
-    const promise = submitToolCall(message);
-    setToolCall(promise);
-    return promise;
+    submitToolCall(message);
   };
 
   return (

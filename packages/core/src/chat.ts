@@ -521,7 +521,8 @@ export async function* submitChatGenerator(
     }
   }
 
-  const completion = {};
+  // eslint-disable-next-line prefer-const
+  let completion = {};
 
   const stream = res.body
     .pipeThrough(new TextDecoderStream())
@@ -547,9 +548,11 @@ export async function* submitChatGenerator(
       });
     }
 
-    const delta = json.choices[0].delta;
+    // eslint-disable-next-line prefer-const
+    let delta = json.choices[0].delta;
 
     mergeWith(completion, delta, (destValue, srcValue) => {
+      console.log(destValue, srcValue);
       const type = typeof srcValue;
       if (type === 'string') return (destValue ?? '') + srcValue;
     });
