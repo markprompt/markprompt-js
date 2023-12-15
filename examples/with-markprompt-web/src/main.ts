@@ -5,6 +5,19 @@ import { markprompt, type MarkpromptOptions } from '@markprompt/web';
 
 const el = document.querySelector('#markprompt');
 
+async function get_random_activity(args: string): Promise<string> {
+  const parsed = JSON.parse(args);
+
+  const url = new URL('https://www.boredapi.com/api/activity');
+
+  Object.entries(parsed).forEach(([key, value]) => {
+    if (value) url.searchParams.append(key, value.toString());
+  });
+
+  const res = await fetch(url);
+  return await res.text();
+}
+
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     feedback: { enabled: true },
@@ -21,10 +34,60 @@ if (el && el instanceof HTMLElement) {
           'Do you have a REST API?',
         ],
       },
+      tool_choice: 'auto',
+      tools: [
+        {
+          call: get_random_activity,
+          tool: {
+            type: 'function',
+            function: {
+              name: 'get_random_activity',
+              description: 'Get a random activity from the Bored API',
+              parameters: {
+                type: 'object',
+                properties: {
+                  type: {
+                    type: 'string',
+                    description: 'Find a random activity with a given type',
+                    enum: [
+                      'education',
+                      'recreational',
+                      'social',
+                      'diy',
+                      'charity',
+                      'cooking',
+                      'relaxation',
+                      'music',
+                      'busywork',
+                    ],
+                  },
+                  participants: {
+                    type: 'integer',
+                    description:
+                      'Find a random activity for a given number of participants',
+                  },
+                },
+                required: [],
+              },
+            },
+          },
+          getConfirmation(args: string) {
+            const parsed = JSON.parse(args);
+            const base = `Are you sure you want to get a random activity?`;
+            const participants = parsed.participants
+              ? ` It will be for ${parsed.participants} participants.`
+              : '';
+            const type = parsed.type ? ` It will be ${parsed.type}.` : '';
+            return base + participants + type;
+          },
+          requireConfirmation: true,
+        },
+      ],
     },
     defaultView: 'chat',
     trigger: {
       buttonLabel: 'Ask AI',
     },
+    open: true,
   } satisfies MarkpromptOptions);
 }
