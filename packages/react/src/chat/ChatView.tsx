@@ -59,6 +59,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
             feedbackOptions={feedbackOptions}
             referencesOptions={referencesOptions}
             defaultView={chatOptions.defaultView}
+            tools={chatOptions.tools}
           />
           <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
         </div>

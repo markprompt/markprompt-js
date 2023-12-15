@@ -1,14 +1,15 @@
 import {
   isAbortError,
+  isToolCall,
   isToolCalls,
   submitChatGenerator,
   type ChatCompletionAssistantMessageParam,
   type ChatCompletionMessageParam,
   type ChatCompletionSystemMessageParam,
+  type ChatCompletionTool,
   type ChatCompletionToolMessageParam,
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
-  type ChatCompletionTool,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -35,6 +36,7 @@ export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
   id: string;
   state: ChatLoadingState;
+  toolCallsByToolCallId?: { [tool_call_id: string]: Promise<string> };
   name?: string;
 }
 
@@ -93,6 +95,11 @@ function toApiMessages(
   );
 }
 
+interface ConfirmationProps {
+  args: string;
+  confirm: () => void;
+}
+
 export interface ChatViewTool {
   /**
    * OpenAI tool definition.
@@ -103,16 +110,17 @@ export interface ChatViewTool {
    * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
    * arguments. Must return a string to feed the result back into OpenAI.
    **/
-  call: (args: string) => string;
+  call: (args: string) => Promise<string>;
   /**
-   * A confirmation message callback that takes as the first argument the
-   * function call arguments returned by OpenAI as a JSON string, and returns
-   * a message to show to the user for confirmation.
+   * An optional user-provided confirmation message component that takes as the
+   * first argument the function call arguments returned by OpenAI as a JSON
+   * string, and returns a message to show to the user for confirmation.
    */
-  getConfirmation?: (args: string) => ReactNode;
+  Confirmation?: (props: ConfirmationProps) => JSX.Element;
   /**
    * Whether user needs to confirm a call to this function or function calls
    * will be executed right away.
+   * @default true
    */
   requireConfirmation?: boolean;
 }
@@ -146,6 +154,7 @@ export interface ChatStoreState {
     };
   };
   submitChat: (prompt: string) => void;
+  submitToolCalls: (message: ChatViewMessage) => Promise<void>;
   options?: UserConfigurableOptions;
   setOptions: (options: UserConfigurableOptions) => void;
   regenerateLastAnswer: () => void;
@@ -409,6 +418,31 @@ export const createChatStore = ({
                 state: 'done',
               });
             }
+          },
+          async submitToolCalls(message: ChatViewMessage) {
+            if (!message.tool_calls) return;
+
+            const tools = get().options?.tools;
+            if (!tools) return;
+
+            const toolCallsByToolCallId = Object.fromEntries(
+              message.tool_calls.filter(isToolCall).map((tool_call) => {
+                const tool = tools.find(
+                  (x) => x.tool.function.name === tool_call.function?.name,
+                );
+
+                if (!tool) throw new Error('Tool not found');
+
+                return [
+                  tool_call.id,
+                  tool.call(tool_call.function?.arguments || '{}'),
+                ];
+              }),
+            );
+
+            get().setMessageById(message.id, {
+              toolCallsByToolCallId,
+            });
           },
           options: chatOptions ?? {},
           setOptions: (options) => {

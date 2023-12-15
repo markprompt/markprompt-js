@@ -1,8 +1,17 @@
-import React, { Fragment, type ReactElement } from 'react';
+import {
+  isChatCompletion,
+  isToolCall,
+  type ChatCompletionMessageToolCall,
+} from '@markprompt/core';
+import React, { Fragment, useState, type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
-import { useChatStore } from './store.js';
+import {
+  useChatStore,
+  type ChatViewMessage,
+  type ChatViewTool,
+} from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -15,18 +24,15 @@ interface MessagesProps {
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
   defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
   projectKey: string;
+  tools?: ChatViewTool[];
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { feedbackOptions, referencesOptions, defaultView, projectKey } = props;
+  const { feedbackOptions, referencesOptions, defaultView, projectKey, tools } =
+    props;
 
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
-
-  const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
-    projectKey,
-    feedbackOptions,
-  });
 
   if (!messages || messages.length === 0) {
     return (
@@ -58,29 +64,12 @@ export function Messages(props: MessagesProps): ReactElement {
             )}
 
             {message.role === 'assistant' && (
-              <div className="MarkpromptMessageAnswerContainer">
-                <MessageAnswer state={message.state}>
-                  {message.content ?? ''}
-                </MessageAnswer>
-
-                {feedbackOptions?.enabled && message.state === 'done' && (
-                  <Feedback
-                    variant="icons"
-                    className="MarkpromptPromptFeedback"
-                    submitFeedback={(feedback, promptId) => {
-                      submitFeedback(feedback, promptId);
-                      feedbackOptions.onFeedbackSubmit?.(
-                        feedback,
-                        messages,
-                        promptId,
-                      );
-                    }}
-                    abortFeedbackRequest={abortFeedbackRequest}
-                    promptId={message.promptId}
-                    heading={feedbackOptions.heading}
-                  />
-                )}
-              </div>
+              <AssistantMessage
+                message={message}
+                projectKey={projectKey}
+                feedbackOptions={feedbackOptions}
+                tools={tools}
+              />
             )}
 
             {(!referencesOptions?.display ||
@@ -106,6 +95,104 @@ export function Messages(props: MessagesProps): ReactElement {
           </Fragment>
         ))}
       </BaseMarkprompt.AutoScroller>
+    </div>
+  );
+}
+
+interface AssistantMessageProps {
+  feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
+  message: ChatViewMessage;
+  projectKey: string;
+  tools?: ChatViewTool[];
+}
+
+function AssistantMessage(props: AssistantMessageProps): JSX.Element {
+  const { feedbackOptions, message, projectKey, tools } = props;
+
+  const messages = useChatStore((state) => state.messages);
+  const submitToolCall = useChatStore((state) => state.submitToolCalls);
+
+  const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
+    projectKey,
+    feedbackOptions,
+  });
+
+  const [toolCallConfirmed, setToolCallConfirmed] = useState(false);
+  const [toolCall, setToolCall] = useState<Promise<void>>();
+
+  const confirmToolCall = async () => {
+    setToolCallConfirmed(true);
+    const promise = submitToolCall(message);
+    setToolCall(promise);
+    return promise;
+  };
+
+  return (
+    <div className="MarkpromptMessageAnswerContainer">
+      <MessageAnswer state={message.state}>
+        {message.content ?? ''}
+      </MessageAnswer>
+
+      {/* if this message has any tool calls, and those tool calls require a confirmation, and that confirmation has not already been given, show either the default or user-provided confirmation */}
+      {Array.isArray(message.tool_calls) &&
+        message.tool_calls.map((tool_call) => {
+          // don't render incomplete tool calls
+          if (!isToolCall(tool_call)) return null;
+
+          const tool = tools?.find(
+            (tool) => tool.tool.function.name === tool_call.function?.name,
+          );
+
+          if (tool?.requireConfirmation === false || toolCallConfirmed) {
+            // show a message that we received a function call and show a loading state?
+            // render a loading state while we wait for the tool call to resolve?
+          }
+
+          if (tool.Confirmation) {
+            const Confirmation = tool.Confirmation;
+            return (
+              <Confirmation
+                key={tool_call.id!}
+                args={
+                  tool_call.function.arguments === ''
+                    ? '{}'
+                    : tool_call.function.arguments!
+                }
+                confirm={confirmToolCall}
+              />
+            );
+          }
+
+          return (
+            <div key={tool_call.id!} style={{ paddingInline: '1.75rem' }}>
+              <p>
+                The bot wants to use a tool, please confirm that you want to:
+              </p>
+              <p>
+                <strong>
+                  {tool.tool.function.description ?? tool.tool.function.name}
+                </strong>
+              </p>
+              <div>
+                <button onClick={confirmToolCall}>Confirm</button>
+              </div>
+            </div>
+          );
+        })}
+
+      {feedbackOptions?.enabled && message.state === 'done' && (
+        <Feedback
+          variant="icons"
+          className="MarkpromptPromptFeedback"
+          submitFeedback={(feedback, promptId) => {
+            submitFeedback(feedback, promptId);
+            feedbackOptions.onFeedbackSubmit?.(feedback, messages, promptId);
+          }}
+          abortFeedbackRequest={abortFeedbackRequest}
+          promptId={message.promptId}
+          heading={feedbackOptions.heading}
+        />
+      )}
     </div>
   );
 }

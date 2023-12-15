@@ -1,13 +1,12 @@
 import '@markprompt/css';
 import './style.css';
-
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';
+// import { h } from 'preact';
 
 const el = document.querySelector('#markprompt');
 
 async function get_random_activity(args: string): Promise<string> {
   const parsed = JSON.parse(args);
-
   const url = new URL('https://www.boredapi.com/api/activity');
 
   Object.entries(parsed).forEach(([key, value]) => {
@@ -71,15 +70,38 @@ if (el && el instanceof HTMLElement) {
               },
             },
           },
-          getConfirmation(args: string) {
-            const parsed = JSON.parse(args);
-            const base = `Are you sure you want to get a random activity?`;
-            const participants = parsed.participants
-              ? ` It will be for ${parsed.participants} participants.`
-              : '';
-            const type = parsed.type ? ` It will be ${parsed.type}.` : '';
-            return base + participants + type;
-          },
+          // Confirmation(props) {
+          //   const { args, confirm } = props;
+
+          //   const parsed = JSON.parse(args);
+
+          //   const base = `Are you sure you want to get a random activity?`;
+          //   const participants = parsed.participants
+          //     ? ` It will be for ${parsed.participants} participants.`
+          //     : '';
+          //   const type = parsed.type ? ` It will be ${parsed.type}.` : '';
+
+          //   const buttonStyles = {
+          //     padding: '0.2rem 0.5rem',
+          //     border: 'none',
+          //     borderRadius: '0.35rem',
+          //     cursor: 'pointer',
+          //   };
+
+          //   return h('div', { style: { paddingInlineStart: '1.75rem' } }, [
+          //     h('p', null, [base, participants, type]),
+          //     h('div', { style: { display: 'flex', gap: '0.25rem' } }, [
+          //       h(
+          //         'button',
+          //         {
+          //           onClick: confirm,
+          //           style: buttonStyles,
+          //         },
+          //         'Confirm',
+          //       ),
+          //     ]),
+          //   ]);
+          // },
           requireConfirmation: true,
         },
       ],
