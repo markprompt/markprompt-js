@@ -138,6 +138,8 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             (tool) => tool.tool.function.name === tool_call.function?.name,
           );
 
+          if (!tool) return null;
+
           if (tool?.requireConfirmation === false || toolCallConfirmed) {
             // show a message that we received a function call and show a loading state?
             // render a loading state while we wait for the tool call to resolve?

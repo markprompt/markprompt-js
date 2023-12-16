@@ -540,7 +540,8 @@ export async function* submitChatGenerator(
       continue;
     }
 
-    const json = JSON.parse(event.data);
+    // eslint-disable-next-line prefer-const
+    let json = JSON.parse(event.data);
 
     if (!isChatCompletionChunk(json)) {
       throw new Error('Malformed response from Markprompt API', {
@@ -548,19 +549,25 @@ export async function* submitChatGenerator(
       });
     }
 
-    // eslint-disable-next-line prefer-const
-    let delta = json.choices[0].delta;
+    mergeWith(completion, json.choices[0].delta, concatStrings);
 
-    mergeWith(completion, delta, (destValue, srcValue) => {
-      console.log(destValue, srcValue);
-      const type = typeof srcValue;
-      if (type === 'string') return (destValue ?? '') + srcValue;
-    });
-
-    yield completion;
+    /**
+     * If we do not yield a structuredClone here, the completion object will
+     * become read-only/frozen and TypeErrors will be thrown when trying to
+     * merge the next chunk into it.
+     */
+    yield structuredClone(completion);
   }
 
   if (isChatCompletionMessage(completion) && isMarkpromptMetadata(data)) {
     return { ...completion, ...data };
   }
+}
+
+function concatStrings(dest: unknown, src: unknown): unknown {
+  if (typeof dest === 'string' && typeof src === 'string') {
+    return dest + src;
+  }
+
+  return undefined;
 }
