@@ -1,4 +1,7 @@
-import { isToolCall } from '@markprompt/core';
+import {
+  isToolCall,
+  type ChatCompletionMessageToolCall,
+} from '@markprompt/core';
 import React, { Fragment, useState, type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
@@ -146,9 +149,8 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           }
 
           if (tool.Confirmation) {
-            const Confirmation = tool.Confirmation;
             return (
-              <Confirmation
+              <tool.Confirmation
                 key={tool_call.id!}
                 args={
                   tool_call.function.arguments === ''
@@ -161,19 +163,11 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           }
 
           return (
-            <div key={tool_call.id!} style={{ paddingInline: '1.75rem' }}>
-              <p>
-                The bot wants to use a tool, please confirm that you want to:
-              </p>
-              <p>
-                <strong>
-                  {tool.tool.function.description ?? tool.tool.function.name}
-                </strong>
-              </p>
-              <div>
-                <button onClick={confirmToolCall}>Confirm</button>
-              </div>
-            </div>
+            <ToolCallConfirmation
+              key={tool_call.id!}
+              tool={tool}
+              confirmToolCall={confirmToolCall}
+            />
           );
         })}
 
@@ -190,6 +184,31 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           heading={feedbackOptions.heading}
         />
       )}
+    </div>
+  );
+}
+
+interface ToolCallConfirmationProps {
+  tool: ChatViewTool;
+  confirmToolCall: () => void;
+}
+
+function ToolCallConfirmation(props: ToolCallConfirmationProps): JSX.Element {
+  const { tool, confirmToolCall } = props;
+
+  return (
+    <div className="MarkpromptToolCallConfirmation">
+      <p>The bot wants to use a tool, please confirm that you want to:</p>
+      <p>
+        <strong>
+          {tool.tool.function.description ?? tool.tool.function.name}
+        </strong>
+      </p>
+      <div>
+        <button className="MarkpromptButton" onClick={confirmToolCall}>
+          Confirm
+        </button>
+      </div>
     </div>
   );
 }
