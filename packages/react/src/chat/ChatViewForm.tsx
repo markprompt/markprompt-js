@@ -48,7 +48,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
       const value = data.get('markprompt-prompt');
 
       if (typeof value === 'string') {
-        submitChat({ role: 'user', content: value });
+        submitChat([{ role: 'user', content: value }]);
       }
 
       if (event.target instanceof HTMLFormElement) {

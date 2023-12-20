@@ -10,6 +10,7 @@ import {
   type ChatCompletionToolMessageParam,
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
+  type ChatCompletionMessageToolCall,
 } from '@markprompt/core';
 import React, {
   createContext,
@@ -23,7 +24,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
-import { isIterable, isPresent } from '../utils.js';
+import { hasValueAtKey, isIterable, isPresent } from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -35,17 +36,13 @@ export type ChatLoadingState =
 interface ToolCall {
   status: 'loading' | 'done' | 'error';
   error?: string;
-  promise?: Promise<string>;
   result?: string;
 }
 
 export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
-  id: string;
+  id: ReturnType<typeof crypto.randomUUID>;
   state: ChatLoadingState;
-  toolCallsByToolCallId?: {
-    [tool_call_id: string]: ToolCall;
-  };
   name?: string;
 }
 
@@ -105,8 +102,8 @@ function toApiMessages(
 }
 
 interface ConfirmationProps {
-  args: string;
-  confirm: () => void;
+  toolCalls: ChatCompletionMessageToolCall[];
+  confirmToolCalls: () => void;
 }
 
 export interface ChatViewTool {
@@ -121,12 +118,6 @@ export interface ChatViewTool {
    **/
   call: (args: string) => Promise<string>;
   /**
-   * An optional user-provided confirmation message component that takes as the
-   * first argument the function call arguments returned by OpenAI as a JSON
-   * string, and returns a message to show to the user for confirmation.
-   */
-  Confirmation?: (props: ConfirmationProps) => JSX.Element;
-  /**
    * Whether user needs to confirm a call to this function or function calls
    * will be executed right away.
    * @default true
@@ -139,6 +130,12 @@ export type UserConfigurableOptions = Omit<
   'signal' | 'tools'
 > & {
   tools?: ChatViewTool[];
+  /**
+   * An optional user-provided confirmation message component that takes the tool calls
+   * provided by OpenAI and a confirm function that should be called when the user
+   * confirms the tool calls.
+   */
+  ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
 };
 
 export interface ChatStoreState {
@@ -153,11 +150,7 @@ export interface ChatStoreState {
   setMessages: (messages: ChatViewMessage[]) => void;
   setMessageById(id: string, next: Partial<ChatViewMessage>): void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
-  setToolCallById: (
-    messageId: string,
-    toolCallId: string,
-    next: Partial<ToolCall>,
-  ) => void;
+  setToolCallById: (toolCallId: string, next: Partial<ToolCall>) => void;
   conversationIdsByProjectKey: {
     [projectKey: string]: string[];
   };
@@ -167,10 +160,14 @@ export interface ChatStoreState {
       messages: ChatViewMessage[];
     };
   };
+  toolCallsByToolCallId: {
+    [tool_call_id: string]: ToolCall;
+  };
   submitChat: (
-    message:
+    messages: (
       | { content: string; role: 'user'; name?: string }
-      | { content: string; role: 'tool'; name: string; tool_call_id: string },
+      | { content: string; role: 'tool'; name: string; tool_call_id: string }
+    )[],
   ) => void;
   submitToolCalls: (message: ChatViewMessage) => Promise<void>;
   options?: UserConfigurableOptions;
@@ -214,6 +211,7 @@ export const createChatStore = ({
             [projectKey]: [],
           },
           messagesByConversationId: {},
+          toolCallsByToolCallId: {},
           error: undefined,
           setError: (error?: string) => {
             set((state) => {
@@ -318,51 +316,30 @@ export const createChatStore = ({
               };
             });
           },
-          setToolCallById(messageId, toolCallId, next) {
+          setToolCallById(toolCallId, next) {
             set((state) => {
-              let index = state.messages.findIndex((m) => m.id === messageId);
-              index = index === -1 ? state.messages.length : index;
-
-              let message = state.messages[index] ?? {};
-
-              const toolCallsByToolCallId = message.toolCallsByToolCallId ?? {};
-
-              toolCallsByToolCallId[toolCallId] = {
-                ...toolCallsByToolCallId[toolCallId],
+              state.toolCallsByToolCallId[toolCallId] = {
+                ...state.toolCallsByToolCallId[toolCallId],
                 ...next,
-              };
-
-              message = { ...message, toolCallsByToolCallId };
-              state.messages[index] = message;
-
-              const conversationId = state.conversationId;
-              if (!conversationId) return;
-
-              // save the message to local storage
-              state.messagesByConversationId[conversationId] = {
-                lastUpdated: new Date().toISOString(),
-                messages: state.messages,
               };
             });
           },
-          submitChat: async (
-            message:
-              | { content: string; role: 'user'; name?: string }
-              | { content: string; role: 'tool'; tool_call_id: string },
-          ) => {
-            const promptId = crypto.randomUUID();
+          submitChat: async (messages) => {
+            const messageIds = Array.from({ length: messages.length }, () =>
+              crypto.randomUUID(),
+            );
             const responseId = crypto.randomUUID();
 
             get().setError(undefined);
 
             set((state) => {
               state.messages.push(
-                {
+                ...messages.map((message, i) => ({
                   ...message,
-                  id: promptId,
+                  id: messageIds[i],
                   references: [],
-                  state: 'indeterminate',
-                },
+                  state: 'indeterminate' as const,
+                })),
                 // also create a placeholder message for the assistants response
                 {
                   id: responseId,
@@ -380,7 +357,7 @@ export const createChatStore = ({
                 m.role === 'user' &&
                 m.state !== 'done' &&
                 m.state !== 'cancelled' &&
-                m.id !== promptId,
+                !messageIds.includes(m.id),
             )?.id;
 
             if (prevMessageId) {
@@ -393,7 +370,7 @@ export const createChatStore = ({
             const controller = new AbortController();
             const abort = (): void => {
               controller.abort();
-              for (const id of [promptId, responseId]) {
+              for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
                 });
@@ -405,7 +382,7 @@ export const createChatStore = ({
 
             // get ready to do the request
             const apiMessages = toApiMessages(get().messages);
-            for (const id of [promptId, responseId]) {
+            for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {
                 state: 'preload',
               });
@@ -429,18 +406,21 @@ export const createChatStore = ({
                 if (chunk.conversationId) {
                   get().setConversationId(chunk.conversationId);
                 }
-                get().setMessageById(promptId, {
-                  state: 'streaming-answer',
-                });
+                for (const id of messageIds) {
+                  get().setMessageById(id, {
+                    state: 'streaming-answer',
+                  });
+                }
                 get().setMessageById(responseId, {
                   state: 'streaming-answer',
                   ...chunk,
                 });
               }
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.error(error);
 
-              for (const id of [promptId, responseId]) {
+              for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
                 });
@@ -448,7 +428,6 @@ export const createChatStore = ({
 
               if (isAbortError(error)) return;
 
-              // eslint-disable-next-line no-console
               get().setError(
                 error instanceof Error ? error.message : String(error),
               );
@@ -460,17 +439,46 @@ export const createChatStore = ({
               });
             }
 
-            const currentMessage = get().messages.find(
-              (m) => m.id === promptId,
-            );
-
-            if (currentMessage?.state === 'cancelled') return;
             if (controller.signal.aborted) return;
 
-            for (const id of [promptId, responseId]) {
+            for (const id of [...messageIds, responseId]) {
+              const message = get().messages.find((m) => m.id === id);
+
+              if (!message) continue;
+              if (message.state === 'cancelled') continue;
+
               get().setMessageById(id, {
                 state: 'done',
               });
+            }
+
+            /**
+             * Submit automatic tool calls if none of the tool calls require
+             * confirmation.
+             *
+             * We do this so that we can return the result of all tool calls to
+             * OpenAI simultaneously and OpenAI can generate a single response in return.
+             *
+             * If we have some calls that require confirmation and some that do not, we will
+             * do all calls simultaneously after the user has confirmed.
+             **/
+            const responseMessage = get().messages.find(
+              (m) => m.id === responseId,
+            );
+
+            if (!responseMessage?.tool_calls) return;
+
+            const tools = get().options?.tools;
+            if (!tools) return;
+
+            if (
+              responseMessage.tool_calls.every((x) => {
+                const name = x.function?.name;
+                const tool = tools.find((x) => x.tool.function.name === name);
+                return tool?.requireConfirmation === false;
+              })
+            ) {
+              get().submitToolCalls(responseMessage);
             }
           },
           async submitToolCalls(message: ChatViewMessage) {
@@ -479,41 +487,50 @@ export const createChatStore = ({
             const tools = get().options?.tools;
             if (!tools) return;
 
-            for (const tool_call of message.tool_calls.filter(isToolCall)) {
-              const tool = tools.find(
-                (x) => x.tool.function.name === tool_call.function?.name,
-              );
+            const toolCallResults = await Promise.allSettled(
+              message.tool_calls.filter(isToolCall).map(async (tool_call) => {
+                const tool = tools.find(
+                  (x) => x.tool.function.name === tool_call.function?.name,
+                );
 
-              if (!tool) throw new Error('Tool not found');
+                if (!tool) throw new Error('Tool not found');
 
-              const promise = tool.call(tool_call.function?.arguments || '{}');
+                try {
+                  get().setToolCallById(tool_call.id!, {
+                    status: 'loading',
+                  });
 
-              get().setToolCallById(message.id, tool_call.id!, {
-                status: 'loading',
-                promise,
-              });
+                  const result = await tool.call(
+                    tool_call.function?.arguments || '{}',
+                  );
 
-              promise.then((result) => {
-                get().setToolCallById(message.id, tool_call.id!, {
-                  result,
-                  status: 'done',
-                });
+                  get().setToolCallById(tool_call.id!, {
+                    result,
+                    status: 'done',
+                  });
 
-                get().submitChat({
+                  return { result, tool_call, tool };
+                } catch (error) {
+                  get().setToolCallById(tool_call.id!, {
+                    status: 'error',
+                    error:
+                      error instanceof Error ? error.message : String(error),
+                  });
+                }
+              }),
+            );
+
+            get().submitChat(
+              toolCallResults
+                .filter(hasValueAtKey('status', 'fulfilled' as const))
+                .filter((x) => x.value)
+                .map((x) => ({
                   role: 'tool',
-                  name: tool.tool.function.name,
-                  tool_call_id: tool_call.id!,
-                  content: result,
-                });
-              });
-
-              promise.catch((error) => {
-                get().setToolCallById(message.id, tool_call.id!, {
-                  status: 'error',
-                  error: error instanceof Error ? error.message : String(error),
-                });
-              });
-            }
+                  name: x.value!.tool.tool.function.name,
+                  tool_call_id: x.value!.tool_call.id!,
+                  content: x.value!.result,
+                })),
+            );
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
@@ -533,10 +550,12 @@ export const createChatStore = ({
             if (!lastUserMessage.content) return;
 
             get().setMessages(messages.slice(0, lastUserMessageIndex));
-            get().submitChat({
-              role: 'user',
-              content: lastUserMessage.content,
-            });
+            get().submitChat([
+              {
+                role: 'user',
+                content: lastUserMessage.content,
+              },
+            ]);
           },
         }),
         {
@@ -549,6 +568,7 @@ export const createChatStore = ({
           partialize: (state) => ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,
             messagesByConversationId: state.messagesByConversationId,
+            toolCallsByToolCallId: state.toolCallsByToolCallId,
           }),
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {

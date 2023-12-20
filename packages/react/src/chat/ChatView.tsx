@@ -55,11 +55,10 @@ export function ChatView(props: ChatViewProps): JSX.Element {
         <ConversationSidebar />
         <div className="MarkpromptChatViewChat">
           <Messages
-            projectKey={projectKey}
+            chatOptions={chatOptions}
             feedbackOptions={feedbackOptions}
+            projectKey={projectKey}
             referencesOptions={referencesOptions}
-            defaultView={chatOptions.defaultView}
-            tools={chatOptions.tools}
           />
           <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
         </div>

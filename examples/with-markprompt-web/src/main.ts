@@ -1,7 +1,7 @@
 import '@markprompt/css';
 import './style.css';
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';
-// import { h } from 'preact';
+import { h } from 'preact';
 
 const el = document.querySelector('#markprompt');
 
@@ -23,6 +23,7 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
+      apiUrl: 'http://api.localhost:3000/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
@@ -70,41 +71,23 @@ if (el && el instanceof HTMLElement) {
               },
             },
           },
-          // Confirmation(props) {
-          //   const { args, confirm } = props;
-
-          //   const parsed = JSON.parse(args);
-
-          //   const base = `Are you sure you want to get a random activity?`;
-          //   const participants = parsed.participants
-          //     ? ` It will be for ${parsed.participants} participants.`
-          //     : '';
-          //   const type = parsed.type ? ` It will be ${parsed.type}.` : '';
-
-          //   const buttonStyles = {
-          //     padding: '0.2rem 0.5rem',
-          //     border: 'none',
-          //     borderRadius: '0.35rem',
-          //     cursor: 'pointer',
-          //   };
-
-          //   return h('div', { style: { paddingInlineStart: '1.75rem' } }, [
-          //     h('p', null, [base, participants, type]),
-          //     h('div', { style: { display: 'flex', gap: '0.25rem' } }, [
-          //       h(
-          //         'button',
-          //         {
-          //           onClick: confirm,
-          //           style: buttonStyles,
-          //         },
-          //         'Confirm',
-          //       ),
-          //     ]),
-          //   ]);
-          // },
           requireConfirmation: true,
         },
       ],
+      ToolCallsConfirmation: (props) => {
+        const { confirmToolCalls } = props;
+        return h(
+          'div',
+          {
+            style:
+              'background:red;padding-inline:1.5rem;padding-block:0.75rem;',
+          },
+          [
+            JSON.stringify(props),
+            h('button', { onClick: confirmToolCalls }, 'Confirm'),
+          ],
+        );
+      },
     },
     defaultView: 'chat',
     trigger: {

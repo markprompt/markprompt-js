@@ -1,8 +1,8 @@
 import {
-  isToolCall,
+  isToolCalls,
   type ChatCompletionMessageToolCall,
 } from '@markprompt/core';
-import React, { Fragment, useState, type ReactElement } from 'react';
+import React, { Fragment, useMemo, type ReactElement } from 'react';
 
 import { MessageAnswer } from './MessageAnswer.js';
 import { MessagePrompt } from './MessagePrompt.js';
@@ -19,16 +19,14 @@ import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
-  defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
   projectKey: string;
-  tools?: ChatViewTool[];
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { feedbackOptions, referencesOptions, defaultView, projectKey, tools } =
-    props;
+  const { chatOptions, feedbackOptions, referencesOptions, projectKey } = props;
 
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
@@ -36,11 +34,9 @@ export function Messages(props: MessagesProps): ReactElement {
   if (!messages || messages.length === 0) {
     return (
       <DefaultView
-        message={defaultView?.message}
-        prompts={defaultView?.prompts}
-        promptsHeading={defaultView?.promptsHeading}
+        {...chatOptions.defaultView}
         onDidSelectPrompt={(prompt) =>
-          submitChat({ role: 'user', content: prompt })
+          submitChat([{ role: 'user', content: prompt }])
         }
       />
     );
@@ -69,7 +65,7 @@ export function Messages(props: MessagesProps): ReactElement {
                 message={message}
                 projectKey={projectKey}
                 feedbackOptions={feedbackOptions}
-                tools={tools}
+                chatOptions={chatOptions}
               />
             )}
 
@@ -101,29 +97,36 @@ export function Messages(props: MessagesProps): ReactElement {
 }
 
 interface AssistantMessageProps {
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
-  tools?: ChatViewTool[];
 }
 
 function AssistantMessage(props: AssistantMessageProps): JSX.Element {
-  const { feedbackOptions, message, projectKey, tools } = props;
+  const { feedbackOptions, message, projectKey, chatOptions } = props;
 
   const messages = useChatStore((state) => state.messages);
-  const submitToolCall = useChatStore((state) => state.submitToolCalls);
+  const submitToolCalls = useChatStore((state) => state.submitToolCalls);
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
     feedbackOptions,
   });
 
-  const [toolCallConfirmed, setToolCallConfirmed] = useState(false);
-
-  const confirmToolCall = (): void => {
-    setToolCallConfirmed(true);
-    submitToolCall(message);
+  const confirmToolCalls = (): void => {
+    submitToolCalls(message);
   };
+
+  const toolCalls = useMemo(
+    () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
+    [message.tool_calls],
+  );
+
+  const ToolCallConfirmation = useMemo(
+    () => chatOptions.ToolCallsConfirmation ?? DefaultToolCallsConfirmation,
+    [chatOptions.ToolCallsConfirmation],
+  );
 
   return (
     <div className="MarkpromptMessageAnswerContainer">
@@ -132,44 +135,13 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
       </MessageAnswer>
 
       {/* if this message has any tool calls, and those tool calls require a confirmation, and that confirmation has not already been given, show either the default or user-provided confirmation */}
-      {Array.isArray(message.tool_calls) &&
-        message.tool_calls.map((tool_call) => {
-          // don't render incomplete tool calls
-          if (!isToolCall(tool_call)) return null;
-
-          const tool = tools?.find(
-            (tool) => tool.tool.function.name === tool_call.function?.name,
-          );
-
-          if (!tool) return null;
-
-          if (tool?.requireConfirmation === false || toolCallConfirmed) {
-            // show a message that we received a function call and show a loading state?
-            // render a loading state while we wait for the tool call to resolve?
-          }
-
-          if (tool.Confirmation) {
-            return (
-              <tool.Confirmation
-                key={tool_call.id!}
-                args={
-                  tool_call.function.arguments === ''
-                    ? '{}'
-                    : tool_call.function.arguments!
-                }
-                confirm={confirmToolCall}
-              />
-            );
-          }
-
-          return (
-            <ToolCallConfirmation
-              key={tool_call.id!}
-              tool={tool}
-              confirmToolCall={confirmToolCall}
-            />
-          );
-        })}
+      {Array.isArray(toolCalls) && (
+        <ToolCallConfirmation
+          toolCalls={toolCalls}
+          tools={chatOptions.tools}
+          confirmToolCalls={confirmToolCalls}
+        />
+      )}
 
       {feedbackOptions?.enabled && message.state === 'done' && (
         <Feedback
@@ -188,27 +160,112 @@ function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   );
 }
 
-interface ToolCallConfirmationProps {
-  tool: ChatViewTool;
-  confirmToolCall: () => void;
+interface DefaultToolCallsConfirmationProps {
+  toolCalls: ChatCompletionMessageToolCall[];
+  tools?: ChatViewTool[];
+  confirmToolCalls: () => void;
 }
 
-function ToolCallConfirmation(props: ToolCallConfirmationProps): JSX.Element {
-  const { tool, confirmToolCall } = props;
+function DefaultToolCallsConfirmation(
+  props: DefaultToolCallsConfirmationProps,
+): JSX.Element {
+  const { toolCalls, tools, confirmToolCalls } = props;
+
+  const toolCallsByToolCallId = useChatStore(
+    (state) => state.toolCallsByToolCallId,
+  );
+
+  const toolCallsRequiringConfirmation = useMemo(() => {
+    return toolCalls.filter((toolCall) => {
+      const tool = tools?.find(
+        (tool) => tool.tool.function.name === toolCall.function?.name,
+      );
+
+      return tool?.requireConfirmation ?? true;
+    });
+  }, [toolCalls, tools]);
+
+  const toolCallsWithoutConfirmation = useMemo(() => {
+    return toolCalls.filter((toolCall) => {
+      const tool = tools?.find(
+        (tool) => tool.tool.function.name === toolCall.function?.name,
+      );
+
+      return tool?.requireConfirmation === false;
+    });
+  }, [toolCalls, tools]);
 
   return (
     <div className="MarkpromptToolCallConfirmation">
-      <p>The bot wants to use a tool, please confirm that you want to:</p>
-      <p>
-        <strong>
-          {tool.tool.function.description ?? tool.tool.function.name}
-        </strong>
-      </p>
-      <div>
-        <button className="MarkpromptButton" onClick={confirmToolCall}>
-          Confirm
-        </button>
-      </div>
+      {toolCallsWithoutConfirmation.length > 0 && (
+        <div>
+          <p>The bot is calling the following tools on your behalf:</p>
+          {toolCallsWithoutConfirmation.map((toolCall) => {
+            const tool = tools?.find(
+              (tool) => tool.tool.function.name === toolCall.function?.name,
+            );
+
+            if (!tool) throw Error('tool not found');
+
+            return (
+              <p key={toolCall.function.name}>
+                <strong>
+                  {tool.tool.function.description ?? tool.tool.function.name}
+                </strong>
+              </p>
+            );
+          })}
+        </div>
+      )}
+
+      {toolCallsRequiringConfirmation.length > 0 && (
+        <>
+          <div>
+            <p>
+              The bot wants to use {toolCalls.length === 1 ? 'a tool' : 'tools'}
+              , please confirm that you allow to:
+            </p>
+            {toolCallsRequiringConfirmation.map((toolCall) => {
+              const tool = tools?.find(
+                (tool) => tool.tool.function.name === toolCall.function?.name,
+              );
+
+              if (!tool) throw Error('tool not found');
+
+              if (tool?.requireConfirmation === false) {
+                return null;
+              }
+
+              const status = toolCallsByToolCallId[toolCall.id]?.status;
+
+              return (
+                <p key={toolCall.function.name}>
+                  <strong>
+                    {tool.tool.function.description ?? tool.tool.function.name}{' '}
+                    {status === 'loading'
+                      ? '🔄'
+                      : status === 'done'
+                      ? '✅'
+                      : status === 'error'
+                      ? '❌'
+                      : null}
+                  </strong>
+                </p>
+              );
+            })}
+          </div>
+
+          {Object.values(toolCallsByToolCallId).some(
+            (x) => x.status !== 'done',
+          ) && (
+            <div>
+              <button className="MarkpromptButton" onClick={confirmToolCalls}>
+                Confirm
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
