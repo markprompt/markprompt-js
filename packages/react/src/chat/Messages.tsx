@@ -255,9 +255,10 @@ function DefaultToolCallsConfirmation(
             })}
           </div>
 
-          {Object.values(toolCallsByToolCallId).some(
-            (x) => x.status !== 'done',
-          ) && (
+          {(Object.values(toolCallsByToolCallId).length === 0 ||
+            Object.values(toolCallsByToolCallId).some(
+              (x) => x.status !== 'done',
+            )) && (
             <div>
               <button className="MarkpromptButton" onClick={confirmToolCalls}>
                 Confirm

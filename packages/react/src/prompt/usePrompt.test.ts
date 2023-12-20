@@ -20,7 +20,12 @@ import {
 import { type UsePromptResult, usePrompt } from './usePrompt.js';
 
 const encoder = new TextEncoder();
-let response: object | string[] = [];
+let response:
+  | object
+  | {
+      content: string | null;
+      tool_call?: { name: string; parameters: string } | null;
+    }[] = [];
 
 let status = 200;
 let stream: ReadableStream;
@@ -39,7 +44,11 @@ const server = setupServer(
             let i = 0;
             for (const chunk of response) {
               controller.enqueue(
-                encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+                encoder.encode(
+                  formatEvent({
+                    data: getChunk(chunk.content, chunk.tool_call ?? null, i),
+                  }),
+                ),
               );
               i++;
             }
@@ -106,7 +115,10 @@ describe('usePrompt', () => {
 
     act(() => result.current.setPrompt('How much is 1+2?'));
 
-    response = ['According to my calculator ', '1 + 2 = 3'];
+    response = [
+      { content: 'According to my calculator ' },
+      { content: '1 + 2 = 3' },
+    ];
 
     await result.current.submitPrompt();
 
@@ -182,7 +194,10 @@ describe('usePrompt', () => {
         usePrompt({ projectKey: 'TEST_PROJECT_KEY' }),
       );
 
-      response = ['According to my calculator ', '1 + 2 = 3'];
+      response = [
+        { content: 'According to my calculator ' },
+        { content: '1 + 2 = 3' },
+      ];
 
       act(() => result.current.setPrompt('How much is 1+2?'));
 
@@ -250,6 +265,7 @@ export function encodeData(text: string): string {
 
 export function getChunk(
   content: string | null,
+  tool_call: { name: string; parameters: string } | null,
   index: number,
   model = 'gpt-3.5-turbo',
   isLast?: boolean,
@@ -261,6 +277,20 @@ export function getChunk(
         delta: {
           content,
           role: 'assistant',
+          ...(tool_call
+            ? {
+                tool_calls: [
+                  {
+                    id: crypto.randomUUID(),
+                    type: 'function',
+                    function: {
+                      name: tool_call?.name,
+                      parameters: tool_call?.parameters,
+                    },
+                  },
+                ],
+              }
+            : {}),
         },
         finish_reason: isLast ? 'stop' : null,
         index,

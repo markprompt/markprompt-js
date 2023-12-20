@@ -1,7 +1,6 @@
 import '@markprompt/css';
 import './style.css';
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';
-import { h } from 'preact';
 
 const el = document.querySelector('#markprompt');
 
