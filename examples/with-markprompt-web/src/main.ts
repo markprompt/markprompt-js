@@ -74,20 +74,20 @@ if (el && el instanceof HTMLElement) {
           requireConfirmation: true,
         },
       ],
-      ToolCallsConfirmation: (props) => {
-        const { confirmToolCalls } = props;
-        return h(
-          'div',
-          {
-            style:
-              'background:red;padding-inline:1.5rem;padding-block:0.75rem;',
-          },
-          [
-            JSON.stringify(props),
-            h('button', { onClick: confirmToolCalls }, 'Confirm'),
-          ],
-        );
-      },
+      // ToolCallsConfirmation: (props) => {
+      //   const { confirmToolCalls } = props;
+      //   return h(
+      //     'div',
+      //     {
+      //       style:
+      //         'background:red;padding-inline:1.5rem;padding-block:0.75rem;',
+      //     },
+      //     [
+      //       JSON.stringify(props),
+      //       h('button', { onClick: confirmToolCalls }, 'Confirm'),
+      //     ],
+      //   );
+      // },
     },
     defaultView: 'chat',
     trigger: {
