@@ -102,7 +102,18 @@ function toApiMessages(
 }
 
 interface ConfirmationProps {
+  /**
+   * Tool calls as returned by the model
+   */
   toolCalls: ChatCompletionMessageToolCall[];
+  /**
+   * Status and results of tool calls
+   */
+  toolCallsStatus: { [key: string]: ToolCall };
+  /**
+   * Tools as provided by the user
+   */
+  tools?: ChatViewTool[];
   confirmToolCalls: () => void;
 }
 

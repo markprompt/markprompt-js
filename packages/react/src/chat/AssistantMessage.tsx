@@ -17,8 +17,20 @@ interface AssistantMessageProps {
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const { feedbackOptions, message, projectKey, chatOptions } = props;
 
+  const toolCalls = useMemo(
+    () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
+    [message.tool_calls],
+  );
+
   const messages = useChatStore((state) => state.messages);
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
+  const toolCallsByToolCallId = useChatStore((state) =>
+    Object.fromEntries(
+      Object.entries(state.toolCallsByToolCallId).filter(
+        ([id]) => toolCalls?.some((x) => x.id === id),
+      ),
+    ),
+  );
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
     projectKey,
@@ -28,11 +40,6 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const confirmToolCalls = (): void => {
     submitToolCalls(message);
   };
-
-  const toolCalls = useMemo(
-    () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
-    [message.tool_calls],
-  );
 
   const ToolCallConfirmation = useMemo(
     () => chatOptions.ToolCallsConfirmation ?? DefaultToolCallsConfirmation,
@@ -54,6 +61,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
         <ToolCallConfirmation
           toolCalls={toolCalls}
           tools={chatOptions.tools}
+          toolCallsStatus={toolCallsByToolCallId}
           confirmToolCalls={confirmToolCalls}
         />
       )}

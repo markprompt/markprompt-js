@@ -1,8 +1,8 @@
 import { type ChatCompletionMessageToolCall } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import React, { useMemo, useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { useChatStore, type ChatViewTool, type ToolCall } from './store.js';
+import { type ChatViewTool, type ToolCall } from './store.js';
 import {
   CheckCircleIcon,
   CircleDashedIcon,
@@ -12,17 +12,15 @@ import {
 
 interface DefaultToolCallsConfirmationProps {
   toolCalls: ChatCompletionMessageToolCall[];
+  toolCallsStatus: { [key: string]: ToolCall };
   tools?: ChatViewTool[];
   confirmToolCalls: () => void;
 }
+
 export function DefaultToolCallsConfirmation(
   props: DefaultToolCallsConfirmationProps,
 ): JSX.Element {
-  const { toolCalls, tools, confirmToolCalls } = props;
-
-  const toolCallsByToolCallId = useChatStore(
-    (state) => state.toolCallsByToolCallId,
-  );
+  const { toolCalls, tools, toolCallsStatus, confirmToolCalls } = props;
 
   const toolCallsRequiringConfirmation = useMemo(() => {
     return toolCalls.filter((toolCall) => {
@@ -58,16 +56,14 @@ export function DefaultToolCallsConfirmation(
   }, []);
 
   const showConfirmButton = useMemo(() => {
-    const validEntries = Object.entries(toolCallsByToolCallId).filter(
-      ([key]) => {
-        return toolCallsRequiringConfirmation.some(
-          (toolCall) => toolCall.id === key,
-        );
-      },
-    );
+    const validEntries = Object.entries(toolCallsStatus).filter(([key]) => {
+      return toolCallsRequiringConfirmation.some(
+        (toolCall) => toolCall.id === key,
+      );
+    });
     if (validEntries.length === 0) return true;
     return validEntries.some(([_key, value]) => value.status !== 'done');
-  }, [toolCallsByToolCallId, toolCallsRequiringConfirmation]);
+  }, [toolCallsRequiringConfirmation, toolCallsStatus]);
 
   return (
     <div className="MarkpromptToolCallConfirmation">
@@ -111,7 +107,7 @@ export function DefaultToolCallsConfirmation(
                 return null;
               }
 
-              const status = toolCallsByToolCallId[toolCall.id]?.status;
+              const status = toolCallsStatus[toolCall.id]?.status;
               const StatusIcon = getStatusIcon(status);
 
               return (
