@@ -331,3 +331,25 @@ test('References renders the passed ReferenceComponent', () => {
   );
   expect(ReferenceComponent).toHaveBeenCalledOnce();
 });
+
+test('Answer renders a button to copy code to clipboard', async () => {
+  const user = userEvent.setup();
+  render(
+    <Markprompt.Answer
+      answer={`
+\`\`\`js
+console.log('Hello world!');
+\`\`\`
+`}
+    />,
+  );
+  const button = await screen.findByRole('button');
+  await user.click(button);
+  expect(button).toHaveTextContent('copied');
+});
+
+test('ErrorMessage renders', () => {
+  const err = new Error('test');
+  render(<Markprompt.ErrorMessage>{err.message}</Markprompt.ErrorMessage>);
+  expect(screen.getByText(err.message)).toBeInTheDocument();
+});
