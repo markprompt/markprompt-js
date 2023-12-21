@@ -1,5 +1,6 @@
 import { rest, type RestRequest } from 'msw';
 import { setupServer } from 'msw/node';
+import type { OpenAI } from 'openai';
 import {
   afterAll,
   afterEach,
@@ -15,6 +16,7 @@ import {
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   submitChat,
   submitChatGenerator,
+  SubmitChatGeneratorOptions,
   SubmitChatReturn,
   SubmitChatYield,
 } from './index.js';
@@ -376,9 +378,9 @@ describe('submitChatGenerator', () => {
   const encoder = new TextEncoder();
   let markpromptData: unknown = '';
   const markpromptDebug = '';
-  let response: string[] | string = [];
+  let response: string[] | string | object = [];
   let request: RestRequest;
-  let requestBody: unknown = {};
+  let requestBody: SubmitChatGeneratorOptions = {};
   let stream: ReadableStream;
   let malformattedJson = false;
 
@@ -395,8 +397,26 @@ describe('submitChatGenerator', () => {
           return res(
             ctx.status(status),
             ctx.text(
-              Array.isArray(response) ? JSON.stringify(response) : response,
+              typeof response !== 'string'
+                ? JSON.stringify(response)
+                : response,
             ),
+          );
+        }
+
+        if (requestBody?.stream === false) {
+          return res(
+            ctx.status(status),
+            ctx.set('Content-Type', 'application/json'),
+            ctx.set(
+              'x-markprompt-data',
+              encoder.encode(JSON.stringify(markpromptData)).toString(),
+            ),
+            ctx.set(
+              'x-markprompt-debug-info',
+              encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+            ),
+            ctx.json(response),
           );
         }
 
@@ -647,6 +667,68 @@ describe('submitChatGenerator', () => {
         'testKey',
       )) {
         chunks.push(chunk);
+      }
+    } catch (error) {
+      expect(error.message).toBe('Malformed response from Markprompt API');
+    }
+  });
+
+  test('supports non-streaming mode', async () => {
+    response = {
+      object: 'chat.completion',
+      id: crypto.randomUUID(),
+      created: Date.now(),
+      model: 'gpt-3.5-turbo',
+      choices: [
+        {
+          index: 0,
+          finish_reason: 'stop',
+          message: {
+            content: 'According to my calculator 1 + 2 = 3',
+            role: 'assistant',
+          },
+        },
+      ],
+    } satisfies OpenAI.ChatCompletion;
+
+    const conversationId = 'test-id';
+    const promptId = 'test-id';
+    const references = [
+      {
+        file: { path: '/page1', source: { type: 'file-upload' } },
+        meta: { leadHeading: { value: 'Page 1' } },
+      },
+    ];
+
+    markpromptData = { conversationId, promptId, references };
+
+    for await (const json of submitChatGenerator(
+      [{ content: 'How much is 1+2?', role: 'user' }],
+      'testKey',
+      { stream: false },
+    )) {
+      await expect(json).toStrictEqual({
+        content: 'According to my calculator 1 + 2 = 3',
+        role: 'assistant',
+        promptId,
+        conversationId,
+        references,
+      });
+    }
+  });
+
+  test('non-streaming mode throws when response contains faulty data', async () => {
+    response = {
+      foo: 'bar',
+    };
+
+    try {
+      for await (const _json of submitChatGenerator(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+        { stream: false },
+      )) {
+        // nothing
       }
     } catch (error) {
       expect(error.message).toBe('Malformed response from Markprompt API');
