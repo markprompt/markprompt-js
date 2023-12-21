@@ -29,6 +29,7 @@ const server = setupServer(
   rest.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, (req, res, ctx) => {
     if (status >= 400) {
       return res(
+        ctx.delay('real'),
         ctx.status(status),
         ctx.json({ error: 'Server error', debug }),
       );

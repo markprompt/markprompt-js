@@ -380,6 +380,7 @@ describe('submitChatGenerator', () => {
   let request: RestRequest;
   let requestBody: unknown = {};
   let stream: ReadableStream;
+  let malformattedJson = false;
 
   let status = 200;
 
@@ -405,7 +406,11 @@ describe('submitChatGenerator', () => {
               let i = 0;
               for (const chunk of response) {
                 controller.enqueue(
-                  encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+                  encoder.encode(
+                    formatEvent({
+                      data: malformattedJson ? chunk : getChunk(chunk, i),
+                    }),
+                  ),
                 );
                 i++;
               }
@@ -451,6 +456,7 @@ describe('submitChatGenerator', () => {
     requestBody = {};
     markpromptData = '';
     status = 200;
+    malformattedJson = false;
     server.resetHandlers();
     vi.resetAllMocks();
   });
@@ -624,6 +630,26 @@ describe('submitChatGenerator', () => {
       expect.fail('Expected an error to be thrown');
     } catch (error) {
       expect(error.message).toBe('Internal Server Error');
+    }
+  });
+
+  test('throws when malformatted json is provided', async () => {
+    const conversationId = 'test-id';
+
+    markpromptData = { conversationId };
+
+    response = ['{ "foo": "bar" }'];
+
+    const chunks: SubmitChatYield[] = [];
+    try {
+      for await (const chunk of submitChatGenerator(
+        [{ content: 'How much is 1+2?', role: 'user' }],
+        'testKey',
+      )) {
+        chunks.push(chunk);
+      }
+    } catch (error) {
+      expect(error.message).toBe('Malformed response from Markprompt API');
     }
   });
 });

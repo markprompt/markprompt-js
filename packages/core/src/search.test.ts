@@ -78,7 +78,7 @@ const algoliaProvider: AlgoliaProvider = {
 };
 
 let status = 200;
-const wait = 0;
+let wait = 0;
 
 const server = setupServer(
   rest.get(
@@ -126,6 +126,7 @@ afterAll(() => {
 
 afterEach(() => {
   status = 200;
+  wait = 0;
   vi.resetAllMocks();
   server.resetHandlers();
 });
