@@ -63,12 +63,12 @@ function toApiMessages(
 
             return msg;
           }
-          case 'system': {
-            return {
-              content: content ?? null,
-              role,
-            } satisfies ChatCompletionSystemMessageParam;
-          }
+          // case 'system': {
+          //   return {
+          //     content: content ?? null,
+          //     role,
+          //   } satisfies ChatCompletionSystemMessageParam;
+          // }
           case 'tool': {
             if (!tool_call_id) throw new Error('tool_call_id is required');
             return {
