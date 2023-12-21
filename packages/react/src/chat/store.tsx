@@ -100,7 +100,7 @@ function toApiMessages(
   );
 }
 
-interface ConfirmationProps {
+export interface ConfirmationProps {
   /**
    * Tool calls as returned by the model
    */

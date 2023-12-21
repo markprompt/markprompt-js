@@ -66,6 +66,9 @@ export {
   type CreateChatOptions,
   type ChatViewMessage,
   type ChatLoadingState,
+  type ConfirmationProps,
+  type ToolCall,
+  type ChatViewTool,
 } from './chat/store.js';
 export { PromptView, type PromptViewProps } from './prompt/PromptView.js';
 export { SearchView, type SearchViewProps } from './search/SearchView.js';
