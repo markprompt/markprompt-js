@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.21.0
+
+### Minor Changes
+
+- [#253](https://github.com/motifland/markprompt-js/pull/253) [`d19ddf6`](https://github.com/motifland/markprompt-js/commit/d19ddf6bec116f988c1fe1c6da74e591da499645) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for tool calling
+
+### Patch Changes
+
+- Updated dependencies [[`73907d1`](https://github.com/motifland/markprompt-js/commit/73907d1dd8bafda5b84fd0181b5c79bacfd29e84), [`73907d1`](https://github.com/motifland/markprompt-js/commit/73907d1dd8bafda5b84fd0181b5c79bacfd29e84), [`d19ddf6`](https://github.com/motifland/markprompt-js/commit/d19ddf6bec116f988c1fe1c6da74e591da499645), [`9177b3f`](https://github.com/motifland/markprompt-js/commit/9177b3fd4d6e0e01f0c342e97d539a2942684ab6), [`ff6db03`](https://github.com/motifland/markprompt-js/commit/ff6db03e38b182e2bab346c077831eeba18bee6f)]:
+  - @markprompt/core@0.20.0
+  - @markprompt/react@0.30.0
+
 ## 0.20.8
 
 ### Patch Changes
