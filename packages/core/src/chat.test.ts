@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+
 import { rest, type RestRequest } from 'msw';
 import { setupServer } from 'msw/node';
 import type { OpenAI } from 'openai';
