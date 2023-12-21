@@ -1,5 +1,19 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.14.0
+
+### Minor Changes
+
+- [#253](https://github.com/motifland/markprompt-js/pull/253) [`d19ddf6`](https://github.com/motifland/markprompt-js/commit/d19ddf6bec116f988c1fe1c6da74e591da499645) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for tool calling
+
+- [#249](https://github.com/motifland/markprompt-js/pull/249) [`9177b3f`](https://github.com/motifland/markprompt-js/commit/9177b3fd4d6e0e01f0c342e97d539a2942684ab6) Thanks [@nickrttn](https://github.com/nickrttn)! - Adopt generator-based version of `submitChat` in prompt and chat views
+
+### Patch Changes
+
+- Updated dependencies [[`d19ddf6`](https://github.com/motifland/markprompt-js/commit/d19ddf6bec116f988c1fe1c6da74e591da499645), [`9177b3f`](https://github.com/motifland/markprompt-js/commit/9177b3fd4d6e0e01f0c342e97d539a2942684ab6)]:
+  - @markprompt/react@0.30.0
+  - @markprompt/css@0.19.0
+
 ## 0.13.15
 
 ### Patch Changes

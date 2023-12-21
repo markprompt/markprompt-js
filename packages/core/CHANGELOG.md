@@ -1,5 +1,21 @@
 # @markprompt/core
 
+## 0.20.0
+
+### Minor Changes
+
+- [#253](https://github.com/motifland/markprompt-js/pull/253) [`d19ddf6`](https://github.com/motifland/markprompt-js/commit/d19ddf6bec116f988c1fe1c6da74e591da499645) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for tool calling
+
+- [#249](https://github.com/motifland/markprompt-js/pull/249) [`9177b3f`](https://github.com/motifland/markprompt-js/commit/9177b3fd4d6e0e01f0c342e97d539a2942684ab6) Thanks [@nickrttn](https://github.com/nickrttn)! - Adopt generator-based version of `submitChat` in prompt and chat views
+
+### Patch Changes
+
+- [#252](https://github.com/motifland/markprompt-js/pull/252) [`73907d1`](https://github.com/motifland/markprompt-js/commit/73907d1dd8bafda5b84fd0181b5c79bacfd29e84) Thanks [@nickrttn](https://github.com/nickrttn)! - Filter options passed to submitChat and submitChatGenerator so only valid options are sent to the Markprompt API
+
+- [#252](https://github.com/motifland/markprompt-js/pull/252) [`73907d1`](https://github.com/motifland/markprompt-js/commit/73907d1dd8bafda5b84fd0181b5c79bacfd29e84) Thanks [@nickrttn](https://github.com/nickrttn)! - Add tests for submitChatGenerator
+
+- [#251](https://github.com/motifland/markprompt-js/pull/251) [`ff6db03`](https://github.com/motifland/markprompt-js/commit/ff6db03e38b182e2bab346c077831eeba18bee6f) Thanks [@nickrttn](https://github.com/nickrttn)! - Clean up re-exported OpenAI types
+
 ## 0.19.1
 
 ### Patch Changes
