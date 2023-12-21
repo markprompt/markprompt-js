@@ -473,6 +473,30 @@ describe('ChatView', () => {
     });
   });
 
+  it('renders a custom component for the DefaultView message', () => {
+    const DefaultViewMessage = vi.fn(() => <p>test</p>);
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{ defaultView: { message: DefaultViewMessage } }}
+      />,
+    );
+    expect(DefaultViewMessage).toHaveBeenCalledOnce();
+  });
+
+  it('renders empty prompts for the DefaultView message', () => {
+    const DefaultViewMessage = vi.fn(() => <p>test</p>);
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          defaultView: { message: DefaultViewMessage, prompts: [] },
+        }}
+      />,
+    );
+    expect(DefaultViewMessage).toHaveBeenCalledOnce();
+  });
+
   it('shows references', async () => {
     response = [{ content: 'answer' }];
     const references = [
