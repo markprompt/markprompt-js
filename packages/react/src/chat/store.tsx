@@ -5,12 +5,11 @@ import {
   submitChatGenerator,
   type ChatCompletionAssistantMessageParam,
   type ChatCompletionMessageParam,
-  type ChatCompletionSystemMessageParam,
+  type ChatCompletionMessageToolCall,
   type ChatCompletionTool,
   type ChatCompletionToolMessageParam,
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
-  type ChatCompletionMessageToolCall,
 } from '@markprompt/core';
 import React, {
   createContext,
