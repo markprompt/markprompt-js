@@ -282,7 +282,9 @@ describe('ChatView', () => {
     await user.keyboard('{Enter}');
 
     expect(
-      await screen.findByText('The bot wants to use a tool', { exact: false }),
+      await screen.findByText('The bot wants to perform the following action', {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(await screen.findByText('Do a thing')).toBeInTheDocument();
 

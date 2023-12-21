@@ -92,6 +92,5 @@ if (el && el instanceof HTMLElement) {
     trigger: {
       buttonLabel: 'Ask AI',
     },
-    open: true,
   } satisfies MarkpromptOptions);
 }

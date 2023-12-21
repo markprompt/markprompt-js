@@ -33,7 +33,7 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
-interface ToolCall {
+export interface ToolCall {
   status: 'loading' | 'done' | 'error';
   error?: string;
   result?: string;

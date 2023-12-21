@@ -1738,8 +1738,22 @@
   border-radius: 0.375rem;
 }
 
-:where(.MarkpromptToolCallConfirmation strong) {
+:where(.MarkpromptToolDescriptionWithStatus) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+:where(.MarkpromptToolDescriptionWithStatus strong) {
   font-weight: 500;
+}
+
+:where(.MarkpromptToolCallStatusIcon) {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
 }
 
 :where(.MarkpromptErrorMessage) {
