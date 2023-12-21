@@ -1,40 +1,33 @@
 import React, { Fragment, type ReactElement } from 'react';
 
-import { MessageAnswer } from './MessageAnswer.js';
+import { AssistantMessage } from './AssistantMessage.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { useChatStore } from './store.js';
-import { Feedback } from '../feedback/Feedback.js';
-import { useFeedback } from '../feedback/useFeedback.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { DefaultView } from '../prompt/DefaultView.js';
 import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
-  defaultView: NonNullable<MarkpromptOptions['chat']>['defaultView'];
   projectKey: string;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { feedbackOptions, referencesOptions, defaultView, projectKey } = props;
+  const { chatOptions, feedbackOptions, referencesOptions, projectKey } = props;
 
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
 
-  const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
-    projectKey,
-    feedbackOptions,
-  });
-
   if (!messages || messages.length === 0) {
     return (
       <DefaultView
-        message={defaultView?.message}
-        prompts={defaultView?.prompts}
-        promptsHeading={defaultView?.promptsHeading}
-        onDidSelectPrompt={submitChat}
+        {...chatOptions.defaultView}
+        onDidSelectPrompt={(prompt) =>
+          submitChat([{ role: 'user', content: prompt }])
+        }
       />
     );
   }
@@ -58,29 +51,12 @@ export function Messages(props: MessagesProps): ReactElement {
             )}
 
             {message.role === 'assistant' && (
-              <div className="MarkpromptMessageAnswerContainer">
-                <MessageAnswer state={message.state}>
-                  {message.content ?? ''}
-                </MessageAnswer>
-
-                {feedbackOptions?.enabled && message.state === 'done' && (
-                  <Feedback
-                    variant="icons"
-                    className="MarkpromptPromptFeedback"
-                    submitFeedback={(feedback, promptId) => {
-                      submitFeedback(feedback, promptId);
-                      feedbackOptions.onFeedbackSubmit?.(
-                        feedback,
-                        messages,
-                        promptId,
-                      );
-                    }}
-                    abortFeedbackRequest={abortFeedbackRequest}
-                    promptId={message.promptId}
-                    heading={feedbackOptions.heading}
-                  />
-                )}
-              </div>
+              <AssistantMessage
+                message={message}
+                projectKey={projectKey}
+                feedbackOptions={feedbackOptions}
+                chatOptions={chatOptions}
+              />
             )}
 
             {(!referencesOptions?.display ||

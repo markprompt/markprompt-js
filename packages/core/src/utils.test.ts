@@ -6,6 +6,13 @@ import {
   isFileSectionReferences,
   isAbortError,
   safeStringify,
+  isMarkpromptMetadata,
+  isChatCompletion,
+  isToolCall,
+  isToolCalls,
+  isChatCompletionChunk,
+  isKeyOf,
+  isChatCompletionMessage,
 } from './utils.js';
 
 const encoder = new TextEncoder();
@@ -110,11 +117,130 @@ describe('safeStringify', () => {
         },
       },
     };
+
     expect(safeStringify(obj)).toEqual(
       JSON.stringify({
         name: 'Name',
         sub: { name: 'Sub' },
       }),
     );
+  });
+});
+
+describe('isMarkpromptMetadata', () => {
+  test('identifies ChatCompletionMetadata types', () => {
+    expect(
+      isMarkpromptMetadata({
+        conversationId: 'test',
+        promptId: 'test',
+        references: [{ file: { path: 'test', source: { type: 'website' } } }],
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isMarkpromptMetadata({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletion', () => {
+  test('identifies ChatCompletionMessage types', () => {
+    expect(
+      isChatCompletion({
+        object: 'chat.completion',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletion({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isToolCall(s)', () => {
+  test('identifies ChatCompletionMessageToolCall types', () => {
+    expect(
+      isToolCall({
+        id: 'test',
+        type: 'function',
+        function: {},
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isToolCall({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+
+    expect(
+      isToolCalls([
+        {
+          id: 'test',
+          type: 'function',
+          function: {},
+        },
+      ]),
+    ).toBeTruthy();
+
+    expect(
+      isToolCalls([
+        {
+          foo: 'bar',
+        },
+      ]),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletionChunk', () => {
+  test('identifies ChatCompletionChunk types', () => {
+    expect(
+      isChatCompletionChunk({
+        object: 'chat.completion.chunk',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionChunk({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletionMessage', () => {
+  test('identifies ChatCompletionMessage types', () => {
+    expect(
+      isChatCompletionMessage({
+        content: 'test',
+        role: 'assistant',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionMessage({
+        content: null,
+        role: 'assistant',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionMessage({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isKeyOf', () => {
+  test('identifies keys of an object', () => {
+    const obj = { foo: 'bar' };
+    expect(isKeyOf(obj, 'foo')).toBeTruthy();
+    expect(isKeyOf(obj, 'bar')).toBeFalsy();
   });
 });

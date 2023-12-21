@@ -78,7 +78,7 @@ const algoliaProvider: AlgoliaProvider = {
 };
 
 let status = 200;
-const wait = 0;
+let wait = 0;
 
 const server = setupServer(
   rest.get(
@@ -126,6 +126,7 @@ afterAll(() => {
 
 afterEach(() => {
   status = 200;
+  wait = 0;
   vi.resetAllMocks();
   server.resetHandlers();
 });
@@ -183,5 +184,26 @@ describe('submitAlgoliaDocsearchQuery', () => {
         provider: { name: 'test' },
       }),
     ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
+  });
+
+  test('throws with faulty response', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({
+        ok: false,
+        text: () => Promise.resolve('{"error":"test"}'),
+      } as Response);
+    });
+
+    try {
+      await expect(
+        submitAlgoliaDocsearchQuery('react', {
+          provider: algoliaProvider,
+        }),
+      ).rejects.toStrictEqual(
+        new Error('Failed to fetch search results: test'),
+      );
+    } finally {
+      mockFetch.mockRestore();
+    }
   });
 });

@@ -1,10 +1,12 @@
 import {
   isAbortError,
+  isToolCall,
   isToolCalls,
   submitChatGenerator,
   type ChatCompletionAssistantMessageParam,
   type ChatCompletionMessageParam,
-  type ChatCompletionSystemMessageParam,
+  type ChatCompletionMessageToolCall,
+  type ChatCompletionTool,
   type ChatCompletionToolMessageParam,
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
@@ -21,7 +23,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
-import { isIterable, isPresent } from '../utils.js';
+import { hasValueAtKey, isIterable, isPresent } from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -30,9 +32,15 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
+export interface ToolCall {
+  status: 'loading' | 'done' | 'error';
+  error?: string;
+  result?: string;
+}
+
 export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
-  id: string;
+  id: ReturnType<typeof crypto.randomUUID>;
   state: ChatLoadingState;
   name?: string;
 }
@@ -40,49 +48,105 @@ export interface ChatViewMessage
 function toApiMessages(
   messages: (ChatViewMessage & { tool_call_id?: string })[],
 ): ChatCompletionMessageParam[] {
-  return messages
-    .map(({ content, role, tool_calls, tool_call_id, name }) => {
-      switch (role) {
-        case 'assistant': {
-          const msg: ChatCompletionAssistantMessageParam = {
-            content: content ?? null,
-            role,
-          };
+  return (
+    messages
+      .map(({ content, role, tool_calls, tool_call_id, name }) => {
+        switch (role) {
+          case 'assistant': {
+            const msg: ChatCompletionAssistantMessageParam = {
+              content: content ?? null,
+              role,
+            };
 
-          if (isToolCalls(tool_calls)) msg.tool_calls = tool_calls;
+            if (isToolCalls(tool_calls)) msg.tool_calls = tool_calls;
 
-          return msg;
+            return msg;
+          }
+          // case 'system': {
+          //   return {
+          //     content: content ?? null,
+          //     role,
+          //   } satisfies ChatCompletionSystemMessageParam;
+          // }
+          case 'tool': {
+            if (!tool_call_id) throw new Error('tool_call_id is required');
+            return {
+              content: content ?? null,
+              role,
+              tool_call_id,
+            } satisfies ChatCompletionToolMessageParam;
+          }
+          case 'user': {
+            return {
+              content: content ?? null,
+              role,
+              ...(name ? { name } : {}),
+            } satisfies ChatCompletionMessageParam;
+          }
         }
-        case 'system': {
-          return {
-            content: content ?? null,
-            role,
-          } satisfies ChatCompletionSystemMessageParam;
-        }
-        case 'tool': {
-          if (!tool_call_id) throw new Error('tool_call_id is required');
-          return {
-            content: content ?? null,
-            role,
-            tool_call_id,
-          } satisfies ChatCompletionToolMessageParam;
-        }
-        case 'user': {
-          return {
-            content: content ?? null,
-            role,
-            ...(name ? { name } : {}),
-          } satisfies ChatCompletionMessageParam;
-        }
-      }
-    })
-    .filter(isPresent);
+      })
+      .filter(isPresent)
+      // remove the last message if role is assistant and content is null
+      // we add this message locally as a placeholder for ourself and OpenAI errors out
+      // if we send it to them
+      .filter(
+        (m, i, arr) =>
+          !(
+            i === arr.length - 1 &&
+            m.role === 'assistant' &&
+            m.content === null
+          ),
+      )
+  );
+}
+
+interface ConfirmationProps {
+  /**
+   * Tool calls as returned by the model
+   */
+  toolCalls: ChatCompletionMessageToolCall[];
+  /**
+   * Status and results of tool calls
+   */
+  toolCallsStatus: { [key: string]: ToolCall };
+  /**
+   * Tools as provided by the user
+   */
+  tools?: ChatViewTool[];
+  confirmToolCalls: () => void;
+}
+
+export interface ChatViewTool {
+  /**
+   * OpenAI tool definition.
+   */
+  tool: ChatCompletionTool;
+  /**
+   * The actual function to call. Called with a JSON string as returned from
+   * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
+   * arguments. Must return a string to feed the result back into OpenAI.
+   **/
+  call: (args: string) => Promise<string>;
+  /**
+   * Whether user needs to confirm a call to this function or function calls
+   * will be executed right away.
+   * @default true
+   */
+  requireConfirmation?: boolean;
 }
 
 export type UserConfigurableOptions = Omit<
   SubmitChatGeneratorOptions,
-  'signal' | 'tools' | 'tool_choice'
->;
+  'signal' | 'tools'
+> & {
+  tools?: ChatViewTool[];
+  /**
+   * An optional user-provided confirmation message component that takes the tool calls
+   * provided by OpenAI and a confirm function that should be called when the user
+   * confirms the tool calls.
+   */
+  ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
+};
 
 export interface ChatStoreState {
   abort?: () => void;
@@ -96,6 +160,7 @@ export interface ChatStoreState {
   setMessages: (messages: ChatViewMessage[]) => void;
   setMessageById(id: string, next: Partial<ChatViewMessage>): void;
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
+  setToolCallById: (toolCallId: string, next: Partial<ToolCall>) => void;
   conversationIdsByProjectKey: {
     [projectKey: string]: string[];
   };
@@ -105,7 +170,16 @@ export interface ChatStoreState {
       messages: ChatViewMessage[];
     };
   };
-  submitChat: (prompt: string) => void;
+  toolCallsByToolCallId: {
+    [tool_call_id: string]: ToolCall;
+  };
+  submitChat: (
+    messages: (
+      | { content: string; role: 'user'; name?: string }
+      | { content: string; role: 'tool'; name: string; tool_call_id: string }
+    )[],
+  ) => void;
+  submitToolCalls: (message: ChatViewMessage) => Promise<void>;
   options?: UserConfigurableOptions;
   setOptions: (options: UserConfigurableOptions) => void;
   regenerateLastAnswer: () => void;
@@ -147,6 +221,7 @@ export const createChatStore = ({
             [projectKey]: [],
           },
           messagesByConversationId: {},
+          toolCallsByToolCallId: {},
           error: undefined,
           setError: (error?: string) => {
             set((state) => {
@@ -235,7 +310,10 @@ export const createChatStore = ({
               index = index === -1 ? state.messages.length : index;
 
               let currentMessage = state.messages[index] ?? {};
-              currentMessage = { ...currentMessage, ...next };
+              currentMessage = {
+                ...currentMessage,
+                ...next,
+              };
               state.messages[index] = currentMessage;
 
               const conversationId = state.conversationId;
@@ -248,21 +326,31 @@ export const createChatStore = ({
               };
             });
           },
-          submitChat: async (prompt: string) => {
-            const promptId = crypto.randomUUID();
+          setToolCallById(toolCallId, next) {
+            set((state) => {
+              state.toolCallsByToolCallId[toolCallId] = {
+                ...state.toolCallsByToolCallId[toolCallId],
+                ...next,
+              };
+            });
+          },
+          submitChat: async (messages) => {
+            const messageIds = Array.from({ length: messages.length }, () =>
+              crypto.randomUUID(),
+            );
             const responseId = crypto.randomUUID();
 
             get().setError(undefined);
 
             set((state) => {
               state.messages.push(
-                {
-                  id: promptId,
-                  role: 'user',
-                  content: prompt,
-                  state: 'indeterminate',
+                ...messages.map((message, i) => ({
+                  ...message,
+                  id: messageIds[i],
                   references: [],
-                },
+                  state: 'indeterminate' as const,
+                })),
+                // also create a placeholder message for the assistants response
                 {
                   id: responseId,
                   role: 'assistant',
@@ -279,7 +367,7 @@ export const createChatStore = ({
                 m.role === 'user' &&
                 m.state !== 'done' &&
                 m.state !== 'cancelled' &&
-                m.id !== promptId,
+                !messageIds.includes(m.id),
             )?.id;
 
             if (prevMessageId) {
@@ -292,7 +380,7 @@ export const createChatStore = ({
             const controller = new AbortController();
             const abort = (): void => {
               controller.abort();
-              for (const id of [promptId, responseId]) {
+              for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
                 });
@@ -304,37 +392,45 @@ export const createChatStore = ({
 
             // get ready to do the request
             const apiMessages = toApiMessages(get().messages);
-            for (const id of [promptId, responseId]) {
+            for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {
                 state: 'preload',
               });
             }
+
+            const options = {
+              conversationId: get().conversationId,
+              signal: controller.signal,
+              debug,
+              ...get().options,
+              tools: get().options?.tools?.map((x) => x.tool),
+            };
 
             // do the chat completion request
             try {
               for await (const chunk of submitChatGenerator(
                 apiMessages,
                 projectKey,
-                {
-                  conversationId: get().conversationId,
-                  signal: controller.signal,
-                  debug,
-                  ...get().options,
-                },
+                options,
               )) {
                 if (chunk.conversationId) {
                   get().setConversationId(chunk.conversationId);
                 }
-                get().setMessageById(promptId, {
-                  state: 'streaming-answer',
-                });
+                for (const id of messageIds) {
+                  get().setMessageById(id, {
+                    state: 'streaming-answer',
+                  });
+                }
                 get().setMessageById(responseId, {
                   state: 'streaming-answer',
                   ...chunk,
                 });
               }
             } catch (error) {
-              for (const id of [promptId, responseId]) {
+              // eslint-disable-next-line no-console
+              console.error(error);
+
+              for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
                 });
@@ -342,7 +438,6 @@ export const createChatStore = ({
 
               if (isAbortError(error)) return;
 
-              // eslint-disable-next-line no-console
               get().setError(
                 error instanceof Error ? error.message : String(error),
               );
@@ -354,18 +449,98 @@ export const createChatStore = ({
               });
             }
 
-            const currentMessage = get().messages.find(
-              (m) => m.id === promptId,
-            );
-
-            if (currentMessage?.state === 'cancelled') return;
             if (controller.signal.aborted) return;
 
-            for (const id of [promptId, responseId]) {
+            for (const id of [...messageIds, responseId]) {
+              const message = get().messages.find((m) => m.id === id);
+
+              if (!message) continue;
+              if (message.state === 'cancelled') continue;
+
               get().setMessageById(id, {
                 state: 'done',
               });
             }
+
+            /**
+             * Submit automatic tool calls if none of the tool calls require
+             * confirmation.
+             *
+             * We do this so that we can return the result of all tool calls to
+             * OpenAI simultaneously and OpenAI can generate a single response in return.
+             *
+             * If we have some calls that require confirmation and some that do not, we will
+             * do all calls simultaneously after the user has confirmed.
+             **/
+            const responseMessage = get().messages.find(
+              (m) => m.id === responseId,
+            );
+
+            if (!responseMessage?.tool_calls) return;
+
+            const tools = get().options?.tools;
+            if (!tools) return;
+
+            if (
+              responseMessage.tool_calls.every((x) => {
+                const name = x.function?.name;
+                const tool = tools.find((x) => x.tool.function.name === name);
+                return tool?.requireConfirmation === false;
+              })
+            ) {
+              get().submitToolCalls(responseMessage);
+            }
+          },
+          async submitToolCalls(message: ChatViewMessage) {
+            if (!message.tool_calls) return;
+
+            const tools = get().options?.tools;
+            if (!tools) return;
+
+            const toolCallResults = await Promise.allSettled(
+              message.tool_calls.filter(isToolCall).map(async (tool_call) => {
+                const tool = tools.find(
+                  (x) => x.tool.function.name === tool_call.function?.name,
+                );
+
+                if (!tool) throw new Error('Tool not found');
+
+                try {
+                  get().setToolCallById(tool_call.id!, {
+                    status: 'loading',
+                  });
+
+                  const result = await tool.call(
+                    tool_call.function?.arguments || '{}',
+                  );
+
+                  get().setToolCallById(tool_call.id!, {
+                    result,
+                    status: 'done',
+                  });
+
+                  return { result, tool_call, tool };
+                } catch (error) {
+                  get().setToolCallById(tool_call.id!, {
+                    status: 'error',
+                    error:
+                      error instanceof Error ? error.message : String(error),
+                  });
+                }
+              }),
+            );
+
+            get().submitChat(
+              toolCallResults
+                .filter(hasValueAtKey('status', 'fulfilled' as const))
+                .filter((x) => x.value)
+                .map((x) => ({
+                  role: 'tool',
+                  name: x.value!.tool.tool.function.name,
+                  tool_call_id: x.value!.tool_call.id!,
+                  content: x.value!.result,
+                })),
+            );
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
@@ -385,7 +560,12 @@ export const createChatStore = ({
             if (!lastUserMessage.content) return;
 
             get().setMessages(messages.slice(0, lastUserMessageIndex));
-            get().submitChat(lastUserMessage.content!);
+            get().submitChat([
+              {
+                role: 'user',
+                content: lastUserMessage.content,
+              },
+            ]);
           },
         }),
         {
@@ -398,6 +578,7 @@ export const createChatStore = ({
           partialize: (state) => ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,
             messagesByConversationId: state.messagesByConversationId,
+            toolCallsByToolCallId: state.toolCallsByToolCallId,
           }),
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {

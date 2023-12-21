@@ -1,8 +1,19 @@
 import { describe, expect, test } from 'vitest';
 
-import { markdownToString, isPresent } from './utils.js';
+import {
+  markdownToString,
+  isPresent,
+  isIterable,
+  hasPresentKey,
+  hasValueAtKey,
+} from './utils.js';
 
 describe('utils', () => {
+  test('isIterable', () => {
+    expect(isIterable(null)).toBe(false);
+    expect(isIterable([])).toBe(true);
+  });
+
   test('isPresent', () => {
     // Test case with a non-null and non-undefined value
     const value1 = 'Test String';
@@ -18,6 +29,23 @@ describe('utils', () => {
     const value3 = undefined;
     const result3 = isPresent(value3);
     expect(result3).toBe(false);
+  });
+
+  test('hasPresentKey', () => {
+    const value1 = { foo: 'bar' };
+    const value2 = { bar: 'foo' };
+    const test = hasPresentKey('foo');
+    expect(test(value1)).toBe(true);
+    expect(test(value2)).toBe(false);
+  });
+
+  test('hasValueAtKey', () => {
+    const value1 = { foo: 'bar' };
+    const value2 = { bar: 'foo' };
+    const test = hasValueAtKey('foo', 'bar');
+    expect(test(value1)).toBe(true);
+    // @ts-expect-error - testing false input
+    expect(test(value2)).toBe(false);
   });
 
   test('markdownToString', () => {

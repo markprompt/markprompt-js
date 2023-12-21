@@ -35,7 +35,12 @@ let markpromptData: {
   debug?: unknown;
 } = {};
 let markpromptDebug: object = {};
-let response: string | string[] = [];
+let response:
+  | string
+  | {
+      content: string | null;
+      tool_call?: { name: string; parameters: string } | null;
+    }[] = [];
 let wait = false;
 let status = 200;
 let stream: ReadableStream;
@@ -59,7 +64,11 @@ const server = setupServer(
               if (wait)
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               controller.enqueue(
-                encoder.encode(formatEvent({ data: getChunk(chunk, i) })),
+                encoder.encode(
+                  formatEvent({
+                    data: getChunk(chunk.content, chunk.tool_call ?? null, i),
+                  }),
+                ),
               );
               i++;
             }
@@ -129,7 +138,7 @@ describe('ChatView', () => {
   });
 
   it('submits a chat request', async () => {
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -143,11 +152,36 @@ describe('ChatView', () => {
     });
   });
 
+  it('allows selecting an example prompt', async () => {
+    const user = await userEvent.setup();
+
+    response = [{ content: 'answer' }];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          defaultView: {
+            message: 'test message',
+            promptsHeading: 'test heading',
+            prompts: ['example prompt'],
+          },
+        }}
+      />,
+    );
+
+    await user.click(screen.getByText('example prompt'));
+
+    await waitFor(() => {
+      expect(screen.getByText('answer')).toBeInTheDocument();
+    });
+  });
+
   it('allows users to ask multiple questions', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -162,7 +196,7 @@ describe('ChatView', () => {
 
     const nextPromptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId: nextPromptId };
-    response = ['a different answer'];
+    response = [{ content: 'a different answer' }];
 
     await user.type(screen.getByRole('textbox'), 'test 2');
     await user.keyboard('{Enter}');
@@ -178,7 +212,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -199,7 +233,7 @@ describe('ChatView', () => {
       conversationId: nextConversationId,
       promptId: nextPromptId,
     };
-    response = ['a different answer'];
+    response = [{ content: 'a different answer' }];
 
     await user.type(screen.getByRole('textbox'), 'test 2');
     await user.keyboard('{Enter}');
@@ -207,8 +241,264 @@ describe('ChatView', () => {
     await user.click(screen.getByRole('button', { name: 'test 1 answer' }));
   });
 
+  it('allows users to confirm tool calls', async () => {
+    async function do_a_thing(): Promise<string> {
+      return 'test function result';
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: true,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText('The bot wants to perform the following action', {
+        exact: false,
+      }),
+    ).toBeInTheDocument();
+    expect(await screen.findByText('Do a thing')).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('you did a thing and it got a result'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('allows users to confirm tool calls with a custom confirmation', async () => {
+    async function do_a_thing(): Promise<string> {
+      return 'test function result';
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: true,
+            },
+          ],
+          ToolCallsConfirmation(props) {
+            return (
+              <div>
+                <p>custom confirmation</p>
+                {/* eslint-disable react/prop-types */}
+                <button onClick={props.confirmToolCalls}>Confirm</button>
+              </div>
+            );
+          },
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText('custom confirmation', { exact: false }),
+    ).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('you did a thing and it got a result'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('automatically calls tools that do not require confirmation', async () => {
+    async function do_a_thing(): Promise<string> {
+      return 'test function result';
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: false,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText(
+        'The bot is calling the following tools on your behalf',
+        { exact: false },
+      ),
+    ).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('you did a thing and it got a result'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('shows an error state for failed tool calls', async () => {
+    async function do_a_thing(): Promise<string> {
+      throw new Error('tool call failed');
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: false,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText(
+        'The bot is calling the following tools on your behalf',
+        { exact: false },
+      ),
+    ).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await waitFor(() => {
+      expect(screen.getByText('Tool status: error')).toBeInTheDocument();
+    });
+  });
+
+  it('renders a custom component for the DefaultView message', () => {
+    const DefaultViewMessage = vi.fn(() => <p>test</p>);
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{ defaultView: { message: DefaultViewMessage } }}
+      />,
+    );
+    expect(DefaultViewMessage).toHaveBeenCalledOnce();
+  });
+
+  it('renders empty prompts for the DefaultView message', () => {
+    const DefaultViewMessage = vi.fn(() => <p>test</p>);
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          defaultView: { message: DefaultViewMessage, prompts: [] },
+        }}
+      />,
+    );
+    expect(DefaultViewMessage).toHaveBeenCalledOnce();
+  });
+
   it('shows references', async () => {
-    response = ['answer'];
+    response = [{ content: 'answer' }];
     const references = [
       {
         file: { path: '/page1', source: { type: 'file-upload' as const } },
@@ -230,7 +520,7 @@ describe('ChatView', () => {
   });
 
   it('shows references at the end', async () => {
-    response = ['answer'];
+    response = [{ content: 'answer' }];
     const references = [
       {
         file: { path: '/page1', source: { type: 'file-upload' as const } },
@@ -254,7 +544,7 @@ describe('ChatView', () => {
   });
 
   it('does not show references when disabled', async () => {
-    response = ['answer'];
+    response = [{ content: 'answer' }];
     const references = [
       {
         file: { path: '/page1', source: { type: 'file-upload' as const } },
@@ -284,7 +574,11 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['testing', 'testing', 'test'];
+    response = [
+      { content: 'testing' },
+      { content: 'testing' },
+      { content: 'test' },
+    ];
     wait = true;
 
     const user = await userEvent.setup();
@@ -310,7 +604,11 @@ describe('ChatView', () => {
   it(
     'aborts a pending chat request when a new prompt is submitted',
     async () => {
-      response = ['testing ', 'testing ', 'test'];
+      response = [
+        { content: 'testing ' },
+        { content: 'testing ' },
+        { content: 'test' },
+      ];
       wait = true;
 
       const user = await userEvent.setup();
@@ -326,7 +624,11 @@ describe('ChatView', () => {
         ).toBeInTheDocument();
       });
 
-      response = ['testing ', 'testing ', 'test again'];
+      response = [
+        { content: 'testing ' },
+        { content: 'testing ' },
+        { content: 'test again' },
+      ];
       wait = false;
 
       await user.type(screen.getByRole('textbox'), 'test again');
@@ -374,7 +676,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -400,7 +702,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -424,7 +726,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -559,7 +861,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -584,7 +886,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -612,7 +914,7 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['answer'];
+    response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
 
@@ -627,7 +929,7 @@ describe('ChatView', () => {
 
     const nextPromptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId: nextPromptId };
-    response = ['a different answer'];
+    response = [{ content: 'a different answer' }];
 
     await user.click(screen.getByText('Regenerate'));
 
@@ -642,7 +944,11 @@ describe('ChatView', () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
-    response = ['testing ', 'testing ', 'test'];
+    response = [
+      { content: 'testing ' },
+      { content: 'testing ' },
+      { content: 'test' },
+    ];
     wait = true;
 
     const user = await userEvent.setup();

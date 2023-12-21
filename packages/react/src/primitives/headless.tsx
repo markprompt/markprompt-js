@@ -287,7 +287,7 @@ function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
       style={{ animationDelay: '100ms' }}
       onClick={handleClick}
     >
-      <AccessibleIcon label="copy">
+      <AccessibleIcon label={didCopy ? 'copied' : 'copy'}>
         {didCopy ? (
           <CheckIcon width={16} height={16} strokeWidth={2} />
         ) : (

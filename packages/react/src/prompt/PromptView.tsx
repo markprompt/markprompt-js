@@ -151,7 +151,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
             [
               {
                 content: answer,
-                id: promptId!,
+                id: promptId! as ReturnType<typeof crypto.randomUUID>,
                 promptId,
                 references,
                 state,

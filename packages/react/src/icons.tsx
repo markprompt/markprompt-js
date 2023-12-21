@@ -279,23 +279,103 @@ const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
+const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
+
+const CheckCircleIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="m9 12 2 2 4-4" />
+  </svg>
+);
+
+const CrossCircleIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="m15 9-6 6" />
+    <path d="m9 9 6 6" />
+  </svg>
+);
+
+const CircleDashedIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0" />
+    <path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7" />
+    <path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8" />
+    <path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69" />
+    <path d="M13.9 21.82a9.94 9.94 0 0 1-3.8 0" />
+    <path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7" />
+    <path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8" />
+    <path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69" />
+  </svg>
+);
+
 export {
   ChatIcon,
+  CheckCircleIcon,
   CheckIcon,
   ChevronLeftIcon,
   ChevronUpIcon,
+  CircleDashedIcon,
   CloseIcon,
   CommandIcon,
   CopyIcon,
   CornerDownLeftIcon,
   CounterClockwiseClockIcon,
+  CrossCircleIcon,
   FileTextIcon,
   HashIcon,
+  LoaderIcon,
+  PlusIcon,
   ReloadIcon,
   SearchIcon,
   SparklesIcon,
   StopIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-  PlusIcon,
 };

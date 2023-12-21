@@ -28,6 +28,7 @@ In browsers with [esm.sh](https://esm.sh):
 <script type="module">
   import {
     submitChat,
+    submitChatGenerator,
     submitSearchQuery,
     submitFeedback,
   } from 'https://esm.sh/@markprompt/core';
@@ -37,59 +38,34 @@ In browsers with [esm.sh](https://esm.sh):
 ## Usage
 
 ```js
-import { submitChat } from '@markprompt/core';
+import { submitChatGenerator } from '@markprompt/core';
 
 // User input
 const prompt = 'What is Markprompt?';
 // Can be obtained in your project settings on markprompt.com
 const projectKey = 'YOUR-PROJECT-KEY';
 
-// Called when a new answer chunk is available
-// Should be concatenated to previous chunks
-function onAnswerChunk(chunk) {
-  // Process an answer chunk
-}
-
-// Called when references are available
-function onReferences(references) {
-  // Process references
-}
-
-function onConversationId(conversationId) {
-  // Store conversationId for future use
-}
-
-function onPromptId(promptId) {
-  // Store promptId for future use
-}
-
-// Called when submitChat encounters an error
-function onError(error) {
-  // Handle errors
-}
-
 // Optional parameters, defaults displayed
 const options = {
   model: 'gpt-3.5-turbo', // Supports all OpenAI models
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  apiUrl: 'https://api.markprompt.com/v1/chat', // Or your own chat API endpoint
+  apiUrl: 'https://api.markprompt.com/chat', // Or your own chat API endpoint
 };
 
-await submitChat(
+for await (const chunk of submitChatGenerator(
   [{ content: prompt, role: 'user' }],
   projectKey,
-  onAnswerChunk,
-  onReferences,
-  onConversationId,
-  onPromptId,
-  onError,
   options,
-);
+)) {
+  console.log(chunk);
+}
 ```
 
 ## API
 
 ### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onConversationId, onPromptId, onError, options?)`
+
+**Deprecated**. Use `submitChatGenerator` instead.
 
 Submit a prompt to the Markprompt Completions API.
 

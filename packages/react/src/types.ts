@@ -169,7 +169,10 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
    */
-  prompt?: UserConfigurableOptions & {
+  prompt?: Omit<
+    UserConfigurableOptions,
+    'tools' | 'tool_call' | 'ToolCallsConfirmation'
+  > & {
     /**
      * Label for the prompt input
      * @default "Ask AI"
