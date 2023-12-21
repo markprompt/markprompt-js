@@ -103,10 +103,6 @@ export function DefaultToolCallsConfirmation(
 
               if (!tool) throw Error('tool not found');
 
-              if (tool?.requireConfirmation === false) {
-                return null;
-              }
-
               const status = toolCallsStatus[toolCall.id]?.status;
               const StatusIcon = getStatusIcon(status);
 
