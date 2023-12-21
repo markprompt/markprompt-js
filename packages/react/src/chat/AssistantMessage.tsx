@@ -45,7 +45,11 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
         {message.content ?? ''}
       </MessageAnswer>
 
-      {/* if this message has any tool calls, and those tool calls require a confirmation, and that confirmation has not already been given, show either the default or user-provided confirmation */}
+      {/*
+        if this message has any tool calls, and those tool calls require a
+        confirmation, and that confirmation has not already been given, show
+        either the default or user-provided confirmation
+      */}
       {Array.isArray(toolCalls) && (
         <ToolCallConfirmation
           toolCalls={toolCalls}

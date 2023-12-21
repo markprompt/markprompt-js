@@ -1740,8 +1740,7 @@
 
 :where(.MarkpromptToolDescriptionWithStatus) {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-flow: row nowrap;
   gap: 0.5rem;
   align-items: center;
 }
