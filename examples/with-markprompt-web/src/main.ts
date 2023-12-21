@@ -22,7 +22,6 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
-      apiUrl: 'http://api.localhost:3000/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
@@ -73,20 +72,6 @@ if (el && el instanceof HTMLElement) {
           requireConfirmation: false,
         },
       ],
-      // ToolCallsConfirmation: (props) => {
-      //   const { confirmToolCalls } = props;
-      //   return h(
-      //     'div',
-      //     {
-      //       style:
-      //         'background:red;padding-inline:1.5rem;padding-block:0.75rem;',
-      //     },
-      //     [
-      //       JSON.stringify(props),
-      //       h('button', { onClick: confirmToolCalls }, 'Confirm'),
-      //     ],
-      //   );
-      // },
     },
     defaultView: 'chat',
     trigger: {
