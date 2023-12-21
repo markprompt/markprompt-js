@@ -77,10 +77,25 @@ export function DefaultToolCallsConfirmation(
 
             if (!tool) throw Error('tool not found');
 
+            const status = toolCallsStatus[toolCall.id]?.status;
+            const StatusIcon = getStatusIcon(status);
+
             return (
-              <p key={toolCall.function.name}>
+              <p
+                key={toolCall.function.name}
+                className="MarkpromptToolDescriptionWithStatus"
+              >
+                <AccessibleIcon
+                  label={`Tool status: ${status ?? 'not started'}`}
+                >
+                  <StatusIcon
+                    width={16}
+                    height={16}
+                    className={`MarkpromptToolCallStatusIcon`}
+                  />
+                </AccessibleIcon>
                 <strong>
-                  {tool.tool.function.description ?? tool.tool.function.name}
+                  {tool.tool.function.description ?? tool.tool.function.name}{' '}
                 </strong>
               </p>
             );

@@ -70,7 +70,7 @@ if (el && el instanceof HTMLElement) {
               },
             },
           },
-          requireConfirmation: true,
+          requireConfirmation: false,
         },
       ],
       // ToolCallsConfirmation: (props) => {

@@ -363,6 +363,116 @@ describe('ChatView', () => {
     });
   });
 
+  it('automatically calls tools that do not require confirmation', async () => {
+    async function do_a_thing(): Promise<string> {
+      return 'test function result';
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: false,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText(
+        'The bot is calling the following tools on your behalf',
+        { exact: false },
+      ),
+    ).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('you did a thing and it got a result'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('shows an error state for failed tool calls', async () => {
+    async function do_a_thing(): Promise<string> {
+      throw new Error('tool call failed');
+    }
+
+    const user = await userEvent.setup();
+
+    response = [
+      { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
+    ];
+
+    render(
+      <ChatView
+        projectKey="test-key"
+        chatOptions={{
+          tool_choice: 'auto',
+          tools: [
+            {
+              call: do_a_thing,
+              tool: {
+                type: 'function',
+                function: {
+                  name: 'do_a_thing',
+                  description: 'Do a thing',
+                  parameters: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+              requireConfirmation: false,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.type(screen.getByRole('textbox'), 'I want to do a thing');
+    await user.keyboard('{Enter}');
+
+    expect(
+      await screen.findByText(
+        'The bot is calling the following tools on your behalf',
+        { exact: false },
+      ),
+    ).toBeInTheDocument();
+
+    response = [{ content: 'you did a thing and it got a result' }];
+
+    await waitFor(() => {
+      expect(screen.getByText('Tool status: error')).toBeInTheDocument();
+    });
+  });
+
   it('shows references', async () => {
     response = [{ content: 'answer' }];
     const references = [
