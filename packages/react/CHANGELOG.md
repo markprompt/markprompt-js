@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.30.1
+
+### Patch Changes
+
+- [#254](https://github.com/motifland/markprompt-js/pull/254) [`b4c2c34`](https://github.com/motifland/markprompt-js/commit/b4c2c34e3c31076c2b0599329eb9bbc16604b92b) Thanks [@nickrttn](https://github.com/nickrttn)! - Export new @markprompt/react types for ChatView
+
 ## 0.30.0
 
 ### Minor Changes
