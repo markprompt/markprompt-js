@@ -216,7 +216,10 @@ export async function submitChat(
 
     const res = await fetch(apiUrl, {
       method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'X-API-Version': '2023-12-01',
+      }),
       // Some properties may be non-serializable, like callback, so
       // make sure to safely stringify the payload.
       body: safeStringify({
@@ -280,11 +283,6 @@ export async function submitChat(
   }
 }
 export interface SubmitChatGeneratorOptions {
-  /**
-   * API version
-   * @default "2023-10-20"
-   */
-  version?: '2023-12-01';
   /**
    * URL at which to fetch completions
    * @default "https://api.markprompt.com/chat"
@@ -396,7 +394,6 @@ export interface SubmitChatGeneratorOptions {
 
 export const DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/chat',
-  version: '2023-12-01',
   frequencyPenalty: 0,
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   maxTokens: 500,
@@ -440,7 +437,6 @@ const validSubmitChatGeneratorOptionsKeys: (keyof SubmitChatGeneratorOptions)[] 
     'tool_choice',
     'tools',
     'topP',
-    'version',
   ];
 
 const isValidSubmitChatGeneratorOptionsKey = (
@@ -482,7 +478,10 @@ export async function* submitChatGenerator(
 
   const res = await fetch(apiUrl, {
     method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json' }),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'X-API-Version': '2023-12-01',
+    }),
     body: JSON.stringify({ projectKey, messages, debug, ...resolvedOptions }),
     signal,
   });

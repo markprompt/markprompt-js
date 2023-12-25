@@ -81,6 +81,9 @@ export async function submitSearchQuery(
     const res = await fetch(`${apiUrl}?${params.toString()}`, {
       method: 'GET',
       signal: options?.signal,
+      headers: new Headers({
+        'X-API-Version': '2023-12-01',
+      }),
     });
 
     if (!res.ok) {
