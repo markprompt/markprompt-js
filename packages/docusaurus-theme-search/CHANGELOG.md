@@ -1,5 +1,15 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.14.2
+
+### Patch Changes
+
+- [#257](https://github.com/motifland/markprompt-js/pull/257) [`011698d`](https://github.com/motifland/markprompt-js/commit/011698de13d95af7d33b729f853b96049f1cb715) Thanks [@michaelfester](https://github.com/michaelfester)! - Use header version
+
+- Updated dependencies [[`011698d`](https://github.com/motifland/markprompt-js/commit/011698de13d95af7d33b729f853b96049f1cb715)]:
+  - @markprompt/css@0.19.1
+  - @markprompt/react@0.30.2
+
 ## 0.14.1
 
 ### Patch Changes
