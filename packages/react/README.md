@@ -92,7 +92,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `chat.defaultView.message` (`string` or `ReactElement`): A message or React component to show when no conversation has been initiated.
 - `chat.defaultView.prompts` (`stringp[]`): A list of default prompts to show to give the user ideas of what to ask for.
 - `chat.apiUrl` (`string`): URL at which to fetch completions. (Default:
-  `https://api.markprompt.com/v1/chat`)
+  `https://api.markprompt.com/chat`)
 - `chat.iDontKnowMessage` (`string`): Message returned when the model does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `chat.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
 - `chat.systemPrompt` (`string`): The prompt template. (Default:
@@ -112,7 +112,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
   chat answers. (Default: `true`)
 - `feedback.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-  `https://api.markprompt.com/v1/feedback`)
+  `https://api.markprompt.com/feedback`)
 - `feedback.heading` (`string`): Heading for the feedback form, only shown in
   the prompt view (Default: `Was this response helpful?`)
 - `feedback.onFeedbackSubmit` (`function`): Callback when feedback is submitted
@@ -161,7 +161,7 @@ The pre-built Markprompt component. It accepts the following props:
   `Search docs…`)
 - `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
 - `search.apiUrl` (`string`): URL at which to fetch search results. (Default:
-  `https://api.markprompt.com/v1/search`)
+  `https://api.markprompt.com/search`)
 - `search.provider` (`object`): A custom search provider configuration, such as Algolia
 - `trigger` (`object`): Options for the trigger
 - `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will disable rendering any trigger element. Use `openMarkprompt()` to trigger the Markprompt dialog. (Default: `false`)
@@ -207,7 +207,7 @@ accepts the following props:
 - `chatOptions.placeholder` (`string`): Placeholder for the prompt input
   (Default: `Ask AI…`)
 - `chatOptions.apiUrl` (`string`): URL at which to fetch completions. (Default:
-  `https://api.markprompt.com/v1/chat`)
+  `https://api.markprompt.com/chat`)
 - `chatOptions.iDontKnowMessage` (`string`): Message returned when the model
   does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `chatOptions.model` (`string`): The OpenAI model to use. (Default:
@@ -237,7 +237,7 @@ accepts the following props:
 - `feedbackOptions.enabled` (`boolean`): Enable users to give feedback on prompt
   or chat answers. (Default: `true`)
 - `feedbackOptions.apiUrl` (`string`): URL at which to deliver feedback.
-  (Default: `https://api.markprompt.com/v1/feedback`)
+  (Default: `https://api.markprompt.com/feedback`)
 - `onDidSelectReference` (`function(reference: FileSectionReference): void`):
   Callback when a reference is selected
 - `referencesOptions` (`MarkpromptOptions['references']`): Options for the
@@ -270,7 +270,7 @@ It accepts the following props:
 - `promptOptions.placeholder` (`string`): Placeholder for the prompt input
   (Default: `Ask AI…`)
 - `promptOptions.apiUrl` (`string`): URL at which to fetch completions.
-  (Default: `https://api.markprompt.com/v1/prompt`)
+  (Default: `https://api.markprompt.com/prompt`)
 - `promptOptions.iDontKnowMessage` (`string`): Message returned when the model
   does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
 - `promptOptions.model` (`string`): The OpenAI model to use. (Default:
@@ -301,7 +301,7 @@ It accepts the following props:
 - `feedbackOptions.enabled` (`boolean`): Enable users to give feedback on prompt
   or chat answers. (Default: `true`)
 - `feedbackOptions.apiUrl` (`string`): URL at which to deliver feedback.
-  (Default: `https://api.markprompt.com/v1/feedback`)
+  (Default: `https://api.markprompt.com/feedback`)
 - `onDidSelectReference` (`function(reference: FileSectionReference): void`):
   Callback when a reference is selected
 - `referencesOptions` (`MarkpromptOptions['references']`): Options for the
@@ -351,7 +351,7 @@ It accepts the following props:
 - `searchOptions.limit` (`number`): Maximum amount of results to return.
   (Default: `5`)
 - `searchOptions.apiUrl` (`string`): URL at which to fetch search results.
-  (Default: `https://api.markprompt.com/v1/search`)
+  (Default: `https://api.markprompt.com/search`)
 - `searchOptions.provider` (`object`): A custom search provider configuration,
   such as Algolia
 
@@ -452,7 +452,7 @@ Create a chat prompt. It accepts the following options:
   - `options.chatOptions` (`SubmitChatOptions`): Options passed to `submitChat`
     from `@markprompt/core`
     - `chatOptions.apiUrl` (`string`): URL at which to fetch completions.
-      (Default: `https://api.markprompt.com/v1/chat`)
+      (Default: `https://api.markprompt.com/chat`)
     - `chatOptions.frequencyPenalty` (`number`): The model frequency penalty.
       (Default: `0`)
     - `chatOptions.iDontKnowMessage` (`string`): Message returned when the model
@@ -480,7 +480,7 @@ Create a chat prompt. It accepts the following options:
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `useFeedback`.
     - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-      `https://api.markprompt.com/v1/feedback`)
+      `https://api.markprompt.com/feedback`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
     [Markprompt.com](https://markprompt.com/) under "Your Project > Settings >
@@ -513,7 +513,7 @@ Create a chat prompt. It accepts the following options:
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `@markprompt/core`'s `submitFeedback`.
     - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-      `https://api.markprompt.com/v1/feedback`)
+      `https://api.markprompt.com/feedback`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
     [Markprompt.com](https://markprompt.com/) under "Your Project > Settings >
@@ -537,7 +537,7 @@ Create a prompt. It accepts the following options:
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `useFeedback`.
     - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-      `https://api.markprompt.com/v1/feedback`)
+      `https://api.markprompt.com/feedback`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
     [Markprompt.com](https://markprompt.com/) under "Your Project > Settings >
@@ -601,7 +601,7 @@ Create a search prompt. It accepts the following options:
   - `options.searchOptions` (`SubmitSearchOptions`): Options for
     `@markprompt/core`'s `submitSearch`
     - `searchOptions.apiUrl` (`string`): URL at which to fetch search results.
-      (Default: `https://api.markprompt.com/v1/search`)
+      (Default: `https://api.markprompt.com/search`)
     - `searchOptions.limit` (`number`): Maximum amount of results to return.
       (Default: `8`)
     - `searchOptions.provider` (`AlgoliaProvider`): A custom search provider

@@ -34,7 +34,7 @@ export type {
 export interface SubmitChatOptions {
   /**
    * URL at which to fetch completions
-   * @default "https://api.markprompt.com/v1/chat"
+   * @default "https://api.markprompt.com/chat"
    * */
   apiUrl?: string;
   /**
@@ -119,7 +119,7 @@ export interface SubmitChatOptions {
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
-  apiUrl: 'https://api.markprompt.com/v1/chat',
+  apiUrl: 'https://api.markprompt.com/chat',
   frequencyPenalty: 0,
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
   maxTokens: 500,
