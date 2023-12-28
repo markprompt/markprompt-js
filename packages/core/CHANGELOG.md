@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.21.0
+
+### Minor Changes
+
+- [#261](https://github.com/motifland/markprompt-js/pull/261) [`7919a4e`](https://github.com/motifland/markprompt-js/commit/7919a4eab79dc1166e0e94cdb94c08eb5830183d) Thanks [@michaelfester](https://github.com/michaelfester)! - Update away from /v1 paths
+
+- [#259](https://github.com/motifland/markprompt-js/pull/259) [`015cb1c`](https://github.com/motifland/markprompt-js/commit/015cb1c94789e838454e4b93b1de6cb28aee8582) Thanks [@michaelfester](https://github.com/michaelfester)! - Update to new API endpoints without /v1
+
 ## 0.20.1
 
 ### Patch Changes
