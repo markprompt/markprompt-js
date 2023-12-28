@@ -14,7 +14,7 @@ export interface SubmitSearchQueryOptions {
   limit?: number;
   /**
    * URL at which to fetch search results
-   * @default "https://api.markprompt.com/v1/search"
+   * @default "https://api.markprompt.com/search"
    **/
   apiUrl?: string;
   /**
@@ -51,7 +51,7 @@ export interface AlgoliaProvider {
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
   limit: 8,
-  apiUrl: 'https://api.markprompt.com/v1/search',
+  apiUrl: 'https://api.markprompt.com/search',
 };
 
 /**

@@ -12,7 +12,7 @@ export interface SubmitFeedbackBody {
 export interface SubmitFeedbackOptions {
   /**
    * URL to submit feedback to.
-   * @default 'https://api.markprompt.com/v1/feedback'
+   * @default 'https://api.markprompt.com/feedback'
    */
   apiUrl?: string;
   /**
@@ -23,7 +23,7 @@ export interface SubmitFeedbackOptions {
 }
 
 export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
-  apiUrl: 'https://api.markprompt.com/v1/feedback',
+  apiUrl: 'https://api.markprompt.com/feedback',
 } satisfies SubmitFeedbackOptions;
 
 export async function submitFeedback(
