@@ -49,7 +49,7 @@ export async function submitFeedback(
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'X-API-Version': '2023-12-01',
+        'X-Markprompt-API-Version': '2023-12-01',
       }),
       body: JSON.stringify(feedback),
       signal: resolvedOptions?.signal,

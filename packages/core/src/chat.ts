@@ -218,7 +218,7 @@ export async function submitChat(
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'X-API-Version': '2023-12-01',
+        'X-Markprompt-API-Version': '2023-12-01',
       }),
       // Some properties may be non-serializable, like callback, so
       // make sure to safely stringify the payload.
@@ -480,7 +480,7 @@ export async function* submitChatGenerator(
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'X-API-Version': '2023-12-01',
+      'X-Markprompt-API-Version': '2023-12-01',
     }),
     body: JSON.stringify({ projectKey, messages, debug, ...resolvedOptions }),
     signal,
