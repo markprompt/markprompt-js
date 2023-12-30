@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.21.1
+
+### Patch Changes
+
+- [#262](https://github.com/motifland/markprompt-js/pull/262) [`9ffc460`](https://github.com/motifland/markprompt-js/commit/9ffc4605401ba41e40e907254fcb89235baed4f9) Thanks [@michaelfester](https://github.com/michaelfester)! - Update to X-Markprompt-API-Version flag
+
 ## 0.21.0
 
 ### Minor Changes
