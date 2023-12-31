@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.21.2
+
+### Patch Changes
+
+- [#264](https://github.com/motifland/markprompt-js/pull/264) [`b673a83`](https://github.com/motifland/markprompt-js/commit/b673a83cdd9fc8de8562c78483ff2f56d02a9d2b) Thanks [@michaelfester](https://github.com/michaelfester)! - Add models
+
 ## 0.21.1
 
 ### Patch Changes
