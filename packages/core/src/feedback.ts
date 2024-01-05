@@ -51,7 +51,14 @@ export async function submitFeedback(
         'Content-Type': 'application/json',
         'X-Markprompt-API-Version': '2023-12-01',
       }),
-      body: JSON.stringify(feedback),
+      body: JSON.stringify({
+        ...feedback,
+        // /v1/feedback was using promptId. The new /feedback endpoint
+        // now uses messageId. We should eventually migrate everything
+        // to messageId, but now we just copy the promptId parameter
+        // to messageId, so that it works with both endpoints.
+        messageId: feedback.promptId,
+      }),
       signal: resolvedOptions?.signal,
     });
 
