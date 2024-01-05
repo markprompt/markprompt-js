@@ -1,8 +1,3 @@
-<a href="https://markprompt.com">
-  <img alt="Markprompt – Enterprise-grade AI chatbots for your website and docs" src="https://raw.githubusercontent.com/motifland/markprompt/main/public/static/cover.png">
-  <h1 align="center">Markprompt</h1>
-</a>
-
 Markprompt is a platform for building GPT-powered prompts. It takes Markdown,
 Markdoc, MDX, reStructuredText, HTML and plain text files (from a GitHub repo,
 website or file uploads), and creates embeddings that you can use to create a
@@ -60,7 +55,6 @@ To use the Markprompt platform as is, please refer to the
 ## Community
 
 - [X](https://x.com/markprompt)
-- [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 
