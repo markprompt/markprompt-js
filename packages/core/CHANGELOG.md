@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.21.4
+
+### Patch Changes
+
+- [#268](https://github.com/motifland/markprompt-js/pull/268) [`af52572`](https://github.com/motifland/markprompt-js/commit/af52572f97f54e77e1c62fc78bc39d4eade25336) Thanks [@michaelfester](https://github.com/michaelfester)! - Add messageId param
+
+- [#268](https://github.com/motifland/markprompt-js/pull/268) [`af52572`](https://github.com/motifland/markprompt-js/commit/af52572f97f54e77e1c62fc78bc39d4eade25336) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix currupt messages
+
 ## 0.21.3
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.31.1
+
+### Patch Changes
+
+- [#268](https://github.com/motifland/markprompt-js/pull/268) [`af52572`](https://github.com/motifland/markprompt-js/commit/af52572f97f54e77e1c62fc78bc39d4eade25336) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix currupt messages
+
+- Updated dependencies [[`af52572`](https://github.com/motifland/markprompt-js/commit/af52572f97f54e77e1c62fc78bc39d4eade25336), [`af52572`](https://github.com/motifland/markprompt-js/commit/af52572f97f54e77e1c62fc78bc39d4eade25336)]:
+  - @markprompt/core@0.21.4
+
 ## 0.31.0
 
 ### Minor Changes
