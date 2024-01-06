@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.21.3
+
+### Patch Changes
+
+- [#267](https://github.com/motifland/markprompt-js/pull/267) [`f76e043`](https://github.com/motifland/markprompt-js/commit/f76e0437c3d6c2a619aa918f6d773333c25be9d1) Thanks [@michaelfester](https://github.com/michaelfester)! - Add messageId param
+
 ## 0.21.2
 
 ### Patch Changes
