@@ -51,6 +51,10 @@ function toApiMessages(
   return (
     messages
       .map(({ content, role, tool_calls, tool_call_id, name }) => {
+        if (!content) {
+          // Ignore empty messages
+          return undefined;
+        }
         switch (role) {
           case 'assistant': {
             const msg: ChatCompletionAssistantMessageParam = {
