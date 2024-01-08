@@ -70,6 +70,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `projectKey` (`string`): The project key associated to your project. It can be obtained in the project settings on [Markprompt.com](https://markprompt.com/) under "Project key"
 - `display` (`plain | dialog`): The way to display the prompt (Default:
   `dialog`)
+- `sticky` (`boolean`): If true, enable user interactions outside of the dialog while keeping it open. (Default: `false`)
 - `defaultView` (`chat | prompt | search`): The default view to show (Default:
   `prompt` or `search` when search is enabled)
 - `close` (`object`): Options for the close modal button
