@@ -1,5 +1,14 @@
 # @markprompt/web
 
+## 0.21.8
+
+### Patch Changes
+
+- [#271](https://github.com/motifland/markprompt-js/pull/271) [`638e1d6`](https://github.com/motifland/markprompt-js/commit/638e1d65184794e6ed8462a6ee5b5d9668dd2c66) Thanks [@michaelfester](https://github.com/michaelfester)! - Add sticky option
+
+- Updated dependencies [[`638e1d6`](https://github.com/motifland/markprompt-js/commit/638e1d65184794e6ed8462a6ee5b5d9668dd2c66)]:
+  - @markprompt/react@0.31.2
+
 ## 0.21.7
 
 ### Patch Changes
