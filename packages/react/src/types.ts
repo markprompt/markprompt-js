@@ -68,6 +68,12 @@ export interface MarkpromptOptions {
    **/
   display?: 'plain' | 'dialog';
   /**
+   * If true, enable user interactions outside of the dialog while
+   * keeping it open.
+   * @default false
+   **/
+  sticky?: boolean;
+  /**
    * Enable and configure search functionality.
    * @default "search"
    * */

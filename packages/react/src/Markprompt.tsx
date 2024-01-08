@@ -58,6 +58,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
   const {
     display,
+    sticky,
     defaultView,
     close,
     description,
@@ -73,6 +74,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   }: MarkpromptOptions = useDefaults(
     {
       display: props.display,
+      sticky: props.sticky,
       defaultView: props.defaultView,
       close: props.close,
       description: props.description,
@@ -155,12 +157,21 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       {display === 'dialog' && (
         <>
           <BaseMarkprompt.Portal>
-            <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+            {!sticky && (
+              <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+            )}
             <BaseMarkprompt.Content
               className="MarkpromptContentDialog"
               branding={branding}
               showAlgolia={
                 search?.enabled && search.provider?.name === 'algolia'
+              }
+              onPointerDownOutside={
+                sticky
+                  ? (e) => {
+                      e.preventDefault();
+                    }
+                  : undefined
               }
             >
               <BaseMarkprompt.Title hide={title.hide}>
