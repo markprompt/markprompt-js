@@ -261,6 +261,22 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               inset: 0,
             }}
           >
+            {close?.visible && (
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '0.5rem',
+                  top: '0.5rem',
+                  zIndex: 10,
+                }}
+              >
+                <BaseMarkprompt.Close className="MarkpromptClose">
+                  <AccessibleIcon.Root label={close!.label!}>
+                    <kbd>Esc</kbd>
+                  </AccessibleIcon.Root>
+                </BaseMarkprompt.Close>
+              </div>
+            )}
             {chat?.enabled ? (
               <ChatView
                 activeView={activeView}
