@@ -160,19 +160,12 @@
 
 :where(.MarkpromptContentDialog) {
   background-color: var(--markprompt-background);
-  border-radius: var(--markprompt-radius);
-  border: 1px solid var(--markprompt-border);
-  box-shadow:
-    hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
-    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80vw;
-  max-width: 600px;
-  height: calc(100vh - 200px);
-  max-height: 600px;
+  width: 100dvw;
+  height: 100dvh;
   animation-name: markprompt-show-content;
   animation-duration: 300ms;
   animation-fill-mode: both;
@@ -181,8 +174,20 @@
   overflow: hidden;
   display: grid;
   grid-template-rows: 1fr auto;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+}
+
+@media screen and (pointer: fine) {
+  :where(.MarkpromptContentDialog) {
+    border-radius: var(--markprompt-radius);
+    border: 1px solid var(--markprompt-border);
+    box-shadow:
+      hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+      hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
+    max-width: 37.5rem;
+    max-height: 37.5rem;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
 }
 
 :where(.MarkpromptContentPlain) {
@@ -361,7 +366,7 @@
   padding: 0.25rem;
   border-style: solid;
   border-width: 1px;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   border-color: var(--markprompt-border);
   text-transform: uppercase;
   cursor: pointer;
@@ -511,7 +516,11 @@
   width: 100%;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  font-size: var(--markprompt-text-size);
+  /*
+    If the font-size of the prompt input is not at least 1rem (16px), Safari
+    on iOS will automatically zoom to the prompt input
+  */
+  font-size: 1rem;
   background-color: var(--markprompt-background);
   color: var(--markprompt-foreground);
   caret-color: var(--markprompt-primary);

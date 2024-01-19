@@ -1,3 +1,6 @@
+// polyfill crypto.randomUUID for iOS
+import 'randomuuid';
+
 import '@markprompt/css';
 import './style.css';
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';

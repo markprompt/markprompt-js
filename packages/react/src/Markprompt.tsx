@@ -6,13 +6,14 @@ import React, { useEffect, useState, type ReactElement } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import { ChatIcon, SparklesIcon } from './icons.js';
+import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions } from './types.js';
 import { useDefaults } from './useDefaults.js';
+import { useMediaQuery } from './useMediaQuery.js';
 import { useViews, type View } from './useViews.js';
 
 type MarkpromptProps = MarkpromptOptions &
@@ -248,6 +249,8 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
 
   const { activeView, setActiveView } = useViews({ search, chat }, defaultView);
 
+  const isTouchDevice = useMediaQuery('(pointer: coarse)');
+
   if (!search?.enabled) {
     return (
       <div className="MarkpromptTabsContainer">
@@ -272,7 +275,11 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               >
                 <BaseMarkprompt.Close className="MarkpromptClose">
                   <AccessibleIcon.Root label={close!.label!}>
-                    <kbd>Esc</kbd>
+                    {isTouchDevice ? (
+                      <CloseIcon width={20} height={20} />
+                    ) : (
+                      <kbd>Esc</kbd>
+                    )}
                   </AccessibleIcon.Root>
                 </BaseMarkprompt.Close>
               </div>
@@ -368,7 +375,11 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             <BaseMarkprompt.Close className="MarkpromptClose">
               <AccessibleIcon.Root label={close!.label!}>
-                <kbd>Esc</kbd>
+                {isTouchDevice ? (
+                  <CloseIcon width={20} height={20} />
+                ) : (
+                  <kbd>Esc</kbd>
+                )}
               </AccessibleIcon.Root>
             </BaseMarkprompt.Close>
           </div>

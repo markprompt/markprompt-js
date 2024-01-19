@@ -11,7 +11,8 @@
   "dependencies": {
     "@markprompt/css": "*",
     "@markprompt/web": "*",
-    "preact": "^10.19.3"
+    "preact": "^10.19.3",
+    "randomuuid": "^1.0.1"
   },
   "devDependencies": {
     "vite": "^4.4.9"
