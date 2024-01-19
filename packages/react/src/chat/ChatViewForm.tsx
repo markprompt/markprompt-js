@@ -44,6 +44,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
+      inputRef.current?.blur();
       const data = new FormData(event.currentTarget);
       const value = data.get('markprompt-prompt');
 

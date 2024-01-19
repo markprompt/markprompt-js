@@ -92,6 +92,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
+      inputRef?.current?.blur();
       event.preventDefault();
       submitPrompt();
     },
@@ -151,7 +152,7 @@ export function PromptView(props: PromptViewProps): ReactElement {
             [
               {
                 content: answer,
-                id: promptId! as ReturnType<typeof crypto.randomUUID>,
+                id: promptId! as ReturnType<typeof self.crypto.randomUUID>,
                 promptId,
                 references,
                 state,

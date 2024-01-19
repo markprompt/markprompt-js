@@ -340,9 +340,9 @@ export const createChatStore = ({
           },
           submitChat: async (messages) => {
             const messageIds = Array.from({ length: messages.length }, () =>
-              crypto.randomUUID(),
+              self.crypto.randomUUID(),
             );
-            const responseId = crypto.randomUUID();
+            const responseId = self.crypto.randomUUID();
 
             get().setError(undefined);
 
