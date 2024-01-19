@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.32.0
+
+### Minor Changes
+
+- [#277](https://github.com/motifland/markprompt-js/pull/277) [`0d7170d`](https://github.com/motifland/markprompt-js/commit/0d7170dcb16a8a233c7a5ed3ad5b59065d2e27b6) Thanks [@nickrttn](https://github.com/nickrttn)! - Improve mobile/touch devices design
+
 ## 0.31.3
 
 ### Patch Changes
