@@ -516,6 +516,7 @@
   width: 100%;
   padding-top: 1rem;
   padding-bottom: 1rem;
+
   /*
     If the font-size of the prompt input is not at least 1rem (16px), Safari
     on iOS will automatically zoom to the prompt input
