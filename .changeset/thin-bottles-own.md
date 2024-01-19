@@ -3,4 +3,4 @@
 '@markprompt/css': minor
 ---
 
-Improve mobile/touch design
+Improve mobile/touch devices design
