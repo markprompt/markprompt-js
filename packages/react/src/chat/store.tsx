@@ -2,13 +2,13 @@ import {
   isAbortError,
   isToolCall,
   isToolCalls,
-  submitChatGenerator,
+  submitChat,
   type ChatCompletionAssistantMessageParam,
   type ChatCompletionMessageParam,
   type ChatCompletionMessageToolCall,
   type ChatCompletionTool,
   type ChatCompletionToolMessageParam,
-  type SubmitChatGeneratorOptions,
+  type SubmitChatOptions,
   type SubmitChatYield,
 } from '@markprompt/core';
 import React, {
@@ -140,7 +140,7 @@ export interface ChatViewTool {
 }
 
 export type UserConfigurableOptions = Omit<
-  SubmitChatGeneratorOptions,
+  SubmitChatOptions,
   'signal' | 'tools'
 > & {
   tools?: ChatViewTool[];
@@ -412,7 +412,7 @@ export const createChatStore = ({
 
             // do the chat completion request
             try {
-              for await (const chunk of submitChatGenerator(
+              for await (const chunk of submitChat(
                 apiMessages,
                 projectKey,
                 options,

@@ -42,16 +42,6 @@ export const parseEncodedJSONHeader = (
   return undefined;
 };
 
-export function isFileSectionReferences(
-  data: unknown,
-): data is FileSectionReference[] {
-  return (
-    Array.isArray(data) &&
-    Boolean(data[0]?.file?.path) &&
-    Boolean(data[0]?.file?.source?.type)
-  );
-}
-
 export function isAbortError(err: unknown): err is DOMException {
   return (
     (err instanceof DOMException && err.name === 'AbortError') ||
@@ -59,45 +49,13 @@ export function isAbortError(err: unknown): err is DOMException {
   );
 }
 
-function safeStringifyReplacer(seen: WeakSet<object>) {
-  return function (key: string, value: unknown) {
-    if (value !== null && typeof value === 'object') {
-      if (seen.has(value)) {
-        return '[Circular]';
-      }
-
-      seen.add(value);
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const newValue: { [s: string]: unknown } | ArrayLike<unknown> =
-        Array.isArray(value) ? [] : {};
-
-      for (const [key2, value2] of Object.entries(value)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (newValue as any)[key2] = safeStringifyReplacer(seen)(key2, value2);
-      }
-
-      seen.delete(value);
-
-      return newValue;
-    }
-
-    return value;
-  };
-}
-
-// Source: https://github.com/sindresorhus/safe-stringify
-export function safeStringify(
-  object: unknown,
-  options?: {
-    indentation?: string | number;
-  },
-): string {
-  const seen = new WeakSet();
-  return JSON.stringify(
-    object,
-    safeStringifyReplacer(seen),
-    options?.indentation,
+export function isFileSectionReferences(
+  data: unknown,
+): data is FileSectionReference[] {
+  return (
+    Array.isArray(data) &&
+    Boolean(data[0]?.file?.path) &&
+    Boolean(data[0]?.file?.source?.type)
   );
 }
 
