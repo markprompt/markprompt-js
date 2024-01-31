@@ -6,7 +6,6 @@ import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import React from 'react';
 import {
   afterAll,
   afterEach,
@@ -338,6 +337,8 @@ test('Answer renders a button to copy code to clipboard', async () => {
     <Markprompt.Answer
       answer={`
 \`\`\`js
+console.log('Hello world!');
+
 console.log('Hello world!');
 \`\`\`
 `}

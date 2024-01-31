@@ -10,8 +10,8 @@
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
-  "exports": "./dist/index.cjs",
-  "main": "dist/index.cjs",
+  "exports": "./dist/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist",
     "src/theme"
@@ -21,16 +21,16 @@
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
-    "@docusaurus/types": "^2.4.1",
+    "@docusaurus/types": "^3.1.1",
     "@markprompt/css": "^0.20.0",
     "@markprompt/react": "0.32.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.4.1",
+    "@docusaurus/module-type-aliases": "^3.1.1",
     "cpy-cli": "^5.0.0"
   },
   "peerDependencies": {
-    "react": "^17"
+    "react": "^18"
   },
   "publishConfig": {
     "access": "public"

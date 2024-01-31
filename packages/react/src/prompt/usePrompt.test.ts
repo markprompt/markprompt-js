@@ -1,10 +1,5 @@
-import { DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS } from '@markprompt/core';
-import { waitFor } from '@testing-library/react';
-import {
-  act,
-  renderHook,
-  suppressErrorOutput,
-} from '@testing-library/react-hooks';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
+import { waitFor, act, renderHook } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import {
@@ -31,39 +26,36 @@ let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(
-    DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
-    async (_req, res, ctx) => {
-      if (status >= 400) {
-        return res(ctx.status(status), ctx.json(response));
-      }
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+    if (status >= 400) {
+      return res(ctx.status(status), ctx.json(response));
+    }
 
-      stream = new ReadableStream({
-        start(controller) {
-          if (Array.isArray(response)) {
-            let i = 0;
-            for (const chunk of response) {
-              controller.enqueue(
-                encoder.encode(
-                  formatEvent({
-                    data: getChunk(chunk.content, chunk.tool_call ?? null, i),
-                  }),
-                ),
-              );
-              i++;
-            }
-            controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
-          } else {
-            controller.enqueue(encoder.encode(JSON.stringify(response)));
+    stream = new ReadableStream({
+      start(controller) {
+        if (Array.isArray(response)) {
+          let i = 0;
+          for (const chunk of response) {
+            controller.enqueue(
+              encoder.encode(
+                formatEvent({
+                  data: getChunk(chunk.content, chunk.tool_call ?? null, i),
+                }),
+              ),
+            );
+            i++;
           }
+          controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
+        } else {
+          controller.enqueue(encoder.encode(JSON.stringify(response)));
+        }
 
-          controller?.close();
-        },
-      });
+        controller?.close();
+      },
+    });
 
-      return res(ctx.status(status), ctx.body(stream));
-    },
-  ),
+    return res(ctx.status(status), ctx.body(stream));
+  }),
 );
 
 describe('usePrompt', () => {
@@ -130,14 +122,9 @@ describe('usePrompt', () => {
   });
 
   it('should throw when instantiated without projectKey', async () => {
-    const restoreConsole = suppressErrorOutput();
-
-    try {
-      const { result } = renderHook(() => usePrompt({ projectKey: '' }));
-      expect(result.error).toBeInstanceOf(Error);
-    } finally {
-      restoreConsole();
-    }
+    expect(() => renderHook(() => usePrompt({ projectKey: '' }))).toThrow(
+      'Markprompt: a project key is required. Make sure to pass the projectKey to usePrompt.',
+    );
   });
 
   it('should not do requests when submitting without prompt', async () => {
@@ -160,12 +147,10 @@ describe('usePrompt', () => {
     result.current.submitPrompt();
     result.current.abort();
 
-    expect(result.error).toBeUndefined();
+    expect(result.current.error).toBeUndefined();
   });
 
   it('should log an error to console when an error is thrown', async () => {
-    const restoreConsole = suppressErrorOutput();
-
     try {
       const { result } = renderHook(() =>
         usePrompt({ projectKey: 'TEST_PROJECT_KEY' }),
@@ -179,8 +164,8 @@ describe('usePrompt', () => {
       await act(() => result.current.submitPrompt());
 
       expect(consoleMock).toHaveBeenCalled();
-    } finally {
-      restoreConsole();
+    } catch {
+      // nothing
     }
   });
 
@@ -204,7 +189,7 @@ describe('usePrompt', () => {
       result.current.submitPrompt();
       result.current.abort();
 
-      expect(result.error).toBeUndefined();
+      expect(result.current.error).toBeUndefined();
       expect(consoleMock).not.toHaveBeenCalled();
     } finally {
       mockFetch.mockRestore();

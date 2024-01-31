@@ -1,4 +1,4 @@
-import React, { Fragment, type ReactElement } from 'react';
+import { Fragment, type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import { MessagePrompt } from './MessagePrompt.js';

@@ -1,5 +1,5 @@
 import { isToolCalls } from '@markprompt/core';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
 import { MessageAnswer } from './MessageAnswer.js';
@@ -26,8 +26,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
   const toolCallsByToolCallId = useChatStore((state) =>
     Object.fromEntries(
-      Object.entries(state.toolCallsByToolCallId).filter(
-        ([id]) => toolCalls?.some((x) => x.id === id),
+      Object.entries(state.toolCallsByToolCallId).filter(([id]) =>
+        toolCalls?.some((x) => x.id === id),
       ),
     ),
   );
