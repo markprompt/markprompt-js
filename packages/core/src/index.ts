@@ -19,6 +19,7 @@ export {
   submitAlgoliaDocsearchQuery,
   submitSearchQuery,
   type SubmitSearchQueryOptions,
+  type AlgoliaProvider,
 } from './search.js';
 
 export {
