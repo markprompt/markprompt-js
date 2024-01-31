@@ -1,5 +1,19 @@
 # @markprompt/core
 
+## 0.22.0
+
+### Minor Changes
+
+- [#279](https://github.com/motifland/markprompt-js/pull/279) [`14dd12cc7a29c4ce0ac5727529cbfda89c2503a9`](https://github.com/motifland/markprompt-js/commit/14dd12cc7a29c4ce0ac5727529cbfda89c2503a9) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove deprecated `submitChat` and rename `submitChatGenerator` to `submitChat`
+
+- [#281](https://github.com/motifland/markprompt-js/pull/281) [`834a97e672a350ed79bdb66e793bd6bb6c9a5b5c`](https://github.com/motifland/markprompt-js/commit/834a97e672a350ed79bdb66e793bd6bb6c9a5b5c) Thanks [@nickrttn](https://github.com/nickrttn)! - Only pass valid options to `submitFeedback` endpoint
+
+- [#281](https://github.com/motifland/markprompt-js/pull/281) [`834a97e672a350ed79bdb66e793bd6bb6c9a5b5c`](https://github.com/motifland/markprompt-js/commit/834a97e672a350ed79bdb66e793bd6bb6c9a5b5c) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade various dependencies
+
+### Patch Changes
+
+- [`03549823f8a63e7e2f1b5a3518ca54ec12347cf3`](https://github.com/motifland/markprompt-js/commit/03549823f8a63e7e2f1b5a3518ca54ec12347cf3) Thanks [@nickrttn](https://github.com/nickrttn)! - Export AlgoliaProvider type
+
 ## 0.21.4
 
 ### Patch Changes
