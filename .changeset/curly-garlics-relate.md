@@ -3,4 +3,4 @@
 '@markprompt/react': patch
 ---
 
-Remove deprecated submitChat and rename submitChatGenerator
+Remove deprecated `submitChat` and rename `submitChatGenerator` to `submitChat`
