@@ -11,7 +11,7 @@ import {
   type SubmitChatGeneratorOptions,
   type SubmitChatYield,
 } from '@markprompt/core';
-import React, {
+import {
   createContext,
   useContext,
   useEffect,

@@ -1,7 +1,7 @@
 import type { FileSectionReference } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
-import React, {
+import {
   forwardRef,
   useEffect,
   useRef,
@@ -12,6 +12,7 @@ import React, {
   type ReactNode,
   memo,
   useCallback,
+  useState,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -271,7 +272,7 @@ interface CopyCodeButtonProps {
 }
 
 function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
-  const [didCopy, setDidCopy] = React.useState(false);
+  const [didCopy, setDidCopy] = useState(false);
 
   const handleClick = (): void => {
     navigator.clipboard.writeText(props.children[0]?.props.children[0]);

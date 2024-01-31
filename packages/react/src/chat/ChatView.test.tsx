@@ -8,7 +8,6 @@ import { renderHook, suppressErrorOutput } from '@testing-library/react-hooks';
 import { userEvent } from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import React from 'react';
 import {
   afterAll,
   afterEach,

@@ -77,7 +77,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { type MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
 import type SearchBarType from '@theme/SearchBar';
 import SearchBar from '@theme-original/SearchBar';
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 // import Markprompt lazily as Docusaurus does not currently support ESM
 const Markprompt = lazy(() =>

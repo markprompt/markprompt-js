@@ -15,7 +15,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2021"
+    "target": "es2021",
   },
-  "references": [{ "path": "../../packages/react" }]
+  "references": [{ "path": "../../packages/react" }],
 }

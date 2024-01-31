@@ -27,19 +27,20 @@
     ]
   },
   "dependencies": {
-    "@docusaurus/core": "^2.4.1",
-    "@docusaurus/module-type-aliases": "^2.4.1",
-    "@docusaurus/preset-classic": "^2.4.1",
-    "@docusaurus/theme-search-algolia": "^2.4.1",
+    "@docusaurus/core": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.1.1",
+    "@docusaurus/preset-classic": "^3.1.1",
+    "@docusaurus/theme-search-algolia": "^3.1.1",
     "@markprompt/css": "*",
     "@markprompt/docusaurus-theme-search": "*",
     "@markprompt/react": "*",
-    "@mdx-js/react": "^1.6.22",
-    "prism-react-renderer": "^1.3.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@mdx-js/react": "^3.0.0",
+    "prism-react-renderer": "^2.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "dotenv": "^16.3.1"
+    "@docusaurus/tsconfig": "^3.1.1",
+    "dotenv": "^16.4.1"
   }
 }

@@ -1,7 +1,7 @@
 import { submitChatGenerator } from '@markprompt/core';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
-import React, { ReactElement, useCallback, useState } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 
 interface ChatCompletionExecution {
   run?: (args: unknown) => void;

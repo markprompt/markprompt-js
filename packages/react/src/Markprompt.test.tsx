@@ -1,7 +1,6 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { suppressErrorOutput } from '@testing-library/react-hooks';
 import { userEvent } from '@testing-library/user-event';
-import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
