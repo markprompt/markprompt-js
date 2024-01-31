@@ -1,6 +1,6 @@
 import { type ChatCompletionMessageToolCall } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { type ChatViewTool, type ToolCall } from './store.js';
 import {

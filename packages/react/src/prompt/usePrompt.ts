@@ -77,7 +77,7 @@ export function usePrompt({
 }: UsePromptOptions): UsePromptResult {
   if (!projectKey) {
     throw new Error(
-      'Markprompt: a project key is required. Make sure to pass the projectKey to useMarkprompt.',
+      'Markprompt: a project key is required. Make sure to pass the projectKey to usePrompt.',
     );
   }
 

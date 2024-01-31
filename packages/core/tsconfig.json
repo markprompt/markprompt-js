@@ -13,8 +13,8 @@
     "strict": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
   },
   "include": ["src/*"],
-  "exclude": ["src/*.test.ts"]
+  "exclude": ["src/*.test.ts"],
 }

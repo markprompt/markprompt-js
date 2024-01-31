@@ -10,7 +10,7 @@
     "sourceMap": true,
     "rootDir": "./src",
     "strict": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "dist",
     "skipLibCheck": true,
     "target": "es2021",
@@ -18,7 +18,7 @@
     "verbatimModuleSyntax": true,
     "types": ["@testing-library/jest-dom/vitest"],
     "paths": {
-      "@markprompt/core": ["../core/src"]
-    }
-  }
+      "@markprompt/core": ["../core/src"],
+    },
+  },
 }

@@ -1,5 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import React, {
+import {
   useCallback,
   useEffect,
   useRef,
@@ -9,6 +9,7 @@ import React, {
   type KeyboardEventHandler,
   type ReactElement,
   type SetStateAction,
+  useState,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -70,7 +71,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
   });
 
   const [activeSearchResult, setActiveSearchResult] =
-    React.useState<ActiveSearchResult>();
+    useState<ActiveSearchResult>();
 
   useEffect(() => {
     // if the search query changes, unset the active search result

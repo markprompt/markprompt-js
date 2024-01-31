@@ -1,6 +1,5 @@
 import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS } from '@markprompt/core';
-import { waitFor } from '@testing-library/react';
-import { renderHook, suppressErrorOutput } from '@testing-library/react-hooks';
+import { waitFor, renderHook } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -46,17 +45,9 @@ describe('useFeedback', () => {
   });
 
   it('should throw an error if no project key is provided', async () => {
-    const restoreConsole = suppressErrorOutput();
-
-    try {
-      const { result } = renderHook(() => useFeedback({ projectKey: '' }));
-
-      expect(result.error!.message).toBe(
-        `Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.`,
-      );
-    } finally {
-      restoreConsole();
-    }
+    expect(() => renderHook(() => useFeedback({ projectKey: '' }))).toThrow(
+      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.`,
+    );
   });
 
   it(`submitFeedback should make requests to ${DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl}`, async () => {
@@ -99,23 +90,17 @@ describe('useFeedback', () => {
   });
 
   it('should ignore errors', async () => {
-    const restoreConsole = suppressErrorOutput();
+    const { result } = renderHook(() =>
+      useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
+    );
 
-    try {
-      const { result } = renderHook(() =>
-        useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
-      );
+    const { submitFeedback } = result.current;
 
-      const { submitFeedback } = result.current;
+    response = { error: 'I will not be handled' };
+    status = 500;
 
-      response = { error: 'I will not be handled' };
-      status = 500;
-
-      await submitFeedback({ vote: '1' }, 'prompt-id');
-
-      expect(result.error).toBeUndefined();
-    } finally {
-      restoreConsole();
-    }
+    expect(
+      async () => await submitFeedback({ vote: '1' }, 'prompt-id'),
+    ).not.toThrow();
   });
 });

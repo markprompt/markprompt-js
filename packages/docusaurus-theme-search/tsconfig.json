@@ -10,15 +10,16 @@
     "sourceMap": true,
     "rootDir": "src",
     "strict": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "dist",
     "skipLibCheck": true,
-    "target": "es2021",
+    "target": "es2022",
+    "lib": ["DOM", "ESNext"],
     "isolatedModules": true,
     "types": ["@docusaurus/module-type-aliases"],
     "paths": {
       "@markprompt/core": ["../core/src"],
-      "@markprompt/react": ["../react/src"]
-    }
-  }
+      "@markprompt/react": ["../react/src"],
+    },
+  },
 }

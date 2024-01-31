@@ -32,10 +32,10 @@
     "@markprompt/react": "0.32.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.6",
-    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
     "esbuild": "^0.19.8",
-    "preact": "^10.17.1",
+    "preact": "^10.19.3",
     "react": "npm:@preact/compat",
     "react-dom": "npm:@preact/compat"
   },

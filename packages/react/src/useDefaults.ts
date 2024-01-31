@@ -10,15 +10,15 @@ type DeepMerge<T, U> = T extends { [key: string]: unknown }
             ? DeepMerge<T[K], U[K]>
             : T[K]
           : K extends keyof U
-          ? U[K]
-          : never;
+            ? U[K]
+            : never;
       }
     : T
   : U extends undefined
-  ? T extends undefined
-    ? U
-    : T
-  : U;
+    ? T extends undefined
+      ? U
+      : T
+    : U;
 
 // defaults only merges the first level of properties, we need to make sure that
 // deeper nested properties are merged as well.

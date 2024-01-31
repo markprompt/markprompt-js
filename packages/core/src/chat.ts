@@ -210,7 +210,7 @@ export async function submitChat(
     );
     const { signal, ...cloneableOpts } = validOptions;
     const { apiUrl, ...resolvedOptions } = defaults(
-      { ...cloneableOpts },
+      cloneableOpts,
       DEFAULT_SUBMIT_CHAT_OPTIONS,
     );
 
