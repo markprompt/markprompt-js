@@ -172,84 +172,88 @@ describe('SearchView', () => {
     });
   });
 
-  it('allows users to select search queries', async () => {
-    const query = 'test query';
-    const user = await userEvent.setup();
+  it(
+    'allows users to select search queries',
+    async () => {
+      const query = 'test query';
+      const user = await userEvent.setup();
 
-    results = [
-      {
-        file: { path: 'path/to/file', source: { type: 'github' } },
-        matchType: 'title',
-      },
-      {
-        file: {
-          path: 'path/to/file',
-          title: 'result 1',
-          source: { type: 'github' },
+      results = [
+        {
+          file: { path: 'path/to/file', source: { type: 'github' } },
+          matchType: 'title',
         },
-        matchType: 'title',
-      },
-      {
-        file: {
-          path: 'path/to/file',
-          title: 'result 2',
-          source: { type: 'github' },
+        {
+          file: {
+            path: 'path/to/file',
+            title: 'result 1',
+            source: { type: 'github' },
+          },
+          matchType: 'title',
         },
-        matchType: 'title',
-        meta: {
-          leadHeading: {
-            id: 'test-id',
+        {
+          file: {
+            path: 'path/to/file',
+            title: 'result 2',
+            source: { type: 'github' },
+          },
+          matchType: 'title',
+          meta: {
+            leadHeading: {
+              id: 'test-id',
+            },
           },
         },
-      },
-    ];
+      ];
 
-    render(<SearchView projectKey="test-key" />);
+      render(<SearchView projectKey="test-key" />);
 
-    await user.type(screen.getByRole('searchbox'), query);
-    await user.keyboard('{Enter}');
+      await user.type(screen.getByRole('searchbox'), query);
+      await user.keyboard('{Enter}');
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Untitled' }),
-      ).toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expect(
+          screen.getByRole('link', { name: 'Untitled' }),
+        ).toBeInTheDocument();
+      });
 
-    // first item selected by default
-    await expect(
-      screen.getByRole('option', { selected: true }),
-    ).toHaveAttribute('id', 'markprompt-result-0');
+      // first item selected by default
+      await expect(
+        screen.getByRole('option', { selected: true }),
+      ).toHaveAttribute('id', 'markprompt-result-0');
 
-    // select item on arrow down
-    await user.keyboard('{ArrowDown}');
+      // select item on arrow down
+      await user.keyboard('{ArrowDown}');
 
-    await expect(
-      screen.getByRole('option', { selected: true }),
-    ).toHaveAttribute('id', 'markprompt-result-1');
+      await expect(
+        screen.getByRole('option', { selected: true }),
+      ).toHaveAttribute('id', 'markprompt-result-1');
 
-    // select item on mousemove
-    await userEvent.hover(screen.getByRole('link', { name: 'result 2' }));
+      // select item on mousemove
+      await userEvent.hover(screen.getByRole('link', { name: 'result 2' }));
 
-    await expect(
-      screen.getByRole('option', { selected: true }),
-    ).toHaveAttribute('id', 'markprompt-result-2');
+      await expect(
+        screen.getByRole('option', { selected: true }),
+      ).toHaveAttribute('id', 'markprompt-result-2');
 
-    // select previous on arrow up
-    await user.keyboard('{ArrowUp}');
+      // select previous on arrow up
+      await user.keyboard('{ArrowUp}');
 
-    await expect(
-      screen.getByRole('option', { selected: true }),
-    ).toHaveAttribute('id', 'markprompt-result-1');
+      await expect(
+        screen.getByRole('option', { selected: true }),
+      ).toHaveAttribute('id', 'markprompt-result-1');
 
-    // don't go past the last result
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{ArrowDown}');
+      // don't go past the last result
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowDown}');
 
-    await expect(
-      screen.getByRole('option', { selected: true }),
-    ).toHaveAttribute('id', 'markprompt-result-2');
-  }, { retry: 3 });
+      await expect(
+        screen.getByRole('option', { selected: true }),
+      ).toHaveAttribute('id', 'markprompt-result-2');
+    },
+    { retry: 3 },
+  );
 
   it('reselects the first search result when the search query changes', async () => {
     const query = 'test query';
