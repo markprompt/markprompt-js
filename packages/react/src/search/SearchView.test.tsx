@@ -249,7 +249,7 @@ describe('SearchView', () => {
     await expect(
       screen.getByRole('option', { selected: true }),
     ).toHaveAttribute('id', 'markprompt-result-2');
-  }, { repeats: 3 });
+  }, { retry: 3 });
 
   it('reselects the first search result when the search query changes', async () => {
     const query = 'test query';
