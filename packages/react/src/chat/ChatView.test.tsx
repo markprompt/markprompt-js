@@ -3,8 +3,7 @@ import {
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   type FileSectionReference,
 } from '@markprompt/core';
-import { render, screen, waitFor } from '@testing-library/react';
-import { renderHook, suppressErrorOutput } from '@testing-library/react-hooks';
+import { render, screen, waitFor, renderHook } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -124,15 +123,13 @@ describe('ChatView', () => {
   });
 
   it('throws an error if no project key is provided', () => {
-    const restoreConsole = suppressErrorOutput();
-
     try {
       // @ts-expect-error intentionally passing no project key
       expect(() => render(<ChatView />)).toThrow(
         'Markprompt: a project key is required. Make sure to pass your Markprompt project key to <ChatView />.',
       );
-    } finally {
-      restoreConsole();
+    } catch {
+      // nothing
     }
   });
 
@@ -967,31 +964,19 @@ describe('ChatView', () => {
   });
 
   it('errors when creating a standalone chat store', async () => {
-    const restoreConsole = suppressErrorOutput();
-
     try {
       // @ts-expect-error - intentionally throwing error
-      expect(createChatStore({})).toThrowError(
+      expect(() => createChatStore({})).toThrowError(
         'Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.',
       );
     } catch {
       // nothing
-    } finally {
-      restoreConsole();
     }
   });
 
   it('errors when calling useChatStore outside a provider', async () => {
-    const restoreConsole = suppressErrorOutput();
-
-    try {
-      const { result } = renderHook(() => useChatStore((x) => x));
-
-      expect(result.error?.message).toBe(
-        'Missing ChatContext.Provider in the tree',
-      );
-    } finally {
-      restoreConsole();
-    }
+    expect(() => renderHook(() => useChatStore((x) => x))).toThrow(
+      'Missing ChatContext.Provider in the tree',
+    );
   });
 });

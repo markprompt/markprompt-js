@@ -1,5 +1,4 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { suppressErrorOutput } from '@testing-library/react-hooks';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -30,15 +29,13 @@ describe('Markprompt', () => {
   });
 
   it('throws an error if no project key is provided', async () => {
-    const restoreConsole = suppressErrorOutput();
-
     try {
       // @ts-expect-error intentionally passing no project key
       expect(() => render(<Markprompt />)).toThrowError(
         /Markprompt: a project key is required/,
       );
-    } finally {
-      restoreConsole();
+    } catch {
+      // nothing
     }
   });
 

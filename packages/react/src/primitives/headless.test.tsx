@@ -338,6 +338,8 @@ test('Answer renders a button to copy code to clipboard', async () => {
       answer={`
 \`\`\`js
 console.log('Hello world!');
+
+console.log('Hello world!');
 \`\`\`
 `}
     />,

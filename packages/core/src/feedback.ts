@@ -22,6 +22,8 @@ export interface SubmitFeedbackOptions {
   signal?: AbortSignal;
 }
 
+const allowedOptionKeys = ['apiUrl', 'signal'];
+
 export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/feedback',
 } satisfies SubmitFeedbackOptions;
@@ -35,8 +37,16 @@ export async function submitFeedback(
     throw new Error('A projectKey is required.');
   }
 
+  const allowedOptions = Object.fromEntries(
+    Object.entries(options ?? {}).filter(([key]) =>
+      allowedOptionKeys.includes(key),
+    ),
+  );
+
+  const { signal, ...cloneableOpts } = allowedOptions ?? {};
+
   const resolvedOptions = defaults(
-    { ...options },
+    cloneableOpts,
     DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   );
 
@@ -59,7 +69,7 @@ export async function submitFeedback(
         // to messageId, so that it works with both endpoints.
         messageId: feedback.promptId,
       }),
-      signal: resolvedOptions?.signal,
+      signal: signal,
     });
 
     if (!response.ok) {

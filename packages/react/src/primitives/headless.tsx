@@ -268,14 +268,15 @@ Prompt.displayName = 'Markprompt.Prompt';
 // serves.
 interface CopyCodeButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children?: any;
+  code: string;
 }
 
 function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
+  const { code } = props;
   const [didCopy, setDidCopy] = useState(false);
 
   const handleClick = (): void => {
-    navigator.clipboard.writeText(props.children[0]?.props.children[0]);
+    navigator.clipboard.writeText(code);
     setDidCopy(true);
     setTimeout(() => {
       setDidCopy(false);
@@ -312,6 +313,7 @@ type AnswerProps = Omit<
  */
 function Answer(props: AnswerProps): ReactElement {
   const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
+
   return (
     <Markdown
       {...rest}
@@ -319,9 +321,18 @@ function Answer(props: AnswerProps): ReactElement {
       components={{
         pre: (props) => {
           const { children, className, ...rest } = props;
+
           return (
             <div style={{ position: 'relative' }}>
-              <CopyCodeButton>{children}</CopyCodeButton>
+              <CopyCodeButton
+                code={
+                  children &&
+                  typeof children === 'object' &&
+                  'props' in children
+                    ? children.props.children
+                    : ''
+                }
+              />
               <pre {...rest} className={className}>
                 {children}
               </pre>

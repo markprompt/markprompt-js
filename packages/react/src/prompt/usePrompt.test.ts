@@ -1,10 +1,5 @@
 import { DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS } from '@markprompt/core';
-import { waitFor } from '@testing-library/react';
-import {
-  act,
-  renderHook,
-  suppressErrorOutput,
-} from '@testing-library/react-hooks';
+import { waitFor, act, renderHook } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import {
@@ -130,14 +125,9 @@ describe('usePrompt', () => {
   });
 
   it('should throw when instantiated without projectKey', async () => {
-    const restoreConsole = suppressErrorOutput();
-
-    try {
-      const { result } = renderHook(() => usePrompt({ projectKey: '' }));
-      expect(result.error).toBeInstanceOf(Error);
-    } finally {
-      restoreConsole();
-    }
+    expect(() => renderHook(() => usePrompt({ projectKey: '' }))).toThrow(
+      'Markprompt: a project key is required. Make sure to pass the projectKey to usePrompt.',
+    );
   });
 
   it('should not do requests when submitting without prompt', async () => {
@@ -160,12 +150,10 @@ describe('usePrompt', () => {
     result.current.submitPrompt();
     result.current.abort();
 
-    expect(result.error).toBeUndefined();
+    expect(result.current.error).toBeUndefined();
   });
 
   it('should log an error to console when an error is thrown', async () => {
-    const restoreConsole = suppressErrorOutput();
-
     try {
       const { result } = renderHook(() =>
         usePrompt({ projectKey: 'TEST_PROJECT_KEY' }),
@@ -179,8 +167,8 @@ describe('usePrompt', () => {
       await act(() => result.current.submitPrompt());
 
       expect(consoleMock).toHaveBeenCalled();
-    } finally {
-      restoreConsole();
+    } catch {
+      // nothing
     }
   });
 
@@ -204,7 +192,7 @@ describe('usePrompt', () => {
       result.current.submitPrompt();
       result.current.abort();
 
-      expect(result.error).toBeUndefined();
+      expect(result.current.error).toBeUndefined();
       expect(consoleMock).not.toHaveBeenCalled();
     } finally {
       mockFetch.mockRestore();
