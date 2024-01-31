@@ -1,6 +1,6 @@
 import {
   isAbortError,
-  submitChatGenerator,
+  submitChat,
   type FileSectionReference,
   type SubmitFeedbackOptions,
 } from '@markprompt/core';
@@ -123,7 +123,7 @@ export function usePrompt({
       };
 
       try {
-        for await (const chunk of submitChatGenerator(
+        for await (const chunk of submitChat(
           [{ content: state.prompt, role: 'user' }],
           projectKey,
           options,

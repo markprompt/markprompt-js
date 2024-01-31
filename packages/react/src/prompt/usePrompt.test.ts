@@ -1,4 +1,4 @@
-import { DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS } from '@markprompt/core';
+import { DEFAULT_SUBMIT_CHAT_OPTIONS } from '@markprompt/core';
 import { waitFor, act, renderHook } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -26,39 +26,36 @@ let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(
-    DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
-    async (_req, res, ctx) => {
-      if (status >= 400) {
-        return res(ctx.status(status), ctx.json(response));
-      }
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (_req, res, ctx) => {
+    if (status >= 400) {
+      return res(ctx.status(status), ctx.json(response));
+    }
 
-      stream = new ReadableStream({
-        start(controller) {
-          if (Array.isArray(response)) {
-            let i = 0;
-            for (const chunk of response) {
-              controller.enqueue(
-                encoder.encode(
-                  formatEvent({
-                    data: getChunk(chunk.content, chunk.tool_call ?? null, i),
-                  }),
-                ),
-              );
-              i++;
-            }
-            controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
-          } else {
-            controller.enqueue(encoder.encode(JSON.stringify(response)));
+    stream = new ReadableStream({
+      start(controller) {
+        if (Array.isArray(response)) {
+          let i = 0;
+          for (const chunk of response) {
+            controller.enqueue(
+              encoder.encode(
+                formatEvent({
+                  data: getChunk(chunk.content, chunk.tool_call ?? null, i),
+                }),
+              ),
+            );
+            i++;
           }
+          controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
+        } else {
+          controller.enqueue(encoder.encode(JSON.stringify(response)));
+        }
 
-          controller?.close();
-        },
-      });
+        controller?.close();
+      },
+    });
 
-      return res(ctx.status(status), ctx.body(stream));
-    },
-  ),
+    return res(ctx.status(status), ctx.body(stream));
+  }),
 );
 
 describe('usePrompt', () => {

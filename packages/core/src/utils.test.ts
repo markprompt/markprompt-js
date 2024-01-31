@@ -5,7 +5,6 @@ import {
   parseEncodedJSONHeader,
   isFileSectionReferences,
   isAbortError,
-  safeStringify,
   isMarkpromptMetadata,
   isChatCompletion,
   isToolCall,
@@ -100,30 +99,6 @@ describe('isAbortError', () => {
     expect(isAbortError(err2)).toBe(true);
     const err3 = new Error('Some other error');
     expect(isAbortError(err3)).toBe(false);
-  });
-});
-
-describe('safeStringify', () => {
-  test('removes non-serializable entries', () => {
-    const obj = {
-      name: 'Name',
-      fn: () => {
-        return 1;
-      },
-      sub: {
-        name: 'Sub',
-        callback: () => {
-          return 0;
-        },
-      },
-    };
-
-    expect(safeStringify(obj)).toEqual(
-      JSON.stringify({
-        name: 'Name',
-        sub: { name: 'Sub' },
-      }),
-    );
   });
 });
 

@@ -1,5 +1,5 @@
 import {
-  DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS,
+  DEFAULT_SUBMIT_CHAT_OPTIONS,
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   type FileSectionReference,
 } from '@markprompt/core';
@@ -44,54 +44,50 @@ let status = 200;
 let stream: ReadableStream;
 
 const server = setupServer(
-  rest.post(
-    DEFAULT_SUBMIT_CHAT_GENERATOR_OPTIONS.apiUrl!,
-    async (req, res, ctx) => {
-      if (status >= 400) {
-        return res(
-          ctx.status(status),
-          ctx.json({ error: 'Internal server error' }),
-        );
-      }
-
-      stream = new ReadableStream({
-        async start(controller) {
-          if (Array.isArray(response)) {
-            let i = 0;
-            for (const chunk of response) {
-              if (wait)
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-              controller.enqueue(
-                encoder.encode(
-                  formatEvent({
-                    data: getChunk(chunk.content, chunk.tool_call ?? null, i),
-                  }),
-                ),
-              );
-              i++;
-            }
-            controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
-          }
-
-          controller?.close();
-        },
-      });
-
+  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+    if (status >= 400) {
       return res(
-        ctx.delay('real'),
         ctx.status(status),
-        ctx.set(
-          'x-markprompt-data',
-          encoder.encode(JSON.stringify(markpromptData)).toString(),
-        ),
-        ctx.set(
-          'x-markprompt-debug-info',
-          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-        ),
-        ctx.body(stream),
+        ctx.json({ error: 'Internal server error' }),
       );
-    },
-  ),
+    }
+
+    stream = new ReadableStream({
+      async start(controller) {
+        if (Array.isArray(response)) {
+          let i = 0;
+          for (const chunk of response) {
+            if (wait) await new Promise((resolve) => setTimeout(resolve, 1000));
+            controller.enqueue(
+              encoder.encode(
+                formatEvent({
+                  data: getChunk(chunk.content, chunk.tool_call ?? null, i),
+                }),
+              ),
+            );
+            i++;
+          }
+          controller.enqueue(encoder.encode(formatEvent({ data: '[DONE]' })));
+        }
+
+        controller?.close();
+      },
+    });
+
+    return res(
+      ctx.delay('real'),
+      ctx.status(status),
+      ctx.set(
+        'x-markprompt-data',
+        encoder.encode(JSON.stringify(markpromptData)).toString(),
+      ),
+      ctx.set(
+        'x-markprompt-debug-info',
+        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+      ),
+      ctx.body(stream),
+    );
+  }),
   rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl!, async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ status: 'ok' }));
   }),
