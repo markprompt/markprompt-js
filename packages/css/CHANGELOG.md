@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.21.0
+
+### Minor Changes
+
+- [#281](https://github.com/motifland/markprompt-js/pull/281) [`834a97e672a350ed79bdb66e793bd6bb6c9a5b5c`](https://github.com/motifland/markprompt-js/commit/834a97e672a350ed79bdb66e793bd6bb6c9a5b5c) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade various dependencies
+
 ## 0.20.0
 
 ### Minor Changes
