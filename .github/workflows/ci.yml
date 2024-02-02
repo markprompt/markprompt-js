@@ -32,7 +32,7 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: npm test
+      - run: npx vitest --reporter=hanging-process --coverage
       - uses: codecov/codecov-action@v3
 
   bundle-size:
