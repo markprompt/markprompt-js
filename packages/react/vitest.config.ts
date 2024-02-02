@@ -7,5 +7,6 @@ export default defineProject({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    pool: 'forks',
   },
 });
