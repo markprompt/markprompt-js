@@ -231,6 +231,27 @@ export async function* submitChat(
     signal,
   });
 
+  const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
+
+  if (res.headers.get('Content-Type')?.includes('application/json')) {
+    const json = await res.json();
+    if (isChatCompletion(json) && isMarkpromptMetadata(data)) {
+      return { ...json.choices[0].message, ...data };
+    } else {
+      if (isMarkpromptMetadata(data)) {
+        yield data;
+      }
+
+      throw new Error('Malformed response from Markprompt API', {
+        cause: json,
+      });
+    }
+  }
+
+  if (isMarkpromptMetadata(data)) {
+    yield data;
+  }
+
   if (!res.ok || !res.body) {
     if (options.signal?.aborted) {
       throw new Error(options.signal.reason);
@@ -252,23 +273,6 @@ export async function* submitChat(
 
   if (options.signal?.aborted) {
     throw new Error(options.signal.reason);
-  }
-
-  const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
-
-  if (res.headers.get('Content-Type')?.includes('application/json')) {
-    const json = await res.json();
-    if (isChatCompletion(json) && isMarkpromptMetadata(data)) {
-      return { ...json.choices[0].message, ...data };
-    } else {
-      throw new Error('Malformed response from Markprompt API', {
-        cause: json,
-      });
-    }
-  }
-
-  if (isMarkpromptMetadata(data)) {
-    yield data;
   }
 
   // eslint-disable-next-line prefer-const

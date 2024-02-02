@@ -428,7 +428,7 @@ export const createChatStore = ({
               }
             } catch (error) {
               // eslint-disable-next-line no-console
-              console.error(error);
+              console.error({ error });
 
               for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {

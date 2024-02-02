@@ -19,6 +19,7 @@ import {
 
 import { PromptView } from './PromptView.js';
 import { formatEvent, getChunk } from './usePrompt.test.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {
@@ -109,17 +110,39 @@ describe('PromptView', () => {
   });
 
   it('should throw when rendered without projectKey', async () => {
-    expect(() => render(<PromptView />)).toThrow(
+    expect(() =>
+      render(
+        // @ts-expect-error - testing invalid props
+        <PromptView
+          promptOptions={DEFAULT_MARKPROMPT_OPTIONS.prompt}
+          referencesOptions={DEFAULT_MARKPROMPT_OPTIONS.references}
+        />,
+      ),
+    ).toThrow(
       'Markprompt: a project key is required. Make sure to pass the projectKey to usePrompt.',
     );
   });
 
   it('should render with defaults', async () => {
-    expect(() => render(<PromptView projectKey="test" />)).not.toThrow();
+    expect(() =>
+      render(
+        <PromptView
+          promptOptions={DEFAULT_MARKPROMPT_OPTIONS.prompt}
+          referencesOptions={DEFAULT_MARKPROMPT_OPTIONS.references}
+          projectKey="test"
+        />,
+      ),
+    ).not.toThrow();
   });
 
   it('should answer a prompt', async () => {
-    render(<PromptView projectKey="test" />);
+    render(
+      <PromptView
+        projectKey="test"
+        promptOptions={DEFAULT_MARKPROMPT_OPTIONS.prompt}
+        referencesOptions={DEFAULT_MARKPROMPT_OPTIONS.references}
+      />,
+    );
 
     const user = userEvent.setup();
 
@@ -140,6 +163,7 @@ describe('PromptView', () => {
     render(
       <PromptView
         projectKey="test"
+        referencesOptions={DEFAULT_MARKPROMPT_OPTIONS.references}
         promptOptions={{
           defaultView: {
             message:
@@ -158,11 +182,7 @@ describe('PromptView', () => {
     response = [{ content: 'test answer' }];
 
     const user = userEvent.setup();
-
-    screen.debug();
-
     const prompt = screen.getByText('What is Markprompt?');
-
     user.click(prompt);
 
     await vi.waitFor(() => screen.getByText('test answer'));
@@ -171,7 +191,13 @@ describe('PromptView', () => {
   });
 
   it('should render an error view', async () => {
-    render(<PromptView projectKey="test" />);
+    render(
+      <PromptView
+        projectKey="test"
+        promptOptions={DEFAULT_MARKPROMPT_OPTIONS.prompt}
+        referencesOptions={DEFAULT_MARKPROMPT_OPTIONS.references}
+      />,
+    );
 
     const user = userEvent.setup();
 

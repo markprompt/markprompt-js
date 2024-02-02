@@ -2,6 +2,8 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeAll, vi } from 'vitest';
 
+vi.mock('zustand');
+
 beforeAll(() => {
   vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
     matches: false,
