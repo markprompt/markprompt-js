@@ -55,7 +55,7 @@ interface UsePromptState {
 
 const initialState = {
   answer: '',
-  error: new Error('an error occurred'),
+  error: undefined,
   prompt: '',
   promptId: undefined,
   references: [],

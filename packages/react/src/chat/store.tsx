@@ -226,46 +226,9 @@ export const createChatStore = ({
           projectKey,
           messages: [],
           conversationIdsByProjectKey: {
-            sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4: [
-              'aa74d600-0403-459d-a028-69526eb74ac8',
-            ],
+            [projectKey]: [],
           },
-          messagesByConversationId: {
-            'aa74d600-0403-459d-a028-69526eb74ac8': {
-              lastUpdated: '2024-02-02T10:23:36.813Z',
-              messages: [
-                {
-                  role: 'user',
-                  content: 'how does it shake?',
-                  id: '73ce5839-84d9-4af1-9b11-aa6a830d6363',
-                  references: [],
-                  state: 'done',
-                },
-                {
-                  id: '24dcb2eb-9e6d-45c5-8fcc-91bd0475febe',
-                  role: 'assistant',
-                  state: 'cancelled',
-                  error: new Error('something went wrong'),
-                  references: [],
-                  conversationId: null,
-                  promptId: '11b89b83-1b3e-46e9-b938-19a3a2c05db1',
-                  content: null,
-                },
-                {
-                  role: 'user',
-                  content: "what's going on?",
-                  id: '6c651321-6006-4f09-83dd-1df3a6ff1fcc',
-                  references: [],
-                  state: 'cancelled',
-                },
-                {
-                  id: 'f9dfb2d3-e2ec-48c3-a014-ad8906148b68',
-                  role: 'assistant',
-                  state: 'cancelled',
-                },
-              ],
-            },
-          },
+          messagesByConversationId: {},
           toolCallsByToolCallId: {},
           setConversationId: (conversationId: string) => {
             set((state) => {
