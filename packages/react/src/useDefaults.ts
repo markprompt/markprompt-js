@@ -1,6 +1,6 @@
-import cloneDeep from 'lodash/cloneDeep.js';
+import cloneDeepWith from 'lodash/cloneDeepWith.js';
 import defaults from 'lodash/defaultsDeep.js';
-import { useMemo } from 'react';
+import { cloneElement, isValidElement, useMemo } from 'react';
 
 type DeepMerge<T, U> = T extends { [key: string]: unknown }
   ? U extends { [key: string]: unknown }
@@ -28,7 +28,16 @@ export function useDefaults<
 >(options: T, defaultOptions: U): U extends undefined ? T : DeepMerge<U, T> {
   return useMemo(
     // cloning options as defaultsDeep mutates the first argument
-    () => defaults(cloneDeep(options), defaultOptions),
+    () =>
+      defaults(
+        cloneDeepWith(options, (value) => {
+          // don't clone React elements, they won't render properly after cloning
+          if (isValidElement(value)) {
+            return cloneElement(value);
+          }
+        }),
+        defaultOptions,
+      ),
     [defaultOptions, options],
   );
 }

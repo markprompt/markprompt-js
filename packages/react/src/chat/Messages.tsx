@@ -20,6 +20,24 @@ export function Messages(props: MessagesProps): ReactElement {
 
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
+  const error = useChatStore((state) => state.error);
+
+  if (error) {
+    const ErrorText = chatOptions.errorText;
+    return (
+      <div
+        className="MarkpromptMessages"
+        style={{
+          backgroundColor: 'var(--markprompt-muted)',
+          color: 'var(--markprompt-mutedForeground)',
+        }}
+      >
+        <div className="MarkpromptError">
+          {ErrorText && <ErrorText error={error} />}
+        </div>
+      </div>
+    );
+  }
 
   if (!messages || messages.length === 0) {
     return (

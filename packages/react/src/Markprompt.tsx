@@ -92,7 +92,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS,
   );
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const onOpen = (): void => {

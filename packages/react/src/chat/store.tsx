@@ -226,7 +226,7 @@ export const createChatStore = ({
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
-          error: undefined,
+          error: 'some error',
           setError: (error?: string) => {
             set((state) => {
               state.error = error;

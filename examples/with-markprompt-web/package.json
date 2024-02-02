@@ -15,6 +15,7 @@
     "randomuuid": "^1.0.1"
   },
   "devDependencies": {
+    "typescript": "^5.3.3",
     "vite": "^4.4.9"
   }
 }
