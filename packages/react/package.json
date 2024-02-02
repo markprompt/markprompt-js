@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/react",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "A headless React component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.25.4",
-    "@markprompt/core": "^0.22.0",
+    "@markprompt/core": "^0.22.1",
     "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-tabs": "^1.0.4",

@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.22.0
+
+### Minor Changes
+
+- [#283](https://github.com/motifland/markprompt-js/pull/283) [`1a8cec690be2567846e7c3de7f12af2060e332e9`](https://github.com/motifland/markprompt-js/commit/1a8cec690be2567846e7c3de7f12af2060e332e9) Thanks [@nickrttn](https://github.com/nickrttn)! - Improve the error view for `PromptView` and `ChatView`
+
 ## 0.21.0
 
 ### Minor Changes
