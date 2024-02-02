@@ -31,7 +31,7 @@ export function useDefaults<
     () =>
       defaults(
         cloneDeepWith(options, (value) => {
-          // don't clone React elements, they won't render properly after cloning
+          // don't clone React elements with lodash, they won't render properly after
           if (isValidElement(value)) {
             return cloneElement(value);
           }
