@@ -9,8 +9,8 @@ import {
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
+  ComponentType,
   ElementType,
-  JSXElementConstructor,
   PropsWithChildren,
 } from 'react';
 
@@ -56,7 +56,7 @@ export interface SearchResultComponentProps {
 }
 
 export interface DefaultViewProps {
-  message?: string | JSXElementConstructor<unknown>;
+  message?: string | ComponentType;
   promptsHeading?: string;
   prompts?: string[];
 }
@@ -154,10 +154,9 @@ export interface MarkpromptOptions {
      **/
     placeholder?: string;
     /**
-     * Default error text
-     * @default "Sorry, it looks like the bot is having a hard time! Please try again in a few minutes."
+     * Component to render when an error occurs in prompt view
      */
-    errorText?: string;
+    errorText?: ComponentType<{ error: Error }>;
     /**
      * Show sender info, like avatar
      * @default true
@@ -199,14 +198,14 @@ export interface MarkpromptOptions {
      **/
     placeholder?: string;
     /**
-     * Default (empty) view
+     * (Empty) view
      */
     defaultView?: DefaultViewProps;
     /**
-     * Default error text
+     * Component to render when an error occurs in prompt view
      * @default "Sorry, it looks like the bot is having a hard time! Please try again in a few minutes."
      */
-    errorText?: string;
+    errorText?: ComponentType<{ error: Error }>;
   };
   references?: {
     /**

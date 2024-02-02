@@ -32,7 +32,7 @@ export interface UsePromptOptions {
 
 export interface UsePromptResult {
   answer: string;
-  error?: string;
+  error: Error | undefined;
   prompt: string;
   promptId?: string;
   references: FileSectionReference[];
@@ -50,7 +50,7 @@ interface UsePromptState {
   answer: string;
   references: FileSectionReference[];
   promptId: string | undefined;
-  error: string | undefined;
+  error: Error | undefined;
 }
 
 const initialState = {
@@ -139,7 +139,7 @@ export function usePrompt({
         // eslint-disable-next-line no-console
         console.error(error);
         dispatch({
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error : new Error(String(error)),
         });
       }
 

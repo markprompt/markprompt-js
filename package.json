@@ -16,6 +16,7 @@
     "prepare": "husky install",
     "publish": "npm run build:packages && changeset publish",
     "test": "vitest run --coverage",
+    "test:watch": "vitest watch --coverage",
     "version": "changeset version && npm install"
   },
   "dependencies": {

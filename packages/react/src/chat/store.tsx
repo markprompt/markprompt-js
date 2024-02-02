@@ -23,7 +23,12 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
-import { hasValueAtKey, isIterable, isPresent } from '../utils.js';
+import {
+  hasValueAtKey,
+  isIterable,
+  isPresent,
+  isStoredError,
+} from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -43,6 +48,7 @@ export interface ChatViewMessage
   id: ReturnType<typeof crypto.randomUUID>;
   state: ChatLoadingState;
   name?: string;
+  error?: Error;
 }
 
 function toApiMessages(
@@ -156,8 +162,6 @@ export interface ChatStoreState {
   abort?: () => void;
   projectKey: string;
   conversationId?: string;
-  error?: string;
-  setError: (error?: string) => void;
   setConversationId: (conversationId: string) => void;
   selectConversation: (conversationId?: string) => void;
   messages: ChatViewMessage[];
@@ -226,12 +230,6 @@ export const createChatStore = ({
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
-          error: undefined,
-          setError: (error?: string) => {
-            set((state) => {
-              state.error = error;
-            });
-          },
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -344,8 +342,6 @@ export const createChatStore = ({
             );
             const responseId = self.crypto.randomUUID();
 
-            get().setError(undefined);
-
             set((state) => {
               state.messages.push(
                 ...messages.map((message, i) => ({
@@ -432,7 +428,7 @@ export const createChatStore = ({
               }
             } catch (error) {
               // eslint-disable-next-line no-console
-              console.error(error);
+              console.error({ error });
 
               for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
@@ -442,9 +438,10 @@ export const createChatStore = ({
 
               if (isAbortError(error)) return;
 
-              get().setError(
-                error instanceof Error ? error.message : String(error),
-              );
+              get().setMessageById(responseId, {
+                error:
+                  error instanceof Error ? error : new Error(String(error)),
+              });
             }
 
             if (get().abort === abort) {
@@ -575,8 +572,34 @@ export const createChatStore = ({
         {
           name: 'markprompt',
           version: 1,
-          storage: createJSONStorage(() =>
-            persistChatHistory ? localStorage : sessionStorage,
+          storage: createJSONStorage(
+            () => (persistChatHistory ? localStorage : sessionStorage),
+            {
+              reviver: (_, value) => {
+                if (value && isStoredError(value)) {
+                  const error = new Error(value.message);
+                  error.name = value.name;
+                  if (value.stack) error.stack = value.stack;
+                  if (value.cause) error.cause = value.cause;
+                  return error;
+                }
+
+                return value;
+              },
+              replacer: (_, value) => {
+                if (value instanceof Error) {
+                  return Object.fromEntries(
+                    [
+                      ['type', 'error'],
+                      ['name', value.name],
+                      ['message', value.message],
+                      ['cause', value.cause],
+                    ].filter(([, v]) => v !== undefined),
+                  );
+                }
+                return value;
+              },
+            },
           ),
           // only store conversationsByProjectKey in local storage
           partialize: (state) => ({

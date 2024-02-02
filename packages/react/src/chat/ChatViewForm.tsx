@@ -39,7 +39,6 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     (state) => state.regenerateLastAnswer,
   );
   const conversations = useChatStore(selectProjectConversations);
-  const error = useChatStore((state) => state.error);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -109,11 +108,11 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
         />
       </div>
 
-      {error && (
+      {/* {error && (
         <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
           {chatOptions.errorText}
         </BaseMarkprompt.ErrorMessage>
-      )}
+      )} */}
 
       <div className="MarkpromptChatActions">
         {lastMessageState && lastMessageState !== 'indeterminate' && (

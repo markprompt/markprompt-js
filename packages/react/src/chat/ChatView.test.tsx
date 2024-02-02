@@ -3,14 +3,14 @@ import {
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   type FileSectionReference,
 } from '@markprompt/core';
-import { render, screen, waitFor, renderHook } from '@testing-library/react';
+import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import {
   afterAll,
-  afterEach,
   beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
@@ -47,7 +47,16 @@ const server = setupServer(
   rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
     if (status >= 400) {
       return res(
+        ctx.delay('real'),
         ctx.status(status),
+        ctx.set(
+          'x-markprompt-data',
+          encoder.encode(JSON.stringify(markpromptData)).toString(),
+        ),
+        ctx.set(
+          'x-markprompt-debug-info',
+          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
+        ),
         ctx.json({ error: 'Internal server error' }),
       );
     }
@@ -96,7 +105,7 @@ const server = setupServer(
 describe('ChatView', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 
-  afterEach(() => {
+  beforeEach(() => {
     status = 200;
     response = [];
     wait = false;
@@ -114,7 +123,7 @@ describe('ChatView', () => {
   });
 
   it('renders', () => {
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
     expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
 
@@ -134,7 +143,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -151,7 +160,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           defaultView: {
             message: 'test message',
@@ -177,7 +186,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test 1');
     await user.keyboard('{Enter}');
@@ -208,7 +217,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test 1');
     await user.keyboard('{Enter}');
@@ -246,7 +255,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           tool_choice: 'auto',
           tools: [
@@ -304,7 +313,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           tool_choice: 'auto',
           tools: [
@@ -368,7 +377,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           tool_choice: 'auto',
           tools: [
@@ -424,7 +433,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           tool_choice: 'auto',
           tools: [
@@ -469,7 +478,7 @@ describe('ChatView', () => {
     const DefaultViewMessage = vi.fn(() => <p>test</p>);
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{ defaultView: { message: DefaultViewMessage } }}
       />,
     );
@@ -480,7 +489,7 @@ describe('ChatView', () => {
     const DefaultViewMessage = vi.fn(() => <p>test</p>);
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         chatOptions={{
           defaultView: { message: DefaultViewMessage, prompts: [] },
         }}
@@ -501,7 +510,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -524,7 +533,10 @@ describe('ChatView', () => {
     const user = await userEvent.setup();
 
     render(
-      <ChatView projectKey="test-key" referencesOptions={{ display: 'end' }} />,
+      <ChatView
+        projectKey={crypto.randomUUID()}
+        referencesOptions={{ display: 'end' }}
+      />,
     );
 
     await user.type(screen.getByRole('textbox'), 'test');
@@ -549,7 +561,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         referencesOptions={{ display: 'none' }}
       />,
     );
@@ -576,13 +588,13 @@ describe('ChatView', () => {
     const user = await userEvent.setup();
 
     const { rerender } = render(
-      <ChatView projectKey="test-key" activeView="chat" />,
+      <ChatView projectKey={crypto.randomUUID()} activeView="chat" />,
     );
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
 
-    rerender(<ChatView projectKey="test-key" activeView="search" />);
+    rerender(<ChatView projectKey={crypto.randomUUID()} activeView="search" />);
 
     await waitFor(() => {
       expect(
@@ -605,7 +617,7 @@ describe('ChatView', () => {
 
       const user = await userEvent.setup();
 
-      render(<ChatView projectKey="test-key" />);
+      render(<ChatView projectKey={crypto.randomUUID()} />);
 
       await user.type(screen.getByRole('textbox'), 'test');
       await user.keyboard('{Enter}');
@@ -645,7 +657,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -653,14 +665,14 @@ describe('ChatView', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'This chat response was cancelled. Please try regenerating the answer or ask another question.',
+          'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
         ),
       ).toBeInTheDocument();
     });
   });
 
   it('initially does not have stored conversations', async () => {
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
@@ -672,7 +684,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -698,7 +710,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -714,7 +726,39 @@ describe('ChatView', () => {
     });
   });
 
-  it('does not save conversations when disabled', async () => {
+  it('saves conversations with serialized errors', async () => {
+    const projectKey = crypto.randomUUID();
+    const conversationId = crypto.randomUUID();
+    const promptId = crypto.randomUUID();
+
+    markpromptData = { conversationId, promptId };
+    status = 500;
+
+    render(<ChatView projectKey={projectKey} />);
+
+    const user = await userEvent.setup();
+
+    await user.type(screen.getByRole('textbox'), 'test');
+    await user.keyboard('{Enter}');
+
+    await screen.findByText(
+      'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
+    );
+
+    expect(localStorage.getItem('markprompt')).not.toBeNull();
+
+    expect(
+      JSON.parse(localStorage.getItem('markprompt')!).state
+        .messagesByConversationId[conversationId].messages[1].error,
+    ).toEqual({
+      type: 'error',
+      name: 'Error',
+      message: 'Malformed response from Markprompt API',
+      cause: { error: 'Internal server error' },
+    });
+  });
+
+  it('does not save conversations to LocalStorage when history is disabled', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
@@ -722,7 +766,12 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" chatOptions={{ history: false }} />);
+    render(
+      <ChatView
+        projectKey={crypto.randomUUID()}
+        chatOptions={{ history: false }}
+      />,
+    );
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -735,6 +784,7 @@ describe('ChatView', () => {
   });
 
   it("does not restore a conversation if it's older than 4 hours", () => {
+    const projectKey = crypto.randomUUID();
     const conversationId = crypto.randomUUID();
     const lastUpdated = new Date(
       new Date().getTime() - 1000 * 60 * 60 * 5,
@@ -745,7 +795,7 @@ describe('ChatView', () => {
       JSON.stringify({
         state: {
           conversationIdsByProjectKey: {
-            'test-key': [conversationId],
+            [projectKey]: [conversationId],
           },
           messagesByConversationId: {
             [conversationId]: {
@@ -774,12 +824,13 @@ describe('ChatView', () => {
       }),
     );
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={projectKey} />);
 
     expect(screen.getAllByText('test')).toHaveLength(1);
   });
 
   it('restores the latest conversation that is < 4 hours old', () => {
+    const projectKey = crypto.randomUUID();
     const conversationId1 = crypto.randomUUID();
     const conversationId2 = crypto.randomUUID();
     const lastUpdated1 = new Date(
@@ -794,7 +845,7 @@ describe('ChatView', () => {
       JSON.stringify({
         state: {
           conversationIdsByProjectKey: {
-            'test-key': [conversationId1, conversationId2],
+            [projectKey]: [conversationId1, conversationId2],
           },
           messagesByConversationId: {
             [conversationId1]: {
@@ -843,7 +894,7 @@ describe('ChatView', () => {
       }),
     );
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={projectKey} />);
 
     expect(screen.getAllByText('test 1')).toHaveLength(1);
     expect(screen.getAllByText('test 2')).toHaveLength(2);
@@ -858,7 +909,10 @@ describe('ChatView', () => {
     const user = await userEvent.setup();
 
     render(
-      <ChatView projectKey="test-key" feedbackOptions={{ enabled: true }} />,
+      <ChatView
+        projectKey={crypto.randomUUID()}
+        feedbackOptions={{ enabled: true }}
+      />,
     );
 
     await user.type(screen.getByRole('textbox'), 'test');
@@ -884,7 +938,7 @@ describe('ChatView', () => {
 
     render(
       <ChatView
-        projectKey="test-key"
+        projectKey={crypto.randomUUID()}
         feedbackOptions={{ enabled: true, onFeedbackSubmit: onSubmit }}
       />,
     );
@@ -910,7 +964,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -945,7 +999,7 @@ describe('ChatView', () => {
 
     const user = await userEvent.setup();
 
-    render(<ChatView projectKey="test-key" />);
+    render(<ChatView projectKey={crypto.randomUUID()} />);
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');

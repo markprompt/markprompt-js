@@ -194,15 +194,37 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
     history: true,
-    errorText:
-      'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
+    errorText: (props) => (
+      <p className="MarkpromptDefaultError">
+        <span className="MarkpromptDefaultErrorIcon">:-(</span>
+        Sorry, it looks like the bot is having a hard time! Please try again in
+        a few minutes.
+        <details>
+          <summary>Error info</summary>
+          <code>
+            {props.error.name}: {props.error.message}
+          </code>
+        </details>
+      </p>
+    ),
   },
   prompt: {
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
-    errorText:
-      'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
+    errorText: (props) => (
+      <p className="MarkpromptDefaultError">
+        <span className="MarkpromptDefaultErrorIcon">:-(</span>
+        Sorry, it looks like the bot is having a hard time! Please try again in
+        a few minutes.
+        <details>
+          <summary>Error info</summary>
+          <code>
+            {props.error.name}: {props.error.message}
+          </code>
+        </details>
+      </p>
+    ),
   },
   references: {
     loadingText: 'Fetching relevant pages…',

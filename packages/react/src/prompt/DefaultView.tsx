@@ -1,9 +1,9 @@
-import { type JSXElementConstructor, type ReactElement } from 'react';
+import { type ComponentType, type ReactElement } from 'react';
 
 import type { DefaultViewProps } from '../types.js';
 
 export function DefaultMessage(props: {
-  message: string | JSXElementConstructor<unknown>;
+  message: string | ComponentType;
 }): ReactElement {
   if (typeof props.message === 'string') {
     return <p className="MarkpromptDefaultViewMessage">{props.message}</p>;

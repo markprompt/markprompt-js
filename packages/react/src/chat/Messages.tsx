@@ -1,4 +1,4 @@
-import { Fragment, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import { MessagePrompt } from './MessagePrompt.js';
@@ -40,7 +40,7 @@ export function Messages(props: MessagesProps): ReactElement {
         discreteScrollTrigger={messages.length}
       >
         {messages.map((message) => (
-          <Fragment key={message.id}>
+          <div key={message.id} className="MarkpromptMessage">
             {message.role === 'user' && (
               <MessagePrompt
                 state={message.state}
@@ -62,24 +62,19 @@ export function Messages(props: MessagesProps): ReactElement {
             {(!referencesOptions?.display ||
               referencesOptions?.display === 'end') &&
               message.references &&
-              message.references?.length > 0 && (
-                <div className="MarkpromptReferences">
-                  {(message.state === 'streaming-answer' ||
-                    message.state === 'done') && (
-                    <>
-                      <References
-                        references={message.references}
-                        getHref={referencesOptions?.getHref}
-                        getLabel={referencesOptions?.getLabel}
-                        loadingText={referencesOptions?.loadingText}
-                        heading={referencesOptions?.heading}
-                        state={message.state}
-                      />
-                    </>
-                  )}
-                </div>
+              message.references?.length > 0 &&
+              (message.state === 'streaming-answer' ||
+                message.state === 'done') && (
+                <References
+                  references={message.references}
+                  getHref={referencesOptions?.getHref}
+                  getLabel={referencesOptions?.getLabel}
+                  loadingText={referencesOptions?.loadingText}
+                  heading={referencesOptions?.heading}
+                  state={message.state}
+                />
               )}
-          </Fragment>
+          </div>
         ))}
       </BaseMarkprompt.AutoScroller>
     </div>

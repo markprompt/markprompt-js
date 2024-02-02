@@ -57,7 +57,10 @@ function markpromptChat(
     <ChatView
       projectKey={projectKey}
       {...options}
-      chatOptions={{ ...options?.chatOptions, enabled: true }}
+      chatOptions={{
+        ...options?.chatOptions,
+        enabled: true,
+      }}
     />,
   );
 }
