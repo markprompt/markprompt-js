@@ -7,6 +7,7 @@ export default defineProject({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    // See https://vitest.dev/guide/common-errors.html#failed-to-terminate-worker for why this is enabled
     pool: 'forks',
   },
 });
