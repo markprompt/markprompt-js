@@ -653,7 +653,7 @@ describe('ChatView', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'This chat response was cancelled. Please try regenerating the answer or ask another question.',
+          'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
         ),
       ).toBeInTheDocument();
     });
