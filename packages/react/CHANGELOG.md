@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.34.0
+
+### Minor Changes
+
+- [#284](https://github.com/motifland/markprompt-js/pull/284) [`9b6cb0863aa092e43f2c068337889d40143a8e3c`](https://github.com/motifland/markprompt-js/commit/9b6cb0863aa092e43f2c068337889d40143a8e3c) Thanks [@nickrttn](https://github.com/nickrttn)! - Add an option (`close.hasIcon`) to show a close icon on the close button instead of the keyboard shortcut
+
 ## 0.33.0
 
 ### Minor Changes
