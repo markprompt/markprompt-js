@@ -179,6 +179,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   close: {
     label: 'Close Markprompt',
     visible: true,
+    hasIcon: false,
   },
   description: {
     hide: true,

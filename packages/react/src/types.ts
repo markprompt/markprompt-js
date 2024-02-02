@@ -89,6 +89,10 @@ export interface MarkpromptOptions {
      * @default true
      **/
     visible?: boolean;
+    /**
+     * Show an × icon in the close button instead of the keyboard shortcut ('Esc')
+     */
+    hasIcon?: boolean;
   };
   description?: {
     /**
