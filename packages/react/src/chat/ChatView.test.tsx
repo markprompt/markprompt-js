@@ -726,27 +726,36 @@ describe('ChatView', () => {
     });
   });
 
-  it.only('saves conversations with serialized errors', async () => {
+  it('saves conversations with serialized errors', async () => {
+    const projectKey = crypto.randomUUID();
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
 
     markpromptData = { conversationId, promptId };
     status = 500;
 
-    render(<ChatView projectKey={crypto.randomUUID()} />);
+    render(<ChatView projectKey={projectKey} />);
 
     const user = await userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
 
-    expect(localStorage.getItem('markprompt')).not.toBeNull();
-
     await screen.findByText(
       'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
     );
 
-    screen.debug();
+    expect(localStorage.getItem('markprompt')).not.toBeNull();
+
+    expect(
+      JSON.parse(localStorage.getItem('markprompt')!).state
+        .messagesByConversationId[conversationId].messages[1].error,
+    ).toEqual({
+      type: 'error',
+      name: 'Error',
+      message: 'Malformed response from Markprompt API',
+      cause: { error: 'Internal server error' },
+    });
   });
 
   it('does not save conversations to LocalStorage when history is disabled', async () => {
