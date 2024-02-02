@@ -275,7 +275,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               >
                 <BaseMarkprompt.Close className="MarkpromptClose">
                   <AccessibleIcon.Root label={close!.label!}>
-                    {isTouchDevice ? (
+                    {isTouchDevice || close.hasIcon ? (
                       <CloseIcon width={20} height={20} />
                     ) : (
                       <kbd>Esc</kbd>
