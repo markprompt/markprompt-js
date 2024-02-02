@@ -152,7 +152,7 @@ export interface MarkpromptOptions {
     /**
      * Component to render when an error occurs in prompt view
      */
-    errorText?: ComponentType<{ error: string }>;
+    errorText?: ComponentType<{ error: Error }>;
     /**
      * Show sender info, like avatar
      * @default true
@@ -201,7 +201,7 @@ export interface MarkpromptOptions {
      * Component to render when an error occurs in prompt view
      * @default "Sorry, it looks like the bot is having a hard time! Please try again in a few minutes."
      */
-    errorText?: ComponentType<{ error: string }>;
+    errorText?: ComponentType<{ error: Error }>;
   };
   references?: {
     /**

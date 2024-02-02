@@ -23,7 +23,12 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import type { MarkpromptOptions } from '../types.js';
-import { hasValueAtKey, isIterable, isPresent } from '../utils.js';
+import {
+  hasValueAtKey,
+  isIterable,
+  isPresent,
+  isStoredError,
+} from '../utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -43,6 +48,7 @@ export interface ChatViewMessage
   id: ReturnType<typeof crypto.randomUUID>;
   state: ChatLoadingState;
   name?: string;
+  error?: Error;
 }
 
 function toApiMessages(
@@ -156,8 +162,6 @@ export interface ChatStoreState {
   abort?: () => void;
   projectKey: string;
   conversationId?: string;
-  error?: string;
-  setError: (error?: string) => void;
   setConversationId: (conversationId: string) => void;
   selectConversation: (conversationId?: string) => void;
   messages: ChatViewMessage[];
@@ -222,16 +226,47 @@ export const createChatStore = ({
           projectKey,
           messages: [],
           conversationIdsByProjectKey: {
-            [projectKey]: [],
+            sk_test_mKfzAaRVAZaVvu0MHJvGNJBywfJSOdp4: [
+              'aa74d600-0403-459d-a028-69526eb74ac8',
+            ],
           },
-          messagesByConversationId: {},
+          messagesByConversationId: {
+            'aa74d600-0403-459d-a028-69526eb74ac8': {
+              lastUpdated: '2024-02-02T10:23:36.813Z',
+              messages: [
+                {
+                  role: 'user',
+                  content: 'how does it shake?',
+                  id: '73ce5839-84d9-4af1-9b11-aa6a830d6363',
+                  references: [],
+                  state: 'done',
+                },
+                {
+                  id: '24dcb2eb-9e6d-45c5-8fcc-91bd0475febe',
+                  role: 'assistant',
+                  state: 'cancelled',
+                  error: new Error('something went wrong'),
+                  references: [],
+                  conversationId: null,
+                  promptId: '11b89b83-1b3e-46e9-b938-19a3a2c05db1',
+                  content: null,
+                },
+                {
+                  role: 'user',
+                  content: "what's going on?",
+                  id: '6c651321-6006-4f09-83dd-1df3a6ff1fcc',
+                  references: [],
+                  state: 'cancelled',
+                },
+                {
+                  id: 'f9dfb2d3-e2ec-48c3-a014-ad8906148b68',
+                  role: 'assistant',
+                  state: 'cancelled',
+                },
+              ],
+            },
+          },
           toolCallsByToolCallId: {},
-          error: 'some error',
-          setError: (error?: string) => {
-            set((state) => {
-              state.error = error;
-            });
-          },
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -344,8 +379,6 @@ export const createChatStore = ({
             );
             const responseId = self.crypto.randomUUID();
 
-            get().setError(undefined);
-
             set((state) => {
               state.messages.push(
                 ...messages.map((message, i) => ({
@@ -442,9 +475,10 @@ export const createChatStore = ({
 
               if (isAbortError(error)) return;
 
-              get().setError(
-                error instanceof Error ? error.message : String(error),
-              );
+              get().setMessageById(responseId, {
+                error:
+                  error instanceof Error ? error : new Error(String(error)),
+              });
             }
 
             if (get().abort === abort) {
@@ -575,8 +609,34 @@ export const createChatStore = ({
         {
           name: 'markprompt',
           version: 1,
-          storage: createJSONStorage(() =>
-            persistChatHistory ? localStorage : sessionStorage,
+          storage: createJSONStorage(
+            () => (persistChatHistory ? localStorage : sessionStorage),
+            {
+              reviver: (_, value) => {
+                if (value && isStoredError(value)) {
+                  const error = new Error(value.message);
+                  error.name = value.name;
+                  if (value.stack) error.stack = value.stack;
+                  if (value.cause) error.cause = value.cause;
+                  return error;
+                }
+
+                return value;
+              },
+              replacer: (_, value) => {
+                if (value instanceof Error) {
+                  return Object.fromEntries(
+                    [
+                      ['type', 'error'],
+                      ['name', value.name],
+                      ['message', value.message],
+                      ['cause', value.cause],
+                    ].filter(([, v]) => v !== undefined),
+                  );
+                }
+                return value;
+              },
+            },
           ),
           // only store conversationsByProjectKey in local storage
           partialize: (state) => ({

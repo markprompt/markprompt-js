@@ -46,6 +46,15 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
     [chatOptions.ToolCallsConfirmation],
   );
 
+  if (message.error) {
+    const ErrorText = chatOptions.errorText;
+    return (
+      <div className="MarkpromptError">
+        {ErrorText && <ErrorText error={message.error} />}
+      </div>
+    );
+  }
+
   return (
     <div className="MarkpromptMessageAnswerContainer">
       <MessageAnswer state={message.state}>

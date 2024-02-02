@@ -127,23 +127,18 @@ export function PromptView(props: PromptViewProps): ReactElement {
             }
           />
         </div>
-
-        {error && (
-          <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
-            {promptOptions.errorText}
-          </BaseMarkprompt.ErrorMessage>
-        )}
       </BaseMarkprompt.Form>
 
       <AnswerContainer
         abortFeedbackRequest={abortFeedbackRequest}
         answer={answer}
+        error={error}
         feedbackOptions={feedbackOptions}
         onDidSelectReference={onDidSelectReference}
         promptId={promptId}
         references={references}
         referencesOptions={referencesOptions}
-        defaultView={promptOptions.defaultView}
+        promptOptions={promptOptions}
         state={state}
         submitFeedback={(feedback, promptId) => {
           submitFeedback(feedback, promptId);
@@ -171,33 +166,53 @@ export function PromptView(props: PromptViewProps): ReactElement {
 }
 
 interface AnswerContainerProps {
+  abortFeedbackRequest: UseFeedbackResult['abort'];
   answer: string;
+  error?: Error;
   feedbackOptions?: MarkpromptOptions['feedback'];
+  onDidSelectDefaultViewPrompt?: (prompt: string) => void;
   onDidSelectReference?: () => void;
+  promptId?: string;
+  promptOptions: NonNullable<MarkpromptOptions['prompt']>;
   references: FileSectionReference[];
   referencesOptions: MarkpromptOptions['references'];
-  defaultView: NonNullable<MarkpromptOptions['prompt']>['defaultView'];
   state: PromptLoadingState;
   submitFeedback: UseFeedbackResult['submitFeedback'];
-  abortFeedbackRequest: UseFeedbackResult['abort'];
-  promptId?: string;
-  onDidSelectDefaultViewPrompt?: (prompt: string) => void;
 }
 
 function AnswerContainer(props: AnswerContainerProps): ReactElement {
   const {
     abortFeedbackRequest,
     answer,
+    error,
     feedbackOptions,
+    onDidSelectDefaultViewPrompt,
     onDidSelectReference,
     promptId,
+    promptOptions,
     references,
     referencesOptions,
     state,
     submitFeedback,
-    defaultView,
-    onDidSelectDefaultViewPrompt,
   } = props;
+
+  const { defaultView, errorText } = promptOptions;
+
+  if (error) {
+    const ErrorText = errorText!;
+
+    return (
+      <div
+        className="MarkpromptError"
+        style={{
+          backgroundColor: 'var(--markprompt-muted)',
+          color: 'var(--markprompt-mutedForeground)',
+        }}
+      >
+        {ErrorText && <ErrorText error={error} />}
+      </div>
+    );
+  }
 
   if ((!answer || answer.length === 0) && state === 'indeterminate') {
     return (

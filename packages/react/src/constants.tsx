@@ -201,7 +201,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         a few minutes.
         <details>
           <summary>Error info</summary>
-          <code>{props.error}</code>
+          <code>
+            {props.error.name}: {props.error.message}
+          </code>
         </details>
       </p>
     ),
@@ -217,7 +219,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         a few minutes.
         <details>
           <summary>Error info</summary>
-          <code>{props.error}</code>
+          <code>
+            {props.error.name}: {props.error.message}
+          </code>
         </details>
       </p>
     ),

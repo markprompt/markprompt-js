@@ -77,3 +77,20 @@ export function hasValueAtKey<K extends string | number | symbol, V>(
     return a[k] === v;
   };
 }
+
+export const isStoredError = (
+  value: unknown,
+): value is {
+  type: 'error';
+  name: string;
+  message: string;
+  cause?: string;
+  stack?: string;
+} => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'type' in value &&
+    value.type === 'error'
+  );
+};
