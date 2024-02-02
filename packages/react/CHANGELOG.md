@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.35.0
+
+### Minor Changes
+
+- [#283](https://github.com/motifland/markprompt-js/pull/283) [`1a8cec690be2567846e7c3de7f12af2060e332e9`](https://github.com/motifland/markprompt-js/commit/1a8cec690be2567846e7c3de7f12af2060e332e9) Thanks [@nickrttn](https://github.com/nickrttn)! - Improve the error view for `PromptView` and `ChatView`
+
+### Patch Changes
+
+- Updated dependencies [[`1a8cec690be2567846e7c3de7f12af2060e332e9`](https://github.com/motifland/markprompt-js/commit/1a8cec690be2567846e7c3de7f12af2060e332e9)]:
+  - @markprompt/core@0.22.1
+
 ## 0.34.0
 
 ### Minor Changes
