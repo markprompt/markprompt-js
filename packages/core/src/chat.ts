@@ -146,11 +146,8 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/chat',
   frequencyPenalty: 0,
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  maxTokens: 500,
   model: 'gpt-3.5-turbo',
   presencePenalty: 0,
-  sectionsMatchCount: 5,
-  sectionsMatchThreshold: 0.5,
   systemPrompt: `You are an enthusiastic company representative who loves to help people! You must adhere to the following rules when answering:
 
 - You must not make up answers that are not present in the provided context.

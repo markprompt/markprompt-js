@@ -103,9 +103,9 @@ The pre-built Markprompt component. It accepts the following props:
 - `chat.frequencyPenalty` (`number`): The model frequency penalty. (Default:
   `0`)
 - `chat.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
-- `chat.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
-- `chat.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
-- `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections. (Default: `0.5`)
+- `chat.maxTokens` (`number`): The max number of tokens to include in the response.
+- `chat.sectionsMatchCount` (`number`): The number of sections to include in the prompt context.
+- `chat.sectionsMatchThreshold` (`number`): The similarity threshold between the input question and selected sections.
 - `chat.tools`: (`ChatViewTool[]`): A list of tools the model may call.
 - `chat.tool_choice` (`'auto' | 'none' | {"type": "function", "function": {"name": string}}`): Controls which (if any) function is called by the model.
 - `chat.ToolCallsConfirmation` (`(props: ConfirmationProps) => JSX.Element`): An optional user-provided confirmation message component that takes the tool calls provided by OpenAI and a confirm function that should be called when the user confirms the tool calls.
@@ -136,10 +136,10 @@ The pre-built Markprompt component. It accepts the following props:
   `0`)
 - `prompt.presencePenalty` (`number`): The model presence penalty. (Default:
   `0`)
-- `prompt.maxTokens` (`number`): The max number of tokens to include in the response. (Default: `500`)
-- `prompt.sectionsMatchCount` (`number`): The number of sections to include in the prompt context. (Default: `10`)
+- `prompt.maxTokens` (`number`): The max number of tokens to include in the response.
+- `prompt.sectionsMatchCount` (`number`): The number of sections to include in the prompt context.
 - `prompt.sectionsMatchThreshold` (`number`): The similarity threshold between
-  the input question and selected sections. (Default: `0.5`)
+  the input question and selected sections.
 - `prompt.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an href
@@ -222,11 +222,11 @@ accepts the following props:
 - `chatOptions.presencePenalty` (`number`): The model presence penalty.
   (Default: `0`)
 - `chatOptions.maxTokens` (`number`): The max number of tokens to include in the
-  response. (Default: `500`)
+  response.
 - `chatOptions.sectionsMatchCount` (`number`): The number of sections to include
-  in the prompt context. (Default: `10`)
+  in the prompt context.
 - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
-  between the input question and selected sections. (Default: `0.5`)
+  between the input question and selected sections.
 - `chat.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
 - `chat.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model.
 - `close`: Options for the close modal button
@@ -286,11 +286,11 @@ It accepts the following props:
 - `promptOptions.presencePenalty` (`number`): The model presence penalty.
   (Default: `0`)
 - `promptOptions.maxTokens` (`number`): The max number of tokens to include in
-  the response. (Default: `500`)
+  the response.
 - `promptOptions.sectionsMatchCount` (`number`): The number of sections to
-  include in the prompt context. (Default: `10`)
+  include in the prompt context.
 - `promptOptions.sectionsMatchThreshold` (`number`): The similarity threshold
-  between the input question and selected sections. (Default: `0.5`)
+  between the input question and selected sections.
 - `promptOption.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call.
 - `promptOption.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which
 - `close`: Options for the close modal button
@@ -460,15 +460,15 @@ Create a chat prompt. It accepts the following options:
       does not have an answer. (Default:
       `Sorry, I am not sure how to answer that.`)
     - `chatOptions.maxTokens` (`number`): The max number of tokens to include in
-      the response. (Default: `500`)
+      the response.
     - `chatOptions.model` (`string`): The OpenAI model to use. (Default:
       `gpt-3.5-turbo`)
     - `chatOptions.presencePenalty` (`number`): The model presence penalty.
       (Default: `0`)
     - `chatOptions.sectionsMatchCount` (`number`): The number of sections to
-      include in the prompt context. (Default: `10`)
+      include in the prompt context.
     - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
-      between the input question and selected sections. (Default: `0.5`)
+      between the input question and selected sections.
     - `chatOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
     - `chatOptions.systemPrompt` (`string`): The prompt template. (Default:
       `You are a very enthusiastic company representative who loves to help people!`)
@@ -553,16 +553,15 @@ Create a prompt. It accepts the following options:
       model does not have an answer. (Default:
       `Sorry, I am not sure how to answer that.`)
     - `promptOptions.maxTokens` (`number`): The max number of tokens to include
-      in the response. (Default: `500`)
+      in the response.
     - `promptOptions.model` (`string`): The OpenAI model to use. (Default:
       `gpt-3.5-turbo`)
     - `promptOptions.presencePenalty` (`number`): The model presence penalty.
       (Default: `0`)
     - `promptOptions.sectionsMatchCount` (`number`): The number of sections to
-      include in the prompt context. (Default: `10`)
+      include in the prompt context.
     - `promptOptions.sectionsMatchThreshold` (`number`): The similarity
-      threshold between the input question and selected sections. (Default:
-      `0.5`)
+      threshold between the input question and selected sections.
     - `promptOptions.sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file. (Default: `undefined`)
     - `promptOptions.systemPrompt` (`string`): The prompt template. (Default:
       `You are a very enthusiastic company representative who loves to help people!`)
