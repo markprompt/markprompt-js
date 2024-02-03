@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.22.2
+
+### Patch Changes
+
+- [#287](https://github.com/motifland/markprompt-js/pull/287) [`2276dd3c0b09349a7524e4bad8da73b8d2b5bef2`](https://github.com/motifland/markprompt-js/commit/2276dd3c0b09349a7524e4bad8da73b8d2b5bef2) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for GPT-4 Turbo preview
+
 ## 0.22.1
 
 ### Patch Changes
