@@ -88,3 +88,30 @@ body,
   min-height: 100vh;
   min-height: 100dvh;
 }
+
+#search {
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 12px;
+  align-items: center;
+  min-width: 400px;
+  font-size: 14px;
+  color: hsl(0, 0%, 50%);
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid hsl(0, 0%, 92%);
+  transition-property: all;
+  transition-duration: 200ms;
+}
+
+#search:hover {
+  background-color: hsl(0, 0%, 93%);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2px;
+  color: hsl(0, 0%, 30%);
+}

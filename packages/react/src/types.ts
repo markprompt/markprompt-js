@@ -12,6 +12,7 @@ import type {
   ComponentType,
   ElementType,
   PropsWithChildren,
+  ReactNode,
 } from 'react';
 
 import type { UserConfigurableOptions } from './chat/store.js';
@@ -61,7 +62,17 @@ export interface DefaultViewProps {
   prompts?: string[];
 }
 
+export interface DefaultSearchViewProps {
+  searchesHeading?: string;
+  searches?: SearchResultComponentProps[];
+}
+
 export interface MarkpromptOptions {
+  /**
+   * The children trigger component
+   * @default undefined
+   **/
+  children?: React.ReactNode;
   /**
    * Display format.
    * @default "dialog"
@@ -264,9 +275,17 @@ export interface MarkpromptOptions {
     ) => string | undefined;
     /**
      * Label for the search input, not shown but used for `aria-label`
-     * @default "Search docs…"
+     * @default "Search documentation"
      **/
-    label?: string;
+    label?: string /**
+     * Label for the tab bar
+     * @default "Search"
+     **/;
+    layout?: 'tabs' | 'input';
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultSearchViewProps;
     /**
      * Label for the tab bar
      * @default "Search"
@@ -274,7 +293,7 @@ export interface MarkpromptOptions {
     tabLabel?: string;
     /**
      * Placeholder for the search input
-     * @default "Search docs…"
+     * @default "Search documentation"
      */
     placeholder?: string;
   };
@@ -300,7 +319,7 @@ export interface MarkpromptOptions {
      */
     floating?: boolean;
     /** Do you use a custom element as the dialog trigger? */
-    customElement?: boolean;
+    customElement?: boolean | ReactNode;
     /**
      * Custom image icon source for the open button
      **/

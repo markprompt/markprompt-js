@@ -238,9 +238,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     getHeading: defaultGetSearchResultHeading,
     getTitle: defaultGetSearchResultTitle,
     getSubtitle: defaultGetSearchResultSubtitle,
-    label: 'Search docs…',
+    label: 'Search documentation',
     tabLabel: 'Search',
-    placeholder: 'Search docs…',
+    placeholder: 'Search documentation',
   },
   trigger: {
     label: 'Ask AI',

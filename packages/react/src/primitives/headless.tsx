@@ -22,6 +22,7 @@ import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
 import { CheckIcon, CopyIcon } from '../icons.js';
 import type {
+  MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
@@ -511,6 +512,7 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
       SearchResultComponentProps & { index?: number }
     >;
     searchResults: SearchResultComponentProps[];
+    searchOptions?: MarkpromptOptions['search'];
   }
 >;
 
@@ -521,6 +523,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       label = 'Search results',
       SearchResultComponent = SearchResult,
       searchResults,
+      searchOptions,
       ...rest
     } = props;
 
@@ -539,6 +542,25 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
             <SearchResultComponent
               id={id}
               index={index}
+              key={id}
+              role="option"
+              {...result}
+            />
+          );
+        })}
+        {searchOptions?.defaultView?.searches?.length &&
+          searchOptions?.defaultView?.searchesHeading && (
+            <div className="MarkpromptSearchResultSectionHeading">
+              {searchOptions.defaultView.searchesHeading}
+            </div>
+          )}
+        {searchOptions?.defaultView?.searches?.map((result, index) => {
+          const adjustedIndex = index + searchResults.length;
+          const id = `markprompt-result-${adjustedIndex}`;
+          return (
+            <SearchResultComponent
+              id={id}
+              index={adjustedIndex}
               key={id}
               role="option"
               {...result}

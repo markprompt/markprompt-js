@@ -172,7 +172,7 @@ interface MarkpromptOptions {
     /**
      * Default (empty) view
      */
-    defaultView?:  {
+    defaultView?: {
       message?: string | ReactElement;
       promptsHeading?: string;
       prompts?: string[];
@@ -200,7 +200,7 @@ interface MarkpromptOptions {
     /**
      * Default (empty) view
      */
-    defaultView?:  {
+    defaultView?: {
       message?: string | ReactElement;
       promptsHeading?: string;
       prompts?: string[];
@@ -263,7 +263,7 @@ interface MarkpromptOptions {
     ) => string | undefined;
     /**
      * Label for the search input, not shown but used for `aria-label`
-     * @default "Search docs…"
+     * @default "Search documentation"
      **/
     label?: string;
     /**
@@ -273,7 +273,7 @@ interface MarkpromptOptions {
     tabLabel?: string;
     /**
      * Placeholder for the search input
-     * @default "Search docs…"
+     * @default "Search documentation"
      */
     placeholder?: string;
   };
@@ -404,10 +404,12 @@ button by default. You have two other options:
   - `options` (`object`): Options for customizing Markprompt, see above.
   - `options.chatOptions` (`MarkpromptOptions.chat`): Enable and configure chat
     functionality. Allows users to have a conversation with an assistant.
-    Enabling chat functionality will disable prompt functionality. See above for options.
+    Enabling chat functionality will disable prompt functionality. See above for
+    options.
   - `options.debug` (`boolean`): Display debug info
   - `options.feedbackOptions` (`MarkpromptOptions.feedback`): Enable feedback
-    functionality, shows a thumbs up/down button after a prompt was submitted. See above for options.
+    functionality, shows a thumbs up/down button after a prompt was submitted.
+    See above for options.
   - `options.referencesOptions` (`MarkpromptOptions.references`): Enable and
     configure references functionality. See above for options.
 

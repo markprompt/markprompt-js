@@ -10,6 +10,7 @@ import {
   type ReactElement,
   type SetStateAction,
   useState,
+  useMemo,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -74,15 +75,16 @@ export function SearchView(props: SearchViewProps): ReactElement {
     useState<ActiveSearchResult>();
 
   useEffect(() => {
-    // if the search query changes, unset the active search result
+    // If the search query changes, unset the active search result
     setActiveSearchResult(undefined);
   }, [searchQuery]);
 
   useEffect(() => {
-    // if the search results change, set the active search result to the
+    // If the search results change, set the active search result to the
     // first result
-    if (searchResults.length === 0) return;
-    setActiveSearchResult({ id: 'markprompt-result-0' });
+    if (searchResults.length > 0) {
+      setActiveSearchResult({ id: 'markprompt-result-0' });
+    }
   }, [searchResults]);
 
   useEffect(() => {
@@ -91,7 +93,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
   }, [activeView]);
 
   useEffect(() => {
-    // abort search requests when the view changes to something
+    // Abort search requests when the view changes to something
     // that's not search and on unmounting the component
     if (activeView && activeView !== 'search') abort();
     return () => abort();
@@ -102,9 +104,18 @@ export function SearchView(props: SearchViewProps): ReactElement {
       switch (event.key) {
         case 'ArrowDown': {
           if (!activeSearchResult) return;
-          if (activeSearchResult.id?.endsWith(`${searchResults.length - 1}`)) {
+
+          const defaultSearches = searchOptions?.defaultView?.searches || [];
+          const numAllDisplayedResults =
+            searchResults.length + defaultSearches.length;
+
+          if (
+            activeSearchResult.id?.endsWith(`${numAllDisplayedResults - 1}`)
+          ) {
+            // We're at the end of the list
             return;
           }
+
           event.preventDefault();
           const nextActiveSearchResultId = activeSearchResult.id?.replace(
             /\d+$/,
@@ -114,6 +125,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
             id: nextActiveSearchResultId,
             trigger: 'keyboard',
           });
+
           const el: HTMLAnchorElement | null = document.querySelector(
             `#${nextActiveSearchResultId} > a`,
           );
@@ -153,7 +165,11 @@ export function SearchView(props: SearchViewProps): ReactElement {
         }
       }
     },
-    [activeSearchResult, searchResults.length],
+    [
+      activeSearchResult,
+      searchResults.length,
+      searchOptions?.defaultView?.searches,
+    ],
   );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -189,18 +205,18 @@ export function SearchView(props: SearchViewProps): ReactElement {
             aria-activedescendant={activeSearchResult?.id}
             label={
               <AccessibleIcon.Root label={searchOptions?.label}>
-                <SearchIcon className="MarkpromptSearchIcon" />
+                <SearchIcon className="MarkpromptSearchIconAccented" />
               </AccessibleIcon.Root>
             }
           />
         </div>
       </BaseMarkprompt.Form>
-
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
         onDidSelectResult={onDidSelectResult}
         searchQuery={searchQuery}
         searchResults={searchResults}
+        searchOptions={searchOptions}
         setActiveSearchResult={setActiveSearchResult}
         state={state}
       />
@@ -217,6 +233,7 @@ interface SearchResultsContainerProps {
     SetStateAction<ActiveSearchResult | undefined>
   >;
   onDidSelectResult?: () => void;
+  searchOptions: MarkpromptOptions['search'];
 }
 
 function SearchResultsContainer(
@@ -229,13 +246,17 @@ function SearchResultsContainer(
     activeSearchResult,
     setActiveSearchResult,
     onDidSelectResult,
+    searchOptions,
   } = props;
   const onMouseMovedOverSearchResult = useRef<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === 'ArrowDown') {
-        if (searchResults.length > 0 && activeSearchResult === undefined) {
+      if (event.key === 'ArrowDown' && activeSearchResult === undefined) {
+        if (
+          searchResults.length > 0 ||
+          (searchOptions?.defaultView?.searches || []).length > 0
+        ) {
           setActiveSearchResult({
             id: 'markprompt-result-0',
             trigger: 'keyboard',
@@ -251,7 +272,12 @@ function SearchResultsContainer(
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeSearchResult, searchResults, setActiveSearchResult]);
+  }, [
+    activeSearchResult,
+    searchResults,
+    setActiveSearchResult,
+    searchOptions?.defaultView?.searches,
+  ]);
 
   useEffect(() => {
     // Do not scroll into view unless using keyboard navigation.
@@ -270,7 +296,8 @@ function SearchResultsContainer(
     <div className="MarkpromptSearchResultsContainer">
       {state === 'done' &&
         searchResults.length === 0 &&
-        searchQuery.trim().length > 0 && (
+        searchQuery.trim().length > 0 &&
+        !searchOptions?.defaultView?.searches && (
           <div className="MarkpromptNoSearchResults">
             <p>
               No results for “<span>{searchQuery}</span>”
@@ -278,36 +305,35 @@ function SearchResultsContainer(
           </div>
         )}
 
-      {searchResults.length > 0 && (
-        <BaseMarkprompt.SearchResults
-          searchResults={searchResults}
-          className="MarkpromptSearchResults"
-          SearchResultComponent={({ index, ...rest }) => {
-            const id = `markprompt-result-${index}`;
-            return (
-              <SearchResult
-                {...rest}
-                id={`markprompt-result-${index}`}
-                searchQuery={searchQuery}
-                onMouseMove={() => {
-                  // We use a mouse move event, instead of mouse over or
-                  // mouse enter. Indeed, onMouseOver and onMouseEnter will
-                  // trigger at each rerender. This is a problem when scrolling
-                  // the list using the keyboard: it will automatically reselect
-                  // the result that the mouse is over.
-                  if (onMouseMovedOverSearchResult?.current === id) {
-                    return;
-                  }
-                  onMouseMovedOverSearchResult.current = id;
-                  setActiveSearchResult({ id, trigger: 'mouse' });
-                }}
-                onClick={onDidSelectResult}
-                aria-selected={id === activeSearchResult?.id}
-              />
-            );
-          }}
-        />
-      )}
+      <BaseMarkprompt.SearchResults
+        searchResults={searchResults}
+        searchOptions={searchOptions}
+        className="MarkpromptSearchResults"
+        SearchResultComponent={({ index, ...rest }) => {
+          const id = `markprompt-result-${index}`;
+          return (
+            <SearchResult
+              {...rest}
+              id={`markprompt-result-${index}`}
+              searchQuery={searchQuery}
+              onMouseMove={() => {
+                // We use a mouse move event, instead of mouse over or
+                // mouse enter. Indeed, onMouseOver and onMouseEnter will
+                // trigger at each rerender. This is a problem when scrolling
+                // the list using the keyboard: it will automatically reselect
+                // the result that the mouse is over.
+                if (onMouseMovedOverSearchResult?.current === id) {
+                  return;
+                }
+                onMouseMovedOverSearchResult.current = id;
+                setActiveSearchResult({ id, trigger: 'mouse' });
+              }}
+              onClick={onDidSelectResult}
+              aria-selected={id === activeSearchResult?.id}
+            />
+          );
+        }}
+      />
     </div>
   );
 }
