@@ -27,6 +27,7 @@ export const OPENAI_CHAT_COMPLETIONS_MODELS = [
   'gpt-4',
   'gpt-4-32k',
   'gpt-4-1106-preview',
+  'gpt-4-turbo-preview',
 ] as const;
 
 export type OpenAIChatCompletionsModelId =
