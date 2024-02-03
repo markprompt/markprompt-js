@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.22.3
+
+### Patch Changes
+
+- [#289](https://github.com/motifland/markprompt-js/pull/289) [`e373009b4e7aae4190c34a232beda214b2a9df55`](https://github.com/motifland/markprompt-js/commit/e373009b4e7aae4190c34a232beda214b2a9df55) Thanks [@michaelfester](https://github.com/michaelfester)! - Remove default prefs for max tokens and section thresholds
+
 ## 0.22.2
 
 ### Patch Changes
