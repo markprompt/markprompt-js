@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.35.1
+
+### Patch Changes
+
+- [#289](https://github.com/motifland/markprompt-js/pull/289) [`e373009b4e7aae4190c34a232beda214b2a9df55`](https://github.com/motifland/markprompt-js/commit/e373009b4e7aae4190c34a232beda214b2a9df55) Thanks [@michaelfester](https://github.com/michaelfester)! - Remove default prefs for max tokens and section thresholds
+
+- Updated dependencies [[`e373009b4e7aae4190c34a232beda214b2a9df55`](https://github.com/motifland/markprompt-js/commit/e373009b4e7aae4190c34a232beda214b2a9df55)]:
+  - @markprompt/core@0.22.3
+
 ## 0.35.0
 
 ### Minor Changes
