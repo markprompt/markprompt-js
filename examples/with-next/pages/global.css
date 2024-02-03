@@ -94,7 +94,7 @@ body,
   display: flex;
   gap: 8px;
   border-radius: 8px;
-  padding: 12px;
+  padding: 8px 8px 8px 12px;
   align-items: center;
   min-width: 400px;
   font-size: 14px;
@@ -109,9 +109,34 @@ body,
   background-color: hsl(0, 0%, 93%);
 }
 
-.icon {
+#search > span {
+  flex-grow: 1;
+  overflow: hidden;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+#search svg,
+#search kbd {
+  flex: none;
+}
+
+#search svg {
   width: 16px;
   height: 16px;
   stroke-width: 2px;
   color: hsl(0, 0%, 30%);
+}
+
+#search kbd {
+  color: hsl(0, 0%, 30%);
+  border: 1px solid hsl(0, 0%, 86%);
+  background-color: hsl(0, 0%, 98%);
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 0.75rem;
+  border-radius: 5px;
+  font-family: unset;
 }

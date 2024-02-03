@@ -1,9 +1,27 @@
-import { Markprompt } from '@markprompt/react';
+import { Markprompt, openMarkprompt } from '@markprompt/react';
 import Head from 'next/head';
-import { ReactElement, forwardRef } from 'react';
+import { ReactElement, forwardRef, useEffect } from 'react';
 import { SearchIcon } from '../components/icons';
 
 export default function IndexPage(): ReactElement {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (
+        (event.key === 'k' && event.ctrlKey) ||
+        (event.key === 'k' && event.metaKey)
+      ) {
+        event.preventDefault();
+        openMarkprompt();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -61,8 +79,11 @@ export default function IndexPage(): ReactElement {
           branding={{ show: false }}
         >
           <button id="search">
-            <SearchIcon className="icon" />
-            Search documentation...
+            <SearchIcon />
+            <span>Search documentation...</span>
+            <kbd>
+              <span>⌘ K</span>
+            </kbd>
           </button>
         </Markprompt>
       </div>
