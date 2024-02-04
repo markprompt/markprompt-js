@@ -412,6 +412,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             searchOptions={search}
             linkAs={linkAs}
             onDidSelectResult={() => emitter.emit('close')}
+            onDidSelectAsk={() => setActiveView('chat')}
             debug={debug}
           />
         </Tabs.Content>

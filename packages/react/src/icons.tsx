@@ -40,6 +40,20 @@ const ChevronLeftIcon = (
   </svg>
 );
 
+const ChevronRightIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <polyline points="9 6 15 12 9 18" />
+  </svg>
+);
+
 const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -360,6 +374,7 @@ export {
   CheckCircleIcon,
   CheckIcon,
   ChevronLeftIcon,
+  ChevronRightIcon,
   ChevronUpIcon,
   CircleDashedIcon,
   CloseIcon,

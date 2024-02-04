@@ -278,10 +278,16 @@ export interface MarkpromptOptions {
      * Label for the search input, not shown but used for `aria-label`
      * @default "Search documentation"
      **/
-    label?: string /**
-     * Label for the tab bar
-     * @default "Search"
-     **/;
+    label?: string;
+    /**
+     * Label for the "Ask AI" link when using "input" layout
+     * @default "Ask AI"
+     **/
+    askLabel?: string;
+    /**
+     * Search layout
+     * @default "input"
+     **/
     layout?: 'tabs' | 'input';
     /**
      * Default (empty) view

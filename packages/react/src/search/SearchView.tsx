@@ -16,7 +16,12 @@ import {
 import { SearchResult } from './SearchResult.js';
 import { useSearch, type SearchLoadingState } from './useSearch.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import { SearchIcon } from '../icons.js';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  SparklesIcon,
+} from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import {
   type MarkpromptOptions,
@@ -29,6 +34,7 @@ export interface SearchViewProps {
   activeView?: View;
   debug?: boolean;
   onDidSelectResult?: () => void;
+  onDidSelectAsk?: () => void;
   projectKey: string;
   searchOptions?: MarkpromptOptions['search'];
   linkAs?: MarkpromptOptions['linkAs'];
@@ -42,7 +48,8 @@ interface ActiveSearchResult {
 const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { activeView, debug, onDidSelectResult, projectKey } = props;
+  const { activeView, debug, onDidSelectResult, onDidSelectAsk, projectKey } =
+    props;
 
   if (!projectKey) {
     throw new Error(
@@ -50,8 +57,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
     );
   }
 
-  // we are also merging defaults in the Markprompt component, but this makes sure
-  // that standalone SearchView components also have defaults as expected.
+  // We are also merging defaults in the Markprompt component, but this makes
+  // sure that standalone SearchView components also have defaults as expected.
   const searchOptions = useDefaults(
     { ...props.searchOptions },
     DEFAULT_MARKPROMPT_OPTIONS.search,
@@ -75,18 +82,34 @@ export function SearchView(props: SearchViewProps): ReactElement {
   const [activeSearchResult, setActiveSearchResult] =
     useState<ActiveSearchResult>();
 
+  // Show "Ask AI" it the query contains a space between two words
+  const isAskVisible =
+    searchOptions?.layout === 'input' && searchQuery.trim().includes(' ');
+
+  const isActiveSearchResultAsk = useMemo(() => {
+    return activeSearchResult?.id === 'ask';
+  }, [activeSearchResult?.id]);
+
   useEffect(() => {
-    // If the search query changes, unset the active search result
-    setActiveSearchResult(undefined);
-  }, [searchQuery]);
+    if (isAskVisible) {
+      return;
+    }
+    // If the search query changes, unset the active search result.
+    // This should only be done when "Ask AI" is not enabled.
+    if (!isActiveSearchResultAsk) {
+      setActiveSearchResult(undefined);
+    }
+  }, [searchQuery, isAskVisible, isActiveSearchResultAsk]);
 
   useEffect(() => {
     // If the search results change, set the active search result to the
     // first result
-    if (searchResults.length > 0) {
+    if (isAskVisible) {
+      setActiveSearchResult({ id: 'ask' });
+    } else if (searchResults.length > 0) {
       setActiveSearchResult({ id: 'markprompt-result-0' });
     }
-  }, [searchResults]);
+  }, [searchResults, isAskVisible]);
 
   useEffect(() => {
     // Bring form input in focus when activeView changes.
@@ -111,6 +134,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
             searchResults.length + defaultSearches.length;
 
           if (
+            activeSearchResult.id !== 'ask' &&
             activeSearchResult.id?.endsWith(`${numAllDisplayedResults - 1}`)
           ) {
             // We're at the end of the list
@@ -118,10 +142,16 @@ export function SearchView(props: SearchViewProps): ReactElement {
           }
 
           event.preventDefault();
-          const nextActiveSearchResultId = activeSearchResult.id?.replace(
-            /\d+$/,
-            (match) => String(Number(match) + 1),
-          );
+          let nextActiveSearchResultId: string | undefined;
+          if (activeSearchResult.id === 'ask') {
+            nextActiveSearchResultId = 'markprompt-result-0';
+          } else {
+            nextActiveSearchResultId = activeSearchResult.id?.replace(
+              /\d+$/,
+              (match) => String(Number(match) + 1),
+            );
+          }
+
           setActiveSearchResult({
             id: nextActiveSearchResultId,
             trigger: 'keyboard',
@@ -135,33 +165,52 @@ export function SearchView(props: SearchViewProps): ReactElement {
         }
         case 'ArrowUp': {
           if (!activeSearchResult) return;
-          if (activeSearchResult.id?.endsWith('-0')) return;
+          if (activeSearchResult.id?.endsWith('-0')) {
+            if (isAskVisible) {
+              event.preventDefault();
+              setActiveSearchResult({
+                id: 'ask',
+                trigger: 'keyboard',
+              });
+            }
+            return;
+          }
+
           event.preventDefault();
-          const nextActiveSearchResult = activeSearchResult.id?.replace(
+          const previousActiveSearchResult = activeSearchResult.id?.replace(
             /\d+$/,
             (match) => String(Number(match) - 1),
           );
           setActiveSearchResult({
-            id: nextActiveSearchResult,
+            id: previousActiveSearchResult,
             trigger: 'keyboard',
           });
           const el: HTMLAnchorElement | null = document.querySelector(
-            `#${nextActiveSearchResult} > a`,
+            `#${previousActiveSearchResult} > a`,
           );
           if (!el) return;
           break;
         }
         case 'Enter': {
           if (event.ctrlKey || event.metaKey) return;
-          if (!activeSearchResult) return;
+          if (!activeSearchResult && !isAskVisible) return;
           event.preventDefault();
-          // assumption here is that the search result will always contain an a element
+          if (!activeSearchResult || activeSearchResult.id === 'ask') {
+            const el: HTMLAnchorElement | null = document.querySelector('#ask');
+            el?.click();
+            return;
+          }
+          if (!activeSearchResult) {
+            return;
+          }
+          // Assumption here is that the search result will always contain
+          // an a element
           const el: HTMLAnchorElement | null = document.querySelector(
             `#${activeSearchResult.id} a`,
           );
-          // todo: reset search query and result
+          // TODO: reset search query and result
           if (!el) return;
-          el?.click();
+          el.click();
           break;
         }
       }
@@ -170,6 +219,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
       activeSearchResult,
       searchResults.length,
       searchOptions?.defaultView?.searches,
+      isAskVisible,
     ],
   );
 
@@ -215,12 +265,14 @@ export function SearchView(props: SearchViewProps): ReactElement {
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
         onDidSelectResult={onDidSelectResult}
+        onDidSelectAsk={onDidSelectAsk}
         searchQuery={searchQuery}
         searchResults={searchResults}
         searchOptions={searchOptions}
         linkAs={props.linkAs}
         setActiveSearchResult={setActiveSearchResult}
         state={state}
+        isAskVisible={isAskVisible}
       />
     </div>
   );
@@ -235,8 +287,10 @@ interface SearchResultsContainerProps {
     SetStateAction<ActiveSearchResult | undefined>
   >;
   onDidSelectResult?: () => void;
+  onDidSelectAsk?: () => void;
   searchOptions: MarkpromptOptions['search'];
   linkAs: MarkpromptOptions['linkAs'];
+  isAskVisible: boolean;
 }
 
 function SearchResultsContainer(
@@ -249,8 +303,10 @@ function SearchResultsContainer(
     activeSearchResult,
     setActiveSearchResult,
     onDidSelectResult,
+    onDidSelectAsk,
     searchOptions,
     linkAs,
+    isAskVisible,
   } = props;
   const onMouseMovedOverSearchResult = useRef<string | null>(null);
 
@@ -308,7 +364,46 @@ function SearchResultsContainer(
             </p>
           </div>
         )}
-
+      {isAskVisible && (
+        <div
+          className="MarkpromptSearchResult"
+          aria-selected={
+            !activeSearchResult?.id || activeSearchResult.id === 'ask'
+          }
+          id="ask"
+          style={{ cursor: 'pointer' }}
+          onMouseMove={() => {
+            // We use a mouse move event, instead of mouse over or
+            // mouse enter. Indeed, onMouseOver and onMouseEnter will
+            // trigger at each rerender. This is a problem when scrolling
+            // the list using the keyboard: it will automatically reselect
+            // the result that the mouse is over.
+            if (onMouseMovedOverSearchResult?.current === 'ask') {
+              return;
+            }
+            onMouseMovedOverSearchResult.current = 'ask';
+            setActiveSearchResult({ id: 'ask', trigger: 'mouse' });
+          }}
+          onClick={onDidSelectAsk}
+        >
+          <div className="MarkpromptSearchResultLink">
+            <div className="MarkpromptSearchResultContainer">
+              <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
+                <SparklesIcon className="MarkpromptSearchResultIcon" />
+              </div>
+              <div className="MarkpromptSearchResultContentWrapper">
+                <div className="MarkpromptSearchResultTitle">
+                  <span className="MarkpromptSearchResultTitleAccent">
+                    {searchOptions?.askLabel ?? 'Ask AI'}:
+                  </span>{' '}
+                  {searchQuery}
+                </div>
+              </div>
+              <ChevronRightIcon className="MarkpromptSearchResultIcon" />
+            </div>
+          </div>
+        </div>
+      )}
       <BaseMarkprompt.SearchResults
         searchResults={searchResults}
         searchOptions={searchOptions}
@@ -318,7 +413,7 @@ function SearchResultsContainer(
           return (
             <SearchResult
               {...rest}
-              id={`markprompt-result-${index}`}
+              id={id}
               searchQuery={searchQuery}
               onMouseMove={() => {
                 // We use a mouse move event, instead of mouse over or
@@ -332,7 +427,9 @@ function SearchResultsContainer(
                 onMouseMovedOverSearchResult.current = id;
                 setActiveSearchResult({ id, trigger: 'mouse' });
               }}
-              onClick={onDidSelectResult}
+              onClick={() => {
+                onDidSelectResult?.();
+              }}
               aria-selected={id === activeSearchResult?.id}
               linkAs={linkAs}
             />

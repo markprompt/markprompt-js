@@ -241,6 +241,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     label: 'Search documentation',
     tabLabel: 'Search',
     placeholder: 'Search documentation',
+    layout: 'input',
   },
   trigger: {
     label: 'Ask AI',

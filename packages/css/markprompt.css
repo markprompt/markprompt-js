@@ -1558,6 +1558,10 @@
   max-width: 100%;
 }
 
+:where(.MarkpromptSearchResultTitleAccent) {
+  font-weight: 600;
+}
+
 :where(.MarkpromptSearchResultSubtitle) {
   overflow: hidden;
   text-overflow: ellipsis;

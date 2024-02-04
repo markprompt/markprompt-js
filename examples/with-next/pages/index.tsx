@@ -38,9 +38,7 @@ export default function IndexPage(): ReactElement {
         }}
       >
         <Markprompt
-          projectKey={
-            process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY || 'YOUR-PROJECT-KEY'
-          }
+          projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
           chat={{
             enabled: true,
             systemPrompt:
@@ -48,7 +46,7 @@ export default function IndexPage(): ReactElement {
           }}
           search={{
             enabled: true,
-            layout: 'input',
+            askLabel: 'Ask Acme',
             defaultView: {
               searchesHeading: 'Recommended for you',
               searches: [
