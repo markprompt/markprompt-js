@@ -16,19 +16,14 @@ import {
 import { SearchResult } from './SearchResult.js';
 import { useSearch, type SearchLoadingState } from './useSearch.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  SearchIcon,
-  SparklesIcon,
-} from '../icons.js';
+import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import {
   type MarkpromptOptions,
   type SearchResultComponentProps,
+  type View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
-import type { View } from '../useViews.js';
 
 export interface SearchViewProps {
   activeView?: View;
@@ -356,16 +351,6 @@ function SearchResultsContainer(
 
   return (
     <div className="MarkpromptSearchResultsContainer">
-      {state === 'done' &&
-        searchResults.length === 0 &&
-        searchQuery.trim().length > 0 &&
-        !searchOptions?.defaultView?.searches && (
-          <div className="MarkpromptNoSearchResults">
-            <p>
-              No results for “<span>{searchQuery}</span>”
-            </p>
-          </div>
-        )}
       {isAskVisible && (
         <div
           className="MarkpromptSearchResult"
@@ -406,6 +391,17 @@ function SearchResultsContainer(
           </div>
         </div>
       )}
+
+      {state === 'done' &&
+        searchResults.length === 0 &&
+        searchQuery.trim().length > 0 && (
+          <div className="MarkpromptNoSearchResults">
+            <p>
+              No matches found for <span>“{searchQuery}”</span>
+            </p>
+          </div>
+        )}
+
       <BaseMarkprompt.SearchResults
         searchResults={searchResults}
         searchOptions={searchOptions}

@@ -293,7 +293,7 @@
 }
 
 :where(.MarkpromptChatViewNavigation) {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -445,7 +445,7 @@
 :where(.MarkpromptSearchView .MarkpromptPromptWrapper) {
   border-bottom: 1px solid var(--markprompt-border);
   box-shadow: 0 7px 10px -1px rgb(0 0 0 / 0.03);
-  padding: 2px 0.5rem 1px 0.5rem;
+  padding: 2px 0.5rem 1px 0.875rem;
 }
 
 :where(.MarkpromptChatView .MarkpromptPromptWrapper):focus-within {
@@ -560,9 +560,9 @@
 
 :where(.MarkpromptSearchIconAccented) {
   color: var(--markprompt-foreground);
-  width: var(--markprompt-button-icon-size);
-  height: var(--markprompt-button-icon-size);
-  stroke-width: var(--markprompt-icon-stroke-width);
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5px;
 }
 
 :where(.MarkpromptTitle) {
@@ -1676,17 +1676,14 @@
 }
 
 :where(.MarkpromptNoSearchResults) {
-  font-size: var(--markprompt-text-size);
+  font-size: var(--markprompt-text-size-xs);
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex: 1 1 auto;
 }
 
 :where(.MarkpromptNoSearchResults p) {
   color: var(--markprompt-mutedForeground);
-  padding: 2rem;
-  text-align: center;
+  padding: 0rem 1rem 0 0.5rem;
 }
 
 :where(.MarkpromptNoSearchResults span) {

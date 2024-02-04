@@ -11,11 +11,10 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
-import { type MarkpromptOptions } from './types.js';
+import { type MarkpromptOptions, type View } from './types.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
-import { useViews, type View } from './useViews.js';
-import type { ChatCompletionMessageParam } from '@markprompt/core';
+import { useViews } from './useViews.js';
 import { ChatProvider, useChatStore } from './index.js';
 
 type MarkpromptProps = MarkpromptOptions &
@@ -28,6 +27,25 @@ type MarkpromptProps = MarkpromptOptions &
   };
 
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
+
+function getDefaultView(
+  candidateView: View | undefined,
+  isSearchEnabled: boolean,
+  isChatEnabled: boolean,
+): View {
+  if (candidateView === 'search' && isSearchEnabled) {
+    return candidateView;
+  } else if (candidateView === 'chat' && isChatEnabled) {
+    return candidateView;
+  }
+  if (isSearchEnabled) {
+    return 'search';
+  }
+  if (isChatEnabled) {
+    return 'chat';
+  }
+  return 'prompt';
+}
 
 /**
  * Open Markprompt programmatically. Useful for building a custom trigger
@@ -76,7 +94,11 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     {
       display: props.display,
       sticky: props.sticky,
-      defaultView: props.defaultView,
+      defaultView: getDefaultView(
+        props.defaultView,
+        !!props.search?.enabled,
+        !!props.chat?.enabled,
+      ),
       close: props.close,
       description: props.description,
       feedback: props.feedback,

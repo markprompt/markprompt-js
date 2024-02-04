@@ -19,6 +19,8 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
+export type View = 'chat' | 'prompt' | 'search';
+
 interface AsProp<C extends ElementType> {
   as?: C;
 }
@@ -89,7 +91,7 @@ export interface MarkpromptOptions {
    * Enable and configure search functionality.
    * @default "search"
    * */
-  defaultView?: 'search' | 'chat' | 'prompt';
+  defaultView?: View;
   /**
    * Multi-pane layout when both search and chat is enabled
    * @default "panels"

@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { MarkpromptOptions } from './types.js';
-
-export type View = 'chat' | 'prompt' | 'search';
+import type { MarkpromptOptions, View } from './types.js';
 
 interface UseViewsResult {
   activeView: View;

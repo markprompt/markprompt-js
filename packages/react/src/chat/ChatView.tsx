@@ -1,11 +1,9 @@
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
-import { ChatProvider } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { MarkpromptOptions, View } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
-import type { View } from '../useViews.js';
 import { ChevronLeftIcon } from '../icons.js';
 
 export interface ChatViewProps {
@@ -25,7 +23,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
 
   if (!projectKey) {
     throw new Error(
-      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to <ChatView />.`,
+      'Markprompt: a project key is required. Make sure to pass your Markprompt project key to <ChatView />.',
     );
   }
 

@@ -16,8 +16,7 @@ import {
   useChatStore,
 } from './store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { MarkpromptOptions } from '../types.js';
-import type { View } from '../useViews.js';
+import type { MarkpromptOptions, View } from '../types.js';
 
 interface ChatViewFormProps {
   activeView?: View;

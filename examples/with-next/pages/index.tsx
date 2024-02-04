@@ -79,7 +79,9 @@ export default function IndexPage(): ReactElement {
           branding={{ show: false }}
         >
           <button id="search">
-            <SearchIcon />
+            <SearchIcon
+              style={{ strokeWidth: '2.5px', width: 16, height: 16 }}
+            />
             <span>Search documentation</span>
             <kbd>
               <span>⌘ K</span>

@@ -18,9 +18,8 @@ import { Feedback } from '../feedback/Feedback.js';
 import type { UseFeedbackResult } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { type MarkpromptOptions } from '../types.js';
+import { type MarkpromptOptions, type View } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
-import type { View } from '../useViews.js';
 
 export interface PromptViewProps {
   activeView?: View;
