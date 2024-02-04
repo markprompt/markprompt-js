@@ -31,6 +31,7 @@ export interface SearchViewProps {
   onDidSelectResult?: () => void;
   projectKey: string;
   searchOptions?: MarkpromptOptions['search'];
+  linkAs?: MarkpromptOptions['linkAs'];
 }
 
 interface ActiveSearchResult {
@@ -217,6 +218,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
         searchQuery={searchQuery}
         searchResults={searchResults}
         searchOptions={searchOptions}
+        linkAs={props.linkAs}
         setActiveSearchResult={setActiveSearchResult}
         state={state}
       />
@@ -234,6 +236,7 @@ interface SearchResultsContainerProps {
   >;
   onDidSelectResult?: () => void;
   searchOptions: MarkpromptOptions['search'];
+  linkAs: MarkpromptOptions['linkAs'];
 }
 
 function SearchResultsContainer(
@@ -247,6 +250,7 @@ function SearchResultsContainer(
     setActiveSearchResult,
     onDidSelectResult,
     searchOptions,
+    linkAs,
   } = props;
   const onMouseMovedOverSearchResult = useRef<string | null>(null);
 
@@ -330,6 +334,7 @@ function SearchResultsContainer(
               }}
               onClick={onDidSelectResult}
               aria-selected={id === activeSearchResult?.id}
+              linkAs={linkAs}
             />
           );
         }}

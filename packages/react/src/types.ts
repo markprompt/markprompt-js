@@ -11,6 +11,7 @@ import type {
   ComponentPropsWithoutRef,
   ComponentType,
   ElementType,
+  JSXElementConstructor,
   PropsWithChildren,
   ReactNode,
 } from 'react';
@@ -337,6 +338,11 @@ export interface MarkpromptOptions {
      **/
     text?: string;
   };
+  /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  linkAs?: string | ComponentType<any>;
   /**
    * Show Markprompt branding
    * @default true

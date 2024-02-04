@@ -66,6 +66,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     trigger,
     title,
     branding,
+    linkAs,
     debug,
     children,
   }: MarkpromptOptions = useDefaults(
@@ -83,6 +84,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       trigger: props.trigger,
       title: props.title,
       branding: props.branding || { show: props.showBranding },
+      linkAs: props.linkAs,
       debug: props.debug,
       children: props.children,
     },
@@ -197,6 +199,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 prompt={prompt}
                 references={references}
                 search={search}
+                linkAs={linkAs}
               />
             </BaseMarkprompt.Content>
           </BaseMarkprompt.Portal>
@@ -234,6 +237,7 @@ interface MarkpromptContentProps {
   prompt?: MarkpromptOptions['prompt'];
   references?: MarkpromptOptions['references'];
   search?: MarkpromptOptions['search'];
+  linkAs?: MarkpromptOptions['linkAs'];
 }
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
@@ -247,6 +251,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     prompt,
     references,
     search,
+    linkAs,
   } = props;
 
   const { activeView, setActiveView } = useViews({ search, chat }, defaultView);
@@ -405,6 +410,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             activeView={activeView}
             projectKey={projectKey}
             searchOptions={search}
+            linkAs={linkAs}
             onDidSelectResult={() => emitter.emit('close')}
             debug={debug}
           />
