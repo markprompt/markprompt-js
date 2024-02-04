@@ -291,11 +291,20 @@
   border-right: 1px solid var(--markprompt-border);
 }
 
+:where(.MarkpromptChatViewNavigation) {
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--markprompt-border);
+  box-shadow: 0 7px 10px -1px rgb(0 0 0 / 0.03);
+}
+
 :where(.MarkpromptChatViewChat) {
   overflow: hidden;
   display: grid;
-  grid-template-rows: 1fr auto;
-  grid-column: span 2;
+  grid-template-rows: auto 1fr auto;
+  grid-column: span 3;
 }
 
 @container (width > 50rem) {
@@ -414,6 +423,8 @@
   flex-direction: column-reverse;
   align-items: stretch;
   padding: 1rem;
+  border-top: 1px solid var(--markprompt-border);
+  box-shadow: 0 -7px 10px -1px rgb(0 0 0 / 0.03);
 }
 
 :where(.MarkpromptPromptWrapper) {
@@ -427,17 +438,12 @@
   transition-duration: 150ms;
 }
 
-:where(.MarkpromptPromptWrapper):focus-within {
-  border: 1px solid var(--markprompt-border-accent);
-}
-
 :where(.MarkpromptMessageAnswerContainer) {
   max-width: 100%;
-  padding: 0.5rem 0 3.75rem;
-}
-
-:where(.MarkpromptMessageAnswerContainer:has(+ .MarkpromptReferences)) {
-  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: row;
+  padding-inline: 1.5rem;
+  gap: 1rem;
 }
 
 :where(.MarkpromptMessageAnswer) {
@@ -485,6 +491,10 @@
   border-bottom: 1px solid var(--markprompt-border);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: start;
 }
 
 :where(.MarkpromptMessage:has(+ .MarkpromptMessage) .MarkpromptMessagePrompt) {
@@ -495,6 +505,15 @@
   font-size: var(--markprompt-text-size);
   color: var(--markprompt-foreground);
   font-weight: 400;
+  flex: grow;
+}
+
+:where(.MarkpromptMessageAvatar) {
+  color: var(--markprompt-foreground);
+  width: 24px;
+  height: 24px;
+  flex: none;
+  margin-top: 14px;
 }
 
 :where(.MarkpromptPrimaryIcon) {
@@ -573,6 +592,12 @@
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+:where(.MarkpromptPromptWrapper) button:hover:not(:disabled) {
+  opacity: 80%;
 }
 
 :where(.MarkpromptPromptWrapper) button:disabled {
@@ -630,6 +655,7 @@
   scroll-behavior: smooth;
   scrollbar-width: none;
   overflow: hidden auto;
+  padding-top: 1rem;
 }
 
 :where(.MarkpromptAutoScroller::-webkit-scrollbar) {
@@ -641,14 +667,6 @@
   font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
   line-height: 1.7142857;
-}
-
-:where(.MarkpromptPromptView .MarkpromptAnswer) {
-  padding: 1rem 2rem;
-}
-
-:where(.MarkpromptChatView .MarkpromptAnswer) {
-  padding: 0 2rem 1rem;
 }
 
 :where(.MarkpromptAnswer p) {
@@ -1050,10 +1068,6 @@
   padding-right: 0;
 }
 
-:where(.MarkpromptMessageAnswer .MarkpromptAnswer) {
-  padding: 0 1.5rem;
-}
-
 :where(.MarkpromptCaret) {
   display: none;
   height: 1em;
@@ -1199,10 +1213,10 @@
 
 :where(.MarkpromptReferences) {
   position: relative;
-  padding-block: 1rem 0.5rem;
+  padding: 1rem 1rem 1rem 2.5rem;
   background-color: var(--markprompt-muted);
   border-top: 1px solid var(--markprompt-border);
-  font-size: 0.875rem;
+  font-size: var(--markprompt-text-size-xs);
   color: var(--markprompt-mutedForeground);
   overflow: hidden;
   flex: 0 0 auto;
@@ -1235,8 +1249,7 @@
 }
 
 :where(.MarkpromptChatView .MarkpromptReferences p) {
-  animation: markprompt-fade-in 500ms ease-out forwards 1;
-  font-weight: 600;
+  animation: markprompt-fade-in 300ms ease-out forwards 1;
   margin: 0;
   margin-bottom: 0.5rem;
   padding-inline: 2rem;
@@ -1327,10 +1340,6 @@
 :where(.MarkpromptReference) {
   font-size: 0.875rem;
   line-height: 1.5rem;
-  animation-name: markprompt-slide-up;
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  transition-timing-function: ease-in-out;
 }
 
 :where(.MarkpromptReference a) {
@@ -1697,6 +1706,7 @@
   box-shadow: var(--markprompt-ring-offset-shadow, 0 0 #0000),
     var(--markprompt-ring-shadow, 0 0 #0000), var(--markprompt-shadow);
   max-width: 30ch;
+  overflow: hidden;
 }
 
 :where(.MarkpromptSelectMenu[data-open='true']) {
@@ -1833,16 +1843,14 @@
 }
 
 :where(.MarkpromptError) {
-  padding-block: 1rem;
-  padding-inline: 2rem;
-  background-color: var(--markprompt-muted);
+  padding: 0.375rem 4rem;
   color: var(--markprompt-mutedForeground);
 }
 
 :where(.MarkpromptDefaultError) {
   display: flex;
   flex-direction: column;
-  font-size: 1rem;
+  font-size: var(--markprompt-text-size);
   text-wrap: balance;
 }
 

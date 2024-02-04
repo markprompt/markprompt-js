@@ -67,6 +67,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     title,
     branding,
     linkAs,
+    layout,
     debug,
     children,
   }: MarkpromptOptions = useDefaults(
@@ -84,6 +85,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       trigger: props.trigger,
       title: props.title,
       branding: props.branding || { show: props.showBranding },
+      layout: props.layout,
       linkAs: props.linkAs,
       debug: props.debug,
       children: props.children,
@@ -199,6 +201,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 prompt={prompt}
                 references={references}
                 search={search}
+                layout={layout}
                 linkAs={linkAs}
               />
             </BaseMarkprompt.Content>
@@ -220,6 +223,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             prompt={prompt}
             references={references}
             search={search}
+            layout={layout}
           />
         </BaseMarkprompt.PlainContent>
       )}
@@ -433,9 +437,11 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               chatOptions={chat}
               debug={debug}
               feedbackOptions={feedback}
-              onDidSelectReference={() => emitter.emit('close')}
               projectKey={projectKey}
               referencesOptions={references}
+              showBack={layout === 'panels'}
+              onDidSelectReference={() => emitter.emit('close')}
+              onDidPressBack={() => setActiveView('search')}
             />
           </Tabs.Content>
         ) : (

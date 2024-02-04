@@ -623,9 +623,7 @@ describe('ChatView', () => {
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Fetching relevant pages…'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Fetching context…')).toBeInTheDocument();
       });
 
       response = [

@@ -169,9 +169,9 @@ The pre-built Markprompt component. It accepts the following props:
 - `references.getLabel` (`function`): Callback to transform a reference into an
   label to show for the link
 - `references.loadingText` (`string`): Loading text (Default:
-  `Fetching relevant pages…`)
+  `Fetching context…`)
 - `references.heading` (`string`): Heading for the references panel (Default:
-  `Answer generated from the following sources:`)
+  `Sources:`)
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default:
   `true`)
@@ -282,9 +282,9 @@ accepts the following props:
 - `referencesOptions.getLabel` (`function`): Callback to transform a reference
   into an label to show for the link
 - `referencesOptions.loadingText` (`string`): Loading text (Default:
-  `Fetching relevant pages…`)
+  `Fetching context…`)
 - `referencesOptions.heading` (`string`): Heading for the references panel
-  (Default: `Answer generated from the following sources:`)
+  (Default: `Sources:`)
 
 ### `<PromptView />`
 
@@ -348,9 +348,9 @@ It accepts the following props:
 - `referencesOptions.getLabel` (`function`): Callback to transform a reference
   into an label to show for the link
 - `referencesOptions.loadingText` (`string`): Loading text (Default:
-  `Fetching relevant pages…`)
+  `Fetching context…`)
 - `referencesOptions.heading` (`string`): Heading for the references panel
-  (Default: `Answer generated from the following sources:`)
+  (Default: `Sources:`)
 
 ### `<SearchView />`
 

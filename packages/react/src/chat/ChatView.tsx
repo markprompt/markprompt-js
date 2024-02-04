@@ -6,19 +6,22 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { MarkpromptOptions } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 import type { View } from '../useViews.js';
+import { ChevronLeftIcon } from '../icons.js';
 
 export interface ChatViewProps {
   activeView?: View;
   chatOptions?: MarkpromptOptions['chat'];
   debug?: boolean;
   feedbackOptions?: MarkpromptOptions['feedback'];
-  onDidSelectReference?: () => void;
   projectKey: string;
   referencesOptions?: MarkpromptOptions['references'];
+  showBack?: boolean;
+  onDidSelectReference?: () => void;
+  onDidPressBack?: () => void;
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {
-  const { activeView, debug, projectKey } = props;
+  const { activeView, debug, projectKey, showBack } = props;
 
   if (!projectKey) {
     throw new Error(
@@ -52,6 +55,14 @@ export function ChatView(props: ChatViewProps): JSX.Element {
       <div className="MarkpromptChatView">
         <ConversationSidebar />
         <div className="MarkpromptChatViewChat">
+          {showBack ? (
+            <div className="MarkpromptChatViewNavigation">
+              <ChevronLeftIcon style={{ width: 20 }} strokeWidth={2.5} />
+            </div>
+          ) : (
+            // Keep this for the grid template rows layout
+            <div />
+          )}
           <Messages
             chatOptions={chatOptions}
             feedbackOptions={feedbackOptions}
@@ -61,6 +72,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
         </div>
       </div>
+      {/* </div> */}
     </ChatProvider>
   );
 }

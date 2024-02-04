@@ -36,7 +36,11 @@ const ChevronLeftIcon = (
     stroke="currentColor"
     {...props}
   >
-    <polyline points="15 18 9 12 15 6" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15.75 19.5 8.25 12l7.5-7.5"
+    />
   </svg>
 );
 
@@ -50,7 +54,11 @@ const ChevronRightIcon = (
     stroke="currentColor"
     {...props}
   >
-    <polyline points="9 6 15 12 9 18" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+    />
   </svg>
 );
 
@@ -384,7 +392,41 @@ const CircleDashedIcon = (
   </svg>
 );
 
+const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    {...props}
+  >
+    <path
+      fillRule="evenodd"
+      d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const BotIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    {...props}
+  >
+    <path d="M12 8V4H8" />
+    <rect width="16" height="12" x="4" y="8" rx="2" />
+    <path d="M2 14h2" />
+    <path d="M20 14h2" />
+    <path d="M15 13v2" />
+    <path d="M9 13v2" />
+  </svg>
+);
+
 export {
+  BotIcon,
   ChatIcon,
   CheckCircleIcon,
   CheckIcon,
@@ -409,4 +451,5 @@ export {
   StopIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
+  UserIcon,
 };

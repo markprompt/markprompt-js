@@ -219,10 +219,10 @@ interface MarkpromptOptions {
     getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
-     * @default "Answer generated from the following sources:"
+     * @default "Sources:"
      **/
     heading?: string;
-    /** Loading text, default: `Fetching relevant pages…` */
+    /** Loading text, default: `Fetching context…` */
     loadingText?: string;
     /**
      * Callback to transform a reference id into an href and text

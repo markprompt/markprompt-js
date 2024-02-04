@@ -112,13 +112,13 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
       )} */}
 
       <div className="MarkpromptChatActions">
-        {lastMessageState && lastMessageState !== 'indeterminate' && (
+        {/* {lastMessageState && lastMessageState !== 'indeterminate' && (
           <RegenerateButton
             lastMessageState={lastMessageState}
             regenerateLastAnswer={regenerateLastAnswer}
             abortSubmitChat={abortChat.current}
           />
-        )}
+        )} */}
 
         {conversations.length > 0 && <ConversationSelect />}
       </div>

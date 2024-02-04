@@ -7,6 +7,7 @@ import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import type { MarkpromptOptions } from '../types.js';
+import { BotIcon } from '../icons.js';
 
 interface AssistantMessageProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
@@ -14,6 +15,7 @@ interface AssistantMessageProps {
   message: ChatViewMessage;
   projectKey: string;
 }
+
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const { feedbackOptions, message, projectKey, chatOptions } = props;
 
@@ -57,37 +59,40 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
 
   return (
     <div className="MarkpromptMessageAnswerContainer">
-      <MessageAnswer state={message.state}>
-        {message.content ?? ''}
-      </MessageAnswer>
+      <BotIcon className="MarkpromptMessageAvatar" />
+      <div>
+        <MessageAnswer state={message.state}>
+          {message.content ?? ''}
+        </MessageAnswer>
 
-      {/*
+        {/*
         if this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
         either the default or user-provided confirmation
       */}
-      {Array.isArray(toolCalls) && (
-        <ToolCallConfirmation
-          toolCalls={toolCalls}
-          tools={chatOptions.tools}
-          toolCallsStatus={toolCallsByToolCallId}
-          confirmToolCalls={confirmToolCalls}
-        />
-      )}
+        {Array.isArray(toolCalls) && (
+          <ToolCallConfirmation
+            toolCalls={toolCalls}
+            tools={chatOptions.tools}
+            toolCallsStatus={toolCallsByToolCallId}
+            confirmToolCalls={confirmToolCalls}
+          />
+        )}
 
-      {feedbackOptions?.enabled && message.state === 'done' && (
-        <Feedback
-          variant="icons"
-          className="MarkpromptPromptFeedback"
-          submitFeedback={(feedback, promptId) => {
-            submitFeedback(feedback, promptId);
-            feedbackOptions.onFeedbackSubmit?.(feedback, messages, promptId);
-          }}
-          abortFeedbackRequest={abortFeedbackRequest}
-          promptId={message.promptId}
-          heading={feedbackOptions.heading}
-        />
-      )}
+        {feedbackOptions?.enabled && message.state === 'done' && (
+          <Feedback
+            variant="icons"
+            className="MarkpromptPromptFeedback"
+            submitFeedback={(feedback, promptId) => {
+              submitFeedback(feedback, promptId);
+              feedbackOptions.onFeedbackSubmit?.(feedback, messages, promptId);
+            }}
+            abortFeedbackRequest={abortFeedbackRequest}
+            promptId={message.promptId}
+            heading={feedbackOptions.heading}
+          />
+        )}
+      </div>
     </div>
   );
 }
