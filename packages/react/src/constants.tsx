@@ -208,6 +208,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         </details> */}
       </p>
     ),
+    avatars: {
+      visible: true,
+    },
   },
   prompt: {
     label: 'Ask AI',

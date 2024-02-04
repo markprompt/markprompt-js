@@ -7,14 +7,30 @@ import { UserIcon } from '../icons.js';
 interface MessagePromptProps {
   children: string;
   state: ChatViewMessage['state'];
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   referencesOptions?: MarkpromptOptions['references'];
 }
 
 export function MessagePrompt(props: MessagePromptProps): ReactElement {
-  const { children, referencesOptions, state } = props;
+  const { children, chatOptions, referencesOptions, state } = props;
   return (
     <div className="MarkpromptMessagePrompt" data-loading-state={state}>
-      <UserIcon className="MarkpromptMessageAvatar" />
+      {chatOptions.avatars?.visible && (
+        <>
+          {!chatOptions.avatars?.user ? (
+            <UserIcon className="MarkpromptMessageAvatar" />
+          ) : typeof chatOptions.avatars?.user === 'string' ? (
+            <img
+              src={chatOptions.avatars.user}
+              className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+            />
+          ) : (
+            <div className="MarkpromptMessageAvatar">
+              <chatOptions.avatars.user className="MarkpromptMessageAvatar" />
+            </div>
+          )}
+        </>
+      )}
       <h3 className="MarkpromptMessagePromptText">{children}</h3>
       {(state === 'preload' || state === 'streaming-answer') && (
         <div

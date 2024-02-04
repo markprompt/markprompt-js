@@ -44,6 +44,7 @@ export function Messages(props: MessagesProps): ReactElement {
             {message.role === 'user' && (
               <MessagePrompt
                 state={message.state}
+                chatOptions={chatOptions}
                 referencesOptions={referencesOptions}
               >
                 {message.content ?? ''}

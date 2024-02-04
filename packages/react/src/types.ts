@@ -201,6 +201,26 @@ export interface MarkpromptOptions {
      * Default (empty) view
      */
     defaultView?: DefaultViewProps;
+    /**
+     * Avatars to use for chat messages.
+     */
+    avatars?: {
+      /**
+       * If true, show avatars.
+       * @default true
+       */
+      visible?: boolean;
+      /**
+       * The user avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      user?: string | ComponentType<{ className: string }>;
+      /**
+       * The assistant avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      assistant?: string | ComponentType<{ className: string }>;
+    };
   };
   /**
    * Enable and configure prompt functionality. Allows users to ask a single question to an assistant

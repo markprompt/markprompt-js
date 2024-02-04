@@ -59,7 +59,22 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
 
   return (
     <div className="MarkpromptMessageAnswerContainer">
-      <BotIcon className="MarkpromptMessageAvatar" />
+      {chatOptions?.avatars?.visible && (
+        <>
+          {!chatOptions.avatars?.assistant ? (
+            <BotIcon className="MarkpromptMessageAvatar" />
+          ) : typeof chatOptions.avatars?.assistant === 'string' ? (
+            <img
+              src={chatOptions.avatars.assistant}
+              className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+            />
+          ) : (
+            <div className="MarkpromptMessageAvatar">
+              <chatOptions.avatars.assistant className="MarkpromptMessageAvatar" />
+            </div>
+          )}
+        </>
+      )}
       <div>
         <MessageAnswer state={message.state}>
           {message.content ?? ''}
