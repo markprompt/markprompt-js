@@ -14,7 +14,7 @@
   --markprompt-primaryHighlight: #ec4899;
   --markprompt-secondaryHighlight: #a855f7;
   --markprompt-overlay: #00000010;
-  --markprompt-ring: #0ea5e9;
+  --markprompt-ring: #e5e5e5;
   --markprompt-radius: 0.75rem;
   --markprompt-button-radius: 0.375rem;
   --markprompt-text-size: 0.875rem;
@@ -36,6 +36,7 @@
     --markprompt-muted: #171717;
     --markprompt-mutedForeground: #808080;
     --markprompt-border: #262626;
+    --markprompt-border-accent: #444444;
     --markprompt-input: #fff;
     --markprompt-primary: #6366f1;
     --markprompt-primaryForeground: #fff;
@@ -45,7 +46,7 @@
     --markprompt-primaryHighlight: #ec4899;
     --markprompt-secondaryHighlight: #a855f7;
     --markprompt-overlay: #00000040;
-    --markprompt-ring: #fff;
+    --markprompt-ring: #2d2d2d;
     --markprompt-error-background: #450a0a;
     --markprompt-error-foreground: #fecaca;
   }
@@ -436,6 +437,11 @@
   border-radius: calc(var(--markprompt-radius) * 0.5);
   transition-property: all;
   transition-duration: 150ms;
+}
+
+:where(.MarkpromptPromptWrapper):focus-within {
+  box-shadow: 0px 0px 0px 3px var(--markprompt-border);
+  border-color: var(--markprompt-border-accent);
 }
 
 :where(.MarkpromptMessageAnswerContainer) {

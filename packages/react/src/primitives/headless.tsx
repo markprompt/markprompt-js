@@ -246,7 +246,6 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       ...rest
     } = props;
 
-    console.log('VALUE', rest.value);
     return (
       <>
         {label && (

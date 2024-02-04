@@ -72,7 +72,6 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
         </div>
       </div>
-      {/* </div> */}
     </ChatProvider>
   );
 }
