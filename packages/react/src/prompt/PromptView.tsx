@@ -35,8 +35,8 @@ export interface PromptViewProps {
 export function PromptView(props: PromptViewProps): ReactElement {
   const { activeView, onDidSelectReference, debug, projectKey } = props;
 
-  // we are also merging defaults in the Markprompt component, but this makes sure
-  // that standalone PromptView components also have defaults as expected.
+  // we are also merging defaults in the Markprompt component, but this makes
+  // sure that standalone PromptView components also have defaults as expected.
   const promptOptions = useDefaults(
     { ...props.promptOptions },
     DEFAULT_MARKPROMPT_OPTIONS.prompt,

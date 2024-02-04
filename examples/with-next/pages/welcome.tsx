@@ -48,7 +48,6 @@ export default function IndexPage(): ReactElement {
           }}
           search={{
             enabled: true,
-            layout: 'input',
             defaultView: {
               searchesHeading: 'Recommended for you',
               searches: [

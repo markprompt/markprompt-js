@@ -34,7 +34,7 @@ export interface SearchViewProps {
   activeView?: View;
   debug?: boolean;
   onDidSelectResult?: () => void;
-  onDidSelectAsk?: () => void;
+  onDidSelectAsk?: (query: string) => void;
   projectKey: string;
   layout?: MarkpromptOptions['layout'];
   searchOptions?: MarkpromptOptions['search'];
@@ -267,7 +267,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
       <SearchResultsContainer
         activeSearchResult={activeSearchResult}
         onDidSelectResult={onDidSelectResult}
-        onDidSelectAsk={onDidSelectAsk}
+        onDidSelectAsk={() => onDidSelectAsk?.(searchQuery)}
         searchQuery={searchQuery}
         searchResults={searchResults}
         searchOptions={searchOptions}

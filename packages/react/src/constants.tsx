@@ -221,12 +221,13 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         <span className="MarkpromptDefaultErrorIcon">:-(</span>
         Sorry, it looks like the bot is having a hard time! Please try again in
         a few minutes.
-        <details>
+        {/* We should find a better way to display this message. */}
+        {/* <details>
           <summary>Error info</summary>
           <code>
             {props.error.name}: {props.error.message}
           </code>
-        </details>
+        </details> */}
       </p>
     ),
   },

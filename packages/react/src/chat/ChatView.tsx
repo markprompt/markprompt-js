@@ -46,40 +46,32 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS.references,
   );
 
+  console.log('chatOptions', JSON.stringify(chatOptions, null, 2));
   return (
-    <ChatProvider
-      chatOptions={chatOptions}
-      debug={debug}
-      projectKey={projectKey}
-    >
-      <div className="MarkpromptChatView">
-        <ConversationSidebar />
-        <div className="MarkpromptChatViewChat">
-          {showBack ? (
-            <div className="MarkpromptChatViewNavigation">
-              <button
-                className="MarkpromptGhostButton"
-                onClick={onDidPressBack}
-              >
-                <ChevronLeftIcon
-                  style={{ width: 20, height: 20 }}
-                  strokeWidth={2.5}
-                />
-              </button>
-            </div>
-          ) : (
-            // Keep this for the grid template rows layout
-            <div />
-          )}
-          <Messages
-            chatOptions={chatOptions}
-            feedbackOptions={feedbackOptions}
-            projectKey={projectKey}
-            referencesOptions={referencesOptions}
-          />
-          <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
-        </div>
+    <div className="MarkpromptChatView">
+      <ConversationSidebar />
+      <div className="MarkpromptChatViewChat">
+        {showBack ? (
+          <div className="MarkpromptChatViewNavigation">
+            <button className="MarkpromptGhostButton" onClick={onDidPressBack}>
+              <ChevronLeftIcon
+                style={{ width: 20, height: 20 }}
+                strokeWidth={2.5}
+              />
+            </button>
+          </div>
+        ) : (
+          // Keep this for the grid template rows layout
+          <div />
+        )}
+        <Messages
+          chatOptions={chatOptions}
+          feedbackOptions={feedbackOptions}
+          projectKey={projectKey}
+          referencesOptions={referencesOptions}
+        />
+        <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
       </div>
-    </ChatProvider>
+    </div>
   );
 }

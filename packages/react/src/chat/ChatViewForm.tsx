@@ -1,4 +1,3 @@
-import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
   useContext,
@@ -16,7 +15,6 @@ import {
   selectProjectConversations,
   useChatStore,
 } from './store.js';
-import { SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 import type { View } from '../useViews.js';
