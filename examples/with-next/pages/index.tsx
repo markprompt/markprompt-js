@@ -39,10 +39,12 @@ export default function IndexPage(): ReactElement {
       >
         <Markprompt
           projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
+          defaultView="chat"
           chat={{
             enabled: true,
+            placeholder: 'Send a message',
             systemPrompt:
-              'You are a very enthusiastic company representative who loves to help people!',
+              'You are a friendly AI who loves to help people find the information they need!',
           }}
           search={{
             enabled: true,
@@ -77,7 +79,7 @@ export default function IndexPage(): ReactElement {
         >
           <button id="search">
             <SearchIcon />
-            <span>Search documentation...</span>
+            <span>Search documentation</span>
             <kbd>
               <span>⌘ K</span>
             </kbd>

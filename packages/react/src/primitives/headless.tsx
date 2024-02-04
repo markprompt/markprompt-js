@@ -20,7 +20,7 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
-import { CheckIcon, CopyIcon } from '../icons.js';
+import { CheckIcon, CopyIcon, SendIcon } from '../icons.js';
 import type {
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
@@ -220,6 +220,10 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   /** The class name of the label element. */
   labelClassName?: string;
+  /** The label for the submit button. */
+  buttonLabel?: string;
+  /** Show an icon next to the send button, */
+  showButtonIcon?: boolean;
 };
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -232,19 +236,24 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       autoCorrect = 'off',
       autoFocus = true,
       label,
+      buttonLabel = 'Send',
       labelClassName,
       placeholder,
       spellCheck = false,
       type = 'search',
+      showButtonIcon = true,
       name,
       ...rest
     } = props;
 
+    console.log('VALUE', rest.value);
     return (
       <>
-        <label htmlFor={name} className={labelClassName}>
-          {label}
-        </label>
+        {label && (
+          <label htmlFor={name} className={labelClassName}>
+            {label}
+          </label>
+        )}
         <input
           {...rest}
           id={name}
@@ -258,6 +267,15 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           autoFocus={autoFocus}
           spellCheck={spellCheck}
         />
+        {showButtonIcon && (
+          <button
+            type="submit"
+            disabled={(rest.value as string)?.trim()?.length === 0}
+          >
+            {buttonLabel}
+            <SendIcon />
+          </button>
+        )}
       </>
     );
   },

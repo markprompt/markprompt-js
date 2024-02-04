@@ -88,7 +88,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   }, [activeView]);
 
   return (
-    <BaseMarkprompt.Form className={'MarkpromptForm'} onSubmit={handleSubmit}>
+    <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
       <div className="MarkpromptPromptWrapper">
         <BaseMarkprompt.Prompt
           ref={inputRef}
@@ -98,13 +98,10 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
+          buttonLabel={chatOptions?.buttonLabel}
+          showButtonIcon={chatOptions?.showButtonIcon}
           value={prompt}
           onChange={(event) => setPrompt(event.target.value)}
-          label={
-            <AccessibleIcon.Root label={chatOptions!.label!}>
-              <SparklesIcon className="MarkpromptSearchIcon" />
-            </AccessibleIcon.Root>
-          }
         />
       </div>
 

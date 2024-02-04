@@ -172,6 +172,7 @@ const defaultGetSearchResultSubtitle = (
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'dialog',
+  layout: 'panels',
   branding: {
     show: true,
     type: 'plain',
@@ -196,7 +197,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     history: true,
     errorText: (props) => (
       <p className="MarkpromptDefaultError">
-        <span className="MarkpromptDefaultErrorIcon">:-(</span>
         Sorry, it looks like the bot is having a hard time! Please try again in
         a few minutes.
         <details>
@@ -241,7 +241,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     label: 'Search documentation',
     tabLabel: 'Search',
     placeholder: 'Search documentation',
-    layout: 'input',
   },
   trigger: {
     label: 'Ask AI',

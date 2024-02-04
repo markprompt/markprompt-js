@@ -67,6 +67,21 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
+const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 12h8" />
+    <path d="m12 16 4-4-4-4" />
+  </svg>
+);
+
 const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -389,6 +404,7 @@ export {
   PlusIcon,
   ReloadIcon,
   SearchIcon,
+  SendIcon,
   SparklesIcon,
   StopIcon,
   ThumbsDownIcon,

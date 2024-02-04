@@ -90,6 +90,11 @@ export interface MarkpromptOptions {
    * @default "search"
    * */
   defaultView?: 'search' | 'chat' | 'prompt';
+  /**
+   * Multi-pane layout when both search and chat is enabled
+   * @default "panels"
+   **/
+  layout?: 'tabs' | 'panels';
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -165,6 +170,16 @@ export interface MarkpromptOptions {
      * @default "Ask AI…"
      **/
     placeholder?: string;
+    /**
+     * Label for the submit button
+     * @default "Send"
+     **/
+    buttonLabel?: string;
+    /**
+     * Show an icon next to the send button
+     * @default true
+     **/
+    showButtonIcon?: boolean;
     /**
      * Component to render when an error occurs in prompt view
      */
@@ -284,11 +299,6 @@ export interface MarkpromptOptions {
      * @default "Ask AI"
      **/
     askLabel?: string;
-    /**
-     * Search layout
-     * @default "input"
-     **/
-    layout?: 'tabs' | 'input';
     /**
      * Default (empty) view
      */

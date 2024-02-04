@@ -36,6 +36,7 @@ export interface SearchViewProps {
   onDidSelectResult?: () => void;
   onDidSelectAsk?: () => void;
   projectKey: string;
+  layout?: MarkpromptOptions['layout'];
   searchOptions?: MarkpromptOptions['search'];
   linkAs?: MarkpromptOptions['linkAs'];
 }
@@ -84,7 +85,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   // Show "Ask AI" it the query contains a space between two words
   const isAskVisible =
-    searchOptions?.layout === 'input' && searchQuery.trim().includes(' ');
+    props.layout === 'panels' && searchQuery.trim().includes(' ');
 
   const isActiveSearchResultAsk = useMemo(() => {
     return activeSearchResult?.id === 'ask';

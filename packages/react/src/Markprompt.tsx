@@ -233,6 +233,7 @@ interface MarkpromptContentProps {
   close?: MarkpromptOptions['close'];
   debug?: boolean;
   defaultView?: MarkpromptOptions['defaultView'];
+  layout?: MarkpromptOptions['layout'];
   feedback?: MarkpromptOptions['feedback'];
   prompt?: MarkpromptOptions['prompt'];
   references?: MarkpromptOptions['references'];
@@ -247,6 +248,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     defaultView,
     feedback,
     projectKey,
+    layout,
     chat,
     prompt,
     references,
@@ -324,7 +326,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
       value={activeView}
       onValueChange={(value) => setActiveView(value as View)}
     >
-      {search.layout === 'tabs' ? (
+      {layout === 'tabs' ? (
         <div style={{ position: 'relative' }}>
           <Tabs.List className="MarkpromptTabsList">
             <Tabs.Trigger
@@ -409,6 +411,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           <SearchView
             activeView={activeView}
             projectKey={projectKey}
+            layout={layout}
             searchOptions={search}
             linkAs={linkAs}
             onDidSelectResult={() => emitter.emit('close')}
