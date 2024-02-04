@@ -253,6 +253,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
             value={searchQuery}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            showSubmitButton={false}
             aria-controls="markprompt-search-results"
             aria-activedescendant={activeSearchResult?.id}
             label={

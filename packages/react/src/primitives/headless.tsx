@@ -223,7 +223,7 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
   /** The label for the submit button. */
   buttonLabel?: string;
   /** Show an icon next to the send button, */
-  showButtonIcon?: boolean;
+  showSubmitButton?: boolean;
 };
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -241,7 +241,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       placeholder,
       spellCheck = false,
       type = 'search',
-      showButtonIcon = true,
+      showSubmitButton = true,
       name,
       ...rest
     } = props;
@@ -266,13 +266,13 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           autoFocus={autoFocus}
           spellCheck={spellCheck}
         />
-        {showButtonIcon && (
+        {showSubmitButton && (
           <button
             type="submit"
             disabled={(rest.value as string)?.trim()?.length === 0}
           >
             {buttonLabel}
-            <SendIcon />
+            {/* <SendIcon /> */}
           </button>
         )}
       </>

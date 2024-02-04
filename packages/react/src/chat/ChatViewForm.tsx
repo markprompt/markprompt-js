@@ -99,7 +99,6 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
           buttonLabel={chatOptions?.buttonLabel}
-          showButtonIcon={chatOptions?.showButtonIcon}
           value={prompt}
           onChange={(event) => setPrompt(event.target.value)}
         />

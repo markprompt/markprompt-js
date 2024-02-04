@@ -46,6 +46,7 @@ export default function IndexPage(): ReactElement {
             systemPrompt:
               'You are a friendly AI who loves to help people find the information they need!',
           }}
+          feedback={{ enabled: true }}
           search={{
             enabled: true,
             askLabel: 'Ask Acme',

@@ -21,7 +21,7 @@ export interface ChatViewProps {
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {
-  const { activeView, debug, projectKey, showBack } = props;
+  const { activeView, debug, projectKey, showBack, onDidPressBack } = props;
 
   if (!projectKey) {
     throw new Error(
@@ -57,7 +57,15 @@ export function ChatView(props: ChatViewProps): JSX.Element {
         <div className="MarkpromptChatViewChat">
           {showBack ? (
             <div className="MarkpromptChatViewNavigation">
-              <ChevronLeftIcon style={{ width: 20 }} strokeWidth={2.5} />
+              <button
+                className="MarkpromptGhostButton"
+                onClick={onDidPressBack}
+              >
+                <ChevronLeftIcon
+                  style={{ width: 20, height: 20 }}
+                  strokeWidth={2.5}
+                />
+              </button>
             </div>
           ) : (
             // Keep this for the grid template rows layout

@@ -176,11 +176,6 @@ export interface MarkpromptOptions {
      **/
     buttonLabel?: string;
     /**
-     * Show an icon next to the send button
-     * @default true
-     **/
-    showButtonIcon?: boolean;
-    /**
      * Component to render when an error occurs in prompt view
      */
     errorText?: ComponentType<{ error: Error }>;

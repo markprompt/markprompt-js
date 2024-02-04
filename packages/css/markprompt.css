@@ -293,7 +293,7 @@
 }
 
 :where(.MarkpromptChatViewNavigation) {
-  padding: 1rem 1rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -432,6 +432,9 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+:where(.MarkpromptChatView .MarkpromptPromptWrapper) {
   background-color: var(--markprompt-muted);
   border: 1px solid var(--markprompt-border);
   border-radius: calc(var(--markprompt-radius) * 0.5);
@@ -439,7 +442,13 @@
   transition-duration: 150ms;
 }
 
-:where(.MarkpromptPromptWrapper):focus-within {
+:where(.MarkpromptSearchView .MarkpromptPromptWrapper) {
+  border-bottom: 1px solid var(--markprompt-border);
+  box-shadow: 0 7px 10px -1px rgb(0 0 0 / 0.03);
+  padding: 2px 0.5rem 1px 0.5rem;
+}
+
+:where(.MarkpromptChatView .MarkpromptPromptWrapper):focus-within {
   box-shadow: 0px 0px 0px 2px var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
 }
@@ -1179,6 +1188,26 @@
 }
 
 .MarkpromptPromptFeedback button:hover {
+  background-color: var(--markprompt-muted);
+}
+
+:where(.MarkpromptGhostButton) {
+  color: var(--markprompt-foreground);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  outline: none;
+  background: transparent;
+  border-radius: var(--markprompt-button-radius);
+  transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
+  transition-property: all;
+  transition-duration: 200ms;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+:where(.MarkpromptGhostButton):hover {
   background-color: var(--markprompt-muted);
 }
 
