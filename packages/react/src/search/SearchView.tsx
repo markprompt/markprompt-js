@@ -29,7 +29,7 @@ export interface SearchViewProps {
   activeView?: View;
   debug?: boolean;
   onDidSelectResult?: () => void;
-  onDidSelectAsk?: (query: string) => void;
+  onDidSelectAsk?: (query?: string) => void;
   projectKey: string;
   layout?: MarkpromptOptions['layout'];
   searchOptions?: MarkpromptOptions['search'];
@@ -257,6 +257,13 @@ export function SearchView(props: SearchViewProps): ReactElement {
               </AccessibleIcon.Root>
             }
           />
+          <button
+            className="MarkpromptGhostButton"
+            style={{ flexGrow: 'none', marginRight: '0.25rem' }}
+            onClick={() => onDidSelectAsk?.()}
+          >
+            <SparklesIcon style={{ width: 20, height: 20 }} strokeWidth={2.5} />
+          </button>
         </div>
       </BaseMarkprompt.Form>
       <SearchResultsContainer

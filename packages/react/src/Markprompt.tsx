@@ -451,9 +451,11 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             searchOptions={search}
             linkAs={linkAs}
             onDidSelectResult={() => emitter.emit('close')}
-            onDidSelectAsk={(query: string) => {
+            onDidSelectAsk={(query?: string) => {
               setActiveView('chat');
-              submitChat([{ role: 'user', content: query }]);
+              if (query) {
+                submitChat([{ role: 'user', content: query }]);
+              }
             }}
             debug={debug}
           />
