@@ -102,7 +102,7 @@ const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     strokeLinecap="round"
     {...props}
   >
-    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="10" opacity=".25" />
     <path d="M8 12h8" />
     <path d="m12 16 4-4-4-4" />
   </svg>
@@ -443,6 +443,48 @@ const BotIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
+const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" opacity=".25" stroke="currentColor" />
+    <path
+      fill="currentColor"
+      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+    >
+      <animateTransform
+        attributeName="transform"
+        dur="2s"
+        repeatCount="indefinite"
+        type="rotate"
+        values="0 12 12;360 12 12"
+      />
+    </path>
+  </svg>
+);
+
+const StopInsideLoadingIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth={2}
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
+    />
+  </svg>
+);
+
 export {
   BotIcon,
   ChatIcon,
@@ -462,12 +504,14 @@ export {
   FileTextIcon,
   HashIcon,
   LoaderIcon,
+  LoadingIcon,
   PlusIcon,
   ReloadIcon,
   SearchIcon,
   SendIcon,
   SparklesIcon,
   StopIcon,
+  StopInsideLoadingIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
   UserIcon,

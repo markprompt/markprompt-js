@@ -6,6 +6,7 @@ import {
   type FormEventHandler,
   type ReactElement,
   useState,
+  useMemo,
 } from 'react';
 
 import { ConversationSelect } from './ConversationSelect.js';
@@ -14,13 +15,33 @@ import {
   ChatContext,
   selectProjectConversations,
   useChatStore,
+  type ChatLoadingState,
 } from './store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
+import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
 
 interface ChatViewFormProps {
   activeView?: View;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
+}
+
+interface ChatSendIconProps {
+  isLoading: boolean;
+}
+
+function ChatSendIcon(props: ChatSendIconProps) {
+  if (props.isLoading) {
+    return (
+      <div>
+        <LoadingIcon />
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <StopInsideLoadingIcon />
+        </div>
+      </div>
+    );
+  }
+  return <SendIcon />;
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
@@ -84,6 +105,14 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     return () => abortChat.current?.();
   }, [activeView]);
 
+  const isLoading = useMemo(() => {
+    return (
+      lastMessageState === 'streaming-answer' ||
+      lastMessageState === 'indeterminate' ||
+      lastMessageState === 'preload'
+    );
+  }, [lastMessageState]);
+
   return (
     <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
       <div className="MarkpromptPromptWrapper">
@@ -95,19 +124,15 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
-          buttonLabel={chatOptions?.buttonLabel}
+          sendButtonClassName="MarkpromptPromptSubmitButton"
+          buttonLabel={isLoading ? 'Stop generating' : chatOptions?.buttonLabel}
           value={prompt}
+          isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}
+          Icon={<ChatSendIcon isLoading={isLoading} />}
         />
-      </div>
 
-      {/* {error && (
-        <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
-          {chatOptions.errorText}
-        </BaseMarkprompt.ErrorMessage>
-      )} */}
-
-      <div className="MarkpromptChatActions">
+        {/* <div className="MarkpromptChatActions"> */}
         {/* {lastMessageState && lastMessageState !== 'indeterminate' && (
           <RegenerateButton
             lastMessageState={lastMessageState}
@@ -117,7 +142,14 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
         )} */}
 
         {conversations.length > 0 && <ConversationSelect />}
+        <div style={{ width: '0.25rem' }} />
       </div>
+
+      {/* {error && (
+        <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
+          {chatOptions.errorText}
+        </BaseMarkprompt.ErrorMessage>
+      )} */}
     </BaseMarkprompt.Form>
   );
 }

@@ -222,10 +222,16 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   /** The class name of the label element. */
   labelClassName?: string;
+  /** The class name of the send button element. */
+  sendButtonClassName?: string;
   /** The label for the submit button. */
   buttonLabel?: string;
-  /** Show an icon next to the send button, */
+  /** Show an icon next to the send button. */
   showSubmitButton?: boolean;
+  /** If the answer is loading. */
+  isLoading?: boolean;
+  /** Icon for the button. */
+  Icon?: ReactNode;
 };
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -240,10 +246,13 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       label,
       buttonLabel = 'Send',
       labelClassName,
+      sendButtonClassName,
       placeholder,
       spellCheck = false,
       type = 'search',
       showSubmitButton = true,
+      isLoading,
+      Icon,
       name,
       ...rest
     } = props;
@@ -270,11 +279,14 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
         />
         {showSubmitButton && (
           <button
+            className={sendButtonClassName}
             type="submit"
-            disabled={(rest.value as string)?.trim()?.length === 0}
+            disabled={
+              (rest.value as string)?.trim()?.length === 0 && !isLoading
+            }
           >
             {buttonLabel}
-            {/* <SendIcon /> */}
+            {Icon}
           </button>
         )}
       </>

@@ -27,8 +27,8 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     );
   }
 
-  // we are also merging defaults in the Markprompt component, but this makes sure
-  // that standalone ChatView components also have defaults as expected.
+  // We are also merging defaults in the Markprompt component, but this makes
+  // sure that standalone ChatView components also have defaults as expected.
   const chatOptions = useDefaults(
     { ...props.chatOptions },
     DEFAULT_MARKPROMPT_OPTIONS.chat,
