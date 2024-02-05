@@ -55,7 +55,12 @@ export function Feedback(props: FeedbackProps): ReactElement {
     <div {...divProps} data-variant={variant}>
       {heading && <h3>{heading}</h3>}
       <div>
-        {showCopy && message && <CopyContentButton content={message} />}
+        {showCopy && message && (
+          <CopyContentButton
+            content={message}
+            className="MarkpromptGhostThumbButton"
+          />
+        )}
         {showFeedback && (
           <>
             <button

@@ -36,7 +36,11 @@ export function Answer(props: AnswerProps): ReactElement {
       aria-live="polite"
     >
       <Caret answer={answer} />
-      <BaseMarkprompt.Answer answer={answer} state={state} />
+      <BaseMarkprompt.Answer
+        answer={answer}
+        state={state}
+        copyButtonClassName="MarkpromptGhostThumbButton"
+      />
     </div>
   );
 }

@@ -406,6 +406,7 @@ function SearchResultsContainer(
         searchResults={searchResults}
         searchOptions={searchOptions}
         className="MarkpromptSearchResults"
+        headingClassName="MarkpromptSearchResultSectionHeading"
         SearchResultComponent={({ index, ...rest }) => {
           const id = `markprompt-result-${index}`;
           return (

@@ -101,7 +101,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
       abortChat.current?.();
     }
 
-    // cancel pending chat request when the component unmounts.
+    // Cancel pending chat request when the component unmounts.
     return () => abortChat.current?.();
   }, [activeView]);
 
@@ -144,12 +144,6 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
         {conversations.length > 0 && <ConversationSelect />}
         <div style={{ width: '0.25rem' }} />
       </div>
-
-      {/* {error && (
-        <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
-          {chatOptions.errorText}
-        </BaseMarkprompt.ErrorMessage>
-      )} */}
     </BaseMarkprompt.Form>
   );
 }

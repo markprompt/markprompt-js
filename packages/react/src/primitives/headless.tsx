@@ -301,10 +301,11 @@ Prompt.displayName = 'Markprompt.Prompt';
 interface CopyContentButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: string;
+  className?: string;
 }
 
 function CopyContentButton(props: CopyContentButtonProps): ReactElement {
-  const { content } = props;
+  const { content, className } = props;
   const [didJustCopy, setDidJustCopy] = useState(false);
 
   const handleClick = (): void => {
@@ -317,7 +318,7 @@ function CopyContentButton(props: CopyContentButtonProps): ReactElement {
 
   return (
     <button
-      className="MarkpromptGhostThumbButton"
+      className={className}
       style={{ animationDelay: '100ms' }}
       data-active={false}
       onClick={handleClick}
@@ -376,13 +377,20 @@ type AnswerProps = Omit<
 > & {
   answer: string;
   state: PromptLoadingState | ChatLoadingState;
+  copyButtonClassName?: string;
 };
 
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
-  const { answer, state, remarkPlugins = [remarkGfm], ...rest } = props;
+  const {
+    answer,
+    state,
+    copyButtonClassName,
+    remarkPlugins = [remarkGfm],
+    ...rest
+  } = props;
 
   return (
     <Markdown
@@ -403,6 +411,7 @@ function Answer(props: AnswerProps): ReactElement {
                 }}
               >
                 <CopyContentButton
+                  className={copyButtonClassName}
                   content={
                     children &&
                     typeof children === 'object' &&
@@ -591,6 +600,7 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
     >;
     searchResults: SearchResultComponentProps[];
     searchOptions?: MarkpromptOptions['search'];
+    headingClassName?: string;
   }
 >;
 
@@ -602,6 +612,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       SearchResultComponent = SearchResult,
       searchResults,
       searchOptions,
+      headingClassName,
       ...rest
     } = props;
 
@@ -628,7 +639,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
         })}
         {searchOptions?.defaultView?.searches?.length &&
           searchOptions?.defaultView?.searchesHeading && (
-            <div className="MarkpromptSearchResultSectionHeading">
+            <div className={headingClassName}>
               {searchOptions.defaultView.searchesHeading}
             </div>
           )}

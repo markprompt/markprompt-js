@@ -644,10 +644,6 @@
   position: relative;
 }
 
-:where(.MarkpromptAnimateSpin) {
-  animation: markprompt-spin 1s linear infinite;
-}
-
 /* Remove 2px padding that some browsers add to input */
 :where(.MarkpromptPrompt[type='search' i]) {
   padding: 1rem 3rem 1rem 0;
@@ -1926,6 +1922,10 @@
   padding: 0;
 }
 
+.MarkpromptAnimateSpin {
+  animation: markprompt-spin 1s linear infinite;
+}
+
 @keyframes markprompt-show-content {
   0% {
     opacity: 0;
@@ -2020,14 +2020,5 @@
   to {
     opacity: 1;
     transform: translateX(0);
-  }
-}
-
-@keyframes markprompt-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
