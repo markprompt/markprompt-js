@@ -1758,6 +1758,11 @@
 
 :where(.MarkpromptSelectMenu[data-open='true']) {
   display: block;
+  animation: markprompt-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:where(.MarkpromptSelectMenu[data-open='false']) {
+  animation: markprompt-fade-out 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :where(.MarkpromptSelectMenu li) {
