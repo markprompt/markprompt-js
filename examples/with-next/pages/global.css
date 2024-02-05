@@ -98,7 +98,8 @@ body,
 }
 
 #search:hover {
-  background-color: hsl(0, 0%, 93%);
+  background-color: hsl(0, 0%, 96%);
+  border: 1px solid hsl(0, 0%, 90%);
 }
 
 #search > span {

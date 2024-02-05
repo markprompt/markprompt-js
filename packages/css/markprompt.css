@@ -19,6 +19,7 @@
   --markprompt-button-radius: 0.375rem;
   --markprompt-text-size: 0.875rem;
   --markprompt-text-size-xs: 0.75rem;
+  --markprompt-text-size-code: 88%;
   --markprompt-button-icon-size: 1rem;
   --markprompt-icon-stroke-width: 2px;
   --markprompt-shadow: 0 1px 2px 0 #0000000d;
@@ -871,7 +872,7 @@
 
 :where(.MarkpromptAnswer figcaption) {
   color: var(--markprompt-mutedForeground);
-  font-size: 0.8571429em;
+  font-size: var(--markprompt-text-size);
   line-height: 1.3333333;
   margin-top: 0.6666667em;
 }
@@ -880,7 +881,7 @@
   color: var(--markprompt-foreground);
   border: 1px solid var(--markprompt-border);
   background-color: var(--markprompt-secondary);
-  font-size: 88%;
+  font-size: var(--markprompt-text-size-code);
   padding: 0.125rem 0.25rem;
   border-radius: 4px;
   font-weight: 500;
@@ -904,12 +905,12 @@
 
 :where(.MarkpromptAnswer h2 code) {
   color: inherit;
-  font-size: 0.9em;
+  font-size: var(--markprompt-text-size-code);
 }
 
 :where(.MarkpromptAnswer h3 code) {
   color: inherit;
-  font-size: 0.8888889em;
+  font-size: var(--markprompt-text-size-code);
 }
 
 :where(.MarkpromptAnswer h4 code) {
@@ -931,12 +932,12 @@
   overflow-x: auto;
   font-weight: 400;
   font-family: monospace;
-  font-size: 0.8571429em;
+  font-size: var(--markprompt-text-size-code);
   line-height: 1.6666667;
-  margin-top: 1.6666667em;
-  margin-bottom: 1.6666667em;
-  border-radius: 0.25rem;
-  padding: 0.6666667em 1em;
+  border-radius: var(--markprompt-button-radius);
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
 }
 
 :where(.MarkpromptAnswer pre code) {
@@ -964,7 +965,7 @@
   text-align: left;
   margin-top: 2em;
   margin-bottom: 2em;
-  font-size: 0.8571429em;
+  font-size: var(--markprompt-text-size);
   line-height: 1.5;
 }
 
@@ -1900,6 +1901,10 @@
 .MarkpromptAnswer .hljs {
   background: transparent;
   color: var(--markprompt-foreground);
+}
+
+.MarkpromptAnswer code.hljs {
+  padding: 0;
 }
 
 @keyframes markprompt-show-content {
