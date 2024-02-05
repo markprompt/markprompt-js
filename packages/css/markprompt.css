@@ -925,6 +925,7 @@
   border: 1px solid var(--markprompt-border);
   overflow-x: auto;
   font-weight: 400;
+  font-family: monospace;
   font-size: 0.8571429em;
   line-height: 1.6666667;
   margin-top: 1.6666667em;
@@ -1157,7 +1158,7 @@
   stroke-width: 2.2px;
 }
 
-:where(.MarkpromptPromptFeedback button) {
+:where(.MarkpromptGhostThumbButton) {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1168,7 +1169,7 @@
   background-color: transparent;
 }
 
-:where(.MarkpromptPromptFeedback[data-variant='icons'] button) {
+:where(.MarkpromptGhostThumbButton) {
   border: 0;
 }
 
@@ -1176,21 +1177,21 @@
   border: 1px solid var(--markprompt-border);
 }
 
-:where(.MarkpromptPromptFeedback button[data-active='true']) {
+:where(.MarkpromptGhostThumbButton[data-active='true']) {
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
   border-color: var(--markprompt-primaryForeground);
 }
 
-.MarkpromptPromptFeedback button[data-active='true']:hover {
+.MarkpromptGhostThumbButton[data-active='true']:hover {
   background-color: var(--markprompt-primary);
 }
 
-:where(.MarkpromptPromptFeedback button svg) {
+:where(.MarkpromptGhostThumbButton svg) {
   display: block;
 }
 
-.MarkpromptPromptFeedback button:hover {
+.MarkpromptGhostThumbButton:hover {
   background-color: var(--markprompt-muted);
 }
 

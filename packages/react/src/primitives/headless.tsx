@@ -303,8 +303,9 @@ function CopyContentButton(props: CopyContentButtonProps): ReactElement {
 
   return (
     <button
-      className="MarkpromptPromptFeedback"
+      className="MarkpromptGhostThumbButton"
       style={{ animationDelay: '100ms' }}
+      data-active={false}
       onClick={handleClick}
     >
       <AccessibleIcon label={didJustCopy ? 'copied' : 'copy'}>
@@ -356,8 +357,8 @@ function Answer(props: AnswerProps): ReactElement {
               <div
                 style={{
                   position: 'absolute',
-                  top: 5,
-                  right: 5,
+                  top: '0.5rem',
+                  right: '0.5rem',
                   border: 0,
                 }}
               >

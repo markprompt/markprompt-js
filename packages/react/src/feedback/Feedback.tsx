@@ -9,7 +9,7 @@ import {
 
 import type { UseFeedbackResult } from './useFeedback.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
-import { ClipboardIcon, ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
+import { ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
 import { CopyContentButton } from '../primitives/headless.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {

@@ -63,7 +63,7 @@ html {
   box-sizing: inherit;
 }
 
-* {
+*:not(pre):not(code) {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
