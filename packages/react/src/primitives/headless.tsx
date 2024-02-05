@@ -20,7 +20,7 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
-import { CheckIcon, CopyIcon, SendIcon } from '../icons.js';
+import { CheckIcon, ClipboardIcon, CopyIcon, SendIcon } from '../icons.js';
 import type {
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
@@ -284,17 +284,17 @@ Prompt.displayName = 'Markprompt.Prompt';
 // TODO: find the right type definition for children. There is a mismatch
 // between the type that react-markdown exposes, and what is actually
 // serves.
-interface CopyCodeButtonProps {
+interface CopyContentButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  code: string;
+  content: string;
 }
 
-function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
-  const { code } = props;
+function CopyContentButton(props: CopyContentButtonProps): ReactElement {
+  const { content } = props;
   const [didCopy, setDidCopy] = useState(false);
 
   const handleClick = (): void => {
-    navigator.clipboard.writeText(code);
+    navigator.clipboard.writeText(content);
     setDidCopy(true);
     setTimeout(() => {
       setDidCopy(false);
@@ -303,7 +303,7 @@ function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
 
   return (
     <button
-      className="MarkpromptCopyButton"
+      className="MarkpromptPromptFeedback"
       style={{ animationDelay: '100ms' }}
       onClick={handleClick}
     >
@@ -311,13 +311,13 @@ function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
         {didCopy ? (
           <CheckIcon width={16} height={16} strokeWidth={2} />
         ) : (
-          <CopyIcon width={16} height={16} strokeWidth={2} />
+          <ClipboardIcon width={16} height={16} strokeWidth={2} />
         )}
       </AccessibleIcon>
     </button>
   );
 }
-CopyCodeButton.displayName = 'Markprompt.CopyCodeButton';
+CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
 type AnswerProps = Omit<
   ComponentPropsWithoutRef<typeof Markdown>,
@@ -342,15 +342,24 @@ function Answer(props: AnswerProps): ReactElement {
 
           return (
             <div style={{ position: 'relative' }}>
-              <CopyCodeButton
-                code={
-                  children &&
-                  typeof children === 'object' &&
-                  'props' in children
-                    ? children.props.children
-                    : ''
-                }
-              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  right: 5,
+                  border: 0,
+                }}
+              >
+                <CopyContentButton
+                  content={
+                    children &&
+                    typeof children === 'object' &&
+                    'props' in children
+                      ? children.props.children
+                      : ''
+                  }
+                />
+              </div>
               <pre {...rest} className={className}>
                 {children}
               </pre>
@@ -630,6 +639,7 @@ export {
   AutoScroller,
   Close,
   Content,
+  CopyContentButton,
   Description,
   DialogTrigger,
   ErrorMessage,

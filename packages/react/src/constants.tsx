@@ -195,6 +195,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
     history: true,
+    showCopy: true,
     errorText: (props) => (
       <p className="MarkpromptDefaultError">
         Sorry, it looks like the bot is having a hard time! Please try again in
@@ -233,7 +234,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   },
   references: {
     loadingText: 'Fetching context…',
-    heading: 'Sources:',
+    heading: 'Sources',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
   },

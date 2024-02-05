@@ -7,7 +7,8 @@ import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import type { MarkpromptOptions } from '../types.js';
-import { BotIcon } from '../icons.js';
+import { BotIcon, ClipboardIcon } from '../icons.js';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 interface AssistantMessageProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
@@ -93,20 +94,27 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             confirmToolCalls={confirmToolCalls}
           />
         )}
-
-        {feedbackOptions?.enabled && message.state === 'done' && (
-          <Feedback
-            variant="icons"
-            className="MarkpromptPromptFeedback"
-            submitFeedback={(feedback, promptId) => {
-              submitFeedback(feedback, promptId);
-              feedbackOptions.onFeedbackSubmit?.(feedback, messages, promptId);
-            }}
-            abortFeedbackRequest={abortFeedbackRequest}
-            promptId={message.promptId}
-            heading={feedbackOptions.heading}
-          />
-        )}
+        {(chatOptions.showCopy || feedbackOptions?.enabled) &&
+          message.state === 'done' && (
+            <Feedback
+              message={message.content ?? ''}
+              variant="icons"
+              className="MarkpromptPromptFeedback"
+              submitFeedback={(feedback, promptId) => {
+                submitFeedback(feedback, promptId);
+                feedbackOptions.onFeedbackSubmit?.(
+                  feedback,
+                  messages,
+                  promptId,
+                );
+              }}
+              abortFeedbackRequest={abortFeedbackRequest}
+              promptId={message.promptId}
+              heading={feedbackOptions.heading}
+              showFeedback={!!feedbackOptions?.enabled}
+              showCopy={chatOptions.showCopy}
+            />
+          )}
       </div>
     </div>
   );

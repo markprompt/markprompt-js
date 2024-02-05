@@ -144,7 +144,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     <div data-loading-state={adjustedState} className={styles.references}>
       <div className={styles.progress} />
       <p>Fetching context…</p>
-      <p>Sources:</p>
+      <p>Sources</p>
       <Markprompt.References
         RootComponent="ul"
         ReferenceComponent={Reference}

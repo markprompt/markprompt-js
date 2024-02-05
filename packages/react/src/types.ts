@@ -182,10 +182,10 @@ export interface MarkpromptOptions {
      */
     errorText?: ComponentType<{ error: Error }>;
     /**
-     * Show sender info, like avatar
+     * Show copy response button
      * @default true
      **/
-    showSender?: boolean;
+    showCopy?: boolean;
     /**
      * Enable chat history features
      * - enable saving chat history to local storage
@@ -264,7 +264,7 @@ export interface MarkpromptOptions {
     getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
-     * @default "Sources:"
+     * @default "Sources"
      **/
     heading?: string;
     /** Loading text, default: `Fetching context…` */

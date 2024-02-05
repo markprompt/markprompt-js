@@ -171,7 +171,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `references.loadingText` (`string`): Loading text (Default:
   `Fetching context…`)
 - `references.heading` (`string`): Heading for the references panel (Default:
-  `Sources:`)
+  `Sources`)
 - `search` (`object`): Options for search
 - `search.enabled` (`boolean`): Whether or not to enable search. (Default:
   `true`)
@@ -284,7 +284,7 @@ accepts the following props:
 - `referencesOptions.loadingText` (`string`): Loading text (Default:
   `Fetching context…`)
 - `referencesOptions.heading` (`string`): Heading for the references panel
-  (Default: `Sources:`)
+  (Default: `Sources`)
 
 ### `<PromptView />`
 
@@ -350,7 +350,7 @@ It accepts the following props:
 - `referencesOptions.loadingText` (`string`): Loading text (Default:
   `Fetching context…`)
 - `referencesOptions.heading` (`string`): Heading for the references panel
-  (Default: `Sources:`)
+  (Default: `Sources`)
 
 ### `<SearchView />`
 

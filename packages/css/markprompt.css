@@ -1117,7 +1117,6 @@
 }
 
 :where(.MarkpromptPromptFeedback[data-variant='icons']) {
-  padding: 0 1.5rem;
   margin-top: -0.25rem;
   margin-bottom: -1rem;
 }
@@ -1152,18 +1151,13 @@
   justify-content: flex-end;
 }
 
-:where(.MarkpromptPromptFeedback button),
-:where(.MarkpromptCopyButton) {
+:where(.MarkpromptPromptFeedback button) {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.375rem;
   border-radius: 0.375rem;
-  animation-name: markprompt-slide-up;
-  animation-duration: 1s;
-  animation-fill-mode: backwards;
-  transition-timing-function: ease-in-out;
   color: var(--markprompt-mutedForeground);
   background-color: transparent;
 }
@@ -1212,17 +1206,6 @@
 
 :where(.MarkpromptGhostButton):hover {
   background-color: var(--markprompt-muted);
-}
-
-:where(.MarkpromptCopyButton) {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  border: 0;
-}
-
-:where(.MarkpromptCopyButton):hover {
-  opacity: 0.8;
 }
 
 :where(.MarkpromptProgress) {
