@@ -34,7 +34,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
     abortFeedbackRequest,
     variant,
     promptId,
-    showFeedback,
+    showFeedback = true,
     showCopy,
     ...divProps
   } = props;

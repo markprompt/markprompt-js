@@ -51,7 +51,7 @@ export default function IndexPage(): ReactElement {
             },
           }}
           feedback={{ enabled: true }}
-          references={{ display: 'none' }}
+          references={{ display: 'end' }}
           search={{
             enabled: true,
             askLabel: 'Ask Acme',

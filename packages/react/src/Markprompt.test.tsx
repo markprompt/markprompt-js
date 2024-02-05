@@ -41,9 +41,21 @@ describe('Markprompt', () => {
 
   it('renders search view when search is enabled', async () => {
     const user = await userEvent.setup();
-    render(<Markprompt projectKey="test-key" search={{ enabled: true }} />);
-    await user.click(screen.getByText('Ask AI'));
-    expect(screen.getByText('Search')).toBeInTheDocument();
+    render(
+      <Markprompt
+        projectKey="test-key"
+        defaultView="search"
+        search={{
+          enabled: true,
+          askLabel: 'Ask Acme',
+          defaultView: {
+            searchesHeading: 'Recommended for you',
+          },
+        }}
+      />,
+    );
+    await user.click(screen.getByText('Ask Acme'));
+    expect(screen.getByText('Recommended for you')).toBeInTheDocument();
   });
 
   it('renders chat view when chat is enabled', async () => {
@@ -58,6 +70,7 @@ describe('Markprompt', () => {
     render(
       <Markprompt
         projectKey="test-key"
+        layout="tabs"
         chat={{ enabled: true, tabLabel: 'chattab' }}
         search={{ enabled: true, tabLabel: 'searchtab' }}
       />,

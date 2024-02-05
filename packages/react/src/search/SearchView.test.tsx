@@ -157,7 +157,7 @@ describe('SearchView', () => {
   });
 
   it('display an empty state when there are no search results', async () => {
-    const query = 'test query';
+    const query = 'testquery';
     const user = await userEvent.setup();
 
     results = [];
@@ -168,14 +168,14 @@ describe('SearchView', () => {
     await user.keyboard('{Enter}');
 
     await waitFor(() => {
-      expect(screen.getByText(/no results/i)).toBeInTheDocument();
+      expect(screen.getByText(/no matches found/i)).toBeInTheDocument();
     });
   });
 
   it(
     'allows users to select search queries',
     async () => {
-      const query = 'test query';
+      const query = 'testquery';
       const user = await userEvent.setup();
 
       results = [
