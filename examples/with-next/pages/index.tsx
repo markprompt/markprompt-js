@@ -45,6 +45,10 @@ export default function IndexPage(): ReactElement {
             placeholder: 'Send a message',
             systemPrompt:
               'You are a friendly AI who loves to help people find the information they need!',
+            avatars: {
+              user: '/avatars/user.png',
+              assistant: '/avatars/logo.png',
+            },
           }}
           feedback={{ enabled: true }}
           references={{ display: 'none' }}

@@ -131,18 +131,8 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           onChange={(event) => setPrompt(event.target.value)}
           Icon={<ChatSendIcon isLoading={isLoading} />}
         />
-
-        {/* <div className="MarkpromptChatActions"> */}
-        {/* {lastMessageState && lastMessageState !== 'indeterminate' && (
-          <RegenerateButton
-            lastMessageState={lastMessageState}
-            regenerateLastAnswer={regenerateLastAnswer}
-            abortSubmitChat={abortChat.current}
-          />
-        )} */}
-
         {conversations.length > 0 && <ConversationSelect />}
-        <div style={{ width: '0.25rem' }} />
+        <div />
       </div>
     </BaseMarkprompt.Form>
   );

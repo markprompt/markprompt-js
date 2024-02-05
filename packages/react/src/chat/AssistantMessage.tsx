@@ -76,13 +76,14 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           )}
         </>
       )}
+
       <div>
         <MessageAnswer state={message.state}>
           {message.content ?? ''}
         </MessageAnswer>
 
         {/*
-        if this message has any tool calls, and those tool calls require a
+        If this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
         either the default or user-provided confirmation
       */}

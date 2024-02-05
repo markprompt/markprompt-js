@@ -457,7 +457,7 @@ const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     >
       <animateTransform
         attributeName="transform"
-        dur="2s"
+        dur="1s"
         repeatCount="indefinite"
         type="rotate"
         values="0 12 12;360 12 12"

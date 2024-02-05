@@ -111,15 +111,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
       data-loading-state={adjustedState}
       role="status"
     >
-      <div
-        className="MarkpromptProgress"
-        id="markprompt-progressbar"
-        role="progressbar"
-        aria-labelledby="markprompt-loading-text"
-      />
-
-      {state === 'preload' && <p id="markprompt-loading-text">{loadingText}</p>}
-
       {state !== 'preload' && <p>{heading}</p>}
 
       {(state === 'streaming-answer' || state === 'done') && (
