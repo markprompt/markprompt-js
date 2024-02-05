@@ -458,7 +458,7 @@
   display: flex;
   flex-direction: row;
   padding-inline: 1.5rem;
-  padding-bottom: 1rem;
+  margin-bottom: 3rem;
   gap: 1rem;
 }
 
@@ -677,6 +677,7 @@
   scrollbar-width: none;
   overflow: hidden auto;
   padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 :where(.MarkpromptAutoScroller::-webkit-scrollbar) {
@@ -877,8 +878,12 @@
 
 :where(.MarkpromptAnswer code) {
   color: var(--markprompt-foreground);
-  font-weight: 600;
-  font-size: 0.8571429em;
+  border: 1px solid var(--markprompt-border);
+  background-color: var(--markprompt-secondary);
+  font-size: 88%;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
 :where(.MarkpromptAnswer code::before) {

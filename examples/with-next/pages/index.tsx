@@ -46,7 +46,7 @@ export default function IndexPage(): ReactElement {
             systemPrompt:
               'You are a friendly AI who loves to help people find the information they need!',
           }}
-          feedback={{ enabled: false }}
+          feedback={{ enabled: true }}
           references={{ display: 'none' }}
           search={{
             enabled: true,

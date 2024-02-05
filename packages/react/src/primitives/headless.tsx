@@ -347,7 +347,6 @@ function HighlightedCode(props: HighlightedCodeProps) {
       // we can syntax highlight. This trick allows us to provide
       // syntax highlighting without imposing a large extra
       // package as part of the markprompt-js bundle.
-      console.log('Calling highlight');
       ((globalThis as any).hljs as any)?.highlightAll();
     }
   }, [children, state]);
@@ -401,10 +400,9 @@ function Answer(props: AnswerProps): ReactElement {
                   }
                 />
               </div>
-              {children}
-              {/* <HighlightedCode {...rest} className={className} state={state}>
+              <HighlightedCode {...rest} className={className} state={state}>
                 {children}
-              </HighlightedCode> */}
+              </HighlightedCode>
             </div>
           );
         },

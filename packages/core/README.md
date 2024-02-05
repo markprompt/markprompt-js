@@ -57,7 +57,7 @@ for await (const chunk of submitChatGenerator(
   projectKey,
   options,
 )) {
-  console.log(chunk);
+  console.debug(chunk);
 }
 ```
 
@@ -105,10 +105,14 @@ All options are optional.
 - `sectionsMatchCount` (`number`): The number of sections to include in the
   prompt context
 - `sectionsMatchThreshold` (`number`): The similarity threshold between the
-- `sectionsScope` (`number`): When a section is matched, extend the context to the parent section. For instance, if a section has level 3 and `sectionsScope` is set to 1, include the content of the entire parent section of level 1. If 0, this includes the entire file.
+- `sectionsScope` (`number`): When a section is matched, extend the context to
+  the parent section. For instance, if a section has level 3 and `sectionsScope`
+  is set to 1, include the content of the entire parent section of level 1. If
+  0, this includes the entire file.
 - `signal` (`AbortSignal`): AbortController signal
 - `tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call
-- `tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if any) function is called by the model
+- `tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
+  any) function is called by the model
 
 #### Returns
 
@@ -147,8 +151,8 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 - `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters
 - `options.apiUrl` (`string`): URL at which to post feedback
-- `options.onFeedbackSubmitted` (`function`): Callback function when feedback
-  is submitted
+- `options.onFeedbackSubmitted` (`function`): Callback function when feedback is
+  submitted
 - `options.signal` (`AbortSignal`): AbortController signal
 
 #### Returns
