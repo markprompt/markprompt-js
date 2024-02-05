@@ -627,6 +627,7 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       >
         {searchResults.map((result, index) => {
           const id = `markprompt-result-${index}`;
+          console.log('Search result', `markprompt-result-${index}`);
           return (
             <SearchResultComponent
               id={id}
