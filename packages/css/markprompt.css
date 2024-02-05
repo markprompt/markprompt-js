@@ -1151,6 +1151,12 @@
   justify-content: flex-end;
 }
 
+:where(.MarkpromptPromptFeedback svg) {
+  transition-property: all;
+  transition-duration: 200ms;
+  stroke-width: 2.2px;
+}
+
 :where(.MarkpromptPromptFeedback button) {
   cursor: pointer;
   display: flex;

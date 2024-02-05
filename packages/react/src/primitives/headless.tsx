@@ -291,13 +291,13 @@ interface CopyContentButtonProps {
 
 function CopyContentButton(props: CopyContentButtonProps): ReactElement {
   const { content } = props;
-  const [didCopy, setDidCopy] = useState(false);
+  const [didJustCopy, setDidJustCopy] = useState(false);
 
   const handleClick = (): void => {
     navigator.clipboard.writeText(content);
-    setDidCopy(true);
+    setDidJustCopy(true);
     setTimeout(() => {
-      setDidCopy(false);
+      setDidJustCopy(false);
     }, 2000);
   };
 
@@ -307,12 +307,23 @@ function CopyContentButton(props: CopyContentButtonProps): ReactElement {
       style={{ animationDelay: '100ms' }}
       onClick={handleClick}
     >
-      <AccessibleIcon label={didCopy ? 'copied' : 'copy'}>
-        {didCopy ? (
-          <CheckIcon width={16} height={16} strokeWidth={2} />
-        ) : (
-          <ClipboardIcon width={16} height={16} strokeWidth={2} />
-        )}
+      <AccessibleIcon label={didJustCopy ? 'copied' : 'copy'}>
+        <div style={{ position: 'relative' }}>
+          <ClipboardIcon
+            style={{ opacity: didJustCopy ? 0 : 1 }}
+            width={16}
+            height={16}
+            strokeWidth={2}
+          />
+          <div style={{ position: 'absolute', inset: 0 }}>
+            <CheckIcon
+              style={{ opacity: didJustCopy ? 1 : 0 }}
+              width={16}
+              height={16}
+              strokeWidth={2}
+            />
+          </div>
+        </div>
       </AccessibleIcon>
     </button>
   );

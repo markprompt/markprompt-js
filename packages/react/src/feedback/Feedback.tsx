@@ -13,7 +13,7 @@ import { ClipboardIcon, ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
 import { CopyContentButton } from '../primitives/headless.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
-  message: string;
+  message?: string;
   heading?: string;
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
