@@ -36,7 +36,7 @@ export function Answer(props: AnswerProps): ReactElement {
       aria-live="polite"
     >
       <Caret answer={answer} />
-      <BaseMarkprompt.Answer answer={answer} />
+      <BaseMarkprompt.Answer answer={answer} state={state} />
     </div>
   );
 }

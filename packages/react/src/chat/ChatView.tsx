@@ -44,7 +44,6 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS.references,
   );
 
-  console.log('chatOptions', JSON.stringify(chatOptions, null, 2));
   return (
     <div className="MarkpromptChatView">
       <ConversationSidebar />

@@ -1892,6 +1892,11 @@
   font-size: var(--markprompt-text-size);
 }
 
+.MarkpromptAnswer .hljs {
+  background: transparent;
+  color: var(--markprompt-foreground);
+}
+
 @keyframes markprompt-show-content {
   0% {
     opacity: 0;

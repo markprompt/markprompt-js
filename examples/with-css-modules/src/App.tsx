@@ -68,7 +68,7 @@ function PromptView(props: PromptViewProps): ReactElement {
 
       <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
         <Caret answer={answer} />
-        <Markprompt.Answer answer={answer} />
+        <Markprompt.Answer answer={answer} state={state} />
       </Markprompt.AutoScroller>
 
       <References references={references} state={state} />

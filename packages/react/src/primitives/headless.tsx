@@ -27,6 +27,8 @@ import type {
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
+import type { ChatLoadingState } from '../index.js';
+import type { PromptLoadingState } from '../prompt/usePrompt.js';
 
 type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
 
@@ -331,18 +333,45 @@ function CopyContentButton(props: CopyContentButtonProps): ReactElement {
 }
 CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
+type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
+  React.HTMLAttributes<HTMLPreElement> & {
+    state: PromptLoadingState | ChatLoadingState;
+  };
+
+function HighlightedCode(props: HighlightedCodeProps) {
+  const { children, className, state, ...rest } = props;
+
+  useEffect(() => {
+    if (state === 'done') {
+      // If highlight.js script/css tags were added globally,
+      // we can syntax highlight. This trick allows us to provide
+      // syntax highlighting without imposing a large extra
+      // package as part of the markprompt-js bundle.
+      console.log('Calling highlight');
+      ((globalThis as any).hljs as any)?.highlightAll();
+    }
+  }, [children, state]);
+
+  return (
+    <pre {...rest} className={className}>
+      {children}
+    </pre>
+  );
+}
+
 type AnswerProps = Omit<
   ComponentPropsWithoutRef<typeof Markdown>,
   'children'
 > & {
   answer: string;
+  state: PromptLoadingState | ChatLoadingState;
 };
 
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
-  const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
+  const { answer, state, remarkPlugins = [remarkGfm], ...rest } = props;
 
   return (
     <Markdown
@@ -372,9 +401,10 @@ function Answer(props: AnswerProps): ReactElement {
                   }
                 />
               </div>
-              <pre {...rest} className={className}>
+              {children}
+              {/* <HighlightedCode {...rest} className={className} state={state}>
                 {children}
-              </pre>
+              </HighlightedCode> */}
             </div>
           );
         },
