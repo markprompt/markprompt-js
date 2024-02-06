@@ -44,7 +44,7 @@ export function DefaultView(
   props: DefaultViewProps & { onDidSelectPrompt: (prompt: string) => void },
 ): ReactElement {
   if (!props.message && !props.prompts) {
-    return <></>;
+    return <div />;
   }
 
   return (
