@@ -2,14 +2,20 @@
 
 This example contains a reference implementation of
 [`@markprompt/react`](../../packages/react/README.md) with
-[Next.js](https://nextjs.org).
-
-It also contains an example of using the exported context provider to manage the
-state of the prompt, conditionally showing a loading state and references.
+[Next.js](https://nextjs.org), and featuring [Algolia](https://algolia.com/) docs search.
 
 ## Getting Started
 
-Run locally:
+Create a `.env.local` file at the root of the project, and add the following:
+
+```
+NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY=<MARKPROMPT_PROJECT_KEY>
+NEXT_PUBLIC_ALGOLIA_API_KEY=<ALGOLIA_API_KEY>
+NEXT_PUBLIC_ALGOLIA_APP_ID=<ALGOLIA_APP_ID>
+NEXT_PUBLIC_ALGOLIA_INDEX_NAME=<ALGOLIA_INDEX_NAME>
+```
+
+Start the local dev server:
 
 ```sh
 npm run dev
