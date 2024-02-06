@@ -571,69 +571,6 @@ And it returns:
     (`function(feedback: PromptFeedback, state: ChatLoadingState, messageIndex: number)`):
     Submit feedback for the last answer.
 
-### `usePrompt(options): UsePromptResult`
-
-Create a prompt. It accepts the following options:
-
-- `options` (`UsePromptOptions`): Options for `usePrompt`.
-  - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
-  - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
-    `useFeedback`.
-    - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
-      `https://api.markprompt.com/feedback`)
-  - `options.projectKey` (`string`): The project key associated to your project.
-    It can be obtained in the project settings on
-    [Markprompt.com](https://markprompt.com/) under "Your Project > Settings >
-    Project key"
-  - `options.promptOptions` (`SubmitPromptOptions`): Options for
-    `@markprompt/core`'s `submitPrompt`
-    - `promptOptions.apiUrl` (`string`): URL at which to fetch completions.
-      (Default: `https://api.markprompt.com/v1/completions`)
-    - `promptOptions.frequencyPenalty` (`number`): The model frequency penalty.
-      (Default: `0`)
-    - `promptOptions.iDontKnowMessage` (`string`): Message returned when the
-      model does not have an answer. (Default:
-      `Sorry, I am not sure how to answer that.`)
-    - `promptOptions.maxTokens` (`number`): The max number of tokens to include
-      in the response.
-    - `promptOptions.model` (`string`): The OpenAI model to use. (Default:
-      `gpt-3.5-turbo`)
-    - `promptOptions.presencePenalty` (`number`): The model presence penalty.
-      (Default: `0`)
-    - `promptOptions.sectionsMatchCount` (`number`): The number of sections to
-      include in the prompt context.
-    - `promptOptions.sectionsMatchThreshold` (`number`): The similarity
-      threshold between the input question and selected sections.
-    - `promptOptions.sectionsScope` (`number`): When a section is matched,
-      extend the context to the parent section. For instance, if a section has
-      level 3 and `sectionsScope` is set to 1, include the content of the entire
-      parent section of level 1. If 0, this includes the entire file. (Default:
-      `undefined`)
-    - `promptOptions.systemPrompt` (`string`): The prompt template. (Default:
-      `You are a very enthusiastic company representative who loves to help people!`)
-    - `promptOptions.temperature` (`number`): The model temperature. (Default:
-      `0.1`)
-    - `promptOptions.topP` (`number`): The model top P. (Default: `1`)
-
-And it returns:
-
-- `result` (`UsePromptResult`)
-  - `result.answer` (`string`): The answer for the current prompt
-  - `result.prompt` (`string`): The current prompt
-  - `result.references` (`FileSectionReference[]`): References for the current
-    prompt. Can be used to render a list of references.
-  - `result.state` (`PromptLoadingState`): The loading state of the current
-    completions request
-  - `result.abort` (`function(): void`): Abort the current prompt completions
-    request.
-  - `result.abortFeedbackRequest` (`string`): Abort the current feedback
-    request.
-  - `result.setPrompt` (`function(prompt: string): void`): Set the prompt.
-  - `result.submitFeedback`
-    (`function(feedback: PromptFeedback, state: PromptLoadingState)`): Submit
-    feedback for the last answer.
-  - `result.submitPrompt` (`function(): void`): Submit the prompt.
-
 ### `useSearch(options): UseSearchResult`
 
 Create a search prompt. It accepts the following options:

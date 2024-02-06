@@ -1,11 +1,11 @@
 import { type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
+import { DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
+import { References } from './References.js';
 import { useChatStore } from './store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { DefaultView } from '../prompt/DefaultView.js';
-import { References } from '../prompt/References.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {

@@ -18,7 +18,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'prompt' | 'search';
+export type View = 'chat' | 'search';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -217,38 +217,6 @@ export interface MarkpromptOptions {
        */
       assistant?: string | ComponentType<{ className: string }>;
     };
-  };
-  /**
-   * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
-   */
-  prompt?: Omit<
-    UserConfigurableOptions,
-    'tools' | 'tool_call' | 'ToolCallsConfirmation'
-  > & {
-    /**
-     * Label for the prompt input
-     * @default "Ask AI"
-     **/
-    label?: string;
-    /**
-     * Label for the tab bar
-     * @default "Ask AI"
-     **/
-    tabLabel?: string;
-    /**
-     * Placeholder for the prompt input
-     * @default "Ask AI…"
-     **/
-    placeholder?: string;
-    /**
-     * (Empty) view
-     */
-    defaultView?: DefaultViewProps;
-    /**
-     * Component to render when an error occurs in prompt view
-     * @default "Sorry, it looks like the bot is having a hard time! Please try again in a few minutes."
-     */
-    errorText?: ComponentType<{ error: Error }>;
   };
   references?: {
     /**

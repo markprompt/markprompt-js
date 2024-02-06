@@ -213,25 +213,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
       visible: true,
     },
   },
-  prompt: {
-    label: 'Ask AI',
-    tabLabel: 'Ask AI',
-    placeholder: 'Ask AI…',
-    errorText: () => (
-      <p className="MarkpromptDefaultError">
-        <span className="MarkpromptDefaultErrorIcon">:-(</span>
-        Sorry, it looks like the bot is having a hard time! Please try again in
-        a few minutes.
-        {/* We should find a better way to display this message. */}
-        {/* <details>
-          <summary>Error info</summary>
-          <code>
-            {props.error.name}: {props.error.message}
-          </code>
-        </details> */}
-      </p>
-    ),
-  },
   references: {
     loadingText: 'Fetching context…',
     heading: 'Sources',

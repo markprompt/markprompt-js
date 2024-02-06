@@ -22,7 +22,6 @@ import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
 import { CheckIcon, ClipboardIcon } from '../icons.js';
 import type { ChatLoadingState } from '../index.js';
-import type { PromptLoadingState } from '../prompt/usePrompt.js';
 import type {
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
@@ -348,7 +347,7 @@ CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
 type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
   React.HTMLAttributes<HTMLPreElement> & {
-    state?: PromptLoadingState | ChatLoadingState;
+    state?: ChatLoadingState;
   };
 
 function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
@@ -377,7 +376,7 @@ type AnswerProps = Omit<
   'children'
 > & {
   answer: string;
-  state?: PromptLoadingState | ChatLoadingState;
+  state?: ChatLoadingState;
   copyButtonClassName?: string;
 };
 

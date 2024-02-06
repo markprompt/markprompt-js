@@ -9,7 +9,6 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
 import { ChatProvider, useChatStore } from './index.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
 import { type MarkpromptOptions, type View } from './types.js';
@@ -41,10 +40,7 @@ function getDefaultView(
   if (isSearchEnabled) {
     return 'search';
   }
-  if (isChatEnabled) {
-    return 'chat';
-  }
-  return 'prompt';
+  return 'chat';
 }
 
 /**
@@ -80,7 +76,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     description,
     feedback,
     chat,
-    prompt,
     references,
     search,
     trigger,
@@ -103,7 +98,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       description: props.description,
       feedback: props.feedback,
       chat: props.chat,
-      prompt: props.prompt,
       references: props.references,
       search: props.search,
       trigger: props.trigger,
@@ -227,7 +221,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   defaultView={defaultView}
                   feedback={feedback}
                   projectKey={projectKey}
-                  prompt={prompt}
                   references={references}
                   search={search}
                   layout={layout}
@@ -249,7 +242,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               defaultView={defaultView}
               feedback={feedback}
               projectKey={projectKey}
-              prompt={prompt}
               references={references}
               search={search}
               layout={layout}
@@ -270,7 +262,6 @@ interface MarkpromptContentProps {
   defaultView?: MarkpromptOptions['defaultView'];
   layout?: MarkpromptOptions['layout'];
   feedback?: MarkpromptOptions['feedback'];
-  prompt?: MarkpromptOptions['prompt'];
   references?: MarkpromptOptions['references'];
   search?: MarkpromptOptions['search'];
   linkAs?: MarkpromptOptions['linkAs'];
@@ -285,7 +276,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     projectKey,
     layout,
     chat,
-    prompt,
     references,
     search,
     linkAs,
@@ -329,7 +319,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 </BaseMarkprompt.Close>
               </div>
             )}
-            {chat?.enabled ? (
+            {chat?.enabled && (
               <ChatView
                 activeView={activeView}
                 chatOptions={chat}
@@ -337,16 +327,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 feedbackOptions={feedback}
                 onDidSelectReference={() => emitter.emit('close')}
                 projectKey={projectKey}
-                referencesOptions={references}
-              />
-            ) : (
-              <PromptView
-                activeView={activeView}
-                debug={debug}
-                feedbackOptions={feedback}
-                onDidSelectReference={() => emitter.emit('close')}
-                projectKey={projectKey}
-                promptOptions={prompt}
                 referencesOptions={references}
               />
             )}
@@ -372,22 +352,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             >
               {search.tabLabel}
             </Tabs.Trigger>
-            {!chat?.enabled && (
-              <Tabs.Trigger
-                value="prompt"
-                className="MarkpromptTab"
-                onClick={() => setActiveView('prompt')}
-              >
-                <SparklesIcon
-                  focusable={false}
-                  className={clsx('MarkpromptBaseIcon', {
-                    MarkpromptPrimaryIcon: activeView === 'prompt',
-                    MarkpromptHighlightedIcon: activeView === 'search',
-                  })}
-                />
-                {prompt!.tabLabel}
-              </Tabs.Trigger>
-            )}
             {chat?.enabled && (
               <Tabs.Trigger
                 value="chat"
@@ -461,7 +425,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           />
         </Tabs.Content>
 
-        {chat?.enabled ? (
+        {chat?.enabled && (
           <Tabs.Content
             value="chat"
             style={{
@@ -479,24 +443,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               showBack={layout === 'panels'}
               onDidSelectReference={() => emitter.emit('close')}
               onDidPressBack={() => setActiveView('search')}
-            />
-          </Tabs.Content>
-        ) : (
-          <Tabs.Content
-            value="prompt"
-            style={{
-              position: 'absolute',
-              inset: 0,
-            }}
-          >
-            <PromptView
-              activeView={activeView}
-              debug={debug}
-              feedbackOptions={feedback}
-              onDidSelectReference={() => emitter.emit('close')}
-              projectKey={projectKey}
-              promptOptions={prompt}
-              referencesOptions={references}
             />
           </Tabs.Content>
         )}

@@ -147,55 +147,6 @@ describe('Markprompt', () => {
     );
   });
 
-  it('switches views when the hotkey is pressed', async () => {
-    const user = await userEvent.setup();
-    render(<Markprompt projectKey="test-key" search={{ enabled: true }} />);
-    await user.click(screen.getByText('Ask AI'));
-    expect(screen.getByRole('searchbox')).toBeInTheDocument();
-    await user.keyboard('{Meta>}{Enter}{/Meta}');
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
-    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
-    await user.keyboard('{Meta>}{Enter}{/Meta}');
-    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
-    expect(screen.getByRole('searchbox')).toBeInTheDocument();
-  });
-
-  it('switches views when props change', async () => {
-    const user = await userEvent.setup();
-    const { rerender } = render(
-      <Markprompt
-        layout="tabs"
-        defaultView="prompt"
-        projectKey="test-key"
-        prompt={{ label: 'promptinput' }}
-        chat={{ enabled: false }}
-      />,
-    );
-    await user.click(screen.getByText('Ask AI'));
-    expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
-    rerender(
-      <Markprompt
-        layout="tabs"
-        projectKey="test-key"
-        defaultView="chat"
-        chat={{ enabled: true, label: 'chatinput' }}
-        search={{ enabled: true }}
-      />,
-    );
-    expect(screen.queryByLabelText('promptinput')).not.toBeInTheDocument();
-    rerender(
-      <Markprompt
-        layout="tabs"
-        projectKey="test-key"
-        prompt={{ label: 'promptinput' }}
-        chat={{ enabled: false }}
-        search={{ enabled: true }}
-      />,
-    );
-    expect(screen.getByLabelText('promptinput')).toBeInTheDocument();
-    expect(screen.queryByLabelText('chatinput')).not.toBeInTheDocument();
-  });
-
   it('calls back on open', async () => {
     const user = await userEvent.setup();
     const fn = vi.fn();
