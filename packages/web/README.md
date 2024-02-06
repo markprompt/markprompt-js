@@ -29,7 +29,7 @@ JavaScript:
 
 ```html
 <!-- load from a CDN: -->
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.5.1?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.22.0?css" />
 ```
 
 ```js
@@ -71,11 +71,17 @@ import type {
 
 interface MarkpromptOptions {
   /**
+   * The children trigger component
+   * @default undefined
+   **/
+  children?: React.ReactNode;
+  /**
    * Display format.
    * @default "dialog"
    **/
   display?: 'plain' | 'dialog';
-  /* If true, enable user interactions outside of the dialog while
+  /**
+   * If true, enable user interactions outside of the dialog while
    * keeping it open.
    * @default false
    **/
@@ -84,7 +90,12 @@ interface MarkpromptOptions {
    * Enable and configure search functionality.
    * @default "search"
    * */
-  defaultView?: 'search' | 'chat' | 'prompt';
+  defaultView?: View;
+  /**
+   * Multi-pane layout when both search and chat is enabled
+   * @default "panels"
+   **/
+  layout?: 'panels' | 'tabs';
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -96,6 +107,10 @@ interface MarkpromptOptions {
      * @default true
      **/
     visible?: boolean;
+    /**
+     * Show an × icon in the close button instead of the keyboard shortcut ('Esc')
+     */
+    hasIcon?: boolean;
   };
   description?: {
     /**
@@ -134,7 +149,7 @@ interface MarkpromptOptions {
    * Enable and configure chat functionality. Allows users to have a conversation with an assistant.
    * Enabling chat functionality will disable prompt functionality.
    */
-  chat?: SubmitChatOptions & {
+  chat?: UserConfigurableOptions & {
     /**
      * Show a chat-like prompt input allowing for conversation-style interaction
      * rather than single question prompts.
@@ -157,10 +172,19 @@ interface MarkpromptOptions {
      **/
     placeholder?: string;
     /**
-     * Show sender info, like avatar
+     * Label for the submit button
+     * @default "Send"
+     **/
+    buttonLabel?: string;
+    /**
+     * Component to render when an error occurs in prompt view
+     */
+    errorText?: ComponentType<{ error: Error }>;
+    /**
+     * Show copy response button
      * @default true
      **/
-    showSender?: boolean;
+    showCopy?: boolean;
     /**
      * Enable chat history features
      * - enable saving chat history to local storage
@@ -172,38 +196,26 @@ interface MarkpromptOptions {
     /**
      * Default (empty) view
      */
-    defaultView?:  {
-      message?: string | ReactElement;
-      promptsHeading?: string;
-      prompts?: string[];
-    };
-  };
-  /**
-   * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
-   */
-  prompt?: SubmitChatOptions & {
+    defaultView?: DefaultViewProps;
     /**
-     * Label for the prompt input
-     * @default "Ask AI"
-     **/
-    label?: string;
-    /**
-     * Label for the tab bar
-     * @default "Ask AI"
-     **/
-    tabLabel?: string;
-    /**
-     * Placeholder for the prompt input
-     * @default "Ask AI…"
-     **/
-    placeholder?: string;
-    /**
-     * Default (empty) view
+     * Avatars to use for chat messages.
      */
-    defaultView?:  {
-      message?: string | ReactElement;
-      promptsHeading?: string;
-      prompts?: string[];
+    avatars?: {
+      /**
+       * If true, show avatars.
+       * @default true
+       */
+      visible?: boolean;
+      /**
+       * The user avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      user?: string | ComponentType<{ className: string }>;
+      /**
+       * The assistant avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      assistant?: string | ComponentType<{ className: string }>;
     };
   };
   references?: {
@@ -219,10 +231,10 @@ interface MarkpromptOptions {
     getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
-     * @default "Answer generated from the following sources:"
+     * @default "Sources"
      **/
     heading?: string;
-    /** Loading text, default: `Fetching relevant pages…` */
+    /** Loading text, default: `Fetching context…` */
     loadingText?: string;
     /**
      * Callback to transform a reference id into an href and text
@@ -263,9 +275,18 @@ interface MarkpromptOptions {
     ) => string | undefined;
     /**
      * Label for the search input, not shown but used for `aria-label`
-     * @default "Search docs…"
+     * @default "Search documentation"
      **/
     label?: string;
+    /**
+     * Label for the "Ask AI" link when using "input" layout
+     * @default "Ask AI"
+     **/
+    askLabel?: string;
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultSearchViewProps;
     /**
      * Label for the tab bar
      * @default "Search"
@@ -273,7 +294,7 @@ interface MarkpromptOptions {
     tabLabel?: string;
     /**
      * Placeholder for the search input
-     * @default "Search docs…"
+     * @default "Search documentation"
      */
     placeholder?: string;
   };
@@ -284,11 +305,11 @@ interface MarkpromptOptions {
      **/
     label?: string;
     /**
-     * Label the open button
+     * Label for the open button
      **/
     buttonLabel?: string;
     /**
-     * Placeholder text for non-floating element
+     * Placeholder text for non-floating element.
      * @default "Ask AI"
      **/
     placeholder?: string;
@@ -298,13 +319,11 @@ interface MarkpromptOptions {
      * to the `markprompt` function.
      */
     floating?: boolean;
-    /**
-     * Do you use a custom element as the dialog trigger?
-     */
-    customElement?: boolean;
+    /** Do you use a custom element as the dialog trigger? */
+    customElement?: boolean | ReactNode;
     /**
      * Custom image icon source for the open button
-     */
+     **/
     iconSrc?: string;
   };
   title?: {
@@ -320,10 +339,25 @@ interface MarkpromptOptions {
     text?: string;
   };
   /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  linkAs?: string | ComponentType<any>;
+  /**
+   * Show Markprompt branding
+   * @default true
+   * @deprecated Use `branding` instead
+   **/
+  showBranding?: boolean;
+  /**
    * Show Markprompt branding
    * @default true
    **/
-  showBranding?: boolean;
+  branding?: {
+    show?: boolean;
+    type?: 'plain' | 'text';
+  };
   /**
    * Display debug info
    * @default false
@@ -343,7 +377,7 @@ can load the script from a CDN. You can attach the options for the Markprompt
 component to the window prior to loading our script:
 
 ```html
-<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.13.x?css" />
+<link rel="stylesheet" href="https://esm.sh/@markprompt/css@0.22.0?css" />
 <script>
   window.markprompt = {
     projectKey: `YOUR-PROJECT-KEY`,
@@ -358,7 +392,7 @@ component to the window prior to loading our script:
     },
   };
 </script>
-<script type="module" src="https://esm.sh/@markprompt/web@0.16.x/init"></script>
+<script type="module" src="https://esm.sh/@markprompt/web@0.26.0/init"></script>
 
 <div id="markprompt"></div>
 ```
@@ -386,30 +420,32 @@ button by default. You have two other options:
   your own trigger element and attach whatever event handlers you would like
   and/or open the Markprompt dialog programmatically.
 
-  ### `markpromptOpen()`
+### `markpromptOpen()`
 
-  Open the Markprompt dialog programmatically.
+Open the Markprompt dialog programmatically.
 
-  ### `markpromptClose()`
+### `markpromptClose()`
 
-  Close the Markprompt dialog programmatically.
+Close the Markprompt dialog programmatically.
 
-  ### `markpromptChat(projectKey, container, options?)`
+### `markpromptChat(projectKey, container, options?)`
 
-  Render the Markprompt chat view standalone, outside of a dialog.
+Render the Markprompt chat view standalone, outside of a dialog.
 
-  - `projectKey` (`string`): Your Markprompt project key.
-  - `container` (`HTMLElement | string`): The element or selector to render
-    Markprompt into.
-  - `options` (`object`): Options for customizing Markprompt, see above.
-  - `options.chatOptions` (`MarkpromptOptions.chat`): Enable and configure chat
-    functionality. Allows users to have a conversation with an assistant.
-    Enabling chat functionality will disable prompt functionality. See above for options.
-  - `options.debug` (`boolean`): Display debug info
-  - `options.feedbackOptions` (`MarkpromptOptions.feedback`): Enable feedback
-    functionality, shows a thumbs up/down button after a prompt was submitted. See above for options.
-  - `options.referencesOptions` (`MarkpromptOptions.references`): Enable and
-    configure references functionality. See above for options.
+- `projectKey` (`string`): Your Markprompt project key.
+- `container` (`HTMLElement | string`): The element or selector to render
+  Markprompt into.
+- `options` (`object`): Options for customizing Markprompt, see above.
+- `options.chatOptions` (`MarkpromptOptions.chat`): Enable and configure chat
+  functionality. Allows users to have a conversation with an assistant.
+  Enabling chat functionality will disable prompt functionality. See above for
+  options.
+- `options.debug` (`boolean`): Display debug info
+- `options.feedbackOptions` (`MarkpromptOptions.feedback`): Enable feedback
+  functionality, shows a thumbs up/down button after a prompt was submitted.
+  See above for options.
+- `options.referencesOptions` (`MarkpromptOptions.references`): Enable and
+  configure references functionality. See above for options.
 
 ## Documentation
 

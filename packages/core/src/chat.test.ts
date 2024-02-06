@@ -328,6 +328,7 @@ describe('submitChat', () => {
             content: 'According to my calculator 1 + 2 = 3',
             role: 'assistant',
           },
+          logprobs: null,
         },
       ],
     } satisfies OpenAI.ChatCompletion;

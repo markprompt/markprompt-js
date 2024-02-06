@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { type ReactElement } from 'react';
 
-import type { PromptLoadingState } from './usePrompt.js';
 import type { ChatLoadingState } from '../chat/store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 
@@ -22,7 +21,7 @@ export function Caret(props: CaretProps): ReactElement | null {
 interface AnswerProps {
   className?: string;
   answer: string;
-  state: PromptLoadingState | ChatLoadingState;
+  state: ChatLoadingState;
 }
 
 export function Answer(props: AnswerProps): ReactElement {
@@ -36,7 +35,11 @@ export function Answer(props: AnswerProps): ReactElement {
       aria-live="polite"
     >
       <Caret answer={answer} />
-      <BaseMarkprompt.Answer answer={answer} />
+      <BaseMarkprompt.Answer
+        answer={answer}
+        state={state}
+        copyButtonClassName="MarkpromptGhostThumbButton"
+      />
     </div>
   );
 }

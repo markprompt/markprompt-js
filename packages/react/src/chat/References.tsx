@@ -1,8 +1,8 @@
 import type { FileSectionReference } from '@markprompt/core';
 import { useCallback, useMemo, type ReactElement } from 'react';
 
-import type { PromptLoadingState } from './usePrompt.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import type { ChatLoadingState } from '../index.js';
 import * as Markprompt from '../primitives/headless.js';
 
 interface ReferenceProps {
@@ -67,7 +67,7 @@ interface ReferencesProps {
   };
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
-  state: PromptLoadingState;
+  state: ChatLoadingState;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -75,7 +75,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
     getHref,
     getLabel,
     heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
-    loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
     transformReferenceId,
     references,
     state,
@@ -94,7 +93,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     [transformReferenceId, getHref, getLabel],
   );
 
-  let adjustedState: PromptLoadingState = state;
+  let adjustedState: ChatLoadingState = state;
   if (state === 'done' && references.length === 0) {
     adjustedState = 'indeterminate';
   }
@@ -111,15 +110,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
       data-loading-state={adjustedState}
       role="status"
     >
-      <div
-        className="MarkpromptProgress"
-        id="markprompt-progressbar"
-        role="progressbar"
-        aria-labelledby="markprompt-loading-text"
-      />
-
-      {state === 'preload' && <p id="markprompt-loading-text">{loadingText}</p>}
-
       {state !== 'preload' && <p>{heading}</p>}
 
       {(state === 'streaming-answer' || state === 'done') && (

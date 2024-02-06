@@ -6,6 +6,7 @@ import { MessageAnswer } from './MessageAnswer.js';
 import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
+import { BotIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface AssistantMessageProps {
@@ -14,6 +15,7 @@ interface AssistantMessageProps {
   message: ChatViewMessage;
   projectKey: string;
 }
+
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const { feedbackOptions, message, projectKey, chatOptions } = props;
 
@@ -57,37 +59,63 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
 
   return (
     <div className="MarkpromptMessageAnswerContainer">
-      <MessageAnswer state={message.state}>
-        {message.content ?? ''}
-      </MessageAnswer>
+      {chatOptions?.avatars?.visible && (
+        <>
+          {!chatOptions.avatars?.assistant ? (
+            <BotIcon className="MarkpromptMessageAvatar" />
+          ) : typeof chatOptions.avatars?.assistant === 'string' ? (
+            <img
+              src={chatOptions.avatars.assistant}
+              className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+            />
+          ) : (
+            <div className="MarkpromptMessageAvatar">
+              <chatOptions.avatars.assistant className="MarkpromptMessageAvatar" />
+            </div>
+          )}
+        </>
+      )}
 
-      {/*
-        if this message has any tool calls, and those tool calls require a
+      <div style={{ width: '100%' }}>
+        <MessageAnswer state={message.state}>
+          {message.content ?? ''}
+        </MessageAnswer>
+
+        {/*
+        If this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
         either the default or user-provided confirmation
       */}
-      {Array.isArray(toolCalls) && (
-        <ToolCallConfirmation
-          toolCalls={toolCalls}
-          tools={chatOptions.tools}
-          toolCallsStatus={toolCallsByToolCallId}
-          confirmToolCalls={confirmToolCalls}
-        />
-      )}
-
-      {feedbackOptions?.enabled && message.state === 'done' && (
-        <Feedback
-          variant="icons"
-          className="MarkpromptPromptFeedback"
-          submitFeedback={(feedback, promptId) => {
-            submitFeedback(feedback, promptId);
-            feedbackOptions.onFeedbackSubmit?.(feedback, messages, promptId);
-          }}
-          abortFeedbackRequest={abortFeedbackRequest}
-          promptId={message.promptId}
-          heading={feedbackOptions.heading}
-        />
-      )}
+        {Array.isArray(toolCalls) && (
+          <ToolCallConfirmation
+            toolCalls={toolCalls}
+            tools={chatOptions.tools}
+            toolCallsStatus={toolCallsByToolCallId}
+            confirmToolCalls={confirmToolCalls}
+          />
+        )}
+        {(chatOptions.showCopy || feedbackOptions?.enabled) &&
+          message.state === 'done' && (
+            <Feedback
+              message={message.content ?? ''}
+              variant="icons"
+              className="MarkpromptPromptFeedback"
+              submitFeedback={(feedback, promptId) => {
+                submitFeedback(feedback, promptId);
+                feedbackOptions.onFeedbackSubmit?.(
+                  feedback,
+                  messages,
+                  promptId,
+                );
+              }}
+              abortFeedbackRequest={abortFeedbackRequest}
+              promptId={message.promptId}
+              heading={feedbackOptions.heading}
+              showFeedback={!!feedbackOptions?.enabled}
+              showCopy={chatOptions.showCopy}
+            />
+          )}
+      </div>
     </div>
   );
 }

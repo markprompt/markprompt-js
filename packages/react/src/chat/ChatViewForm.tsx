@@ -1,4 +1,3 @@
-import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
   useContext,
@@ -7,23 +6,40 @@ import {
   type FormEventHandler,
   type ReactElement,
   useState,
+  useMemo,
 } from 'react';
 
 import { ConversationSelect } from './ConversationSelect.js';
-import { RegenerateButton } from './RegenerateButton.js';
 import {
   ChatContext,
   selectProjectConversations,
   useChatStore,
 } from './store.js';
-import { SparklesIcon } from '../icons.js';
+import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { MarkpromptOptions } from '../types.js';
-import type { View } from '../useViews.js';
+import type { MarkpromptOptions, View } from '../types.js';
 
 interface ChatViewFormProps {
   activeView?: View;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
+}
+
+interface ChatSendIconProps {
+  isLoading: boolean;
+}
+
+function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
+  if (props.isLoading) {
+    return (
+      <div>
+        <LoadingIcon />
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <StopInsideLoadingIcon />
+        </div>
+      </div>
+    );
+  }
+  return <SendIcon />;
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
@@ -35,9 +51,9 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const lastMessageState = useChatStore(
     (state) => state.messages[state.messages.length - 1]?.state,
   );
-  const regenerateLastAnswer = useChatStore(
-    (state) => state.regenerateLastAnswer,
-  );
+  // const regenerateLastAnswer = useChatStore(
+  //   (state) => state.regenerateLastAnswer,
+  // );
   const conversations = useChatStore(selectProjectConversations);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
@@ -83,12 +99,20 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
       abortChat.current?.();
     }
 
-    // cancel pending chat request when the component unmounts.
+    // Cancel pending chat request when the component unmounts.
     return () => abortChat.current?.();
   }, [activeView]);
 
+  const isLoading = useMemo(() => {
+    return (
+      lastMessageState === 'streaming-answer' ||
+      lastMessageState === 'indeterminate' ||
+      lastMessageState === 'preload'
+    );
+  }, [lastMessageState]);
+
   return (
-    <BaseMarkprompt.Form className={'MarkpromptForm'} onSubmit={handleSubmit}>
+    <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
       <div className="MarkpromptPromptWrapper">
         <BaseMarkprompt.Prompt
           ref={inputRef}
@@ -98,32 +122,15 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
+          sendButtonClassName="MarkpromptPromptSubmitButton"
+          buttonLabel={isLoading ? 'Stop generating' : chatOptions?.buttonLabel}
           value={prompt}
+          isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}
-          label={
-            <AccessibleIcon.Root label={chatOptions!.label!}>
-              <SparklesIcon className="MarkpromptSearchIcon" />
-            </AccessibleIcon.Root>
-          }
+          Icon={<ChatSendIcon isLoading={isLoading} />}
         />
-      </div>
-
-      {/* {error && (
-        <BaseMarkprompt.ErrorMessage className="MarkpromptErrorMessage">
-          {chatOptions.errorText}
-        </BaseMarkprompt.ErrorMessage>
-      )} */}
-
-      <div className="MarkpromptChatActions">
-        {lastMessageState && lastMessageState !== 'indeterminate' && (
-          <RegenerateButton
-            lastMessageState={lastMessageState}
-            regenerateLastAnswer={regenerateLastAnswer}
-            abortSubmitChat={abortChat.current}
-          />
-        )}
-
         {conversations.length > 0 && <ConversationSelect />}
+        <div />
       </div>
     </BaseMarkprompt.Form>
   );

@@ -1,4 +1,4 @@
-import { Fragment, forwardRef, memo } from 'react';
+import { Fragment, forwardRef, memo, type ComponentType } from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
 import { type SearchResultProps as BaseSearchResultProps } from '../index.js';
@@ -47,6 +47,8 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 interface SearchResultProps extends BaseSearchResultProps {
   searchQuery: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  linkAs?: string | ComponentType<any>;
 }
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
@@ -59,18 +61,20 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
       onMouseMove,
       onClick,
       searchQuery,
+      linkAs,
       ...rest
     } = props;
 
+    const Link = linkAs ?? 'a';
+
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
-        <a
-          href={href}
-          className="MarkpromptSearchResultLink"
-          onMouseMove={onMouseMove}
-          onClick={onClick}
-        >
-          <div className="MarkpromptSearchResultContainer">
+        <Link href={href} className="MarkpromptSearchResultLink">
+          <div
+            onMouseMove={onMouseMove}
+            onClick={onClick}
+            className="MarkpromptSearchResultContainer"
+          >
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
               {href?.includes('#') ? (
                 <HashIcon className="MarkpromptSearchResultIcon" />
@@ -94,7 +98,7 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
               )}
             </div>
           </div>
-        </a>
+        </Link>
       </li>
     );
   },

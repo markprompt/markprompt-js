@@ -20,8 +20,10 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
-import { CheckIcon, CopyIcon } from '../icons.js';
+import { CheckIcon, ClipboardIcon } from '../icons.js';
+import type { ChatLoadingState } from '../index.js';
 import type {
+  MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
@@ -219,6 +221,16 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
   label?: ReactNode;
   /** The class name of the label element. */
   labelClassName?: string;
+  /** The class name of the send button element. */
+  sendButtonClassName?: string;
+  /** The label for the submit button. */
+  buttonLabel?: string;
+  /** Show an icon next to the send button. */
+  showSubmitButton?: boolean;
+  /** If the answer is loading. */
+  isLoading?: boolean;
+  /** Icon for the button. */
+  Icon?: ReactNode;
 };
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -231,19 +243,26 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       autoCorrect = 'off',
       autoFocus = true,
       label,
+      buttonLabel = 'Send',
       labelClassName,
+      sendButtonClassName,
       placeholder,
       spellCheck = false,
       type = 'search',
+      showSubmitButton = true,
+      isLoading,
+      Icon,
       name,
       ...rest
     } = props;
 
     return (
       <>
-        <label htmlFor={name} className={labelClassName}>
-          {label}
-        </label>
+        {label && (
+          <label htmlFor={name} className={labelClassName}>
+            {label}
+          </label>
+        )}
         <input
           {...rest}
           id={name}
@@ -257,6 +276,18 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           autoFocus={autoFocus}
           spellCheck={spellCheck}
         />
+        {showSubmitButton && (
+          <button
+            className={sendButtonClassName}
+            type="submit"
+            disabled={
+              (rest.value as string)?.trim()?.length === 0 && !isLoading
+            }
+          >
+            {buttonLabel}
+            {Icon}
+          </button>
+        )}
       </>
     );
   },
@@ -266,53 +297,100 @@ Prompt.displayName = 'Markprompt.Prompt';
 // TODO: find the right type definition for children. There is a mismatch
 // between the type that react-markdown exposes, and what is actually
 // serves.
-interface CopyCodeButtonProps {
+interface CopyContentButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  code: string;
+  content: string;
+  className?: string;
 }
 
-function CopyCodeButton(props: CopyCodeButtonProps): ReactElement {
-  const { code } = props;
-  const [didCopy, setDidCopy] = useState(false);
+function CopyContentButton(props: CopyContentButtonProps): ReactElement {
+  const { content, className } = props;
+  const [didJustCopy, setDidJustCopy] = useState(false);
 
   const handleClick = (): void => {
-    navigator.clipboard.writeText(code);
-    setDidCopy(true);
+    navigator.clipboard.writeText(content);
+    setDidJustCopy(true);
     setTimeout(() => {
-      setDidCopy(false);
+      setDidJustCopy(false);
     }, 2000);
   };
 
   return (
     <button
-      className="MarkpromptCopyButton"
+      className={className}
       style={{ animationDelay: '100ms' }}
+      data-active={false}
       onClick={handleClick}
     >
-      <AccessibleIcon label={didCopy ? 'copied' : 'copy'}>
-        {didCopy ? (
-          <CheckIcon width={16} height={16} strokeWidth={2} />
-        ) : (
-          <CopyIcon width={16} height={16} strokeWidth={2} />
-        )}
+      <AccessibleIcon label={didJustCopy ? 'copied' : 'copy'}>
+        <div style={{ position: 'relative' }}>
+          <ClipboardIcon
+            style={{ opacity: didJustCopy ? 0 : 1 }}
+            width={16}
+            height={16}
+            strokeWidth={2}
+          />
+          <div style={{ position: 'absolute', inset: 0 }}>
+            <CheckIcon
+              style={{ opacity: didJustCopy ? 1 : 0 }}
+              width={16}
+              height={16}
+              strokeWidth={2}
+            />
+          </div>
+        </div>
       </AccessibleIcon>
     </button>
   );
 }
-CopyCodeButton.displayName = 'Markprompt.CopyCodeButton';
+CopyContentButton.displayName = 'Markprompt.CopyContentButton';
+
+type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
+  React.HTMLAttributes<HTMLPreElement> & {
+    state?: ChatLoadingState;
+  };
+
+function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
+  const { children, className, state, ...rest } = props;
+
+  useEffect(() => {
+    if (state === 'done') {
+      // If highlight.js script/css tags were added globally,
+      // we can syntax highlight. This trick allows us to provide
+      // syntax highlighting without imposing a large extra
+      // package as part of the markprompt-js bundle.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((globalThis as any).hljs as any)?.highlightAll();
+    }
+  }, [children, state]);
+
+  return (
+    <pre {...rest} className={className}>
+      {children}
+    </pre>
+  );
+}
 
 type AnswerProps = Omit<
   ComponentPropsWithoutRef<typeof Markdown>,
   'children'
 > & {
   answer: string;
+  state?: ChatLoadingState;
+  copyButtonClassName?: string;
 };
 
 /**
  * Render the markdown answer from the Markprompt API.
  */
 function Answer(props: AnswerProps): ReactElement {
-  const { answer, remarkPlugins = [remarkGfm], ...rest } = props;
+  const {
+    answer,
+    state,
+    copyButtonClassName,
+    remarkPlugins = [remarkGfm],
+    ...rest
+  } = props;
 
   return (
     <Markdown
@@ -324,18 +402,28 @@ function Answer(props: AnswerProps): ReactElement {
 
           return (
             <div style={{ position: 'relative' }}>
-              <CopyCodeButton
-                code={
-                  children &&
-                  typeof children === 'object' &&
-                  'props' in children
-                    ? children.props.children
-                    : ''
-                }
-              />
-              <pre {...rest} className={className}>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '0.5rem',
+                  right: '0.5rem',
+                  border: 0,
+                }}
+              >
+                <CopyContentButton
+                  className={copyButtonClassName}
+                  content={
+                    children &&
+                    typeof children === 'object' &&
+                    'props' in children
+                      ? children.props.children
+                      : ''
+                  }
+                />
+              </div>
+              <HighlightedCode {...rest} className={className} state={state}>
                 {children}
-              </pre>
+              </HighlightedCode>
             </div>
           );
         },
@@ -511,6 +599,8 @@ type SearchResultsProps = PolymorphicComponentPropWithRef<
       SearchResultComponentProps & { index?: number }
     >;
     searchResults: SearchResultComponentProps[];
+    searchOptions?: MarkpromptOptions['search'];
+    headingClassName?: string;
   }
 >;
 
@@ -521,6 +611,8 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       label = 'Search results',
       SearchResultComponent = SearchResult,
       searchResults,
+      searchOptions,
+      headingClassName,
       ...rest
     } = props;
 
@@ -539,6 +631,25 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
             <SearchResultComponent
               id={id}
               index={index}
+              key={id}
+              role="option"
+              {...result}
+            />
+          );
+        })}
+        {searchOptions?.defaultView?.searches?.length &&
+          searchOptions?.defaultView?.searchesHeading && (
+            <div className={headingClassName}>
+              {searchOptions.defaultView.searchesHeading}
+            </div>
+          )}
+        {searchOptions?.defaultView?.searches?.map((result, index) => {
+          const adjustedIndex = index + searchResults.length;
+          const id = `markprompt-result-${adjustedIndex}`;
+          return (
+            <SearchResultComponent
+              id={id}
+              index={adjustedIndex}
               key={id}
               role="option"
               {...result}
@@ -591,6 +702,7 @@ export {
   AutoScroller,
   Close,
   Content,
+  CopyContentButton,
   Description,
   DialogTrigger,
   ErrorMessage,

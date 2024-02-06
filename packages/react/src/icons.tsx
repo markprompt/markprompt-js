@@ -36,7 +36,29 @@ const ChevronLeftIcon = (
     stroke="currentColor"
     {...props}
   >
-    <polyline points="15 18 9 12 15 6" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15.75 19.5 8.25 12l7.5-7.5"
+    />
+  </svg>
+);
+
+const ChevronRightIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+    />
   </svg>
 );
 
@@ -48,8 +70,41 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     stroke="currentColor"
     {...props}
   >
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.35-4.35" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+    />
+  </svg>
+);
+
+const ClipboardIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+  </svg>
+);
+
+const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" opacity=".25" />
+    <path d="M8 12h8" />
+    <path d="m12 16 4-4-4-4" />
   </svg>
 );
 
@@ -355,13 +410,91 @@ const CircleDashedIcon = (
   </svg>
 );
 
+const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    {...props}
+  >
+    <path
+      fillRule="evenodd"
+      d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const BotIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    {...props}
+  >
+    <path d="M12 8V4H8" />
+    <rect width="16" height="12" x="4" y="8" rx="2" />
+    <path d="M2 14h2" />
+    <path d="M20 14h2" />
+    <path d="M15 13v2" />
+    <path d="M9 13v2" />
+  </svg>
+);
+
+const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" opacity=".25" stroke="currentColor" />
+    <path
+      fill="currentColor"
+      d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+    >
+      <animateTransform
+        attributeName="transform"
+        dur="1s"
+        repeatCount="indefinite"
+        type="rotate"
+        values="0 12 12;360 12 12"
+      />
+    </path>
+  </svg>
+);
+
+const StopInsideLoadingIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth={2}
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
+    />
+  </svg>
+);
+
 export {
+  BotIcon,
   ChatIcon,
   CheckCircleIcon,
   CheckIcon,
   ChevronLeftIcon,
+  ChevronRightIcon,
   ChevronUpIcon,
   CircleDashedIcon,
+  ClipboardIcon,
   CloseIcon,
   CommandIcon,
   CopyIcon,
@@ -371,11 +504,15 @@ export {
   FileTextIcon,
   HashIcon,
   LoaderIcon,
+  LoadingIcon,
   PlusIcon,
   ReloadIcon,
   SearchIcon,
+  SendIcon,
   SparklesIcon,
   StopIcon,
+  StopInsideLoadingIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
+  UserIcon,
 };

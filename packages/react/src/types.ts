@@ -12,10 +12,13 @@ import type {
   ComponentType,
   ElementType,
   PropsWithChildren,
+  ReactNode,
 } from 'react';
 
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
+
+export type View = 'chat' | 'search';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -61,7 +64,17 @@ export interface DefaultViewProps {
   prompts?: string[];
 }
 
+export interface DefaultSearchViewProps {
+  searchesHeading?: string;
+  searches?: SearchResultComponentProps[];
+}
+
 export interface MarkpromptOptions {
+  /**
+   * The children trigger component
+   * @default undefined
+   **/
+  children?: React.ReactNode;
   /**
    * Display format.
    * @default "dialog"
@@ -77,7 +90,12 @@ export interface MarkpromptOptions {
    * Enable and configure search functionality.
    * @default "search"
    * */
-  defaultView?: 'search' | 'chat' | 'prompt';
+  defaultView?: View;
+  /**
+   * Multi-pane layout when both search and chat is enabled
+   * @default "panels"
+   **/
+  layout?: 'panels' | 'tabs';
   close?: {
     /**
      * `aria-label` for the close modal button
@@ -154,14 +172,19 @@ export interface MarkpromptOptions {
      **/
     placeholder?: string;
     /**
+     * Label for the submit button
+     * @default "Send"
+     **/
+    buttonLabel?: string;
+    /**
      * Component to render when an error occurs in prompt view
      */
     errorText?: ComponentType<{ error: Error }>;
     /**
-     * Show sender info, like avatar
+     * Show copy response button
      * @default true
      **/
-    showSender?: boolean;
+    showCopy?: boolean;
     /**
      * Enable chat history features
      * - enable saving chat history to local storage
@@ -174,38 +197,26 @@ export interface MarkpromptOptions {
      * Default (empty) view
      */
     defaultView?: DefaultViewProps;
-  };
-  /**
-   * Enable and configure prompt functionality. Allows users to ask a single question to an assistant
-   */
-  prompt?: Omit<
-    UserConfigurableOptions,
-    'tools' | 'tool_call' | 'ToolCallsConfirmation'
-  > & {
     /**
-     * Label for the prompt input
-     * @default "Ask AI"
-     **/
-    label?: string;
-    /**
-     * Label for the tab bar
-     * @default "Ask AI"
-     **/
-    tabLabel?: string;
-    /**
-     * Placeholder for the prompt input
-     * @default "Ask AI…"
-     **/
-    placeholder?: string;
-    /**
-     * (Empty) view
+     * Avatars to use for chat messages.
      */
-    defaultView?: DefaultViewProps;
-    /**
-     * Component to render when an error occurs in prompt view
-     * @default "Sorry, it looks like the bot is having a hard time! Please try again in a few minutes."
-     */
-    errorText?: ComponentType<{ error: Error }>;
+    avatars?: {
+      /**
+       * If true, show avatars.
+       * @default true
+       */
+      visible?: boolean;
+      /**
+       * The user avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      user?: string | ComponentType<{ className: string }>;
+      /**
+       * The assistant avatar. Can be a string (to use as source for
+       * the image) or a component.
+       */
+      assistant?: string | ComponentType<{ className: string }>;
+    };
   };
   references?: {
     /**
@@ -220,10 +231,10 @@ export interface MarkpromptOptions {
     getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
-     * @default "Answer generated from the following sources:"
+     * @default "Sources"
      **/
     heading?: string;
-    /** Loading text, default: `Fetching relevant pages…` */
+    /** Loading text, default: `Fetching context…` */
     loadingText?: string;
     /**
      * Callback to transform a reference id into an href and text
@@ -264,9 +275,18 @@ export interface MarkpromptOptions {
     ) => string | undefined;
     /**
      * Label for the search input, not shown but used for `aria-label`
-     * @default "Search docs…"
+     * @default "Search documentation"
      **/
     label?: string;
+    /**
+     * Label for the "Ask AI" link when using "input" layout
+     * @default "Ask AI"
+     **/
+    askLabel?: string;
+    /**
+     * Default (empty) view
+     */
+    defaultView?: DefaultSearchViewProps;
     /**
      * Label for the tab bar
      * @default "Search"
@@ -274,7 +294,7 @@ export interface MarkpromptOptions {
     tabLabel?: string;
     /**
      * Placeholder for the search input
-     * @default "Search docs…"
+     * @default "Search documentation"
      */
     placeholder?: string;
   };
@@ -300,7 +320,7 @@ export interface MarkpromptOptions {
      */
     floating?: boolean;
     /** Do you use a custom element as the dialog trigger? */
-    customElement?: boolean;
+    customElement?: boolean | ReactNode;
     /**
      * Custom image icon source for the open button
      **/
@@ -318,6 +338,12 @@ export interface MarkpromptOptions {
      **/
     text?: string;
   };
+  /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  linkAs?: string | ComponentType<any>;
   /**
    * Show Markprompt branding
    * @default true

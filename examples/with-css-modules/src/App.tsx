@@ -1,6 +1,5 @@
 import { FileSectionReference } from '@markprompt/core';
 import * as Markprompt from '@markprompt/react';
-import { usePrompt } from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { ReactElement } from 'react';
 
@@ -35,44 +34,12 @@ function Component(): ReactElement {
             </Markprompt.Description>
           </VisuallyHidden>
 
-          <PromptView projectKey={import.meta.env.VITE_PROJECT_API_KEY} />
+          <Markprompt.ChatView
+            projectKey={import.meta.env.VITE_PROJECT_API_KEY}
+          />
         </Markprompt.Content>
       </Markprompt.Portal>
     </Markprompt.Root>
-  );
-}
-
-interface PromptViewProps {
-  projectKey: string;
-}
-
-function PromptView(props: PromptViewProps): ReactElement {
-  const { projectKey } = props;
-  const { answer, submitPrompt, prompt, setPrompt, references, state } =
-    usePrompt({ projectKey });
-  return (
-    <>
-      <Markprompt.Form
-        onSubmit={(event) => {
-          event.preventDefault();
-          submitPrompt();
-        }}
-      >
-        <SearchIcon className={styles.MarkpromptSearchIcon} />
-        <Markprompt.Prompt
-          className={styles.MarkpromptPrompt}
-          onChange={(event) => setPrompt(event.target.value)}
-          value={prompt}
-        />
-      </Markprompt.Form>
-
-      <Markprompt.AutoScroller className={styles.MarkpromptAnswer}>
-        <Caret answer={answer} />
-        <Markprompt.Answer answer={answer} />
-      </Markprompt.AutoScroller>
-
-      <References references={references} state={state} />
-    </>
   );
 }
 
@@ -143,8 +110,8 @@ const References = (props: ReferencesProps): ReactElement | null => {
   return (
     <div data-loading-state={adjustedState} className={styles.references}>
       <div className={styles.progress} />
-      <p>Fetching relevant pages…</p>
-      <p>Answer generated from the following sources:</p>
+      <p>Fetching context…</p>
+      <p>Sources</p>
       <Markprompt.References
         RootComponent="ul"
         ReferenceComponent={Reference}

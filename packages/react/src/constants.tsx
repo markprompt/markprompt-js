@@ -172,6 +172,7 @@ const defaultGetSearchResultSubtitle = (
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'dialog',
+  layout: 'panels',
   branding: {
     show: true,
     type: 'plain',
@@ -185,50 +186,36 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     text: 'Markprompt',
   },
   feedback: {
-    enabled: false,
+    enabled: true,
     heading: 'Was this response helpful?',
   },
   chat: {
-    enabled: false,
+    enabled: true,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
     history: true,
-    errorText: (props) => (
+    showCopy: true,
+    errorText: () => (
       <p className="MarkpromptDefaultError">
-        <span className="MarkpromptDefaultErrorIcon">:-(</span>
         Sorry, it looks like the bot is having a hard time! Please try again in
         a few minutes.
-        <details>
+        {/* We should find a better way to display this message. */}
+        {/* <details>
           <summary>Error info</summary>
           <code>
             {props.error.name}: {props.error.message}
           </code>
-        </details>
+        </details> */}
       </p>
     ),
-  },
-  prompt: {
-    label: 'Ask AI',
-    tabLabel: 'Ask AI',
-    placeholder: 'Ask AI…',
-    errorText: (props) => (
-      <p className="MarkpromptDefaultError">
-        <span className="MarkpromptDefaultErrorIcon">:-(</span>
-        Sorry, it looks like the bot is having a hard time! Please try again in
-        a few minutes.
-        <details>
-          <summary>Error info</summary>
-          <code>
-            {props.error.name}: {props.error.message}
-          </code>
-        </details>
-      </p>
-    ),
+    avatars: {
+      visible: true,
+    },
   },
   references: {
-    loadingText: 'Fetching relevant pages…',
-    heading: 'Answer generated from the following sources:',
+    loadingText: 'Fetching context…',
+    heading: 'Sources',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
   },
@@ -238,9 +225,9 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     getHeading: defaultGetSearchResultHeading,
     getTitle: defaultGetSearchResultTitle,
     getSubtitle: defaultGetSearchResultSubtitle,
-    label: 'Search docs…',
+    label: 'Search documentation',
     tabLabel: 'Search',
-    placeholder: 'Search docs…',
+    placeholder: 'Search documentation',
   },
   trigger: {
     label: 'Ask AI',
