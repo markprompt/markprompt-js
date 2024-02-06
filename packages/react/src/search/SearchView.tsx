@@ -377,6 +377,7 @@ function SearchResultsContainer(
             }
             onMouseMovedOverSearchResult.current = 'ask';
             setActiveSearchResult({ id: 'ask', trigger: 'mouse' });
+            return true;
           }}
           onClick={onDidSelectAsk}
         >
@@ -428,10 +429,11 @@ function SearchResultsContainer(
                 // the list using the keyboard: it will automatically reselect
                 // the result that the mouse is over.
                 if (onMouseMovedOverSearchResult?.current === id) {
-                  return;
+                  return true;
                 }
                 onMouseMovedOverSearchResult.current = id;
                 setActiveSearchResult({ id, trigger: 'mouse' });
+                return true;
               }}
               onClick={() => {
                 onDidSelectResult?.();

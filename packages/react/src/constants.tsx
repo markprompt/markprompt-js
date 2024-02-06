@@ -186,11 +186,11 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     text: 'Markprompt',
   },
   feedback: {
-    enabled: false,
+    enabled: true,
     heading: 'Was this response helpful?',
   },
   chat: {
-    enabled: false,
+    enabled: true,
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',

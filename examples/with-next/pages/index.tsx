@@ -40,6 +40,7 @@ export default function IndexPage(): ReactElement {
         <Markprompt
           projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
           defaultView="search"
+          layout="tabs"
           chat={{
             enabled: true,
             placeholder: 'Send a message',
@@ -81,7 +82,6 @@ export default function IndexPage(): ReactElement {
           }}
           close={{ visible: false }}
           linkAs={Link}
-          branding={{ show: false }}
         >
           <button id="search">
             <SearchIcon

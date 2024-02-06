@@ -17,7 +17,7 @@ export const Footer = (props: FooterProps): ReactElement => {
           alignItems: 'center',
           gap: '0.25rem',
           justifyContent: 'center',
-          margin: '-1rem 0 0 0',
+          margin: 0,
           padding: '0.5rem 0.75rem',
           color: 'var(--markprompt-mutedForeground)',
           fontSize: '0.75rem',

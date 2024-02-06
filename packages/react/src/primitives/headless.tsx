@@ -348,7 +348,7 @@ CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
 type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
   React.HTMLAttributes<HTMLPreElement> & {
-    state: PromptLoadingState | ChatLoadingState;
+    state?: PromptLoadingState | ChatLoadingState;
   };
 
 function HighlightedCode(props: HighlightedCodeProps) {
@@ -376,7 +376,7 @@ type AnswerProps = Omit<
   'children'
 > & {
   answer: string;
-  state: PromptLoadingState | ChatLoadingState;
+  state?: PromptLoadingState | ChatLoadingState;
   copyButtonClassName?: string;
 };
 
@@ -627,7 +627,6 @@ const SearchResults = forwardRef<HTMLUListElement, SearchResultsProps>(
       >
         {searchResults.map((result, index) => {
           const id = `markprompt-result-${index}`;
-          console.log('Search result', `markprompt-result-${index}`);
           return (
             <SearchResultComponent
               id={id}

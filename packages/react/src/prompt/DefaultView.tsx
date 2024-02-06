@@ -43,6 +43,10 @@ export function DefaultPrompts(props: {
 export function DefaultView(
   props: DefaultViewProps & { onDidSelectPrompt: (prompt: string) => void },
 ): ReactElement {
+  if (!props.message && !props.prompts) {
+    return <></>;
+  }
+
   return (
     <div className="MarkpromptDefaultView">
       {props.message && <DefaultMessage message={props.message} />}

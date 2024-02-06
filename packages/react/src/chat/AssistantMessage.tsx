@@ -77,7 +77,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
         </>
       )}
 
-      <div>
+      <div style={{ width: '100%' }}>
         <MessageAnswer state={message.state}>
           {message.content ?? ''}
         </MessageAnswer>
