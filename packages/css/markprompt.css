@@ -1225,7 +1225,7 @@
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
   transition-property: all;
   transition-duration: 200ms;
-  padding: 0.25rem;
+  padding: 0.375rem;
   cursor: pointer;
 }
 

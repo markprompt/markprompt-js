@@ -262,7 +262,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
             style={{ flexGrow: 'none', marginRight: '0.25rem' }}
             onClick={() => onDidSelectAsk?.()}
           >
-            <SparklesIcon style={{ width: 20, height: 20 }} strokeWidth={2.5} />
+            <SparklesIcon style={{ width: 18, height: 18 }} />
           </button>
         </div>
       </BaseMarkprompt.Form>

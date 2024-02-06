@@ -52,7 +52,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           <div className="MarkpromptChatViewNavigation">
             <button className="MarkpromptGhostButton" onClick={onDidPressBack}>
               <ChevronLeftIcon
-                style={{ width: 20, height: 20 }}
+                style={{ width: 16, height: 16 }}
                 strokeWidth={2.5}
               />
             </button>

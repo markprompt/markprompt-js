@@ -11,7 +11,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
 
-  /* --markprompt-background: #fff;
+  --markprompt-background: #fff;
   --markprompt-foreground: #171717;
   --markprompt-muted: hsl(0, 0%, 98%);
   --markprompt-mutedForeground: #808080;
@@ -30,7 +30,7 @@
   --markprompt-text-size: 0.875rem;
   --markprompt-text-size-xs: 0.75rem;
   --markprompt-button-icon-size: 1rem;
-  --markprompt-icon-stroke-width: 2px; */
+  --markprompt-icon-stroke-width: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
