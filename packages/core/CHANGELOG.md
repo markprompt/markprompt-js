@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.23.0
+
+### Minor Changes
+
+- [#291](https://github.com/motifland/markprompt-js/pull/291) [`090d4a4c254ea84747a3ac1caf862ceb5a43e5f3`](https://github.com/motifland/markprompt-js/commit/090d4a4c254ea84747a3ac1caf862ceb5a43e5f3) Thanks [@michaelfester](https://github.com/michaelfester)! - Add docs
+
+- [#291](https://github.com/motifland/markprompt-js/pull/291) [`090d4a4c254ea84747a3ac1caf862ceb5a43e5f3`](https://github.com/motifland/markprompt-js/commit/090d4a4c254ea84747a3ac1caf862ceb5a43e5f3) Thanks [@michaelfester](https://github.com/michaelfester)! - New search view
+
 ## 0.22.3
 
 ### Patch Changes
