@@ -15,16 +15,11 @@ NEXT_PUBLIC_ALGOLIA_APP_ID=<ALGOLIA_APP_ID>
 NEXT_PUBLIC_ALGOLIA_INDEX_NAME=<ALGOLIA_INDEX_NAME>
 ```
 
-Start the local dev server:
+Install dependencies and start the local dev server:
 
 ```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open http://localhost:3000 and see the result.
