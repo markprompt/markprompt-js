@@ -11,7 +11,6 @@ import type {
   ComponentPropsWithoutRef,
   ComponentType,
   ElementType,
-  JSXElementConstructor,
   PropsWithChildren,
   ReactNode,
 } from 'react';
@@ -375,6 +374,7 @@ export interface MarkpromptOptions {
    * Component to use in place of <a>.
    * @default "a"
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   linkAs?: string | ComponentType<any>;
   /**
    * Show Markprompt branding

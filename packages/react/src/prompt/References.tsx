@@ -75,7 +75,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
     getHref,
     getLabel,
     heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
-    loadingText = DEFAULT_MARKPROMPT_OPTIONS.references!.loadingText!,
     transformReferenceId,
     references,
     state,

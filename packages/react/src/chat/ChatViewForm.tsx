@@ -10,16 +10,14 @@ import {
 } from 'react';
 
 import { ConversationSelect } from './ConversationSelect.js';
-import { RegenerateButton } from './RegenerateButton.js';
 import {
   ChatContext,
   selectProjectConversations,
   useChatStore,
-  type ChatLoadingState,
 } from './store.js';
+import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
-import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
 
 interface ChatViewFormProps {
   activeView?: View;
@@ -30,7 +28,7 @@ interface ChatSendIconProps {
   isLoading: boolean;
 }
 
-function ChatSendIcon(props: ChatSendIconProps) {
+function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
   if (props.isLoading) {
     return (
       <div>
@@ -53,9 +51,9 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const lastMessageState = useChatStore(
     (state) => state.messages[state.messages.length - 1]?.state,
   );
-  const regenerateLastAnswer = useChatStore(
-    (state) => state.regenerateLastAnswer,
-  );
+  // const regenerateLastAnswer = useChatStore(
+  //   (state) => state.regenerateLastAnswer,
+  // );
   const conversations = useChatStore(selectProjectConversations);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(

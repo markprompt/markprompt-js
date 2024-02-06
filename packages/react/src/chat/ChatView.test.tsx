@@ -57,7 +57,7 @@ const ChatViewWithProvider = ({
   activeView?: View;
   referencesOptions?: MarkpromptOptions['references'];
   feedbackOptions?: MarkpromptOptions['feedback'];
-}) => {
+}): JSX.Element => {
   return (
     <ChatProvider chatOptions={chatOptions} projectKey={projectKey}>
       <ChatView
@@ -762,7 +762,8 @@ describe('ChatView', () => {
     });
   });
 
-  it('saves conversations with serialized errors', async () => {
+  // TODO Michael: cannot make this test pass
+  it.skip('saves conversations with serialized errors', async () => {
     const projectKey = crypto.randomUUID();
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
@@ -781,18 +782,17 @@ describe('ChatView', () => {
       'Sorry, it looks like the bot is having a hard time! Please try again in a few minutes.',
     );
 
-    // TODO Michael: cannot make this test pass
-    // expect(localStorage.getItem('markprompt')).not.toBeNull();
+    expect(localStorage.getItem('markprompt')).not.toBeNull();
 
-    // expect(
-    //   JSON.parse(localStorage.getItem('markprompt')!).state
-    //     .messagesByConversationId[conversationId].messages[1].error,
-    // ).toEqual({
-    //   type: 'error',
-    //   name: 'Error',
-    //   message: 'Malformed response from Markprompt API',
-    //   cause: { error: 'Internal server error' },
-    // });
+    expect(
+      JSON.parse(localStorage.getItem('markprompt')!).state
+        .messagesByConversationId[conversationId].messages[1].error,
+    ).toEqual({
+      type: 'error',
+      name: 'Error',
+      message: 'Malformed response from Markprompt API',
+      cause: { error: 'Internal server error' },
+    });
   });
 
   it('does not save conversations to LocalStorage when history is disabled', async () => {
@@ -820,7 +820,8 @@ describe('ChatView', () => {
     expect(localStorage.getItem('markprompt')).toBeNull();
   });
 
-  it("does not restore a conversation if it's older than 4 hours", () => {
+  // TODO Michael: cannot make this test pass
+  it.skip("does not restore a conversation if it's older than 4 hours", () => {
     const projectKey = crypto.randomUUID();
     const conversationId = crypto.randomUUID();
     const lastUpdated = new Date(
@@ -863,11 +864,11 @@ describe('ChatView', () => {
 
     render(<ChatViewWithProvider projectKey={projectKey} />);
 
-    // TODO Michael: unable to pass this test
-    // expect(screen.getAllByText('test')).toHaveLength(1);
+    expect(screen.getAllByText('test')).toHaveLength(1);
   });
 
-  it('restores the latest conversation that is < 4 hours old', () => {
+  // TODO Michael: cannot make this test pass
+  it.skip('restores the latest conversation that is < 4 hours old', () => {
     const projectKey = crypto.randomUUID();
     const conversationId1 = crypto.randomUUID();
     const conversationId2 = crypto.randomUUID();
@@ -934,9 +935,8 @@ describe('ChatView', () => {
 
     render(<ChatViewWithProvider projectKey={projectKey} />);
 
-    // TODO Michael: cannot pass
-    // expect(screen.getAllByText('test 1')).toHaveLength(1);
-    // expect(screen.getAllByText('test 2')).toHaveLength(2);
+    expect(screen.getAllByText('test 1')).toHaveLength(1);
+    expect(screen.getAllByText('test 2')).toHaveLength(2);
   });
 
   it('allows users to give feedback', async () => {

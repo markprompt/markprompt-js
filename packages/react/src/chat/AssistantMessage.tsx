@@ -6,9 +6,8 @@ import { MessageAnswer } from './MessageAnswer.js';
 import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
+import { BotIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
-import { BotIcon, ClipboardIcon } from '../icons.js';
-import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 interface AssistantMessageProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;

@@ -2,9 +2,9 @@ import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { ChevronLeftIcon } from '../icons.js';
 import type { MarkpromptOptions, View } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
-import { ChevronLeftIcon } from '../icons.js';
 
 export interface ChatViewProps {
   activeView?: View;
@@ -19,7 +19,7 @@ export interface ChatViewProps {
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {
-  const { activeView, debug, projectKey, showBack, onDidPressBack } = props;
+  const { activeView, projectKey, showBack, onDidPressBack } = props;
 
   if (!projectKey) {
     throw new Error(

@@ -20,15 +20,15 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { Footer } from './footer.js';
-import { CheckIcon, ClipboardIcon, CopyIcon, SendIcon } from '../icons.js';
+import { CheckIcon, ClipboardIcon } from '../icons.js';
+import type { ChatLoadingState } from '../index.js';
+import type { PromptLoadingState } from '../prompt/usePrompt.js';
 import type {
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
-import type { ChatLoadingState } from '../index.js';
-import type { PromptLoadingState } from '../prompt/usePrompt.js';
 
 type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
 
@@ -351,7 +351,7 @@ type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
     state?: PromptLoadingState | ChatLoadingState;
   };
 
-function HighlightedCode(props: HighlightedCodeProps) {
+function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   const { children, className, state, ...rest } = props;
 
   useEffect(() => {
@@ -360,6 +360,7 @@ function HighlightedCode(props: HighlightedCodeProps) {
       // we can syntax highlight. This trick allows us to provide
       // syntax highlighting without imposing a large extra
       // package as part of the markprompt-js bundle.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ((globalThis as any).hljs as any)?.highlightAll();
     }
   }, [children, state]);

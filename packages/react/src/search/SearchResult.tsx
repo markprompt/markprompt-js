@@ -1,10 +1,4 @@
-import {
-  Fragment,
-  forwardRef,
-  memo,
-  type ComponentType,
-  type JSXElementConstructor,
-} from 'react';
+import { Fragment, forwardRef, memo, type ComponentType } from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
 import { type SearchResultProps as BaseSearchResultProps } from '../index.js';
@@ -53,7 +47,8 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 interface SearchResultProps extends BaseSearchResultProps {
   searchQuery: string;
-  linkAs?: string | JSXElementConstructor<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  linkAs?: string | ComponentType<any>;
 }
 
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(

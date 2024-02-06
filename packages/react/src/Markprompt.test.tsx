@@ -39,7 +39,8 @@ describe('Markprompt', () => {
     }
   });
 
-  it('renders search view when search is enabled', async () => {
+  // TODO Michael: unable to pass
+  it.skip('renders search view when search is enabled', async () => {
     const user = await userEvent.setup();
     render(
       <Markprompt
@@ -56,9 +57,8 @@ describe('Markprompt', () => {
         }}
       />,
     );
-    // // TODO Michael: unable to pass
-    // await user.click(screen.getByText('Ask Acme'));
-    // expect(screen.getByText('Recommended for you')).toBeInTheDocument();
+    await user.click(screen.getByText('Ask Acme'));
+    expect(screen.getByText('Recommended for you')).toBeInTheDocument();
   });
 
   it('renders chat view when chat is enabled', async () => {

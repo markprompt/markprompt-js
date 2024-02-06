@@ -1,8 +1,8 @@
 import { type ReactElement } from 'react';
 
 import { type ChatViewMessage } from './store.js';
-import type { MarkpromptOptions } from '../types.js';
 import { UserIcon } from '../icons.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
   children: string;
@@ -12,7 +12,7 @@ interface MessagePromptProps {
 }
 
 export function MessagePrompt(props: MessagePromptProps): ReactElement {
-  const { children, chatOptions, referencesOptions, state } = props;
+  const { children, chatOptions, state } = props;
   return (
     <div className="MarkpromptMessagePrompt" data-loading-state={state}>
       {chatOptions.avatars?.visible && (

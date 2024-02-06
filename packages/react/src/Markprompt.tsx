@@ -2,11 +2,12 @@ import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import { useEffect, useState, type ReactElement, forwardRef } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
+import { ChatProvider, useChatStore } from './index.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { PromptView } from './prompt/PromptView.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
@@ -15,7 +16,6 @@ import { type MarkpromptOptions, type View } from './types.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
 import { useViews } from './useViews.js';
-import { ChatProvider, useChatStore } from './index.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<

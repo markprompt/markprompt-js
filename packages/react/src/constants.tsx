@@ -196,7 +196,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     placeholder: 'Ask AI…',
     history: true,
     showCopy: true,
-    errorText: (props) => (
+    errorText: () => (
       <p className="MarkpromptDefaultError">
         Sorry, it looks like the bot is having a hard time! Please try again in
         a few minutes.
@@ -217,7 +217,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     label: 'Ask AI',
     tabLabel: 'Ask AI',
     placeholder: 'Ask AI…',
-    errorText: (props) => (
+    errorText: () => (
       <p className="MarkpromptDefaultError">
         <span className="MarkpromptDefaultErrorIcon">:-(</span>
         Sorry, it looks like the bot is having a hard time! Please try again in
