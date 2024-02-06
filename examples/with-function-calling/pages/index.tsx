@@ -1,4 +1,4 @@
-import { submitChatGenerator } from '@markprompt/core';
+import { submitChat } from '@markprompt/core';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { ReactElement, useCallback, useState } from 'react';
@@ -47,7 +47,7 @@ export default function IndexPage(): ReactElement {
 
       const toolCalls: OpenAI.Chat.Completions.ChatCompletionChunk.Choice.Delta.ToolCall[] =
         [];
-      for await (const chunk of submitChatGenerator(
+      for await (const chunk of submitChat(
         [
           {
             role: 'system',

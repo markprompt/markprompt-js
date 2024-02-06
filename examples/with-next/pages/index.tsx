@@ -58,7 +58,7 @@ export default function IndexPage(): ReactElement {
             defaultView: {
               searchesHeading: 'Recommended for you',
               searches: [
-                { title: 'Welcome to Acme', href: '/welcome' },
+                { title: 'Welcome to Acme', href: '/' },
                 { title: 'Get Started', href: '/' },
                 { title: 'Onboarding', href: '/' },
                 { title: 'Payments', href: '/' },

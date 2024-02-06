@@ -28,7 +28,6 @@ In browsers with [esm.sh](https://esm.sh):
 <script type="module">
   import {
     submitChat,
-    submitChatGenerator,
     submitSearchQuery,
     submitFeedback,
   } from 'https://esm.sh/@markprompt/core';
@@ -38,24 +37,15 @@ In browsers with [esm.sh](https://esm.sh):
 ## Usage
 
 ```js
-import { submitChatGenerator } from '@markprompt/core';
+import { submitChat } from '@markprompt/core';
 
-// User input
-const prompt = 'What is Markprompt?';
-// Can be obtained in your project settings on markprompt.com
-const projectKey = 'YOUR-PROJECT-KEY';
-
-// Optional parameters, defaults displayed
-const options = {
-  model: 'gpt-3.5-turbo', // Supports all OpenAI models
-  iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  apiUrl: 'https://api.markprompt.com/chat', // Or your own chat API endpoint
-};
-
-for await (const chunk of submitChatGenerator(
-  [{ content: prompt, role: 'user' }],
-  projectKey,
-  options,
+for await (const chunk of submitChat(
+  [{ content: 'What is Markprompt?', role: 'user' }],
+  'YOUR-PROJECT-KEY',
+  {
+    model: 'gpt-4-turbo-preview',
+    systemPrompt: 'You are a helpful AI assistant'
+  }
 )) {
   console.debug(chunk);
 }
@@ -63,9 +53,7 @@ for await (const chunk of submitChatGenerator(
 
 ## API
 
-### `submitChat(messages: ChatMessage[], projectKey: string, onAnswerChunk, onReferences, onConversationId, onPromptId, onError, options?)`
-
-**Deprecated**. Use `submitChatGenerator` instead.
+### `submitChat(messages: ChatMessage[], projectKey: string, options?)`
 
 Submit a prompt to the Markprompt Completions API.
 
@@ -73,18 +61,6 @@ Submit a prompt to the Markprompt Completions API.
 
 - `messages` (`ChatMessage[]`): Chat messages to submit to the model
 - `projectKey` (`string`): Project key for the project
-- `onAnswerChunk` (`function(chunk: string)`): Answers come in via streaming.
-  This function is called when a new chunk arrives. Chunks should be
-  concatenated to previous chunks of the same answer response.
-- `onReferences` (`function(references: FileSectionReference[])`): This function
-  is called when receiving the list of references from which the response was
-  created.
-- `onConversationId` (`function(conversationId: string)`): This function is
-  called with the conversation ID returned by the API. Used to keep track of
-  conversations.
-- `onPromptId` (`function(promptId: string)`): This function is called with the
-  prompt ID returned by the API. Used to submit feedback.
-- `onError` (`function`): called when an error occurs
 - [`options`](#options) (`SubmitChatOptions`): Optional parameters
 
 #### Options
@@ -105,10 +81,6 @@ All options are optional.
 - `sectionsMatchCount` (`number`): The number of sections to include in the
   prompt context
 - `sectionsMatchThreshold` (`number`): The similarity threshold between the
-- `sectionsScope` (`number`): When a section is matched, extend the context to
-  the parent section. For instance, if a section has level 3 and `sectionsScope`
-  is set to 1, include the content of the entire parent section of level 1. If
-  0, this includes the entire file.
 - `signal` (`AbortSignal`): AbortController signal
 - `tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call
 - `tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
@@ -146,7 +118,7 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 
 - `feedback` (`object`): Feedback to submit
 - `feedback.feedback` (`object`): Feedback data
-- `feedback.feedback.vote` (`"1" | "-1"`): Vote
+- `feedback.feedback.vote` (`"1" | "-1" | "escalated"`): Vote
 - `feedback.promptId` (`string`): Prompt ID
 - `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters

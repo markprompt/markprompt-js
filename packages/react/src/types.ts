@@ -95,7 +95,7 @@ export interface MarkpromptOptions {
    * Multi-pane layout when both search and chat is enabled
    * @default "panels"
    **/
-  layout?: 'tabs' | 'panels';
+  layout?: 'panels' | 'tabs';
   close?: {
     /**
      * `aria-label` for the close modal button

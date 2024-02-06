@@ -15,7 +15,7 @@ Common CSS for [Markprompt](https://markprompt.com) components.
 ## Installation
 
 ```sh
-npm install @markprompt/core
+npm install @markprompt/css
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ With a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@markprompt/css@0.2.0/markprompt.css"
+  href="https://unpkg.com/@markprompt/css@0.22.0/markprompt.css"
 />
 ```
 
@@ -41,53 +41,36 @@ class, so you can override all styling manually.
 
 ## API
 
-### CSS Classes
-
-The package adds styling using the following classes.
-
-- `MarkpromptAnswer`
-- `MarkpromptAutoScroller`
-- `MarkpromptCaret`
-- `MarkpromptClose`
-- `MarkpromptContentDialog`
-- `MarkpromptContentPlain`
-- `MarkpromptForm`
-- `MarkpromptIcon`
-- `MarkpromptOverlay`
-- `MarkpromptProgress`
-- `MarkpromptPrompt`
-- `MarkpromptPromptLabel`
-- `MarkpromptReferences`
-- `MarkpromptSearchIcon`
-- `MarkpromptTitle`
-- `MarkpromptTrigger`
-
-### CSS Variables
-
 Styling can be customized using the following CSS variables.
 
-- `--markprompt-background`: (Default: `#ffffff`, Default dark: `#050505`)
-- `--markprompt-foreground`: (Default: `#171717`, Default dark: `#d4d4d4`)
-- `--markprompt-muted`: (Default: `#fafafa`, Default dark: `#171717`)
-- `--markprompt-mutedForeground`: (Default: `#737373`, Default dark: `#737373`)
-- `--markprompt-border`: (Default: `#e5e5e5`, Default dark: `#262626`)
-- `--markprompt-input`: (Default: `#ffffff`, Default dark: `#ffffff`)
-- `--markprompt-primary`: (Default: `#6366f1`, Default dark: `#6366f1`)
-- `--markprompt-primaryForeground`: (Default: `#ffffff`, Default dark:
-  `#ffffff`)
-- `--markprompt-primaryMuted`: (Default: `#8285f4`, Default dark: `#8285f4`)
-- `--markprompt-secondary`: (Default: `#fafafa`, Default dark: `#0e0e0e`)
-- `--markprompt-secondaryForeground`: (Default: `#171717`, Default dark:
-  `#ffffff`)
-- `--markprompt-primaryHighlight`: (Default: `#ec4899`, Default dark: `#ec4899`)
-- `--markprompt-secondaryHighlight`: (Default: `#a855f7`, Default dark:
-  `#a855f7`)
-- `--markprompt-overlay`: (Default: `#00000010`, Default dark: `#00000040\`)
-- `--markprompt-ring`: (Default: `#0ea5e9`, Default dark: `#ffffff`)
-- `--markprompt-radius`: (Default: `8px`)
-- `--markprompt-text-size`-(Default: `0.875rem`)
-- `--markprompt-text-size-xs`-(Default: `0.75rem`)
-- `--markprompt-button-icon-size`-(Default: `: 1rem`)
+- `--markprompt-background`
+- `--markprompt-foreground`
+- `--markprompt-muted`
+- `--markprompt-mutedForeground`
+- `--markprompt-border`
+- `--markprompt-border-accent`
+- `--markprompt-input`
+- `--markprompt-primary`
+- `--markprompt-primaryForeground`
+- `--markprompt-primaryMuted`
+- `--markprompt-secondary`
+- `--markprompt-secondaryForeground`
+- `--markprompt-primaryHighlight`
+- `--markprompt-secondaryHighlight`
+- `--markprompt-overlay`
+- `--markprompt-ring`
+- `--markprompt-radius`
+- `--markprompt-button-radius`
+- `--markprompt-text-size`
+- `--markprompt-text-size-xs`
+- `--markprompt-text-size-code`
+- `--markprompt-button-icon-size`
+- `--markprompt-icon-stroke-width`
+- `--markprompt-shadow`
+- `--markprompt-ring-shadow`
+- `--markprompt-ring-offset-shadow`
+- `--markprompt-error-background`
+- `--markprompt-error-foreground`
 
 ## Community
 

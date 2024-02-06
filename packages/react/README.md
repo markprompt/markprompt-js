@@ -70,12 +70,13 @@ The pre-built Markprompt component. It accepts the following props:
 - `projectKey` (`string`): The project key associated to your project. It can be
   obtained in the project settings on [Markprompt.com](https://markprompt.com/)
   under "Project key"
+- `children` (`React.ReactNode`): Trigger component, such as a search button or a floating chat bubble.
 - `display` (`plain | dialog`): The way to display the content (Default:
   `dialog`)
 - `sticky` (`boolean`): If true, enable user interactions outside of the dialog
-  while keeping it open. (Default: `false`)
+  while keeping it open (Default: `false`)
 - `defaultView` (`chat | search`): The default view to show (Default:
-  `chat` or `search` when search is enabled)
+- `layout` (`panels | tabs`): Multi-pane layout when both search and chat is enabled (Default: `panels`)
 - `close` (`object`): Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
@@ -87,27 +88,30 @@ The pre-built Markprompt component. It accepts the following props:
 - `chat` (`object`): Options for the chat view
 - `chat.enabled` (`boolean`): Whether or not to enable the chat view (Default: `true`)
 - `chat.history` (`boolean`): Whether or not to store conversation history and
-  show conversation selection. (Default: `true`)
+  show conversation selection (Default: `true`)
 - `chat.label` (`string`): Label for the prompt input (Default: `Ask AI`)
 - `chat.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `chat.placeholder` (`string`): Placeholder for the prompt input (Default:
+  `Ask AI…`)
+- `chat.buttonLabel` (`string`): Label for the chat submit button (Default: `Send`)
+- `chat.showCopy` (`boolean`): If true, show a button to copy the answer (Default: `true`)
   `Ask AI…`)
 - `chat.defaultView.message` (`string` or `ReactElement`): A message or React
   component to show when no conversation has been initiated.
 - `chat.defaultView.prompts` (`stringp[]`): A list of default prompts to show to
   give the user ideas of what to ask for.
-- `chat.apiUrl` (`string`): URL at which to fetch completions. (Default:
+- `chat.apiUrl` (`string`): URL at which to fetch completions (Default:
   `https://api.markprompt.com/chat`)
 - `chat.iDontKnowMessage` (`string`): Message returned when the model does not
-  have an answer. (Default: `Sorry, I am not sure how to answer that.`)
-- `chat.model` (`string`): The OpenAI model to use. (Default: `gpt-3.5-turbo`)
-- `chat.systemPrompt` (`string`): The prompt template. (Default:
+  have an answer (Default: `Sorry, I am not sure how to answer that.`)
+- `chat.model` (`string`): The OpenAI model to use (Default: `gpt-3.5-turbo`)
+- `chat.systemPrompt` (`string`): The prompt template (Default:
   `You are a very enthusiastic company representative who loves to help people!`)
-- `chat.temperature` (`number`): The model temperature. (Default: `0.1`)
-- `chat.topP` (`number`): The model top P. (Default: `1`)
-- `chat.frequencyPenalty` (`number`): The model frequency penalty. (Default:
+- `chat.temperature` (`number`): The model temperature (Default: `0.1`)
+- `chat.topP` (`number`): The model top P (Default: `1`)
+- `chat.frequencyPenalty` (`number`): The model frequency penalty (Default:
   `0`)
-- `chat.presencePenalty` (`number`): The model presence penalty. (Default: `0`)
+- `chat.presencePenalty` (`number`): The model presence penalty (Default: `0`)
 - `chat.maxTokens` (`number`): The max number of tokens to include in the
   response.
 - `chat.sectionsMatchCount` (`number`): The number of sections to include in the
@@ -122,17 +126,17 @@ The pre-built Markprompt component. It accepts the following props:
   optional user-provided confirmation message component that takes the tool
   calls provided by OpenAI and a confirm function that should be called when the
   user confirms the tool calls.
+- `chat.avatars.visible` (`boolean`): If true, show message avatars (Default: `true`)
+- `chat.user` (`string | ComponentType<{ className: string }>`): The user avatar. Can be a string (to use as source for the image) or a component.
+- `chat.assistant` (`string | ComponentType<{ className: string }>`): The assistant avatar. Can be a string (to use as source for the image) or a component.
 - `feedback` (`object`): Options for the feedback component
 - `feedback.enabled` (`boolean`): Enable users to give feedback on prompt or
-  chat answers. (Default: `true`)
-- `feedback.apiUrl` (`string`): URL at which to deliver feedback. (Default:
+  chat answers (Default: `true`)
+- `feedback.apiUrl` (`string`): URL at which to deliver feedback (Default:
   `https://api.markprompt.com/feedback`)
 - `feedback.heading` (`string`): Heading for the feedback form, only shown in
   the chat view (Default: `Was this response helpful?`)
 - `feedback.onFeedbackSubmit` (`function`): Callback when feedback is submitted
-  context to the parent section. For instance, if a section has level 3 and
-  `sectionsScope` is set to 1, include the content of the entire parent section
-  of level 1. If 0, this includes the entire file. (Default: `undefined`)
 - `references` (`object`): Options for the references
 - `references.getHref` (`function`): Callback to transform a reference into an
   href
@@ -143,7 +147,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `references.heading` (`string`): Heading for the references panel (Default:
   `Sources`)
 - `search` (`object`): Options for search
-- `search.enabled` (`boolean`): Whether or not to enable search. (Default:
+- `search.enabled` (`boolean`): Whether or not to enable search (Default:
   `true`)
 - `search.getHref` (`function`): Callback to transform a search result into an
   href
@@ -158,15 +162,19 @@ The pre-built Markprompt component. It accepts the following props:
 - `search.tabLabel` (`string`): Label for the tab bar (Default: `Search`)
 - `search.placeholder` (`string`): Placeholder for the search input (Default:
   `Search documentation`)
-- `search.limit` (`number`): Maximum amount of results to return. (Default: `5`)
-- `search.apiUrl` (`string`): URL at which to fetch search results. (Default:
+- `search.limit` (`number`): Maximum amount of results to return (Default: `5`)
+- `search.apiUrl` (`string`): URL at which to fetch search results (Default:
   `https://api.markprompt.com/search`)
 - `search.provider` (`object`): A custom search provider configuration, such as
   Algolia
+- `search.askLabel` (`string`): Label for the "Ask AI" link when using "panels" layout (Default: `Ask AI`)
+- `search.defaultView.searchesHeading` (`string`): Section heading for default search results (Default: `Recommended for you`)
+- `search.defaultView.searches` (`SearchResultComponentProps[]`): List of default search results, of the form `{ href?: string; heading?: string;
+  title?: string; subtitle?: string;}`
 - `trigger` (`object`): Options for the trigger
-- `trigger.customElement` (`boolean`): Use a custom element as the trigger. Will
+- `trigger.customElement` (`boolean | ReactNode`): Use a custom element as the trigger. Will
   disable rendering any trigger element. Use `openMarkprompt()` to trigger the
-  Markprompt dialog. (Default: `false`)
+  Markprompt dialog (Default: `false`)
 - `trigger.label` (`string`): `aria-label` for the open button (Default:
   `Ask AI`)
 - `trigger.buttonLabel` (`string`): Label for the open button (Default:
@@ -177,6 +185,7 @@ The pre-built Markprompt component. It accepts the following props:
 - `title` (`object`): Options for the title
 - `title.hide` (`boolean`): Visually hide the title (Default: `true`)
 - `title.text` (`string`): Title text (Default: `Ask AI`)
+- `linkAs` (`string | ComponentType`): Component to use in place of `<a>`.
 
 When rendering the Markprompt component, it will render a search input-like
 button by default. You have two other options:
@@ -200,7 +209,7 @@ accepts the following props:
 - `projectKey` (`string`): The project key associated to your project. It can be
   obtained in the project settings on [Markprompt.com](https://markprompt.com/)
   under "Project key"
-- `activeView` (`"chat" | "search"`): The active view. (Default:
+- `activeView` (`"chat" | "search"`): The active view (Default:
   `undefined`)
 - `chatOptions` (`object`): Options for the chat view
 - `chatOptions.enabled` (`boolean`): Whether or not to enable the chat view (Default: `true`)
@@ -208,16 +217,16 @@ accepts the following props:
 - `chatOptions.tabLabel` (`string`): Label for the tab bar (Default: `Ask AI`)
 - `chatOptions.placeholder` (`string`): Placeholder for the prompt input
   (Default: `Ask AI…`)
-- `chatOptions.apiUrl` (`string`): URL at which to fetch completions. (Default:
+- `chatOptions.apiUrl` (`string`): URL at which to fetch completions (Default:
   `https://api.markprompt.com/chat`)
 - `chatOptions.iDontKnowMessage` (`string`): Message returned when the model
-  does not have an answer. (Default: `Sorry, I am not sure how to answer that.`)
-- `chatOptions.model` (`string`): The OpenAI model to use. (Default:
+  does not have an answer (Default: `Sorry, I am not sure how to answer that.`)
+- `chatOptions.model` (`string`): The OpenAI model to use (Default:
   `gpt-3.5-turbo`)
-- `chatOptions.systemPrompt` (`string`): The prompt template. (Default:
+- `chatOptions.systemPrompt` (`string`): The prompt template (Default:
   `You are a very enthusiastic company representative who loves to help people!`)
-- `chatOptions.temperature` (`number`): The model temperature. (Default: `0.1`)
-- `chatOptions.topP` (`number`): The model top P. (Default: `1`)
+- `chatOptions.temperature` (`number`): The model temperature (Default: `0.1`)
+- `chatOptions.topP` (`number`): The model top P (Default: `1`)
 - `chatOptions.frequencyPenalty` (`number`): The model frequency penalty.
   (Default: `0`)
 - `chatOptions.presencePenalty` (`number`): The model presence penalty.
@@ -239,7 +248,7 @@ accepts the following props:
 - `feedbackOptions` (`MarkpromptOptions['feedback']`): Options for the feedback
   component
 - `feedbackOptions.enabled` (`boolean`): Enable users to give feedback on prompt
-  or chat answers. (Default: `true`)
+  or chat answers (Default: `true`)
 - `feedbackOptions.apiUrl` (`string`): URL at which to deliver feedback.
   (Default: `https://api.markprompt.com/feedback`)
 - `onDidSelectReference` (`function(reference: FileSectionReference): void`):
@@ -263,13 +272,13 @@ It accepts the following props:
 - `projectKey` (`string`): The project key associated to your project. It can be
   obtained in the project settings on [Markprompt.com](https://markprompt.com/)
   under "Project key"
-- `activeView` (`"chat" | "prompt" | "search"`): The active view. (Default:
+- `activeView` (`"chat" | "prompt" | "search"`): The active view (Default:
   `undefined`)
 - `close`: Options for the close modal button
 - `close.label` (`string`): `aria-label` for the close modal button (Default:
   `Close Markprompt`)
 - `close.visible` (`boolean`): Show the close button (Default: `true`)
-- `debug` (`boolean`): Enable debug mode. (Default: `false`)
+- `debug` (`boolean`): Enable debug mode (Default: `false`)
 - `onDidSelectResult` (`function(): void`): Callback when a search result is
   selected
 - `searchOptions` (`object`): Options for search
@@ -308,7 +317,7 @@ props:
 
 - `autoScroll` (`boolean`): Whether or not to enable automatic scrolling.
   (Default: `true`)
-- `scrollBehaviour` (`string`): The behaviour to use for scrolling. (Default:
+- `scrollBehaviour` (`string`): The behaviour to use for scrolling (Default:
   `smooth`)
 
 All other props will be passed to the underlying `<div>` element.
@@ -360,10 +369,10 @@ context. It accepts the following props:
 
 Render the references that Markprompt returns. It accepts the following props:
 
-- `RootComponent` (`Component`): The wrapper component to render. (Default:
+- `RootComponent` (`Component`): The wrapper component to render (Default:
   `'ul'`)
 - `ReferenceComponent` (`Component`): The component to render for each
-  reference. (Default: '`li`')
+  reference (Default: '`li`')
 
 ### `<Root />`
 
@@ -396,11 +405,11 @@ Create a chat prompt. It accepts the following options:
     - `chatOptions.frequencyPenalty` (`number`): The model frequency penalty.
       (Default: `0`)
     - `chatOptions.iDontKnowMessage` (`string`): Message returned when the model
-      does not have an answer. (Default:
+      does not have an answer (Default:
       `Sorry, I am not sure how to answer that.`)
     - `chatOptions.maxTokens` (`number`): The max number of tokens to include in
       the response.
-    - `chatOptions.model` (`string`): The OpenAI model to use. (Default:
+    - `chatOptions.model` (`string`): The OpenAI model to use (Default:
       `gpt-3.5-turbo`)
     - `chatOptions.presencePenalty` (`number`): The model presence penalty.
       (Default: `0`)
@@ -408,24 +417,19 @@ Create a chat prompt. It accepts the following options:
       include in the prompt context.
     - `chatOptions.sectionsMatchThreshold` (`number`): The similarity threshold
       between the input question and selected sections.
-    - `chatOptions.sectionsScope` (`number`): When a section is matched, extend
-      the context to the parent section. For instance, if a section has level 3
-      and `sectionsScope` is set to 1, include the content of the entire parent
-      section of level 1. If 0, this includes the entire file. (Default:
-      `undefined`)
-    - `chatOptions.systemPrompt` (`string`): The prompt template. (Default:
+    - `chatOptions.systemPrompt` (`string`): The prompt template (Default:
       `You are a very enthusiastic company representative who loves to help people!`)
-    - `chatOptions.temperature` (`number`): The model temperature. (Default:
+    - `chatOptions.temperature` (`number`): The model temperature (Default:
       `0.1`)
-    - `chatOptions.topP` (`number`): The model top P. (Default: `1`)
+    - `chatOptions.topP` (`number`): The model top P (Default: `1`)
     - `chatOptions.tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the
       model may call.
     - `chatOptions.tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`):
       Controls which
-  - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
+  - `options.debug` (`boolean`): Enable debug mode (Default: `false`)
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `useFeedback`.
-    - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
+    - `options.apiUrl` (`string`): URL at which to deliver feedback (Default:
       `https://api.markprompt.com/feedback`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
@@ -455,10 +459,10 @@ And it returns:
 Create a chat prompt. It accepts the following options:
 
 - `options` (`UseFeedbackOptions`): Options for `useFeedback`.
-  - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
+  - `options.debug` (`boolean`): Enable debug mode (Default: `false`)
   - `options.feedbackOptions` (`SubmitFeedbackOptions`): Options for
     `@markprompt/core`'s `submitFeedback`.
-    - `options.apiUrl` (`string`): URL at which to deliver feedback. (Default:
+    - `options.apiUrl` (`string`): URL at which to deliver feedback (Default:
       `https://api.markprompt.com/feedback`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
@@ -479,7 +483,7 @@ And it returns:
 Create a search prompt. It accepts the following options:
 
 - `options` (`UseSearchOptions`): Options for `useSearch`.
-  - `options.debug` (`boolean`): Enable debug mode. (Default: `false`)
+  - `options.debug` (`boolean`): Enable debug mode (Default: `false`)
   - `options.projectKey` (`string`): The project key associated to your project.
     It can be obtained in the project settings on
     [Markprompt.com](https://markprompt.com/) under "Your Project > Settings >
