@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.17.0
+
+### Minor Changes
+
+- [#297](https://github.com/motifland/markprompt-js/pull/297) [`eb5e324007c1f03e6925b9a834a7a9b1b00452fb`](https://github.com/motifland/markprompt-js/commit/eb5e324007c1f03e6925b9a834a7a9b1b00452fb) Thanks [@nickrttn](https://github.com/nickrttn)! - Use `moduleResolution: bundler` and `module: esnext` in `tsconfig.json`
+
+### Patch Changes
+
+- Updated dependencies [[`eb5e324007c1f03e6925b9a834a7a9b1b00452fb`](https://github.com/motifland/markprompt-js/commit/eb5e324007c1f03e6925b9a834a7a9b1b00452fb)]:
+  - @markprompt/react@0.37.0
+
 ## 0.16.6
 
 ### Patch Changes
