@@ -21,14 +21,15 @@
     // transpilation
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noEmit": true,
     "outDir": "dist/",
     "rootDir": "src/",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,
     "composite": true,
     "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
 
     // runtime
     "lib": ["dom", "dom.iterable", "es2023"],
