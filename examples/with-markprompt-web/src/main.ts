@@ -21,6 +21,7 @@ async function get_random_activity(args: string): Promise<string> {
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+    search: { enabled: true },
     chat: {
       enabled: true,
       defaultView: {

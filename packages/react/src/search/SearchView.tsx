@@ -257,8 +257,10 @@ export function SearchView(props: SearchViewProps): ReactElement {
               </AccessibleIcon.Root>
             }
           />
+
           <button
             className="MarkpromptGhostButton"
+            type="button"
             style={{ flexGrow: 'none', marginRight: '0.25rem' }}
             onClick={() => onDidSelectAsk?.()}
           >
