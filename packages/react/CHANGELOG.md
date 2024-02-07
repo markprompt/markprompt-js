@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.36.2
+
+### Patch Changes
+
+- [`237810e12c30ebf53a09156d833ca2f3d75eac49`](https://github.com/motifland/markprompt-js/commit/237810e12c30ebf53a09156d833ca2f3d75eac49) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix jump to chat view when submitting search form
+
 ## 0.36.1
 
 ### Patch Changes
