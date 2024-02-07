@@ -54,7 +54,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   // const regenerateLastAnswer = useChatStore(
   //   (state) => state.regenerateLastAnswer,
   // );
-  const conversations = useChatStore(selectProjectConversations);
+  // const conversations = useChatStore(selectProjectConversations);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
@@ -129,7 +129,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           onChange={(event) => setPrompt(event.target.value)}
           Icon={<ChatSendIcon isLoading={isLoading} />}
         />
-        {conversations.length > 0 && <ConversationSelect />}
+        {chatOptions.history && <ConversationSelect />}
         <div />
       </div>
     </BaseMarkprompt.Form>

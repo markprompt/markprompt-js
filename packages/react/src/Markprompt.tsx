@@ -192,6 +192,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               )}
               <BaseMarkprompt.Content
                 className="MarkpromptContentDialog"
+                footerClassName="MarkpromptFooter"
                 branding={branding}
                 showAlgolia={
                   search?.enabled && search.provider?.name === 'algolia'
