@@ -5,7 +5,7 @@ import type {
 } from '@markprompt/core';
 import { describe, expect, test } from 'vitest';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants';
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
 const basePath = '/docs/guides';
 const filePath = `${basePath}/index.md`;
@@ -93,80 +93,80 @@ const algoliaSearchHits = [
 
 describe('constants', () => {
   test('default references.getHref', async () => {
-    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[0])).toBe(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[0]!)).toBe(
       `${basePath}#${headingSlug}`,
     );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[1]),
+      DEFAULT_MARKPROMPT_OPTIONS.references!.getHref?.(results[1]!),
     ).toEqual(basePath);
   });
 
   test('default references.getLabel', async () => {
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[0]),
+      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[0]!),
     ).toEqual(heading);
-    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[1])).toBe(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[1]!)).toBe(
       'Home',
     );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[2]),
+      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[2]!),
     ).toEqual(noTitleFileName);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[3]),
+      DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel?.(results[3]!),
     ).toEqual(noTitleFileName);
   });
 
   test('default search.getHref', async () => {
-    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[0])).toBe(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[0]!)).toBe(
       `${basePath}#${headingSlug}`,
     );
-    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[6])).toBe(
+    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[6]!)).toBe(
       `${basePath}#${headingId}`,
     );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(algoliaSearchHits[0]),
-    ).toEqual(algoliaSearchHits[0].url);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(algoliaSearchHits[0]!),
+    ).toEqual(algoliaSearchHits[0]!.url);
   });
 
   test('default search.getHeading', async () => {
-    expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[0])).toEqual(
-      results[0].file.title,
-    );
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[1]),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[0]!),
+    ).toEqual(results[0]!.file.title);
+    expect(
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(results[1]!),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[0]),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[0]!),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[1]),
-    ).toEqual(algoliaSearchHits[1].hierarchy.lvl0);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading?.(algoliaSearchHits[1]!),
+    ).toEqual(algoliaSearchHits[1]!.hierarchy.lvl0);
   });
 
   test('default search.getTitle', async () => {
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[0], ''),
-    ).toEqual(results[0].meta?.leadHeading?.value);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[0]!, ''),
+    ).toEqual(results[0]!.meta?.leadHeading?.value);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[1], ''),
-    ).toEqual(results[1].file.title);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[1]!, ''),
+    ).toEqual(results[1]!.file.title);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[4], 'aute'),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[4]!, 'aute'),
     ).toEqual(loremIpsumKwicSnippet);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[5], 'Some'),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(results[5]!, 'Some'),
     ).toEqual(shortContent);
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(algoliaSearchHits[0], ''),
-    ).toEqual(algoliaSearchHits[0].hierarchy.lvl1);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle?.(algoliaSearchHits[0]!, ''),
+    ).toEqual(algoliaSearchHits[0]!.hierarchy.lvl1);
   });
 
   test('default search.getSubtitle', async () => {
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(results[0]),
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(results[0]!),
     ).toBeUndefined();
     expect(
-      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(algoliaSearchHits[0]),
-    ).toEqual(algoliaSearchHits[0].hierarchy.lvl2);
+      DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle?.(algoliaSearchHits[0]!),
+    ).toEqual(algoliaSearchHits[0]!.hierarchy.lvl2);
   });
 });

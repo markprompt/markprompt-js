@@ -1,5 +1,5 @@
-import cloneDeepWith from 'lodash/cloneDeepWith';
-import defaults from 'lodash/defaultsDeep';
+import cloneDeepWith from 'lodash/cloneDeepWith.js';
+import defaults from 'lodash/defaultsDeep.js';
 import { cloneElement, isValidElement, useMemo } from 'react';
 
 type DeepMerge<T, U> = T extends { [key: string]: unknown }

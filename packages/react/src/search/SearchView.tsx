@@ -13,17 +13,17 @@ import {
   useMemo,
 } from 'react';
 
-import { SearchResult } from './SearchResult';
-import { useSearch, type SearchLoadingState } from './useSearch';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants';
-import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons';
-import * as BaseMarkprompt from '../primitives/headless';
+import { SearchResult } from './SearchResult.js';
+import { useSearch, type SearchLoadingState } from './useSearch.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
 import {
   type MarkpromptOptions,
   type SearchResultComponentProps,
   type View,
-} from '../types';
-import { useDefaults } from '../useDefaults';
+} from '../types.js';
+import { useDefaults } from '../useDefaults.js';
 
 export interface SearchViewProps {
   activeView?: View;

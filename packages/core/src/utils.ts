@@ -5,7 +5,7 @@ import type {
   ChatCompletionMessageToolCall,
   ChatCompletionMetadata,
   FileSectionReference,
-} from './types';
+} from './types.js';
 
 export type {
   ChatCompletion,

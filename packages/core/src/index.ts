@@ -5,14 +5,14 @@ export {
   type SubmitChatOptions,
   type SubmitChatReturn,
   type SubmitChatYield,
-} from './chat';
+} from './chat.js';
 
 export {
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   submitFeedback,
   type SubmitFeedbackBody,
   type SubmitFeedbackOptions,
-} from './feedback';
+} from './feedback.js';
 
 export {
   DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
@@ -20,7 +20,7 @@ export {
   submitSearchQuery,
   type SubmitSearchQueryOptions,
   type AlgoliaProvider,
-} from './search';
+} from './search.js';
 
 export {
   OPENAI_CHAT_COMPLETIONS_MODELS,
@@ -54,7 +54,7 @@ export {
   type SearchResultsResponse,
   type Source,
   type SourceType,
-} from './types';
+} from './types.js';
 
 export {
   getErrorMessage,
@@ -68,4 +68,4 @@ export {
   isToolCall,
   isToolCalls,
   parseEncodedJSONHeader,
-} from './utils';
+} from './utils.js';

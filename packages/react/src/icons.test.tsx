@@ -20,7 +20,7 @@ import {
   ThumbsDownIcon,
   ThumbsUpIcon,
   PlusIcon,
-} from './icons';
+} from './icons.js';
 
 const icons = [
   ChatIcon,

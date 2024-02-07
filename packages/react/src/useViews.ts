@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { MarkpromptOptions, View } from './types';
+import type { MarkpromptOptions, View } from './types.js';
 
 interface UseViewsResult {
   activeView: View;

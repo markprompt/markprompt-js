@@ -4,7 +4,7 @@ import {
   type SearchResult,
 } from '@markprompt/core';
 
-import type { MarkpromptOptions } from './types';
+import type { MarkpromptOptions } from './types.js';
 
 const removeFileExtension = (fileName: string): string => {
   const lastDotIndex = fileName.lastIndexOf('.');

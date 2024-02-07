@@ -12,7 +12,7 @@ import {
   isChatCompletionChunk,
   isKeyOf,
   isChatCompletionMessage,
-} from './utils';
+} from './utils.js';
 
 const encoder = new TextEncoder();
 const unencodedObject = { data: 'Some text' };

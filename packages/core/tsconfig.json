@@ -1,20 +1,27 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "esnext"],
-    "composite": true,
-    "rootDir": "src",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "target": "es2021",
+    // base
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    // strictness
+    "strict": true,
+
+    // transpilation
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "dist/",
+    "rootDir": "src/",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "incremental": true,
-    "outDir": "dist/",
-    "strict": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
+    "composite": true,
+
+    // runtime
+    "lib": ["dom", "dom.iterable", "es2023"],
   },
   "include": ["src/*"],
   "exclude": ["src/*.test.ts"],

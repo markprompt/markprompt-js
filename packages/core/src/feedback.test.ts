@@ -2,7 +2,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'vitest';
 
-import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS, submitFeedback } from './index';
+import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS, submitFeedback } from './index.js';
 
 let status = 200;
 

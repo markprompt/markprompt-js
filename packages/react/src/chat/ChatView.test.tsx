@@ -17,14 +17,14 @@ import {
   vi,
 } from 'vitest';
 
-import { ChatView } from './ChatView';
+import { ChatView } from './ChatView.js';
 import {
   createChatStore,
   useChatStore,
   type ChatViewMessage,
   ChatProvider,
-} from './store';
-import type { MarkpromptOptions, View } from '../types';
+} from './store.js';
+import type { MarkpromptOptions, View } from '../types.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {
@@ -1076,7 +1076,7 @@ export function encodeData(text: string): string {
   let output = '';
 
   for (let i = 0, l = lines.length; i < l; ++i) {
-    line = lines[i];
+    line = lines[i]!;
 
     output += `data: ${line}`;
     output += i + 1 === l ? '\n\n' : '\n';

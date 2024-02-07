@@ -2,7 +2,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Markprompt, closeMarkprompt, openMarkprompt } from './index';
+import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 
 describe('Markprompt', () => {
   it('renders', async () => {

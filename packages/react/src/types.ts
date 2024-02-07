@@ -15,8 +15,8 @@ import type {
   ReactNode,
 } from 'react';
 
-import type { UserConfigurableOptions } from './chat/store';
-import type { ChatViewMessage } from './index';
+import type { UserConfigurableOptions } from './chat/store.js';
+import type { ChatViewMessage } from './index.js';
 
 export type View = 'chat' | 'search';
 
