@@ -5,7 +5,7 @@ import type {
 } from '@markprompt/core';
 import { describe, expect, test } from 'vitest';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants';
 
 const basePath = '/docs/guides';
 const filePath = `${basePath}/index.md`;

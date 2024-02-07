@@ -1,6 +1,6 @@
-import { selectProjectConversations, useChatStore } from './store.js';
-import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
-import { Select } from '../primitives/Select.js';
+import { selectProjectConversations, useChatStore } from './store';
+import { CounterClockwiseClockIcon, PlusIcon } from '../icons';
+import { Select } from '../primitives/Select';
 
 export function ConversationSelect(): JSX.Element {
   const conversations = useChatStore(selectProjectConversations);

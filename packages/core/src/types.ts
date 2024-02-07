@@ -1,4 +1,4 @@
-import type { DocSearchHit } from './docsearch.js';
+import type { DocSearchHit } from './docsearch';
 
 export type {
   Chat,

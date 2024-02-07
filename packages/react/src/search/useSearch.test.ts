@@ -16,7 +16,7 @@ import {
   vi,
 } from 'vitest';
 
-import { type UseSearchResult, useSearch } from './useSearch.js';
+import { type UseSearchResult, useSearch } from './useSearch';
 
 let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;

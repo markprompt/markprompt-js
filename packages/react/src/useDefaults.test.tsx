@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { cloneElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useDefaults } from './useDefaults.js';
+import { useDefaults } from './useDefaults';
 
 vi.mock('react', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react')>();

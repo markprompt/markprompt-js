@@ -19,8 +19,8 @@ import {
   SubmitChatOptions,
   SubmitChatReturn,
   SubmitChatYield,
-} from './index.js';
-import { formatEvent, getChunk } from '../../../test/utils.js';
+} from './index';
+import { formatEvent, getChunk } from '../../../test/utils';
 
 describe('submitChat', () => {
   const encoder = new TextEncoder();

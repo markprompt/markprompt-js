@@ -18,16 +18,16 @@ import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
-import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
-import { Footer } from './footer.js';
-import { CheckIcon, ClipboardIcon } from '../icons.js';
-import type { ChatLoadingState } from '../index.js';
+import { ConditionalVisuallyHidden } from './ConditionalWrap';
+import { Footer } from './footer';
+import { CheckIcon, ClipboardIcon } from '../icons';
+import type { ChatLoadingState } from '../index';
 import type {
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
-} from '../types.js';
+} from '../types';
 
 type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
 

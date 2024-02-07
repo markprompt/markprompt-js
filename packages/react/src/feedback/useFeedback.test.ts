@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { useFeedback } from './useFeedback.js';
+import { useFeedback } from './useFeedback';
 
 let status = 200;
 let endpointHits = 0;

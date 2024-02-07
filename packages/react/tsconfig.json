@@ -4,7 +4,8 @@
   "compilerOptions": {
     "lib": ["dom", "es2022", "esnext"],
     "composite": true,
-    "module": "node16",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

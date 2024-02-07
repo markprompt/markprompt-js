@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Footer, MarkpromptIcon } from './footer.js';
+import { Footer, MarkpromptIcon } from './footer';
 
 describe('Footer', () => {
   test('render a footer', () => {

@@ -1,6 +1,6 @@
 import defaults from 'defaults';
 import { EventSourceParserStream } from 'eventsource-parser/stream';
-import mergeWith from 'lodash-es/mergeWith.js';
+import mergeWith from 'lodash-es/mergeWith';
 
 import type {
   Chat,
@@ -10,14 +10,14 @@ import type {
   ChatCompletionToolChoiceOption,
   ChatCompletionMetadata,
   OpenAIModelId,
-} from './types.js';
+} from './types';
 import {
   isChatCompletion,
   isChatCompletionChunk,
   isChatCompletionMessage,
   isMarkpromptMetadata,
   parseEncodedJSONHeader,
-} from './utils.js';
+} from './utils';
 
 export type {
   ChatCompletionMessageParam,

@@ -1,10 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import {
-  ConditionalVisuallyHidden,
-  ConditionalWrap,
-} from './ConditionalWrap.js';
+import { ConditionalVisuallyHidden, ConditionalWrap } from './ConditionalWrap';
 
 describe('ConditionalWrap', () => {
   it('renders', () => {

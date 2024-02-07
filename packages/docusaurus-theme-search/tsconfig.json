@@ -3,8 +3,8 @@
   "references": [{ "path": "../react/tsconfig.build.json" }],
   "compilerOptions": {
     "composite": true,
-    "module": "node16",
-    "moduleResolution": "node16",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
