@@ -706,11 +706,6 @@ describe('ChatView', () => {
     });
   });
 
-  it('initially does not have stored conversations', async () => {
-    render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-  });
-
   it('starts a new chat when the "New chat" option is selected', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();

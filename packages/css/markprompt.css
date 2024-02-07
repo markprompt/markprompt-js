@@ -267,6 +267,10 @@
   grid-template-rows: 1fr;
 }
 
+:where(.MarkpromptViews > div) {
+  outline: none;
+}
+
 :where(.MarkpromptSearchView) {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -619,11 +623,16 @@
 }
 
 :where(.MarkpromptViews) button:focus-visible,
-:where(.MarkpromptViews) a:focus-visible {
+:where(.MarkpromptViews) a:focus-visible,
+:where(.MarkpromptFooter) a:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--markprompt-ring);
   transition-property: all;
   transition-duration: 200ms;
+}
+
+:where(.MarkpromptFooter) a:focus-visible {
+  border-radius: calc(var(--markprompt-radius) * 0.5);
 }
 
 :where(.MarkpromptPromptWrapper) button:disabled {

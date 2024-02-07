@@ -107,6 +107,10 @@ type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
    * Show Algolia attribution in the footer.
    **/
   showAlgolia?: boolean;
+  /**
+   * Footer class name.
+   **/
+  footerClassName?: string;
 };
 
 /**
@@ -117,6 +121,7 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(
     const {
       branding = { show: true, type: 'plain' },
       showAlgolia,
+      footerClassName,
       ...rest
     } = props;
 
@@ -124,7 +129,11 @@ const Content = forwardRef<HTMLDivElement, ContentProps>(
       <Dialog.Content {...rest} ref={ref}>
         {props.children}
         {branding.show && (
-          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
+          <Footer
+            className={footerClassName}
+            brandingType={branding.type}
+            showAlgolia={showAlgolia}
+          />
         )}
       </Dialog.Content>
     );

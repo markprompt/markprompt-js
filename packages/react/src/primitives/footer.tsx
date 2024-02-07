@@ -4,14 +4,16 @@ import { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 interface FooterProps {
   showAlgolia?: boolean;
   brandingType?: 'plain' | 'text';
+  className?: string;
 }
 
 export const Footer = (props: FooterProps): ReactElement => {
-  const { brandingType, showAlgolia } = props;
+  const { brandingType, showAlgolia, className } = props;
 
   if (brandingType === 'plain') {
     return (
       <p
+        className={className}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -49,14 +51,17 @@ export const Footer = (props: FooterProps): ReactElement => {
             <a
               style={{
                 color: 'var(--markprompt-primary)',
-                marginBottom: -5,
+                marginBottom: -1,
                 textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyItems: 'center',
               }}
               target="_blank"
               href="https://algolia.com"
               aria-label="Algolia"
             >
-              <AlgoliaIcon style={{ height: '13px' }} aria-hidden />
+              <AlgoliaIcon style={{ height: '14px' }} aria-hidden />
             </a>
           </>
         )}
@@ -66,6 +71,7 @@ export const Footer = (props: FooterProps): ReactElement => {
 
   return (
     <p
+      className={className}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -84,6 +90,9 @@ export const Footer = (props: FooterProps): ReactElement => {
           textDecoration: 'none',
           color: 'var(--markprompt-mutedForeground)',
           fontWeight: 600,
+          display: 'flex',
+          alignItems: 'center',
+          justifyItems: 'center',
         }}
         target="_blank"
         href="https://markprompt.com"
@@ -96,7 +105,7 @@ export const Footer = (props: FooterProps): ReactElement => {
           <a
             style={{
               color: 'var(--markprompt-primary)',
-              marginBottom: -5,
+              marginBottom: -1,
               textDecoration: 'none',
             }}
             target="_blank"
