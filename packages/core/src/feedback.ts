@@ -1,6 +1,6 @@
 import defaults from 'defaults';
 
-import type { PromptFeedback } from './types.js';
+import type { PromptFeedback } from './types';
 
 export interface SubmitFeedbackBody {
   /** Prompt feedback */

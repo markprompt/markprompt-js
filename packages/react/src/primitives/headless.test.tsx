@@ -16,7 +16,7 @@ import {
   vitest,
 } from 'vitest';
 
-import * as Markprompt from './headless.js';
+import * as Markprompt from './headless';
 
 let searchResults: SearchResult[] = [];
 let status = 200;

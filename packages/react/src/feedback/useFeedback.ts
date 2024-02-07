@@ -6,7 +6,7 @@ import {
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
-import { useAbortController } from '../useAbortController.js';
+import { useAbortController } from '../useAbortController';
 
 export interface UseFeedbackOptions {
   /** Enable and configure feedback functionality */

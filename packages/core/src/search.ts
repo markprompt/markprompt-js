@@ -3,8 +3,8 @@ import type { SearchOptions } from '@algolia/client-search';
 import type {
   AlgoliaDocSearchResultsResponse,
   SearchResultsResponse,
-} from './types.js';
-import { getErrorMessage, isAbortError } from './utils.js';
+} from './types';
+import { getErrorMessage, isAbortError } from './utils';
 
 export interface SubmitSearchQueryOptions {
   /**

@@ -30,29 +30,29 @@ export {
   type SearchResultProps,
   type SearchResultsProps,
   type TitleProps,
-} from './primitives/headless.js';
+} from './primitives/headless';
 
 export {
   useFeedback,
   type UseFeedbackOptions,
   type UseFeedbackResult,
-} from './feedback/useFeedback.js';
+} from './feedback/useFeedback';
 
 export {
   useSearch,
   type SearchLoadingState,
   type UseSearchOptions,
   type UseSearchResult,
-} from './search/useSearch.js';
+} from './search/useSearch';
 
 export {
   Markprompt,
   type MarkpromptProps,
   openMarkprompt,
   closeMarkprompt,
-} from './Markprompt.js';
+} from './Markprompt';
 
-export { ChatView, type ChatViewProps } from './chat/ChatView.js';
+export { ChatView, type ChatViewProps } from './chat/ChatView';
 export {
   ChatProvider,
   useChatStore,
@@ -63,9 +63,9 @@ export {
   type ConfirmationProps,
   type ToolCall,
   type ChatViewTool,
-} from './chat/store.js';
-export { SearchView, type SearchViewProps } from './search/SearchView.js';
+} from './chat/store';
+export { SearchView, type SearchViewProps } from './search/SearchView';
 
-export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+export { DEFAULT_MARKPROMPT_OPTIONS } from './constants';
 
-export * from './types.js';
+export * from './types';

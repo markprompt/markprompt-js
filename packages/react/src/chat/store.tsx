@@ -22,13 +22,8 @@ import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import type { MarkpromptOptions } from '../types.js';
-import {
-  hasValueAtKey,
-  isIterable,
-  isPresent,
-  isStoredError,
-} from '../utils.js';
+import type { MarkpromptOptions } from '../types';
+import { hasValueAtKey, isIterable, isPresent, isStoredError } from '../utils';
 
 export type ChatLoadingState =
   | 'indeterminate'

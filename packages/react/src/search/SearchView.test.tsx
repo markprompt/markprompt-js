@@ -17,7 +17,7 @@ import {
   vi,
 } from 'vitest';
 
-import { SearchView } from './SearchView.js';
+import { SearchView } from './SearchView';
 
 let status = 200;
 let results: SearchResult[] | AlgoliaDocSearchHit[] = [];

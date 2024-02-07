@@ -17,14 +17,14 @@ import {
   vi,
 } from 'vitest';
 
-import { ChatView } from './ChatView.js';
+import { ChatView } from './ChatView';
 import {
   createChatStore,
   useChatStore,
   type ChatViewMessage,
   ChatProvider,
-} from './store.js';
-import type { MarkpromptOptions, View } from '../types.js';
+} from './store';
+import type { MarkpromptOptions, View } from '../types';
 
 const encoder = new TextEncoder();
 let markpromptData: {
