@@ -4,6 +4,12 @@ This example contains a reference implementation of
 [`@markprompt/react`](../../packages/react/README.md) with
 [Next.js](https://nextjs.org), and featuring [Algolia](https://algolia.com/) docs search.
 
+
+
+https://github.com/motifland/markprompt-js/assets/504893/6b9809d7-2ac7-44a3-9ae8-8b017441da7d
+
+
+
 ## Getting Started
 
 Create a `.env.local` file at the root of the project, and add the following:
