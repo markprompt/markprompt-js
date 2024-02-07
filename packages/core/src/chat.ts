@@ -150,7 +150,7 @@ export interface SubmitChatOptions {
    * Optional user data to attach to the conversation.
    * @default: undefined
    */
-  userData: { [key: string]: unknown };
+  userData?: { [key: string]: unknown };
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {

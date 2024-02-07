@@ -34,7 +34,7 @@ export interface SubmitSearchQueryOptions {
   /**
    * User data to attach to the search request
    */
-  userData: { [key: string]: unknown };
+  userData?: { [key: string]: unknown };
 }
 
 export interface AlgoliaProvider {

@@ -29,7 +29,7 @@ export interface SubmitFeedbackOptions {
    * User data to attach to the feedback request
    * @default undefined
    **/
-  userData: { [key: string]: unknown };
+  userData?: { [key: string]: unknown };
 }
 
 const allowedOptionKeys = ['apiUrl', 'signal', 'clientId', 'userData'];

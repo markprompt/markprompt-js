@@ -248,7 +248,7 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure search functionality
    */
-  search?: Omit<SubmitSearchQueryOptions, 'clientId'> & {
+  search?: Omit<SubmitSearchQueryOptions, 'clientId' | 'userData'> & {
     /**
      * Enable search
      * @default false
@@ -367,5 +367,5 @@ export interface MarkpromptOptions {
    * User data to attach to requests to the Markprompt API.
    * @default undefined
    **/
-  userData: { [key: string]: unknown };
+  userData?: { [key: string]: unknown };
 }

@@ -11,6 +11,7 @@ import { ChatProvider, useChatStore } from './index.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { SearchView } from './search/SearchView.js';
+import { useMarkpromptStore } from './store.js';
 import { type MarkpromptOptions, type View } from './types.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
@@ -60,13 +61,19 @@ function closeMarkprompt(): void {
 }
 
 function Markprompt(props: MarkpromptProps): JSX.Element {
-  const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
+  const { projectKey, onDidRequestOpenChange, userData, ...dialogProps } =
+    props;
 
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass the projectKey prop to <Markprompt />.',
     );
   }
+
+  // update user data when it changes
+  useEffect(() => {
+    useMarkpromptStore.setState({ userData });
+  }, [userData]);
 
   const {
     display,
