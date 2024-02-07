@@ -1,6 +1,6 @@
 import defaults from 'defaults';
 import { EventSourceParserStream } from 'eventsource-parser/stream';
-import mergeWith from 'lodash-es/mergeWith';
+import mergeWith from 'lodash-es/mergeWith.js';
 
 import type {
   Chat,
@@ -10,14 +10,14 @@ import type {
   ChatCompletionToolChoiceOption,
   ChatCompletionMetadata,
   OpenAIModelId,
-} from './types';
+} from './types.js';
 import {
   isChatCompletion,
   isChatCompletionChunk,
   isChatCompletionMessage,
   isMarkpromptMetadata,
   parseEncodedJSONHeader,
-} from './utils';
+} from './utils.js';
 
 export type {
   ChatCompletionMessageParam,
@@ -232,7 +232,11 @@ export async function* submitChat(
 
   if (res.headers.get('Content-Type')?.includes('application/json')) {
     const json = await res.json();
-    if (isChatCompletion(json) && isMarkpromptMetadata(data)) {
+    if (
+      isChatCompletion(json) &&
+      isMarkpromptMetadata(data) &&
+      json.choices[0]
+    ) {
       return { ...json.choices[0].message, ...data };
     } else {
       if (isMarkpromptMetadata(data)) {
@@ -300,7 +304,7 @@ export async function* submitChat(
       });
     }
 
-    mergeWith(completion, json.choices[0].delta, concatStrings);
+    mergeWith(completion, json.choices[0]?.delta, concatStrings);
 
     /**
      * If we do not yield a structuredClone here, the completion object will

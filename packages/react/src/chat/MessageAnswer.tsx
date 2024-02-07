@@ -1,7 +1,7 @@
 import { type ReactElement } from 'react';
 
-import { Answer } from './Answer';
-import { type ChatViewMessage } from './store';
+import { Answer } from './Answer.js';
+import { type ChatViewMessage } from './store.js';
 
 interface MessageAnswerProps {
   children: string;

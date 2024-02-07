@@ -1,6 +1,6 @@
-import { selectProjectConversations, useChatStore } from './store';
-import { PlusIcon } from '../icons';
-import { markdownToString } from '../utils';
+import { selectProjectConversations, useChatStore } from './store.js';
+import { PlusIcon } from '../icons.js';
+import { markdownToString } from '../utils.js';
 
 export function ConversationSidebar(): JSX.Element {
   const selectedConversationId = useChatStore((state) => state.conversationId);

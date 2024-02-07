@@ -1,8 +1,8 @@
 import { type ReactElement } from 'react';
 
-import { type ChatViewMessage } from './store';
-import { UserIcon } from '../icons';
-import type { MarkpromptOptions } from '../types';
+import { type ChatViewMessage } from './store.js';
+import { UserIcon } from '../icons.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
   children: string;

@@ -1,12 +1,12 @@
 import { type ReactElement } from 'react';
 
-import { AssistantMessage } from './AssistantMessage';
-import { DefaultView } from './DefaultView';
-import { MessagePrompt } from './MessagePrompt';
-import { References } from './References';
-import { useChatStore } from './store';
-import * as BaseMarkprompt from '../primitives/headless';
-import type { MarkpromptOptions } from '../types';
+import { AssistantMessage } from './AssistantMessage.js';
+import { DefaultView } from './DefaultView.js';
+import { MessagePrompt } from './MessagePrompt.js';
+import { References } from './References.js';
+import { useChatStore } from './store.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;

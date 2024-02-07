@@ -1,9 +1,9 @@
 import type { FileSectionReference } from '@markprompt/core';
 import { useCallback, useMemo, type ReactElement } from 'react';
 
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants';
-import type { ChatLoadingState } from '../index';
-import * as Markprompt from '../primitives/headless';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import type { ChatLoadingState } from '../index.js';
+import * as Markprompt from '../primitives/headless.js';
 
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;

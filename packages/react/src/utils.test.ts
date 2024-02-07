@@ -6,7 +6,7 @@ import {
   isIterable,
   hasPresentKey,
   hasValueAtKey,
-} from './utils';
+} from './utils.js';
 
 describe('utils', () => {
   test('isIterable', () => {

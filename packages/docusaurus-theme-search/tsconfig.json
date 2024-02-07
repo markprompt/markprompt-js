@@ -2,20 +2,32 @@
   "include": ["src"],
   "references": [{ "path": "../react/tsconfig.build.json" }],
   "compilerOptions": {
-    "composite": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "rootDir": "src",
-    "strict": true,
-    "jsx": "react-jsx",
-    "outDir": "dist",
+    // base
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "lib": ["DOM", "ESNext"],
+    "moduleDetection": "force",
     "isolatedModules": true,
+
+    // strictness
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    // transpilation
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "dist/",
+    "rootDir": "src/",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+
+    // runtime
+    "lib": ["dom", "dom.iterable", "es2023"],
+
     "types": ["@docusaurus/module-type-aliases"],
     "paths": {
       "@markprompt/core": ["../core/src"],

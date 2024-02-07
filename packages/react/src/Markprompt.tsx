@@ -4,17 +4,17 @@ import { clsx } from 'clsx';
 import Emittery from 'emittery';
 import { useEffect, useState, type ReactElement } from 'react';
 
-import { ChatView } from './chat/ChatView';
-import { DEFAULT_MARKPROMPT_OPTIONS } from './constants';
-import { ChatIcon, CloseIcon, SparklesIcon } from './icons';
-import { ChatProvider, useChatStore } from './index';
-import * as BaseMarkprompt from './primitives/headless';
-import { SearchBoxTrigger } from './search/SearchBoxTrigger';
-import { SearchView } from './search/SearchView';
-import { type MarkpromptOptions, type View } from './types';
-import { useDefaults } from './useDefaults';
-import { useMediaQuery } from './useMediaQuery';
-import { useViews } from './useViews';
+import { ChatView } from './chat/ChatView.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
+import { ChatProvider, useChatStore } from './index.js';
+import * as BaseMarkprompt from './primitives/headless.js';
+import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
+import { SearchView } from './search/SearchView.js';
+import { type MarkpromptOptions, type View } from './types.js';
+import { useDefaults } from './useDefaults.js';
+import { useMediaQuery } from './useMediaQuery.js';
+import { useViews } from './useViews.js';
 
 type MarkpromptProps = MarkpromptOptions &
   Omit<

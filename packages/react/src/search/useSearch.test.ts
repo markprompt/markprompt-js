@@ -16,7 +16,7 @@ import {
   vi,
 } from 'vitest';
 
-import { type UseSearchResult, useSearch } from './useSearch';
+import { type UseSearchResult, useSearch } from './useSearch.js';
 
 let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
@@ -128,16 +128,16 @@ describe('useSearch', () => {
     await waitFor(() => expect(searchHits).toBe(1));
 
     expect(result.current.searchResults[0]?.href).toBe(
-      (searchResults as SearchResult[])[0].file.path,
+      (searchResults as SearchResult[])[0]?.file.path,
     );
     expect(result.current.searchResults[0]?.title).toBe(
-      (searchResults as SearchResult[])[0].file.title,
+      (searchResults as SearchResult[])[0]?.file.title,
     );
     expect(result.current.searchResults[1]?.title).toBe(
-      (searchResults as SearchResult[])[1].meta?.leadHeading?.value,
+      (searchResults as SearchResult[])[1]?.meta?.leadHeading?.value,
     );
     expect(result.current.searchResults[2]?.title).toBe(
-      (searchResults as SearchResult[])[2].snippet,
+      (searchResults as SearchResult[])[2]?.snippet,
     );
   });
 
