@@ -6,11 +6,12 @@ import {
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
+import { useMarkpromptStore } from '../store';
 import { useAbortController } from '../useAbortController';
 
 export interface UseFeedbackOptions {
   /** Enable and configure feedback functionality */
-  feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
+  feedbackOptions?: Omit<SubmitFeedbackOptions, 'clientId' | 'signal'>;
   /** Markprompt project key */
   projectKey: string;
   /** The current list of messages */
@@ -36,6 +37,8 @@ export function useFeedback({
 
   const { ref: controllerRef, abort } = useAbortController();
 
+  const clientId = useMarkpromptStore((state) => state.clientId);
+
   const submitFeedback = useCallback(
     async (feedback: PromptFeedback, promptId?: string) => {
       abort();
@@ -49,7 +52,7 @@ export function useFeedback({
       const promise = submitFeedbackToMarkprompt(
         { feedback, promptId },
         projectKey,
-        { ...feedbackOptions, signal: controller.signal },
+        { ...feedbackOptions, clientId, signal: controller.signal },
       );
 
       promise.catch(() => {
@@ -62,7 +65,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, controllerRef, projectKey, feedbackOptions],
+    [abort, controllerRef, projectKey, feedbackOptions, clientId],
   );
 
   return { submitFeedback, abort };

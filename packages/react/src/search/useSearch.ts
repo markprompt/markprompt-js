@@ -12,6 +12,7 @@ import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants';
+import { useMarkpromptStore } from '../store';
 import type { MarkpromptOptions, SearchResultComponentProps } from '../types';
 import { useAbortController } from '../useAbortController';
 
@@ -20,7 +21,7 @@ export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
 export interface UseSearchOptions {
   debug?: boolean;
   projectKey: string;
-  searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'>;
+  searchOptions?: Omit<SubmitSearchQueryOptions, 'clientId' | 'signal'>;
 }
 
 export interface UseSearchResult {
@@ -44,6 +45,7 @@ export function useSearch({
   >([]);
 
   const { ref: controllerRef, abort } = useAbortController();
+  const clientId = useMarkpromptStore((state) => state.clientId);
 
   const submitSearchQuery = useCallback(
     (searchQuery: string) => {
@@ -68,6 +70,7 @@ export function useSearch({
         promise = (
           submitAlgoliaDocsearchQuery(searchQuery, {
             ...searchOptions,
+            clientId,
             signal: controller.signal,
           }) as Promise<AlgoliaDocSearchResultsResponse>
         ).then((result) => result?.hits || []) as Promise<
@@ -77,6 +80,7 @@ export function useSearch({
         promise = (
           submitSearchQueryToMarkprompt(searchQuery, projectKey, {
             ...searchOptions,
+            clientId,
             signal: controller.signal,
           }) as Promise<SearchResultsResponse>
         ).then((result) => {
@@ -119,7 +123,7 @@ export function useSearch({
         }
       });
     },
-    [searchOptions, abort, controllerRef, projectKey, debug],
+    [abort, controllerRef, searchOptions, projectKey, clientId, debug],
   );
 
   return {

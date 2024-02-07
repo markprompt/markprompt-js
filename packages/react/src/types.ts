@@ -15,8 +15,8 @@ import type {
   ReactNode,
 } from 'react';
 
-import type { UserConfigurableOptions } from './chat/store';
-import type { ChatViewMessage } from './index';
+import type { UserConfigurableOptions } from './chat/store.js';
+import type { ChatViewMessage } from './index.js';
 
 export type View = 'chat' | 'search';
 
@@ -123,7 +123,7 @@ export interface MarkpromptOptions {
      **/
     text?: string;
   };
-  feedback?: SubmitFeedbackOptions & {
+  feedback?: Omit<SubmitFeedbackOptions, 'clientId'> & {
     /**
      * Enable feedback functionality, shows a thumbs up/down button after a
      * prompt was submitted.
@@ -248,7 +248,7 @@ export interface MarkpromptOptions {
   /**
    * Enable and configure search functionality
    */
-  search?: SubmitSearchQueryOptions & {
+  search?: Omit<SubmitSearchQueryOptions, 'clientId'> & {
     /**
      * Enable search
      * @default false
@@ -363,4 +363,9 @@ export interface MarkpromptOptions {
    * @default false
    **/
   debug?: boolean;
+  /**
+   * User data to attach to requests to the Markprompt API.
+   * @default undefined
+   **/
+  userData: { [key: string]: unknown };
 }

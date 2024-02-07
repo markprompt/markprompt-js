@@ -20,7 +20,7 @@ import {
   SubmitChatReturn,
   SubmitChatYield,
 } from './index';
-import { formatEvent, getChunk } from '../../../test/utils';
+import { formatEvent, getChunk } from '../../../test/utils.js';
 
 describe('submitChat', () => {
   const encoder = new TextEncoder();

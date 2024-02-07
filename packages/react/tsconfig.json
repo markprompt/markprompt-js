@@ -1,25 +1,32 @@
 {
-  "references": [{ "path": "../core" }],
-  "include": ["src/"],
   "compilerOptions": {
-    "lib": ["dom", "es2022", "esnext"],
-    "composite": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "rootDir": "./src",
-    "strict": true,
+    "composite": true,
+
+    "lib": ["dom", "dom.iterable", "es2023"],
     "jsx": "react-jsx",
-    "outDir": "dist",
-    "skipLibCheck": true,
-    "target": "es2021",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "types": ["@testing-library/jest-dom/vitest"],
+
     "paths": {
       "@markprompt/core": ["../core/src"],
     },
   },
+  "include": ["src/"],
+  "references": [{ "path": "../core" }],
 }

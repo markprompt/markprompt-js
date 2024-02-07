@@ -22,6 +22,7 @@ import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import { useMarkpromptStore } from '../store';
 import type { MarkpromptOptions } from '../types';
 import { hasValueAtKey, isIterable, isPresent, isStoredError } from '../utils';
 
@@ -142,7 +143,7 @@ export interface ChatViewTool {
 
 export type UserConfigurableOptions = Omit<
   SubmitChatOptions,
-  'signal' | 'tools'
+  'clientId' | 'signal' | 'tools'
 > & {
   tools?: ChatViewTool[];
   /**
@@ -189,10 +190,11 @@ export interface ChatStoreState {
 }
 
 export interface CreateChatOptions {
-  debug?: boolean;
-  projectKey: string;
-  persistChatHistory?: boolean;
   chatOptions?: UserConfigurableOptions;
+  clientId: string;
+  debug?: boolean;
+  persistChatHistory?: boolean;
+  projectKey: string;
 }
 
 /**
@@ -204,6 +206,7 @@ export interface CreateChatOptions {
  */
 export const createChatStore = ({
   chatOptions,
+  clientId,
   debug,
   persistChatHistory,
   projectKey, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -394,6 +397,7 @@ export const createChatStore = ({
             }
 
             const options = {
+              clientId: clientId,
               conversationId: get().conversationId,
               signal: controller.signal,
               debug,
@@ -671,13 +675,15 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
   const { chatOptions, children, debug, projectKey } = props;
 
   const store = useRef<ChatStore>();
+  const clientId = useMarkpromptStore((state) => state.clientId);
 
   if (!store.current) {
     store.current = createChatStore({
-      projectKey,
       chatOptions,
+      clientId,
       debug,
       persistChatHistory: chatOptions?.history,
+      projectKey,
     });
   }
 

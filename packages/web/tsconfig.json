@@ -6,10 +6,11 @@
   ],
   "include": ["src/*"],
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "es2023"],
     "checkJs": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "target": "esnext",
+    "target": "es2022",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,

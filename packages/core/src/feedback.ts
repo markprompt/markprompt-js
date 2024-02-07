@@ -1,6 +1,6 @@
 import defaults from 'defaults';
 
-import type { PromptFeedback } from './types';
+import type { PromptFeedback } from './types.js';
 
 export interface SubmitFeedbackBody {
   /** Prompt feedback */
@@ -16,16 +16,27 @@ export interface SubmitFeedbackOptions {
    */
   apiUrl?: string;
   /**
+   * Client ID to use for submitting feedback.
+   * @default undefined
+   **/
+  clientId: string;
+  /**
    * AbortController signal
    * @default undefined
    **/
   signal?: AbortSignal;
+  /**
+   * User data to attach to the feedback request
+   * @default undefined
+   **/
+  userData: { [key: string]: unknown };
 }
 
-const allowedOptionKeys = ['apiUrl', 'signal'];
+const allowedOptionKeys = ['apiUrl', 'signal', 'clientId', 'userData'];
 
 export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS = {
   apiUrl: 'https://api.markprompt.com/feedback',
+  clientId: crypto.randomUUID(),
 } satisfies SubmitFeedbackOptions;
 
 export async function submitFeedback(
