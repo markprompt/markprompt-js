@@ -9,11 +9,11 @@ import {
   useMemo,
 } from 'react';
 
-import { ConversationSelect } from './ConversationSelect';
-import { ChatContext, useChatStore } from './store';
-import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons';
-import * as BaseMarkprompt from '../primitives/headless';
-import type { MarkpromptOptions, View } from '../types';
+import { ConversationSelect } from './ConversationSelect.js';
+import { ChatContext, useChatStore } from './store.js';
+import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
+import * as BaseMarkprompt from '../primitives/headless.js';
+import type { MarkpromptOptions, View } from '../types.js';
 
 interface ChatViewFormProps {
   activeView?: View;

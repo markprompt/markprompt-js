@@ -7,10 +7,10 @@ import {
   useEffect,
 } from 'react';
 
-import type { UseFeedbackResult } from './useFeedback';
-import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants';
-import { ThumbsDownIcon, ThumbsUpIcon } from '../icons';
-import { CopyContentButton } from '../primitives/headless';
+import type { UseFeedbackResult } from './useFeedback.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
+import { ThumbsDownIcon, ThumbsUpIcon } from '../icons.js';
+import { CopyContentButton } from '../primitives/headless.js';
 
 interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   message?: string;

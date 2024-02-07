@@ -1,13 +1,13 @@
 import { isToolCalls } from '@markprompt/core';
 import { useMemo } from 'react';
 
-import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation';
-import { MessageAnswer } from './MessageAnswer';
-import { useChatStore, type ChatViewMessage } from './store';
-import { Feedback } from '../feedback/Feedback';
-import { useFeedback } from '../feedback/useFeedback';
-import { BotIcon } from '../icons';
-import type { MarkpromptOptions } from '../types';
+import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
+import { MessageAnswer } from './MessageAnswer.js';
+import { useChatStore, type ChatViewMessage } from './store.js';
+import { Feedback } from '../feedback/Feedback.js';
+import { useFeedback } from '../feedback/useFeedback.js';
+import { BotIcon } from '../icons.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface AssistantMessageProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;

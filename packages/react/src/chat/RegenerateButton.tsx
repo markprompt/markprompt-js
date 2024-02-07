@@ -1,7 +1,7 @@
 import { type ReactElement, useCallback } from 'react';
 
-import type { ChatViewMessage } from './store';
-import { ReloadIcon, StopIcon } from '../icons';
+import type { ChatViewMessage } from './store.js';
+import { ReloadIcon, StopIcon } from '../icons.js';
 
 interface RegenerateButtonProps {
   abortSubmitChat?: () => void;

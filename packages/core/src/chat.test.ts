@@ -19,7 +19,7 @@ import {
   SubmitChatOptions,
   SubmitChatReturn,
   SubmitChatYield,
-} from './index';
+} from './index.js';
 import { formatEvent, getChunk } from '../../../test/utils.js';
 
 describe('submitChat', () => {

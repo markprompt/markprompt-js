@@ -1,6 +1,6 @@
 import { type ComponentType, type ReactElement } from 'react';
 
-import type { DefaultViewProps } from '../types';
+import type { DefaultViewProps } from '../types.js';
 
 export function DefaultMessage(props: {
   message: string | ComponentType;

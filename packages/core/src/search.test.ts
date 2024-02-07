@@ -17,8 +17,8 @@ import {
   submitSearchQuery,
   type AlgoliaDocSearchHit,
   type SearchResult,
-} from './index';
-import type { AlgoliaProvider } from './search';
+} from './index.js';
+import type { AlgoliaProvider } from './search.js';
 
 const searchResults: SearchResult[] = [
   {

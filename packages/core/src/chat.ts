@@ -246,7 +246,11 @@ export async function* submitChat(
 
   if (res.headers.get('Content-Type')?.includes('application/json')) {
     const json = await res.json();
-    if (isChatCompletion(json) && isMarkpromptMetadata(data)) {
+    if (
+      isChatCompletion(json) &&
+      isMarkpromptMetadata(data) &&
+      json.choices[0]
+    ) {
       return { ...json.choices[0].message, ...data };
     } else {
       if (isMarkpromptMetadata(data)) {
@@ -314,7 +318,7 @@ export async function* submitChat(
       });
     }
 
-    mergeWith(completion, json.choices[0].delta, concatStrings);
+    mergeWith(completion, json.choices[0]?.delta, concatStrings);
 
     /**
      * If we do not yield a structuredClone here, the completion object will

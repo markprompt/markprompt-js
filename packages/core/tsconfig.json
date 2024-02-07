@@ -1,25 +1,26 @@
 {
   "compilerOptions": {
+    // base
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
 
+    // strictness
     "strict": true,
-    "noUncheckedIndexedAccess": true,
 
-    "moduleResolution": "nodenext",
+    // transpilation
     "module": "nodenext",
-    "outDir": "dist",
+    "moduleResolution": "nodenext",
+    "outDir": "dist/",
     "rootDir": "src/",
-
     "sourceMap": true,
     "declaration": true,
     "composite": true,
     "declarationMap": true,
 
+    // runtime
     "lib": ["dom", "dom.iterable", "es2023"],
   },
   "include": ["src/*"],
