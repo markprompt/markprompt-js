@@ -10,11 +10,7 @@ import {
 } from 'react';
 
 import { ConversationSelect } from './ConversationSelect.js';
-import {
-  ChatContext,
-  selectProjectConversations,
-  useChatStore,
-} from './store.js';
+import { ChatContext, useChatStore } from './store.js';
 import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
