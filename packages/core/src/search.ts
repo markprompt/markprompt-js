@@ -15,7 +15,7 @@ export interface SubmitSearchQueryOptions {
   /**
    * Markprompt client ID
    */
-  clientId: string;
+  clientId?: string;
   /**
    * Maximum amount of results to return
    * @default 8

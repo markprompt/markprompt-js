@@ -41,7 +41,7 @@ export interface SubmitChatOptions {
   /**
    * Markprompt Client ID
    */
-  clientId: string;
+  clientId?: string;
   /**
    * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
    * @default undefined

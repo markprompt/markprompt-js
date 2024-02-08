@@ -70,10 +70,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     );
   }
 
-  // update user data when it changes
-  useEffect(() => {
-    useMarkpromptStore.setState({ userData });
-  }, [userData]);
+  const clientId = useMarkpromptStore((state) => state.clientId);
 
   const {
     display,
@@ -103,10 +100,10 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       ),
       close: props.close,
       description: props.description,
-      feedback: props.feedback,
-      chat: props.chat,
+      feedback: { ...props.feedback, clientId, userData },
+      chat: { ...props.chat, clientId, userData },
       references: props.references,
-      search: props.search,
+      search: { ...props.search, clientId, userData },
       trigger: props.trigger,
       title: props.title,
       branding: props.branding || { show: props.showBranding },

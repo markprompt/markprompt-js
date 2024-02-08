@@ -19,7 +19,7 @@ export interface SubmitFeedbackOptions {
    * Client ID to use for submitting feedback.
    * @default undefined
    **/
-  clientId: string;
+  clientId?: string;
   /**
    * AbortController signal
    * @default undefined

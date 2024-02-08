@@ -22,7 +22,6 @@ import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { useMarkpromptStore } from '../store.js';
 import type { MarkpromptOptions } from '../types.js';
 import {
   hasValueAtKey,
@@ -148,7 +147,7 @@ export interface ChatViewTool {
 
 export type UserConfigurableOptions = Omit<
   SubmitChatOptions,
-  'clientId' | 'signal' | 'tools'
+  'signal' | 'tools'
 > & {
   tools?: ChatViewTool[];
   /**
@@ -189,13 +188,13 @@ export interface ChatStoreState {
     )[],
   ) => void;
   submitToolCalls: (message: ChatViewMessage) => Promise<void>;
-  options?: UserConfigurableOptions;
+  options: UserConfigurableOptions;
   setOptions: (options: UserConfigurableOptions) => void;
   regenerateLastAnswer: () => void;
 }
 
 export interface CreateChatOptions {
-  chatOptions?: UserConfigurableOptions;
+  chatOptions: UserConfigurableOptions;
   debug?: boolean;
   persistChatHistory?: boolean;
   projectKey: string;
@@ -400,14 +399,12 @@ export const createChatStore = ({
             }
 
             const options = {
-              clientId: useMarkpromptStore.getState().clientId,
-              conversationId: get().conversationId,
               debug,
+              conversationId: get().conversationId,
               signal: controller.signal,
-              userData: useMarkpromptStore.getState().userData,
               ...get().options,
               tools: get().options?.tools?.map((x) => x.tool),
-            };
+            } satisfies SubmitChatOptions;
 
             // do the chat completion request
             try {
@@ -669,7 +666,7 @@ type ChatStore = ReturnType<typeof createChatStore>;
 export const ChatContext = createContext<ChatStore | null>(null);
 
 interface ChatProviderProps {
-  chatOptions: MarkpromptOptions['chat'];
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
