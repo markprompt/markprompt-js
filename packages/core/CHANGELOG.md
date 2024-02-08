@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.25.0
+
+### Minor Changes
+
+- [#299](https://github.com/motifland/markprompt-js/pull/299) [`8d22d24c9220734288c9a7e87923bcd8ef92b8e7`](https://github.com/motifland/markprompt-js/commit/8d22d24c9220734288c9a7e87923bcd8ef92b8e7) Thanks [@nickrttn](https://github.com/nickrttn)! - Use `module: nodenext` and `moduleResolution: nodenext` and update tsconfigs to modern standards
+
 ## 0.24.0
 
 ### Minor Changes

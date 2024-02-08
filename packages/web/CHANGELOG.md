@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.28.0
+
+### Minor Changes
+
+- [#299](https://github.com/motifland/markprompt-js/pull/299) [`8d22d24c9220734288c9a7e87923bcd8ef92b8e7`](https://github.com/motifland/markprompt-js/commit/8d22d24c9220734288c9a7e87923bcd8ef92b8e7) Thanks [@nickrttn](https://github.com/nickrttn)! - Use `module: nodenext` and `moduleResolution: nodenext` and update tsconfigs to modern standards
+
+### Patch Changes
+
+- Updated dependencies [[`8d22d24c9220734288c9a7e87923bcd8ef92b8e7`](https://github.com/motifland/markprompt-js/commit/8d22d24c9220734288c9a7e87923bcd8ef92b8e7)]:
+  - @markprompt/react@0.38.0
+  - @markprompt/core@0.25.0
+
 ## 0.27.0
 
 ### Minor Changes
