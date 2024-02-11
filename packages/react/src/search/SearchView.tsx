@@ -78,7 +78,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
   const [activeSearchResult, setActiveSearchResult] =
     useState<ActiveSearchResult>();
 
-  // Show "Ask AI" it the query contains a space between two words
+  // Show "Ask AI" if the query contains a space between two words
   const isAskVisible =
     props.layout === 'panels' && searchQuery.trim().includes(' ');
 

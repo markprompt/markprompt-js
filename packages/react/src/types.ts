@@ -18,7 +18,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'search';
+export type View = 'chat' | 'search' | 'create-ticket';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -357,6 +357,15 @@ export interface MarkpromptOptions {
   branding?: {
     show?: boolean;
     type?: 'plain' | 'text';
+  };
+  /**
+   * Enable optional integrations
+   */
+  integrations?: {
+    /**
+     * Allow users to create tickets in a support system from the chat.
+     */
+    createTicket?: 'zendesk';
   };
   /**
    * Display debug info

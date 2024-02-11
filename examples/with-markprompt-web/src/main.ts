@@ -75,6 +75,9 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
+    integrations: {
+      createTicket: 'zendesk',
+    },
     defaultView: 'chat',
     trigger: {
       buttonLabel: 'Ask AI',
