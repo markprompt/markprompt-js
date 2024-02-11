@@ -8,6 +8,7 @@ import {
 import { createStore, useStore, type StoreApi } from 'zustand';
 
 import type { MarkpromptOptions, View } from './types.js';
+import { getDefaultView } from './utils.js';
 
 interface State {
   options: MarkpromptOptions;
@@ -21,15 +22,24 @@ interface Actions {
 export type GlobalStore = StoreApi<State & Actions>;
 
 function getInitialView(options: MarkpromptOptions): View {
-  if (options.defaultView) return options.defaultView;
-  if (options?.search?.enabled) return 'search';
+  if (options.defaultView) {
+    return getDefaultView(options.defaultView, options);
+  }
+
+  if (options?.search?.enabled) {
+    return 'search';
+  }
+
   return 'chat';
 }
 
 function getEnabledViews(options: MarkpromptOptions): View[] {
   const views: View[] = ['chat'];
 
-  if (options?.search?.enabled) views.push('search');
+  if (options?.search?.enabled) {
+    views.push('search');
+  }
+
   if (typeof options?.integrations?.createTicket === 'string') {
     views.push('create-ticket');
   }

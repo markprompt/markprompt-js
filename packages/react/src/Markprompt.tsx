@@ -1,3 +1,4 @@
+import { submitChat as coreSubmitChat } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
@@ -5,6 +6,7 @@ import Emittery from 'emittery';
 import { useEffect, useState, type ReactElement, lazy, Suspense } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
+import { toApiMessages } from './chat/utils.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
@@ -15,6 +17,7 @@ import { GlobalStoreProvider, useGlobalStore } from './store.js';
 import { type MarkpromptOptions, type View } from './types.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
+import { getDefaultView } from './utils.js';
 
 const SearchView = lazy(() =>
   import('./search/SearchView.js').then((m) => ({ default: m.SearchView })),
@@ -30,22 +33,6 @@ type MarkpromptProps = MarkpromptOptions &
   };
 
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
-
-function getDefaultView(
-  candidateView: View | undefined,
-  isSearchEnabled: boolean,
-  isChatEnabled: boolean,
-): View {
-  if (candidateView === 'search' && isSearchEnabled) {
-    return candidateView;
-  } else if (candidateView === 'chat' && isChatEnabled) {
-    return candidateView;
-  }
-  if (isSearchEnabled) {
-    return 'search';
-  }
-  return 'chat';
-}
 
 /**
  * Open Markprompt programmatically. Useful for building a custom trigger
@@ -94,11 +81,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     {
       display: props.display,
       sticky: props.sticky,
-      defaultView: getDefaultView(
-        props.defaultView,
-        !!props.search?.enabled,
-        !!props.chat?.enabled,
-      ),
+      defaultView: getDefaultView(props.defaultView, props),
       close: props.close,
       description: props.description,
       feedback: props.feedback,
@@ -316,6 +299,26 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const setActiveView = useGlobalStore((state) => state.setActiveView);
   const submitChat = useChatStore((state) => state.submitChat);
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
+  const messages = useChatStore((state) => state.messages);
+
+  async function handleCreateTicket() {
+    setActiveView('create-ticket');
+
+    for await (const chunk of coreSubmitChat(
+      [
+        ...toApiMessages(messages),
+        {
+          role: 'user',
+          content:
+            'I want to create a support case. Please summarize the conversation for sending it to a support agent.',
+        },
+      ],
+      projectKey,
+      { stream: false },
+    )) {
+      console.log(chunk);
+    }
+  }
 
   if (!search?.enabled) {
     return (
@@ -357,9 +360,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 debug={debug}
                 feedbackOptions={feedback}
                 integrations={integrations}
-                handleCreateTicket={() => {
-                  setActiveView('create-ticket');
-                }}
+                handleCreateTicket={handleCreateTicket}
                 projectKey={projectKey}
                 referencesOptions={references}
               />
@@ -480,9 +481,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               feedbackOptions={feedback}
               integrations={integrations}
               onDidPressBack={() => setActiveView('search')}
-              handleCreateTicket={() => {
-                setActiveView('create-ticket');
-              }}
+              handleCreateTicket={handleCreateTicket}
               projectKey={projectKey}
               referencesOptions={references}
               showBack={layout === 'panels'}

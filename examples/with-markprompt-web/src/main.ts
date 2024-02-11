@@ -24,6 +24,7 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
+      apiUrl: 'http://api.localhost:3000/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
