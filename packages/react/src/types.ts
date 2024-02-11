@@ -364,8 +364,19 @@ export interface MarkpromptOptions {
   integrations?: {
     /**
      * Allow users to create tickets in a support system from the chat.
+     * @default undefined
      */
-    createTicket?: 'zendesk';
+    createTicket?: {
+      /**
+       * The provider to use for creating tickets
+       **/
+      provider?: 'zendesk';
+      /**
+       * The prompt to use to create a summary of the conversation between user and bot for the support agent
+       * @default "I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets."
+       **/
+      prompt?: string;
+    };
   };
   /**
    * Display debug info

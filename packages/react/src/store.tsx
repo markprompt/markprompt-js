@@ -1,3 +1,4 @@
+import { isAbortError, submitChat } from '@markprompt/core';
 import {
   createContext,
   useContext,
@@ -6,20 +7,12 @@ import {
   useEffect,
 } from 'react';
 import { createStore, useStore, type StoreApi } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
+import { toApiMessages } from './chat/utils.js';
+import type { ChatViewMessage } from './index.js';
 import type { MarkpromptOptions, View } from './types.js';
 import { getDefaultView } from './utils.js';
-
-interface State {
-  options: MarkpromptOptions;
-  activeView: View;
-}
-
-interface Actions {
-  setActiveView: (view: View) => void;
-}
-
-export type GlobalStore = StoreApi<State & Actions>;
 
 function getInitialView(options: MarkpromptOptions): View {
   if (options.defaultView) {
@@ -47,12 +40,107 @@ function getEnabledViews(options: MarkpromptOptions): View[] {
   return views;
 }
 
-export const createGlobalStore = (options: MarkpromptOptions): GlobalStore => {
-  return createStore((set) => ({
-    options,
-    activeView: getInitialView(options),
-    setActiveView: (view: View) => set({ activeView: view }),
-  }));
+type GlobalOptions = MarkpromptOptions & { projectKey: string };
+
+interface State {
+  options: GlobalOptions;
+  activeView: View;
+  setActiveView: (view: View) => void;
+
+  tickets?: {
+    summaryByConversationId: { [conversationId: string]: ChatViewMessage };
+    createTicketSummary: (
+      conversationId: string,
+      messages: ChatViewMessage[],
+    ) => void;
+  };
+}
+
+export type GlobalStore = StoreApi<State>;
+
+export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
+  return createStore(
+    immer((set, get) => ({
+      options,
+      activeView: getInitialView(options),
+      setActiveView: (view: View) => set({ activeView: view }),
+      ...(options.integrations?.createTicket && {
+        tickets: {
+          summaryByConversationId: {},
+          createTicketSummary: async (
+            conversationId: string,
+            messages: ChatViewMessage[],
+          ) => {
+            const summaryId = crypto.randomUUID();
+
+            set((state) => {
+              state.tickets!.summaryByConversationId[conversationId] = {
+                id: summaryId,
+                references: [],
+                state: 'indeterminate',
+              };
+            });
+
+            const options = {
+              conversationId: conversationId,
+              ...get().options.chat,
+              tools: get().options?.chat?.tools?.map((x) => x.tool),
+            };
+
+            const apiMessages = [
+              ...toApiMessages(messages),
+              {
+                role: 'user',
+                content:
+                  get().options?.integrations?.createTicket?.prompt ??
+                  'I want to create a support case. Please summarize the conversation so far in first-person, from my point of view, for sending it to a support agent. Return only the summary itself, nothing else. Use short paragraphs. Include relevant code snippets. Respond in plain text.',
+              } as const,
+            ];
+
+            set((state) => {
+              state.tickets!.summaryByConversationId[conversationId].state =
+                'preload';
+            });
+
+            try {
+              for await (const chunk of submitChat(
+                apiMessages,
+                get().options.projectKey,
+                options,
+              )) {
+                set((state) => {
+                  state.tickets!.summaryByConversationId[conversationId] = {
+                    ...state.tickets!.summaryByConversationId[conversationId],
+                    state: 'streaming-answer',
+                    ...chunk,
+                  };
+                });
+              }
+            } catch (error) {
+              set((state) => {
+                state.tickets!.summaryByConversationId[conversationId] = {
+                  ...state.tickets!.summaryByConversationId[conversationId],
+                  state: 'cancelled',
+                };
+              });
+
+              if (isAbortError(error)) return;
+
+              // eslint-disable-next-line no-console
+              console.error({ error });
+
+              return;
+            }
+
+            set((state) => {
+              state.tickets!.summaryByConversationId[conversationId].state =
+                'done';
+            });
+          },
+        },
+      }),
+    })),
+  );
 };
 
 export const GlobalStoreContext = createContext<GlobalStore | undefined>(
@@ -60,13 +148,13 @@ export const GlobalStoreContext = createContext<GlobalStore | undefined>(
 );
 
 interface GlobalStoreProviderProps {
-  options: MarkpromptOptions;
+  options: GlobalOptions;
   children: ReactNode;
 }
 
 function updateStateOnOptionsChange(
   store: GlobalStore,
-  nextOptions: MarkpromptOptions,
+  nextOptions: GlobalOptions,
 ): void {
   const activeView = store.getState().activeView;
   const nextInitialView = getInitialView(nextOptions);
@@ -104,7 +192,7 @@ export function GlobalStoreProvider(
   );
 }
 
-export function useGlobalStore<T>(selector: (state: State & Actions) => T): T {
+export function useGlobalStore<T>(selector: (state: State) => T): T {
   const store = useContext(GlobalStoreContext);
   if (!store) {
     throw new Error(

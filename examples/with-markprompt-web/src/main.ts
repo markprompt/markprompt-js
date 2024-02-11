@@ -35,49 +35,51 @@ if (el && el instanceof HTMLElement) {
           'Do you have a REST API?',
         ],
       },
-      tool_choice: 'auto',
-      tools: [
-        {
-          call: get_random_activity,
-          tool: {
-            type: 'function',
-            function: {
-              name: 'get_random_activity',
-              description: 'Get a random activity from the Bored API',
-              parameters: {
-                type: 'object',
-                properties: {
-                  type: {
-                    type: 'string',
-                    description: 'Find a random activity with a given type',
-                    enum: [
-                      'education',
-                      'recreational',
-                      'social',
-                      'diy',
-                      'charity',
-                      'cooking',
-                      'relaxation',
-                      'music',
-                      'busywork',
-                    ],
-                  },
-                  participants: {
-                    type: 'integer',
-                    description:
-                      'Find a random activity for a given number of participants',
-                  },
-                },
-                required: [],
-              },
-            },
-          },
-          requireConfirmation: false,
-        },
-      ],
+      //   tool_choice: 'auto',
+      //   tools: [
+      //     {
+      //       call: get_random_activity,
+      //       tool: {
+      //         type: 'function',
+      //         function: {
+      //           name: 'get_random_activity',
+      //           description: 'Get a random activity from the Bored API',
+      //           parameters: {
+      //             type: 'object',
+      //             properties: {
+      //               type: {
+      //                 type: 'string',
+      //                 description: 'Find a random activity with a given type',
+      //                 enum: [
+      //                   'education',
+      //                   'recreational',
+      //                   'social',
+      //                   'diy',
+      //                   'charity',
+      //                   'cooking',
+      //                   'relaxation',
+      //                   'music',
+      //                   'busywork',
+      //                 ],
+      //               },
+      //               participants: {
+      //                 type: 'integer',
+      //                 description:
+      //                   'Find a random activity for a given number of participants',
+      //               },
+      //             },
+      //             required: [],
+      //           },
+      //         },
+      //       },
+      //       requireConfirmation: false,
+      //     },
+      //   ],
     },
     integrations: {
-      createTicket: 'zendesk',
+      createTicket: {
+        provider: 'zendesk',
+      },
     },
     defaultView: 'chat',
     trigger: {

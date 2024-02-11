@@ -1,12 +1,17 @@
-import { submitChat as coreSubmitChat } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
-import { useEffect, useState, type ReactElement, lazy, Suspense } from 'react';
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  useTransition,
+  type ReactElement,
+} from 'react';
 
 import { ChatView } from './chat/ChatView.js';
-import { toApiMessages } from './chat/utils.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
@@ -128,23 +133,23 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   return (
     <GlobalStoreProvider
       options={{
-        display,
-        sticky,
-        defaultView,
-        close,
-        description,
-        feedback,
+        branding,
         chat,
+        close,
+        debug,
+        defaultView,
+        description,
+        display,
+        feedback,
+        integrations,
+        layout,
+        linkAs,
+        projectKey,
         references,
         search,
-        trigger,
+        sticky,
         title,
-        branding,
-        linkAs,
-        layout,
-        debug,
-        integrations,
-        children,
+        trigger,
       }}
     >
       <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
@@ -188,6 +193,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               )}
             </>
           )}
+
           {children && display === 'dialog' && (
             <BaseMarkprompt.DialogTrigger asChild>
               {children}
@@ -300,23 +306,19 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const submitChat = useChatStore((state) => state.submitChat);
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
   const messages = useChatStore((state) => state.messages);
+  const conversationId = useChatStore((state) => state.conversationId);
+  const tickets = useGlobalStore((state) => state.tickets);
+  const [, startTransition] = useTransition();
 
-  async function handleCreateTicket() {
+  async function handleCreateTicket(): Promise<void> {
+    if (!integrations?.createTicket) return;
+
     setActiveView('create-ticket');
 
-    for await (const chunk of coreSubmitChat(
-      [
-        ...toApiMessages(messages),
-        {
-          role: 'user',
-          content:
-            'I want to create a support case. Please summarize the conversation for sending it to a support agent.',
-        },
-      ],
-      projectKey,
-      { stream: false },
-    )) {
-      console.log(chunk);
+    if (conversationId && messages.length > 0) {
+      startTransition(() => {
+        tickets?.createTicketSummary?.(conversationId, messages);
+      });
     }
   }
 
@@ -502,4 +504,4 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export { Markprompt, openMarkprompt, closeMarkprompt, type MarkpromptProps };
+export { closeMarkprompt, Markprompt, openMarkprompt, type MarkpromptProps };

@@ -1935,6 +1935,74 @@
   animation: markprompt-spin 1s linear infinite;
 }
 
+:where(.MarkpromptCreateTicketView) {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  max-height: 100%;
+}
+
+:where(.MarkpromptCreateTicket) {
+  padding-inline: 3rem;
+  padding-block: 1.5rem;
+  overflow: scroll;
+  scrollbar-width: none;
+  height: 100%;
+}
+
+:where(.MarkpromptCreateTicket h1) {
+  font-size: calc(var(--markprompt-text-size) * 1.5);
+}
+
+:where(.MarkpromptCreateTicketForm) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+:where(.MarkpromptCreateTicketForm label) {
+  color: var(--markprompt-foreground);
+  font-weight: 500;
+}
+
+:where(.MarkpromptFormGroup) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 100%;
+  gap: 0.5rem;
+}
+
+:where(.MarkpromptFormGroup input),
+:where(.MarkpromptFormGroup textarea) {
+  font-size: var(--markprompt-text-size);
+}
+
+:where(.MarkpromptFormGroup textarea) {
+  min-width: 100%;
+  min-height: 10rem;
+  font-family: inherit;
+  field-sizing: normal;
+}
+
+:where(.MarkpromptFormGroup input),
+:where(.MarkpromptFormGroup textarea) {
+  background-color: var(--markprompt-muted);
+  border: 1px solid var(--markprompt-border);
+  border-radius: calc(var(--markprompt-radius) * 0.5);
+  transition-property: all;
+  transition-duration: 150ms;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+}
+
+:where(.MarkpromptFormGroup input):focus-within,
+:where(.MarkpromptFormGroup textarea):focus-within {
+  box-shadow: 0 0 0 3px var(--markprompt-border);
+  border-color: var(--markprompt-border-accent);
+}
+
 @keyframes markprompt-show-content {
   0% {
     opacity: 0;
