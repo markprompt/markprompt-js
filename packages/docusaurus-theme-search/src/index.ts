@@ -1,6 +1,6 @@
 import type {
-   PluginModule,
-   ThemeConfigValidationContext,
+  PluginModule,
+  ThemeConfigValidationContext,
 } from '@docusaurus/types';
 import type { MarkpromptProps } from '@markprompt/react';
 
