@@ -65,6 +65,11 @@ export interface SubmitChatOptions {
    **/
   doNotInjectContext?: boolean;
   /**
+   * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information. Default `true`.
+   * @default true
+   **/
+  allowFollowUpQuestions?: boolean;
+  /**
    * Whether or not to include message in insights.
    * @default false
    **/
@@ -169,6 +174,7 @@ const validSubmitChatOptionsKeys: (keyof SubmitChatOptions)[] = [
   'conversationMetadata',
   'debug',
   'doNotInjectContext',
+  'allowFollowUpQuestions',
   'excludeFromInsights',
   'frequencyPenalty',
   'iDontKnowMessage',

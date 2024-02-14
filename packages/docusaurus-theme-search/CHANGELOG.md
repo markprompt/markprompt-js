@@ -1,5 +1,11 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.18.1
+
+### Patch Changes
+
+- [#305](https://github.com/motifland/markprompt-js/pull/305) [`8526c0d1ccf1162846d8653c7231a7d8225e5a41`](https://github.com/motifland/markprompt-js/commit/8526c0d1ccf1162846d8653c7231a7d8225e5a41) Thanks [@nickrttn](https://github.com/nickrttn)! - Do not output a stub import for a type import.
+
 ## 0.18.0
 
 ### Minor Changes
