@@ -2,6 +2,7 @@
   "name": "markprompt",
   "private": true,
   "workspaces": [
+    "examples/*",
     "packages/*"
   ],
   "scripts": {
