@@ -1,16 +1,18 @@
-import { set } from 'lodash';
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, useId } from 'react';
 
 import { ChevronLeftIcon } from './icons.js';
-import { useChatStore } from './index.js';
+import { useChatStore, type MarkpromptOptions } from './index.js';
 import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
+  createTicketOptions: NonNullable<
+    MarkpromptOptions['integrations']
+  >['createTicket'];
 }
 
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
-  const { handleGoBack } = props;
+  const { handleGoBack, createTicketOptions } = props;
 
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const conversationId = useChatStore((state) => state.conversationId);
@@ -61,35 +63,37 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       </div>
 
       <div className="MarkpromptCreateTicket">
-        <h1>Create a case</h1>
+        <h1>{createTicketOptions?.view?.title}</h1>
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
-            <label htmlFor="name">Your Name</label>
+            <label htmlFor="name">{createTicketOptions?.view?.nameLabel}</label>
 
             <input
               required
               type="text"
               id="user_name"
               name="user_name"
-              placeholder="Markprompt AI"
+              placeholder={createTicketOptions?.view?.namePlaceholder}
             />
           </div>
 
           <div className="MarkpromptFormGroup">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              {createTicketOptions?.view?.emailLabel}
+            </label>
 
             <input
               required
               type="email"
               id="email"
               name="email"
-              placeholder="bot@markprompt.com"
+              placeholder={createTicketOptions?.view?.emailPlaceholder}
             />
           </div>
 
           <div className="MarkpromptFormGroup">
             <label htmlFor="summary" id="summary-label">
-              How can we help?
+              {createTicketOptions?.view?.summaryLabel}
             </label>
             <textarea
               value={
@@ -98,8 +102,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                   : summary?.state &&
                       summary.state !== 'done' &&
                       summary?.state !== 'cancelled'
-                    ? 'Generating summary…'
-                    : 'Please describe your issue'
+                    ? createTicketOptions?.view?.summaryLoading
+                    : createTicketOptions?.view?.summaryPlaceholder
               }
               required
               aria-labelledby="summary-label"
@@ -116,14 +120,14 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
 
           <button type="submit" className="MarkpromptPromptSubmitButton">
-            Submit case
+            {createTicketOptions?.view?.submitLabel}
           </button>
 
           {result && (
             <p>
               {result.ok
-                ? 'Ticket created successfully!'
-                : 'An error occurred while creating the case'}
+                ? createTicketOptions?.view?.ticketCreatedOk
+                : createTicketOptions?.view?.ticketCreatedError}
             </p>
           )}
         </form>

@@ -78,6 +78,7 @@ if (el && el instanceof HTMLElement) {
     },
     integrations: {
       createTicket: {
+        enabled: true,
         provider: 'zendesk',
       },
     },

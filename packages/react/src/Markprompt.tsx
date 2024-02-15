@@ -307,17 +307,19 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
   const messages = useChatStore((state) => state.messages);
   const conversationId = useChatStore((state) => state.conversationId);
-  const tickets = useGlobalStore((state) => state.tickets);
+  const createTicketSummary = useGlobalStore(
+    (state) => state.tickets?.createTicketSummary,
+  );
   const [, startTransition] = useTransition();
 
   async function handleCreateTicket(): Promise<void> {
-    if (!integrations?.createTicket) return;
+    if (!integrations?.createTicket?.enabled) return;
 
     setActiveView('create-ticket');
 
     if (conversationId && messages.length > 0) {
       startTransition(() => {
-        tickets?.createTicketSummary?.(conversationId, messages);
+        createTicketSummary?.(conversationId, messages);
       });
     }
   }
@@ -496,7 +498,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             value="create-ticket"
             style={{ position: 'absolute', inset: 0 }}
           >
-            <CreateTicketView handleGoBack={() => setActiveView('chat')} />
+            <CreateTicketView
+              createTicketOptions={integrations.createTicket}
+              handleGoBack={() => setActiveView('chat')}
+            />
           </Tabs.Content>
         )}
       </div>

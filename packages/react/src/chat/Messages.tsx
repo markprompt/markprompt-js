@@ -5,18 +5,28 @@ import { DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
+import { MessageCircleQuestionIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface MessagesProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
-  referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  integrations: MarkpromptOptions['integrations'];
   projectKey: string;
+  referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  handleCreateTicket?: () => void;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
-  const { chatOptions, feedbackOptions, referencesOptions, projectKey } = props;
+  const {
+    chatOptions,
+    feedbackOptions,
+    integrations,
+    referencesOptions,
+    projectKey,
+    handleCreateTicket,
+  } = props;
 
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
@@ -74,6 +84,38 @@ export function Messages(props: MessagesProps): ReactElement {
                   heading={referencesOptions?.heading}
                   state={message.state}
                 />
+              )}
+
+            {message.role === 'assistant' &&
+              integrations?.createTicket?.enabled &&
+              message.state === 'done' && (
+                <div className="MarkpromptMessageCreateTicket">
+                  <p className="MarkpromptMessageCreateTicketDefaultText">
+                    {integrations.createTicket.messageText}
+                  </p>
+                  <button
+                    className="MarkpromptMessageCreateTicketButton"
+                    onClick={handleCreateTicket}
+                    aria-label={
+                      integrations.createTicket.messageButton?.hasText
+                        ? undefined
+                        : integrations.createTicket.messageButton?.text
+                    }
+                  >
+                    <div>
+                      <MessageCircleQuestionIcon
+                        width={20}
+                        height={20}
+                        aria-hidden={true}
+                      />
+                      {integrations.createTicket.messageButton?.hasText && (
+                        <span>
+                          {integrations.createTicket.messageButton?.text}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </div>
               )}
           </div>
         ))}

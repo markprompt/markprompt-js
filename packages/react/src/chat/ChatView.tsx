@@ -72,16 +72,12 @@ export function ChatView(props: ChatViewProps): JSX.Element {
         <Messages
           chatOptions={chatOptions}
           feedbackOptions={feedbackOptions}
+          integrations={integrations}
           projectKey={projectKey}
           referencesOptions={referencesOptions}
+          handleCreateTicket={handleCreateTicket}
         />
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
-        {integrations && (
-          <div>
-            bot not being helpful?{' '}
-            <button onClick={handleCreateTicket}>Create a ticket</button>
-          </div>
-        )}
       </div>
     </div>
   );
