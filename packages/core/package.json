@@ -27,5 +27,8 @@
     "lodash-es": "^4.17.21",
     "openai": "^4.20.1",
     "type-fest": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/defaults": "^1.0.6"
   }
 }
