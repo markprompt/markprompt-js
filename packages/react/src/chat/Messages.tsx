@@ -42,6 +42,10 @@ export function Messages(props: MessagesProps): ReactElement {
     );
   }
 
+  const lastAssistantMessageIndex = messages.findLastIndex(
+    (x) => x.role === 'assistant',
+  );
+
   return (
     <div className="MarkpromptMessages">
       <BaseMarkprompt.AutoScroller
@@ -49,7 +53,7 @@ export function Messages(props: MessagesProps): ReactElement {
         scrollTrigger={messages}
         discreteScrollTrigger={messages.length}
       >
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div key={message.id} className="MarkpromptMessage">
             {message.role === 'user' && (
               <MessagePrompt
@@ -88,7 +92,8 @@ export function Messages(props: MessagesProps): ReactElement {
 
             {message.role === 'assistant' &&
               integrations?.createTicket?.enabled &&
-              message.state === 'done' && (
+              message.state === 'done' &&
+              index === lastAssistantMessageIndex && (
                 <div className="MarkpromptMessageCreateTicket">
                   <p className="MarkpromptMessageCreateTicketDefaultText">
                     {integrations.createTicket.messageText}

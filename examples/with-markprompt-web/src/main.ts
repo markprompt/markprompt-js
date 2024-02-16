@@ -24,7 +24,6 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
-      apiUrl: 'http://api.localhost:3000/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
@@ -35,52 +34,46 @@ if (el && el instanceof HTMLElement) {
           'Do you have a REST API?',
         ],
       },
-      //   tool_choice: 'auto',
-      //   tools: [
-      //     {
-      //       call: get_random_activity,
-      //       tool: {
-      //         type: 'function',
-      //         function: {
-      //           name: 'get_random_activity',
-      //           description: 'Get a random activity from the Bored API',
-      //           parameters: {
-      //             type: 'object',
-      //             properties: {
-      //               type: {
-      //                 type: 'string',
-      //                 description: 'Find a random activity with a given type',
-      //                 enum: [
-      //                   'education',
-      //                   'recreational',
-      //                   'social',
-      //                   'diy',
-      //                   'charity',
-      //                   'cooking',
-      //                   'relaxation',
-      //                   'music',
-      //                   'busywork',
-      //                 ],
-      //               },
-      //               participants: {
-      //                 type: 'integer',
-      //                 description:
-      //                   'Find a random activity for a given number of participants',
-      //               },
-      //             },
-      //             required: [],
-      //           },
-      //         },
-      //       },
-      //       requireConfirmation: false,
-      //     },
-      //   ],
-    },
-    integrations: {
-      createTicket: {
-        enabled: true,
-        provider: 'zendesk',
-      },
+      tool_choice: 'auto',
+      tools: [
+        {
+          call: get_random_activity,
+          tool: {
+            type: 'function',
+            function: {
+              name: 'get_random_activity',
+              description: 'Get a random activity from the Bored API',
+              parameters: {
+                type: 'object',
+                properties: {
+                  type: {
+                    type: 'string',
+                    description: 'Find a random activity with a given type',
+                    enum: [
+                      'education',
+                      'recreational',
+                      'social',
+                      'diy',
+                      'charity',
+                      'cooking',
+                      'relaxation',
+                      'music',
+                      'busywork',
+                    ],
+                  },
+                  participants: {
+                    type: 'integer',
+                    description:
+                      'Find a random activity for a given number of participants',
+                  },
+                },
+                required: [],
+              },
+            },
+          },
+          requireConfirmation: false,
+        },
+      ],
     },
     defaultView: 'chat',
     trigger: {
