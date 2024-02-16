@@ -1,4 +1,4 @@
-import { useState, type FormEvent, useId } from 'react';
+import { useState, type FormEvent } from 'react';
 
 import { ChevronLeftIcon } from './icons.js';
 import { useChatStore, type MarkpromptOptions } from './index.js';
