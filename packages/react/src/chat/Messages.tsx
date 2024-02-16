@@ -90,8 +90,8 @@ export function Messages(props: MessagesProps): ReactElement {
                 />
               )}
 
-            {message.role === 'assistant' &&
-              integrations?.createTicket?.enabled &&
+            {integrations?.createTicket?.enabled &&
+              message.role === 'assistant' &&
               message.state === 'done' &&
               index === lastAssistantMessageIndex && (
                 <div className="MarkpromptMessageCreateTicket">

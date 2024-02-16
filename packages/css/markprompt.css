@@ -2023,11 +2023,13 @@
   min-width: 100%;
   min-height: 10rem;
   font-family: inherit;
+
+  /* upcoming future property */
+  /* stylelint-disable-next-line property-no-unknown */
   field-sizing: normal;
 }
 
-:where(.MarkpromptFormGroup input),
-:where(.MarkpromptFormGroup textarea) {
+:where(.MarkpromptFormGroup input, .MarkpromptFormGroup textarea) {
   background-color: var(--markprompt-muted);
   border: 1px solid var(--markprompt-border);
   border-radius: calc(var(--markprompt-radius) * 0.5);
