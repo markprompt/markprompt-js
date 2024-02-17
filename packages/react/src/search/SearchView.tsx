@@ -259,12 +259,23 @@ export function SearchView(props: SearchViewProps): ReactElement {
           />
 
           <button
-            className="MarkpromptGhostButton"
+            className={
+              searchOptions.askLabel
+                ? 'MarkpromptBorderedButton'
+                : 'MarkpromptGhostButton'
+            }
             type="button"
             style={{ flexGrow: 'none', marginRight: '0.25rem' }}
             onClick={() => onDidSelectAsk?.()}
           >
-            <SparklesIcon style={{ width: 18, height: 18 }} />
+            <SparklesIcon
+              style={
+                searchOptions.askLabel
+                  ? { width: 16, height: 16, opacity: 0.4 }
+                  : { width: 18, height: 18 }
+              }
+            />
+            <span>{searchOptions.askLabel}</span>
           </button>
         </div>
       </BaseMarkprompt.Form>

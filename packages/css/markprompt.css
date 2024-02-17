@@ -1233,9 +1233,35 @@
   transition-duration: 200ms;
   padding: 0.375rem;
   cursor: pointer;
+  gap: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 :where(.MarkpromptGhostButton):hover {
+  background-color: var(--markprompt-muted);
+}
+
+:where(.MarkpromptBorderedButton) {
+  color: var(--markprompt-foreground);
+  border: 1px solid var(--markprompt-border);
+  border-radius: 0.375rem;
+  display: flex;
+  place-items: center;
+  outline: none;
+  background: transparent;
+  border-radius: var(--markprompt-button-radius);
+  transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
+  transition-property: all;
+  transition-duration: 200ms;
+  padding: 0.375rem 0.5rem;
+  cursor: pointer;
+  gap: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+:where(.MarkpromptBorderedButton):hover {
   background-color: var(--markprompt-muted);
 }
 
@@ -1730,8 +1756,7 @@
   all: unset;
   padding: 0.375rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  place-items: center;
   transition-property: all;
   transition-duration: 200ms;
   background-color: var(--markprompt-background);
@@ -1739,6 +1764,10 @@
   border-radius: 0.375rem;
   color: var(--markprompt-foreground);
   cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  font-size: var(--markprompt-text-size);
+  gap: 0.5rem;
 }
 
 :where(.MarkpromptSelectToggle:hover) {
