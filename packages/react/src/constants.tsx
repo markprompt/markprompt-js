@@ -100,14 +100,14 @@ const defaultGetHref = (
     return result.url;
   }
 
-  let path = ''
+  let path = '';
 
   if (result.file.source.type === 'github') {
     // If it's a repo, it's probably a file with an extension,
     // and names such as "index".
     path = filePathToHref(result.file.path);
   } else {
-    path = result.file.path
+    path = result.file.path;
   }
 
   if (result.meta?.leadHeading?.id) {
