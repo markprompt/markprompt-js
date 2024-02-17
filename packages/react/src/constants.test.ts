@@ -9,11 +9,13 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
 const basePath = '/docs/guides';
 const filePath = `${basePath}/index.md`;
+const urlPath = `${basePath}/blog/post1`;
 const heading = 'Heading 1';
 const headingSlug = 'heading-1';
 const headingId = 'generated-id';
 const noTitleFileName = 'no-title';
-const source: Source = { type: 'api-upload' };
+const githubSource: Source = { type: 'github' };
+const websiteSource: Source = { type: 'website' };
 const shortContent = 'Some content';
 
 const loremIpsum =
@@ -25,35 +27,35 @@ const loremIpsumKwicSnippet =
 const results: SearchResult[] = [
   {
     matchType: 'leadHeading',
-    file: { path: filePath, source },
+    file: { path: filePath, source: githubSource },
     meta: { leadHeading: { value: heading, slug: headingSlug } },
   },
   {
     matchType: 'title',
-    file: { path: `${basePath}/index.md`, title: 'Home', source },
+    file: { path: `${basePath}/index.md`, title: 'Home', source: githubSource },
   },
   {
     matchType: 'title',
-    file: { path: `${basePath}/${noTitleFileName}.md`, source },
+    file: { path: `${basePath}/${noTitleFileName}.md`, source: githubSource },
   },
   {
     matchType: 'title',
-    file: { path: `${basePath}/${noTitleFileName}`, source },
+    file: { path: `${basePath}/${noTitleFileName}`, source: githubSource },
   },
   {
     matchType: 'content',
     snippet: loremIpsum,
-    file: { path: `${basePath}/${noTitleFileName}`, source },
+    file: { path: `${urlPath}/${noTitleFileName}`, source: websiteSource },
   },
   {
     matchType: 'content',
     snippet: `## ${heading}\n\n${shortContent}`,
-    file: { path: `${basePath}/${noTitleFileName}`, source },
+    file: { path: `${urlPath}/${noTitleFileName}`, source: websiteSource },
     meta: { leadHeading: { value: heading, slug: headingSlug } },
   },
   {
     matchType: 'leadHeading',
-    file: { path: filePath, source },
+    file: { path: urlPath, source: websiteSource },
     meta: { leadHeading: { value: heading, slug: headingSlug, id: headingId } },
   },
 ];
@@ -121,7 +123,7 @@ describe('constants', () => {
       `${basePath}#${headingSlug}`,
     );
     expect(DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(results[6]!)).toBe(
-      `${basePath}#${headingId}`,
+      `${urlPath}#${headingId}`,
     );
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.search!.getHref?.(algoliaSearchHits[0]!),
