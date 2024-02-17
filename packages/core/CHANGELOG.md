@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.25.2
+
+### Patch Changes
+
+- [#311](https://github.com/motifland/markprompt-js/pull/311) [`eb91960c8831f40a6dde5e98ec72f6c6853211ea`](https://github.com/motifland/markprompt-js/commit/eb91960c8831f40a6dde5e98ec72f6c6853211ea) Thanks [@michaelfester](https://github.com/michaelfester)! - Update default system prompt
+
 ## 0.25.1
 
 ### Patch Changes
