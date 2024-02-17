@@ -16,7 +16,7 @@ const removeFileExtension = (fileName: string): string => {
   return fileName.substring(0, lastDotIndex);
 };
 
-const pathToHref = (path: string): string => {
+const filePathToHref = (path: string): string => {
   const lastDotIndex = path.lastIndexOf('.');
   let cleanPath = path;
   if (lastDotIndex >= 0) {
@@ -100,7 +100,15 @@ const defaultGetHref = (
     return result.url;
   }
 
-  const path = pathToHref(result.file.path);
+  let path = '';
+
+  if (result.file.source.type === 'github') {
+    // If it's a repo, it's probably a file with an extension,
+    // and names such as "index".
+    path = filePathToHref(result.file.path);
+  } else {
+    path = result.file.path;
+  }
 
   if (result.meta?.leadHeading?.id) {
     return `${path}#${result.meta.leadHeading.id}`;
