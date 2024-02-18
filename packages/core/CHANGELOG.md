@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.25.3
+
+### Patch Changes
+
+- [#314](https://github.com/motifland/markprompt-js/pull/314) [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4) Thanks [@michaelfester](https://github.com/michaelfester)! - Update default system prompt
+
+- [#314](https://github.com/motifland/markprompt-js/pull/314) [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4) Thanks [@michaelfester](https://github.com/michaelfester)! - Add showDefaultAutoTriggerMessage
+
 ## 0.25.2
 
 ### Patch Changes
