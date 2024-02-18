@@ -1903,7 +1903,7 @@
 :where(.MarkpromptToolCallConfirmation) {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
-  padding: 1rem 1rem;
+  padding: 1rem;
   font-size: var(--markprompt-text-size);
   border: 1px solid var(--markprompt-border);
   border-radius: var(--markprompt-button-radius);
