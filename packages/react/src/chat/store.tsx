@@ -550,18 +550,12 @@ export const createChatStore = ({
               toolCallResults
                 .filter(hasValueAtKey('status', 'fulfilled' as const))
                 .filter((x) => x.value)
-                .flatMap((x) => [
-                  {
-                    role: 'assistant',
-                    tool_calls: x.value?.tool_call ? [x.value.tool_call] : [],
-                  },
-                  {
-                    role: 'tool',
-                    name: x.value!.tool.tool.function.name,
-                    tool_call_id: x.value!.tool_call.id!,
-                    content: x.value!.result,
-                  },
-                ]),
+                .map((x) => ({
+                  role: 'tool',
+                  name: x.value!.tool.tool.function.name,
+                  tool_call_id: x.value!.tool_call.id!,
+                  content: x.value!.result,
+                })),
             );
           },
           options: chatOptions ?? {},
