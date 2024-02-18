@@ -1910,7 +1910,7 @@
 }
 
 :where(.MarkpromptToolCallConfirmation p) {
-  margin-top: 0rem;
+  margin-top: 0;
 }
 
 :where(.MarkpromptToolDescriptionWithStatus) {
