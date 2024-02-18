@@ -230,7 +230,12 @@ export async function* submitChat(
       'Content-Type': 'application/json',
       'X-Markprompt-API-Version': '2023-12-01',
     }),
-    body: JSON.stringify({ projectKey, messages, debug, ...resolvedOptions }),
+    body: JSON.stringify({
+      projectKey,
+      messages,
+      debug,
+      ...resolvedOptions,
+    }),
     signal,
   });
 

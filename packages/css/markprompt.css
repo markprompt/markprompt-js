@@ -1901,20 +1901,23 @@
 }
 
 :where(.MarkpromptToolCallConfirmation) {
-  margin-inline: 1.35rem;
-  margin-block: 0.25rem;
-  padding-inline: 1rem;
-  padding-block-end: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
   font-size: var(--markprompt-text-size);
   border: 1px solid var(--markprompt-border);
   border-radius: var(--markprompt-button-radius);
+}
+
+:where(.MarkpromptToolCallConfirmation p) {
+  margin-top: 0;
 }
 
 :where(.MarkpromptToolDescriptionWithStatus) {
   display: flex;
   flex-flow: row nowrap;
   gap: 0.5rem;
-  align-items: center;
+  align-items: top;
 }
 
 :where(.MarkpromptToolDescriptionWithStatus strong) {
@@ -1925,6 +1928,7 @@
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
+  margin-top: 2px;
 }
 
 :where(.MarkpromptError) {

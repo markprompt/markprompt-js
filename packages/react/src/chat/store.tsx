@@ -10,6 +10,7 @@ import {
   type ChatCompletionToolMessageParam,
   type SubmitChatOptions,
   type SubmitChatYield,
+  type ChatCompletionChunk,
 } from '@markprompt/core';
 import {
   createContext,
@@ -57,8 +58,8 @@ function toApiMessages(
   return (
     messages
       .map(({ content, role, tool_calls, tool_call_id, name }) => {
-        if (!content) {
-          // Ignore empty messages
+        if (!content && !tool_calls) {
+          // Ignore empty messages unless it's a tool_call
           return undefined;
         }
         switch (role) {
@@ -68,7 +69,9 @@ function toApiMessages(
               role,
             };
 
-            if (isToolCalls(tool_calls)) msg.tool_calls = tool_calls;
+            if (isToolCalls(tool_calls)) {
+              msg.tool_calls = tool_calls;
+            }
 
             return msg;
           }
@@ -80,15 +83,17 @@ function toApiMessages(
           // }
           case 'tool': {
             if (!tool_call_id) throw new Error('tool_call_id is required');
+            if (!content) throw new Error('content is required');
             return {
-              content: content ?? null,
+              content,
               role,
               tool_call_id,
             } satisfies ChatCompletionToolMessageParam;
           }
           case 'user': {
+            if (!content) throw new Error('content is required');
             return {
-              content: content ?? null,
+              content,
               role,
               ...(name ? { name } : {}),
             } satisfies ChatCompletionMessageParam;
@@ -143,6 +148,11 @@ export interface ChatViewTool {
    * @default true
    */
   requireConfirmation?: boolean;
+  /**
+   * If true, show a message when the tool is automatically triggered.
+   * @default true
+   */
+  showDefaultAutoTriggerMessage?: boolean;
 }
 
 export type UserConfigurableOptions = Omit<
@@ -184,6 +194,10 @@ export interface ChatStoreState {
   submitChat: (
     messages: (
       | { content: string; role: 'user'; name?: string }
+      | {
+          role: 'assistant';
+          tool_calls: ChatCompletionChunk.Choice.Delta.ToolCall[];
+        }
       | { content: string; role: 'tool'; name: string; tool_call_id: string }
     )[],
   ) => void;
@@ -390,8 +404,9 @@ export const createChatStore = ({
               state.abort = abort;
             });
 
-            // get ready to do the request
+            // Get ready to do the request
             const apiMessages = toApiMessages(get().messages);
+
             for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {
                 state: 'preload',

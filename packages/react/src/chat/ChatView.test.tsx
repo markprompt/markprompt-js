@@ -431,13 +431,6 @@ describe('ChatView', () => {
     await user.type(screen.getByRole('textbox'), 'I want to do a thing');
     await user.keyboard('{Enter}');
 
-    expect(
-      await screen.findByText(
-        'The bot is calling the following tools on your behalf',
-        { exact: false },
-      ),
-    ).toBeInTheDocument();
-
     response = [{ content: 'you did a thing and it got a result' }];
 
     await waitFor(() => {
@@ -486,13 +479,6 @@ describe('ChatView', () => {
 
     await user.type(screen.getByRole('textbox'), 'I want to do a thing');
     await user.keyboard('{Enter}');
-
-    expect(
-      await screen.findByText(
-        'The bot is calling the following tools on your behalf',
-        { exact: false },
-      ),
-    ).toBeInTheDocument();
 
     response = [{ content: 'you did a thing and it got a result' }];
 
