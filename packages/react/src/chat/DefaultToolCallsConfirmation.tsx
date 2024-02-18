@@ -32,10 +32,12 @@ export function DefaultToolCallsConfirmation(
     });
   }, [toolCalls, tools]);
 
-  const toolCallsWithoutConfirmation = useMemo(() => {
+  const toolCallsWithoutConfirmationAndWithMessage = useMemo(() => {
     return toolCalls.filter((toolCall) => {
       const tool = tools?.find(
-        (tool) => tool.tool.function.name === toolCall.function?.name,
+        (tool) =>
+          tool.tool.function.name === toolCall.function?.name &&
+          tool.showDefaultAutoTriggerMessage,
       );
 
       return tool?.requireConfirmation === false;
@@ -65,12 +67,20 @@ export function DefaultToolCallsConfirmation(
     return validEntries.some(([_key, value]) => value.status !== 'done');
   }, [toolCallsRequiringConfirmation, toolCallsStatus]);
 
+  const hasToolsCallsWithMessages =
+    toolCallsWithoutConfirmationAndWithMessage.length > 0 ||
+    toolCallsRequiringConfirmation.length > 0;
+
+  if (!hasToolsCallsWithMessages) {
+    return <></>;
+  }
+
   return (
     <div className="MarkpromptToolCallConfirmation">
-      {toolCallsWithoutConfirmation.length > 0 && (
+      {toolCallsWithoutConfirmationAndWithMessage.length > 0 && (
         <div>
           <p>The bot is calling the following tools on your behalf:</p>
-          {toolCallsWithoutConfirmation.map((toolCall) => {
+          {toolCallsWithoutConfirmationAndWithMessage.map((toolCall) => {
             const tool = tools?.find(
               (tool) => tool.tool.function.name === toolCall.function?.name,
             );
