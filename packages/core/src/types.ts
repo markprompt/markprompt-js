@@ -126,3 +126,9 @@ export interface ChatCompletionMetadata {
   promptId?: string;
   references?: FileSectionReference[];
 }
+
+export interface NoStreamingData {
+  text: string;
+  references?: FileSectionReference[];
+  responseId: string;
+}

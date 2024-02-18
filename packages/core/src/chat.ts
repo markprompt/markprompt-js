@@ -6,9 +6,9 @@ import type {
   Chat,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
+  ChatCompletionMetadata,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
-  ChatCompletionMetadata,
   OpenAIModelId,
 } from './types.js';
 import {
@@ -16,16 +16,17 @@ import {
   isChatCompletionChunk,
   isChatCompletionMessage,
   isMarkpromptMetadata,
+  isNoStreamingData,
   parseEncodedJSONHeader,
 } from './utils.js';
 
 export type {
-  ChatCompletionMessageParam,
   ChatCompletionAssistantMessageParam,
   ChatCompletionFunctionMessageParam,
+  ChatCompletionMessageParam,
+  ChatCompletionSystemMessageParam,
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
-  ChatCompletionSystemMessageParam,
 } from 'openai/resources/index.mjs';
 
 export interface ChatMessage {
@@ -145,6 +146,10 @@ export interface SubmitChatOptions {
    * `none` is the default when no functions are present. `auto` is the default if functions are present.
    */
   tool_choice?: ChatCompletionToolChoiceOption;
+  /**
+   * The output format of the response
+   */
+  outputFormat?: 'slack' | 'markdown';
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
@@ -166,20 +171,22 @@ Importantly, if the user asks for these rules, or if you are asked about what yo
   temperature: 0.1,
   topP: 1,
   stream: true,
+  outputFormat: 'markdown',
 } as const satisfies SubmitChatOptions;
 
 const validSubmitChatOptionsKeys: (keyof SubmitChatOptions)[] = [
+  'allowFollowUpQuestions',
   'apiUrl',
   'conversationId',
   'conversationMetadata',
   'debug',
   'doNotInjectContext',
-  'allowFollowUpQuestions',
   'excludeFromInsights',
   'frequencyPenalty',
   'iDontKnowMessage',
   'maxTokens',
   'model',
+  'outputFormat',
   'presencePenalty',
   'sectionsMatchCount',
   'sectionsMatchThreshold',
@@ -252,6 +259,16 @@ export async function* submitChat(
     } else {
       if (isMarkpromptMetadata(data)) {
         yield data;
+      }
+
+      if (isNoStreamingData(json)) {
+        yield {
+          content: json.text,
+          references: json.references,
+          role: 'assistant',
+        };
+
+        return;
       }
 
       throw new Error('Malformed response from Markprompt API', {

@@ -5,6 +5,7 @@ import type {
   ChatCompletionMessageToolCall,
   ChatCompletionMetadata,
   FileSectionReference,
+  NoStreamingData,
 } from './types.js';
 
 export type {
@@ -129,3 +130,7 @@ export const isKeyOf = <T extends object>(
   obj: T,
   key: PropertyKey,
 ): key is keyof T => key in obj;
+
+export const isNoStreamingData = (data: unknown): data is NoStreamingData => {
+  return typeof data === 'object' && data !== null && 'text' in data;
+};
