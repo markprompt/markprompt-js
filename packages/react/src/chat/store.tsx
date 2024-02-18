@@ -150,7 +150,7 @@ export interface ChatViewTool {
   requireConfirmation?: boolean;
   /**
    * If true, show a message when the tool is automatically triggered.
-   * @default false
+   * @default true
    */
   showDefaultAutoTriggerMessage?: boolean;
 }

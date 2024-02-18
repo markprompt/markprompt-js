@@ -34,11 +34,13 @@ export function DefaultToolCallsConfirmation(
 
   const toolCallsWithoutConfirmationAndWithMessage = useMemo(() => {
     return toolCalls.filter((toolCall) => {
-      const tool = tools?.find(
-        (tool) =>
-          tool.tool.function.name === toolCall.function?.name &&
-          tool.showDefaultAutoTriggerMessage,
-      );
+      const tool = tools?.find((tool) => {
+        const show =
+          typeof tool.showDefaultAutoTriggerMessage === 'undefined'
+            ? true
+            : tool.showDefaultAutoTriggerMessage;
+        return tool.tool.function.name === toolCall.function?.name && show;
+      });
 
       return tool?.requireConfirmation === false;
     });
