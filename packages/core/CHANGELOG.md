@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.25.4
+
+### Patch Changes
+
+- [`50fe530b72f2801afb64adcac5f041725324739d`](https://github.com/motifland/markprompt-js/commit/50fe530b72f2801afb64adcac5f041725324739d) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix parsing data when streaming is set to false
+
 ## 0.25.3
 
 ### Patch Changes
