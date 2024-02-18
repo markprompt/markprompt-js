@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.38.2
+
+### Patch Changes
+
+- [#314](https://github.com/motifland/markprompt-js/pull/314) [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4) Thanks [@michaelfester](https://github.com/michaelfester)! - Add showDefaultAutoTriggerMessage
+
+- Updated dependencies [[`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4), [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4)]:
+  - @markprompt/core@0.25.3
+
 ## 0.38.1
 
 ### Patch Changes
