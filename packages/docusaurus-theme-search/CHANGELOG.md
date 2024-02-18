@@ -1,5 +1,21 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.18.3
+
+### Patch Changes
+
+- Updated dependencies [[`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4)]:
+  - @markprompt/react@0.38.2
+  - @markprompt/css@0.23.3
+
+## 0.18.2
+
+### Patch Changes
+
+- Updated dependencies [[`ad70a09d5a4f04b90314662b982d0466ac5d0dca`](https://github.com/motifland/markprompt-js/commit/ad70a09d5a4f04b90314662b982d0466ac5d0dca)]:
+  - @markprompt/css@0.23.2
+  - @markprompt/react@0.38.1
+
 ## 0.18.1
 
 ### Patch Changes

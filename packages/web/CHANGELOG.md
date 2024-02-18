@@ -1,5 +1,29 @@
 # @markprompt/web
 
+## 0.28.4
+
+### Patch Changes
+
+- Updated dependencies [[`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4), [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4)]:
+  - @markprompt/core@0.25.3
+  - @markprompt/react@0.38.2
+
+## 0.28.3
+
+### Patch Changes
+
+- Updated dependencies [[`eb91960c8831f40a6dde5e98ec72f6c6853211ea`](https://github.com/motifland/markprompt-js/commit/eb91960c8831f40a6dde5e98ec72f6c6853211ea)]:
+  - @markprompt/core@0.25.2
+
+## 0.28.2
+
+### Patch Changes
+
+- [#309](https://github.com/motifland/markprompt-js/pull/309) [`ad70a09d5a4f04b90314662b982d0466ac5d0dca`](https://github.com/motifland/markprompt-js/commit/ad70a09d5a4f04b90314662b982d0466ac5d0dca) Thanks [@michaelfester](https://github.com/michaelfester)! - UI fixes
+
+- Updated dependencies [[`ad70a09d5a4f04b90314662b982d0466ac5d0dca`](https://github.com/motifland/markprompt-js/commit/ad70a09d5a4f04b90314662b982d0466ac5d0dca)]:
+  - @markprompt/react@0.38.1
+
 ## 0.28.1
 
 ### Patch Changes

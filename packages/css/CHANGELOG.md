@@ -1,5 +1,17 @@
 # @markprompt/css
 
+## 0.23.3
+
+### Patch Changes
+
+- [#314](https://github.com/motifland/markprompt-js/pull/314) [`48ddc66dc642acca227856519cfbd1bf166df2c4`](https://github.com/motifland/markprompt-js/commit/48ddc66dc642acca227856519cfbd1bf166df2c4) Thanks [@michaelfester](https://github.com/michaelfester)! - Add showDefaultAutoTriggerMessage
+
+## 0.23.2
+
+### Patch Changes
+
+- [#309](https://github.com/motifland/markprompt-js/pull/309) [`ad70a09d5a4f04b90314662b982d0466ac5d0dca`](https://github.com/motifland/markprompt-js/commit/ad70a09d5a4f04b90314662b982d0466ac5d0dca) Thanks [@michaelfester](https://github.com/michaelfester)! - UI fixes
+
 ## 0.23.1
 
 ### Patch Changes
