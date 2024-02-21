@@ -377,6 +377,11 @@ export interface MarkpromptOptions {
        **/
       provider: 'zendesk';
       /**
+       * The API URL to use for creating tickets
+       * @default "https://api.markprompt.com/create-ticket"
+       **/
+      apiUrl?: string;
+      /**
        * The prompt to use to create a summary of the conversation between user and bot for the support agent
        * @default "I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets."
        **/

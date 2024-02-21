@@ -19,6 +19,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const provider = useGlobalStore(
     (state) => state.options.integrations?.createTicket?.provider,
   );
+  const apiUrl = useGlobalStore(
+    (state) => state.options.integrations?.createTicket?.apiUrl,
+  );
   const summary = useGlobalStore((state) =>
     conversationId
       ? state.tickets?.summaryByConversationId[conversationId]
@@ -32,9 +35,13 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   ): Promise<void> => {
     event.preventDefault();
 
+    if (!apiUrl || !projectKey || !provider) {
+      return;
+    }
+
     setResult(undefined);
 
-    const result = await fetch('http://api.localhost:3000/create-ticket', {
+    const result = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
