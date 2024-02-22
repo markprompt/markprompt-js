@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.25.5
+
+### Patch Changes
+
+- [`799209344334e5ee542c940dfe216cfff1f7b70d`](https://github.com/motifland/markprompt-js/commit/799209344334e5ee542c940dfe216cfff1f7b70d) Thanks [@nickrttn](https://github.com/nickrttn)! - Filter out unknown keys from `submitChat` tools definition
+
 ## 0.25.4
 
 ### Patch Changes
