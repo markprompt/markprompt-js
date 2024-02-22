@@ -39,7 +39,6 @@ export default function IndexPage(): ReactElement {
   const [input, setInput] = useState('');
   const [streamedMessage, setStreamedMessage] = useState('');
 
-
   const submitForm = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -71,7 +70,7 @@ export default function IndexPage(): ReactElement {
           setStreamedMessage(chunk.content);
         }
 
-        acc = {...acc, ...chunk}
+        acc = { ...acc, ...chunk };
       }
 
       for (const toolCall of acc.tool_calls || []) {
