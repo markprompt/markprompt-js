@@ -47,24 +47,29 @@ export default function IndexPage(): ReactElement {
 
       let acc = {} as SubmitChatYield;
 
-      const toolCalls: OpenAI.Chat.Completions.ChatCompletionChunk.Choice.Delta.ToolCall[] =
-        [];
-      for await (const chunk of submitChat(
-        [
-          {
-            role: 'system',
-            content: 'You are an expert AI assistant who loves to help people.',
-          },
-          {
-            role: 'user',
-            content: input,
-          },
-        ],
-        process.env.NEXT_PUBLIC_PROJECT_API_KEY!,
+      const messages = [
         {
-          apiUrl: process.env.NEXT_PUBLIC_MARKPROMPT_API_URL + '/chat',
-          tools: tools,
+          role: 'system',
+          content: 'You are an expert AI assistant who loves to help people.',
         },
+        {
+          role: 'user',
+          content: input,
+        },
+      ] satisfies OpenAI.Chat.Completions.ChatCompletionMessageParam[];
+
+      const submitChatOptions = {
+        apiUrl: process.env.NEXT_PUBLIC_MARKPROMPT_API_URL + '/chat',
+        tools: tools.map((tool) => {
+          const { run, ...rest } = tool;
+          return rest;
+        }),
+      };
+
+      for await (const chunk of submitChat(
+        messages,
+        process.env.NEXT_PUBLIC_PROJECT_API_KEY!,
+        submitChatOptions,
       )) {
         if (chunk.content) {
           setStreamedMessage(chunk.content);

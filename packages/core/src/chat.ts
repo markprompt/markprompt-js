@@ -225,9 +225,16 @@ export async function* submitChat(
   const validOptions: SubmitChatOptions = Object.fromEntries(
     Object.entries(options).filter(([key]) => isValidSubmitChatOptionsKey(key)),
   );
-  const { signal, ...cloneableOpts } = validOptions;
+  const { signal, tools, ...cloneableOpts } = validOptions;
   const { apiUrl, debug, ...resolvedOptions } = defaults(
-    { ...cloneableOpts },
+    {
+      ...cloneableOpts,
+      // only include known tool properties
+      tools: tools?.map((tool) => ({
+        function: tool.function,
+        type: tool.type,
+      })),
+    },
     DEFAULT_SUBMIT_CHAT_OPTIONS,
   );
 
