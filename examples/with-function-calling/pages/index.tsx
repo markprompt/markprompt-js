@@ -1,4 +1,4 @@
-import { submitChat } from '@markprompt/core';
+import { SubmitChatYield, submitChat } from '@markprompt/core';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { ReactElement, useCallback, useState } from 'react';
@@ -39,11 +39,14 @@ export default function IndexPage(): ReactElement {
   const [input, setInput] = useState('');
   const [streamedMessage, setStreamedMessage] = useState('');
 
+
   const submitForm = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       setStreamedMessage('Fetching response...');
+
+      let acc = {} as SubmitChatYield;
 
       const toolCalls: OpenAI.Chat.Completions.ChatCompletionChunk.Choice.Delta.ToolCall[] =
         [];
@@ -60,6 +63,7 @@ export default function IndexPage(): ReactElement {
         ],
         process.env.NEXT_PUBLIC_PROJECT_API_KEY!,
         {
+          apiUrl: process.env.NEXT_PUBLIC_MARKPROMPT_API_URL + '/chat',
           tools: tools,
         },
       )) {
@@ -67,18 +71,10 @@ export default function IndexPage(): ReactElement {
           setStreamedMessage(chunk.content);
         }
 
-        for (const toolCall of chunk.tool_calls || []) {
-          if (
-            !toolCall.function ||
-            toolCalls.find((c) => c.function?.name === toolCall.function?.name)
-          ) {
-            continue;
-          }
-          toolCalls.push(toolCall);
-        }
+        acc = {...acc, ...chunk}
       }
 
-      for (const toolCall of toolCalls || []) {
+      for (const toolCall of acc.tool_calls || []) {
         if (!toolCall.function) {
           continue;
         }
@@ -89,7 +85,7 @@ export default function IndexPage(): ReactElement {
           tool.run?.(toolCall.function?.arguments);
           setStreamedMessage(
             `Calling: ${tool.function.name}\n\nArguments:\n\n${
-              toolCall.function?.arguments || {}
+              JSON.stringify(toolCall.function?.arguments, null, 2) || {}
             }`,
           );
         }
