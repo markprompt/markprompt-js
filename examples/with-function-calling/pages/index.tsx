@@ -1,4 +1,8 @@
-import { SubmitChatYield, submitChat } from '@markprompt/core';
+import {
+  ChatCompletionMessageParam,
+  SubmitChatYield,
+  submitChat,
+} from '@markprompt/core';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { ReactElement, useCallback, useState } from 'react';
@@ -56,10 +60,9 @@ export default function IndexPage(): ReactElement {
           role: 'user',
           content: input,
         },
-      ] satisfies OpenAI.Chat.Completions.ChatCompletionMessageParam[];
+      ] as ChatCompletionMessageParam[];
 
       const submitChatOptions = {
-        apiUrl: process.env.NEXT_PUBLIC_MARKPROMPT_API_URL + '/chat',
         tools: tools.map((tool) => {
           const { run, ...rest } = tool;
           return rest;
@@ -86,10 +89,14 @@ export default function IndexPage(): ReactElement {
           (t) => t.function.name === toolCall.function?.name,
         );
         if (tool) {
+          console.log(
+            'toolCall.function?.arguments',
+            toolCall.function?.arguments,
+          );
           tool.run?.(toolCall.function?.arguments);
           setStreamedMessage(
             `Calling: ${tool.function.name}\n\nArguments:\n\n${
-              JSON.stringify(toolCall.function?.arguments, null, 2) || {}
+              toolCall.function?.arguments || {}
             }`,
           );
         }
