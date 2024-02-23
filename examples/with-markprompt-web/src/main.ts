@@ -24,6 +24,7 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
+      apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
@@ -75,13 +76,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    integrations: {
-      createTicket: {
-        enabled: true,
-        apiUrl: import.meta.env.VITE_API_URL + '/create-ticket',
-        provider: 'zendesk'
-      }
-    },
+
     defaultView: 'chat',
     trigger: {
       buttonLabel: 'Ask AI',
