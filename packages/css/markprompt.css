@@ -2049,6 +2049,7 @@
 :where(.MarkpromptCreateTicketForm label) {
   color: var(--markprompt-foreground);
   font-weight: 500;
+  font-size: var(--markprompt-text-size);
 }
 
 :where(.MarkpromptFormGroup) {
