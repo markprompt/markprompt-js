@@ -20,7 +20,7 @@ async function get_random_activity(args: string): Promise<string> {
 }
 
 if (el && el instanceof HTMLElement) {
-  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+  markprompt(import.meta.env.VITE_PROJECT_KEY, el, {
     search: { enabled: true },
     chat: {
       enabled: true,
@@ -74,6 +74,13 @@ if (el && el instanceof HTMLElement) {
           requireConfirmation: false,
         },
       ],
+    },
+    integrations: {
+      createTicket: {
+        enabled: true,
+        apiUrl: import.meta.env.VITE_API_URL + '/create-ticket',
+        provider: 'zendesk'
+      }
     },
     defaultView: 'chat',
     trigger: {

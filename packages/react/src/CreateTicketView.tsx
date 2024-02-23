@@ -73,8 +73,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         <h1>{createTicketOptions?.view?.title}</h1>
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
-            <label htmlFor="name">{createTicketOptions?.view?.nameLabel}</label>
-
+            <label htmlFor="user_name">
+              {createTicketOptions?.view?.nameLabel}
+            </label>
             <input
               required
               type="text"
@@ -88,7 +89,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             <label htmlFor="email">
               {createTicketOptions?.view?.emailLabel}
             </label>
-
             <input
               required
               type="email"
@@ -103,14 +103,13 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               {createTicketOptions?.view?.summaryLabel}
             </label>
             <textarea
-              value={
-                summary?.content
-                  ? summary.content
-                  : summary?.state &&
-                      summary.state !== 'done' &&
-                      summary?.state !== 'cancelled'
-                    ? createTicketOptions?.view?.summaryLoading
-                    : createTicketOptions?.view?.summaryPlaceholder
+              value={summary?.content ? summary.content : ''}
+              placeholder={
+                summary?.state &&
+                summary.state !== 'done' &&
+                summary?.state !== 'cancelled'
+                  ? createTicketOptions?.view?.summaryLoading
+                  : createTicketOptions?.view?.summaryPlaceholder
               }
               required
               aria-labelledby="summary-label"
@@ -126,17 +125,19 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             />
           </div>
 
-          <button type="submit" className="MarkpromptPromptSubmitButton">
-            {createTicketOptions?.view?.submitLabel}
-          </button>
+          <div className="MarkpromptTicketViewButtonRow">
+            <button type="submit" className="MarkpromptPromptSubmitButton">
+              {createTicketOptions?.view?.submitLabel}
+            </button>
 
-          {result && (
-            <p>
-              {result.ok
-                ? createTicketOptions?.view?.ticketCreatedOk
-                : createTicketOptions?.view?.ticketCreatedError}
-            </p>
-          )}
+            {result && (
+              <p>
+                {result.ok
+                  ? createTicketOptions?.view?.ticketCreatedOk
+                  : createTicketOptions?.view?.ticketCreatedError}
+              </p>
+            )}
+          </div>
         </form>
       </div>
     </div>

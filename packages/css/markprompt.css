@@ -2014,6 +2014,19 @@
   max-height: 100%;
 }
 
+:where(.MarkpromptTicketViewButtonRow) {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+:where(.MarkpromptTicketViewButtonRow p) {
+  margin: 0;
+  font-size: var(--markprompt-text-size);
+  color: var(--markprompt-foreground);
+}
+
 :where(.MarkpromptCreateTicket) {
   padding-inline: 3rem;
   padding-block: 1.5rem;
