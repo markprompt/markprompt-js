@@ -515,8 +515,7 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  align-items: flex-start;
-  justify-items: flex-start;
+  place-items: flex-start;
 }
 
 :where(.MarkpromptMessage:has(+ .MarkpromptMessage) .MarkpromptMessagePrompt) {
