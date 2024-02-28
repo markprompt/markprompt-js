@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.23.4
+
+### Patch Changes
+
+- [#320](https://github.com/motifland/markprompt-js/pull/320) [`89e73e8f7e3ee0c0b560661fcab23808f96c542c`](https://github.com/motifland/markprompt-js/commit/89e73e8f7e3ee0c0b560661fcab23808f96c542c) Thanks [@michaelfester](https://github.com/michaelfester)! - UI fixes
+
 ## 0.23.3
 
 ### Patch Changes
