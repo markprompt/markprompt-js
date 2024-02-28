@@ -28,6 +28,12 @@ export function DefaultToolCallsConfirmation(
         (tool) => tool.tool.function.name === toolCall.function?.name,
       );
 
+      if (!tool) {
+        // Skip tools that are in the messages but no longer in the
+        // config.
+        return false;
+      }
+
       return tool?.requireConfirmation ?? true;
     });
   }, [toolCalls, tools]);

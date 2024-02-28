@@ -31,7 +31,9 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
           )}
         </>
       )}
-      <h3 className="MarkpromptMessagePromptText">{children}</h3>
+      {/* Use a div instead of an H3, as often websites will have CSS rules
+          that override the styles of such components. */}
+      <div className="MarkpromptMessagePromptText">{children}</div>
     </div>
   );
 }
