@@ -462,6 +462,7 @@
   display: flex;
   flex-direction: row;
   padding-inline: 1.5rem;
+  padding-block: 1rem;
   gap: 1rem;
 }
 
@@ -506,6 +507,7 @@
 
 :where(.MarkpromptMessagePrompt) {
   padding-inline: 1.5rem;
+  padding-block: 1rem;
   background-color: var(--markprompt-muted);
   border-bottom: 1px solid var(--markprompt-border);
   position: relative;
@@ -514,6 +516,7 @@
   flex-direction: row;
   gap: 1rem;
   align-items: flex-start;
+  justify-items: flex-start;
 }
 
 :where(.MarkpromptMessage:has(+ .MarkpromptMessage) .MarkpromptMessagePrompt) {
@@ -536,7 +539,6 @@
   width: 24px;
   height: 24px;
   flex: none;
-  margin-top: 14px;
   overflow: hidden;
 }
 
@@ -1439,13 +1441,10 @@
   opacity: 0.8;
 }
 
-:where(.MarkpromptCancelled) {
-  padding-inline: 1.5rem;
-}
-
 :where(.MarkpromptCancelledText) {
   font-size: var(--markprompt-text-size-xs);
   color: var(--markprompt-mutedForeground);
+  margin-top: 0.125rem;
 }
 
 :where(.MarkpromptBackButton) {
@@ -1939,7 +1938,7 @@
 :where(.MarkpromptDefaultError) {
   display: flex;
   flex-direction: column;
-  font-size: var(--markprompt-text-size);
+  font-size: var(--markprompt-text-size-xs);
   text-wrap: balance;
 }
 
