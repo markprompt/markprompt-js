@@ -31,7 +31,7 @@ export function DefaultToolCallsConfirmation(
       if (!tool) {
         // Skip tools that are in the messages but no longer in the
         // config.
-        return false
+        return false;
       }
 
       return tool?.requireConfirmation ?? true;

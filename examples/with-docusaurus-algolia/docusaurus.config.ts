@@ -43,7 +43,7 @@ const config = {
       projectKey: 'YOUR-PROJECT-KEY',
       trigger: { floating: false },
       chat: {
-        systemPrompt: "You are a friendly AI who loves to help people."
+        systemPrompt: 'You are a friendly AI who loves to help people.',
       },
       search: {
         enabled: true,
