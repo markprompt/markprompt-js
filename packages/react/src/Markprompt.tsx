@@ -375,8 +375,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     );
   }
 
-  console.log(layout);
-
   return (
     <Tabs.Root
       className="MarkpromptTabsContainer"
