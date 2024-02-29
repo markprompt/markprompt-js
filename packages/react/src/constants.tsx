@@ -247,4 +247,32 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     hide: true,
     text: 'Ask AI',
   },
+  integrations: {
+    createTicket: {
+      enabled: false,
+      provider: 'zendesk',
+      apiUrl: 'https://api.markprompt.com/create-ticket',
+      prompt:
+        'I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets.',
+      messageText: 'Bot not being helpful?',
+      messageButton: {
+        text: 'Create a support ticket',
+        hasIcon: true,
+        hasText: true,
+      },
+      view: {
+        title: 'Create a case',
+        nameLabel: 'Your Name',
+        namePlaceholder: 'Markprompt AI',
+        emailLabel: 'Email',
+        emailPlaceholder: 'bot@markprompt.com',
+        summaryLabel: 'How can we help?',
+        summaryPlaceholder: 'Please describe your issue',
+        summaryLoading: 'Generating summary…',
+        submitLabel: 'Submit case',
+        ticketCreatedOk: 'Ticket created successfully!',
+        ticketCreatedError: 'An error occurred while creating the case',
+      },
+    },
+  },
 } satisfies MarkpromptOptions;

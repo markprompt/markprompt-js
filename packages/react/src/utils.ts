@@ -1,6 +1,9 @@
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
 
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import type { MarkpromptOptions, View } from './types.js';
+
 export function isPresent<T>(t: T | undefined | null | void): t is T {
   return t !== undefined && t !== null;
 }
@@ -94,3 +97,31 @@ export const isStoredError = (
     value.type === 'error'
   );
 };
+
+/**
+ * Returns the default view based on the user-provided view and the enabled views.
+ */
+export function getDefaultView(
+  userProvidedDefaultView: View | undefined,
+  options: MarkpromptOptions,
+): View {
+  const isSearchEnabled =
+    options?.search?.enabled ?? DEFAULT_MARKPROMPT_OPTIONS.search.enabled;
+
+  const isChatEnabled =
+    options?.chat?.enabled ?? DEFAULT_MARKPROMPT_OPTIONS.chat.enabled;
+
+  if (userProvidedDefaultView === 'search' && isSearchEnabled) {
+    return userProvidedDefaultView;
+  }
+
+  if (userProvidedDefaultView === 'chat' && isChatEnabled) {
+    return userProvidedDefaultView;
+  }
+
+  if (isSearchEnabled) {
+    return 'search';
+  }
+
+  return 'chat';
+}

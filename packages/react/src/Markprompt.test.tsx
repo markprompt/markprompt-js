@@ -39,9 +39,9 @@ describe('Markprompt', () => {
     }
   });
 
-  // TODO Michael: unable to pass
-  it.skip('renders search view when search is enabled', async () => {
+  it('renders search view when search is enabled', async () => {
     const user = await userEvent.setup();
+
     render(
       <Markprompt
         projectKey="test-key"
@@ -57,7 +57,12 @@ describe('Markprompt', () => {
         }}
       />,
     );
-    await user.click(screen.getByText('Ask Acme'));
+
+    await user.click(screen.getByText('Ask AI'));
+
+    // wait for lazy loaded content
+    await screen.findByRole('searchbox');
+
     expect(screen.getByText('Recommended for you')).toBeInTheDocument();
   });
 
@@ -70,6 +75,7 @@ describe('Markprompt', () => {
 
   it('renders tabs when multiple views are enabled', async () => {
     const user = await userEvent.setup();
+
     render(
       <Markprompt
         projectKey="test-key"
@@ -84,8 +90,10 @@ describe('Markprompt', () => {
     await expect(screen.getByText('searchtab')).toBeInTheDocument();
     await expect(screen.getByText('chattab')).toBeInTheDocument();
 
+    // wait for lazy loaded content
+    await screen.findByRole('searchbox');
+
     // tabs switching
-    await expect(screen.getByRole('searchbox')).toBeInTheDocument();
     await user.click(screen.getByText('chattab'));
     await expect(screen.getByRole('textbox')).toBeInTheDocument();
   });

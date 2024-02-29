@@ -11,15 +11,23 @@ export interface ChatViewProps {
   chatOptions?: MarkpromptOptions['chat'];
   debug?: boolean;
   feedbackOptions?: MarkpromptOptions['feedback'];
+  integrations?: MarkpromptOptions['integrations'];
   projectKey: string;
   referencesOptions?: MarkpromptOptions['references'];
   showBack?: boolean;
-  onDidSelectReference?: () => void;
   onDidPressBack?: () => void;
+  handleCreateTicket?: () => void;
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {
-  const { activeView, projectKey, showBack, onDidPressBack } = props;
+  const {
+    activeView,
+    projectKey,
+    showBack,
+    onDidPressBack,
+    integrations,
+    handleCreateTicket,
+  } = props;
 
   if (!projectKey) {
     throw new Error(
@@ -64,8 +72,10 @@ export function ChatView(props: ChatViewProps): JSX.Element {
         <Messages
           chatOptions={chatOptions}
           feedbackOptions={feedbackOptions}
+          integrations={integrations}
           projectKey={projectKey}
           referencesOptions={referencesOptions}
+          handleCreateTicket={handleCreateTicket}
         />
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
       </div>

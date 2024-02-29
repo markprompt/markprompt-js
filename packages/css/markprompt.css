@@ -1965,6 +1965,130 @@
   animation: markprompt-spin 1s linear infinite;
 }
 
+:where(.MarkpromptReferences:has(+ .MarkpromptMessageCreateTicket)) {
+  padding-block-end: 1.5rem;
+}
+
+:where(.MarkpromptMessageCreateTicket) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-inline: 4rem;
+}
+
+:where(.MarkpromptMessageCreateTicketDefaultText) {
+  margin-block: 0;
+  font-size: var(--markprompt-text-size-xs);
+  color: var(--markprompt-mutedForeground);
+}
+
+:where(.MarkpromptMessageCreateTicketButton) {
+  padding: 0.35rem 0.5rem 0.25rem;
+  border: 1px solid var(--markprompt-border);
+  border-radius: calc(var(--markprompt-radius) * 0.5);
+  background-color: white;
+  cursor: pointer;
+  color: var(--markprompt-foreground);
+}
+
+:where(.MarkpromptMessageCreateTicketButton):hover {
+  background-color: var(--markprompt-muted);
+}
+
+:where(.MarkpromptMessageCreateTicketButton div) {
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--markprompt-text-size);
+  font-weight: 500;
+}
+
+:where(.MarkpromptCreateTicketView) {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  max-height: 100%;
+}
+
+:where(.MarkpromptTicketViewButtonRow) {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+:where(.MarkpromptTicketViewButtonRow p) {
+  margin: 0;
+  font-size: var(--markprompt-text-size);
+  color: var(--markprompt-foreground);
+}
+
+:where(.MarkpromptCreateTicket) {
+  padding-inline: 3rem;
+  padding-block: 1.5rem;
+  overflow: scroll;
+  scrollbar-width: none;
+  height: 100%;
+}
+
+:where(.MarkpromptCreateTicket h1) {
+  font-size: calc(var(--markprompt-text-size) * 1.5);
+}
+
+:where(.MarkpromptCreateTicketForm) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+:where(.MarkpromptCreateTicketForm label) {
+  color: var(--markprompt-foreground);
+  font-weight: 500;
+  font-size: var(--markprompt-text-size);
+}
+
+:where(.MarkpromptFormGroup) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 100%;
+  gap: 0.5rem;
+}
+
+:where(.MarkpromptFormGroup input),
+:where(.MarkpromptFormGroup textarea) {
+  font-size: var(--markprompt-text-size);
+}
+
+:where(.MarkpromptFormGroup textarea) {
+  min-width: 100%;
+  min-height: 10rem;
+  font-family: inherit;
+
+  /* upcoming future property */
+  /* stylelint-disable-next-line property-no-unknown */
+  field-sizing: normal;
+}
+
+:where(.MarkpromptFormGroup input, .MarkpromptFormGroup textarea) {
+  background-color: var(--markprompt-muted);
+  border: 1px solid var(--markprompt-border);
+  border-radius: calc(var(--markprompt-radius) * 0.5);
+  transition-property: all;
+  transition-duration: 150ms;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+}
+
+:where(.MarkpromptFormGroup input):focus-within,
+:where(.MarkpromptFormGroup textarea):focus-within {
+  box-shadow: 0 0 0 3px var(--markprompt-border);
+  border-color: var(--markprompt-border-accent);
+}
+
 @keyframes markprompt-show-content {
   0% {
     opacity: 0;

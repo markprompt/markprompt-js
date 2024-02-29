@@ -77,6 +77,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
+
     defaultView: 'chat',
     trigger: {
       buttonLabel: 'Ask AI',

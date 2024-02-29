@@ -1,6 +1,9 @@
 {
   "include": ["src"],
-  "references": [{ "path": "../react/tsconfig.build.json" }],
+  "references": [
+    { "path": "../core" },
+    { "path": "../react/tsconfig.build.json" },
+  ],
   "compilerOptions": {
     // base
     "esModuleInterop": true,

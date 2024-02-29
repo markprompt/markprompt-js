@@ -18,7 +18,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'search';
+export type View = 'chat' | 'search' | 'create-ticket';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -357,6 +357,119 @@ export interface MarkpromptOptions {
   branding?: {
     show?: boolean;
     type?: 'plain' | 'text';
+  };
+  /**
+   * Enable optional integrations
+   */
+  integrations?: {
+    /**
+     * Allow users to create tickets in a support system from the chat.
+     * @default undefined
+     */
+    createTicket?: {
+      /**
+       * Enable the create ticket feature
+       * @default false
+       **/
+      enabled: boolean;
+      /**
+       * The provider to use for creating tickets
+       **/
+      provider: 'zendesk';
+      /**
+       * The API URL to use for creating tickets
+       * @default "https://api.markprompt.com/create-ticket"
+       **/
+      apiUrl?: string;
+      /**
+       * The prompt to use to create a summary of the conversation between user and bot for the support agent
+       * @default "I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets."
+       **/
+      prompt?: string;
+      /**
+       * Default text shown at the end of a chat message
+       * @default "Bot not being helpful?"
+       */
+      messageText?: string;
+      /** Options for the button shown at the end of a chat message */
+      messageButton?: {
+        /**
+         * Button text shown at the end of a message
+         * @default "Create a support case"
+         */
+        text?: string;
+        /**
+         * Show icon?
+         * @default true
+         */
+        hasIcon?: boolean;
+        /**
+         * Show text?
+         * @default true
+         */
+        hasText?: boolean;
+      };
+      /**
+       * Options for the create ticket view
+       */
+      view?: {
+        /**
+         * Title for the create ticket view
+         * @default "Create a case"
+         */
+        title: string;
+        /**
+         * Label for the name input
+         * @default "Your Name"
+         */
+        nameLabel: string;
+        /**
+         * Placeholder for the name input
+         * @default "Markprompt AI"
+         */
+        namePlaceholder: string;
+        /**
+         * Label for the email input
+         * @default "Email"
+         */
+        emailLabel: string;
+        /**
+         * Placeholder for the email input
+         * @default "bot@markprompt.com"
+         * */
+        emailPlaceholder: string;
+        /**
+         * Label for the summary input
+         * @default "How can we help?"
+         */
+        summaryLabel: string;
+        /**
+         * Placeholder for the summary input
+         * @default "Please describe your issue"
+         */
+        summaryPlaceholder: string;
+        /**
+         * Loading text for the summary input
+         * @default "Generating summary…"
+         */
+        summaryLoading: string;
+        /**
+         * Label for the submit button
+         * @default "Submit case"
+         */
+        submitLabel: string;
+        /**
+         * Text shown when the ticket was created ok
+         * @default "Ticket created successfully!"
+         */
+        ticketCreatedOk: string;
+        /**
+         * Text shown when the ticket creation failed
+         * @default "An error occurred while creating the case"
+         */
+        ticketCreatedError: string;
+      };
+    };
   };
   /**
    * Display debug info
