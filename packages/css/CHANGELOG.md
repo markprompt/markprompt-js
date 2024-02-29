@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.24.0
+
+### Minor Changes
+
+- [#308](https://github.com/motifland/markprompt-js/pull/308) [`ce40efcc5d4ae425341b814fcb2ec69732beaa84`](https://github.com/motifland/markprompt-js/commit/ce40efcc5d4ae425341b814fcb2ec69732beaa84) Thanks [@nickrttn](https://github.com/nickrttn)! - Add an integration that allows users to create Zendesk tickets when the bot did not manage to help them with their question
+
 ## 0.23.4
 
 ### Patch Changes

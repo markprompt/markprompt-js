@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.29.0
+
+### Minor Changes
+
+- [#308](https://github.com/motifland/markprompt-js/pull/308) [`ce40efcc5d4ae425341b814fcb2ec69732beaa84`](https://github.com/motifland/markprompt-js/commit/ce40efcc5d4ae425341b814fcb2ec69732beaa84) Thanks [@nickrttn](https://github.com/nickrttn)! - Add an integration that allows users to create Zendesk tickets when the bot did not manage to help them with their question
+
+### Patch Changes
+
+- Updated dependencies [[`ce40efcc5d4ae425341b814fcb2ec69732beaa84`](https://github.com/motifland/markprompt-js/commit/ce40efcc5d4ae425341b814fcb2ec69732beaa84)]:
+  - @markprompt/react@0.39.0
+
 ## 0.28.7
 
 ### Patch Changes
