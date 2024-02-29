@@ -375,7 +375,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     );
   }
 
-  console.log(layout)
+  console.log(layout);
 
   return (
     <Tabs.Root
@@ -423,10 +423,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 bottom: '0rem',
               }}
             >
-              <BaseMarkprompt.Close className="MarkpromptClose" style={{ position: 'absolute',
-                right: '0.5rem',
-                top: '0rem',
-                bottom: '0rem',}}>
+              <BaseMarkprompt.Close
+                className="MarkpromptClose"
+                style={{
+                  position: 'absolute',
+                  right: '0.5rem',
+                  top: '0rem',
+                  bottom: '0rem',
+                }}
+              >
                 <AccessibleIcon.Root label={close!.label!}>
                   {isTouchDevice ? (
                     <CloseIcon width={20} height={20} />

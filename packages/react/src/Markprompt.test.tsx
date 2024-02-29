@@ -61,7 +61,7 @@ describe('Markprompt', () => {
     await user.click(screen.getByText('Ask AI'));
 
     // wait for lazy loaded content
-    await waitFor(() => expect(screen.getByRole('searchbox')).toBeInTheDocument());
+    await screen.findByRole('searchbox');
 
     expect(screen.getByText('Recommended for you')).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe('Markprompt', () => {
     await expect(screen.getByText('chattab')).toBeInTheDocument();
 
     // wait for lazy loaded content
-    await waitFor(() => expect(screen.getByRole('searchbox')).toBeInTheDocument());
+    await screen.findByRole('searchbox');
 
     // tabs switching
     await user.click(screen.getByText('chattab'));
