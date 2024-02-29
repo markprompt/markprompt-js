@@ -375,6 +375,8 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     );
   }
 
+  console.log(layout)
+
   return (
     <Tabs.Root
       className="MarkpromptTabsContainer"
@@ -416,15 +418,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <div
               style={{
                 position: 'absolute',
-                display: 'flex',
-                justifyItems: 'center',
-                alignItems: 'center',
                 right: '0.5rem',
                 top: '0rem',
                 bottom: '0rem',
               }}
             >
-              <BaseMarkprompt.Close className="MarkpromptClose">
+              <BaseMarkprompt.Close className="MarkpromptClose" style={{ position: 'absolute',
+                right: '0.5rem',
+                top: '0rem',
+                bottom: '0rem',}}>
                 <AccessibleIcon.Root label={close!.label!}>
                   {isTouchDevice ? (
                     <CloseIcon width={20} height={20} />
@@ -493,7 +495,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           </Tabs.Content>
         )}
 
-        {integrations?.createTicket && (
+        {integrations?.createTicket?.enabled && (
           <Tabs.Content
             value="create-ticket"
             style={{ position: 'absolute', inset: 0 }}
