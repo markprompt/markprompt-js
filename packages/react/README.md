@@ -312,7 +312,7 @@ Render the markdown answer from the Markprompt API. It accepts the same props as
 
 ### `<AutoScroller />`
 
-A component automatically that scrolls to the bottom. It accepts the following
+A component that automatically scrolls to the bottom. It accepts the following
 props:
 
 - `autoScroll` (`boolean`): Whether or not to enable automatic scrolling.

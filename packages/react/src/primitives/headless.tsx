@@ -473,7 +473,7 @@ type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
   discreteScrollTrigger?: number;
 };
 /**
- * A component automatically that scrolls to the bottom.
+ * A component that automatically scrolls to the bottom.
  */
 const AutoScroller = memo<AutoScrollerProps>(
   forwardRef<HTMLDivElement, AutoScrollerProps>((props, ref) => {
