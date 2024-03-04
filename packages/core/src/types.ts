@@ -85,10 +85,16 @@ export interface SearchResultSection extends FileSectionReferenceSectionData {
 }
 
 export interface FileSectionReference extends FileSectionReferenceSectionData {
+  /**
+   * Referenced file.
+   */
   file: FileReferenceFileData;
 }
 
 export interface FileSectionReferenceSectionData {
+  /**
+   * Metadata associated to the file section.
+   */
   meta?: {
     leadHeading?: {
       id?: string;
@@ -100,9 +106,21 @@ export interface FileSectionReferenceSectionData {
 }
 
 export interface FileReferenceFileData {
+  /**
+   * File title.
+   */
   title?: string;
+  /**
+   * File path, e.g. URL or GitHub file path.
+   */
   path: string;
+  /**
+   * File metadata.
+   */
   meta?: object;
+  /**
+   * File source.
+   */
   source: Source;
 }
 

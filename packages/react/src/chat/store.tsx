@@ -46,9 +46,21 @@ export interface ToolCall {
 
 export interface ChatViewMessage
   extends Omit<SubmitChatYield, 'conversationId'> {
+  /**
+   * Message id.
+   */
   id: ReturnType<typeof crypto.randomUUID>;
+  /**
+   * The loading state.
+   */
   state: ChatLoadingState;
+  /**
+   * Message name.
+   */
   name?: string;
+  /**
+   * Error associated to the message.
+   */
   error?: Error;
 }
 
@@ -168,42 +180,91 @@ export type UserConfigurableOptions = Omit<
   ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
 };
 
-export interface ChatStoreState {
-  abort?: () => void;
-  projectKey: string;
-  conversationId?: string;
-  setConversationId: (conversationId: string) => void;
-  selectConversation: (conversationId?: string) => void;
+export type SubmitChatMessage =
+  | { content: string; role: 'user'; name?: string }
+  | {
+      role: 'assistant';
+      tool_calls: ChatCompletionChunk.Choice.Delta.ToolCall[];
+    }
+  | { content: string; role: 'tool'; name: string; tool_call_id: string };
+
+export interface ConversationData {
+  lastUpdated: string;
   messages: ChatViewMessage[];
+}
+
+export interface ChatStoreState {
+  /**
+   * The project key associated to the project.
+   **/
+  projectKey: string;
+  /**
+   * Abort handler.
+   **/
+  abort?: () => void;
+  /**
+   * The current conversation id.
+   **/
+  conversationId?: string;
+  /**
+   * Set a conversation id.
+   **/
+  setConversationId: (conversationId: string) => void;
+  /**
+   * Select a conversation.
+   **/
+  selectConversation: (conversationId?: string) => void;
+  /**
+   * The messages in the current conversation.
+   **/
+  messages: ChatViewMessage[];
+  /**
+   * Set messages.
+   **/
   setMessages: (messages: ChatViewMessage[]) => void;
+  /**
+   * Set a message by id.
+   **/
   setMessageById(id: string, next: Partial<ChatViewMessage>): void;
+  /**
+   * Set a message by index.
+   **/
   setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
+  /**
+   * Set a tool call by id.
+   **/
   setToolCallById: (toolCallId: string, next: Partial<ToolCall>) => void;
-  conversationIdsByProjectKey: {
-    [projectKey: string]: string[];
-  };
-  messagesByConversationId: {
-    [conversationId: string]: {
-      lastUpdated: string;
-      messages: ChatViewMessage[];
-    };
-  };
-  toolCallsByToolCallId: {
-    [tool_call_id: string]: ToolCall;
-  };
-  submitChat: (
-    messages: (
-      | { content: string; role: 'user'; name?: string }
-      | {
-          role: 'assistant';
-          tool_calls: ChatCompletionChunk.Choice.Delta.ToolCall[];
-        }
-      | { content: string; role: 'tool'; name: string; tool_call_id: string }
-    )[],
-  ) => void;
+  /**
+   * Dictionary of conversations by project id.
+   **/
+  conversationIdsByProjectKey: { [projectKey: string]: string[] };
+  /**
+   * Dictionary of messages by conversation id.
+   **/
+  messagesByConversationId: { [conversationId: string]: ConversationData };
+  /**
+   * Dictionary of tool calls by id.
+   **/
+  toolCallsByToolCallId: { [tool_call_id: string]: ToolCall };
+  /**
+   * Submit a list of new messages.
+   **/
+  submitChat: (messages: SubmitChatMessage[]) => void;
+  /**
+   * Submit tool calls.
+   **/
   submitToolCalls: (message: ChatViewMessage) => Promise<void>;
+  /**
+   * User configurable chat options.
+   **/
   options?: UserConfigurableOptions;
+  /**
+   * Set the chat options for this session.
+   **/
   setOptions: (options: UserConfigurableOptions) => void;
+  /**
+   * Trigger a regeneration of the last answer.
+   **/
   regenerateLastAnswer: () => void;
 }
 

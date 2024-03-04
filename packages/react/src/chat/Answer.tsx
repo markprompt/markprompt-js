@@ -19,8 +19,17 @@ export function Caret(props: CaretProps): ReactElement | null {
 }
 
 interface AnswerProps {
+  /**
+   * Custom class name.
+   */
   className?: string;
+  /**
+   * The answer to display, in Markdown format.
+   */
   answer: string;
+  /**
+   * The loading state of the message.
+   */
   state: ChatLoadingState;
 }
 

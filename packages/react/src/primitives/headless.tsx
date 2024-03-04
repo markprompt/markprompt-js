@@ -225,7 +225,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   return <form {...props} ref={ref} />;
 });
 
-type PromptProps = ComponentPropsWithRef<'input'> & {
+interface PromptInnerProps {
   /** The label for the input. */
   label?: ReactNode;
   /** The class name of the label element. */
@@ -240,7 +240,10 @@ type PromptProps = ComponentPropsWithRef<'input'> & {
   isLoading?: boolean;
   /** Icon for the button. */
   Icon?: ReactNode;
-};
+}
+
+type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
+
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
  */
@@ -444,7 +447,7 @@ function Answer(props: AnswerProps): ReactElement {
 }
 Answer.displayName = 'Markprompt.Answer';
 
-type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
+interface AutoScrollerInnerProps {
   /**
    * Whether or not to enable automatic scrolling.
    *
@@ -471,7 +474,10 @@ type AutoScrollerProps = ComponentPropsWithRef<'div'> & {
    * @default number
    * */
   discreteScrollTrigger?: number;
-};
+}
+
+type AutoScrollerProps = ComponentPropsWithRef<'div'> & AutoScrollerInnerProps;
+
 /**
  * A component that automatically scrolls to the bottom.
  */
@@ -540,6 +546,23 @@ const AutoScroller = memo<AutoScrollerProps>(
   }),
 );
 AutoScroller.displayName = 'Markprompt.AutoScroller';
+
+export interface ReferencesInnerProps {
+  /**
+   * The wrapper component to render.
+   * @default 'ul'
+   */
+  RootComponent?: ElementType;
+  /**
+   * The component to render for each reference.
+   * @default 'li'
+   */
+  ReferenceComponent?: ElementType;
+  /**
+   * The references to display.
+   */
+  references: FileSectionReference[];
+}
 
 interface ReferencesProps<
   TRoot extends ElementType,
