@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.40.1
+
+### Patch Changes
+
+- [#326](https://github.com/motifland/markprompt-js/pull/326) [`1c898838ffbb16a6a559564d9361f4263ef3ca11`](https://github.com/motifland/markprompt-js/commit/1c898838ffbb16a6a559564d9361f4263ef3ca11) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix label
+
 ## 0.40.0
 
 ### Minor Changes
