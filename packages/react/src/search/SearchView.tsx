@@ -306,7 +306,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
                   : { width: 18, height: 18 }
               }
             />
-            <span>{searchOptions.askLabel}</span>
+            {searchOptions.askLabel && <span>{searchOptions.askLabel}</span>}
           </button>
         </div>
       </BaseMarkprompt.Form>
