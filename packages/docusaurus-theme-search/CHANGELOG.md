@@ -1,5 +1,17 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.20.0
+
+### Minor Changes
+
+- [#324](https://github.com/motifland/markprompt-js/pull/324) [`bcdaa65d5c23b31e58574b7732d6bee4f7aaddf4`](https://github.com/motifland/markprompt-js/commit/bcdaa65d5c23b31e58574b7732d6bee4f7aaddf4) Thanks [@michaelfester](https://github.com/michaelfester)! - Unnest types
+
+### Patch Changes
+
+- Updated dependencies [[`bcdaa65d5c23b31e58574b7732d6bee4f7aaddf4`](https://github.com/motifland/markprompt-js/commit/bcdaa65d5c23b31e58574b7732d6bee4f7aaddf4)]:
+  - @markprompt/react@0.40.0
+  - @markprompt/css@0.25.0
+
 ## 0.19.0
 
 ### Minor Changes
