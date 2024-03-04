@@ -1,4 +1,4 @@
-# Markprompt Docusaurus plugin
+# Markprompt Docusaurus Plugin
 
 A [Markprompt](https://markprompt.com) plugin for
 [Docusaurus](https://docusaurus.io).
@@ -108,6 +108,11 @@ export default function SearchBarWrapper(props: Props): JSX.Element {
 }
 ```
 
+## Documentation
+
+The full documentation for the package can be found on the
+[Markprompt docs](https://markprompt.com/docs/sdk).
+
 ## Examples
 
 - [With the Docusaurus plugin](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus)
@@ -116,7 +121,6 @@ export default function SearchBarWrapper(props: Props): JSX.Element {
 ## Community
 
 - [X](https://x.com/markprompt)
-- [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 

@@ -1,22 +1,63 @@
+import type { SubmitFeedbackOptions } from '@markprompt/core';
+
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
+import type { UserConfigurableOptions } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronLeftIcon } from '../icons.js';
-import type { MarkpromptOptions, View } from '../types.js';
+import type {
+  ChatOptions,
+  FeedbackOptions,
+  IntegrationsOptions,
+  ReferencesOptions,
+  View,
+} from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 
 export interface ChatViewProps {
-  activeView?: View;
-  chatOptions?: MarkpromptOptions['chat'];
-  debug?: boolean;
-  feedbackOptions?: MarkpromptOptions['feedback'];
-  integrations?: MarkpromptOptions['integrations'];
+  /**
+   * The project key associated to the project.
+   */
   projectKey: string;
-  referencesOptions?: MarkpromptOptions['references'];
+  /**
+   * The active view.
+   */
+  activeView?: View;
+  /**
+   * Options for the chat component.
+   */
+  chatOptions?: UserConfigurableOptions & ChatOptions;
+  /**
+   * Options for the feedback component.
+   */
+  feedbackOptions?: SubmitFeedbackOptions & FeedbackOptions;
+  /**
+   * Options for the references component.
+   */
+  referencesOptions?: ReferencesOptions;
+  /**
+   * Options for the integrations.
+   */
+  integrations?: IntegrationsOptions;
+  /**
+   * Show back button.
+   * @default true
+   */
   showBack?: boolean;
+  /**
+   * Handler when back button is pressed.
+   */
   onDidPressBack?: () => void;
+  /**
+   * Handler when a ticket is created.
+   */
   handleCreateTicket?: () => void;
+  /**
+   * Display debug info.
+   * @default false
+   **/
+  debug?: boolean;
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {

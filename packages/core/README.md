@@ -1,4 +1,4 @@
-# `@markprompt/core`
+# Markprompt Core
 
 `@markprompt/core` is the core library for Markprompt, a conversational AI
 component for your website, trained on your data.
@@ -131,10 +131,14 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 
 A promise that resolves when the feedback is submitted. Has no return value.
 
+## Documentation
+
+The full documentation for the package can be found on the
+[Markprompt docs](https://markprompt.com/docs/sdk).
+
 ## Community
 
 - [X](https://x.com/markprompt)
-- [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 

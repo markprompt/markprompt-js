@@ -1,4 +1,4 @@
-# `@markprompt/web`
+# Markprompt Web
 
 A prebuilt version of the Markprompt dialog, based on `@markprompt/react`, built
 with Preact for bundle-size savings. Viable for use from vanilla JavaScript or
@@ -449,13 +449,12 @@ Render the Markprompt chat view standalone, outside of a dialog.
 
 ## Documentation
 
-The full documentation for `@markprompt/web` can be found on the
-[Markprompt docs](https://markprompt.com/docs#javascript).
+The full documentation for the package can be found on the
+[Markprompt docs](https://markprompt.com/docs/sdk).
 
 ## Community
 
 - [X](https://x.com/markprompt)
-- [Discord](https://discord.gg/MBMh4apz6X)
 
 ## Authors
 

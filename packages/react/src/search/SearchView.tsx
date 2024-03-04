@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { SubmitSearchQueryOptions } from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
@@ -11,6 +13,7 @@ import {
   type SetStateAction,
   useState,
   useMemo,
+  type ComponentType,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -20,20 +23,48 @@ import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import {
   type MarkpromptOptions,
+  type SearchOptions,
   type SearchResultComponentProps,
   type View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 
 export interface SearchViewProps {
-  activeView?: View;
-  debug?: boolean;
-  onDidSelectResult?: () => void;
-  onDidSelectAsk?: (query?: string) => void;
+  /**
+   * The project key associated to the project.
+   */
   projectKey: string;
+  /**
+   * The active view.
+   */
+  activeView?: View;
+  /**
+   * Callback when a search result is selected.
+   */
+  onDidSelectResult?: () => void;
+  /**
+   * Callback when chat is selected.
+   */
+  onDidSelectAsk?: (query?: string) => void;
+  /**
+   * Multi-pane layout when both search and chat are enabled.
+   * @default "panels"
+   **/
   layout?: MarkpromptOptions['layout'];
-  searchOptions?: MarkpromptOptions['search'];
-  linkAs?: MarkpromptOptions['linkAs'];
+  /**
+   * Options for the search component.
+   */
+  searchOptions?: SubmitSearchQueryOptions & SearchOptions;
+  /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  linkAs?: string | ComponentType<any>;
+  /**
+   * Display debug info.
+   * @default false
+   **/
+  debug?: boolean;
 }
 
 interface ActiveSearchResult {
