@@ -1,5 +1,5 @@
 import type { FileSectionReference } from '@markprompt/core';
-import { useCallback, useMemo, type ReactElement } from 'react';
+import { useCallback, useMemo, type ReactElement, type ComponentType } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { ChatLoadingState } from '../index.js';
@@ -16,6 +16,7 @@ interface ReferenceProps {
     text: string;
   };
   onDidSelectReference?: () => void;
+  linkAs?: string | ComponentType<any>;
 }
 
 export const Reference = (props: ReferenceProps): ReactElement => {
@@ -40,6 +41,7 @@ export const Reference = (props: ReferenceProps): ReactElement => {
     };
   }, [transformReferenceId, getHref, reference, getLabel]);
 
+  const LinkComponent = props.linkAs ?? "a"
   return (
     <li
       key={referenceHrefLabel.href}
@@ -48,9 +50,9 @@ export const Reference = (props: ReferenceProps): ReactElement => {
         animationDelay: `${100 * index}ms`,
       }}
     >
-      <a href={referenceHrefLabel.href} onClick={onDidSelectReference}>
+      <LinkComponent href={referenceHrefLabel.href} onClick={onDidSelectReference}>
         {referenceHrefLabel.label}
-      </a>
+      </LinkComponent>
     </li>
   );
 };
@@ -68,6 +70,7 @@ interface ReferencesProps {
   onDidSelectReference?: () => void;
   references: FileSectionReference[];
   state: ChatLoadingState;
+  linkAs?: string | ComponentType<any>;
 }
 
 const References = (props: ReferencesProps): ReactElement | null => {
@@ -78,6 +81,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     transformReferenceId,
     references,
     state,
+    linkAs
   } = props;
 
   const ReferenceComponent = useCallback(
@@ -87,6 +91,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
         getLabel={getLabel}
         // Backwards compatibility
         transformReferenceId={transformReferenceId}
+        linkAs={linkAs}
         {...props}
       />
     ),

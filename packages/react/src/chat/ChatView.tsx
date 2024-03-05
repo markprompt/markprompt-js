@@ -14,6 +14,7 @@ import type {
   View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
+import type { ComponentType } from 'react';
 
 export interface ChatViewProps {
   /**
@@ -54,6 +55,11 @@ export interface ChatViewProps {
    */
   handleCreateTicket?: () => void;
   /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  linkAs?: string | ComponentType<any>;
+  /**
    * Display debug info.
    * @default false
    **/
@@ -68,6 +74,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     onDidPressBack,
     integrations,
     handleCreateTicket,
+    linkAs
   } = props;
 
   if (!projectKey) {
@@ -117,6 +124,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           projectKey={projectKey}
           referencesOptions={referencesOptions}
           handleCreateTicket={handleCreateTicket}
+          linkAs={linkAs}
         />
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
       </div>

@@ -494,6 +494,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               projectKey={projectKey}
               referencesOptions={references}
               showBack={layout === 'panels'}
+              linkAs={linkAs}
             />
           </Tabs.Content>
         )}

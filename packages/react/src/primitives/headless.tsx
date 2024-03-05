@@ -13,6 +13,7 @@ import {
   memo,
   useCallback,
   useState,
+  type ComponentType,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -390,6 +391,7 @@ type AnswerProps = Omit<
   answer: string;
   state?: ChatLoadingState;
   copyButtonClassName?: string;
+  linkAs?: string | ComponentType<any>;
 };
 
 /**
@@ -401,14 +403,17 @@ function Answer(props: AnswerProps): ReactElement {
     state,
     copyButtonClassName,
     remarkPlugins = [remarkGfm],
+    linkAs,
     ...rest
   } = props;
 
+  const LinkComponent = linkAs ?? "a"
   return (
     <Markdown
       {...rest}
       remarkPlugins={remarkPlugins}
       components={{
+        a: (props) => <LinkComponent {...props} />,
         pre: (props) => {
           const { children, className, ...rest } = props;
 
