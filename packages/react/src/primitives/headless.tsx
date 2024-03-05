@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FileSectionReference } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -407,7 +408,7 @@ function Answer(props: AnswerProps): ReactElement {
     ...rest
   } = props;
 
-  const LinkComponent = linkAs ?? "a"
+  const LinkComponent = linkAs ?? 'a';
   return (
     <Markdown
       {...rest}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ComponentType, type ReactElement } from 'react';
 
 import { Answer } from './Answer.js';
@@ -13,7 +14,7 @@ export function MessageAnswer(props: MessageAnswerProps): ReactElement {
   const { children, state } = props;
   return (
     <div className="MarkpromptMessageAnswer">
-      <Answer answer={children} state={state} linkAs={props.linkAs}/>
+      <Answer answer={children} state={state} linkAs={props.linkAs} />
       {state === 'cancelled' && (
         <div className="MarkpromptCancelled">
           <div className="MarkpromptCancelledText">

@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FileSectionReference } from '@markprompt/core';
-import { useCallback, useMemo, type ReactElement, type ComponentType } from 'react';
+import {
+  useCallback,
+  useMemo,
+  type ReactElement,
+  type ComponentType,
+} from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { ChatLoadingState } from '../index.js';
@@ -41,7 +47,7 @@ export const Reference = (props: ReferenceProps): ReactElement => {
     };
   }, [transformReferenceId, getHref, reference, getLabel]);
 
-  const LinkComponent = props.linkAs ?? "a"
+  const LinkComponent = props.linkAs ?? 'a';
   return (
     <li
       key={referenceHrefLabel.href}
@@ -50,7 +56,10 @@ export const Reference = (props: ReferenceProps): ReactElement => {
         animationDelay: `${100 * index}ms`,
       }}
     >
-      <LinkComponent href={referenceHrefLabel.href} onClick={onDidSelectReference}>
+      <LinkComponent
+        href={referenceHrefLabel.href}
+        onClick={onDidSelectReference}
+      >
         {referenceHrefLabel.label}
       </LinkComponent>
     </li>
@@ -81,7 +90,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     transformReferenceId,
     references,
     state,
-    linkAs
+    linkAs,
   } = props;
 
   const ReferenceComponent = useCallback(

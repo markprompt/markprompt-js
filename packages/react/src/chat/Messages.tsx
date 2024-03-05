@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ComponentType, type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
@@ -27,7 +28,7 @@ export function Messages(props: MessagesProps): ReactElement {
     referencesOptions,
     projectKey,
     handleCreateTicket,
-    linkAs
+    linkAs,
   } = props;
 
   const messages = useChatStore((state) => state.messages);

@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core';
+import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
@@ -14,7 +16,6 @@ import type {
   View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
-import type { ComponentType } from 'react';
 
 export interface ChatViewProps {
   /**
@@ -74,7 +75,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     onDidPressBack,
     integrations,
     handleCreateTicket,
-    linkAs
+    linkAs,
   } = props;
 
   if (!projectKey) {
