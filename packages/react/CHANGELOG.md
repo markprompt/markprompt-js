@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.40.2
+
+### Patch Changes
+
+- [#328](https://github.com/motifland/markprompt-js/pull/328) [`30fe76bbf2a055ba46ac49c947eae272f3309dc7`](https://github.com/motifland/markprompt-js/commit/30fe76bbf2a055ba46ac49c947eae272f3309dc7) Thanks [@michaelfester](https://github.com/michaelfester)! - Pass linkAs component to ChatView
+
 ## 0.40.1
 
 ### Patch Changes
