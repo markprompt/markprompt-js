@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isToolCalls } from '@markprompt/core';
 import { useMemo, type ComponentType } from 'react';
 
