@@ -1,4 +1,5 @@
-import { type ReactElement } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { type ComponentType, type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import { DefaultView } from './DefaultView.js';
@@ -16,6 +17,7 @@ interface MessagesProps {
   projectKey: string;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
   handleCreateTicket?: () => void;
+  linkAs?: string | ComponentType<any>;
 }
 
 export function Messages(props: MessagesProps): ReactElement {
@@ -26,6 +28,7 @@ export function Messages(props: MessagesProps): ReactElement {
     referencesOptions,
     projectKey,
     handleCreateTicket,
+    linkAs,
   } = props;
 
   const messages = useChatStore((state) => state.messages);
@@ -71,6 +74,7 @@ export function Messages(props: MessagesProps): ReactElement {
                 projectKey={projectKey}
                 feedbackOptions={feedbackOptions}
                 chatOptions={chatOptions}
+                linkAs={linkAs}
               />
             )}
 
@@ -87,6 +91,7 @@ export function Messages(props: MessagesProps): ReactElement {
                   loadingText={referencesOptions?.loadingText}
                   heading={referencesOptions?.heading}
                   state={message.state}
+                  linkAs={linkAs}
                 />
               )}
 

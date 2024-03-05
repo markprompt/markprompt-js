@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import clsx from 'clsx';
-import { type ReactElement } from 'react';
+import { type ComponentType, type ReactElement } from 'react';
 
 import type { ChatLoadingState } from '../chat/store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -31,10 +32,15 @@ interface AnswerProps {
    * The loading state of the message.
    */
   state: ChatLoadingState;
+  /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  linkAs?: string | ComponentType<any>;
 }
 
 export function Answer(props: AnswerProps): ReactElement {
-  const { answer, className, state } = props;
+  const { answer, className, state, linkAs } = props;
 
   return (
     <div
@@ -48,6 +54,7 @@ export function Answer(props: AnswerProps): ReactElement {
         answer={answer}
         state={state}
         copyButtonClassName="MarkpromptGhostThumbButton"
+        linkAs={linkAs}
       />
     </div>
   );

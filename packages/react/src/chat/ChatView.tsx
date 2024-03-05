@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core';
+import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
@@ -54,6 +56,11 @@ export interface ChatViewProps {
    */
   handleCreateTicket?: () => void;
   /**
+   * Component to use in place of <a>.
+   * @default "a"
+   */
+  linkAs?: string | ComponentType<any>;
+  /**
    * Display debug info.
    * @default false
    **/
@@ -68,6 +75,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     onDidPressBack,
     integrations,
     handleCreateTicket,
+    linkAs,
   } = props;
 
   if (!projectKey) {
@@ -117,6 +125,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           projectKey={projectKey}
           referencesOptions={referencesOptions}
           handleCreateTicket={handleCreateTicket}
+          linkAs={linkAs}
         />
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
       </div>

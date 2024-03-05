@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isToolCalls } from '@markprompt/core';
-import { useMemo } from 'react';
+import { useMemo, type ComponentType } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
 import { MessageAnswer } from './MessageAnswer.js';
@@ -14,6 +15,7 @@ interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
+  linkAs?: string | ComponentType<any>;
 }
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
@@ -77,7 +79,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
       )}
 
       <div style={{ width: '100%' }}>
-        <MessageAnswer state={message.state}>
+        <MessageAnswer state={message.state} linkAs={props.linkAs}>
           {message.content ?? ''}
         </MessageAnswer>
 
