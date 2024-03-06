@@ -717,7 +717,7 @@
 }
 
 :where(.MarkpromptAnswer p) {
-  margin-top: 1.1428571em;
+  margin-top: 0;
   margin-bottom: 1.1428571em;
 }
 
