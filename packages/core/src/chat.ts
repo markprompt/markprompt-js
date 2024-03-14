@@ -209,7 +209,7 @@ export type SubmitChatYield =
 
 export type SubmitChatReturn = ChatCompletionMessage & ChatCompletionMetadata;
 
-function checkAbortSignal(signal?: AbortSignal) {
+function checkAbortSignal(signal?: AbortSignal): void {
   if (signal?.aborted) {
     if (signal.reason instanceof Error) {
       throw signal.reason;
