@@ -1,6 +1,5 @@
 ---
 '@markprompt/core': patch
-'@markprompt/react': patch
 ---
 
 Improve handling of aborted requests by checking for an aborted signal before every yield in `submitChat`
