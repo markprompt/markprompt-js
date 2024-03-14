@@ -1,5 +1,18 @@
 # @markprompt/core
 
+## 0.26.1
+
+### Patch Changes
+
+- [`e86f71438cdf599f37f243a4597596a3ca0a790a`](https://github.com/motifland/markprompt-js/commit/e86f71438cdf599f37f243a4597596a3ca0a790a) Thanks [@nickrttn](https://github.com/nickrttn)! - Improve handling of aborted requests by checking for an aborted signal before every yield in `submitChat`
+
+  Async generators have no real way to deal with cancellation via
+  AbortController in modern JS. This commit adds a check for an aborted
+  signal before every yield in the core/submitChat generator, then throws
+  the error if the signal has been aborted.
+
+  This should prevent yields from happening after the signal has been aborted.
+
 ## 0.26.0
 
 ### Minor Changes
