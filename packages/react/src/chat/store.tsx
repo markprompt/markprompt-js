@@ -332,6 +332,11 @@ export const createChatStore = ({
             });
           },
           selectConversation: (conversationId?: string) => {
+            if (conversationId === get().conversationId) return;
+
+            // abort the current request, if any
+            get().abort?.();
+
             set((state) => {
               if (!conversationId) {
                 // start a new conversation
@@ -489,14 +494,18 @@ export const createChatStore = ({
                 projectKey,
                 options,
               )) {
+                if (controller.signal.aborted) continue;
+
                 if (chunk.conversationId) {
                   get().setConversationId(chunk.conversationId);
                 }
+
                 for (const id of messageIds) {
                   get().setMessageById(id, {
                     state: 'streaming-answer',
                   });
                 }
+
                 get().setMessageById(responseId, {
                   state: 'streaming-answer',
                   ...chunk,
@@ -504,15 +513,15 @@ export const createChatStore = ({
               }
             } catch (error) {
               // eslint-disable-next-line no-console
-              console.error({ error });
+              console.error(error);
+
+              if (isAbortError(error)) return;
 
               for (const id of [...messageIds, responseId]) {
                 get().setMessageById(id, {
                   state: 'cancelled',
                 });
               }
-
-              if (isAbortError(error)) return;
 
               get().setMessageById(responseId, {
                 error:

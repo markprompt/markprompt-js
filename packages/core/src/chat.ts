@@ -209,6 +209,16 @@ export type SubmitChatYield =
 
 export type SubmitChatReturn = ChatCompletionMessage & ChatCompletionMetadata;
 
+function checkAbortSignal(signal?: AbortSignal) {
+  if (signal?.aborted) {
+    if (signal.reason instanceof Error) {
+      throw signal.reason;
+    }
+
+    throw new Error(signal.reason);
+  }
+}
+
 export async function* submitChat(
   messages: ChatCompletionMessageParam[],
   projectKey: string,
@@ -255,8 +265,11 @@ export async function* submitChat(
 
   const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
 
+  checkAbortSignal(options.signal);
+
   if (res.headers.get('Content-Type')?.includes('application/json')) {
     const json = await res.json();
+
     if (
       isChatCompletion(json) &&
       isMarkpromptMetadata(data) &&
@@ -289,9 +302,7 @@ export async function* submitChat(
   }
 
   if (!res.ok || !res.body) {
-    if (options.signal?.aborted) {
-      throw new Error(options.signal.reason);
-    }
+    checkAbortSignal(options.signal);
 
     const text = await res.text();
 
@@ -307,9 +318,7 @@ export async function* submitChat(
     throw new Error(text);
   }
 
-  if (options.signal?.aborted) {
-    throw new Error(options.signal.reason);
-  }
+  checkAbortSignal(options.signal);
 
   // eslint-disable-next-line prefer-const
   let completion = {};
@@ -341,6 +350,7 @@ export async function* submitChat(
 
     mergeWith(completion, json.choices[0]?.delta, concatStrings);
 
+    checkAbortSignal(options.signal);
     /**
      * If we do not yield a structuredClone here, the completion object will
      * become read-only/frozen and TypeErrors will be thrown when trying to
@@ -348,6 +358,8 @@ export async function* submitChat(
      */
     yield structuredClone(completion);
   }
+
+  checkAbortSignal(options.signal);
 
   if (isChatCompletionMessage(completion) && isMarkpromptMetadata(data)) {
     return { ...completion, ...data };

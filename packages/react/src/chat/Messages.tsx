@@ -31,6 +31,9 @@ export function Messages(props: MessagesProps): ReactElement {
     linkAs,
   } = props;
 
+  const state = useChatStore((state) => state);
+  console.log(state);
+
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
 
