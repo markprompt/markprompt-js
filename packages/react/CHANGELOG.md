@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.40.3
+
+### Patch Changes
+
+- [`c400bb2681451d1be9a298b32d6d157dcc9aa222`](https://github.com/motifland/markprompt-js/commit/c400bb2681451d1be9a298b32d6d157dcc9aa222) Thanks [@nickrttn](https://github.com/nickrttn)! - No longer write messages for an aborted request to a conversation they do not belong to
+
+- Updated dependencies [[`e86f71438cdf599f37f243a4597596a3ca0a790a`](https://github.com/motifland/markprompt-js/commit/e86f71438cdf599f37f243a4597596a3ca0a790a)]:
+  - @markprompt/core@0.26.1
+
 ## 0.40.2
 
 ### Patch Changes
