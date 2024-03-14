@@ -24,6 +24,7 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: true },
     chat: {
       enabled: true,
+      model: 'gpt-4-1106-preview',
       apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
