@@ -2,7 +2,6 @@ import {
   submitFeedback as submitFeedbackToMarkprompt,
   type PromptFeedback,
   type SubmitFeedbackOptions,
-  type ChatMessage,
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
@@ -13,8 +12,6 @@ export interface UseFeedbackOptions {
   feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
-  /** The current list of messages */
-  messages?: ChatMessage[];
 }
 
 export interface UseFeedbackResult {
