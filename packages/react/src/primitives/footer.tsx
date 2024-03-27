@@ -20,7 +20,9 @@ export const Footer = (props: FooterProps): ReactElement => {
           gap: '0.25rem',
           justifyContent: 'center',
           margin: 0,
-          padding: '0.5rem 0.75rem',
+          paddingInline: '0.75rem',
+          paddingBlock:
+            '0.5rem calc(0.5rem - var(--markprompt-prompt-focus-shadow-width, 3px))',
           color: 'var(--markprompt-mutedForeground)',
           fontSize: '0.75rem',
           fontWeight: 500,
@@ -78,7 +80,9 @@ export const Footer = (props: FooterProps): ReactElement => {
         gap: '0.25rem',
         justifyContent: 'end',
         margin: '-1rem 0 0 0',
-        padding: '0.5rem 0.75rem',
+        paddingInline: '0.75rem',
+        paddingBlock:
+          '0.5rem calc(0.5rem - var(--markprompt-prompt-focus-shadow-width, 3px))',
         color: 'var(--markprompt-mutedForeground)',
         fontSize: '0.75rem',
         zIndex: 1,
