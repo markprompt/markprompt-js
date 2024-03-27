@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.40.4
+
+### Patch Changes
+
+- [#334](https://github.com/motifland/markprompt-js/pull/334) [`6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e`](https://github.com/motifland/markprompt-js/commit/6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e) Thanks [@michaelfester](https://github.com/michaelfester)! - Update doc strings
+
+- [`b6b1092a65d52366fc225f2fda39818e95b2b826`](https://github.com/motifland/markprompt-js/commit/b6b1092a65d52366fc225f2fda39818e95b2b826) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove unused parameter from `useFeedback`
+
+- Updated dependencies [[`6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e`](https://github.com/motifland/markprompt-js/commit/6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e)]:
+  - @markprompt/core@0.26.2
+
 ## 0.40.3
 
 ### Patch Changes

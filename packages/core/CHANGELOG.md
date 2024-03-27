@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.26.2
+
+### Patch Changes
+
+- [#334](https://github.com/motifland/markprompt-js/pull/334) [`6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e`](https://github.com/motifland/markprompt-js/commit/6c258386ccbb6e7b1ef0a0c258cbec5e61456d6e) Thanks [@michaelfester](https://github.com/michaelfester)! - Update doc strings
+
 ## 0.26.1
 
 ### Patch Changes
