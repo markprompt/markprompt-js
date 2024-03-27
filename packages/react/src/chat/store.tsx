@@ -178,12 +178,13 @@ export interface ToolsOptions {
    * when the user confirms the tool calls.
    */
   ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
-};
+}
 
 export type UserConfigurableOptions = Omit<
   SubmitChatOptions,
   'signal' | 'tools'
-> & ToolsOptions;
+> &
+  ToolsOptions;
 
 export type SubmitChatMessage =
   | { content: string; role: 'user'; name?: string }
