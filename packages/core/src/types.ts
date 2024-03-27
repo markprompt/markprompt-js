@@ -75,7 +75,13 @@ export interface Source {
 }
 
 export interface SearchResult extends SearchResultSection {
+  /**
+   * Reference file.
+   */
   file: FileReferenceFileData;
+  /**
+   * Match type.
+   */
   matchType: 'title' | 'leadHeading' | 'content';
 }
 
