@@ -167,18 +167,24 @@ export interface ChatViewTool {
   showDefaultAutoTriggerMessage?: boolean;
 }
 
+export interface ToolsOptions {
+  /**
+   * A list of tool definitions.
+   */
+  tools?: ChatViewTool[];
+  /**
+   * An optional user-provided confirmation message component that takes the
+   * tool calls provided by OpenAI and a confirm function that should be called
+   * when the user confirms the tool calls.
+   */
+  ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
+}
+
 export type UserConfigurableOptions = Omit<
   SubmitChatOptions,
   'signal' | 'tools'
-> & {
-  tools?: ChatViewTool[];
-  /**
-   * An optional user-provided confirmation message component that takes the tool calls
-   * provided by OpenAI and a confirm function that should be called when the user
-   * confirms the tool calls.
-   */
-  ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
-};
+> &
+  ToolsOptions;
 
 export type SubmitChatMessage =
   | { content: string; role: 'user'; name?: string }

@@ -53,20 +53,47 @@ export interface SectionHeading {
 }
 
 export interface SearchResultComponentProps {
+  /**
+   * Link to the search result.
+   */
   href?: string;
+  /**
+   * Search result item heading.
+   */
   heading?: string;
+  /**
+   * Search result item title.
+   */
   title?: string;
+  /**
+   * Search result item subtitle.
+   */
   subtitle?: string;
 }
 
 export interface DefaultViewProps {
+  /**
+   * A greeting message.
+   */
   message?: string | ComponentType;
+  /**
+   * Heading for the default prompts list.
+   */
   promptsHeading?: string;
+  /**
+   * A list of prompt suggestions.
+   */
   prompts?: string[];
 }
 
 export interface DefaultSearchViewProps {
+  /**
+   * Heading for the search results.
+   */
   searchesHeading?: string;
+  /**
+   * Search results view props.
+   */
   searches?: SearchResultComponentProps[];
 }
 
