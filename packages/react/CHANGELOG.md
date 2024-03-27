@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.40.5
+
+### Patch Changes
+
+- [`f2e185e8deda708bf3786be2771c8728cc912849`](https://github.com/motifland/markprompt-js/commit/f2e185e8deda708bf3786be2771c8728cc912849) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix MarkpromptFooter padding
+
 ## 0.40.4
 
 ### Patch Changes
