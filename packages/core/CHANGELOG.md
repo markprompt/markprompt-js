@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.26.3
+
+### Patch Changes
+
+- [#337](https://github.com/motifland/markprompt-js/pull/337) [`163d05d59e1666de2a9269b65a1eaa579f60afef`](https://github.com/motifland/markprompt-js/commit/163d05d59e1666de2a9269b65a1eaa579f60afef) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for PII flag
+
 ## 0.26.2
 
 ### Patch Changes
