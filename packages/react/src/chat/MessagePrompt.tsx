@@ -16,9 +16,9 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
   return (
     <div className="MarkpromptMessagePrompt" data-loading-state={state}>
       {chatOptions.avatars?.visible && (
-        <>
+        <div className="MarkpromptMessageAvatarContainer">
           {!chatOptions.avatars?.user ? (
-            <UserIcon className="MarkpromptMessageAvatar" />
+            <UserIcon className="MarkpromptMessageAvatar" data-type="icon" />
           ) : typeof chatOptions.avatars?.user === 'string' ? (
             <img
               src={chatOptions.avatars.user}
@@ -29,7 +29,7 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
               <chatOptions.avatars.user className="MarkpromptMessageAvatar" />
             </div>
           )}
-        </>
+        </div>
       )}
       {/* Use a div instead of an H3, as often websites will have CSS rules
           that override the styles of such components. */}

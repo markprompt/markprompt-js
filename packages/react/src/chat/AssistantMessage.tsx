@@ -7,7 +7,7 @@ import { MessageAnswer } from './MessageAnswer.js';
 import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
-import { BotIcon } from '../icons.js';
+import { SparklesIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 
 interface AssistantMessageProps {
@@ -62,9 +62,12 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   return (
     <div className="MarkpromptMessageAnswerContainer">
       {chatOptions?.avatars?.visible && (
-        <>
+        <div className="MarkpromptMessageAvatarContainer" data-role="assistant">
           {!chatOptions.avatars?.assistant ? (
-            <BotIcon className="MarkpromptMessageAvatar" />
+            <SparklesIcon
+              className="MarkpromptMessageAvatar"
+              data-type="icon"
+            />
           ) : typeof chatOptions.avatars?.assistant === 'string' ? (
             <img
               src={chatOptions.avatars.assistant}
@@ -75,7 +78,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               <chatOptions.avatars.assistant className="MarkpromptMessageAvatar" />
             </div>
           )}
-        </>
+        </div>
       )}
 
       <div style={{ width: '100%' }}>
