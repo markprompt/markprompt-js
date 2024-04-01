@@ -150,6 +150,10 @@ export interface SubmitChatOptions {
    * The output format of the response
    */
   outputFormat?: 'slack' | 'markdown';
+  /**
+   * Remove PII from chat messages.
+   */
+  redact?: boolean;
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
@@ -196,6 +200,7 @@ const validSubmitChatOptionsKeys: (keyof SubmitChatOptions)[] = [
   'tool_choice',
   'tools',
   'topP',
+  'redact',
 ];
 
 const isValidSubmitChatOptionsKey = (
