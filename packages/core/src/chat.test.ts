@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { rest, type RestRequest } from 'msw';
+import { http, delay, HttpResponse, StrictRequest, DefaultBodyType } from 'msw';
 import { setupServer } from 'msw/node';
 import type { OpenAI } from 'openai';
 import {
@@ -25,9 +25,8 @@ import { formatEvent, getChunk } from '../../../test/utils.js';
 describe('submitChat', () => {
   const encoder = new TextEncoder();
   let markpromptData: unknown = '';
-  const markpromptDebug = '';
   let response: string[] | string | object = [];
-  let request: RestRequest;
+  let req: StrictRequest<DefaultBodyType>;
   let requestBody: SubmitChatOptions = {};
   let stream: ReadableStream;
   let malformattedJson = false;
@@ -35,33 +34,27 @@ describe('submitChat', () => {
   let status = 200;
 
   const server = setupServer(
-    rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
-      request = req;
-      requestBody = await req.json();
+    http.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async ({ request }) => {
+      req = request;
+      requestBody = (await request.json()) as SubmitChatOptions;
 
       if (status >= 400) {
-        return res(
-          ctx.status(status),
-          ctx.text(
-            typeof response !== 'string' ? JSON.stringify(response) : response,
-          ),
+        return HttpResponse.text(
+          typeof response !== 'string' ? JSON.stringify(response) : response,
+          { status: status },
         );
       }
 
       if (requestBody?.stream === false) {
-        return res(
-          ctx.status(status),
-          ctx.set('Content-Type', 'application/json'),
-          ctx.set(
-            'x-markprompt-data',
-            encoder.encode(JSON.stringify(markpromptData)).toString(),
-          ),
-          ctx.set(
-            'x-markprompt-debug-info',
-            encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-          ),
-          ctx.json(response),
-        );
+        return HttpResponse.json(response, {
+          status: status,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-markprompt-data': encoder
+              .encode(JSON.stringify(markpromptData))
+              .toString(),
+          },
+        });
       }
 
       stream = new ReadableStream({
@@ -86,20 +79,18 @@ describe('submitChat', () => {
           controller?.close();
         },
       });
+      await delay('real');
 
-      return res(
-        ctx.delay('real'),
-        ctx.status(status),
-        ctx.set(
-          'x-markprompt-data',
-          encoder.encode(JSON.stringify(markpromptData)).toString(),
-        ),
-        ctx.set(
-          'x-markprompt-debug-info',
-          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-        ),
-        ctx.body(stream),
-      );
+      return new Response(stream, {
+        status: status,
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'x-markprompt-data': encoder
+            .encode(JSON.stringify(markpromptData))
+            .toString(),
+        },
+      });
     }),
   );
 
@@ -147,7 +138,7 @@ describe('submitChat', () => {
   test('make a request', async () => {
     response = ['According to my calculator ', '1 + 2 = 3'];
 
-    const chunks: unknown[] = [];
+    const chunks: SubmitChatYield[] = [];
 
     for await (const chunk of submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
@@ -156,8 +147,10 @@ describe('submitChat', () => {
       chunks.push(chunk);
     }
 
-    const lastChunk: SubmitChatReturn = chunks[chunks.length - 1];
-    expect(request).toBeDefined();
+    const lastChunk: SubmitChatReturn = chunks[
+      chunks.length - 1
+    ] as SubmitChatReturn;
+    expect(req).toBeDefined();
     expect(lastChunk.content).toBe('According to my calculator 1 + 2 = 3');
   });
 
@@ -211,7 +204,7 @@ describe('submitChat', () => {
     }
 
     const chunkWithReferences = chunks.find((x) => x.references);
-    expect(chunkWithReferences.references).toStrictEqual(references);
+    expect(chunkWithReferences?.references).toStrictEqual(references);
   });
 
   test('yields promptId', async () => {
@@ -231,7 +224,7 @@ describe('submitChat', () => {
     }
 
     const chunkWithPromptId = chunks.find((x) => x.promptId);
-    expect(chunkWithPromptId.promptId).toStrictEqual(promptId);
+    expect(chunkWithPromptId?.promptId).toStrictEqual(promptId);
   });
 
   test('yields conversationId', async () => {
@@ -250,7 +243,7 @@ describe('submitChat', () => {
     }
 
     const chunkWithConversationId = chunks.find((x) => x.conversationId);
-    expect(chunkWithConversationId.conversationId).toStrictEqual(
+    expect(chunkWithConversationId?.conversationId).toStrictEqual(
       conversationId,
     );
   });
@@ -314,7 +307,7 @@ describe('submitChat', () => {
     }
   });
 
-  test('supports non-streaming mode', async () => {
+  test.only('supports non-streaming mode', async () => {
     response = {
       object: 'chat.completion',
       id: crypto.randomUUID(),

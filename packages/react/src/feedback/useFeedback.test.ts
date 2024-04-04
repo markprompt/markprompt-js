@@ -1,6 +1,6 @@
 import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS } from '@markprompt/core';
 import { waitFor, renderHook } from '@testing-library/react';
-import { rest } from 'msw';
+import { http, HttpResponse, type JsonBodyType } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
@@ -8,12 +8,12 @@ import { useFeedback } from './useFeedback.js';
 
 let status = 200;
 let endpointHits = 0;
-let response: unknown = '';
+let response: JsonBodyType = '';
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (_req, res, ctx) => {
+  http.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async () => {
     endpointHits += 1;
-    return res(ctx.status(status), ctx.body(JSON.stringify(response)));
+    return HttpResponse.json(response, { status: status });
   }),
 );
 

@@ -5,7 +5,7 @@ import {
 } from '@markprompt/core';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
   afterAll,
@@ -24,23 +24,19 @@ let results: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let debug: unknown;
 
 const server = setupServer(
-  rest.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, (req, res, ctx) => {
+  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, () => {
     if (status >= 400) {
-      return res(
-        ctx.delay('real'),
-        ctx.status(status),
-        ctx.json({ error: 'Server error', debug }),
+      return HttpResponse.json(
+        { error: 'Server error', debug },
+        { status: status },
       );
     }
 
-    return res(ctx.status(status), ctx.json({ data: results, debug }));
+    return HttpResponse.json({ data: results, debug }, { status: status });
   }),
-  rest.post(
-    `https://test-dsn.algolia.net/1/indexes/test/query`,
-    (req, res, ctx) => {
-      return res(ctx.status(status), ctx.json({ hits: results }));
-    },
-  ),
+  http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, () => {
+    return HttpResponse.json({ hits: results }, { status: status });
+  }),
 );
 
 describe('SearchView', () => {

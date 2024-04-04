@@ -5,7 +5,7 @@ import {
 } from '@markprompt/core';
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { rest } from 'msw';
+import { http, delay, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
   afterAll,
@@ -33,7 +33,7 @@ let markpromptData: {
   references?: FileSectionReference[];
   debug?: unknown;
 } = {};
-let markpromptDebug: object = {};
+
 let response:
   | string
   | {
@@ -71,20 +71,11 @@ const ChatViewWithProvider = ({
 };
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async (req, res, ctx) => {
+  http.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async () => {
     if (status >= 400) {
-      return res(
-        ctx.delay('real'),
-        ctx.status(status),
-        ctx.set(
-          'x-markprompt-data',
-          encoder.encode(JSON.stringify(markpromptData)).toString(),
-        ),
-        ctx.set(
-          'x-markprompt-debug-info',
-          encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-        ),
-        ctx.json({ error: 'Internal server error' }),
+      return HttpResponse.json(
+        { error: 'Internal server error' },
+        { status: status },
       );
     }
 
@@ -109,23 +100,21 @@ const server = setupServer(
         controller?.close();
       },
     });
+    await delay('real');
 
-    return res(
-      ctx.delay('real'),
-      ctx.status(status),
-      ctx.set(
-        'x-markprompt-data',
-        encoder.encode(JSON.stringify(markpromptData)).toString(),
-      ),
-      ctx.set(
-        'x-markprompt-debug-info',
-        encoder.encode(JSON.stringify(markpromptDebug)).toString(),
-      ),
-      ctx.body(stream),
-    );
+    return new Response(stream, {
+      status: status,
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'x-markprompt-data': encoder
+          .encode(JSON.stringify(markpromptData))
+          .toString(),
+      },
+    });
   }),
-  rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl!, async (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ status: 'ok' }));
+  http.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl!, async () => {
+    return HttpResponse.json({ status: 'ok' }, { status: 200 });
   }),
 );
 
@@ -137,7 +126,6 @@ describe('ChatView', () => {
     response = [];
     wait = false;
     markpromptData = {};
-    markpromptDebug = {};
 
     server.resetHandlers();
     vi.resetAllMocks();

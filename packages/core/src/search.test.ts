@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type { PartialDeep } from 'type-fest/index.d.ts';
 import {
@@ -81,35 +81,29 @@ let status = 200;
 let wait = 0;
 
 const server = setupServer(
-  rest.get(
-    DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
-    async (req, res, ctx) => {
-      const url = new URL(req.url);
-      const searchParams = new URLSearchParams(url.search);
-      const limit = searchParams.get('limit');
-      let data = searchResults;
-      if (limit !== null) {
-        data = searchResults.slice(0, parseInt(limit));
-      }
-      if (wait > 0) {
-        await new Promise((resolve) => setTimeout(resolve, wait));
-      }
-      return res(
-        ctx.status(status),
-        ctx.body(
-          status === 200
-            ? JSON.stringify({ data })
-            : JSON.stringify({ error: 'Internal Server Error' }),
-        ),
-      );
-    },
-  ),
-  rest.post(
+  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async ({ request }) => {
+    const url = new URL(request.url);
+    const limit = url.searchParams.get('limit');
+    let data = searchResults;
+    if (limit !== null) {
+      data = searchResults.slice(0, parseInt(limit));
+    }
+    if (wait > 0) {
+      await new Promise((resolve) => setTimeout(resolve, wait));
+    }
+    return HttpResponse.json(
+      status === 200 ? { data } : { error: 'Internal Server Error' },
+      { status: status },
+    );
+  }),
+  http.post(
     `https://${algoliaProvider.appId}-dsn.algolia.net/1/indexes/${algoliaProvider.indexName}/query`,
-    async (req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.body(JSON.stringify({ hits: algoliaSearchHits })),
+    async () => {
+      return HttpResponse.json(
+        { hits: algoliaSearchHits },
+        {
+          status: status,
+        },
       );
     },
   ),

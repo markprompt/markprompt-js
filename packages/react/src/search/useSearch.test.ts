@@ -4,7 +4,7 @@ import {
   type AlgoliaDocSearchHit,
 } from '@markprompt/core';
 import { waitFor, renderHook, act } from '@testing-library/react';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
   describe,
@@ -41,26 +41,18 @@ afterEach(() => {
 });
 
 const server = setupServer(
-  rest.get(
-    DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
-    async (_req, res, ctx) => {
-      searchHits += 1;
-      return res(
-        ctx.status(status),
-        ctx.body(JSON.stringify({ data: searchResults })),
-      );
-    },
-  ),
-  rest.post(
-    `https://test-dsn.algolia.net/1/indexes/test/query`,
-    async (_req, res, ctx) => {
-      algoliaHits += 1;
-      return res(
-        ctx.status(status),
-        ctx.body(JSON.stringify({ data: searchResults })),
-      );
-    },
-  ),
+  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
+    searchHits += 1;
+    return HttpResponse.json({ data: searchResults }, {
+      status: status,
+    });
+  }),
+  http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, async () => {
+    algoliaHits += 1;
+    return HttpResponse.json({ data: searchResults }, {
+      status: status,
+    });
+  }),
 );
 
 describe('useSearch', () => {

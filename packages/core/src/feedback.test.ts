@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'vitest';
 
@@ -7,14 +7,10 @@ import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS, submitFeedback } from './index.js';
 let status = 200;
 
 const server = setupServer(
-  rest.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async (req, res, ctx) => {
-    return res(
-      ctx.status(status),
-      ctx.body(
-        status === 200
-          ? JSON.stringify({ status: 'ok' })
-          : JSON.stringify({ error: 'Internal Server Error' }),
-      ),
+  http.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async () => {
+    return HttpResponse.json(
+      status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
+      { status: status },
     );
   }),
 );

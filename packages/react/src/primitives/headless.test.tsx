@@ -4,7 +4,7 @@ import {
 } from '@markprompt/core';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
   afterAll,
@@ -21,15 +21,11 @@ import * as Markprompt from './headless.js';
 let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
-  rest.get(
-    DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!,
-    async (_req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.body(JSON.stringify({ data: searchResults })),
-      );
-    },
-  ),
+  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
+    return HttpResponse.json({ data: searchResults }, {
+      status: status,
+    });
+  }),
 );
 
 beforeAll(() => {
