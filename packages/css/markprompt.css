@@ -28,6 +28,7 @@
   --markprompt-ring-offset-shadow: 0 0 #0000;
   --markprompt-error-background: #fef2f2;
   --markprompt-error-foreground: #991b1b;
+  --markprompt-warning-background: #fefce8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,6 +52,7 @@
     --markprompt-ring: #b4b6f8;
     --markprompt-error-background: #450a0a;
     --markprompt-error-foreground: #fecaca;
+    --markprompt-warning-background: #fefce8;
   }
 }
 
@@ -701,6 +703,22 @@
   display: none;
 }
 
+.MarkpromptDisclaimerView {
+  flex: 1 1 auto;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overflow: hidden auto;
+  padding: 1rem;
+}
+
+.MarkpromptDisclaimerViewMessage {
+  padding: 1rem;
+  font-size: var(--markprompt-text-size);
+  background-color: var(--markprompt-warning-background);
+  border-radius: var(--markprompt-radius);
+}
+
 .MarkpromptAnswerContainer {
   display: flex;
   flex-direction: column;
@@ -729,7 +747,6 @@
 
 .MarkpromptAnswer {
   color: var(--markprompt-foreground);
-  font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
   line-height: 1.7142857;
 }

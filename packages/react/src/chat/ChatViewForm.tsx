@@ -111,11 +111,6 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     (state) => state.didAcceptDisclaimer,
   );
 
-  console.log(
-    'didAcceptDisclaimer',
-    JSON.stringify(didAcceptDisclaimer, null, 2),
-  );
-
   return (
     <BaseMarkprompt.Form
       className="MarkpromptForm"

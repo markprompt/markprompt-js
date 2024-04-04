@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactElement } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
-import type { UserConfigurableOptions } from './store.js';
+import { useChatStore, type UserConfigurableOptions } from './store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronLeftIcon } from '../icons.js';
 import type {
@@ -67,6 +67,17 @@ export interface ChatViewProps {
   debug?: boolean;
 }
 
+function DisclaimerMessage(props: {
+  message: string | ComponentType;
+}): ReactElement {
+  if (typeof props.message === 'string') {
+    return <span>{props.message}</span>;
+  } else {
+    const Message = props.message;
+    return <Message />;
+  }
+}
+
 export function ChatView(props: ChatViewProps): JSX.Element {
   const {
     activeView,
@@ -101,6 +112,10 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS.references,
   );
 
+  const didAcceptDisclaimer = useChatStore(
+    (state) => state.didAcceptDisclaimer,
+  );
+
   return (
     <div className="MarkpromptChatView">
       <ConversationSidebar />
@@ -118,15 +133,23 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           // Keep this for the grid template rows layout
           <div />
         )}
-        <Messages
-          chatOptions={chatOptions}
-          feedbackOptions={feedbackOptions}
-          integrations={integrations}
-          projectKey={projectKey}
-          referencesOptions={referencesOptions}
-          handleCreateTicket={handleCreateTicket}
-          linkAs={linkAs}
-        />
+        {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
+          <div className="MarkpromptDisclaimerView">
+            <div className="MarkpromptDisclaimerViewMessage">
+              <DisclaimerMessage message={chatOptions.disclaimerView.message} />
+            </div>
+          </div>
+        ) : (
+          <Messages
+            chatOptions={chatOptions}
+            feedbackOptions={feedbackOptions}
+            integrations={integrations}
+            projectKey={projectKey}
+            referencesOptions={referencesOptions}
+            handleCreateTicket={handleCreateTicket}
+            linkAs={linkAs}
+          />
+        )}
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
       </div>
     </div>

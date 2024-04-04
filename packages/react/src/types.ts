@@ -90,7 +90,7 @@ export interface DisclaimerViewProps {
   /**
    * A disclaimer message.
    */
-  message?: string | ComponentType;
+  message: string | ComponentType;
   /**
    * The diclaimer CTA.
    * @default "I agree"

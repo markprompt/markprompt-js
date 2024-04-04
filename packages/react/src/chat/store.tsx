@@ -279,7 +279,7 @@ export interface ChatStoreState {
   /**
    * Set the acceptance state of the disclaimer.
    **/
-  // setDidAcceptDisclaimer: (accept: boolean) => void;
+  setDidAcceptDisclaimer: (accept: boolean) => void;
   /**
    * Trigger a regeneration of the last answer.
    **/
@@ -726,6 +726,10 @@ export const createChatStore = ({
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
 
+            if (!state.options?.disclaimerView) {
+              state.setDidAcceptDisclaimer(true);
+            }
+
             const { conversationIdsByProjectKey, messagesByConversationId } =
               state;
 
@@ -753,9 +757,9 @@ export const createChatStore = ({
             if (
               projectConversations.length === 0 ||
               !isPresent(projectConversations[0])
-            )
+            ) {
               return;
-
+            }
             const [conversationId, { messages }] = projectConversations[0];
 
             state.setConversationId(conversationId);
