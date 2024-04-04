@@ -324,7 +324,9 @@ export const createChatStore = ({
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
-          didAcceptDisclaimerByProjectKey: {},
+          didAcceptDisclaimerByProjectKey: {
+            [projectKey]: false,
+          },
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -721,12 +723,18 @@ export const createChatStore = ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,
             messagesByConversationId: state.messagesByConversationId,
             toolCallsByToolCallId: state.toolCallsByToolCallId,
+            didAcceptDisclaimerByProjectKey:
+              state.didAcceptDisclaimerByProjectKey,
           }),
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
 
-            if (!state.options?.disclaimerView) {
+            if (
+              !state.options?.disclaimerView ||
+              (projectKey &&
+                state.didAcceptDisclaimerByProjectKey?.[projectKey])
+            ) {
               state.setDidAcceptDisclaimer(true);
             }
 

@@ -115,6 +115,9 @@ export function ChatView(props: ChatViewProps): JSX.Element {
   const didAcceptDisclaimer = useChatStore(
     (state) => state.didAcceptDisclaimer,
   );
+  const setDidAcceptDisclaimer = useChatStore(
+    (state) => state.setDidAcceptDisclaimer,
+  );
 
   return (
     <div className="MarkpromptChatView">
@@ -137,6 +140,15 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           <div className="MarkpromptDisclaimerView">
             <div className="MarkpromptDisclaimerViewMessage">
               <DisclaimerMessage message={chatOptions.disclaimerView.message} />
+              <button
+                className="MarkpromptPromptSubmitButton"
+                type="submit"
+                onClick={() => {
+                  setDidAcceptDisclaimer(true);
+                }}
+              >
+                {chatOptions.disclaimerView.cta || 'I agree'}
+              </button>
             </div>
           </div>
         ) : (
