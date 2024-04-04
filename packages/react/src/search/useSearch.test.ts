@@ -43,15 +43,21 @@ afterEach(() => {
 const server = setupServer(
   http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
     searchHits += 1;
-    return HttpResponse.json({ data: searchResults }, {
-      status: status,
-    });
+    return HttpResponse.json(
+      { data: searchResults },
+      {
+        status: status,
+      },
+    );
   }),
   http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, async () => {
     algoliaHits += 1;
-    return HttpResponse.json({ data: searchResults }, {
-      status: status,
-    });
+    return HttpResponse.json(
+      { data: searchResults },
+      {
+        status: status,
+      },
+    );
   }),
 );
 
