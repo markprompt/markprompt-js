@@ -28,7 +28,6 @@
   --markprompt-ring-offset-shadow: 0 0 #0000;
   --markprompt-error-background: #fef2f2;
   --markprompt-error-foreground: #991b1b;
-  --markprompt-warning-background: #fefce8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,7 +51,6 @@
     --markprompt-ring: #b4b6f8;
     --markprompt-error-background: #450a0a;
     --markprompt-error-foreground: #fecaca;
-    --markprompt-warning-background: #171717;
   }
 }
 
@@ -629,7 +627,7 @@
 .MarkpromptPromptSubmitButton {
   padding: 0.375rem 0.75rem;
   outline: none;
-  color: var(--markprompt-foreground);
+  color: var(--markprompt-primaryForeground);
   background-color: var(--markprompt-primary);
   border-radius: calc(var(--markprompt-radius) * 0.5);
   font-size: var(--markprompt-text-size);
@@ -715,7 +713,7 @@
 .MarkpromptDisclaimerViewMessage {
   padding: 1rem;
   font-size: var(--markprompt-text-size);
-  background-color: var(--markprompt-warning-background);
+  background-color: var(--markprompt-muted);
   border-radius: var(--markprompt-radius);
   display: flex;
   flex-direction: column;

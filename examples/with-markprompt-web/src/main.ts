@@ -36,6 +36,11 @@ if (el && el instanceof HTMLElement) {
           'Do you have a REST API?',
         ],
       },
+      disclaimerView: {
+        message:
+          'You are using an AI bot. It may occasionally come up with inaccurate answers.',
+        cta: 'I agree',
+      },
       tool_choice: 'auto',
       tools: [
         {
