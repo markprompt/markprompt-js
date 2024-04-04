@@ -20,29 +20,9 @@ import { type UseSearchResult, useSearch } from './useSearch.js';
 
 let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
-let searchHits = 0;
-let algoliaHits = 0;
-
-beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
-});
-
-afterAll(() => {
-  server.close();
-});
-
-afterEach(() => {
-  searchResults = [];
-  searchHits = 0;
-  algoliaHits = 0;
-  status = 200;
-  server.resetHandlers();
-  vi.resetAllMocks();
-});
 
 const server = setupServer(
   http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
-    searchHits += 1;
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -51,7 +31,6 @@ const server = setupServer(
     );
   }),
   http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, async () => {
-    algoliaHits += 1;
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -62,6 +41,21 @@ const server = setupServer(
 );
 
 describe('useSearch', () => {
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  afterEach(() => {
+    searchResults = [];
+    status = 200;
+    server.resetHandlers();
+    vi.resetAllMocks();
+  });
+
   it('should return a default state', () => {
     const { result } = renderHook(() =>
       useSearch({
@@ -80,12 +74,6 @@ describe('useSearch', () => {
   });
 
   it('should return a state with search results', async () => {
-    const { result } = renderHook(() =>
-      useSearch({
-        projectKey: 'TEST_PROJECT_KEY',
-      }),
-    );
-
     searchResults = [
       {
         matchType: 'title',
@@ -121,9 +109,15 @@ describe('useSearch', () => {
       },
     ];
 
+    const { result } = renderHook(() =>
+      useSearch({
+        projectKey: 'TEST_PROJECT_KEY',
+      }),
+    );
+
     await result.current.submitSearchQuery('react');
 
-    await waitFor(() => expect(searchHits).toBe(1));
+    await waitFor(() => expect(result.current.searchResults.length).toBe(3));
 
     expect(result.current.searchResults[0]?.href).toBe(
       (searchResults as SearchResult[])[0]?.file.path,
@@ -140,20 +134,6 @@ describe('useSearch', () => {
   });
 
   it('should allow Algolia as a search provider', async () => {
-    const { result } = renderHook(() =>
-      useSearch({
-        projectKey: 'TEST_PROJECT_KEY',
-        searchOptions: {
-          provider: {
-            name: 'algolia',
-            apiKey: 'test',
-            appId: 'test',
-            indexName: 'test',
-          },
-        },
-      }),
-    );
-
     searchResults = [
       {
         url: 'https://markprompt.com/docs/hit',
@@ -183,7 +163,21 @@ describe('useSearch', () => {
       },
     ] as AlgoliaDocSearchHit[];
 
+    const { result } = renderHook(() =>
+      useSearch({
+        projectKey: 'TEST_PROJECT_KEY',
+        searchOptions: {
+          provider: {
+            name: 'algolia',
+            apiKey: 'test',
+            appId: 'test',
+            indexName: 'test',
+          },
+        },
+      }),
+    );
+
     await act(() => result.current.submitSearchQuery('react'));
-    await waitFor(() => expect(algoliaHits).toBe(1));
+    await waitFor(() => expect(result.current.searchResults.length).toBe(1));
   });
 });
