@@ -22,9 +22,12 @@ let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
   http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
-    return HttpResponse.json({ data: searchResults }, {
-      status: status,
-    });
+    return HttpResponse.json(
+      { data: searchResults },
+      {
+        status: status,
+      },
+    );
   }),
 );
 
