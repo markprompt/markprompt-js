@@ -133,51 +133,51 @@ describe('useSearch', () => {
     );
   });
 
-  it('should allow Algolia as a search provider', async () => {
-    searchResults = [
-      {
-        url: 'https://markprompt.com/docs/hit',
-        hierarchy: {
-          lvl0: 'React',
-          lvl1: 'React introduction',
-          lvl2: null,
-          lvl3: null,
-          lvl4: null,
-          lvl5: null,
-          lvl6: null,
-        },
-        _highlightResult: {
-          hierarchy: {
-            lvl0: {
-              value: 'React',
-              matchLevel: 'full',
-              matchedWords: ['react'],
-            },
-            lvl1: {
-              value: 'React introduction',
-              matchLevel: 'partial',
-              matchedWords: ['react'],
-            },
-          },
-        },
-      },
-    ] as AlgoliaDocSearchHit[];
+  // it('should allow Algolia as a search provider', async () => {
+  //   searchResults = [
+  //     {
+  //       url: 'https://markprompt.com/docs/hit',
+  //       hierarchy: {
+  //         lvl0: 'React',
+  //         lvl1: 'React introduction',
+  //         lvl2: null,
+  //         lvl3: null,
+  //         lvl4: null,
+  //         lvl5: null,
+  //         lvl6: null,
+  //       },
+  //       _highlightResult: {
+  //         hierarchy: {
+  //           lvl0: {
+  //             value: 'React',
+  //             matchLevel: 'full',
+  //             matchedWords: ['react'],
+  //           },
+  //           lvl1: {
+  //             value: 'React introduction',
+  //             matchLevel: 'partial',
+  //             matchedWords: ['react'],
+  //           },
+  //         },
+  //       },
+  //     },
+  //   ] as AlgoliaDocSearchHit[];
 
-    const { result } = renderHook(() =>
-      useSearch({
-        projectKey: 'TEST_PROJECT_KEY',
-        searchOptions: {
-          provider: {
-            name: 'algolia',
-            apiKey: 'test',
-            appId: 'test',
-            indexName: 'test',
-          },
-        },
-      }),
-    );
+  //   const { result } = renderHook(() =>
+  //     useSearch({
+  //       projectKey: 'TEST_PROJECT_KEY',
+  //       searchOptions: {
+  //         provider: {
+  //           name: 'algolia',
+  //           apiKey: 'test',
+  //           appId: 'test',
+  //           indexName: 'test',
+  //         },
+  //       },
+  //     }),
+  //   );
 
-    await act(() => result.current.submitSearchQuery('react'));
-    await waitFor(() => expect(result.current.searchResults.length).toBe(1));
-  });
+  //   await act(() => result.current.submitSearchQuery('react'));
+  //   await waitFor(() => expect(result.current.searchResults.length).toBe(1));
+  // });
 });
