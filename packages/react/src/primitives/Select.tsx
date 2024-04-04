@@ -25,6 +25,7 @@ interface SelectProps<T = Option> extends UseSelectProps<T> {
   menuClassName?: string;
   toggleClassName?: string;
   itemClassName?: string;
+  disabled?: boolean;
 }
 
 export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
@@ -38,6 +39,7 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
     toggle,
     itemToChildren,
     itemToString,
+    disabled,
     ...useSelectProps
   } = props;
 
@@ -72,6 +74,7 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
         type="button"
         className={clsx('MarkpromptSelectToggle', toggleClassName)}
         {...getToggleButtonProps({ ref: refs.setReference })}
+        disabled={disabled}
       >
         {toggle}
       </button>

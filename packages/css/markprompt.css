@@ -420,6 +420,15 @@
   flex-direction: column;
 }
 
+.MarkpromptForm[data-state='disabled'] {
+  opacity: 70%;
+  cursor: not-allowed;
+}
+
+.MarkpromptForm[data-state='disabled']:hover * {
+  pointer-events: none;
+}
+
 .MarkpromptChatView .MarkpromptForm {
   --padding: calc(1rem - var(--markprompt-input-focus-shadow-width));
 
@@ -605,6 +614,10 @@
 
 .MarkpromptPrompt::placeholder {
   color: var(--markprompt-mutedForeground);
+}
+
+.MarkpromptPrompt::placeholder {
+  opacity: 50%;
 }
 
 .MarkpromptPrompt:focus {

@@ -2,7 +2,11 @@ import { selectProjectConversations, useChatStore } from './store.js';
 import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
 import { Select } from '../primitives/Select.js';
 
-export function ConversationSelect(): JSX.Element {
+export function ConversationSelect({
+  disabled,
+}: {
+  disabled?: boolean;
+}): JSX.Element {
   const conversations = useChatStore(selectProjectConversations);
   const selectConversation = useChatStore((state) => state.selectConversation);
 
@@ -10,6 +14,7 @@ export function ConversationSelect(): JSX.Element {
     <Select
       className="MarkpromptConversationSelect"
       label="Select previous conversation"
+      disabled={disabled}
       toggle={
         <CounterClockwiseClockIcon
           aria-hidden

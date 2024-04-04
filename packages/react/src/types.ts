@@ -86,6 +86,18 @@ export interface DefaultViewProps {
   prompts?: string[];
 }
 
+export interface DisclaimerViewProps {
+  /**
+   * A disclaimer message.
+   */
+  message?: string | ComponentType;
+  /**
+   * The diclaimer CTA.
+   * @default "I agree"
+   */
+  cta?: string;
+}
+
 export interface DefaultSearchViewProps {
   /**
    * Heading for the search results.
@@ -215,6 +227,10 @@ export interface ChatOptions {
    * Default (empty) view
    */
   defaultView?: DefaultViewProps;
+  /**
+   * Disclaimer view
+   */
+  disclaimerView?: DisclaimerViewProps;
   /**
    * Avatars to use for chat messages.
    */

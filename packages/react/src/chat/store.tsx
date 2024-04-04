@@ -263,11 +263,23 @@ export interface ChatStoreState {
   /**
    * User configurable chat options.
    **/
-  options?: UserConfigurableOptions;
+  options?: MarkpromptOptions['chat'];
   /**
    * Set the chat options for this session.
    **/
   setOptions: (options: UserConfigurableOptions) => void;
+  /**
+   * Dictionary of disclaimer acceptance by project id.
+   **/
+  didAcceptDisclaimerByProjectKey: { [projectKey: string]: boolean };
+  /**
+   * Acceptance state of the disclaimer.
+   **/
+  didAcceptDisclaimer: boolean;
+  /**
+   * Set the acceptance state of the disclaimer.
+   **/
+  // setDidAcceptDisclaimer: (accept: boolean) => void;
   /**
    * Trigger a regeneration of the last answer.
    **/
@@ -278,7 +290,7 @@ export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: UserConfigurableOptions;
+  chatOptions?: MarkpromptOptions['chat'];
 }
 
 /**
@@ -306,11 +318,13 @@ export const createChatStore = ({
         (set, get) => ({
           projectKey,
           messages: [],
+          didAcceptDisclaimer: false,
           conversationIdsByProjectKey: {
             [projectKey]: [],
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
+          didAcceptDisclaimerByProjectKey: {},
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -638,6 +652,16 @@ export const createChatStore = ({
           setOptions: (options) => {
             set((state) => {
               state.options = options;
+            });
+          },
+          setDidAcceptDisclaimer: (accept: boolean) => {
+            set((state) => {
+              if (!state.projectKey) {
+                return;
+              }
+              state.didAcceptDisclaimerByProjectKey[state.projectKey] ??=
+                accept;
+              state.didAcceptDisclaimer = accept;
             });
           },
           regenerateLastAnswer: () => {
