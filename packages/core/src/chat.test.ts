@@ -307,7 +307,7 @@ describe('submitChat', () => {
     }
   });
 
-  test.only('supports non-streaming mode', async () => {
+  test('supports non-streaming mode', async () => {
     response = {
       object: 'chat.completion',
       id: crypto.randomUUID(),
