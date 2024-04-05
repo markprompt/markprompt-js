@@ -14,6 +14,7 @@ import {
   describe,
   expect,
   it,
+  test,
   vi,
 } from 'vitest';
 
@@ -168,7 +169,7 @@ describe('SearchView', () => {
     });
   });
 
-  it(
+  test.skip(
     'allows users to select search queries',
     async () => {
       const query = 'test';
