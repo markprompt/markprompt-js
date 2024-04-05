@@ -202,6 +202,7 @@ describe('SearchView', () => {
         },
       ];
 
+      console.log('IN HERE');
       render(<SearchView projectKey="test-key" />);
 
       await user.type(screen.getByRole('searchbox'), query);

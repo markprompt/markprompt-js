@@ -3,7 +3,8 @@ import {
   type SearchResult,
   type AlgoliaDocSearchHit,
 } from '@markprompt/core';
-import { waitFor, renderHook, act } from '@testing-library/react';
+// import { waitFor, renderHook, act } from '@testing-library/react';
+import { waitFor, renderHook } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
