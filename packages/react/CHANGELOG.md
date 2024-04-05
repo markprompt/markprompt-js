@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.40.7
+
+### Patch Changes
+
+- [#339](https://github.com/motifland/markprompt-js/pull/339) [`ba0893ee11d7263c22d23d27513c51cd2c34d03b`](https://github.com/motifland/markprompt-js/commit/ba0893ee11d7263c22d23d27513c51cd2c34d03b) Thanks [@michaelfester](https://github.com/michaelfester)! - Add disclaimer option
+
 ## 0.40.6
 
 ### Patch Changes
