@@ -107,8 +107,16 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     );
   }, [lastMessageState]);
 
+  const didAcceptDisclaimer = useChatStore(
+    (state) => state.didAcceptDisclaimer,
+  );
+
   return (
-    <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
+    <BaseMarkprompt.Form
+      className="MarkpromptForm"
+      onSubmit={handleSubmit}
+      data-state={!didAcceptDisclaimer ? 'disabled' : undefined}
+    >
       <div className="MarkpromptPromptWrapper">
         <BaseMarkprompt.Prompt
           ref={inputRef}
@@ -124,8 +132,11 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}
           Icon={<ChatSendIcon isLoading={isLoading} />}
+          disabled={!didAcceptDisclaimer}
         />
-        {chatOptions.history && <ConversationSelect />}
+        {chatOptions.history && (
+          <ConversationSelect disabled={!didAcceptDisclaimer} />
+        )}
         <div />
       </div>
     </BaseMarkprompt.Form>

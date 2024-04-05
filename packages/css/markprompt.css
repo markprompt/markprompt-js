@@ -420,6 +420,15 @@
   flex-direction: column;
 }
 
+.MarkpromptForm[data-state='disabled'] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.MarkpromptForm[data-state='disabled']:hover * {
+  pointer-events: none;
+}
+
 .MarkpromptChatView .MarkpromptForm {
   --padding: calc(1rem - var(--markprompt-input-focus-shadow-width));
 
@@ -614,7 +623,7 @@
 .MarkpromptPromptSubmitButton {
   padding: 0.375rem 0.75rem;
   outline: none;
-  color: var(--markprompt-background);
+  color: var(--markprompt-primaryForeground);
   background-color: var(--markprompt-primary);
   border-radius: calc(var(--markprompt-radius) * 0.5);
   font-size: var(--markprompt-text-size);
@@ -688,6 +697,26 @@
   display: none;
 }
 
+.MarkpromptDisclaimerView {
+  flex: 1 1 auto;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overflow: hidden auto;
+  padding: 1rem;
+}
+
+.MarkpromptDisclaimerViewMessage {
+  padding: 1rem;
+  font-size: var(--markprompt-text-size);
+  background-color: var(--markprompt-muted);
+  border-radius: var(--markprompt-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+}
+
 .MarkpromptAnswerContainer {
   display: flex;
   flex-direction: column;
@@ -716,7 +745,6 @@
 
 .MarkpromptAnswer {
   color: var(--markprompt-foreground);
-  font-size: 0.875rem;
   font-size: var(--markprompt-text-size);
   line-height: 1.7142857;
 }

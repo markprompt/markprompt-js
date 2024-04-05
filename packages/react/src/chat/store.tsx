@@ -263,11 +263,23 @@ export interface ChatStoreState {
   /**
    * User configurable chat options.
    **/
-  options?: UserConfigurableOptions;
+  options?: MarkpromptOptions['chat'];
   /**
    * Set the chat options for this session.
    **/
   setOptions: (options: UserConfigurableOptions) => void;
+  /**
+   * Dictionary of disclaimer acceptance by project id.
+   **/
+  didAcceptDisclaimerByProjectKey: { [projectKey: string]: boolean };
+  /**
+   * Acceptance state of the disclaimer.
+   **/
+  didAcceptDisclaimer: boolean;
+  /**
+   * Set the acceptance state of the disclaimer.
+   **/
+  setDidAcceptDisclaimer: (accept: boolean) => void;
   /**
    * Trigger a regeneration of the last answer.
    **/
@@ -278,7 +290,7 @@ export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   persistChatHistory?: boolean;
-  chatOptions?: UserConfigurableOptions;
+  chatOptions?: MarkpromptOptions['chat'];
 }
 
 /**
@@ -306,11 +318,15 @@ export const createChatStore = ({
         (set, get) => ({
           projectKey,
           messages: [],
+          didAcceptDisclaimer: false,
           conversationIdsByProjectKey: {
             [projectKey]: [],
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
+          didAcceptDisclaimerByProjectKey: {
+            [projectKey]: false,
+          },
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -640,6 +656,16 @@ export const createChatStore = ({
               state.options = options;
             });
           },
+          setDidAcceptDisclaimer: (accept: boolean) => {
+            set((state) => {
+              if (!state.projectKey) {
+                return;
+              }
+              state.didAcceptDisclaimerByProjectKey[state.projectKey] ??=
+                accept;
+              state.didAcceptDisclaimer = accept;
+            });
+          },
           regenerateLastAnswer: () => {
             const messages = [...get().messages];
 
@@ -697,10 +723,20 @@ export const createChatStore = ({
             conversationIdsByProjectKey: state.conversationIdsByProjectKey,
             messagesByConversationId: state.messagesByConversationId,
             toolCallsByToolCallId: state.toolCallsByToolCallId,
+            didAcceptDisclaimerByProjectKey:
+              state.didAcceptDisclaimerByProjectKey,
           }),
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
+
+            if (
+              !state.options?.disclaimerView ||
+              (projectKey &&
+                state.didAcceptDisclaimerByProjectKey?.[projectKey])
+            ) {
+              state.setDidAcceptDisclaimer(true);
+            }
 
             const { conversationIdsByProjectKey, messagesByConversationId } =
               state;
@@ -729,9 +765,9 @@ export const createChatStore = ({
             if (
               projectConversations.length === 0 ||
               !isPresent(projectConversations[0])
-            )
+            ) {
               return;
-
+            }
             const [conversationId, { messages }] = projectConversations[0];
 
             state.setConversationId(conversationId);

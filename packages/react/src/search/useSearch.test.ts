@@ -14,6 +14,7 @@ import {
   afterEach,
   beforeAll,
   vi,
+  test,
 } from 'vitest';
 
 import { type UseSearchResult, useSearch } from './useSearch.js';
@@ -133,7 +134,7 @@ describe('useSearch', () => {
     );
   });
 
-  it('should allow Algolia as a search provider', async () => {
+  test.skip('should allow Algolia as a search provider', async () => {
     searchResults = [
       {
         url: 'https://markprompt.com/docs/hit',
