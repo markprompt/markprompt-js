@@ -17,8 +17,8 @@ import { type MarkpromptOptions } from '../types.js';
 
 interface SearchBoxTriggerProps {
   trigger: MarkpromptOptions['trigger'];
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
@@ -37,7 +37,7 @@ export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
         (event.key === 'Enter' && event.metaKey)
       ) {
         event.preventDefault();
-        setOpen(true);
+        setOpen?.(true);
       }
     };
 

@@ -178,6 +178,55 @@ export interface AvatarsOptions {
    */
   assistant?: string | ComponentType<{ className: string }>;
 }
+
+export type ButtonTheme = 'purple';
+
+export type MenuIconId =
+  | 'book'
+  | 'chat'
+  | 'magnifying-glass'
+  | 'newspaper'
+  | 'discord';
+
+export interface MenuItemProps {
+  /**
+   * Entry title
+   **/
+  title: string;
+  /**
+   * Entry type
+   * @default link
+   **/
+  type?: 'link' | 'button';
+  /**
+   * Entry icon id
+   **/
+  iconId?: MenuIconId;
+  /**
+   * Entry icon
+   **/
+  iconSrc?: string;
+  /**
+   * Entry id to pass as `data-id` attribute
+   **/
+  id?: string;
+  /**
+   * Theme to pass as `data-theme` attribute
+   **/
+  theme?: ButtonTheme;
+}
+
+export interface MenuSectionProps {
+  /**
+   * Section heading
+   **/
+  heading?: string;
+  /**
+   * Section entries
+   **/
+  entries: MenuItemProps[];
+}
+
 export interface MenuOptions {
   /**
    * Menu title
@@ -187,6 +236,14 @@ export interface MenuOptions {
    * Menu subtitle
    **/
   subtitle?: string;
+  /**
+   * Menu sections
+   **/
+  sections?: MenuSectionProps[];
+  /**
+   * Menu footer
+   **/
+  footer?: MenuItemProps[];
 }
 
 export interface ChatOptions {

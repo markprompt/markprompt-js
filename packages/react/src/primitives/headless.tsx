@@ -2,7 +2,6 @@
 import type { FileSectionReference } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
   forwardRef,
   useEffect,
@@ -62,15 +61,6 @@ function Root(props: RootProps): ReactElement {
   );
 }
 
-/**
- * A context provider and dropdown menu root.
- */
-function DropdownMenuRoot(props: DropdownMenu.DropdownMenuProps): ReactElement {
-  const { children, ...rest } = props;
-
-  return <DropdownMenu.Root {...rest}>{children}</DropdownMenu.Root>;
-}
-
 function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   const { modal = true, ...rest } = props;
   return (
@@ -90,21 +80,6 @@ const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
   },
 );
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
-
-type DropdownMenuTriggerProps = ComponentPropsWithRef<
-  typeof DropdownMenu.Trigger
->;
-
-/**
- * A button to open a Markprompt dropdown menu.
- */
-const DropdownMenuTrigger = forwardRef<
-  HTMLButtonElement,
-  DropdownMenuTriggerProps
->((props, ref) => {
-  return <DropdownMenu.Trigger ref={ref} {...props} />;
-});
-DropdownMenuTrigger.displayName = 'Markprompt.DropdownMenuTrigger';
 
 type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
 /**
@@ -729,8 +704,6 @@ export {
   CopyContentButton,
   Description,
   DialogTrigger,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
   ErrorMessage,
   Form,
   Overlay,

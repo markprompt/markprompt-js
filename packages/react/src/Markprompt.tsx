@@ -19,6 +19,7 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
 import { ChatProvider, useChatStore } from './index.js';
+import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
@@ -44,8 +45,8 @@ type TriggerProps = Pick<
   MarkpromptProps,
   'display' | 'menu' | 'trigger' | 'children'
 > & {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: JSXElementConstructor<any>;
 };
@@ -189,18 +190,9 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
   if (menu) {
     return (
-      <BaseMarkprompt.DropdownMenuRoot>
-        <Trigger
-          Component={BaseMarkprompt.DropdownMenuTrigger}
-          display={display}
-          menu={menu}
-          trigger={trigger}
-          setOpen={setOpen}
-          open={open}
-        >
-          {children}
-        </Trigger>
-      </BaseMarkprompt.DropdownMenuRoot>
+      <Menu display={display} menu={menu} trigger={trigger}>
+        {children}
+      </Menu>
     );
   }
 
@@ -559,4 +551,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export { closeMarkprompt, Markprompt, openMarkprompt, type MarkpromptProps };
+export {
+  closeMarkprompt,
+  Markprompt,
+  openMarkprompt,
+  type MarkpromptProps,
+  Trigger,
+};

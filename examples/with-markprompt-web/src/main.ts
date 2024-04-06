@@ -82,6 +82,26 @@ if (el && el instanceof HTMLElement) {
       subtitle: 'Get help with setting up Acme',
       sections: [
         {
+          entries: [
+            {
+              title: 'Documentation',
+              type: 'link',
+              href: 'https://markprompt.com/docs',
+              iconId: 'book',
+            },
+            {
+              title: 'Ask question or search...',
+              type: 'link',
+              iconId: 'magnifying-glass',
+            },
+            {
+              title: 'Get help',
+              type: 'link',
+              iconId: 'chat',
+            },
+          ],
+        },
+        {
           heading: "What's new",
           entries: [
             {
@@ -92,31 +112,15 @@ if (el && el instanceof HTMLElement) {
           ],
         },
         {
-          heading: 'Help',
           entries: [
             {
-              title: 'Ask question or search...',
-              type: 'link',
-            },
-            {
-              title: 'Get help',
-              type: 'link',
-            },
-            {
-              title: 'Documentation',
-              type: 'link',
-              href: 'https://markprompt.com/docs',
-              iconId: 'book',
+              title: 'Join Discord',
+              type: 'button',
+              href: 'https://discord.com',
+              iconId: 'discord',
+              theme: 'purple',
             },
           ],
-        },
-      ],
-      footer: [
-        {
-          title: 'Join Discord',
-          type: 'button',
-          href: 'https://discord.com',
-          iconId: 'discord',
         },
       ],
     },
