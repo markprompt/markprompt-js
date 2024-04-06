@@ -61,6 +61,10 @@ export interface ChatViewProps {
    */
   linkAs?: string | ComponentType<any>;
   /**
+   * Show the Markprompt footer.
+   **/
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
+  /**
    * Display debug info.
    * @default false
    **/
@@ -87,6 +91,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     integrations,
     handleCreateTicket,
     linkAs,
+    branding,
   } = props;
 
   if (!projectKey) {
@@ -160,6 +165,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
             referencesOptions={referencesOptions}
             handleCreateTicket={handleCreateTicket}
             linkAs={linkAs}
+            branding={branding}
           />
         )}
         <ChatViewForm activeView={activeView} chatOptions={chatOptions} />

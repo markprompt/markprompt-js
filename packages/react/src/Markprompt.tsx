@@ -9,6 +9,9 @@ import {
   useState,
   useTransition,
   type ReactElement,
+  type Dispatch,
+  type SetStateAction,
+  type JSXElementConstructor,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
@@ -37,6 +40,16 @@ type MarkpromptProps = MarkpromptOptions &
     onDidRequestOpenChange?: (open: boolean) => void;
   };
 
+type TriggerProps = Pick<
+  MarkpromptProps,
+  'display' | 'menu' | 'trigger' | 'children'
+> & {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component: JSXElementConstructor<any>;
+};
+
 const emitter = new Emittery<{ open: undefined; close: undefined }>();
 
 /**
@@ -55,6 +68,48 @@ function closeMarkprompt(): void {
   emitter.emit('close');
 }
 
+function Trigger(props: TriggerProps): JSX.Element {
+  const { display, menu, trigger, setOpen, open, Component, children } = props;
+
+  return (
+    <>
+      {!trigger?.customElement && !children && display === 'dialog' && (
+        <>
+          {trigger?.floating !== false ? (
+            <Component className="MarkpromptFloatingTrigger">
+              {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
+              <AccessibleIcon.Root label={trigger.label!}>
+                {trigger.iconSrc ? (
+                  <img
+                    className="MarkpromptChatIcon"
+                    width="20"
+                    height="20"
+                    src={trigger.iconSrc}
+                  />
+                ) : (
+                  <ChatIcon
+                    className="MarkpromptChatIcon"
+                    width="20"
+                    height="20"
+                  />
+                )}
+              </AccessibleIcon.Root>
+            </Component>
+          ) : (
+            <SearchBoxTrigger trigger={trigger} setOpen={setOpen} open={open} />
+          )}
+        </>
+      )}
+
+      {children && (display === 'dialog' || menu) && (
+        <BaseMarkprompt.DialogTrigger asChild>
+          {children}
+        </BaseMarkprompt.DialogTrigger>
+      )}
+    </>
+  );
+}
+
 function Markprompt(props: MarkpromptProps): JSX.Element {
   const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
 
@@ -71,6 +126,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     close,
     description,
     feedback,
+    menu,
     chat,
     references,
     search,
@@ -90,6 +146,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       close: props.close,
       description: props.description,
       feedback: props.feedback,
+      menu: props.menu,
       chat: props.chat,
       references: props.references,
       search: props.search,
@@ -130,6 +187,23 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     };
   }, [trigger?.customElement, display, onDidRequestOpenChange]);
 
+  if (menu) {
+    return (
+      <BaseMarkprompt.DropdownMenuRoot>
+        <Trigger
+          Component={BaseMarkprompt.DropdownMenuTrigger}
+          display={display}
+          menu={menu}
+          trigger={trigger}
+          setOpen={setOpen}
+          open={open}
+        >
+          {children}
+        </Trigger>
+      </BaseMarkprompt.DropdownMenuRoot>
+    );
+  }
+
   return (
     <GlobalStoreProvider
       options={{
@@ -162,43 +236,16 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           }}
           {...dialogProps}
         >
-          {!trigger?.customElement && !children && display === 'dialog' && (
-            <>
-              {trigger?.floating !== false ? (
-                <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-                  {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
-                  <AccessibleIcon.Root label={trigger.label!}>
-                    {trigger.iconSrc ? (
-                      <img
-                        className="MarkpromptChatIcon"
-                        width="24"
-                        height="24"
-                        src={trigger.iconSrc}
-                      />
-                    ) : (
-                      <ChatIcon
-                        className="MarkpromptChatIcon"
-                        width="24"
-                        height="24"
-                      />
-                    )}
-                  </AccessibleIcon.Root>
-                </BaseMarkprompt.DialogTrigger>
-              ) : (
-                <SearchBoxTrigger
-                  trigger={trigger}
-                  setOpen={setOpen}
-                  open={open}
-                />
-              )}
-            </>
-          )}
-
-          {children && display === 'dialog' && (
-            <BaseMarkprompt.DialogTrigger asChild>
-              {children}
-            </BaseMarkprompt.DialogTrigger>
-          )}
+          <Trigger
+            Component={BaseMarkprompt.DialogTrigger}
+            display={display}
+            menu={menu}
+            trigger={trigger}
+            setOpen={setOpen}
+            open={open}
+          >
+            {children}
+          </Trigger>
 
           {display === 'dialog' && (
             <>
@@ -208,11 +255,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 )}
                 <BaseMarkprompt.Content
                   className="MarkpromptContentDialog"
-                  footerClassName="MarkpromptFooter"
-                  branding={branding}
-                  showAlgolia={
-                    search?.enabled && search.provider?.name === 'algolia'
-                  }
                   onPointerDownOutside={
                     sticky
                       ? (e) => {
@@ -242,6 +284,10 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                     search={search}
                     layout={layout}
                     linkAs={linkAs}
+                    branding={branding}
+                    // showAlgolia={
+                    //   search?.enabled && search.provider?.name === 'algolia'
+                    // }
                   />
                 </BaseMarkprompt.Content>
               </BaseMarkprompt.Portal>
@@ -249,13 +295,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           )}
 
           {display === 'plain' && (
-            <BaseMarkprompt.PlainContent
-              className="MarkpromptContentPlain"
-              branding={branding}
-              showAlgolia={
-                search?.enabled && search.provider?.name === 'algolia'
-              }
-            >
+            <BaseMarkprompt.PlainContent className="MarkpromptContentPlain">
               <MarkpromptContent
                 chat={chat}
                 feedback={feedback}
@@ -265,6 +305,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 projectKey={projectKey}
                 references={references}
                 search={search}
+                branding={branding}
               />
             </BaseMarkprompt.PlainContent>
           )}
@@ -274,7 +315,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 }
 
-interface MarkpromptContentProps {
+type MarkpromptContentProps = {
   projectKey: string;
   chat?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
@@ -285,7 +326,7 @@ interface MarkpromptContentProps {
   search?: MarkpromptOptions['search'];
   linkAs?: MarkpromptOptions['linkAs'];
   integrations?: MarkpromptOptions['integrations'];
-}
+} & BaseMarkprompt.BrandingProps;
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
@@ -299,6 +340,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     projectKey,
     references,
     search,
+    branding,
   } = props;
 
   const activeView = useGlobalStore((state) => state.activeView);
@@ -367,6 +409,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 handleCreateTicket={handleCreateTicket}
                 projectKey={projectKey}
                 referencesOptions={references}
+                branding={branding}
               />
             )}
           </div>
@@ -495,6 +538,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               referencesOptions={references}
               showBack={layout === 'panels'}
               linkAs={linkAs}
+              branding={branding}
             />
           </Tabs.Content>
         )}

@@ -2,6 +2,7 @@
 import type { FileSectionReference } from '@markprompt/core';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import * as Dialog from '@radix-ui/react-dialog';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
   forwardRef,
   useEffect,
@@ -21,7 +22,6 @@ import { mergeRefs } from 'react-merge-refs';
 import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
-import { Footer } from './footer.js';
 import { CheckIcon, ClipboardIcon } from '../icons.js';
 import type { ChatLoadingState } from '../index.js';
 import type {
@@ -62,6 +62,15 @@ function Root(props: RootProps): ReactElement {
   );
 }
 
+/**
+ * A context provider and dropdown menu root.
+ */
+function DropdownMenuRoot(props: DropdownMenu.DropdownMenuProps): ReactElement {
+  const { children, ...rest } = props;
+
+  return <DropdownMenu.Root {...rest}>{children}</DropdownMenu.Root>;
+}
+
 function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
   const { modal = true, ...rest } = props;
   return (
@@ -82,6 +91,21 @@ const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
 );
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
+type DropdownMenuTriggerProps = ComponentPropsWithRef<
+  typeof DropdownMenu.Trigger
+>;
+
+/**
+ * A button to open a Markprompt dropdown menu.
+ */
+const DropdownMenuTrigger = forwardRef<
+  HTMLButtonElement,
+  DropdownMenuTriggerProps
+>((props, ref) => {
+  return <DropdownMenu.Trigger ref={ref} {...props} />;
+});
+DropdownMenuTrigger.displayName = 'Markprompt.DropdownMenuTrigger';
+
 type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
 /**
  * The Markprompt dialog portal.
@@ -100,77 +124,38 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
-type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
-  /**
-   * Show the Markprompt footer.
-   */
-  branding?: { show?: boolean; type?: 'plain' | 'text' };
-  /**
-   * Show Algolia attribution in the footer.
-   **/
-  showAlgolia?: boolean;
-  /**
-   * Footer class name.
-   **/
-  footerClassName?: string;
-};
+type ContentProps = ComponentPropsWithRef<typeof Dialog.Content>;
 
 /**
  * The Markprompt dialog content.
  */
 const Content = forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
-    const {
-      branding = { show: true, type: 'plain' },
-      showAlgolia,
-      footerClassName,
-      ...rest
-    } = props;
-
     return (
-      <Dialog.Content {...rest} ref={ref}>
+      <Dialog.Content {...props} ref={ref}>
         {props.children}
-        {branding.show && (
-          <Footer
-            className={footerClassName}
-            brandingType={branding.type}
-            showAlgolia={showAlgolia}
-          />
-        )}
       </Dialog.Content>
     );
   },
 );
 Content.displayName = 'Markprompt.Content';
 
-type PlainContentProps = ComponentPropsWithRef<'div'> & {
+export interface BrandingProps {
   /**
    * Show the Markprompt footer.
-   */
-  branding?: { show?: boolean; type?: 'plain' | 'text' };
-  /**
-   * Show Algolia attribution in the footer.
    **/
-  showAlgolia?: boolean;
-};
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
+}
 
+type PlainContentProps = ComponentPropsWithRef<'div'>;
 /**
  * The Markprompt plain content.
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const {
-      branding = { show: true, type: 'plain' },
-      showAlgolia,
-      ...rest
-    } = props;
-
     return (
-      <div {...rest} ref={ref}>
+      <div {...props} ref={ref}>
         {props.children}
-        {branding.show && (
-          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
-        )}
       </div>
     );
   },
@@ -744,6 +729,8 @@ export {
   CopyContentButton,
   Description,
   DialogTrigger,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
   ErrorMessage,
   Form,
   Overlay,

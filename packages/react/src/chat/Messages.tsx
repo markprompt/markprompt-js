@@ -7,10 +7,11 @@ import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
 import { MessageCircleQuestionIcon } from '../icons.js';
+import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
-interface MessagesProps {
+type MessagesProps = {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   integrations: MarkpromptOptions['integrations'];
@@ -18,7 +19,7 @@ interface MessagesProps {
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
   handleCreateTicket?: () => void;
   linkAs?: string | ComponentType<any>;
-}
+} & BaseMarkprompt.BrandingProps;
 
 export function Messages(props: MessagesProps): ReactElement {
   const {
@@ -29,6 +30,7 @@ export function Messages(props: MessagesProps): ReactElement {
     projectKey,
     handleCreateTicket,
     linkAs,
+    branding = { show: true, type: 'plain' },
   } = props;
 
   const messages = useChatStore((state) => state.messages);
@@ -56,6 +58,7 @@ export function Messages(props: MessagesProps): ReactElement {
         scrollTrigger={messages}
         discreteScrollTrigger={messages.length}
       >
+        {branding.show && <Branding brandingType={branding.type} />}
         {messages.map((message, index) => (
           <div key={message.id} className="MarkpromptMessage">
             {message.role === 'user' && (

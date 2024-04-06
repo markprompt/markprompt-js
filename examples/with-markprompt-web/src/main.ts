@@ -77,11 +77,53 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-
-    defaultView: 'chat',
-    trigger: {
-      buttonLabel: 'Ask AI',
+    menu: {
+      title: 'Need help?',
+      subtitle: 'Get help with setting up Acme',
+      sections: [
+        {
+          heading: "What's new",
+          entries: [
+            {
+              title: 'Changelog',
+              type: 'link',
+              iconId: 'newspaper',
+            },
+          ],
+        },
+        {
+          heading: 'Help',
+          entries: [
+            {
+              title: 'Ask question or search...',
+              type: 'link',
+            },
+            {
+              title: 'Get help',
+              type: 'link',
+            },
+            {
+              title: 'Documentation',
+              type: 'link',
+              href: 'https://markprompt.com/docs',
+              iconId: 'book',
+            },
+          ],
+        },
+      ],
+      footer: [
+        {
+          title: 'Join Discord',
+          type: 'button',
+          href: 'https://discord.com',
+          iconId: 'discord',
+        },
+      ],
     },
+    defaultView: 'chat',
+    // trigger: {
+    //   buttonLabel: 'Ask AI',
+    // },
     close: {},
   } satisfies MarkpromptOptions);
 }

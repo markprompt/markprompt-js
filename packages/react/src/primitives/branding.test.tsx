@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Footer, MarkpromptIcon } from './footer.js';
+import { Branding, MarkpromptIcon } from './branding.js';
 
-describe('Footer', () => {
-  test('render a footer', () => {
-    render(<Footer />);
+describe('Branding', () => {
+  test('render a branding element', () => {
+    render(<Branding />);
 
     const element = screen.getByText(/Powered by/);
     expect(element).toBeInTheDocument();
@@ -15,8 +15,8 @@ describe('Footer', () => {
     expect(anchor.href).toBe('https://markprompt.com/');
   });
 
-  test('render a footer with Algolia', () => {
-    render(<Footer showAlgolia />);
+  test('render a branding element with Algolia', () => {
+    render(<Branding showAlgolia />);
 
     const anchor = screen.getByLabelText<HTMLAnchorElement>('Algolia');
     expect(anchor.href).toBe('https://algolia.com/');

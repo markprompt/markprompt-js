@@ -90,29 +90,73 @@
 }
 
 .MarkpromptFloatingTrigger {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 99999px;
-  color: var(--markprompt-primaryForeground);
-  background-color: var(--markprompt-primary);
-  padding: 0.75rem;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.075) 0px 0px 0px 6px, rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset, rgba(33, 33, 38, 0.2) 0px 1px 3px 0px, rgb(33, 33, 38) 0px 0px 0px 1px;
+  box-sizing: border-box;
+  display: grid
+  overflow: hidden;
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  stroke-width: var(--markprompt-icon-stroke-width);
-  gap: 0.75rem;
-  transition: all 200ms;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 50;
+  place-content: center;
+  border-radius: 9999px;
+  outline-style: none;
+  background-color: rgb(33, 33, 38);
+  cursor: pointer;
+  padding: 0.675rem;
+  display: flex;
+  transition-timing-function: cubic-bezier(.4,.36,0,1);
+  transition-property: all;
+  transition-duration: 300ms;
 }
 
 .MarkpromptFloatingTrigger:hover {
-  opacity: 0.85;
-  transform: scale(1.02);
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.075) 0px 0px 0px 8px, rgba(255, 255, 255, 0.1) 0px 1px 0px 0px inset, rgba(33, 33, 38, 0.2) 0px 1px 3px 0px, rgb(33, 33, 38) 0px 0px 0px 1px;
+}
+
+.MarkpromptFloatingTrigger:before {
+  content: "";
+  background-image: linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition-timing-function: cubic-bezier(.4,.36,0,1);
+  transition-property: opacity;
+  transition-duration: 300ms;
+  opacity: 0.7;
+}
+
+.MarkpromptFloatingTrigger:hover:before {
+  opacity: 1;
+}
+
+.MarkpromptFloatingTrigger:after {
+  content: "";
+  mix-blend-mode: overlay;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0) 55%);
+}
+
+.MarkpromptFloatingTrigger:after, .MarkpromptFloatingTrigger:before {
+  box-sizing: border-box;
+  border: 0 solid var(--markprompt-border-accent);
 }
 
 .MarkpromptFloatingTrigger span {
-  font-weight: 600;
+  font-size: var(--markprompt-text-size);
+  color: var(--markprompt-background);
+  font-weight: 500;
   margin-left: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.MarkpromptFloatingTrigger svg.MarkpromptChatIcon {
+  color: var(--markprompt-primaryForeground);
+}
+
+.MarkpromptFloatingTrigger svg.MarkpromptChatIcon .detail {
+  color: var(--markprompt-mutedForeground);
 }
 
 .MarkpromptSearchBoxTrigger {
@@ -432,11 +476,10 @@
 
 .MarkpromptChatView .MarkpromptForm {
   --padding: calc(1rem - var(--markprompt-input-focus-shadow-width));
-
   position: relative;
   flex-direction: column-reverse;
   align-items: stretch;
-  padding-block: var(--padding) 0;
+  padding-block: var(--padding);
   padding-inline: var(--padding);
   overflow-y: visible;
   border-top: 1px solid var(--markprompt-border);
@@ -668,14 +711,14 @@
 
 .MarkpromptViews button:focus-visible,
 .MarkpromptViews a:focus-visible,
-.MarkpromptFooter a:focus-visible {
+.MarkpromptBranding a:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--markprompt-ring);
   transition-property: all;
   transition-duration: 200ms;
 }
 
-.MarkpromptFooter a:focus-visible {
+.MarkpromptBranding a:focus-visible {
   border-radius: calc(var(--markprompt-radius) * 0.5);
 }
 

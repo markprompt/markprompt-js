@@ -178,6 +178,16 @@ export interface AvatarsOptions {
    */
   assistant?: string | ComponentType<{ className: string }>;
 }
+export interface MenuOptions {
+  /**
+   * Menu title
+   **/
+  title?: string;
+  /**
+   * Menu subtitle
+   **/
+  subtitle?: string;
+}
 
 export interface ChatOptions {
   /**
@@ -516,6 +526,10 @@ export interface MarkpromptOptions {
    * @default "panels"
    **/
   layout?: 'panels' | 'tabs';
+  /**
+   * Options for the menu component.
+   */
+  menu?: MenuOptions;
   /**
    * Options for the chat component.
    */

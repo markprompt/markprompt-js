@@ -39,6 +39,14 @@ main {
   place-items: center;
 }
 
+.centered p {
+  border: 1px solid #ddd;
+  background-color: #eee;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 13px;
+}
+
 /* We make the container fill the entire screen to accommodate for
    the `display: "plain"` case.
 */
