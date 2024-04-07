@@ -1,9 +1,7 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
   type ComponentPropsWithoutRef,
-  type Dispatch,
   type JSXElementConstructor,
-  type SetStateAction,
 } from 'react';
 
 import {
@@ -72,7 +70,7 @@ type MarkpromptMenuProps = Pick<
   'display' | 'menu' | 'trigger' | 'linkAs' | 'children'
 > & {
   open?: boolean;
-  onOpenChange?: Dispatch<SetStateAction<boolean>>;
+  onOpenChange?: (open: boolean) => void;
 };
 
 function Menu(props: MarkpromptMenuProps): JSX.Element {

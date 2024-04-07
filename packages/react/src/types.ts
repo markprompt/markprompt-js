@@ -189,6 +189,8 @@ export type MenuIconId =
   | 'newspaper'
   | 'sparkles';
 
+export type MenuAction = 'chat' | 'ticket' | 'search';
+
 export interface MenuItemProps {
   /**
    * Entry title
@@ -197,7 +199,7 @@ export interface MenuItemProps {
   /**
    * Entry action
    **/
-  action?: 'chat';
+  action?: MenuAction;
   /**
    * Entry type
    * @default link

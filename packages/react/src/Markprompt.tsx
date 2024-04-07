@@ -10,11 +10,8 @@ import {
   useState,
   useTransition,
   type ReactElement,
-  type Dispatch,
-  type SetStateAction,
   useCallback,
   type JSXElementConstructor,
-  Fragment,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
@@ -162,19 +159,18 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS,
   );
 
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [isChatOpen, setChatOpen] = useState(false);
+  const [openViews, setOpenViews] = useState<{ [key in View]?: boolean }>({});
 
   useEffect(() => {
     const onOpen = ({ view }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
       switch (view) {
         case 'menu': {
-          setMenuOpen(true);
+          setOpenViews((v) => ({ ...v, menu: true }));
           return;
         }
         case 'chat': {
-          setChatOpen(true);
+          setOpenViews((v) => ({ ...v, chat: true }));
           return;
         }
       }
@@ -217,9 +213,9 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       ) : (
         <Menu
           menu={menu}
-          open={isMenuOpen}
+          open={openViews.menu}
           onOpenChange={(open) => {
-            setMenuOpen(open);
+            setOpenViews((v) => ({ ...v, menu: open }));
           }}
         >
           <Trigger
@@ -256,10 +252,10 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
           <BaseMarkprompt.Root
             display={display}
-            open={isChatOpen}
+            open={openViews.chat}
             onOpenChange={(open) => {
               onDidRequestOpenChange?.(open);
-              setChatOpen(open);
+              setOpenViews((v) => ({ ...v, chat: open }));
             }}
             {...dialogProps}
           >
@@ -522,7 +518,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 layout={layout}
                 searchOptions={search}
                 linkAs={linkAs}
-                onDidSelectResult={() => emitter.emit('closeChat')}
+                onDidSelectResult={() => emitter.emit('close')}
                 onDidSelectAsk={(query?: string) => {
                   setActiveView('chat');
                   if (query) {

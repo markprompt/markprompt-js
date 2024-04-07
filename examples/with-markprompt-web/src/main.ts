@@ -99,6 +99,7 @@ if (el && el instanceof HTMLElement) {
               title: 'Get help',
               type: 'link',
               iconId: 'chat',
+              action: 'ticket',
             },
           ],
         },
