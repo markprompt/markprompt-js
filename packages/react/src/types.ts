@@ -19,7 +19,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'search' | 'create-ticket' | 'menu';
+export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -579,10 +579,10 @@ export interface MarkpromptOptions {
    **/
   children?: React.ReactNode;
   /**
-   * The way to display the content, either as a plain view or as a dialog.
+   * The way to display the chat/search content.
    * @default "dialog"
    **/
-  display?: 'plain' | 'dialog';
+  display?: 'plain' | 'dialog' | 'sheet';
   /**
    * Enable user interactions outside of the dialog while keeping it open.
    * @default false

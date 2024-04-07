@@ -74,7 +74,7 @@ function Trigger(props: TriggerProps): JSX.Element {
 
   return (
     <>
-      {!trigger?.customElement && !children && display === 'dialog' && (
+      {!trigger?.customElement && !children && display !== 'plain' && (
         <>
           {trigger?.floating !== false ? (
             <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
@@ -102,7 +102,7 @@ function Trigger(props: TriggerProps): JSX.Element {
         </>
       )}
 
-      {children && (display === 'dialog' || hasMenu) && <div>{children}</div>}
+      {children && (display !== 'plain' || hasMenu) && <div>{children}</div>}
     </>
   );
 }
@@ -259,7 +259,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             }}
             {...dialogProps}
           >
-            {display === 'dialog' && (
+            {display !== 'plain' && (
               <>
                 <BaseMarkprompt.Portal>
                   {!sticky && (
@@ -267,6 +267,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   )}
                   <BaseMarkprompt.Content
                     className="MarkpromptContentDialog"
+                    data-variant={display}
                     onPointerDownOutside={
                       sticky
                         ? (e) => {
@@ -370,7 +371,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   async function handleCreateTicket(): Promise<void> {
     if (!integrations?.createTicket?.enabled) return;
 
-    setActiveView('create-ticket');
+    setActiveView('ticket');
 
     if (conversationId && messages.length > 0) {
       startTransition(() => {
@@ -401,10 +402,13 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                   zIndex: 10,
                 }}
               >
-                <BaseMarkprompt.Close className="MarkpromptClose">
+                <BaseMarkprompt.Close
+                  className="MarkpromptClose"
+                  data-type={isTouchDevice || close.hasIcon ? 'icon' : 'kbd'}
+                >
                   <AccessibleIcon.Root label={close!.label!}>
                     {isTouchDevice || close.hasIcon ? (
-                      <CloseIcon width={20} height={20} />
+                      <CloseIcon strokeWidth={2} width={18} height={18} />
                     ) : (
                       <kbd>Esc</kbd>
                     )}
@@ -558,7 +562,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
 
         {integrations?.createTicket?.enabled && (
           <Tabs.Content
-            value="create-ticket"
+            value="ticket"
             style={{ position: 'absolute', inset: 0 }}
           >
             <CreateTicketView

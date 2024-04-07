@@ -53,8 +53,19 @@ function MenuEntry(
         href={props.href}
         target={props.target}
         onClick={() => {
-          if (props.action === 'chat') {
-            openMarkprompt('chat');
+          switch (props.action) {
+            case 'chat': {
+              openMarkprompt('chat');
+              break;
+            }
+            case 'ticket': {
+              openMarkprompt('ticket');
+              break;
+            }
+            case 'search': {
+              openMarkprompt('search');
+              break;
+            }
           }
         }}
       >

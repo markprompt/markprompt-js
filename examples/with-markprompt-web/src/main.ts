@@ -20,10 +20,13 @@ async function get_random_activity(args: string): Promise<string> {
 }
 
 if (el && el instanceof HTMLElement) {
-  markprompt(import.meta.env.VITE_PROJECT_KEY, el, {
-    search: { enabled: true },
+  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+    defaultView: 'chat',
+    display: 'sheet',
+    search: { enabled: false },
     chat: {
       enabled: true,
+      placeholder: 'Ask a question',
       model: 'gpt-4-1106-preview',
       apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
@@ -129,10 +132,11 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    defaultView: 'chat',
     // trigger: {
     //   buttonLabel: 'Ask AI',
     // },
-    close: {},
+    close: {
+      hasIcon: true,
+    },
   } satisfies MarkpromptOptions);
 }

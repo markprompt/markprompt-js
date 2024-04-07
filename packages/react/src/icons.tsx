@@ -71,7 +71,11 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     stroke="currentColor"
     {...props}
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18 18 6M6 6l12 12"
+    />
   </svg>
 );
 

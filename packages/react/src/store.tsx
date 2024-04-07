@@ -34,7 +34,7 @@ function getEnabledViews(options: MarkpromptOptions): View[] {
   }
 
   if (typeof options?.integrations?.createTicket === 'string') {
-    views.push('create-ticket');
+    views.push('ticket');
   }
 
   return views;
