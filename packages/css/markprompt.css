@@ -2314,6 +2314,7 @@
   transition-property: all;
   transition-duration: 150ms;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .MarkpromptDropdownMenuItem[data-type='link'] {

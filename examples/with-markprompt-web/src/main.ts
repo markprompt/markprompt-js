@@ -90,9 +90,10 @@ if (el && el instanceof HTMLElement) {
               iconId: 'book',
             },
             {
-              title: 'Ask question or search...',
+              title: 'Ask a question',
               type: 'link',
               iconId: 'magnifying-glass',
+              action: 'chat',
             },
             {
               title: 'Get help',
@@ -108,6 +109,8 @@ if (el && el instanceof HTMLElement) {
               title: 'Changelog',
               type: 'link',
               iconId: 'newspaper',
+              href: 'https://markprompt.com',
+              target: '_blank',
             },
           ],
         },
@@ -116,9 +119,10 @@ if (el && el instanceof HTMLElement) {
             {
               title: 'Join Discord',
               type: 'button',
-              href: 'https://discord.com',
               iconId: 'discord',
               theme: 'purple',
+              href: 'https://discord.com',
+              target: '_blank',
             },
           ],
         },

@@ -19,7 +19,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'search' | 'create-ticket';
+export type View = 'chat' | 'search' | 'create-ticket' | 'menu';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -184,9 +184,10 @@ export type ButtonTheme = 'purple';
 export type MenuIconId =
   | 'book'
   | 'chat'
+  | 'discord'
   | 'magnifying-glass'
   | 'newspaper'
-  | 'discord';
+  | 'sparkles';
 
 export interface MenuItemProps {
   /**
@@ -194,10 +195,22 @@ export interface MenuItemProps {
    **/
   title: string;
   /**
+   * Entry action
+   **/
+  action?: 'chat';
+  /**
    * Entry type
    * @default link
    **/
   type?: 'link' | 'button';
+  /**
+   * Entry href
+   **/
+  href?: string;
+  /**
+   * Entry link target
+   **/
+  target?: string;
   /**
    * Entry icon id
    **/

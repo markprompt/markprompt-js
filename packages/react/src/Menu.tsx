@@ -1,5 +1,10 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import type { ComponentPropsWithoutRef, JSXElementConstructor } from 'react';
+import {
+  type ComponentPropsWithoutRef,
+  type Dispatch,
+  type JSXElementConstructor,
+  type SetStateAction,
+} from 'react';
 
 import {
   BookIconOutline,
@@ -8,14 +13,10 @@ import {
   MenuIconOutline,
   NewspaperIconOutline,
   SearchIconOutline,
+  SparklesIconOutline,
 } from './icons.js';
-import { Trigger } from './Markprompt.js';
+import { openMarkprompt } from './Markprompt.js';
 import type { MarkpromptOptions, MenuIconId, MenuItemProps } from './types.js';
-
-type MarkpromptMenuProps = Pick<
-  MarkpromptOptions,
-  'display' | 'menu' | 'trigger' | 'children'
->;
 
 function getMenuIconById(
   iconId: MenuIconId | undefined,
@@ -31,43 +32,59 @@ function getMenuIconById(
       return SearchIconOutline;
     case 'newspaper':
       return NewspaperIconOutline;
+    case 'sparkles':
+      return SparklesIconOutline;
     default:
       return MenuIconOutline;
   }
 }
 
-function MenuEntry(props: MenuItemProps): JSX.Element {
+function MenuEntry(
+  props: MenuItemProps & { linkAs?: MarkpromptOptions['linkAs'] },
+): JSX.Element {
   const Icon = getMenuIconById(props.iconId);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Comp: any = props.href ? props.linkAs || 'a' : 'div';
   return (
-    <DropdownMenu.Item
-      className={`MarkpromptDropdownMenuItem ${props.type === 'button' ? 'MarkpromptHighlightButton' : ''}`}
-      data-type={props.type || 'link'}
-      data-id={props.id}
-      data-theme={props.theme}
-    >
-      {props.iconId && <Icon className="MarkpromptDropdownMenuIcon" />}
-      {props.title}
+    <DropdownMenu.Item asChild>
+      <Comp
+        className={`MarkpromptDropdownMenuItem ${props.type === 'button' ? 'MarkpromptHighlightButton' : ''}`}
+        data-type={props.type || 'link'}
+        data-id={props.id}
+        data-theme={props.theme}
+        href={props.href}
+        target={props.target}
+        onClick={() => {
+          if (props.action === 'chat') {
+            openMarkprompt('chat');
+          }
+        }}
+      >
+        {props.iconId && <Icon className="MarkpromptDropdownMenuIcon" />}
+        {props.title}
+      </Comp>
     </DropdownMenu.Item>
   );
 }
 
-function Menu(props: MarkpromptMenuProps): JSX.Element {
-  const { display, menu, trigger, children } = props;
+type MarkpromptMenuProps = Pick<
+  MarkpromptOptions,
+  'display' | 'menu' | 'trigger' | 'linkAs' | 'children'
+> & {
+  open?: boolean;
+  onOpenChange?: Dispatch<SetStateAction<boolean>>;
+};
 
-  if (!menu) {
+function Menu(props: MarkpromptMenuProps): JSX.Element {
+  const { menu: menuConfig, linkAs, open, onOpenChange, children } = props;
+
+  if (!menuConfig) {
     return <></>;
   }
 
   return (
-    <DropdownMenu.Root>
-      <Trigger
-        Component={DropdownMenu.Trigger}
-        display={display}
-        menu={menu}
-        trigger={trigger}
-      >
-        {children}
-      </Trigger>
+    <DropdownMenu.Root onOpenChange={onOpenChange} open={open}>
+      {children}
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className="MarkpromptDropdownMenuContent"
@@ -75,24 +92,24 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
           alignOffset={-4}
           align="end"
         >
-          {menu.title && (
+          {menuConfig.title && (
             <DropdownMenu.Label className="MarkpromptDropdownMenuTitle">
-              {menu.title}
+              {menuConfig.title}
             </DropdownMenu.Label>
           )}
-          {menu.subtitle && (
+          {menuConfig.subtitle && (
             <DropdownMenu.Label className="MarkpromptDropdownMenuSubtitle">
-              {menu.subtitle}
+              {menuConfig.subtitle}
             </DropdownMenu.Label>
           )}
 
-          {(menu.title || menu.subtitle) && (
+          {(menuConfig.title || menuConfig.subtitle) && (
             <DropdownMenu.Separator className="MarkpromptDropdownMenuSeparatorSpace" />
           )}
 
-          {menu.sections && menu.sections?.length > 0 && (
+          {menuConfig.sections && menuConfig.sections?.length > 0 && (
             <div className="MarkpromptDropdownMenuSections">
-              {menu.sections?.map((section, i) => {
+              {menuConfig.sections?.map((section, i) => {
                 return (
                   <div
                     key={`menu-section-${i}`}
@@ -108,6 +125,7 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
                         <MenuEntry
                           key={`menu-section-${i}-entry-${j}`}
                           {...entry}
+                          linkAs={linkAs}
                         />
                       );
                     })}
@@ -116,12 +134,16 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
               })}
             </div>
           )}
-          {menu.footer && (
+          {menuConfig.footer && (
             <>
               <DropdownMenu.Separator className="MarkpromptDropdownMenuSeparatorLine" />
-              {menu.footer?.map((entry, i) => {
+              {menuConfig.footer?.map((entry, i) => {
                 return (
-                  <MenuEntry key={`menu-footer-${i}`} {...entry}></MenuEntry>
+                  <MenuEntry
+                    key={`menu-footer-${i}`}
+                    {...entry}
+                    linkAs={linkAs}
+                  />
                 );
               })}
             </>

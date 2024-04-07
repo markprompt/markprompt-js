@@ -1,10 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import {
-  useEffect,
-  type Dispatch,
-  type ReactElement,
-  type SetStateAction,
-} from 'react';
+import { type Dispatch, type ReactElement, type SetStateAction } from 'react';
 
 import {
   ChevronUpIcon,
@@ -27,26 +22,26 @@ interface SearchBoxTriggerProps {
  * in the container where Markprompt is rendered.
  */
 export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
-  const { trigger, setOpen, open } = props;
+  const { trigger } = props;
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (open) return;
-      if (
-        (event.key === 'Enter' && event.ctrlKey) ||
-        (event.key === 'Enter' && event.metaKey)
-      ) {
-        event.preventDefault();
-        setOpen?.(true);
-      }
-    };
+  // useEffect(() => {
+  //   const handleKeyDown = (event: KeyboardEvent): void => {
+  //     if (open) return;
+  //     if (
+  //       (event.key === 'Enter' && event.ctrlKey) ||
+  //       (event.key === 'Enter' && event.metaKey)
+  //     ) {
+  //       event.preventDefault();
+  //       setOpen?.(true);
+  //     }
+  //   };
 
-    document.addEventListener('keydown', handleKeyDown);
+  //   document.addEventListener('keydown', handleKeyDown);
 
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [open, setOpen]);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, [open, setOpen]);
 
   return (
     <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
