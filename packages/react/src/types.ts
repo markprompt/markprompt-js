@@ -274,6 +274,11 @@ export interface ChatOptions {
    **/
   label?: string;
   /**
+   * Title for the standalone chat view
+   * @default "Help"
+   **/
+  title?: string;
+  /**
    * Label for the tab bar
    * @default "Ask AI"
    **/

@@ -26,13 +26,14 @@ if (el && el instanceof HTMLElement) {
     search: { enabled: false },
     chat: {
       enabled: true,
-      placeholder: 'Ask a question',
+      placeholder: 'Ask a question...',
+      title: 'Help',
       model: 'gpt-4-1106-preview',
       apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
-        promptsHeading: 'Popular questions',
+        // promptsHeading: 'Popular questions',
         prompts: [
           'What is Markprompt?',
           'How do I setup the React component?',
@@ -80,7 +81,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu: {
+    menu1: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

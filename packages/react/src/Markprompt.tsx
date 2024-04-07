@@ -298,6 +298,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                       layout={layout}
                       linkAs={linkAs}
                       branding={branding}
+                      display={display}
                       // showAlgolia={
                       //   search?.enabled && search.provider?.name === 'algolia'
                       // }
@@ -329,11 +330,44 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 }
 
+const Nav = ({
+  title,
+  close,
+  isTouchDevice,
+}: {
+  title?: string;
+  close: MarkpromptOptions['close'];
+  isTouchDevice?: boolean;
+}): ReactElement => {
+  return (
+    <div className="MarkpromptNav">
+      <div className="MarkpromptNavTitle" style={{ flexGrow: 1 }}>
+        {title}
+      </div>
+      <div style={{ flexGrow: 0, marginRight: -4 }}>
+        <BaseMarkprompt.Close
+          className="MarkpromptClose"
+          data-type={isTouchDevice || close?.hasIcon ? 'icon' : 'kbd'}
+        >
+          <AccessibleIcon.Root label={close!.label!}>
+            {isTouchDevice || close?.hasIcon ? (
+              <CloseIcon strokeWidth={2} width={18} height={18} />
+            ) : (
+              <kbd>Esc</kbd>
+            )}
+          </AccessibleIcon.Root>
+        </BaseMarkprompt.Close>
+      </div>
+    </div>
+  );
+};
+
 type MarkpromptContentProps = {
   projectKey: string;
   chat?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
   debug?: boolean;
+  display?: MarkpromptOptions['display'];
   layout?: MarkpromptOptions['layout'];
   feedback?: MarkpromptOptions['feedback'];
   references?: MarkpromptOptions['references'];
@@ -347,6 +381,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     chat,
     close,
     debug,
+    display,
     feedback,
     integrations,
     layout,
@@ -384,7 +419,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     return (
       <div className="MarkpromptTabsContainer">
         {/* We still include a div to preserve the grid-template-rows rules */}
-        <div></div>
+        <div>
+          {display !== 'plain' && (
+            <Nav
+              title={chat?.title}
+              close={close}
+              isTouchDevice={isTouchDevice}
+            />
+          )}
+        </div>
 
         <div className="MarkpromptViews">
           <div
@@ -393,29 +436,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               inset: 0,
             }}
           >
-            {close?.visible && (
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '0.5rem',
-                  top: '0.5rem',
-                  zIndex: 10,
-                }}
-              >
-                <BaseMarkprompt.Close
-                  className="MarkpromptClose"
-                  data-type={isTouchDevice || close.hasIcon ? 'icon' : 'kbd'}
-                >
-                  <AccessibleIcon.Root label={close!.label!}>
-                    {isTouchDevice || close.hasIcon ? (
-                      <CloseIcon strokeWidth={2} width={18} height={18} />
-                    ) : (
-                      <kbd>Esc</kbd>
-                    )}
-                  </AccessibleIcon.Root>
-                </BaseMarkprompt.Close>
-              </div>
-            )}
             {chat?.enabled && (
               <ChatView
                 activeView={activeView}
