@@ -34,6 +34,7 @@ export const Branding = (props: BrandingProps): ReactElement => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.25rem',
+            padding: '0.25rem 0.5rem',
             justifyContent: 'center',
             textDecoration: 'none',
             color: 'var(--markprompt-mutedForeground)',

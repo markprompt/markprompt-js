@@ -339,7 +339,7 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   }, [children, state]);
 
   return (
-    <pre {...rest} className={className}>
+    <pre style={{ overflow: 'auto' }} {...rest} className={className}>
       {children}
     </pre>
   );
@@ -379,7 +379,11 @@ function Answer(props: AnswerProps): ReactElement {
           const { children, className, ...rest } = props;
 
           return (
-            <div style={{ position: 'relative' }}>
+            <div
+              style={{
+                position: 'relative',
+              }}
+            >
               <div
                 style={{
                   position: 'absolute',

@@ -60,7 +60,14 @@ export function Messages(props: MessagesProps): ReactElement {
       >
         {branding.show && <Branding brandingType={branding.type} />}
         {messages.map((message, index) => {
-          const showReferences = index === messages.length - 1;
+          // Only show references for last message
+          const showReferences =
+            index === messages.length - 1 &&
+            (!referencesOptions?.display ||
+              referencesOptions?.display === 'end') &&
+            message.references &&
+            message.references?.length > 0 &&
+            message.state === 'done';
           return (
             <div key={message.id} className="MarkpromptMessage">
               {message.role === 'user' && (
@@ -83,23 +90,17 @@ export function Messages(props: MessagesProps): ReactElement {
                 />
               )}
 
-              {showReferences &&
-                (!referencesOptions?.display ||
-                  referencesOptions?.display === 'end') &&
-                message.references &&
-                message.references?.length > 0 &&
-                (message.state === 'streaming-answer' ||
-                  message.state === 'done') && (
-                  <References
-                    references={message.references}
-                    getHref={referencesOptions?.getHref}
-                    getLabel={referencesOptions?.getLabel}
-                    loadingText={referencesOptions?.loadingText}
-                    heading={referencesOptions?.heading}
-                    state={message.state}
-                    linkAs={linkAs}
-                  />
-                )}
+              {showReferences && (
+                <References
+                  references={message.references || []}
+                  getHref={referencesOptions?.getHref}
+                  getLabel={referencesOptions?.getLabel}
+                  loadingText={referencesOptions?.loadingText}
+                  heading={referencesOptions?.heading}
+                  state={message.state}
+                  linkAs={linkAs}
+                />
+              )}
 
               {integrations?.createTicket?.enabled &&
                 message.role === 'assistant' &&

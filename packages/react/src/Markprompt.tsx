@@ -78,9 +78,9 @@ function Trigger(props: TriggerProps): JSX.Element {
         <>
           {trigger?.floating !== false ? (
             <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
-              {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
-              <AccessibleIcon.Root label={trigger.label!}>
-                {trigger.iconSrc ? (
+              {trigger?.buttonLabel && <span>{trigger.buttonLabel}</span>}
+              <AccessibleIcon.Root label={trigger?.label || ''}>
+                {trigger?.iconSrc ? (
                   <img
                     className="MarkpromptChatIcon"
                     width="20"

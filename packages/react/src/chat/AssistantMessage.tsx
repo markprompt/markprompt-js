@@ -81,11 +81,10 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
         </div>
       )}
 
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', overflow: 'hidden' }}>
         <MessageAnswer state={message.state} linkAs={props.linkAs}>
           {message.content ?? ''}
         </MessageAnswer>
-
         {/*
         If this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
