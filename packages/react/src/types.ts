@@ -577,6 +577,8 @@ export interface IntegrationsOptions {
   createTicket?: CreateTicketIntegrationOptions;
 }
 
+export type MarkpromptDisplay = 'plain' | 'dialog' | 'sheet';
+
 export interface MarkpromptOptions {
   /**
    * Trigger component, such as a search button or a floating chat bubble.
@@ -587,7 +589,7 @@ export interface MarkpromptOptions {
    * The way to display the chat/search content.
    * @default "dialog"
    **/
-  display?: 'plain' | 'dialog' | 'sheet';
+  display?: MarkpromptDisplay;
   /**
    * Enable user interactions outside of the dialog while keeping it open.
    * @default false

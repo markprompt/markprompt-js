@@ -164,19 +164,27 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   useEffect(() => {
     const onOpen = ({ view }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
-      switch (view) {
-        case 'menu': {
-          setOpenViews((v) => ({ ...v, menu: true }));
-          return;
-        }
-        case 'chat': {
-          setOpenViews((v) => ({ ...v, chat: true }));
-          return;
-        }
+      if (view) {
+        setOpenViews((v) => {
+          const closed = Object.keys(v).reduce((acc, value) => {
+            return { ...acc, [value]: false };
+          }, {});
+          return { ...closed, [view]: true };
+        });
       }
-      if (display === 'dialog') {
-        // setOpenState({ open: true });
-      }
+      // switch (view) {
+      //   case 'menu': {
+      //     setOpenViews((v) => ({ ...v, menu: true }));
+      //     return;
+      //   }
+      //   case 'chat': {
+      //     setOpenViews((v) => ({ ...v, chat: true }));
+      //     return;
+      //   }
+      // }
+      // if (display === 'dialog') {
+      //   // setOpenState({ open: true });
+      // }
     };
 
     const onClose = (): void => {
@@ -250,6 +258,35 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         }}
       >
         <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
+          <BaseMarkprompt.Root
+            display="dialog"
+            open={openViews.ticket}
+            onOpenChange={(open) => {
+              onDidRequestOpenChange?.(open);
+              setOpenViews((v) => ({ ...v, ticket: open }));
+            }}
+            {...dialogProps}
+          >
+            <BaseMarkprompt.Portal>
+              {!sticky && (
+                <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+              )}
+              <BaseMarkprompt.Content
+                className="MarkpromptContentDialog"
+                data-variant="dialog"
+              >
+                <BaseMarkprompt.Title hide={title.hide}>
+                  {title.text}
+                </BaseMarkprompt.Title>
+                {description.text && (
+                  <BaseMarkprompt.Description hide={description.hide}>
+                    {description.text}
+                  </BaseMarkprompt.Description>
+                )}
+                Content
+              </BaseMarkprompt.Content>
+            </BaseMarkprompt.Portal>
+          </BaseMarkprompt.Root>
           <BaseMarkprompt.Root
             display={display}
             open={openViews.chat}
@@ -412,13 +449,15 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   async function handleCreateTicket(): Promise<void> {
     if (!integrations?.createTicket?.enabled) return;
 
-    setActiveView('ticket');
+    openMarkprompt('ticket');
+    // TODO
+    // setActiveView('ticket');
 
-    if (conversationId && messages.length > 0) {
-      startTransition(() => {
-        createTicketSummary?.(conversationId, messages);
-      });
-    }
+    // if (conversationId && messages.length > 0) {
+    //   startTransition(() => {
+    //     createTicketSummary?.(conversationId, messages);
+    //   });
+    // }
   }
 
   if (!search?.enabled) {

@@ -34,7 +34,8 @@ if (el && el instanceof HTMLElement) {
     },
     chat: {
       disclaimerView: {
-        message: 'Hello',
+        message:
+          'Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test',
       },
       enabled: true,
       placeholder: 'Ask a question...',

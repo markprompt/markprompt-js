@@ -288,9 +288,9 @@
 .MarkpromptContentDialog[data-variant="sheet"] {
   z-index: 100;
   position: fixed;
-  top: 1rem;
-  bottom: 1rem;
-  right: 1rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  right: 0.5rem;
   width: 100%;
   max-width: 480px;
   animation-name: markprompt-show-sheet;
@@ -898,23 +898,34 @@
 }
 
 .MarkpromptDisclaimerView {
+  width: 100%;
+  height: 100%;
+  z-index: 50;
   flex: 1 1 auto;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
   scrollbar-width: none;
   overflow: hidden auto;
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .MarkpromptDisclaimerViewMessage {
   padding: 1rem;
   font-size: var(--markprompt-text-size);
-  background-color: var(--markprompt-muted);
   border-radius: var(--markprompt-radius);
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   gap: 1rem;
+  text-align: center;
+}
+
+.MarkpromptDisclaimerViewMessage > span {
+  text-align: center;
+  text-wrap: balance;
 }
 
 .MarkpromptAnswerContainer {
@@ -1395,7 +1406,7 @@
 }
 
 .MarkpromptPromptFeedback[data-variant='icons'] {
-  margin-top: -1rem;
+  margin-top: -0.5rem;
 }
 
 .MarkpromptPromptFeedback[data-variant='text'] h3 {
@@ -2034,6 +2045,10 @@
   font-size: var(--markprompt-text-size);
   padding: 1rem;
   margin: 0.5rem 0 0;
+  animation-fill-mode: both;
+  animation-name: markprompt-slide-down-subtle;
+  animation-duration: 500ms;
+  transition-timing-function: ease-in;
 }
 
 .MarkpromptDefaultViewMessagePromptsContainer {
@@ -2041,7 +2056,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  gap: 0.25rem;
+  gap: 0.5rem;
   padding: 1rem;
   flex-grow: 1;
   width: 100%;
@@ -2068,7 +2083,18 @@
   transition-duration: 200ms;
   white-space: nowrap;
   cursor: pointer;
+  opacity: 0;
+  --base-delay: 0.05s;
+  animation-delay: calc(var(--base-delay) * (var(--index) - 1));
+  animation-fill-mode: both;
+  animation-name: markprompt-slide-up-subtle;
+  animation-duration: 500ms;
+  transition-timing-function: ease-in;
 }
+
+.MarkpromptDefaultViewMessagePromptsContainer > :nth-child(1) { --index: 1; }
+.MarkpromptDefaultViewMessagePromptsContainer > :nth-child(2) { --index: 2; }
+.MarkpromptDefaultViewMessagePromptsContainer > :nth-child(3) { --index: 3; }
 
 .MarkpromptDefaultViewMessagePromptsContainer a:hover {
   opacity: 0.8;
@@ -2524,6 +2550,28 @@
   }
 
   to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes markprompt-slide-up-subtle {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes markprompt-slide-down-subtle {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }

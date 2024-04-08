@@ -24,13 +24,14 @@ import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { CheckIcon, ClipboardIcon } from '../icons.js';
 import type { ChatLoadingState } from '../index.js';
 import type {
+  MarkpromptDisplay,
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
 
-type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
+type RootProps = Dialog.DialogProps & { display?: MarkpromptDisplay };
 
 /**
  * The Markprompt context provider and dialog root.
