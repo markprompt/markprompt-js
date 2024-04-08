@@ -10,7 +10,7 @@
   --markprompt-input: #fff;
   --markprompt-primary: #7c3aed;
   --markprompt-primaryForeground: #fff;
-  --markprompt-primaryMuted: #8285f4;
+  --markprompt-primaryMuted: #8b5cf6;
   --markprompt-secondary: #fafafa;
   --markprompt-secondaryForeground: #171717;
   --markprompt-primaryHighlight: #ec4899;
@@ -25,6 +25,7 @@
   --markprompt-text-size-code: 88%;
   --markprompt-button-icon-size: 1rem;
   --markprompt-icon-stroke-width: 2px;
+  --markprompt-navbar-height: 52px;;
   --markprompt-input-focus-shadow-width: 3px;
   --markprompt-shadow: 0 1px 2px 0 #0000000d;
   --markprompt-ring-shadow: 0 0 #0000;
@@ -47,7 +48,7 @@
     --markprompt-input: #fff;
     --markprompt-primary: #6d28d9;
     --markprompt-primaryForeground: #fff;
-    --markprompt-primaryMuted: #8285f4;
+    --markprompt-primaryMuted: #7c3aed;
     --markprompt-secondary: #0e0e0e;
     --markprompt-secondaryForeground: #fff;
     --markprompt-primaryHighlight: #ec4899;
@@ -413,12 +414,14 @@
 }
 
 .MarkpromptChatViewNavigation {
+  height: var(--markprompt-navbar-height);
   padding: 0.75rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   border-bottom: 1px solid var(--markprompt-border);
   box-shadow: 0 7px 10px -1px rgb(0 0 0 / 3%);
+  background-color: var(--markprompt-background-accent);
 }
 
 .MarkpromptChatViewChat {
@@ -548,6 +551,7 @@
 }
 
 .MarkpromptNav {
+  height: var(--markprompt-navbar-height);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -607,9 +611,11 @@
 }
 
 .MarkpromptSearchView .MarkpromptPromptWrapper {
+  height: var(--markprompt-navbar-height);;
   border-bottom: 1px solid var(--markprompt-border);
   box-shadow: 0 7px 10px -1px rgb(0 0 0 / 3%);
   padding: 2px 0.5rem 1px 0.875rem;
+  background-color: var(--markprompt-background-accent);
 }
 
 .MarkpromptChatView .MarkpromptPromptWrapper:focus-within {

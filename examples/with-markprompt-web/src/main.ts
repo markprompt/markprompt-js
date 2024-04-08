@@ -23,7 +23,9 @@ if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
     display: 'sheet',
-    search: { enabled: false },
+    search: {
+      enabled: false,
+    },
     chat: {
       enabled: true,
       placeholder: 'Ask a question...',
