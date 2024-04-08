@@ -34,12 +34,12 @@ main {
   min-height: 100dvh;
 }
 
-.message {
+#message {
   display: grid;
   place-items: center;
 }
 
-.message p {
+#message p {
   border: 1px solid #ddd;
   background-color: #eee;
   padding: 0.25rem 0.75rem;

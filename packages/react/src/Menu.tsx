@@ -69,7 +69,7 @@ function MenuEntry(
           }
         }}
       >
-        {props.iconId && <Icon className="MarkpromptDropdownMenuIcon" />}
+        {props.iconId && <Icon className="MarkpromptMenuIcon" />}
         {props.title}
       </Comp>
     </DropdownMenu.Item>

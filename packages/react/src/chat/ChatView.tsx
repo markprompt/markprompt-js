@@ -120,6 +120,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
   const didAcceptDisclaimer = useChatStore(
     (state) => state.didAcceptDisclaimer,
   );
+
   const setDidAcceptDisclaimer = useChatStore(
     (state) => state.setDidAcceptDisclaimer,
   );

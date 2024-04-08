@@ -255,7 +255,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
       apiUrl: 'https://api.markprompt.com/create-ticket',
       prompt:
         'I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets.',
-      messageText: 'Bot not being helpful?',
+      messageText: 'Is the AI not helpful?',
       messageButton: {
         text: 'Create a support ticket',
         hasIcon: true,
@@ -263,10 +263,10 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
       },
       view: {
         title: 'Create a case',
-        nameLabel: 'Your Name',
-        namePlaceholder: 'Markprompt AI',
+        nameLabel: 'Your name',
+        namePlaceholder: '',
         emailLabel: 'Email',
-        emailPlaceholder: 'bot@markprompt.com',
+        emailPlaceholder: '',
         summaryLabel: 'How can we help?',
         summaryPlaceholder: 'Please describe your issue',
         summaryLoading: 'Generating summary…',

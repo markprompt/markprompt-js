@@ -6,7 +6,7 @@ import { DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
-import { MessageCircleQuestionIcon } from '../icons.js';
+import { ChatIconOutline } from '../icons.js';
 import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
@@ -111,7 +111,7 @@ export function Messages(props: MessagesProps): ReactElement {
                       {integrations.createTicket.messageText}
                     </p>
                     <button
-                      className="MarkpromptMessageCreateTicketButton"
+                      className="MarkpromptButton"
                       onClick={handleCreateTicket}
                       aria-label={
                         integrations.createTicket.messageButton?.hasText
@@ -119,18 +119,15 @@ export function Messages(props: MessagesProps): ReactElement {
                           : integrations.createTicket.messageButton?.text
                       }
                     >
-                      <div>
-                        <MessageCircleQuestionIcon
-                          width={20}
-                          height={20}
-                          aria-hidden={true}
-                        />
-                        {integrations.createTicket.messageButton?.hasText && (
-                          <span>
-                            {integrations.createTicket.messageButton?.text}
-                          </span>
-                        )}
-                      </div>
+                      <ChatIconOutline
+                        className="MarkpromptMenuIcon"
+                        aria-hidden={true}
+                      />
+                      {integrations.createTicket.messageButton?.hasText && (
+                        <span>
+                          {integrations.createTicket.messageButton?.text}
+                        </span>
+                      )}
                     </button>
                   </div>
                 )}

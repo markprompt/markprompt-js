@@ -491,7 +491,6 @@ export interface CreateTicketIntegrationViewOptions {
   nameLabel: string;
   /**
    * Placeholder for the name input
-   * @default "Markprompt AI"
    */
   namePlaceholder: string;
   /**
@@ -501,7 +500,6 @@ export interface CreateTicketIntegrationViewOptions {
   emailLabel: string;
   /**
    * Placeholder for the email input
-   * @default "bot@markprompt.com"
    * */
   emailPlaceholder: string;
   /**

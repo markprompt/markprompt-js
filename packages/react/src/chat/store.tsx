@@ -324,9 +324,7 @@ export const createChatStore = ({
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
-          didAcceptDisclaimerByProjectKey: {
-            [projectKey]: false,
-          },
+          didAcceptDisclaimerByProjectKey: {},
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -661,8 +659,7 @@ export const createChatStore = ({
               if (!state.projectKey) {
                 return;
               }
-              state.didAcceptDisclaimerByProjectKey[state.projectKey] ??=
-                accept;
+              state.didAcceptDisclaimerByProjectKey[state.projectKey] = accept;
               state.didAcceptDisclaimer = accept;
             });
           },
@@ -719,13 +716,15 @@ export const createChatStore = ({
             },
           ),
           // only store conversationsByProjectKey in local storage
-          partialize: (state) => ({
-            conversationIdsByProjectKey: state.conversationIdsByProjectKey,
-            messagesByConversationId: state.messagesByConversationId,
-            toolCallsByToolCallId: state.toolCallsByToolCallId,
-            didAcceptDisclaimerByProjectKey:
-              state.didAcceptDisclaimerByProjectKey,
-          }),
+          partialize: (state) => {
+            return {
+              conversationIdsByProjectKey: state.conversationIdsByProjectKey,
+              messagesByConversationId: state.messagesByConversationId,
+              toolCallsByToolCallId: state.toolCallsByToolCallId,
+              didAcceptDisclaimerByProjectKey:
+                state.didAcceptDisclaimerByProjectKey,
+            };
+          },
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;

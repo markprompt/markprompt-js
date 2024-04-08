@@ -24,9 +24,18 @@ if (el && el instanceof HTMLElement) {
     defaultView: 'chat',
     display: 'sheet',
     search: {
-      enabled: false,
+      enabled: true,
+    },
+    integrations: {
+      createTicket: {
+        enabled: true,
+        provider: 'zendesk',
+      },
     },
     chat: {
+      disclaimerView: {
+        message: 'Hello',
+      },
       enabled: true,
       placeholder: 'Ask a question...',
       title: 'Help',
@@ -87,7 +96,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu1: {
+    menu: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [
