@@ -574,11 +574,13 @@ const References = function References<
     <RootComponent ref={ref}>
       {references.map((reference, index) => {
         return (
-          <ReferenceComponent
-            key={`${reference.file.path}-${index}`}
-            reference={reference}
-            index={index}
-          />
+          <>
+            <ReferenceComponent
+              key={`${reference.file.path}-${index}`}
+              reference={reference}
+              index={index}
+            />
+          </>
         );
       })}
     </RootComponent>
