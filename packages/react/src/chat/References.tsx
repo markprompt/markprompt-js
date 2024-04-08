@@ -104,7 +104,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
         {...props}
       />
     ),
-    [transformReferenceId, getHref, getLabel],
+    [getHref, getLabel, transformReferenceId, linkAs],
   );
 
   let adjustedState: ChatLoadingState = state;

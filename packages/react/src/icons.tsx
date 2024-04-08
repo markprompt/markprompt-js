@@ -368,8 +368,11 @@ const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M5 12h14" />
-    <path d="M12 5v14" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 4.5v15m7.5-7.5h-15"
+    />
   </svg>
 );
 

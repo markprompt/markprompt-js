@@ -665,7 +665,7 @@
 
 .MarkpromptMessagePrompt {
   padding-inline: 1.5rem;
-  padding-block: 1rem;
+  padding-block: 0.5rem;
   /* background-color: var(--markprompt-muted); */
   /* border-bottom: 1px solid var(--markprompt-border); */
   position: relative;
@@ -689,6 +689,7 @@
   color: var(--markprompt-foreground);
   font-weight: 400;
   flex: grow;
+  margin-top: 2px;
 }
 
 .MarkpromptMessageAvatarContainer {
@@ -703,19 +704,7 @@
   align-items: center;
 }
 
-.MarkpromptMessageAvatarContainer[data-role='assistant'] {
-  border: 1px solid transparent;
-  background-color: var(--markprompt-primary);
-  color: var(--markprompt-primaryForeground);
-}
-
-.MarkpromptMessageAvatarContainer[data-role='assistant']
-  .MarkpromptMessageAvatar[data-type='icon'] {
-  opacity: 0.8;
-}
-
 .MarkpromptMessageAvatar {
-  /* color: var(--markprompt-mutedForeground); */
   width: 16px;
   height: 16px;
   flex: none;
@@ -724,6 +713,8 @@
 
 .MarkpromptMessageAvatarImage {
   border-radius: 9999px;
+  width: 24px;
+  height: 24px;
 }
 
 .MarkpromptPrimaryIcon {
@@ -904,15 +895,15 @@
   flex: 1 1 auto;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   overflow: hidden auto;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
-.MarkpromptAutoScroller::-webkit-scrollbar {
+/* .MarkpromptAutoScroller::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .MarkpromptAnswer {
   color: var(--markprompt-foreground);
@@ -1345,6 +1336,19 @@
   display: inline-block;
 }
 
+.MarkpromptPromptFeedback {
+  transition-timing-function: cubic-bezier(.4,.36,0,1);
+  transition-property: all;
+  transition-duration: 300ms;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.MarkpromptMessage:hover .MarkpromptPromptFeedback {
+  opacity: 1;
+  transform: translateY(10px);
+}
+
 .MarkpromptPromptFeedback[data-variant='text'] {
   margin: 0 2rem 1rem;
   padding: 0.75rem 0;
@@ -1352,7 +1356,7 @@
 }
 
 .MarkpromptPromptFeedback[data-variant='icons'] {
-  margin-top: -0.25rem;
+  margin-top: -1rem;
 }
 
 .MarkpromptPromptFeedback[data-variant='text'] h3 {
@@ -1506,6 +1510,7 @@
   color: var(--markprompt-mutedForeground);
   overflow: hidden;
   flex: 0 0 auto;
+  margin-top: -24px;
   transition-property: opacity, transform;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);

@@ -21,8 +21,7 @@ export const Branding = (props: BrandingProps): ReactElement => {
           justifyContent: 'center',
           margin: 0,
           paddingInline: '0.75rem',
-          paddingBlock:
-            '0.5rem calc(0.5rem - var(--markprompt-prompt-focus-shadow-width, 3px))',
+          paddingBlock: '1rem',
           color: 'var(--markprompt-mutedForeground)',
           fontSize: '0.75rem',
           fontWeight: 400,

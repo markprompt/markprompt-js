@@ -40,6 +40,10 @@ if (el && el instanceof HTMLElement) {
           'Do you have a REST API?',
         ],
       },
+      avatars: {
+        user: '/avatars/user.png',
+        assistant: '/avatars/logo.png',
+      },
       tool_choice: 'auto',
       tools: [
         {
@@ -136,8 +140,5 @@ if (el && el instanceof HTMLElement) {
     // trigger: {
     //   buttonLabel: 'Ask AI',
     // },
-    close: {
-      hasIcon: true,
-    },
   } satisfies MarkpromptOptions);
 }

@@ -59,79 +59,83 @@ export function Messages(props: MessagesProps): ReactElement {
         discreteScrollTrigger={messages.length}
       >
         {branding.show && <Branding brandingType={branding.type} />}
-        {messages.map((message, index) => (
-          <div key={message.id} className="MarkpromptMessage">
-            {message.role === 'user' && (
-              <MessagePrompt
-                state={message.state}
-                chatOptions={chatOptions}
-                referencesOptions={referencesOptions}
-              >
-                {message.content ?? ''}
-              </MessagePrompt>
-            )}
-
-            {message.role === 'assistant' && (
-              <AssistantMessage
-                message={message}
-                projectKey={projectKey}
-                feedbackOptions={feedbackOptions}
-                chatOptions={chatOptions}
-                linkAs={linkAs}
-              />
-            )}
-
-            {(!referencesOptions?.display ||
-              referencesOptions?.display === 'end') &&
-              message.references &&
-              message.references?.length > 0 &&
-              (message.state === 'streaming-answer' ||
-                message.state === 'done') && (
-                <References
-                  references={message.references}
-                  getHref={referencesOptions?.getHref}
-                  getLabel={referencesOptions?.getLabel}
-                  loadingText={referencesOptions?.loadingText}
-                  heading={referencesOptions?.heading}
+        {messages.map((message, index) => {
+          const showReferences = index === messages.length - 1;
+          return (
+            <div key={message.id} className="MarkpromptMessage">
+              {message.role === 'user' && (
+                <MessagePrompt
                   state={message.state}
+                  chatOptions={chatOptions}
+                  referencesOptions={referencesOptions}
+                >
+                  {message.content ?? ''}
+                </MessagePrompt>
+              )}
+
+              {message.role === 'assistant' && (
+                <AssistantMessage
+                  message={message}
+                  projectKey={projectKey}
+                  feedbackOptions={feedbackOptions}
+                  chatOptions={chatOptions}
                   linkAs={linkAs}
                 />
               )}
 
-            {integrations?.createTicket?.enabled &&
-              message.role === 'assistant' &&
-              message.state === 'done' &&
-              index === lastAssistantMessageIndex && (
-                <div className="MarkpromptMessageCreateTicket">
-                  <p className="MarkpromptMessageCreateTicketDefaultText">
-                    {integrations.createTicket.messageText}
-                  </p>
-                  <button
-                    className="MarkpromptMessageCreateTicketButton"
-                    onClick={handleCreateTicket}
-                    aria-label={
-                      integrations.createTicket.messageButton?.hasText
-                        ? undefined
-                        : integrations.createTicket.messageButton?.text
-                    }
-                  >
-                    <div>
-                      <MessageCircleQuestionIcon
-                        width={20}
-                        height={20}
-                        aria-hidden={true}
-                      />
-                      {integrations.createTicket.messageButton?.hasText && (
-                        <span>
-                          {integrations.createTicket.messageButton?.text}
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                </div>
-              )}
-          </div>
-        ))}
+              {showReferences &&
+                (!referencesOptions?.display ||
+                  referencesOptions?.display === 'end') &&
+                message.references &&
+                message.references?.length > 0 &&
+                (message.state === 'streaming-answer' ||
+                  message.state === 'done') && (
+                  <References
+                    references={message.references}
+                    getHref={referencesOptions?.getHref}
+                    getLabel={referencesOptions?.getLabel}
+                    loadingText={referencesOptions?.loadingText}
+                    heading={referencesOptions?.heading}
+                    state={message.state}
+                    linkAs={linkAs}
+                  />
+                )}
+
+              {integrations?.createTicket?.enabled &&
+                message.role === 'assistant' &&
+                message.state === 'done' &&
+                index === lastAssistantMessageIndex && (
+                  <div className="MarkpromptMessageCreateTicket">
+                    <p className="MarkpromptMessageCreateTicketDefaultText">
+                      {integrations.createTicket.messageText}
+                    </p>
+                    <button
+                      className="MarkpromptMessageCreateTicketButton"
+                      onClick={handleCreateTicket}
+                      aria-label={
+                        integrations.createTicket.messageButton?.hasText
+                          ? undefined
+                          : integrations.createTicket.messageButton?.text
+                      }
+                    >
+                      <div>
+                        <MessageCircleQuestionIcon
+                          width={20}
+                          height={20}
+                          aria-hidden={true}
+                        />
+                        {integrations.createTicket.messageButton?.hasText && (
+                          <span>
+                            {integrations.createTicket.messageButton?.text}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                )}
+            </div>
+          );
+        })}
       </BaseMarkprompt.AutoScroller>
     </div>
   );

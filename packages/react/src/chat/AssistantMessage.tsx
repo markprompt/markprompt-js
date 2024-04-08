@@ -71,7 +71,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           ) : typeof chatOptions.avatars?.assistant === 'string' ? (
             <img
               src={chatOptions.avatars.assistant}
-              className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+              className="MarkpromptMessageAvatarImage"
             />
           ) : (
             <div className="MarkpromptMessageAvatar">

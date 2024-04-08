@@ -121,7 +121,9 @@ export interface CloseOptions {
    **/
   visible?: boolean;
   /**
-   * Show an × icon in the close button instead of the keyboard shortcut ('Esc')
+   * Show an × icon in the close button instead of the keyboard
+   * shortcut ('Esc').
+   * @default true
    */
   hasIcon?: boolean;
 }
