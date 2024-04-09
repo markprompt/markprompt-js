@@ -16,10 +16,12 @@ export interface AssistantMessageProps {
   message: ChatViewMessage;
   projectKey: string;
   linkAs?: string | ComponentType<any>;
+  messageOnly?: boolean;
 }
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
-  const { feedbackOptions, message, projectKey, chatOptions } = props;
+  const { feedbackOptions, message, projectKey, chatOptions, messageOnly } =
+    props;
 
   const toolCalls = useMemo(
     () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
@@ -60,7 +62,10 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   }
 
   return (
-    <div className="MarkpromptMessageAnswerContainer">
+    <div
+      className="MarkpromptMessageAnswerContainer"
+      data-compact={messageOnly}
+    >
       {chatOptions?.avatars?.visible && (
         <div className="MarkpromptMessageAvatarContainer" data-role="assistant">
           {!chatOptions.avatars?.assistant ? (
@@ -98,7 +103,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             confirmToolCalls={confirmToolCalls}
           />
         )}
-        {(chatOptions.showCopy || feedbackOptions?.enabled) &&
+        {!messageOnly &&
+          (chatOptions.showCopy || feedbackOptions?.enabled) &&
           message.state === 'done' && (
             <Feedback
               message={message.content ?? ''}

@@ -49,7 +49,7 @@ if (el && el instanceof HTMLElement) {
       apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
-          "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
+          "Hello, I'm an AI assistant from Acme. If we find something we can't solve, I'll help create a support case for you.",
         // promptsHeading: 'Popular questions',
         prompts: [
           'What is Markprompt?',

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ComponentType, type ReactElement } from 'react';
+import { useMemo, type ComponentType, type ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
-import { DefaultView } from './DefaultView.js';
+import { DefaultMessage, DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
@@ -11,7 +11,7 @@ import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
-type MessagesProps = {
+export type MessagesProps = {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   integrations: MarkpromptOptions['integrations'];
@@ -36,15 +36,29 @@ export function Messages(props: MessagesProps): ReactElement {
   const messages = useChatStore((state) => state.messages);
   const submitChat = useChatStore((state) => state.submitChat);
 
+  const welcomeMessage = useMemo(() => {
+    const message = chatOptions.defaultView?.message;
+    if (typeof message === 'string') {
+      return message;
+    }
+    return undefined;
+  }, [chatOptions.defaultView?.message]);
+
   if (!messages || messages.length === 0) {
     return (
-      <DefaultView
-        chatOptions={chatOptions}
-        // {...chatOptions.defaultView}
-        onDidSelectPrompt={(prompt) =>
-          submitChat([{ role: 'user', content: prompt }])
-        }
-      />
+      <div className="MarkpromptMessages">
+        <div className="MarkpromptDefaultViewContainer">
+          <div className="MarkpromptDefaultViewBranding">
+            {branding.show && <Branding brandingType={branding.type} />}
+          </div>
+          <DefaultView
+            {...props}
+            onDidSelectPrompt={(prompt) =>
+              submitChat([{ role: 'user', content: prompt }])
+            }
+          />
+        </div>
+      </div>
     );
   }
 
@@ -60,6 +74,7 @@ export function Messages(props: MessagesProps): ReactElement {
         discreteScrollTrigger={messages.length}
       >
         {branding.show && <Branding brandingType={branding.type} />}
+        {welcomeMessage && <DefaultMessage {...props} />}
         {messages.map((message, index) => {
           // Only show references for last message
           const showReferences =
