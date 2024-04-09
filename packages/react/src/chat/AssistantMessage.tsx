@@ -10,7 +10,7 @@ import { useFeedback } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 
-interface AssistantMessageProps {
+export interface AssistantMessageProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;

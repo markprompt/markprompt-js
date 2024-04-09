@@ -222,6 +222,15 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
       visible: true,
     },
   },
+  ticketForm: {
+    enabled: false,
+    title: 'Help',
+    placeholder: 'I am having trouble with…',
+    assistantMessages: [
+      "Hello, I'm an AI assistant. If we find something we can't solve, I'll create a support case for you.",
+      'What is the problem?',
+    ],
+  },
   references: {
     loadingText: 'Fetching context…',
     heading: 'Sources',

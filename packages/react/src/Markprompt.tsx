@@ -127,6 +127,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     feedback,
     menu,
     chat,
+    ticketForm,
     references,
     search,
     trigger,
@@ -147,6 +148,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       feedback: props.feedback,
       menu: props.menu,
       chat: props.chat,
+      ticketForm: props.ticketForm,
       references: props.references,
       search: props.search,
       trigger: props.trigger,
@@ -266,8 +268,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 data-variant="dialog"
                 data-size="adaptive"
               >
-                sdf
-                <TicketDeflectionForm />
+                <TicketDeflectionForm ticketForm={ticketForm} />
               </BaseMarkprompt.Content>
             </BaseMarkprompt.Portal>
           </BaseMarkprompt.Root>
@@ -412,11 +413,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         {/* We still include a div to preserve the grid-template-rows rules */}
         <div>
           {display !== 'plain' && (
-            <NavigationMenu
-              title={chat?.title}
-              close={close}
-              isTouchDevice={isTouchDevice}
-            />
+            <NavigationMenu title={chat?.title} close={close} />
           )}
         </div>
 

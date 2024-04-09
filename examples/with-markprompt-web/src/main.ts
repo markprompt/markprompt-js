@@ -32,16 +32,15 @@ if (el && el instanceof HTMLElement) {
         provider: 'zendesk',
       },
     },
-    ticket: {
+    ticketForm: {
       enabled: true,
       title: 'Get help',
-      description: 'What is the issue?',
       placeholder: 'I am having trouble with...',
     },
     chat: {
       disclaimerView: {
         message:
-          'Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test. Hello this is a test',
+          'I am an AI assistant. Consider checking for important information.',
       },
       enabled: true,
       placeholder: 'Ask a question...',
@@ -103,7 +102,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu1: {
+    menu: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

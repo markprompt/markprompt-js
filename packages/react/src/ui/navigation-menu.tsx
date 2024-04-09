@@ -5,23 +5,30 @@ import { cn } from './utils.js';
 import { CloseIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
+import { useMediaQuery } from '../useMediaQuery.js';
 
 interface NavigationMenuProps {
   className?: string;
   title?: string;
+  subtitle?: string;
   close: MarkpromptOptions['close'];
-  isTouchDevice?: boolean;
 }
 
 const NavigationMenu = ({
   className,
   title,
+  subtitle,
   close,
-  isTouchDevice,
 }: NavigationMenuProps): JSX.Element => {
+  const isTouchDevice = useMediaQuery('(pointer: coarse)');
   return (
     <div className={cn('MarkpromptNavigationMenu', className)}>
-      <div className="MarkpromptNavigationMenuTitle">{title}</div>
+      <div className="MarkpromptNavigationMenuTitleContainer">
+        <div className="MarkpromptNavigationMenuTitle">{title}</div>
+        {subtitle && (
+          <div className="MarkpromptNavigationMenuSubtitle">{subtitle}</div>
+        )}
+      </div>
       {close?.visible && (
         <div style={{ flexGrow: 0, marginRight: -4 }}>
           <BaseMarkprompt.Close

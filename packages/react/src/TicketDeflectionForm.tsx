@@ -1,25 +1,21 @@
-import { NavigationMenu } from '@radix-ui/react-navigation-menu';
-
 import type { MarkpromptOptions } from './types.js';
+import { NavigationMenu } from './ui/navigation-menu.js';
 
-type TicketDeflectionFormProps = Pick<
-  MarkpromptOptions,
-  'display' | 'menu' | 'trigger' | 'linkAs' | 'children'
-> & {
+type TicketDeflectionFormProps = Pick<MarkpromptOptions, 'ticketForm'> & {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
 function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
-  // const { menu: menuConfig, linkAs, open, onOpenChange, children } = props;
+  const { ticketForm } = props;
 
   return (
     <div className="MarkpromptTicketDeflectionForm">
-      {/* <NavigationMenu
-        title={chat?.title}
-        close={close}
-        isTouchDevice={isTouchDevice}
-      /> */}
+      <NavigationMenu
+        title={ticketForm?.title}
+        subtitle={ticketForm?.subtitle}
+        close={{ visible: true, hasIcon: true }}
+      />
     </div>
   );
 }

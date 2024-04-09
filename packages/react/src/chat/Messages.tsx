@@ -39,7 +39,8 @@ export function Messages(props: MessagesProps): ReactElement {
   if (!messages || messages.length === 0) {
     return (
       <DefaultView
-        {...chatOptions.defaultView}
+        chatOptions={chatOptions}
+        // {...chatOptions.defaultView}
         onDidSelectPrompt={(prompt) =>
           submitChat([{ role: 'user', content: prompt }])
         }

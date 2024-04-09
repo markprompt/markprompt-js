@@ -1,12 +1,23 @@
 import { type ComponentType, type ReactElement } from 'react';
 
-import type { DefaultViewProps } from '../types.js';
+import { AssistantMessage } from './AssistantMessage.js';
+import type { DefaultViewProps, MarkpromptOptions } from '../types.js';
 
 export function DefaultMessage(props: {
-  message: string | ComponentType;
+  // message: string | ComponentType;
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
 }): ReactElement {
   if (typeof props.message === 'string') {
-    return <p className="MarkpromptDefaultViewMessage">{props.message}</p>;
+    // return <p className="MarkpromptDefaultViewMessage">{props.message}</p>;
+    return (
+      <AssistantMessage
+        message={{ id: 'a-a-a-a-a', state: 'done', content: props.message }}
+        projectKey={'asd'}
+        chatOptions={{}}
+        feedbackOptions={{}}
+        linkAs={undefined}
+      />
+    );
   } else {
     const Message = props.message;
     return <Message />;
@@ -14,9 +25,9 @@ export function DefaultMessage(props: {
 }
 
 export function DefaultPrompts(props: {
-  promptsHeading?: string;
-  prompts: string[];
-  onDidSelectPrompt: (prompt: string) => void;
+  // promptsHeading?: string;
+  // prompts: string[];
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
 }): ReactElement {
   if (props.prompts.length === 0) {
     return <></>;
@@ -41,15 +52,17 @@ export function DefaultPrompts(props: {
 }
 
 export function DefaultView(
-  props: DefaultViewProps & { onDidSelectPrompt: (prompt: string) => void },
+  props: NonNullable<MarkpromptOptions['chat']> & {
+    onDidSelectPrompt: (prompt: string) => void;
+  },
 ): ReactElement {
-  if (!props.message && !props.prompts) {
+  if (!props.defaultView?.message && !props.defaultView?.prompts) {
     return <div />;
   }
 
   return (
     <div className="MarkpromptDefaultView">
-      {props.message && <DefaultMessage message={props.message} />}
+      {props.defaultView?.message && <DefaultMessage chatOptions={props} />}
       {props.prompts && (
         <DefaultPrompts
           prompts={props.prompts}

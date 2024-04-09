@@ -339,8 +339,12 @@ export interface TicketFormOptions {
    **/
   title?: string;
   /**
+   * Subtitle for the view
+   **/
+  subtitle?: string;
+  /**
    * Placeholder for the chat input
-   * @default "Ask AI…"
+   * @default "I am having trouble with…"
    **/
   placeholder?: string;
   /**
@@ -351,6 +355,11 @@ export interface TicketFormOptions {
    * Disclaimer view
    */
   disclaimerView?: DisclaimerViewProps;
+  /**
+   * Assistant messages
+   * @default ["Hello, I'm an AI assistant. If we find something we can't solve, I'll create a support case for you.", "What is the problem?"]
+   */
+  assistantMessages?: string[];
 }
 
 export interface ReferencesOptions {

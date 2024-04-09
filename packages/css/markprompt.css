@@ -267,6 +267,7 @@
 }
 
 .MarkpromptContentDialog[data-variant="dialog"] {
+  z-index: 50;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -2424,23 +2425,45 @@
 /* MarkpromptNavigationMenu */
 
 .MarkpromptNavigationMenu {
-  height: var(--markprompt-navbar-height);
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0.675rem 1rem;
   border-bottom: 1px solid var(--markprompt-border);
   background-color: var(--markprompt-background-accent);
+  overflow: hidden;
+  width: 100%;
+}
+
+.MarkpromptNavigationMenuTitleContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  overflow: hidden;
 }
 
 .MarkpromptNavigationMenuTitle {
   font-weight: 500;
   font-size: var(--markprompt-text-size-lg);
-  flex-grow: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.MarkpromptNavigationMenuSubtitle {
+  font-size: var(--markprompt-text-size);
+  color: var(--markprompt-mutedForeground);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .MarkpromptTicketDeflectionForm {
-  min-height: 400px;
+  width: 100%;
+  overflow: hidden;
+  height: 480px;
+  max-height: 80vh;
 }
 
 /* Animations */
