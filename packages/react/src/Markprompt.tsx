@@ -23,7 +23,9 @@ import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
+import { TicketDeflectionForm } from './TicketDeflectionForm.js';
 import { type MarkpromptOptions, type View } from './types.js';
+import { NavigationMenu } from './ui/navigation-menu.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
 import { getDefaultView } from './utils.js';
@@ -164,27 +166,15 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   useEffect(() => {
     const onOpen = ({ view }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
-      if (view) {
-        setOpenViews((v) => {
-          const closed = Object.keys(v).reduce((acc, value) => {
-            return { ...acc, [value]: false };
-          }, {});
-          return { ...closed, [view]: true };
-        });
+      if (!view) {
+        return;
       }
-      // switch (view) {
-      //   case 'menu': {
-      //     setOpenViews((v) => ({ ...v, menu: true }));
-      //     return;
-      //   }
-      //   case 'chat': {
-      //     setOpenViews((v) => ({ ...v, chat: true }));
-      //     return;
-      //   }
-      // }
-      // if (display === 'dialog') {
-      //   // setOpenState({ open: true });
-      // }
+      setOpenViews((v) => {
+        const closed = Object.keys(v).reduce((acc, value) => {
+          return { ...acc, [value]: false };
+        }, {});
+        return { ...closed, [view]: true };
+      });
     };
 
     const onClose = (): void => {
@@ -204,7 +194,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   }, [trigger?.customElement, display, onDidRequestOpenChange]);
 
   const onTriggerClicked = useCallback(() => {
-    openMarkprompt(menu ? 'menu' : 'chat');
+    openMarkprompt(menu ? 'menu' : 'ticket');
   }, [menu]);
 
   return (
@@ -274,16 +264,10 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
               <BaseMarkprompt.Content
                 className="MarkpromptContentDialog"
                 data-variant="dialog"
+                data-size="adaptive"
               >
-                <BaseMarkprompt.Title hide={title.hide}>
-                  {title.text}
-                </BaseMarkprompt.Title>
-                {description.text && (
-                  <BaseMarkprompt.Description hide={description.hide}>
-                    {description.text}
-                  </BaseMarkprompt.Description>
-                )}
-                Content
+                sdf
+                <TicketDeflectionForm />
               </BaseMarkprompt.Content>
             </BaseMarkprompt.Portal>
           </BaseMarkprompt.Root>
@@ -367,44 +351,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 }
 
-const Nav = ({
-  title,
-  close,
-  isTouchDevice,
-}: {
-  title?: string;
-  close: MarkpromptOptions['close'];
-  isTouchDevice?: boolean;
-}): ReactElement => {
-  if (!title && (!close || !close?.visible)) {
-    return <div></div>;
-  }
-
-  return (
-    <div className="MarkpromptNav">
-      <div className="MarkpromptNavTitle" style={{ flexGrow: 1 }}>
-        {title}
-      </div>
-      {close?.visible && (
-        <div style={{ flexGrow: 0, marginRight: -4 }}>
-          <BaseMarkprompt.Close
-            className="MarkpromptClose"
-            data-type={isTouchDevice || close?.hasIcon ? 'icon' : 'kbd'}
-          >
-            <AccessibleIcon.Root label={close!.label!}>
-              {isTouchDevice || close?.hasIcon ? (
-                <CloseIcon strokeWidth={2} width={18} height={18} />
-              ) : (
-                <kbd>Esc</kbd>
-              )}
-            </AccessibleIcon.Root>
-          </BaseMarkprompt.Close>
-        </div>
-      )}
-    </div>
-  );
-};
-
 type MarkpromptContentProps = {
   projectKey: string;
   chat?: MarkpromptOptions['chat'];
@@ -466,7 +412,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         {/* We still include a div to preserve the grid-template-rows rules */}
         <div>
           {display !== 'plain' && (
-            <Nav
+            <NavigationMenu
               title={chat?.title}
               close={close}
               isTouchDevice={isTouchDevice}

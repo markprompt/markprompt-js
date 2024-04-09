@@ -326,6 +326,33 @@ export interface ChatOptions {
   avatars?: AvatarsOptions;
 }
 
+export interface TicketFormOptions {
+  /**
+   * Show a chat-like prompt input allowing for conversation-style interaction
+   * rather than single question prompts.
+   * @default false
+   **/
+  enabled?: boolean;
+  /**
+   * Title for the view
+   * @default "Help"
+   **/
+  title?: string;
+  /**
+   * Placeholder for the chat input
+   * @default "Ask AI…"
+   **/
+  placeholder?: string;
+  /**
+   * Default (empty) view
+   */
+  defaultView?: DefaultViewProps;
+  /**
+   * Disclaimer view
+   */
+  disclaimerView?: DisclaimerViewProps;
+}
+
 export interface ReferencesOptions {
   /**
    * Display mode for the references. References can either be
@@ -617,6 +644,10 @@ export interface MarkpromptOptions {
    * Options for the search component.
    */
   search?: SubmitSearchQueryOptions & SearchOptions;
+  /**
+   * Options for the ticket form component.
+   */
+  ticketForm?: TicketFormOptions;
   /**
    * Options for the feedback component.
    **/

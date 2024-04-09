@@ -32,6 +32,12 @@ if (el && el instanceof HTMLElement) {
         provider: 'zendesk',
       },
     },
+    ticket: {
+      enabled: true,
+      title: 'Get help',
+      description: 'What is the issue?',
+      placeholder: 'I am having trouble with...',
+    },
     chat: {
       disclaimerView: {
         message:
@@ -97,7 +103,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu: {
+    menu1: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

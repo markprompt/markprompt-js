@@ -134,6 +134,7 @@ export function Messages(props: MessagesProps): ReactElement {
             </div>
           );
         })}
+        <div style={{ width: '100%', height: 40 }} />
       </BaseMarkprompt.AutoScroller>
     </div>
   );
