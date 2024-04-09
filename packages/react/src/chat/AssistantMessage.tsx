@@ -85,7 +85,6 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           )}
         </div>
       )}
-
       <div style={{ width: '100%', overflow: 'hidden' }}>
         <MessageAnswer state={message.state} linkAs={props.linkAs}>
           {message.content ?? ''}

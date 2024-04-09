@@ -25,7 +25,11 @@ export function MessageAnswer(props: MessageAnswerProps): ReactElement {
 
   return (
     <div className="MarkpromptMessageAnswer">
-      {(state === 'indeterminate' || state === 'preload') && <LoadingDots />}
+      {(state === 'indeterminate' || state === 'preload') && (
+        <div className="MarkpromptLoadingContainer">
+          <LoadingDots />
+        </div>
+      )}
       <Answer answer={children} state={state} linkAs={props.linkAs} />
       {state === 'cancelled' && (
         <div className="MarkpromptCancelled">

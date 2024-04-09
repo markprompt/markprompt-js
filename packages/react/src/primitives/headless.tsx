@@ -483,7 +483,9 @@ const AutoScroller = memo<AutoScrollerProps>(
 
     useEffect(() => {
       // When scrollTrigger changes, potentially trigger scroll.
-      perhapsScroll();
+      // Add a small timeout in case other DOM nodes (such as references)
+      // are appended.
+      setTimeout(perhapsScroll, 200);
     }, [perhapsScroll, scrollTrigger]);
 
     useEffect(() => {
@@ -491,7 +493,7 @@ const AutoScroller = memo<AutoScrollerProps>(
       // is appended to the list of messages), reset the scroll lock, so
       // it can scroll down to the currently loading message.
       scrollLockOn.current = false;
-      perhapsScroll();
+      setTimeout(perhapsScroll, 200);
     }, [discreteScrollTrigger, perhapsScroll]);
 
     const handleScroll = (): void => {

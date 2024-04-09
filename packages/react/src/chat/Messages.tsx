@@ -85,7 +85,11 @@ export function Messages(props: MessagesProps): ReactElement {
             message.references?.length > 0 &&
             message.state === 'done';
           return (
-            <div key={message.id} className="MarkpromptMessage">
+            <div
+              key={message.id}
+              className="MarkpromptMessage"
+              data-loading-state={message.state}
+            >
               {message.role === 'user' && (
                 <MessagePrompt
                   state={message.state}
