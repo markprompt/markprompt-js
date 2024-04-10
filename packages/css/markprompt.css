@@ -84,6 +84,10 @@
   box-sizing: border-box;
 }
 
+[class^='Markprompt'] textarea {
+  font-family: unset;
+}
+
 [class^='Markprompt'] *,
 [class^='Markprompt'] *::before,
 [class^='Markprompt'] *::after {
@@ -440,6 +444,10 @@
   grid-column: span 3;
 }
 
+.MarkpromptConversationSelect {
+  align-self: flex-end;
+}
+
 @container (width > 50rem) {
   .MarkpromptChatView {
     grid-template-columns: 18rem 1fr;
@@ -579,12 +587,19 @@
   position: relative;
   flex-direction: column-reverse;
   align-items: stretch;
-  padding-block: var(--padding);
-  padding-inline: var(--padding);
   overflow-y: visible;
   border-top: 1px solid var(--markprompt-border);
   box-shadow: 0 -7px 10px -1px rgb(0 0 0 / 3%);
-  /* background-color: var(--markprompt-background-accent); */
+}
+
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptChatView .MarkpromptForm {
+  padding-block: var(--padding);
+  padding-inline: var(--padding);
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptForm {
+  padding-block: 0.5rem;
+  padding-inline: 0.5rem;
 }
 
 .MarkpromptPromptWrapper {
@@ -593,7 +608,7 @@
   gap: 0.5rem;
 }
 
-.MarkpromptChatView .MarkpromptPromptWrapper {
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptChatView .MarkpromptPromptWrapper {
   background-color: var(--markprompt-muted);
   border: 1px solid var(--markprompt-border);
   border-radius: calc(var(--markprompt-radius) * 0.75);
@@ -602,6 +617,12 @@
 
   /* make sure the shadow shown when :focus-within is true isn't clipped */
   margin: var(--markprompt-input-focus-shadow-width);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptPromptWrapper {
+
 }
 
 .MarkpromptSearchView .MarkpromptPromptWrapper {
@@ -811,9 +832,9 @@
   */
   font-size: 1rem;
   color: var(--markprompt-foreground);
-  caret-color: var(--markprompt-primary);
   background-color: transparent;
-  padding: 1rem 0.75rem;
+  padding: 0.5rem 0.75rem;
+
 }
 
 .MarkpromptPrompt:focus {
@@ -846,6 +867,7 @@
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  align-self: flex-end;
   border: 1px solid transparent;
   cursor: pointer;
   white-space: nowrap;
@@ -2076,7 +2098,6 @@
   flex-direction: column;
   overflow: hidden auto;
   padding-top: 1rem;
-  padding-bottom: 1rem;
   height: 100%;
 }
 

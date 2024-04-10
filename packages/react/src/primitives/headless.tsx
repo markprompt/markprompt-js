@@ -18,6 +18,7 @@ import {
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
+import TextareaAutoSize from 'react-textarea-autosize';
 import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
@@ -203,6 +204,8 @@ interface PromptInnerProps {
   isLoading?: boolean;
   /** Icon for the button. */
   Icon?: ReactNode;
+  /** Minimum number of rows. */
+  minRows?: number;
 }
 
 type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
@@ -223,13 +226,15 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       sendButtonClassName,
       placeholder,
       spellCheck = false,
-      type = 'search',
+      // type = 'search',
       showSubmitButton = true,
       isLoading,
       Icon,
       name,
+      className,
+      minRows,
       ...rest
-    } = props;
+    } = props as any;
 
     return (
       <>
@@ -238,18 +243,21 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
             {label}
           </label>
         )}
-        <input
+        <TextareaAutoSize
           {...rest}
           id={name}
-          type={type}
           name={name}
+          minRows={minRows || 1}
           placeholder={placeholder}
-          ref={ref}
+          ref={ref as any}
           autoCapitalize={autoCapitalize}
           autoComplete={autoComplete}
           autoCorrect={autoCorrect}
           autoFocus={autoFocus}
           spellCheck={spellCheck}
+          className={className}
+          draggable={false}
+          style={{ resize: 'none' }}
         />
         {showSubmitButton && (
           <button

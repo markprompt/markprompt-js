@@ -61,6 +61,11 @@ export interface ChatViewProps {
    */
   linkAs?: string | ComponentType<any>;
   /**
+   * Minimum number of rows.
+   * @default 1
+   */
+  minInputRows?: number;
+  /**
    * Show the Markprompt footer.
    **/
   branding?: { show?: boolean; type?: 'plain' | 'text' };
@@ -92,6 +97,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     handleCreateTicket,
     linkAs,
     branding,
+    minInputRows,
   } = props;
 
   if (!projectKey) {
@@ -169,7 +175,11 @@ export function ChatView(props: ChatViewProps): JSX.Element {
             branding={branding}
           />
         )}
-        <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
+        <ChatViewForm
+          activeView={activeView}
+          chatOptions={chatOptions}
+          minInputRows={minInputRows}
+        />
       </div>
     </div>
   );

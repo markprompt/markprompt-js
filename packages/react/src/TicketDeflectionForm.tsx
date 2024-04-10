@@ -44,6 +44,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
         projectKey={projectKey}
         referencesOptions={references}
         branding={{ show: false }}
+        minInputRows={3}
       />
     </div>
   );

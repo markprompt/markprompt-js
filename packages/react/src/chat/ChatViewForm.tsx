@@ -18,6 +18,7 @@ import type { MarkpromptOptions, View } from '../types.js';
 interface ChatViewFormProps {
   activeView?: View;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
+  minInputRows?: number;
 }
 
 interface ChatSendIconProps {
@@ -39,7 +40,7 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
-  const { activeView, chatOptions } = props;
+  const { activeView, chatOptions, minInputRows } = props;
 
   const [prompt, setPrompt] = useState('');
 
@@ -133,6 +134,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           onChange={(event) => setPrompt(event.target.value)}
           Icon={<ChatSendIcon isLoading={isLoading} />}
           disabled={!didAcceptDisclaimer}
+          minRows={minInputRows}
         />
         {chatOptions.history && (
           <ConversationSelect disabled={!didAcceptDisclaimer} />

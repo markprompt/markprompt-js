@@ -41,6 +41,7 @@
     "p-debounce": "^4.0.0",
     "react-markdown": "^9.0.1",
     "react-merge-refs": "^2.1.1",
+    "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^4.0.0",
     "tabbable": "^6.2.0",
     "tailwind-merge": "^2.2.2",
