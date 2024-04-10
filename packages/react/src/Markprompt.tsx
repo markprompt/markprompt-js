@@ -260,15 +260,18 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             {...dialogProps}
           >
             <BaseMarkprompt.Portal>
-              {!sticky && (
-                <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
-              )}
+              <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
               <BaseMarkprompt.Content
                 className="MarkpromptContentDialog"
                 data-variant="dialog"
                 data-size="adaptive"
+                onPointerDownOutside={(e) => e.preventDefault()}
               >
-                <TicketDeflectionForm ticketForm={ticketForm} />
+                <TicketDeflectionForm
+                  projectKey={projectKey}
+                  chat={chat}
+                  ticketForm={ticketForm}
+                />
               </BaseMarkprompt.Content>
             </BaseMarkprompt.Portal>
           </BaseMarkprompt.Root>
@@ -321,9 +324,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                       linkAs={linkAs}
                       branding={branding}
                       display={display}
-                      // showAlgolia={
-                      //   search?.enabled && search.provider?.name === 'algolia'
-                      // }
                     />
                   </BaseMarkprompt.Content>
                 </BaseMarkprompt.Portal>

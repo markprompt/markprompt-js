@@ -36,6 +36,10 @@ if (el && el instanceof HTMLElement) {
       enabled: true,
       title: 'Get help',
       placeholder: 'I am having trouble with...',
+      defaultView: {
+        message:
+          "Hello, I'm an AI assistant from Acme. If we find something we can't solve, I'll help create a support case for you.",
+      },
     },
     chat: {
       disclaimerView: {
@@ -102,7 +106,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu: {
+    menu1: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

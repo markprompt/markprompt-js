@@ -53,6 +53,7 @@ main {
    the `display: "plain"` case.
 */
 #markprompt {
-  position: absolute;
+  /* position: absolute;
   inset: 0;
+  pointer-events: auto; */
 }

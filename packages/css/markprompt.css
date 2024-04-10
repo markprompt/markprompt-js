@@ -284,6 +284,11 @@
   max-height: 600px;
 }
 
+.MarkpromptContentDialog[data-variant="dialog"][data-size="adaptive"] {
+  height: 80vh;
+  max-height: 600px;
+}
+
 .MarkpromptContentDialog[data-variant="dialog"][data-state='closed'] {
   animation-name: markprompt-hide-content;
   animation-duration: 100ms;
@@ -2528,9 +2533,20 @@
 
 .MarkpromptTicketDeflectionForm {
   width: 100%;
+  height: 100%;
   overflow: hidden;
-  height: 480px;
-  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptNavigationMenu {
+  flex: none;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptChatView {
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* Animations */
