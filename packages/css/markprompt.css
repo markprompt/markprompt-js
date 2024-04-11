@@ -622,6 +622,12 @@
 }
 
 .MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptPromptWrapper {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 
 }
 
@@ -633,10 +639,15 @@
   background-color: var(--markprompt-background-accent);
 }
 
-.MarkpromptChatView .MarkpromptPromptWrapper:focus-within {
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptChatView .MarkpromptPromptWrapper:focus-within {
   box-shadow: 0 0 0 var(--markprompt-input-focus-shadow-width)
     var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptPromptWrapper:focus-within {
+  box-shadow: none;
+  border: none;
 }
 
 .MarkpromptMessageAnswerContainer {

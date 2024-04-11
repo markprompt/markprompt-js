@@ -38,13 +38,14 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
           ...chat,
           history: false,
           placeholder: ticketForm?.placeholder,
-          defaultView: ticketForm?.defaultView,
+          // defaultView: ticketForm?.defaultView,
+          defaultView: undefined,
         }}
         feedbackOptions={feedback}
         projectKey={projectKey}
         referencesOptions={references}
         branding={{ show: false }}
-        minInputRows={3}
+        minInputRows={6}
       />
     </div>
   );
