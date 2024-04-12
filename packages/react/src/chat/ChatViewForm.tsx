@@ -127,7 +127,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
-          sendButtonClassName="MarkpromptPromptSubmitButton"
+          sendButtonClassName="MarkpromptButton"
           buttonLabel={isLoading ? 'Stop generating' : chatOptions?.buttonLabel}
           value={prompt}
           isLoading={isLoading}

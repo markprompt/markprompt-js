@@ -356,10 +356,10 @@ export interface TicketFormOptions {
    */
   disclaimerView?: DisclaimerViewProps;
   /**
-   * Assistant messages
-   * @default ["Hello, I'm an AI assistant. If we find something we can't solve, I'll create a support case for you.", "What is the problem?"]
-   */
-  assistantMessages?: string[];
+   * Label for the submit button
+   * @default "Send"
+   **/
+  buttonLabel?: string;
 }
 
 export interface ReferencesOptions {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core';
-import type { ComponentType, ReactElement } from 'react';
+import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
@@ -15,6 +15,7 @@ import type {
   ReferencesOptions,
   View,
 } from '../types.js';
+import { RichText } from '../ui/rich-text.js';
 import { useDefaults } from '../useDefaults.js';
 
 export interface ChatViewProps {
@@ -74,17 +75,6 @@ export interface ChatViewProps {
    * @default false
    **/
   debug?: boolean;
-}
-
-function DisclaimerMessage(props: {
-  message: string | ComponentType;
-}): ReactElement {
-  if (typeof props.message === 'string') {
-    return <span>{props.message}</span>;
-  } else {
-    const Message = props.message;
-    return <Message />;
-  }
 }
 
 export function ChatView(props: ChatViewProps): JSX.Element {
@@ -151,9 +141,9 @@ export function ChatView(props: ChatViewProps): JSX.Element {
         {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
           <div className="MarkpromptDisclaimerView">
             <div className="MarkpromptDisclaimerViewMessage">
-              <DisclaimerMessage message={chatOptions.disclaimerView.message} />
+              <RichText>{chatOptions.disclaimerView.message}</RichText>
               <button
-                className="MarkpromptPromptSubmitButton"
+                className="MarkpromptPrimaryButton"
                 type="submit"
                 onClick={() => {
                   setDidAcceptDisclaimer(true);

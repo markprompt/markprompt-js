@@ -263,6 +263,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           <button
             className={sendButtonClassName}
             type="submit"
+            data-variant="primary"
             disabled={
               (rest.value as string)?.trim()?.length === 0 && !isLoading
             }

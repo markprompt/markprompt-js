@@ -40,11 +40,15 @@ if (el && el instanceof HTMLElement) {
         message:
           "Hello, I'm an AI assistant from Acme. If we find something we can't solve, I'll help create a support case for you.",
       },
+      disclaimerView: {
+        message:
+          'Answers generated with AI. Consider checking important information.',
+      },
     },
     chat: {
       disclaimerView: {
         message:
-          'I am an AI assistant. Consider checking for important information.',
+          'I am an AI assistant. Consider checking important information.',
       },
       enabled: true,
       placeholder: 'Ask a question...',

@@ -126,7 +126,11 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
 
           <div className="MarkpromptTicketViewButtonRow">
-            <button type="submit" className="MarkpromptPromptSubmitButton">
+            <button
+              type="submit"
+              className="MarkpromptButton"
+              data-variant="primary"
+            >
               {createTicketOptions?.view?.submitLabel}
             </button>
 

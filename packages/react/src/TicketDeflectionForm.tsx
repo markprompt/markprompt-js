@@ -4,6 +4,7 @@ import { ChatView } from './chat/ChatView.js';
 import { useChatStore } from './chat/store.js';
 import type { MarkpromptOptions } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
+import { RichText } from './ui/rich-text.js';
 
 type TicketDeflectionFormProps = Pick<
   MarkpromptOptions,
@@ -15,8 +16,7 @@ type TicketDeflectionFormProps = Pick<
 };
 
 function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
-  const { projectKey, chat, ticketForm, branding, feedback, references } =
-    props;
+  const { projectKey, chat, ticketForm, feedback, references } = props;
 
   const selectConversation = useChatStore((state) => state.selectConversation);
 
@@ -38,15 +38,25 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
           ...chat,
           history: false,
           placeholder: ticketForm?.placeholder,
-          // defaultView: ticketForm?.defaultView,
           defaultView: undefined,
+          buttonLabel: ticketForm?.buttonLabel,
         }}
         feedbackOptions={feedback}
         projectKey={projectKey}
         referencesOptions={references}
         branding={{ show: false }}
-        minInputRows={6}
+        minInputRows={10}
       />
+      <div className="MarkpromptDialogFooter">
+        <RichText>{ticketForm?.disclaimerView?.message || ''}</RichText>
+        {
+          <button className="MarkpromptButton" data-variant="outline">
+            Create Case
+            {/* {buttonLabel}
+            {Icon} */}
+          </button>
+        }
+      </div>
     </div>
   );
 }

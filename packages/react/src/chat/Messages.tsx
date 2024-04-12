@@ -133,6 +133,7 @@ export function Messages(props: MessagesProps): ReactElement {
                     <button
                       className="MarkpromptButton"
                       onClick={handleCreateTicket}
+                      data-variant="outline"
                       aria-label={
                         integrations.createTicket.messageButton?.hasText
                           ? undefined
