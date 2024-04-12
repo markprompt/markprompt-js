@@ -14,7 +14,10 @@ function App(): ReactElement {
           projectKey={import.meta.env.VITE_PROJECT_API_KEY}
           trigger={{ customElement: true }}
         />
-        <button className={styles.customTrigger} onClick={openMarkprompt}>
+        <button
+          className={styles.customTrigger}
+          onClick={() => openMarkprompt()}
+        >
           Open Markprompt
         </button>
       </div>

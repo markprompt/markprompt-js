@@ -84,7 +84,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               placeholder={createTicketOptions?.view?.namePlaceholder}
             />
           </div>
-
           <div className="MarkpromptFormGroup">
             <label htmlFor="email">
               {createTicketOptions?.view?.emailLabel}
@@ -97,7 +96,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               placeholder={createTicketOptions?.view?.emailPlaceholder}
             />
           </div>
-
           <div className="MarkpromptFormGroup">
             <label htmlFor="summary" id="summary-label">
               {createTicketOptions?.view?.summaryLabel}

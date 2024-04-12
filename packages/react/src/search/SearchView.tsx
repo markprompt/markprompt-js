@@ -91,7 +91,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
     DEFAULT_MARKPROMPT_OPTIONS.search,
   );
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {
     abort,
@@ -140,7 +141,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   useEffect(() => {
     // Bring form input in focus when activeView changes.
-    inputRef.current?.focus();
+    textAreaRef.current?.focus();
   }, [activeView]);
 
   useEffect(() => {
@@ -268,10 +269,14 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   return (
     <div className="MarkpromptSearchView">
-      <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
+      <BaseMarkprompt.Form
+        ref={formRef}
+        className="MarkpromptForm"
+        onSubmit={handleSubmit}
+      >
         <div className="MarkpromptPromptWrapper">
           <BaseMarkprompt.Prompt
-            ref={inputRef}
+            ref={textAreaRef}
             className="MarkpromptPrompt"
             name={searchInputName}
             placeholder={searchOptions?.placeholder}
@@ -287,6 +292,10 @@ export function SearchView(props: SearchViewProps): ReactElement {
                 <SearchIcon className="MarkpromptSearchIconAccented" />
               </AccessibleIcon.Root>
             }
+            onSubmit={(e) => {
+              e.preventDefault();
+              formRef.current?.requestSubmit();
+            }}
           />
 
           <button

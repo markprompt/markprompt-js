@@ -15,6 +15,8 @@ import {
   useCallback,
   useState,
   type ComponentType,
+  type KeyboardEvent,
+  type FormEventHandler,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
@@ -206,6 +208,10 @@ interface PromptInnerProps {
   Icon?: ReactNode;
   /** Minimum number of rows. */
   minRows?: number;
+  /** Trigger submit. */
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  /** Submit on enter. */
+  submitOnEnter?: boolean;
 }
 
 type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
@@ -213,7 +219,7 @@ type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
  */
-const Prompt = forwardRef<HTMLInputElement, PromptProps>(
+const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
   function Prompt(props, ref) {
     const {
       autoCapitalize = 'none',
@@ -233,8 +239,22 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       name,
       className,
       minRows,
+      submitOnEnter,
+      onSubmit,
       ...rest
     } = props as any;
+
+    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>): void => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        if (submitOnEnter !== false) {
+          event.preventDefault();
+          onSubmit?.(event);
+        } else if (event.metaKey || event.ctrlKey) {
+          event.preventDefault();
+          onSubmit?.(event);
+        }
+      }
+    };
 
     return (
       <>
@@ -258,6 +278,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
           className={className}
           draggable={false}
           style={{ resize: 'none' }}
+          onKeyDown={handleKeyDown}
         />
         {showSubmitButton && (
           <button

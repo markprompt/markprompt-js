@@ -67,6 +67,11 @@ export interface ChatViewProps {
    */
   minInputRows?: number;
   /**
+   * Submit on enter.
+   * @default true
+   */
+  submitOnEnter?: boolean;
+  /**
    * Show the Markprompt footer.
    **/
   branding?: { show?: boolean; type?: 'plain' | 'text' };
@@ -86,6 +91,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     integrations,
     handleCreateTicket,
     linkAs,
+    submitOnEnter,
     branding,
     minInputRows,
   } = props;
@@ -169,6 +175,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           activeView={activeView}
           chatOptions={chatOptions}
           minInputRows={minInputRows}
+          submitOnEnter={submitOnEnter}
         />
       </div>
     </div>

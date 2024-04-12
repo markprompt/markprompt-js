@@ -19,6 +19,7 @@ interface ChatViewFormProps {
   activeView?: View;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   minInputRows?: number;
+  submitOnEnter?: boolean;
 }
 
 interface ChatSendIconProps {
@@ -40,7 +41,7 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
-  const { activeView, chatOptions, minInputRows } = props;
+  const { activeView, chatOptions, minInputRows, submitOnEnter } = props;
 
   const [prompt, setPrompt] = useState('');
 
@@ -53,10 +54,13 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   // );
   // const conversations = useChatStore(selectProjectConversations);
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
-      inputRef.current?.blur();
+      textAreaRef.current?.blur();
       const data = new FormData(event.currentTarget);
       const value = data.get('markprompt-prompt');
 
@@ -71,11 +75,9 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     [submitChat],
   );
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
   useEffect(() => {
     // Bring form input in focus when activeView changes.
-    inputRef.current?.focus();
+    textAreaRef.current?.focus();
   }, [activeView]);
 
   // keep abortChat up to date, but do not trigger rerenders (and effect hooks calls) when it updates
@@ -114,13 +116,14 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
 
   return (
     <BaseMarkprompt.Form
+      ref={formRef}
       className="MarkpromptForm"
       onSubmit={handleSubmit}
       data-state={!didAcceptDisclaimer ? 'disabled' : undefined}
     >
       <div className="MarkpromptPromptWrapper">
         <BaseMarkprompt.Prompt
-          ref={inputRef}
+          ref={textAreaRef}
           className="MarkpromptPrompt"
           name="markprompt-prompt"
           type="text"
@@ -135,6 +138,11 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           Icon={<ChatSendIcon isLoading={isLoading} />}
           disabled={!didAcceptDisclaimer}
           minRows={minInputRows}
+          submitOnEnter={submitOnEnter}
+          onSubmit={(e) => {
+            e.preventDefault();
+            formRef.current?.requestSubmit();
+          }}
         />
         {chatOptions.history && (
           <ConversationSelect disabled={!didAcceptDisclaimer} />

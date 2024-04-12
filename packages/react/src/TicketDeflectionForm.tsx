@@ -45,6 +45,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
         projectKey={projectKey}
         referencesOptions={references}
         branding={{ show: false }}
+        submitOnEnter={false}
         minInputRows={10}
       />
       <div className="MarkpromptDialogFooter">
