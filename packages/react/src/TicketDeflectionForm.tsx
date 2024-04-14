@@ -18,6 +18,7 @@ type TicketDeflectionFormProps = Pick<
 function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   const { projectKey, chat, ticketForm, feedback, references } = props;
 
+  const messages = useChatStore((state) => state.messages);
   const selectConversation = useChatStore((state) => state.selectConversation);
 
   useEffect(() => {
@@ -26,7 +27,10 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   }, [selectConversation]);
 
   return (
-    <div className="MarkpromptTicketDeflectionForm">
+    <div
+      className="MarkpromptTicketDeflectionForm"
+      data-expanded={messages && messages.length > 0}
+    >
       <NavigationMenu
         title={ticketForm?.title}
         subtitle={ticketForm?.subtitle}

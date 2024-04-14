@@ -267,7 +267,8 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           {...rest}
           id={name}
           name={name}
-          minRows={minRows || 1}
+          minRows={minRows}
+          maxRows={Math.max(minRows, 6)}
           placeholder={placeholder}
           ref={ref as any}
           autoCapitalize={autoCapitalize}
@@ -277,7 +278,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           spellCheck={spellCheck}
           className={className}
           draggable={false}
-          style={{ resize: 'none' }}
+          style={{ resize: 'none', height: '100%' }}
           onKeyDown={handleKeyDown}
         />
         {showSubmitButton && (

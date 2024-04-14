@@ -35,6 +35,7 @@ if (el && el instanceof HTMLElement) {
     ticketForm: {
       enabled: true,
       title: 'Get help',
+      subtitle: 'How can we help?',
       placeholder: 'I am having trouble with...',
       defaultView: {
         message:

@@ -603,6 +603,11 @@
   padding-inline: 0.5rem;
 }
 
+.MarkpromptTicketDeflectionForm[data-expanded="false"] .MarkpromptChatView .MarkpromptForm {
+  border-top: 0;
+  box-shadow: none;
+}
+
 .MarkpromptPromptWrapper {
   display: flex;
   align-items: center;
@@ -2501,7 +2506,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 0;
   overflow: hidden;
 }
 
@@ -2544,6 +2549,7 @@
 .MarkpromptDialogFooter {
   display: flex;
   flex-direction: row;
+  flex: none;
   align-items: center;
   padding: 0.675rem 1rem;
   border-top: 1px solid var(--markprompt-border);
