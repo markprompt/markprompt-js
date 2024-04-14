@@ -280,7 +280,7 @@
   width: 100dvw;
   animation-name: markprompt-show-content;
   animation-duration: 200ms;
-  animation-fill-mode: both;
+  animation-fill-mode: none;
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
 }
 
@@ -290,8 +290,10 @@
 }
 
 .MarkpromptContentDialog[data-variant="dialog"][data-size="adaptive"] {
-  height: 80vh;
-  max-height: 600px;
+  max-height: 80vh;
+  /* height: 200px; */
+  /* height: 80vh;
+  max-height: 600px; */
 }
 
 .MarkpromptContentDialog[data-variant="dialog"][data-state='closed'] {
@@ -438,11 +440,28 @@
   background-color: var(--markprompt-background-accent);
 }
 
-.MarkpromptChatViewChat {
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptChatViewChat {
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-column: span 3;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptChatViewChat {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.MarkpromptTicketDeflectionForm[data-expanded="false"] .MarkpromptMessages {
+  display: none;
+}
+
+.MarkpromptTextAreaContainer {
+  height: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding-block: 0.5rem;
 }
 
 .MarkpromptConversationSelect {
@@ -587,8 +606,8 @@
   --padding: calc(1rem - var(--markprompt-input-focus-shadow-width));
   position: relative;
   flex-direction: column-reverse;
-  align-items: stretch;
   overflow-y: visible;
+  align-items: stretch;
   border-top: 1px solid var(--markprompt-border);
   box-shadow: 0 -7px 10px -1px rgb(0 0 0 / 3%);
 }
@@ -599,8 +618,12 @@
 }
 
 .MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptForm {
-  padding-block: 0.5rem;
+  padding-block: 0;
   padding-inline: 0.5rem;
+  overflow: hidden;
+  overflow-y: hidden;
+
+
 }
 
 .MarkpromptTicketDeflectionForm[data-expanded="false"] .MarkpromptChatView .MarkpromptForm {
@@ -612,6 +635,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-direction
 }
 
 :not(.MarkpromptTicketDeflectionForm) .MarkpromptChatView .MarkpromptPromptWrapper {
@@ -629,12 +653,15 @@
 
 .MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptPromptWrapper {
   background-color: transparent;
-  border: none;
   border-radius: 0;
+  border: none;
   margin: 0;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
 
 .MarkpromptSearchView .MarkpromptPromptWrapper {
@@ -2544,6 +2571,12 @@
   overflow: hidden;
 }
 
+.MarkpromptTicketDeflectionForm {
+  height: 400px;
+  max-height: 80vh;
+  /* height: 320px; */
+}
+
 /* MarkpromptDialogFooter */
 
 .MarkpromptDialogFooter {
@@ -2626,6 +2659,10 @@
 
 .MarkpromptPromptWrapper button {
   align-self: flex-end;
+}
+
+.MarkpromptPromptWrapper .MarkpromptButton {
+  margin-bottom: 0.5rem;
 }
 
 /* Animations */

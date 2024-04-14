@@ -111,7 +111,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu: {
+    menu1: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

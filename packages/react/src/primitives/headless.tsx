@@ -196,6 +196,8 @@ interface PromptInnerProps {
   label?: ReactNode;
   /** The class name of the label element. */
   labelClassName?: string;
+  /** The class name of the text area container. */
+  textAreaContainerClassName?: string;
   /** The class name of the send button element. */
   sendButtonClassName?: string;
   /** The label for the submit button. */
@@ -229,6 +231,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       label,
       buttonLabel = 'Send',
       labelClassName,
+      textAreaContainerClassName,
       sendButtonClassName,
       placeholder,
       spellCheck = false,
@@ -263,24 +266,26 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
             {label}
           </label>
         )}
-        <TextareaAutoSize
-          {...rest}
-          id={name}
-          name={name}
-          minRows={minRows}
-          maxRows={Math.max(minRows, 6)}
-          placeholder={placeholder}
-          ref={ref as any}
-          autoCapitalize={autoCapitalize}
-          autoComplete={autoComplete}
-          autoCorrect={autoCorrect}
-          autoFocus={autoFocus}
-          spellCheck={spellCheck}
-          className={className}
-          draggable={false}
-          style={{ resize: 'none', height: '100%' }}
-          onKeyDown={handleKeyDown}
-        />
+        <div className={textAreaContainerClassName}>
+          <TextareaAutoSize
+            {...rest}
+            id={name}
+            name={name}
+            minRows={minRows}
+            // maxRows={Math.max(minRows, 6)}
+            placeholder={placeholder}
+            ref={ref as any}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            autoCorrect={autoCorrect}
+            autoFocus={autoFocus}
+            spellCheck={spellCheck}
+            className={className}
+            draggable={false}
+            style={{ resize: 'none', height: '100%' }}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
         {showSubmitButton && (
           <button
             className={sendButtonClassName}
