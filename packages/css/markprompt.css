@@ -461,6 +461,9 @@
   height: 100%;
   flex: 1;
   overflow-y: auto;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptTextAreaContainer {
   padding-block: 0.5rem;
 }
 
@@ -641,14 +644,13 @@
 :not(.MarkpromptTicketDeflectionForm) .MarkpromptChatView .MarkpromptPromptWrapper {
   background-color: var(--markprompt-muted);
   border: 1px solid var(--markprompt-border);
-  border-radius: calc(var(--markprompt-radius) * 0.75);
+  border-radius: calc(var(--markprompt-radius));
   transition-property: all;
   transition-duration: 150ms;
 
   /* make sure the shadow shown when :focus-within is true isn't clipped */
   margin: var(--markprompt-input-focus-shadow-width);
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .MarkpromptTicketDeflectionForm .MarkpromptChatView .MarkpromptPromptWrapper {
@@ -878,7 +880,6 @@
   color: var(--markprompt-foreground);
   background-color: transparent;
   padding: 0.5rem;
-
 }
 
 .MarkpromptPrompt:focus {
@@ -2661,7 +2662,12 @@
   align-self: flex-end;
 }
 
-.MarkpromptPromptWrapper .MarkpromptButton {
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptPromptWrapper .MarkpromptButton,
+:not(.MarkpromptTicketDeflectionForm) .MarkpromptPromptWrapper .MarkpromptConversationSelect {
+  margin-bottom: 0.5rem;
+}
+
+.MarkpromptTicketDeflectionForm .MarkpromptPromptWrapper .MarkpromptButton {
   margin-bottom: 0.5rem;
 }
 

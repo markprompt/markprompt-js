@@ -272,7 +272,6 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
             id={name}
             name={name}
             minRows={minRows}
-            // maxRows={Math.max(minRows, 6)}
             placeholder={placeholder}
             ref={ref as any}
             autoCapitalize={autoCapitalize}
