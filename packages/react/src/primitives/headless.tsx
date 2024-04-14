@@ -210,7 +210,7 @@ interface PromptInnerProps {
   Icon?: ReactNode;
   /** Minimum number of rows. */
   minRows?: number;
-  /** Trigger submit. */
+  /** Use an input field instead of a text area. */
   onSubmit?: FormEventHandler<HTMLFormElement>;
   /** Submit on enter. */
   submitOnEnter?: boolean;
@@ -235,7 +235,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       sendButtonClassName,
       placeholder,
       spellCheck = false,
-      // type = 'search',
+      type,
       showSubmitButton = true,
       isLoading,
       Icon,
@@ -259,6 +259,8 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       }
     };
 
+    const Comp = type === 'search' ? 'input' : TextareaAutoSize;
+
     return (
       <>
         {label && (
@@ -267,7 +269,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           </label>
         )}
         <div className={textAreaContainerClassName}>
-          <TextareaAutoSize
+          <Comp
             {...rest}
             id={name}
             name={name}

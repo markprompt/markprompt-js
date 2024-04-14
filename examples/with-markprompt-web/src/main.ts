@@ -22,10 +22,10 @@ async function get_random_activity(args: string): Promise<string> {
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
-    display: 'dialog',
+    display: 'sheet',
     search: {
       apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL + '/search',
-      enabled: true,
+      enabled: false,
     },
     integrations: {
       createTicket: {
