@@ -1,5 +1,9 @@
 import { selectProjectConversations, useChatStore } from './store.js';
-import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
+import {
+  CounterClockwiseClockIcon,
+  PencilSquareMini,
+  PlusIcon,
+} from '../icons.js';
 import { Select } from '../primitives/Select.js';
 
 export function ConversationSelect({

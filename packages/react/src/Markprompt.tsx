@@ -343,13 +343,16 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 <MarkpromptContent
                   chat={chat}
                   feedback={feedback}
-                  integrations={integrations}
                   layout={layout}
                   linkAs={linkAs}
                   projectKey={projectKey}
                   references={references}
-                  search={search}
                   branding={branding}
+                  display={display}
+                  // Currently, we don't support integrations and
+                  // search in the plain UI
+                  integrations={undefined}
+                  search={undefined}
                 />
               </BaseMarkprompt.PlainContent>
             )}
@@ -422,6 +425,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 projectKey={projectKey}
                 referencesOptions={references}
                 branding={branding}
+                display={display}
               />
             )}
           </div>
@@ -550,6 +554,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               showBack={layout === 'panels'}
               linkAs={linkAs}
               branding={branding}
+              display={display}
             />
           </Tabs.Content>
         )}

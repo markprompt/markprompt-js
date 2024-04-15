@@ -12,6 +12,7 @@ import type {
   ChatOptions,
   FeedbackOptions,
   IntegrationsOptions,
+  MarkpromptOptions,
   ReferencesOptions,
   View,
 } from '../types.js';
@@ -76,6 +77,11 @@ export interface ChatViewProps {
    **/
   branding?: { show?: boolean; type?: 'plain' | 'text' };
   /**
+   * The way to display the chat/search content.
+   * @default "dialog"
+   **/
+  display?: MarkpromptOptions['display'];
+  /**
    * Display debug info.
    * @default false
    **/
@@ -93,6 +99,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     linkAs,
     submitOnEnter,
     branding,
+    display,
     minInputRows,
   } = props;
 
@@ -129,54 +136,59 @@ export function ChatView(props: ChatViewProps): JSX.Element {
 
   return (
     <div className="MarkpromptChatView">
-      <ConversationSidebar />
-      <div className="MarkpromptChatViewChat">
-        {showBack ? (
-          <div className="MarkpromptChatViewNavigation">
-            <button className="MarkpromptGhostButton" onClick={onDidPressBack}>
-              <ChevronLeftIcon
-                style={{ width: 16, height: 16 }}
-                strokeWidth={2.5}
-              />
-            </button>
-          </div>
-        ) : (
-          // Keep this for the grid template rows layout
-          <div />
-        )}
-        {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
-          <div className="MarkpromptDisclaimerView">
-            <div className="MarkpromptDisclaimerViewMessage">
-              <RichText>{chatOptions.disclaimerView.message}</RichText>
+      <ConversationSidebar display={display} />
+      <div className="MarkpromptChatViewChatContainer">
+        <div className="MarkpromptChatViewChat">
+          {showBack ? (
+            <div className="MarkpromptChatViewNavigation">
               <button
-                className="MarkpromptPrimaryButton"
-                type="submit"
-                onClick={() => {
-                  setDidAcceptDisclaimer(true);
-                }}
+                className="MarkpromptGhostButton"
+                onClick={onDidPressBack}
               >
-                {chatOptions.disclaimerView.cta || 'I agree'}
+                <ChevronLeftIcon
+                  style={{ width: 16, height: 16 }}
+                  strokeWidth={2.5}
+                />
               </button>
             </div>
-          </div>
-        ) : (
-          <Messages
+          ) : (
+            // Keep this for the grid template rows layout
+            <div />
+          )}
+          {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
+            <div className="MarkpromptDisclaimerView">
+              <div className="MarkpromptDisclaimerViewMessage">
+                <RichText>{chatOptions.disclaimerView.message}</RichText>
+                <button
+                  className="MarkpromptPrimaryButton"
+                  type="submit"
+                  onClick={() => {
+                    setDidAcceptDisclaimer(true);
+                  }}
+                >
+                  {chatOptions.disclaimerView.cta || 'I agree'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Messages
+              chatOptions={chatOptions}
+              feedbackOptions={feedbackOptions}
+              integrations={integrations}
+              projectKey={projectKey}
+              referencesOptions={referencesOptions}
+              handleCreateTicket={handleCreateTicket}
+              linkAs={linkAs}
+              branding={branding}
+            />
+          )}
+          <ChatViewForm
+            activeView={activeView}
             chatOptions={chatOptions}
-            feedbackOptions={feedbackOptions}
-            integrations={integrations}
-            projectKey={projectKey}
-            referencesOptions={referencesOptions}
-            handleCreateTicket={handleCreateTicket}
-            linkAs={linkAs}
-            branding={branding}
+            minInputRows={minInputRows}
+            submitOnEnter={submitOnEnter}
           />
-        )}
-        <ChatViewForm
-          activeView={activeView}
-          chatOptions={chatOptions}
-          minInputRows={minInputRows}
-          submitOnEnter={submitOnEnter}
-        />
+        </div>
       </div>
     </div>
   );

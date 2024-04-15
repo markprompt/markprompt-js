@@ -320,21 +320,19 @@
   animation-duration: 100ms;
 }
 
-/* @media screen and (pointer: fine) { */
-  .MarkpromptContentDialog {
-    border-radius: var(--markprompt-radius);
-    border: 1px solid var(--markprompt-border);
-    box-shadow:
-      hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
-      hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
-  .MarkpromptContentDialog[data-variant="dialog"] {
-    max-width: 44rem;
-    max-height: 40rem;
-  }
-/* } */
+.MarkpromptContentDialog {
+  border-radius: var(--markprompt-radius);
+  border: 1px solid var(--markprompt-border);
+  box-shadow:
+    hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.MarkpromptContentDialog[data-variant="dialog"] {
+  max-width: 44rem;
+  max-height: 40rem;
+}
 
 .MarkpromptContentPlain {
   background-color: var(--markprompt-background);
@@ -415,14 +413,24 @@
   height: 100%;
 }
 
-.MarkpromptChatView {
+:not(.MarkpromptContentPlain) .MarkpromptChatView {
   container-name: chat;
   container-type: inline-size;
   display: grid;
-  grid-template-columns: 18rem 1fr;
   height: 100%;
   position: relative;
 }
+
+.MarkpromptContentPlain .MarkpromptChatView {
+  container-name: chat;
+  container-type: inline-size;
+  grid-template-columns: 18rem 1fr;
+  display: grid;
+  height: 100%;
+  position: relative;
+}
+
+
 
 .MarkpromptChatViewSidebar {
   display: none;
@@ -445,6 +453,7 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-column: span 3;
+  height: 100%;
 }
 
 .MarkpromptTicketDeflectionForm .MarkpromptChatViewChat {
@@ -476,15 +485,12 @@
 }
 
 @container (width > 50rem) {
-  .MarkpromptChatView {
-    grid-template-columns: 18rem 1fr;
-  }
-
   .MarkpromptChatViewSidebar {
     display: grid;
     grid-column: 1;
     grid-template-rows: auto 1fr;
     height: 100%;
+    overflow: hidden;
   }
 
   .MarkpromptChatViewChat {
@@ -2315,6 +2321,12 @@
   color: var(--markprompt-mutedForeground);
 }
 
+.MarkpromptChatViewChatContainer {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
 .MarkpromptCreateTicketView {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -2330,7 +2342,6 @@
   align-items: center;
   width: 100%;
   padding-bottom: 1rem;
-  overflow: hidden;
   flex: none;
 }
 
