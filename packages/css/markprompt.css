@@ -430,8 +430,6 @@
   position: relative;
 }
 
-
-
 .MarkpromptChatViewSidebar {
   display: none;
   border-right: 1px solid var(--markprompt-border);
@@ -518,12 +516,25 @@
   grid-auto-flow: row;
   grid-auto-rows: min-content;
   overflow-y: auto;
+  overflow-x: hidden;
   gap: 0.5rem;
 }
 
-.MarkpromptChatConversationList button {
+.MarkpromptChatConversationListItem {
+  display: flex;
   all: unset;
-  display: block;
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%;
+  place-items: stretch;
+  place-self: stretch;
+}
+
+.MarkpromptChatConversationListItem button {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   padding-inline: 0.75rem 0.25rem;
   padding-block: 0.75rem;
   font-size: var(--markprompt-text-size);
@@ -531,10 +542,16 @@
   border-radius: 0.25rem;
   border: 1px solid transparent;
   width: 100%;
+  overflow: hidden;
+  flex-grow: 1;
+  place-self: stretch;
 }
 
 .MarkpromptChatConversationList p {
   margin: 0;
+  overflow: hidden;
+  width: 100%;
+  flex-grow: 1;
 }
 
 .MarkpromptChatConversationList p:first-of-type {
