@@ -588,7 +588,7 @@ export interface CreateTicketIntegrationOptions {
   prompt?: string;
   /**
    * Default text shown at the end of a chat message.
-   * @default "Bot not being helpful?"
+   * @default "Is the AI not helpful?"
    */
   messageText?: string;
   /**

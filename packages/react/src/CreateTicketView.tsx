@@ -9,10 +9,12 @@ export interface CreateTicketViewProps {
   createTicketOptions: NonNullable<
     MarkpromptOptions['integrations']
   >['createTicket'];
+  includeNav?: boolean;
+  includeCTA?: boolean;
 }
 
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
-  const { handleGoBack, createTicketOptions } = props;
+  const { handleGoBack, createTicketOptions, includeNav, includeCTA } = props;
 
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const conversationId = useChatStore((state) => state.conversationId);
@@ -60,21 +62,24 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
   return (
     <div className="MarkpromptCreateTicketView">
-      <div className="MarkpromptChatViewNavigation">
-        <button className="MarkpromptGhostButton" onClick={handleGoBack}>
-          <ChevronLeftIcon
-            style={{ width: 16, height: 16 }}
-            strokeWidth={2.5}
-          />
-        </button>
-      </div>
-
+      {includeNav ? (
+        <div className="MarkpromptChatViewNavigation">
+          <button className="MarkpromptGhostButton" onClick={handleGoBack}>
+            <ChevronLeftIcon
+              style={{ width: 16, height: 16 }}
+              strokeWidth={2.5}
+            />
+          </button>
+        </div>
+      ) : (
+        <div />
+      )}
       <div className="MarkpromptCreateTicket">
         <h1>{createTicketOptions?.view?.title}</h1>
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
             <label htmlFor="user_name">
-              {createTicketOptions?.view?.nameLabel}
+              {createTicketOptions?.view?.nameLabel || 'Name'}
             </label>
             <input
               required
@@ -86,7 +91,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
           <div className="MarkpromptFormGroup">
             <label htmlFor="email">
-              {createTicketOptions?.view?.emailLabel}
+              {createTicketOptions?.view?.emailLabel || 'Email'}
             </label>
             <input
               required
@@ -96,9 +101,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               placeholder={createTicketOptions?.view?.emailPlaceholder}
             />
           </div>
-          <div className="MarkpromptFormGroup">
+          <div className="MarkpromptFormGroup MarkpromptFormGroupGrow">
             <label htmlFor="summary" id="summary-label">
-              {createTicketOptions?.view?.summaryLabel}
+              {createTicketOptions?.view?.summaryLabel || 'Description'}
             </label>
             <textarea
               value={summary?.content ? summary.content : ''}
@@ -123,23 +128,28 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             />
           </div>
 
-          <div className="MarkpromptTicketViewButtonRow">
-            <button
-              type="submit"
-              className="MarkpromptButton"
-              data-variant="primary"
+          {includeCTA && (
+            <div
+              className="MarkpromptTicketViewButtonRow"
+              style={{ paddingBottom: '1rem' }}
             >
-              {createTicketOptions?.view?.submitLabel}
-            </button>
+              <button
+                type="submit"
+                className="MarkpromptButton"
+                data-variant="primary"
+              >
+                {createTicketOptions?.view?.submitLabel || 'Send message'}
+              </button>
 
-            {result && (
-              <p>
-                {result.ok
-                  ? createTicketOptions?.view?.ticketCreatedOk
-                  : createTicketOptions?.view?.ticketCreatedError}
-              </p>
-            )}
-          </div>
+              {result && (
+                <p>
+                  {result.ok
+                    ? createTicketOptions?.view?.ticketCreatedOk
+                    : createTicketOptions?.view?.ticketCreatedError}
+                </p>
+              )}
+            </div>
+          )}
         </form>
       </div>
     </div>

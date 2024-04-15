@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { useChatStore } from './chat/store.js';
+import { CreateTicketView } from './CreateTicketView.js';
 import { ChevronLeftIcon } from './icons.js';
 import type { MarkpromptOptions } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
@@ -11,7 +12,12 @@ type TicketDeflectionFormView = 'chat' | 'ticket';
 
 type TicketDeflectionFormProps = Pick<
   MarkpromptOptions,
-  'chat' | 'ticketForm' | 'branding' | 'feedback' | 'references'
+  | 'chat'
+  | 'ticketForm'
+  | 'branding'
+  | 'feedback'
+  | 'references'
+  | 'integrations'
 > & {
   projectKey: string;
   defaultView?: TicketDeflectionFormView;
@@ -26,7 +32,8 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
     ticketForm,
     feedback,
     references,
-    defaultView = 'chat',
+    integrations,
+    defaultView = 'ticket',
   } = props;
   const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
   const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
@@ -85,7 +92,12 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
             minInputRows={10}
           />
         ) : (
-          <></>
+          <CreateTicketView
+            createTicketOptions={integrations?.createTicket}
+            handleGoBack={() => setView('chat')}
+            includeNav={false}
+            includeCTA={true}
+          />
         )}
       </div>
       <div className="MarkpromptDialogFooter">
@@ -95,16 +107,29 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
             <button
               className="MarkpromptButton"
               data-variant="outline"
-              onClick={() => setView((v) => (v === 'chat' ? 'ticket' : 'chat'))}
+              onClick={() => setView('ticket')}
             >
-              Create Case
+              Create case
             </button>
           </>
         ) : (
-          <div className="MarkpromptIconLink" onClick={() => setView('chat')}>
-            <ChevronLeftIcon className="MarkpromptButtonIcon" />
-            Back to AI
-          </div>
+          <>
+            <div
+              style={{
+                display: 'flex',
+                justifyItems: 'start',
+                marginLeft: '-0.5rem',
+              }}
+            >
+              <div
+                className="MarkpromptIconLink"
+                onClick={() => setView('chat')}
+              >
+                <ChevronLeftIcon className="MarkpromptButtonIcon" />
+                Back to AI
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>

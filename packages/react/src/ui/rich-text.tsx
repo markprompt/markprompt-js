@@ -3,9 +3,10 @@ import Markdown from 'react-markdown';
 
 export function RichText(props: {
   children: string | ComponentType;
+  className?: string;
 }): ReactElement {
   if (typeof props.children === 'string') {
-    return <Markdown>{props.children}</Markdown>;
+    return <Markdown className={props.className}>{props.children}</Markdown>;
   } else {
     const Message = props.children;
     return <Message />;
