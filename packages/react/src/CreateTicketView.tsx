@@ -75,7 +75,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         <div />
       )}
       <div className="MarkpromptCreateTicket">
-        <h1>{createTicketOptions?.view?.title}</h1>
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
             <label htmlFor="user_name">

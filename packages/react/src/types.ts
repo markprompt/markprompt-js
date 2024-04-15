@@ -512,11 +512,6 @@ export interface CreateTicketIntegrationMessageButtonOptions {
 
 export interface CreateTicketIntegrationViewOptions {
   /**
-   * Title for the create ticket view
-   * @default "Create a case"
-   */
-  title: string;
-  /**
    * Label for the name input
    * @default "Your Name"
    */

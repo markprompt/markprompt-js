@@ -2689,11 +2689,11 @@
   opacity: 1;
 }
 
-/* .MarkpromptButton:focus {
+.MarkpromptButton:focus {
   box-shadow: 0 0 0 var(--markprompt-input-focus-shadow-width)
     var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
-} */
+}
 
 .MarkpromptButton[data-variant="primary"] {
   border: 1px solid transparent;

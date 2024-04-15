@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { useChatStore } from './chat/store.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChevronLeftIcon } from './icons.js';
+import { useGlobalStore } from './store.js';
 import type { MarkpromptOptions } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { RichText } from './ui/rich-text.js';
@@ -37,9 +38,13 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   } = props;
   const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
   const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
-
+  const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
+  const conversationId = useChatStore((state) => state.conversationId);
   const messages = useChatStore((state) => state.messages);
   const selectConversation = useChatStore((state) => state.selectConversation);
+  const createTicketSummary = useGlobalStore(
+    (state) => state.tickets?.createTicketSummary,
+  );
 
   useEffect(() => {
     // Clear past conversations
@@ -61,6 +66,31 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       setDidTransitionViewOnce(true);
     }
   }, [view, defaultView]);
+
+  const handleCreateTicketSummary = useCallback(() => {
+    console.log(
+      'integrations?.createTicket?.enabled',
+      integrations?.createTicket?.enabled,
+    );
+    if (!integrations?.createTicket?.enabled) {
+      return;
+    }
+
+    if (!messages || messages.length === 0 || !conversationId) {
+      setView('ticket');
+      return;
+    }
+
+    setIsCreatingTicketSummary(true);
+    createTicketSummary?.(conversationId, messages);
+    setIsCreatingTicketSummary(false);
+    setView('ticket');
+  }, [
+    conversationId,
+    createTicketSummary,
+    integrations?.createTicket?.enabled,
+    messages,
+  ]);
 
   return (
     <div
@@ -92,13 +122,12 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
             minInputRows={10}
           />
         ) : (
-          <></>
-          // <CreateTicketView
-          //   createTicketOptions={integrations?.createTicket}
-          //   handleGoBack={() => setView('chat')}
-          //   includeNav={false}
-          //   includeCTA={true}
-          // />
+          <CreateTicketView
+            createTicketOptions={integrations?.createTicket}
+            handleGoBack={() => setView('chat')}
+            includeNav={false}
+            includeCTA={true}
+          />
         )}
       </div>
       <div className="MarkpromptDialogFooter">
@@ -108,9 +137,10 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
             <button
               className="MarkpromptButton"
               data-variant="outline"
-              onClick={() => setView('ticket')}
+              disabled={isCreatingTicketSummary}
+              onClick={() => handleCreateTicketSummary()}
             >
-              Create case
+              {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
             </button>
           </>
         ) : (

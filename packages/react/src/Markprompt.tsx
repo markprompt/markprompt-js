@@ -271,6 +271,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   projectKey={projectKey}
                   chat={chat}
                   ticketForm={ticketForm}
+                  integrations={integrations}
                 />
               </BaseMarkprompt.Content>
             </BaseMarkprompt.Portal>
