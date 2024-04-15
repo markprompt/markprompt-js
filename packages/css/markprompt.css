@@ -2583,7 +2583,13 @@
 .MarkpromptTicketDeflectionForm {
   height: 400px;
   max-height: 80vh;
-  /* height: 320px; */
+}
+
+.MarkpromptTicketDeflectionForm[data-expanded="true"] {
+  animation-name: markprompt-grow-dialog;
+  animation-duration: 200ms;
+  animation-fill-mode: forwards;
+  transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
 }
 
 /* MarkpromptDialogFooter */
@@ -2863,5 +2869,14 @@
   100% {
     opacity: 0.2;
     transform: translateY(1px);
+  }
+}
+
+@keyframes markprompt-grow-dialog {
+  0% {
+    height: 400px;
+  }
+  100% {
+    height: 80vh;
   }
 }
