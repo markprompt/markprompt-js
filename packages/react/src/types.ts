@@ -346,11 +346,7 @@ export interface TicketFormOptions {
    * Placeholder for the chat input
    * @default "I am having trouble with…"
    **/
-  placeholder?: string;
-  /**
-   * Default (empty) view
-   */
-  defaultView?: DefaultViewProps;
+  placeholder?: string | string[];
   /**
    * Disclaimer view
    */
