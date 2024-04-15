@@ -68,18 +68,17 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   }, [view, defaultView]);
 
   const handleCreateTicketSummary = useCallback(() => {
-    console.log(
-      'integrations?.createTicket?.enabled',
-      integrations?.createTicket?.enabled,
-    );
+    console.log('conversationId', conversationId);
     if (!integrations?.createTicket?.enabled) {
       return;
     }
 
     if (!messages || messages.length === 0 || !conversationId) {
+      console.log('IN HERE');
       setView('ticket');
       return;
     }
+    console.log('IN HERE 2');
 
     setIsCreatingTicketSummary(true);
     createTicketSummary?.(conversationId, messages);
