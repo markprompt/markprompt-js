@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 
+import { toApiMessages } from './chat/utils.js';
 import { ChevronLeftIcon } from './icons.js';
 import { useChatStore, type MarkpromptOptions } from './index.js';
 import { useGlobalStore } from './store.js';
@@ -29,6 +30,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       ? state.tickets?.summaryByConversationId[conversationId]
       : undefined,
   );
+  const messages = useChatStore((state) => state.messages);
 
   const [result, setResult] = useState<Response>();
 
@@ -60,6 +62,18 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     setResult(result);
   };
 
+  const description = useMemo(() => {
+    if (!messages || messages.length === 0) {
+      return '';
+    }
+    const transcript = toApiMessages(messages)
+      .map((m) => {
+        return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+      })
+      .join('\n\n');
+    return `${summary?.content || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+  }, [summary?.content, messages]);
+
   return (
     <div className="MarkpromptCreateTicketView">
       {includeNav ? (
@@ -85,6 +99,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               type="text"
               id="user_name"
               name="user_name"
+              value={createTicketOptions?.user?.name}
+              disabled={!!createTicketOptions?.user?.name}
               placeholder={createTicketOptions?.view?.namePlaceholder}
             />
           </div>
@@ -97,6 +113,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               type="email"
               id="email"
               name="email"
+              value={createTicketOptions?.user?.email}
+              disabled={!!createTicketOptions?.user?.name}
               placeholder={createTicketOptions?.view?.emailPlaceholder}
             />
           </div>
@@ -105,7 +123,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               {createTicketOptions?.view?.summaryLabel || 'Description'}
             </label>
             <textarea
-              value={summary?.content ? summary.content : ''}
+              value={description}
               placeholder={
                 summary?.state &&
                 summary.state !== 'done' &&
@@ -128,10 +146,16 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
 
           {includeCTA && (
-            <div
-              className="MarkpromptTicketViewButtonRow"
-              style={{ paddingBottom: '1rem' }}
-            >
+            <div className="MarkpromptTicketViewButtonRow">
+              <div>
+                {result && (
+                  <p>
+                    {result.ok
+                      ? createTicketOptions?.view?.ticketCreatedOk
+                      : createTicketOptions?.view?.ticketCreatedError}
+                  </p>
+                )}
+              </div>
               <button
                 type="submit"
                 className="MarkpromptButton"
@@ -139,14 +163,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               >
                 {createTicketOptions?.view?.submitLabel || 'Send message'}
               </button>
-
-              {result && (
-                <p>
-                  {result.ok
-                    ? createTicketOptions?.view?.ticketCreatedOk
-                    : createTicketOptions?.view?.ticketCreatedError}
-                </p>
-              )}
             </div>
           )}
         </form>

@@ -22,15 +22,19 @@ async function get_random_activity(args: string): Promise<string> {
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
-    display: 'sheet',
+    display: 'plain',
     search: {
       apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL + '/search',
-      enabled: false,
+      enabled: true,
     },
     integrations: {
       createTicket: {
         enabled: true,
         provider: 'zendesk',
+        user: {
+          name: 'Jane Doe',
+          email: 'jane@doe.com',
+        },
       },
     },
     ticketForm: {
@@ -108,7 +112,7 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    menu1: {
+    menu: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
       sections: [

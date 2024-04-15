@@ -201,33 +201,38 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
   return (
     <>
-      {!menu ? (
-        <Trigger
-          display={display}
-          trigger={trigger}
-          Component="button"
-          onClick={onTriggerClicked}
-        >
-          {children}
-        </Trigger>
-      ) : (
-        <Menu
-          menu={menu}
-          open={openViews.menu}
-          onOpenChange={(open) => {
-            setOpenViews((v) => ({ ...v, menu: open }));
-          }}
-        >
-          <Trigger
-            display={display}
-            trigger={trigger}
-            hasMenu
-            Component={DropdownMenu.Trigger}
-          >
-            {children}
-          </Trigger>
-        </Menu>
+      {display !== 'plain' && (
+        <>
+          {!menu ? (
+            <Trigger
+              display={display}
+              trigger={trigger}
+              Component="button"
+              onClick={onTriggerClicked}
+            >
+              {children}
+            </Trigger>
+          ) : (
+            <Menu
+              menu={menu}
+              open={openViews.menu}
+              onOpenChange={(open) => {
+                setOpenViews((v) => ({ ...v, menu: open }));
+              }}
+            >
+              <Trigger
+                display={display}
+                trigger={trigger}
+                hasMenu
+                Component={DropdownMenu.Trigger}
+              >
+                {children}
+              </Trigger>
+            </Menu>
+          )}
+        </>
       )}
+
       <GlobalStoreProvider
         options={{
           branding,
@@ -250,32 +255,34 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         }}
       >
         <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
-          <BaseMarkprompt.Root
-            display="dialog"
-            open={openViews.ticket}
-            onOpenChange={(open) => {
-              onDidRequestOpenChange?.(open);
-              setOpenViews((v) => ({ ...v, ticket: open }));
-            }}
-            {...dialogProps}
-          >
-            <BaseMarkprompt.Portal>
-              <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
-              <BaseMarkprompt.Content
-                className="MarkpromptContentDialog"
-                data-variant="dialog"
-                data-size="adaptive"
-                onPointerDownOutside={(e) => e.preventDefault()}
-              >
-                <TicketDeflectionForm
-                  projectKey={projectKey}
-                  chat={chat}
-                  ticketForm={ticketForm}
-                  integrations={integrations}
-                />
-              </BaseMarkprompt.Content>
-            </BaseMarkprompt.Portal>
-          </BaseMarkprompt.Root>
+          {display !== 'plain' && (
+            <BaseMarkprompt.Root
+              display="dialog"
+              open={openViews.ticket}
+              onOpenChange={(open) => {
+                onDidRequestOpenChange?.(open);
+                setOpenViews((v) => ({ ...v, ticket: open }));
+              }}
+              {...dialogProps}
+            >
+              <BaseMarkprompt.Portal>
+                <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+                <BaseMarkprompt.Content
+                  className="MarkpromptContentDialog"
+                  data-variant="dialog"
+                  data-size="adaptive"
+                  onPointerDownOutside={(e) => e.preventDefault()}
+                >
+                  <TicketDeflectionForm
+                    projectKey={projectKey}
+                    chat={chat}
+                    ticketForm={ticketForm}
+                    integrations={integrations}
+                  />
+                </BaseMarkprompt.Content>
+              </BaseMarkprompt.Portal>
+            </BaseMarkprompt.Root>
+          )}
           <BaseMarkprompt.Root
             display={display}
             open={openViews.chat}
@@ -387,26 +394,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const setActiveView = useGlobalStore((state) => state.setActiveView);
   const submitChat = useChatStore((state) => state.submitChat);
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
-  const messages = useChatStore((state) => state.messages);
-  const conversationId = useChatStore((state) => state.conversationId);
-  const createTicketSummary = useGlobalStore(
-    (state) => state.tickets?.createTicketSummary,
-  );
-  const [, startTransition] = useTransition();
-
-  async function handleCreateTicket(): Promise<void> {
-    if (!integrations?.createTicket?.enabled) return;
-
-    openMarkprompt('ticket');
-    // TODO
-    // setActiveView('ticket');
-
-    // if (conversationId && messages.length > 0) {
-    //   startTransition(() => {
-    //     createTicketSummary?.(conversationId, messages);
-    //   });
-    // }
-  }
 
   if (!search?.enabled) {
     return (
@@ -432,7 +419,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 debug={debug}
                 feedbackOptions={feedback}
                 integrations={integrations}
-                handleCreateTicket={handleCreateTicket}
                 projectKey={projectKey}
                 referencesOptions={references}
                 branding={branding}
@@ -559,7 +545,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               feedbackOptions={feedback}
               integrations={integrations}
               onDidPressBack={() => setActiveView('search')}
-              handleCreateTicket={handleCreateTicket}
               projectKey={projectKey}
               referencesOptions={references}
               showBack={layout === 'panels'}

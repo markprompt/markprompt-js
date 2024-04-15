@@ -320,7 +320,7 @@
   animation-duration: 100ms;
 }
 
-@media screen and (pointer: fine) {
+/* @media screen and (pointer: fine) { */
   .MarkpromptContentDialog {
     border-radius: var(--markprompt-radius);
     border: 1px solid var(--markprompt-border);
@@ -334,7 +334,7 @@
     max-width: 44rem;
     max-height: 40rem;
   }
-}
+/* } */
 
 .MarkpromptContentPlain {
   background-color: var(--markprompt-background);
@@ -2328,8 +2328,21 @@
   flex-direction: row;
   gap: 1rem;
   align-items: center;
-  justify-content: end;
   width: 100%;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  flex: none;
+}
+
+.MarkpromptTicketViewButtonRow :first-child {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.MarkpromptTicketViewButtonRow .MarkpromptButton {
+  flex: none;
 }
 
 .MarkpromptTicketViewButtonRow p {
@@ -2358,6 +2371,7 @@
   align-items: flex-start;
   gap: 1rem;
   flex-grow: 1;
+  width: 100%;
 }
 
 .MarkpromptCreateTicketForm label {
@@ -2705,6 +2719,10 @@
   border: 1px solid var(--markprompt-border);
   color: var(--markprompt-foreground);
   background-color: var(--markprompt-muted);
+}
+
+.MarkpromptButton[data-variant="outline"]:disabled {
+  color: var(--markprompt-mutedForeground);
 }
 
 :not(.MarkpromptTicketDeflectionForm) .MarkpromptPromptWrapper .MarkpromptButton,

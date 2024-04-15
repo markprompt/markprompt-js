@@ -561,6 +561,17 @@ export interface CreateTicketIntegrationViewOptions {
   ticketCreatedError: string;
 }
 
+export interface CreateTicketIntegrationUserOptions {
+  /**
+   * The user's name
+   **/
+  name?: string;
+  /**
+   * The user's email
+   **/
+  email?: string;
+}
+
 export interface CreateTicketIntegrationOptions {
   /**
    * Enable the create ticket feature
@@ -594,6 +605,10 @@ export interface CreateTicketIntegrationOptions {
    * Options for the create ticket view.
    */
   view?: CreateTicketIntegrationViewOptions;
+  /**
+   * User options
+   */
+  user?: CreateTicketIntegrationUserOptions;
 }
 
 export interface IntegrationsOptions {

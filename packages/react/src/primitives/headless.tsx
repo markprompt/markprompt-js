@@ -244,20 +244,28 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       minRows,
       submitOnEnter,
       onSubmit,
+      onKeyDown,
       ...rest
     } = props as any;
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>): void => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        if (submitOnEnter !== false) {
-          event.preventDefault();
-          onSubmit?.(event);
-        } else if (event.metaKey || event.ctrlKey) {
-          event.preventDefault();
-          onSubmit?.(event);
+    const handleKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLTextAreaElement>): void => {
+        if (type === 'search') {
+          onKeyDown?.(event);
+          return;
         }
-      }
-    };
+        if (event.key === 'Enter' && !event.shiftKey) {
+          if (submitOnEnter !== false) {
+            event.preventDefault();
+            onSubmit?.(event);
+          } else if (event.metaKey || event.ctrlKey) {
+            event.preventDefault();
+            onSubmit?.(event);
+          }
+        }
+      },
+      [onKeyDown, onSubmit, submitOnEnter, type],
+    );
 
     const Comp = type === 'search' ? 'input' : TextareaAutoSize;
 

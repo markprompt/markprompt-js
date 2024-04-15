@@ -1,4 +1,8 @@
-import { isAbortError, submitChat } from '@markprompt/core';
+import {
+  isAbortError,
+  submitChat,
+  type ChatCompletionMessageParam,
+} from '@markprompt/core';
 import {
   createContext,
   useContext,
@@ -85,17 +89,26 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
               conversationId: conversationId,
               ...get().options.chat,
               tools: get().options?.chat?.tools?.map((x) => x.tool),
+              systemPrompt:
+                get().options?.integrations?.createTicket?.prompt ??
+                'You are an expert summarizer. Your task is to summarize a conversation between a user and an AI. Your summary is concise, and allows a human support agent to quickly inspect what is going on. You should only output the summary, nothing else. You output the content in plain text.',
+              excludeFromInsights: true,
+              doNotInjectContext: true,
+              allowFollowUpQuestions: true,
             };
 
+            const conversation = toApiMessages(messages)
+              .map((m) => {
+                return `${m.role === 'user' ? 'User' : 'AI'}:\n\n${m.content}`;
+              })
+              .join('\n\n==============================\n\n');
+
             const apiMessages = [
-              ...toApiMessages(messages),
               {
                 role: 'user',
-                content:
-                  get().options?.integrations?.createTicket?.prompt ??
-                  'I want to create a support case. Please summarize the conversation so far in first-person, from my point of view, for sending it to a support agent. Return only the summary itself, nothing else. Use short paragraphs. Include relevant code snippets. Respond in plain text.',
+                content: `Here is the full transcript of the conversation:\n\n${conversation}`,
               } as const,
-            ];
+            ] as ChatCompletionMessageParam[];
 
             set((state) => {
               state.tickets!.summaryByConversationId[conversationId].state =
