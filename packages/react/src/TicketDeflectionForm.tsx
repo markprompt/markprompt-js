@@ -33,7 +33,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
     feedback,
     references,
     integrations,
-    defaultView = 'ticket',
+    defaultView = 'chat',
   } = props;
   const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
   const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
@@ -92,12 +92,13 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
             minInputRows={10}
           />
         ) : (
-          <CreateTicketView
-            createTicketOptions={integrations?.createTicket}
-            handleGoBack={() => setView('chat')}
-            includeNav={false}
-            includeCTA={true}
-          />
+          <></>
+          // <CreateTicketView
+          //   createTicketOptions={integrations?.createTicket}
+          //   handleGoBack={() => setView('chat')}
+          //   includeNav={false}
+          //   includeCTA={true}
+          // />
         )}
       </div>
       <div className="MarkpromptDialogFooter">
@@ -126,7 +127,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
                 onClick={() => setView('chat')}
               >
                 <ChevronLeftIcon className="MarkpromptButtonIcon" />
-                Back to AI
+                Back to help
               </div>
             </div>
           </>

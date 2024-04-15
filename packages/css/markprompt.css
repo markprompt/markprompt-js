@@ -2625,7 +2625,6 @@
   align-items: center;
   padding-block: 0.5rem;
   padding-inline: 1rem;
-  /* height: 3.5rem; */
   border-top: 1px solid var(--markprompt-border);
   background-color: var(--markprompt-background-accent);
   overflow: hidden;
@@ -2689,6 +2688,12 @@
 .MarkpromptButton:hover:before {
   opacity: 1;
 }
+
+/* .MarkpromptButton:focus {
+  box-shadow: 0 0 0 var(--markprompt-input-focus-shadow-width)
+    var(--markprompt-border);
+  border-color: var(--markprompt-border-accent);
+} */
 
 .MarkpromptButton[data-variant="primary"] {
   border: 1px solid transparent;
