@@ -144,7 +144,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
             />
           </div>
-
           {includeCTA && (
             <div className="MarkpromptTicketViewButtonRow">
               <div>
