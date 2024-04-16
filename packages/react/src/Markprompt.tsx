@@ -194,7 +194,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   }, [trigger?.customElement, display, onDidRequestOpenChange]);
 
   const onTriggerClicked = useCallback(() => {
-    openMarkprompt(menu ? 'menu' : 'ticket');
+    openMarkprompt(menu ? 'menu' : 'chat');
   }, [menu]);
 
   return (

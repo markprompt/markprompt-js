@@ -89,10 +89,6 @@ export default function IndexPage(): ReactElement {
           (t) => t.function.name === toolCall.function?.name,
         );
         if (tool) {
-          console.log(
-            'toolCall.function?.arguments',
-            toolCall.function?.arguments,
-          );
           tool.run?.(toolCall.function?.arguments);
           setStreamedMessage(
             `Calling: ${tool.function.name}\n\nArguments:\n\n${

@@ -352,7 +352,9 @@ export const createChatStore = ({
             });
           },
           selectConversation: (conversationId?: string) => {
-            if (conversationId === get().conversationId) return;
+            if (conversationId && conversationId === get().conversationId) {
+              return;
+            }
 
             // abort the current request, if any
             get().abort?.();
