@@ -92,7 +92,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
             <label htmlFor="user_name">
-              {createTicketOptions?.view?.nameLabel || 'Name'}
+              {createTicketOptions?.form?.nameLabel || 'Name'}
             </label>
             <input
               required
@@ -101,12 +101,12 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               name="user_name"
               value={createTicketOptions?.user?.name}
               disabled={!!createTicketOptions?.user?.name}
-              placeholder={createTicketOptions?.view?.namePlaceholder}
+              placeholder={createTicketOptions?.form?.namePlaceholder}
             />
           </div>
           <div className="MarkpromptFormGroup">
             <label htmlFor="email">
-              {createTicketOptions?.view?.emailLabel || 'Email'}
+              {createTicketOptions?.form?.emailLabel || 'Email'}
             </label>
             <input
               required
@@ -115,12 +115,12 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               name="email"
               value={createTicketOptions?.user?.email}
               disabled={!!createTicketOptions?.user?.name}
-              placeholder={createTicketOptions?.view?.emailPlaceholder}
+              placeholder={createTicketOptions?.form?.emailPlaceholder}
             />
           </div>
           <div className="MarkpromptFormGroup MarkpromptFormGroupGrow">
             <label htmlFor="summary" id="summary-label">
-              {createTicketOptions?.view?.summaryLabel || 'Description'}
+              {createTicketOptions?.form?.summaryLabel || 'Description'}
             </label>
             <textarea
               value={description}
@@ -128,8 +128,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 summary?.state &&
                 summary.state !== 'done' &&
                 summary?.state !== 'cancelled'
-                  ? createTicketOptions?.view?.summaryLoading
-                  : createTicketOptions?.view?.summaryPlaceholder
+                  ? createTicketOptions?.form?.summaryLoading
+                  : createTicketOptions?.form?.summaryPlaceholder
               }
               required
               aria-labelledby="summary-label"
@@ -150,8 +150,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 {result && (
                   <p>
                     {result.ok
-                      ? createTicketOptions?.view?.ticketCreatedOk
-                      : createTicketOptions?.view?.ticketCreatedError}
+                      ? createTicketOptions?.form?.ticketCreatedOk
+                      : createTicketOptions?.form?.ticketCreatedError}
                   </p>
                 )}
               </div>
@@ -160,7 +160,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 className="MarkpromptButton"
                 data-variant="primary"
               >
-                {createTicketOptions?.view?.submitLabel || 'Send message'}
+                {createTicketOptions?.form?.submitLabel || 'Send message'}
               </button>
             </div>
           )}

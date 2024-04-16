@@ -482,8 +482,8 @@
   align-self: flex-end;
 }
 
-@container (width > 50rem) {
-  .MarkpromptChatViewSidebar {
+@container (width > 18rem) {
+  .MarkpromptContentPlain .MarkpromptChatViewSidebar {
     display: grid;
     grid-column: 1;
     grid-template-rows: auto 1fr;
@@ -491,11 +491,11 @@
     overflow: hidden;
   }
 
-  .MarkpromptChatViewChat {
+  .MarkpromptContentPlain .MarkpromptChatViewChat {
     grid-column: 2;
   }
 
-  .MarkpromptConversationSelect {
+  .MarkpromptContentPlain .MarkpromptConversationSelect {
     display: none;
   }
 }
@@ -2051,8 +2051,8 @@
 }
 
 .MarkpromptNewChatIcon {
-  width: 1.25em;
-  height: 1.25em;
+  width: 1rem;
+  height: 1rem;
   color: var(--markprompt-mutedForeground);
 }
 
@@ -2129,7 +2129,8 @@
 .MarkpromptNewChatOption {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .MarkpromptDefaultViewContainer {

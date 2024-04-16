@@ -35,11 +35,9 @@ export function ConversationSidebar(
       <ul className="MarkpromptChatConversationList">
         <li className="MarkpromptChatConversationListItem">
           <button onClick={() => selectConversation(undefined)}>
-            <p>
-              <span className="MarkpromptNewChatOption">
-                <PlusIcon className="MarkpromptNewChatIcon" /> New chat
-              </span>
-            </p>
+            <span className="MarkpromptNewChatOption">
+              <PlusIcon className="MarkpromptNewChatIcon" /> New chat
+            </span>
           </button>
         </li>
         {sortedConversations.map(([conversationId, { messages }], index) => (
