@@ -2451,6 +2451,22 @@
   border-color: var(--markprompt-border-accent);
 }
 
+.MarkpromptCreateTicketForm :nth-child(1) { --form-group-index: 1; }
+.MarkpromptCreateTicketForm :nth-child(2) { --form-group-index: 2; }
+.MarkpromptCreateTicketForm :nth-child(3) { --form-group-index: 3; }
+.MarkpromptCreateTicketForm :nth-child(4) { --form-group-index: 4; }
+.MarkpromptCreateTicketForm :nth-child(5) { --form-group-index: 5; }
+.MarkpromptCreateTicketForm :nth-child(6) { --form-group-index: 6; }
+
+.MarkpromptCreateTicketForm > div {
+  --base-delay: 0.05s;
+  animation-fill-mode: both;
+  animation-name: markprompt-slide-up-subtle;
+  animation-duration: 500ms;
+  transition-timing-function: ease-in;
+  animation-delay: calc(var(--base-delay) * (var(--form-group-index) - 1));
+}
+
 .MarkpromptFormGroupGrow {
   flex-grow: 1;
 }
