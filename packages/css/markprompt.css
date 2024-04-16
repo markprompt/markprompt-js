@@ -37,7 +37,7 @@
 @media (prefers-color-scheme: dark) {
   /* Support Docusaurus dark theme data attribute */
   :not([data-theme='light']):root {
-    --markprompt-background: #171717;
+    --markprompt-background: #121212;
     --markprompt-background-accent: #0d0d0d;
     --markprompt-foreground: #d4d4d4;
     --markprompt-muted: #171717;
@@ -621,6 +621,7 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  background-color: var(--markprompt-background-accent);
 }
 
 .MarkpromptForm[data-state='disabled'] {
@@ -2473,7 +2474,7 @@
 
 .MarkpromptDropdownMenuContent {
   width: 240px;
-  background-color: white;
+  background-color: var(--markprompt-background);
   border: 1px solid var(--markprompt-border);
   border-radius: var(--markprompt-radius);
   padding: 1rem 1rem 0.5rem 1rem;
@@ -2554,10 +2555,10 @@
 
 .MarkpromptDropdownMenuItem[data-theme='purple'] {
   --markprompt-button-background: var(--markprompt-background-purple);
+  color: white;
 }
 
 .MarkpromptDropdownMenuItem[data-type='button'] {
-  color: var(--markprompt-background);
   background-color: var(--markprompt-button-background);
   height: 30px;
   justify-content: center;
@@ -2728,7 +2729,7 @@
   background-color: transparent !important;
 }
 
-.MarkpromptButton:not(:disabled):before {
+.MarkpromptButton[data-variant="primary"]:not(:disabled):before {
   content: "";
   background-image: linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
   position: absolute;
