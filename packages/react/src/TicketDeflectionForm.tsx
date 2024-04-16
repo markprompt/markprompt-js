@@ -13,12 +13,7 @@ type TicketDeflectionFormView = 'chat' | 'ticket';
 
 type TicketDeflectionFormProps = Pick<
   MarkpromptOptions,
-  | 'chat'
-  | 'ticketForm'
-  | 'branding'
-  | 'feedback'
-  | 'references'
-  | 'integrations'
+  'chat' | 'branding' | 'feedback' | 'references' | 'integrations'
 > & {
   projectKey: string;
   defaultView?: TicketDeflectionFormView;
@@ -30,7 +25,6 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   const {
     projectKey,
     chat,
-    ticketForm,
     feedback,
     references,
     integrations,
@@ -52,14 +46,15 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   }, [selectConversation]);
 
   const placeholder = useMemo(() => {
-    if (typeof ticketForm?.placeholder === 'string') {
-      return ticketForm.placeholder;
+    const _placeholder = integrations?.createTicket?.chat?.placeholder;
+    if (typeof _placeholder === 'string') {
+      return _placeholder;
     }
     if (messages.length > 0) {
-      return ticketForm?.placeholder?.[1];
+      return _placeholder?.[1];
     }
-    return ticketForm?.placeholder?.[0];
-  }, [messages.length, ticketForm?.placeholder]);
+    return _placeholder?.[0];
+  }, [messages.length, integrations?.createTicket?.chat?.placeholder]);
 
   useEffect(() => {
     if (view !== defaultView) {
@@ -95,8 +90,8 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       data-animate-shrink={didTransitionViewOnce}
     >
       <NavigationMenu
-        title={ticketForm?.title}
-        subtitle={ticketForm?.subtitle}
+        title={integrations?.createTicket?.chat?.title}
+        subtitle={integrations?.createTicket?.chat?.subtitle}
         close={{ visible: true, hasIcon: true }}
       />
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -108,7 +103,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
               defaultView: undefined,
               history: false,
               placeholder,
-              buttonLabel: ticketForm?.buttonLabel,
+              buttonLabel: integrations?.createTicket?.chat?.buttonLabel,
             }}
             feedbackOptions={feedback}
             projectKey={projectKey}
@@ -129,7 +124,9 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       <div className="MarkpromptDialogFooter">
         {view === 'chat' ? (
           <>
-            <RichText>{ticketForm?.disclaimerView?.message || ''}</RichText>
+            <RichText>
+              {integrations?.createTicket?.chat?.disclaimerView?.message || ''}
+            </RichText>
             <button
               className="MarkpromptButton"
               data-variant="outline"

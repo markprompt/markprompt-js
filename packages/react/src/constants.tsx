@@ -222,11 +222,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
       visible: true,
     },
   },
-  ticketForm: {
-    enabled: false,
-    title: 'Help',
-    placeholder: 'I am having trouble with…',
-  },
   references: {
     loadingText: 'Fetching context…',
     heading: 'Sources',
@@ -266,7 +261,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         hasIcon: true,
         hasText: true,
       },
-      view: {
+      form: {
         nameLabel: 'Name',
         namePlaceholder: '',
         emailLabel: 'Email',
@@ -277,6 +272,15 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         submitLabel: 'Submit case',
         ticketCreatedOk: 'Ticket created successfully!',
         ticketCreatedError: 'An error occurred while creating the case',
+      },
+      chat: {
+        title: 'Get help',
+        subtitle: 'How can we help?',
+        placeholder: ['I am having trouble with...', 'Send a message'],
+        disclaimerView: {
+          message:
+            'Answers generated with AI. Consider checking important information.',
+        },
       },
     },
   },

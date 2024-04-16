@@ -265,9 +265,8 @@ export interface MenuOptions {
 
 export interface ChatOptions {
   /**
-   * Show a chat-like prompt input allowing for conversation-style interaction
-   * rather than single question prompts.
-   * @default false
+   * Show a chat-like interface.
+   * @default true
    **/
   enabled?: boolean;
   /**
@@ -326,13 +325,7 @@ export interface ChatOptions {
   avatars?: AvatarsOptions;
 }
 
-export interface TicketFormOptions {
-  /**
-   * Show a chat-like prompt input allowing for conversation-style interaction
-   * rather than single question prompts.
-   * @default false
-   **/
-  enabled?: boolean;
+export interface CreateTicketIntegrationChatOptions {
   /**
    * Title for the view
    * @default "Help"
@@ -510,7 +503,7 @@ export interface CreateTicketIntegrationMessageButtonOptions {
   hasText?: boolean;
 }
 
-export interface CreateTicketIntegrationViewOptions {
+export interface CreateTicketIntegrationFormOptions {
   /**
    * Label for the name input
    * @default "Your Name"
@@ -602,9 +595,13 @@ export interface CreateTicketIntegrationOptions {
    */
   messageButton?: CreateTicketIntegrationMessageButtonOptions;
   /**
-   * Options for the create ticket view.
+   * Options for the create ticket form.
    */
-  view?: CreateTicketIntegrationViewOptions;
+  form?: CreateTicketIntegrationFormOptions;
+  /**
+   * Options for the create ticket chat.
+   */
+  chat?: CreateTicketIntegrationChatOptions;
   /**
    * User options
    */
@@ -659,10 +656,6 @@ export interface MarkpromptOptions {
    * Options for the search component.
    */
   search?: SubmitSearchQueryOptions & SearchOptions;
-  /**
-   * Options for the ticket form component.
-   */
-  ticketForm?: TicketFormOptions;
   /**
    * Options for the feedback component.
    **/

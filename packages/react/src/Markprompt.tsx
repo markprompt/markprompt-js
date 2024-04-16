@@ -127,7 +127,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     feedback,
     menu,
     chat,
-    ticketForm,
     references,
     search,
     trigger,
@@ -148,7 +147,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       feedback: props.feedback,
       menu: props.menu,
       chat: props.chat,
-      ticketForm: props.ticketForm,
       references: props.references,
       search: props.search,
       trigger: props.trigger,
@@ -276,7 +274,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   <TicketDeflectionForm
                     projectKey={projectKey}
                     chat={chat}
-                    ticketForm={ticketForm}
                     integrations={integrations}
                   />
                 </BaseMarkprompt.Content>

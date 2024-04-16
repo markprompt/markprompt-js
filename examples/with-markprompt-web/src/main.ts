@@ -37,16 +37,6 @@ if (el && el instanceof HTMLElement) {
         },
       },
     },
-    ticketForm: {
-      enabled: true,
-      title: 'Get help',
-      subtitle: 'How can we help?',
-      placeholder: ['I am having trouble with...', 'Send a message'],
-      disclaimerView: {
-        message:
-          'Answers generated with AI. Consider checking important information.',
-      },
-    },
     chat: {
       disclaimerView: {
         message:
