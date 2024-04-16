@@ -423,6 +423,9 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 referencesOptions={references}
                 branding={branding}
                 display={display}
+                handleCreateTicket={() => {
+                  openMarkprompt('ticket');
+                }}
               />
             )}
           </div>
@@ -552,6 +555,9 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               linkAs={linkAs}
               branding={branding}
               display={display}
+              handleCreateTicket={() => {
+                openMarkprompt('ticket');
+              }}
             />
           </Tabs.Content>
         )}
