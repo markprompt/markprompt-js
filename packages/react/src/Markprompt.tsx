@@ -8,7 +8,6 @@ import {
   Suspense,
   useEffect,
   useState,
-  useTransition,
   type ReactElement,
   useCallback,
   type JSXElementConstructor,
@@ -418,14 +417,14 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 chatOptions={chat}
                 debug={debug}
                 feedbackOptions={feedback}
-                integrations={integrations}
                 projectKey={projectKey}
                 referencesOptions={references}
                 branding={branding}
                 display={display}
-                handleCreateTicket={() => {
-                  openMarkprompt('ticket');
-                }}
+                // integrations={integrations}
+                // handleCreateTicket={() => {
+                //   openMarkprompt('ticket');
+                // }}
               />
             )}
           </div>
@@ -547,7 +546,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               chatOptions={chat}
               debug={debug}
               feedbackOptions={feedback}
-              integrations={integrations}
               onDidPressBack={() => setActiveView('search')}
               projectKey={projectKey}
               referencesOptions={references}
@@ -555,9 +553,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               linkAs={linkAs}
               branding={branding}
               display={display}
-              handleCreateTicket={() => {
-                openMarkprompt('ticket');
-              }}
+              // integrations={integrations}
+              // handleCreateTicket={() => {
+              //   openMarkprompt('ticket');
+              // }}
             />
           </Tabs.Content>
         )}
