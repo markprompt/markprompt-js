@@ -1,5 +1,15 @@
 # @markprompt/core
 
+## 0.27.0
+
+### Minor Changes
+
+- [`5965259`](https://github.com/motifland/markprompt-js/commit/5965259eeebc2c952b01ffbf794f4bba507c723c) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
+### Patch Changes
+
+- [`fde953d`](https://github.com/motifland/markprompt-js/commit/fde953d46e64cf0936482b0a543978aeb8a45e5f) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade `eventsource-parser`
+
 ## 0.26.3
 
 ### Patch Changes
