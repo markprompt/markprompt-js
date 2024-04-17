@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@docusaurus/tsconfig": "^3.2.1",
-    "dotenv": "^16.4.5",
-    "husky": "^8.0.3"
+    "dotenv": "^16.4.5"
   }
 }
