@@ -482,7 +482,7 @@ interface AutoScrollerInnerProps {
   discreteScrollTrigger?: number;
 }
 
-type AutoScrollerProps = ComponentPropsWithRef<'div'> & AutoScrollerInnerProps;
+type AutoScrollerProps = ComponentPropsWithoutRef<'div'> & AutoScrollerInnerProps;
 
 /**
  * A component that automatically scrolls to the bottom.

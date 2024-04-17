@@ -21,12 +21,12 @@
     "prepack": "tsc --build --clean && tsc --build"
   },
   "dependencies": {
-    "@docusaurus/types": "^3.1.1",
+    "@docusaurus/types": "^3.2.1",
     "@markprompt/css": "^0.26.2",
     "@markprompt/react": "0.40.7"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.2.1",
     "cpy-cli": "^5.0.0"
   },
   "peerDependencies": {

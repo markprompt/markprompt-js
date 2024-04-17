@@ -1,6 +1,7 @@
 {
   "references": [{ "path": "../core" }],
   "include": ["src/"],
+  "exclude": ["src/**/*.test.tsx", "src/**/*.test.ts"],
   "compilerOptions": {
     // base
     "esModuleInterop": true,
@@ -27,7 +28,6 @@
     // runtime
     "lib": ["dom", "dom.iterable", "es2023"],
 
-    "types": ["@testing-library/jest-dom/vitest"],
     "paths": {
       "@markprompt/core": ["../core/src"],
     },
