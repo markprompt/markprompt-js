@@ -2,7 +2,7 @@
   "include": ["src"],
   "references": [
     { "path": "../core" },
-    { "path": "../react/tsconfig.build.json" },
+    { "path": "../react/tsconfig.build.json" }
   ],
   "compilerOptions": {
     // base
@@ -34,7 +34,7 @@
     "types": ["@docusaurus/module-type-aliases"],
     "paths": {
       "@markprompt/core": ["../core/src"],
-      "@markprompt/react": ["../react/src"],
-    },
-  },
+      "@markprompt/react": ["../react/src"]
+    }
+  }
 }

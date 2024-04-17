@@ -35,7 +35,7 @@
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "esbuild": "^0.20.2",
-    "preact": "^10.19.3",
+    "preact": "^10.20.2",
     "react": "npm:@preact/compat",
     "react-dom": "npm:@preact/compat"
   },

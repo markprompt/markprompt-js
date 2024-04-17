@@ -20,12 +20,12 @@ async function get_random_activity(args: string): Promise<string> {
 }
 
 if (el && el instanceof HTMLElement) {
-  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+  markprompt(import.meta.env.VITE_PROJECT_KEY, el, {
     search: { enabled: true },
     chat: {
       enabled: true,
       model: 'gpt-4-1106-preview',
-      apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL + '/chat',
+      apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
           "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
