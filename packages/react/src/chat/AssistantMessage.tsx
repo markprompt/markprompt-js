@@ -17,11 +17,18 @@ export interface AssistantMessageProps {
   projectKey: string;
   linkAs?: string | ComponentType<any>;
   messageOnly?: boolean;
+  showFeedbackAlways?: boolean;
 }
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
-  const { feedbackOptions, message, projectKey, chatOptions, messageOnly } =
-    props;
+  const {
+    feedbackOptions,
+    message,
+    projectKey,
+    chatOptions,
+    messageOnly,
+    showFeedbackAlways,
+  } = props;
 
   const toolCalls = useMemo(
     () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
@@ -108,6 +115,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             <Feedback
               message={message.content ?? ''}
               variant="icons"
+              data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
               submitFeedback={(feedback, promptId) => {
                 submitFeedback(feedback, promptId);
@@ -121,6 +129,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               promptId={message.promptId}
               heading={feedbackOptions.heading}
               showFeedback={!!feedbackOptions?.enabled}
+              showVotes={feedbackOptions.votes}
               showCopy={chatOptions.showCopy}
             />
           )}

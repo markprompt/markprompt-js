@@ -55,25 +55,22 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
     setSubmittingCase(true);
 
-    // const result = await fetch(apiUrl, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     projectKey,
-    //     email: event.currentTarget.email.value,
-    //     name: event.currentTarget.user_name.value,
-    //     content: event.currentTarget.summary.value,
-    //     provider,
-    //   }),
-    // });
+    const result = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        projectKey,
+        email: event.currentTarget.email.value,
+        name: event.currentTarget.user_name.value,
+        content: event.currentTarget.summary.value,
+        provider,
+      }),
+    });
 
     setSubmittingCase(false);
-    // setResult(result);
-    setResult({
-      ok: true,
-    } as any);
+    setResult(result);
   };
 
   const description = useMemo(() => {

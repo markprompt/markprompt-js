@@ -20,6 +20,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   variant: 'text' | 'icons';
   promptId?: string;
   showFeedback?: boolean;
+  showVotes?: boolean;
   showCopy?: boolean;
 }
 
@@ -35,6 +36,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
     variant,
     promptId,
     showFeedback = true,
+    showVotes = true,
     showCopy,
     ...divProps
   } = props;
@@ -55,40 +57,44 @@ export function Feedback(props: FeedbackProps): ReactElement {
     <div {...divProps} data-variant={variant}>
       {heading && <h3>{heading}</h3>}
       <div>
+        {showFeedback && (
+          <>
+            {showVotes && (
+              <>
+                <button
+                  className="MarkpromptGhostThumbButton"
+                  onClick={() => handleFeedback({ vote: '1' })}
+                  data-active={feedback?.vote === '1'}
+                >
+                  {variant === 'text' && 'Yes'}
+                  {variant === 'icons' && (
+                    <AccessibleIcon label="yes">
+                      <ThumbsUpIcon width={16} height={16} strokeWidth={2} />
+                    </AccessibleIcon>
+                  )}
+                </button>
+                <button
+                  className="MarkpromptGhostThumbButton"
+                  onClick={() => handleFeedback({ vote: '-1' })}
+                  data-active={feedback?.vote === '-1'}
+                  style={{ animationDelay: '100ms' }}
+                >
+                  {variant === 'text' && 'No'}
+                  {variant === 'icons' && (
+                    <AccessibleIcon label="no">
+                      <ThumbsDownIcon width={16} height={16} />
+                    </AccessibleIcon>
+                  )}
+                </button>
+              </>
+            )}
+          </>
+        )}
         {showCopy && message && (
           <CopyContentButton
             content={message}
             className="MarkpromptGhostThumbButton"
           />
-        )}
-        {showFeedback && (
-          <>
-            <button
-              className="MarkpromptGhostThumbButton"
-              onClick={() => handleFeedback({ vote: '1' })}
-              data-active={feedback?.vote === '1'}
-            >
-              {variant === 'text' && 'Yes'}
-              {variant === 'icons' && (
-                <AccessibleIcon label="yes">
-                  <ThumbsUpIcon width={16} height={16} strokeWidth={2} />
-                </AccessibleIcon>
-              )}
-            </button>
-            <button
-              className="MarkpromptGhostThumbButton"
-              onClick={() => handleFeedback({ vote: '-1' })}
-              data-active={feedback?.vote === '-1'}
-              style={{ animationDelay: '100ms' }}
-            >
-              {variant === 'text' && 'No'}
-              {variant === 'icons' && (
-                <AccessibleIcon label="no">
-                  <ThumbsDownIcon width={16} height={16} />
-                </AccessibleIcon>
-              )}
-            </button>
-          </>
         )}
       </div>
     </div>

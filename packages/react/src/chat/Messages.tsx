@@ -6,6 +6,7 @@ import { DefaultMessage, DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
+import { CSATPicker } from '../feedback/csat-picker.js';
 import { ChatIconOutline } from '../icons.js';
 import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -76,9 +77,10 @@ export function Messages(props: MessagesProps): ReactElement {
         {branding.show && <Branding brandingType={branding.type} />}
         {welcomeMessage && <DefaultMessage {...props} />}
         {messages.map((message, index) => {
+          const isLastMessage = index === messages.length - 1;
           // Only show references for last message
           const showReferences =
-            index === messages.length - 1 &&
+            isLastMessage &&
             (!referencesOptions?.display ||
               referencesOptions?.display === 'end') &&
             message.references &&
@@ -107,6 +109,8 @@ export function Messages(props: MessagesProps): ReactElement {
                   feedbackOptions={feedbackOptions}
                   chatOptions={chatOptions}
                   linkAs={linkAs}
+                  showFeedbackAlways={isLastMessage}
+                  isLast={isLastMessage}
                 />
               )}
 
@@ -127,7 +131,7 @@ export function Messages(props: MessagesProps): ReactElement {
                 message.state === 'done' &&
                 index === lastAssistantMessageIndex && (
                   <div className="MarkpromptMessageCreateTicket">
-                    <p className="MarkpromptMessageCreateTicketDefaultText">
+                    <p className="MarkpromptMessageSectionHeading">
                       {integrations.createTicket.messageText}
                     </p>
                     <button
@@ -150,6 +154,14 @@ export function Messages(props: MessagesProps): ReactElement {
                         </span>
                       )}
                     </button>
+                  </div>
+                )}
+
+              {message.role === 'assistant' &&
+                (message.state === 'done' || message.state === 'cancelled') &&
+                index === lastAssistantMessageIndex && (
+                  <div className="MarkpromptMessageCSATContainer">
+                    <CSATPicker heading={feedbackOptions.headingCSAT} />
                   </div>
                 )}
             </div>

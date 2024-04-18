@@ -196,7 +196,10 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   },
   feedback: {
     enabled: true,
+    votes: true,
+    csat: true,
     heading: 'Was this response helpful?',
+    headingCSAT: 'How helpful was this?',
   },
   chat: {
     enabled: true,
@@ -224,7 +227,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   },
   references: {
     loadingText: 'Fetching context…',
-    heading: 'Sources',
+    heading: 'Related articles',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
   },

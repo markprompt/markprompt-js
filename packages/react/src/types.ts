@@ -148,10 +148,25 @@ export interface FeedbackOptions {
    * */
   enabled?: boolean;
   /**
+   * Enable votes.
+   * @default true
+   * */
+  votes?: boolean;
+  /**
+   * Enable thread CSAT.
+   * @default true
+   * */
+  csat?: boolean;
+  /**
    * Heading above the form
    * @default "Was this response helpful?"
    **/
   heading?: string;
+  /**
+   * Heading above the CSAT picker
+   * @default "How helpful was this?"
+   **/
+  headingCSAT?: string;
   /**
    * Called when feedback is submitted
    * @default undefined
@@ -364,7 +379,7 @@ export interface ReferencesOptions {
   getLabel?: (reference: FileSectionReference) => string | undefined;
   /**
    * Heading above the references
-   * @default "Sources"
+   * @default "Related articles"
    **/
   heading?: string;
   /** Loading text, default: `Fetching context…` */
