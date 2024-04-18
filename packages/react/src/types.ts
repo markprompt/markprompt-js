@@ -577,7 +577,7 @@ export interface CreateTicketIntegrationOptions {
   provider: 'zendesk';
   /**
    * The API URL to use for creating tickets
-   * @default "https://api.markprompt.com/create-ticket"
+   * @default "https://api.markprompt.com/integrations/create-ticket"
    **/
   apiUrl?: string;
   /**

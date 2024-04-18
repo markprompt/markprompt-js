@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react';
 
 import { toApiMessages } from './chat/utils.js';
-import { ChevronLeftIcon } from './icons.js';
+import { ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { useChatStore, type MarkpromptOptions } from './index.js';
 import { useGlobalStore } from './store.js';
 
@@ -33,17 +33,27 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const messages = useChatStore((state) => state.messages);
 
   const [result, setResult] = useState<Response>();
+  const [isSubmittingCase, setSubmittingCase] = useState(false);
 
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
 
-    if (!apiUrl || !projectKey || !provider) {
+    if (
+      !apiUrl ||
+      !projectKey ||
+      !provider ||
+      event.currentTarget.email.value ||
+      event.currentTarget.user_name.value ||
+      !event.currentTarget.summary.value
+    ) {
       return;
     }
 
     setResult(undefined);
+
+    setSubmittingCase(true);
 
     const result = await fetch(apiUrl, {
       method: 'POST',
@@ -59,6 +69,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       }),
     });
 
+    setSubmittingCase(false);
     setResult(result);
   };
 
@@ -100,7 +111,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               id="user_name"
               name="user_name"
               value={createTicketOptions?.user?.name}
-              disabled={!!createTicketOptions?.user?.name}
+              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
               placeholder={createTicketOptions?.form?.namePlaceholder}
             />
           </div>
@@ -114,7 +125,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               id="email"
               name="email"
               value={createTicketOptions?.user?.email}
-              disabled={!!createTicketOptions?.user?.name}
+              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
               placeholder={createTicketOptions?.form?.emailPlaceholder}
             />
           </div>
@@ -134,6 +145,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               required
               aria-labelledby="summary-label"
               id="summary"
+              disabled={isSubmittingCase}
               style={{
                 color:
                   summary?.state &&
@@ -159,8 +171,12 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 type="submit"
                 className="MarkpromptButton"
                 data-variant="primary"
+                disabled={isSubmittingCase}
               >
                 {createTicketOptions?.form?.submitLabel || 'Send message'}
+                {isSubmittingCase && (
+                  <LoadingIcon style={{ width: 16, height: 16 }} />
+                )}
               </button>
             </div>
           )}

@@ -11,7 +11,7 @@ import {
 
 import { ConversationSelect } from './ConversationSelect.js';
 import { ChatContext, useChatStore } from './store.js';
-import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
+import { LoadingIcon, SendIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
 
@@ -31,9 +31,9 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
     return (
       <div>
         <LoadingIcon />
-        <div style={{ position: 'absolute', inset: 0 }}>
+        {/* <div style={{ position: 'absolute', inset: 0 }}>
           <StopInsideLoadingIcon />
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -132,7 +132,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           labelClassName="MarkpromptPromptLabel"
           textAreaContainerClassName="MarkpromptTextAreaContainer"
           sendButtonClassName="MarkpromptButton"
-          buttonLabel={isLoading ? 'Stop generating' : chatOptions?.buttonLabel}
+          buttonLabel={isLoading ? 'Generating' : chatOptions?.buttonLabel}
           value={prompt}
           isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}

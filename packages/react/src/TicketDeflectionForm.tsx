@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChatView } from './chat/ChatView.js';
 import { useChatStore } from './chat/store.js';
 import { CreateTicketView } from './CreateTicketView.js';
-import { ChevronLeftIcon } from './icons.js';
+import { ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { useGlobalStore } from './store.js';
 import type { MarkpromptOptions } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
@@ -134,6 +134,9 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
               onClick={() => handleCreateTicketSummary()}
             >
               {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
+              {isCreatingTicketSummary && (
+                <LoadingIcon style={{ width: 16, height: 16 }} />
+              )}
             </button>
           </>
         ) : (

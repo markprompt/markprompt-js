@@ -2762,6 +2762,12 @@
   background-color: var(--markprompt-primary);
 }
 
+.MarkpromptButton[data-variant="primary"]:disabled {
+  border: 1px solid var(--markprompt-border);
+  color: var(--markprompt-mutedForeground);
+  background-color: var(--markprompt-muted);
+}
+
 .MarkpromptButton[data-variant="outline"] {
   border: 1px solid var(--markprompt-border);
   color: var(--markprompt-foreground);

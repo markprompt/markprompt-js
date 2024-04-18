@@ -301,7 +301,8 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
             type="submit"
             data-variant="primary"
             disabled={
-              (rest.value as string)?.trim()?.length === 0 && !isLoading
+              isLoading ||
+              ((rest.value as string)?.trim()?.length === 0 && !isLoading)
             }
           >
             {buttonLabel}

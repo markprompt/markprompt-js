@@ -29,6 +29,9 @@ if (el && el instanceof HTMLElement) {
     },
     integrations: {
       createTicket: {
+        apiUrl:
+          import.meta.env.VITE_MARKPROMPT_API_URL +
+          '/integrations/create-ticket',
         enabled: true,
         provider: 'zendesk',
         user: {
