@@ -2371,6 +2371,12 @@
   white-space: nowrap;
 }
 
+.MarkpromptTicketViewButtonRowMessage {
+  animation-fill-mode: both;
+  animation-name: markprompt-slide-down-subtle;
+  animation-duration: 500ms;
+}
+
 .MarkpromptTicketViewButtonRow .MarkpromptButton {
   flex: none;
 }

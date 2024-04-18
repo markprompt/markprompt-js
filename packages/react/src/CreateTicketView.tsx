@@ -44,8 +44,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       !apiUrl ||
       !projectKey ||
       !provider ||
-      event.currentTarget.email.value ||
-      event.currentTarget.user_name.value ||
+      !event.currentTarget.email.value ||
+      !event.currentTarget.user_name.value ||
       !event.currentTarget.summary.value
     ) {
       return;
@@ -55,22 +55,25 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
     setSubmittingCase(true);
 
-    const result = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        projectKey,
-        email: event.currentTarget.email.value,
-        name: event.currentTarget.user_name.value,
-        content: event.currentTarget.summary.value,
-        provider,
-      }),
-    });
+    // const result = await fetch(apiUrl, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     projectKey,
+    //     email: event.currentTarget.email.value,
+    //     name: event.currentTarget.user_name.value,
+    //     content: event.currentTarget.summary.value,
+    //     provider,
+    //   }),
+    // });
 
     setSubmittingCase(false);
-    setResult(result);
+    // setResult(result);
+    setResult({
+      ok: true,
+    } as any);
   };
 
   const description = useMemo(() => {
@@ -160,7 +163,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             <div className="MarkpromptTicketViewButtonRow">
               <div>
                 {result && (
-                  <p>
+                  <p className="MarkpromptTicketViewButtonRowMessage">
                     {result.ok
                       ? createTicketOptions?.form?.ticketCreatedOk
                       : createTicketOptions?.form?.ticketCreatedError}

@@ -544,7 +544,7 @@ export interface CreateTicketIntegrationFormOptions {
   submitLabel: string;
   /**
    * Text shown when the ticket was created ok
-   * @default "Ticket created successfully!"
+   * @default "Thank you! We will get back to you shortly."
    */
   ticketCreatedOk: string;
   /**

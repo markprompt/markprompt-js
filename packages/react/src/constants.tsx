@@ -270,7 +270,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         summaryPlaceholder: 'Please describe your issue',
         summaryLoading: 'Generating summary…',
         submitLabel: 'Submit case',
-        ticketCreatedOk: 'Ticket created successfully!',
+        ticketCreatedOk: 'Thank you! We will get back to you shortly.',
         ticketCreatedError: 'An error occurred while creating the case.',
       },
       chat: {

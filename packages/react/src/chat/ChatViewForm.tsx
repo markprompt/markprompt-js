@@ -132,7 +132,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           labelClassName="MarkpromptPromptLabel"
           textAreaContainerClassName="MarkpromptTextAreaContainer"
           sendButtonClassName="MarkpromptButton"
-          buttonLabel={isLoading ? 'Generating' : chatOptions?.buttonLabel}
+          buttonLabel={isLoading ? 'Generating...' : chatOptions?.buttonLabel}
           value={prompt}
           isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}
