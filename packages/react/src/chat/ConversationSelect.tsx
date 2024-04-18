@@ -42,7 +42,7 @@ export function ConversationSelect({
           ),
         },
       ]}
-      itemToString={(item) => item?.label ?? ''}
+      itemToString={(item) => item?.value ?? ''}
       itemToChildren={(item) => {
         if ('children' in item!) return item.children;
         return item!.label;
