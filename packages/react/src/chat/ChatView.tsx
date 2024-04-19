@@ -165,7 +165,8 @@ export function ChatView(props: ChatViewProps): JSX.Element {
               <div className="MarkpromptDisclaimerViewMessage">
                 <RichText>{chatOptions.disclaimerView.message}</RichText>
                 <button
-                  className="MarkpromptPrimaryButton"
+                  className="MarkpromptButton"
+                  data-variant="primary"
                   type="submit"
                   onClick={() => {
                     setDidAcceptDisclaimer(true);

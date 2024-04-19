@@ -22,10 +22,9 @@ async function get_random_activity(args: string): Promise<string> {
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
-    display: 'dialog',
-    apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
+    display: 'sheet',
     search: {
-      enabled: true,
+      enabled: false,
     },
     integrations: {
       createTicket: {
@@ -41,14 +40,14 @@ if (el && el instanceof HTMLElement) {
       disclaimerView: {
         message:
           'I am an AI assistant. Consider checking important information.',
+        cta: 'I agree',
       },
       enabled: true,
       placeholder: 'Ask a question...',
       title: 'Help',
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4-turbo-preview',
       defaultView: {
-        message:
-          "Hello, I'm an AI assistant from Acme. If we find something we can't solve, I'll help create a support case for you.",
+        message: "Hello, I'm an AI assistant from Acme!",
         // promptsHeading: 'Popular questions',
         prompts: [
           'What is Markprompt?',
