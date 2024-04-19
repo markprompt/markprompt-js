@@ -235,7 +235,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       sendButtonClassName,
       placeholder,
       spellCheck = false,
-      type,
+      type = 'search',
       showSubmitButton = true,
       isLoading,
       Icon,
@@ -281,6 +281,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
             {...rest}
             id={name}
             name={name}
+            type={type}
             minRows={minRows}
             placeholder={placeholder}
             ref={ref as any}
