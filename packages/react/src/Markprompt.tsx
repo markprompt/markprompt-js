@@ -165,11 +165,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   const [openViews, setOpenViews] = useState<{ [key in View]?: boolean }>({});
 
   useEffect(() => {
-    const onOpen = ({ view }: { view?: View }): void => {
+    const onOpen = ({ view = 'chat' }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
-      if (!view) {
-        return;
-      }
       setOpenViews((v) => {
         const closed = Object.keys(v).reduce((acc, value) => {
           return { ...acc, [value]: false };
