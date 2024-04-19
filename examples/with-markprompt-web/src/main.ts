@@ -25,7 +25,7 @@ if (el && el instanceof HTMLElement) {
     display: 'sheet',
     apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
     search: {
-      enabled: false,
+      enabled: true,
     },
     integrations: {
       createTicket: {

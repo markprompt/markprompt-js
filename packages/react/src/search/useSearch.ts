@@ -21,7 +21,7 @@ import { useAbortController } from '../useAbortController.js';
 export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
 
 export interface UseSearchOptions {
-  apiUrl: string;
+  apiUrl?: string;
   projectKey: string;
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'>;
   debug?: boolean;

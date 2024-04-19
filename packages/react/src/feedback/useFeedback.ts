@@ -15,7 +15,7 @@ export interface UseFeedbackOptions {
   /** Markprompt project key */
   projectKey: string;
   /** The base API URL */
-  apiUrl: string;
+  apiUrl?: string;
 }
 
 export interface UseFeedbackResult {
