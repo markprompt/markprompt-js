@@ -10,6 +10,7 @@ export {
 export {
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   submitFeedback,
+  submitCSAT,
   type SubmitFeedbackBody,
   type SubmitFeedbackOptions,
 } from './feedback.js';

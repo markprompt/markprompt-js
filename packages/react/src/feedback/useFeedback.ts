@@ -1,5 +1,6 @@
 import {
-  submitFeedback as submitFeedbackToMarkprompt,
+  submitFeedback as submitFeedbackCore,
+  submitCSAT as submitCSATCore,
   type PromptFeedback,
   type SubmitFeedbackOptions,
 } from '@markprompt/core';
@@ -49,11 +50,11 @@ export function useFeedback({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitFeedbackToMarkprompt(
-        { feedback, promptId },
-        projectKey,
-        { ...feedbackOptions, signal: controller.signal, apiUrl },
-      );
+      const promise = submitFeedbackCore({ feedback, promptId }, projectKey, {
+        ...feedbackOptions,
+        signal: controller.signal,
+        apiUrl,
+      });
 
       promise.catch(() => {
         // ignore submitFeedback errors
@@ -75,21 +76,21 @@ export function useFeedback({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      // const promise = submitFeedbackToMarkprompt(
-      //   { feedback, promptId },
-      //   projectKey,
-      //   { ...feedbackOptions, signal: controller.signal },
-      // );
+      const promise = submitCSATCore({ threadId, csat }, projectKey, {
+        ...feedbackOptions,
+        apiUrl,
+        signal: controller.signal,
+      });
 
-      // promise.catch(() => {
-      //   // ignore submitFeedback errors
-      // });
+      promise.catch(() => {
+        // ignore submitFeedback errors
+      });
 
-      // promise.finally(() => {
-      //   if (controllerRef.current === controller) {
-      //     controllerRef.current = undefined;
-      //   }
-      // });
+      promise.finally(() => {
+        if (controllerRef.current === controller) {
+          controllerRef.current = undefined;
+        }
+      });
     },
     [abort, controllerRef, projectKey, feedbackOptions],
   );

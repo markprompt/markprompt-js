@@ -24,7 +24,7 @@ export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS =
   {} satisfies SubmitFeedbackOptions;
 
 export async function submitFeedback(
-  feedback: SubmitFeedbackBody,
+  body: SubmitFeedbackBody,
   projectKey: string,
   options: SubmitFeedbackOptions & BaseOptions = {},
 ): Promise<void> {
@@ -48,16 +48,16 @@ export async function submitFeedback(
 
   try {
     const response = await fetch(
-      `${resolvedOptions.apiUrl}/messages/${feedback.promptId}`,
+      `${resolvedOptions.apiUrl}/messages/${body.promptId}`,
       {
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
-          'X-Markprompt-API-Version': '2023-12-01',
+          'X-Markprompt-API-Version': '2024-03-23',
         }),
         body: JSON.stringify({
           projectKey,
-          vote: parseInt(feedback.feedback.vote),
+          vote: parseInt(body.feedback.vote),
         }),
         signal: signal,
       },
@@ -77,57 +77,60 @@ export async function submitFeedback(
   }
 }
 
-// export async function submitCSAT(
-//   csat: CSAT,
-//   projectKey: string,
-//   options?: SubmitFeedbackOptions,
-// ): Promise<void> {
-//   if (!projectKey) {
-//     throw new Error('A projectKey is required.');
-//   }
+export interface SubmitCSATBody {
+  /** Thread id */
+  threadId: string;
+  /** CSAT. */
+  csat: CSAT;
+}
 
-//   const allowedOptions = Object.fromEntries(
-//     Object.entries(options ?? {}).filter(([key]) =>
-//       allowedOptionKeys.includes(key),
-//     ),
-//   );
+export async function submitCSAT(
+  body: SubmitCSATBody,
+  projectKey: string,
+  options: SubmitFeedbackOptions & BaseOptions = {},
+): Promise<void> {
+  if (!projectKey) {
+    throw new Error('A projectKey is required.');
+  }
 
-//   const { signal, ...cloneableOpts } = allowedOptions ?? {};
+  const allowedOptions: SubmitFeedbackOptions & BaseOptions =
+    Object.fromEntries(
+      Object.entries(options ?? {}).filter(([key]) =>
+        allowedOptionKeys.includes(key),
+      ),
+    );
 
-//   const params = new URLSearchParams({
-//     projectKey,
-//   });
+  const { signal, ...cloneableOpts } = allowedOptions ?? {};
 
-//   try {
-//     const response = await fetch(`${apiUrl}/threads` + `?${params}`, {
-//       method: 'POST',
-//       headers: new Headers({
-//         'Content-Type': 'application/json',
-//         'X-Markprompt-API-Version': '2023-12-01',
-//       }),
-//       body: JSON.stringify({
-//         ...feedback,
-//         // /v1/feedback was using promptId. The new /feedback endpoint
-//         // now uses messageId. We should eventually migrate everything
-//         // to messageId, but now we just copy the promptId parameter
-//         // to messageId, so that it works with both endpoints.
-//         messageId: feedback.promptId,
-//       }),
-//       signal: signal,
-//     });
+  const resolvedOptions = defaults(cloneableOpts, {
+    ...DEFAULT_OPTIONS,
+    ...DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  });
 
-//     if (!response.ok) {
-//       const error = (await response.json())?.error;
-//       throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
-//     }
+  try {
+    const response = await fetch(
+      `${resolvedOptions.apiUrl}/threads/${body.threadId}`,
+      {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'X-Markprompt-API-Version': '2024-03-23',
+        }),
+        body: JSON.stringify({ projectKey, csat: body.csat }),
+        signal: signal,
+      },
+    );
 
-//     return response.json();
-//   } catch (error) {
-//     if (error instanceof DOMException && error.name === 'AbortError') {
-//       // do nothing on AbortError's, this is expected
-//       return undefined;
-//     } else {
-//       throw error;
-//     }
-//   }
-// }
+    if (!response.ok) {
+      const error = (await response.json())?.error;
+      throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      // do nothing on AbortError's, this is expected
+      return undefined;
+    } else {
+      throw error;
+    }
+  }
+}

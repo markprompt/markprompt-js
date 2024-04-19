@@ -1,3 +1,4 @@
+import { DEFAULT_OPTIONS } from '@markprompt/core';
 import {
   type ReactElement,
   type ComponentPropsWithoutRef,
@@ -11,6 +12,7 @@ import { StarIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../index.js';
 
 interface CSATPickerProps extends ComponentPropsWithoutRef<'aside'> {
+  apiUrl?: string;
   projectKey: string;
   threadId: string;
   csat?: CSAT;
@@ -34,24 +36,24 @@ function getHeading(csat: CSAT): string | undefined {
 }
 
 export function CSATPicker(props: CSATPickerProps): ReactElement {
-  const { csat = 0, projectKey, threadId, feedbackOptions } = props;
+  const { csat = 0, projectKey, apiUrl, threadId, feedbackOptions } = props;
   const [tempValue, setTempValue] = useState<CSAT>(csat);
   const [permanentValue, setPermanentValue] = useState<CSAT>(csat);
   const [isHovering, setIsHovering] = useState(false);
 
-  // const { submitThreadCSAT } = useFeedback({
-  //   projectKey,
-  //   feedbackOptions,
-  // });
+  const { submitThreadCSAT } = useFeedback({
+    apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
+    projectKey,
+    feedbackOptions,
+  });
 
   const submitCSAT = useCallback(
     (value: CSAT) => {
       setTempValue(value);
       setPermanentValue(value);
-      // submitThreadCSAT(threadId, value);
+      submitThreadCSAT(threadId, value);
     },
-    // [submitThreadCSAT, threadId],
-    [threadId],
+    [submitThreadCSAT, threadId],
   );
 
   return (

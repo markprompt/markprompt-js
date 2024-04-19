@@ -166,6 +166,7 @@ export function Messages(props: MessagesProps): ReactElement {
                 index === lastAssistantMessageIndex && (
                   <div className="MarkpromptMessageCSATContainer">
                     <CSATPicker
+                      apiUrl={apiUrl}
                       projectKey={projectKey}
                       threadId={threadId}
                       feedbackOptions={feedbackOptions}
