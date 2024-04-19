@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.12",
+    "@floating-ui/react-dom": "^2.0.8",
     "@markprompt/core": "^0.26.3",
     "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",
