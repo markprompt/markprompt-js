@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { SubmitSearchQueryOptions } from '@markprompt/core';
+import {
+  DEFAULT_OPTIONS,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
@@ -30,6 +33,10 @@ import {
 import { useDefaults } from '../useDefaults.js';
 
 export interface SearchViewProps {
+  /**
+   * The base API URL.
+   */
+  apiUrl?: string;
   /**
    * The project key associated to the project.
    */
@@ -75,8 +82,14 @@ interface ActiveSearchResult {
 const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { activeView, debug, onDidSelectResult, onDidSelectAsk, projectKey } =
-    props;
+  const {
+    activeView,
+    debug,
+    onDidSelectResult,
+    onDidSelectAsk,
+    projectKey,
+    apiUrl,
+  } = props;
 
   if (!projectKey) {
     throw new Error(
@@ -102,8 +115,9 @@ export function SearchView(props: SearchViewProps): ReactElement {
     setSearchQuery,
     submitSearchQuery,
   } = useSearch({
-    debug,
+    apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
     projectKey,
+    debug,
     searchOptions,
   });
 

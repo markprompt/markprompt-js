@@ -14,6 +14,7 @@ import {
 } from 'vitest';
 
 import {
+  DEFAULT_OPTIONS,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   submitChat,
   SubmitChatOptions,
@@ -34,7 +35,7 @@ describe('submitChat', () => {
   let status = 200;
 
   const server = setupServer(
-    http.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async ({ request }) => {
+    http.post(DEFAULT_OPTIONS.apiUrl!, async ({ request }) => {
       req = request;
       requestBody = (await request.json()) as SubmitChatOptions;
 
@@ -162,7 +163,7 @@ describe('submitChat', () => {
       // do nothing
     }
 
-    const { apiUrl: _apiUrl, ...rest } = DEFAULT_SUBMIT_CHAT_OPTIONS;
+    const { ...rest } = DEFAULT_SUBMIT_CHAT_OPTIONS;
 
     expect(requestBody).toStrictEqual({
       messages: [{ content: 'How much is 1+2?', role: 'user' }],

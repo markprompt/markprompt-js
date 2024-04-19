@@ -118,6 +118,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   }
 
   const {
+    apiUrl,
     display,
     sticky,
     defaultView,
@@ -138,6 +139,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     children,
   }: MarkpromptOptions = useDefaults(
     {
+      apiUrl: props.apiUrl,
       display: props.display,
       sticky: props.sticky,
       defaultView: getDefaultView(props.defaultView, props),
@@ -232,6 +234,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
       <GlobalStoreProvider
         options={{
+          apiUrl,
           branding,
           chat,
           close,
@@ -251,7 +254,12 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           trigger,
         }}
       >
-        <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
+        <ChatProvider
+          chatOptions={chat}
+          debug={debug}
+          projectKey={projectKey}
+          apiUrl={apiUrl}
+        >
           {display !== 'plain' && (
             <BaseMarkprompt.Root
               display="dialog"
@@ -271,6 +279,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   onPointerDownOutside={(e) => e.preventDefault()}
                 >
                   <TicketDeflectionForm
+                    apiUrl={apiUrl}
                     projectKey={projectKey}
                     chat={chat}
                     integrations={integrations}
@@ -317,11 +326,12 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
                     <MarkpromptContent
                       close={close}
+                      apiUrl={apiUrl}
+                      projectKey={projectKey}
                       chat={chat}
                       debug={debug}
                       feedback={feedback}
                       integrations={integrations}
-                      projectKey={projectKey}
                       references={references}
                       search={search}
                       layout={layout}
@@ -361,6 +371,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
 type MarkpromptContentProps = {
   projectKey: string;
+  apiUrl?: string;
   chat?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
   debug?: boolean;
@@ -375,6 +386,7 @@ type MarkpromptContentProps = {
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
+    apiUrl,
     chat,
     close,
     debug,
@@ -413,6 +425,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             {chat?.enabled && (
               <ChatView
+                apiUrl={apiUrl}
                 activeView={activeView}
                 chatOptions={chat}
                 debug={debug}
@@ -516,6 +529,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <Suspense fallback={null}>
               <SearchView
                 activeView={activeView}
+                apiUrl={apiUrl}
                 projectKey={projectKey}
                 layout={layout}
                 searchOptions={search}
@@ -542,6 +556,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             }}
           >
             <ChatView
+              apiUrl={apiUrl}
               activeView={activeView}
               chatOptions={chat}
               debug={debug}

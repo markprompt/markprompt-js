@@ -5,6 +5,7 @@ import {
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
+import type { CSAT } from '../../../core/src/types.js';
 import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
@@ -12,18 +13,23 @@ export interface UseFeedbackOptions {
   feedbackOptions?: Omit<SubmitFeedbackOptions, 'signal'>;
   /** Markprompt project key */
   projectKey: string;
+  /** The base API URL */
+  apiUrl: string;
 }
 
 export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
-  /** Submit feedback for the current prompt */
+  /** Submit feedback for the current message */
   submitFeedback: (feedback: PromptFeedback, promptId?: string) => void;
+  /** Submit CSAT for a thread */
+  submitThreadCSAT: (threadId: string, csat: CSAT) => void;
 }
 
 export function useFeedback({
   feedbackOptions,
   projectKey,
+  apiUrl,
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
@@ -46,7 +52,7 @@ export function useFeedback({
       const promise = submitFeedbackToMarkprompt(
         { feedback, promptId },
         projectKey,
-        { ...feedbackOptions, signal: controller.signal },
+        { ...feedbackOptions, signal: controller.signal, apiUrl },
       );
 
       promise.catch(() => {
@@ -59,8 +65,34 @@ export function useFeedback({
         }
       });
     },
+    [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
+  );
+
+  const submitThreadCSAT = useCallback(
+    async (threadId: string, csat: CSAT) => {
+      abort();
+
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      // const promise = submitFeedbackToMarkprompt(
+      //   { feedback, promptId },
+      //   projectKey,
+      //   { ...feedbackOptions, signal: controller.signal },
+      // );
+
+      // promise.catch(() => {
+      //   // ignore submitFeedback errors
+      // });
+
+      // promise.finally(() => {
+      //   if (controllerRef.current === controller) {
+      //     controllerRef.current = undefined;
+      //   }
+      // });
+    },
     [abort, controllerRef, projectKey, feedbackOptions],
   );
 
-  return { submitFeedback, abort };
+  return { submitFeedback, submitThreadCSAT, abort };
 }

@@ -1,5 +1,5 @@
 import {
-  DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  DEFAULT_OPTIONS,
   type AlgoliaDocSearchHit,
   type SearchResult,
 } from '@markprompt/core';
@@ -25,7 +25,7 @@ let results: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let debug: unknown;
 
 const server = setupServer(
-  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, () => {
+  http.get(DEFAULT_OPTIONS.apiUrl!, () => {
     if (status >= 400) {
       return HttpResponse.json(
         { error: 'Server error', debug },

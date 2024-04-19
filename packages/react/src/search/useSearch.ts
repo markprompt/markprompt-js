@@ -21,9 +21,10 @@ import { useAbortController } from '../useAbortController.js';
 export type SearchLoadingState = 'indeterminate' | 'preload' | 'done';
 
 export interface UseSearchOptions {
-  debug?: boolean;
+  apiUrl: string;
   projectKey: string;
   searchOptions?: Omit<SubmitSearchQueryOptions, 'signal'>;
+  debug?: boolean;
 }
 
 export interface UseSearchResult {
@@ -36,8 +37,9 @@ export interface UseSearchResult {
 }
 
 export function useSearch({
-  debug,
+  apiUrl,
   projectKey,
+  debug,
   searchOptions,
 }: UseSearchOptions): UseSearchResult {
   const [state, setState] = useState<SearchLoadingState>('indeterminate');
@@ -79,6 +81,7 @@ export function useSearch({
       } else {
         promise = (
           submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+            apiUrl,
             ...searchOptions,
             signal: controller.signal,
           }) as Promise<SearchResultsResponse>

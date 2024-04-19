@@ -13,6 +13,7 @@ import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
 export type MessagesProps = {
+  apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   integrations: MarkpromptOptions['integrations'];
@@ -24,6 +25,7 @@ export type MessagesProps = {
 
 export function Messages(props: MessagesProps): ReactElement {
   const {
+    apiUrl,
     chatOptions,
     feedbackOptions,
     integrations,
@@ -35,6 +37,7 @@ export function Messages(props: MessagesProps): ReactElement {
   } = props;
 
   const messages = useChatStore((state) => state.messages);
+  const threadId = useChatStore((state) => state.conversationId);
   const submitChat = useChatStore((state) => state.submitChat);
 
   const welcomeMessage = useMemo(() => {
@@ -104,13 +107,13 @@ export function Messages(props: MessagesProps): ReactElement {
 
               {message.role === 'assistant' && (
                 <AssistantMessage
+                  apiUrl={apiUrl}
                   message={message}
                   projectKey={projectKey}
                   feedbackOptions={feedbackOptions}
                   chatOptions={chatOptions}
                   linkAs={linkAs}
                   showFeedbackAlways={isLastMessage}
-                  isLast={isLastMessage}
                 />
               )}
 
@@ -157,11 +160,16 @@ export function Messages(props: MessagesProps): ReactElement {
                   </div>
                 )}
 
-              {message.role === 'assistant' &&
+              {threadId &&
+                message.role === 'assistant' &&
                 (message.state === 'done' || message.state === 'cancelled') &&
                 index === lastAssistantMessageIndex && (
                   <div className="MarkpromptMessageCSATContainer">
-                    <CSATPicker heading={feedbackOptions.headingCSAT} />
+                    <CSATPicker
+                      projectKey={projectKey}
+                      threadId={threadId}
+                      feedbackOptions={feedbackOptions}
+                    />
                   </div>
                 )}
             </div>

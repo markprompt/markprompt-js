@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isToolCalls } from '@markprompt/core';
+import { DEFAULT_OPTIONS, isToolCalls } from '@markprompt/core';
 import { useMemo, type ComponentType } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
@@ -11,6 +11,7 @@ import { SparklesIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 
 export interface AssistantMessageProps {
+  apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
@@ -22,6 +23,7 @@ export interface AssistantMessageProps {
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const {
+    apiUrl,
     feedbackOptions,
     message,
     projectKey,
@@ -46,6 +48,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   );
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
+    apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
     projectKey,
     feedbackOptions,
   });

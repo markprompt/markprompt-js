@@ -2,16 +2,19 @@ import {
   type ReactElement,
   type ComponentPropsWithoutRef,
   useState,
+  useCallback,
 } from 'react';
 
+import { useFeedback } from './useFeedback.js';
+import type { CSAT } from '../../../core/src/types.js';
 import { StarIcon } from '../icons.js';
-
-type CSAT = 0 | 1 | 2 | 3 | 4 | 5;
+import type { MarkpromptOptions } from '../index.js';
 
 interface CSATPickerProps extends ComponentPropsWithoutRef<'aside'> {
+  projectKey: string;
+  threadId: string;
   csat?: CSAT;
-  heading?: string;
-  didSubmit: (csat: number) => void;
+  feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
 }
 
 function getHeading(csat: CSAT): string | undefined {
@@ -31,15 +34,32 @@ function getHeading(csat: CSAT): string | undefined {
 }
 
 export function CSATPicker(props: CSATPickerProps): ReactElement {
-  const { csat = 0, heading, didSubmit } = props;
+  const { csat = 0, projectKey, threadId, feedbackOptions } = props;
   const [tempValue, setTempValue] = useState<CSAT>(csat);
   const [permanentValue, setPermanentValue] = useState<CSAT>(csat);
   const [isHovering, setIsHovering] = useState(false);
 
+  // const { submitThreadCSAT } = useFeedback({
+  //   projectKey,
+  //   feedbackOptions,
+  // });
+
+  const submitCSAT = useCallback(
+    (value: CSAT) => {
+      setTempValue(value);
+      setPermanentValue(value);
+      // submitThreadCSAT(threadId, value);
+    },
+    // [submitThreadCSAT, threadId],
+    [threadId],
+  );
+
   return (
     <>
       <p className="MarkpromptMessageSectionHeading">
-        {isHovering ? getHeading(tempValue) || heading : heading}
+        {isHovering
+          ? getHeading(tempValue) || feedbackOptions.headingCSAT
+          : feedbackOptions.headingCSAT}
       </p>
       <div
         onMouseEnter={() => {
@@ -59,8 +79,7 @@ export function CSATPicker(props: CSATPickerProps): ReactElement {
                 setTempValue((i + 1) as CSAT);
               }}
               onClick={() => {
-                setTempValue((i + 1) as CSAT);
-                setPermanentValue((i + 1) as CSAT);
+                submitCSAT((i + 1) as CSAT);
               }}
               key={`star-${i}`}
               className="MarkpromptMessageCSATStar"

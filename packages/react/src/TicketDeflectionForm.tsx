@@ -13,7 +13,7 @@ type TicketDeflectionFormView = 'chat' | 'ticket';
 
 type TicketDeflectionFormProps = Pick<
   MarkpromptOptions,
-  'chat' | 'branding' | 'feedback' | 'references' | 'integrations'
+  'apiUrl' | 'chat' | 'branding' | 'feedback' | 'references' | 'integrations'
 > & {
   projectKey: string;
   defaultView?: TicketDeflectionFormView;
@@ -23,6 +23,7 @@ type TicketDeflectionFormProps = Pick<
 
 function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   const {
+    apiUrl,
     projectKey,
     chat,
     feedback,
@@ -97,6 +98,7 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
         {view === 'chat' ? (
           <ChatView
+            apiUrl={apiUrl}
             activeView="chat"
             chatOptions={{
               ...chat,

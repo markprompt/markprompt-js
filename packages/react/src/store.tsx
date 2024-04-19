@@ -88,6 +88,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             const options = {
               conversationId: conversationId,
               ...get().options.chat,
+              apiUrl: get().options.apiUrl,
               tools: get().options?.chat?.tools?.map((x) => x.tool),
               systemPrompt:
                 get().options?.integrations?.createTicket?.prompt ??

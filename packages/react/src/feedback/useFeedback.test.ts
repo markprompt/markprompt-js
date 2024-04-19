@@ -1,4 +1,4 @@
-import { DEFAULT_SUBMIT_FEEDBACK_OPTIONS } from '@markprompt/core';
+import { DEFAULT_OPTIONS } from '@markprompt/core';
 import { waitFor, renderHook } from '@testing-library/react';
 import { http, HttpResponse, type JsonBodyType } from 'msw';
 import { setupServer } from 'msw/node';
@@ -11,7 +11,7 @@ let endpointHits = 0;
 let response: JsonBodyType = '';
 
 const server = setupServer(
-  http.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl, async () => {
+  http.post(DEFAULT_OPTIONS.apiUrl, async () => {
     endpointHits += 1;
     return HttpResponse.json(response, { status: status });
   }),
@@ -50,7 +50,7 @@ describe('useFeedback', () => {
     );
   });
 
-  it(`submitFeedback should make requests to ${DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl}`, async () => {
+  it(`submitFeedback should make requests to ${DEFAULT_OPTIONS.apiUrl}`, async () => {
     const { result } = renderHook(() =>
       useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
     );

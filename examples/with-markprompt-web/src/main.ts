@@ -23,15 +23,12 @@ if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
     display: 'sheet',
+    apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
     search: {
-      apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL + '/search',
       enabled: false,
     },
     integrations: {
       createTicket: {
-        apiUrl:
-          import.meta.env.VITE_MARKPROMPT_API_URL +
-          '/integrations/create-ticket',
         enabled: true,
         provider: 'zendesk',
         user: {
@@ -49,7 +46,6 @@ if (el && el instanceof HTMLElement) {
       placeholder: 'Ask a question...',
       title: 'Help',
       model: 'gpt-4-1106-preview',
-      apiUrl: import.meta.env.VITE_API_URL + '/chat',
       defaultView: {
         message:
           "Hello, I'm an AI assistant from Acme. If we find something we can't solve, I'll help create a support case for you.",

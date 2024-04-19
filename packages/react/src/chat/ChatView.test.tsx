@@ -1,8 +1,4 @@
-import {
-  DEFAULT_SUBMIT_CHAT_OPTIONS,
-  DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  type FileSectionReference,
-} from '@markprompt/core';
+import { DEFAULT_OPTIONS, type FileSectionReference } from '@markprompt/core';
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, delay, HttpResponse } from 'msw';
@@ -71,7 +67,7 @@ const ChatViewWithProvider = ({
 };
 
 const server = setupServer(
-  http.post(DEFAULT_SUBMIT_CHAT_OPTIONS.apiUrl!, async () => {
+  http.post(DEFAULT_OPTIONS.apiUrl!, async () => {
     if (status >= 400) {
       return HttpResponse.json(
         { error: 'Internal server error' },
@@ -113,7 +109,7 @@ const server = setupServer(
       },
     });
   }),
-  http.post(DEFAULT_SUBMIT_FEEDBACK_OPTIONS.apiUrl!, async () => {
+  http.post(DEFAULT_OPTIONS.apiUrl!, async () => {
     return HttpResponse.json({ status: 'ok' }, { status: 200 });
   }),
 );

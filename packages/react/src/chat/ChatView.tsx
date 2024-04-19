@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { SubmitFeedbackOptions } from '@markprompt/core';
+import { type SubmitFeedbackOptions } from '@markprompt/core';
 import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
@@ -24,6 +24,10 @@ export interface ChatViewProps {
    * The project key associated to the project.
    */
   projectKey: string;
+  /**
+   * The base API URL.
+   */
+  apiUrl?: string;
   /**
    * The active view.
    */
@@ -90,6 +94,7 @@ export interface ChatViewProps {
 
 export function ChatView(props: ChatViewProps): JSX.Element {
   const {
+    apiUrl,
     activeView,
     projectKey,
     showBack,
@@ -172,6 +177,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
             </div>
           ) : (
             <Messages
+              apiUrl={apiUrl}
               chatOptions={chatOptions}
               feedbackOptions={feedbackOptions}
               integrations={integrations}

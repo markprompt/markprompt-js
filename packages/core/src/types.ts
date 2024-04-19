@@ -141,6 +141,8 @@ export interface AlgoliaDocSearchResultsResponse {
   hits: AlgoliaDocSearchHit[];
 }
 
+export type CSAT = 0 | 1 | 2 | 3 | 4 | 5;
+
 export interface PromptFeedback {
   vote: '1' | '-1';
 }
@@ -155,4 +157,8 @@ export interface NoStreamingData {
   text: string;
   references?: FileSectionReference[];
   responseId: string;
+}
+
+export interface BaseOptions {
+  apiUrl?: string;
 }

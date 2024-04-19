@@ -181,6 +181,7 @@ const defaultGetSearchResultSubtitle = (
 export const DEFAULT_MARKPROMPT_OPTIONS = {
   display: 'sheet',
   layout: 'panels',
+  apiUrl: 'https://api.markprompt.com',
   branding: {
     show: true,
     type: 'plain',
@@ -255,7 +256,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     createTicket: {
       enabled: false,
       provider: 'zendesk',
-      apiUrl: 'https://api.markprompt.com/integrations/create-ticket',
       prompt:
         'I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets.',
       messageText: 'Is the AI not helpful?',

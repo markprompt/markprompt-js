@@ -22,9 +22,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const provider = useGlobalStore(
     (state) => state.options.integrations?.createTicket?.provider,
   );
-  const apiUrl = useGlobalStore(
-    (state) => state.options.integrations?.createTicket?.apiUrl,
-  );
+  const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const summary = useGlobalStore((state) =>
     conversationId
       ? state.tickets?.summaryByConversationId[conversationId]
@@ -55,7 +53,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
     setSubmittingCase(true);
 
-    const result = await fetch(apiUrl, {
+    const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
