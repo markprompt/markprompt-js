@@ -41,6 +41,7 @@
     "react-merge-refs": "^2.1.1",
     "remark-gfm": "^4.0.0",
     "tabbable": "^6.2.0",
+    "use-sync-external-store": "^1.2.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
