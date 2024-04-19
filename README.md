@@ -44,7 +44,6 @@ and some example implementations:
 `@markprompt/web` using a global instance of Markprompt.
 - [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite. based on `@markprompt/react`, Vite and CSS Modules.
 - [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js.
-- [`with-standalone-chat`](examples/with-standalone-chat#readme) — a web application based on `@markprompt/web` using a standalone version of the chat component.
 - [`with-function-calling`](examples/with-function-calling#readme) — a web application based on `@markprompt/react` and Next.js showcasing the use for [OpenAI function calling](https://platform.openai.com/docs/guides/function-calling).
 
 ## Documentation

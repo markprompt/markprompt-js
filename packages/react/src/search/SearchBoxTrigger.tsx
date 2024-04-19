@@ -1,5 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { type Dispatch, type ReactElement, type SetStateAction } from 'react';
+import { type ReactElement } from 'react';
 
 import {
   ChevronUpIcon,
@@ -7,13 +7,11 @@ import {
   CornerDownLeftIcon,
   SearchIcon,
 } from '../icons.js';
-import * as BaseMarkprompt from '../primitives/headless.js';
 import { type MarkpromptOptions } from '../types.js';
 
 interface SearchBoxTriggerProps {
   trigger: MarkpromptOptions['trigger'];
-  open?: boolean;
-  setOpen?: Dispatch<SetStateAction<boolean>>;
+  onClick?: () => void;
 }
 
 /**
@@ -22,29 +20,10 @@ interface SearchBoxTriggerProps {
  * in the container where Markprompt is rendered.
  */
 export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
-  const { trigger } = props;
-
-  // useEffect(() => {
-  //   const handleKeyDown = (event: KeyboardEvent): void => {
-  //     if (open) return;
-  //     if (
-  //       (event.key === 'Enter' && event.ctrlKey) ||
-  //       (event.key === 'Enter' && event.metaKey)
-  //     ) {
-  //       event.preventDefault();
-  //       setOpen?.(true);
-  //     }
-  //   };
-
-  //   document.addEventListener('keydown', handleKeyDown);
-
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyDown);
-  //   };
-  // }, [open, setOpen]);
+  const { trigger, onClick } = props;
 
   return (
-    <BaseMarkprompt.DialogTrigger className="MarkpromptSearchBoxTrigger">
+    <button onClick={onClick} className="MarkpromptSearchBoxTrigger">
       <AccessibleIcon.Root label={trigger?.label ?? ''}>
         <span className="MarkpromptSearchBoxTriggerContent">
           <span className="MarkpromptSearchBoxTriggerText">
@@ -62,6 +41,6 @@ export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
           </kbd>
         </span>
       </AccessibleIcon.Root>
-    </BaseMarkprompt.DialogTrigger>
+    </button>
   );
 }

@@ -98,12 +98,14 @@ function Trigger(props: TriggerProps): JSX.Element {
               </AccessibleIcon.Root>
             </Component>
           ) : (
-            <SearchBoxTrigger trigger={trigger} />
+            <SearchBoxTrigger trigger={trigger} onClick={onClick} />
           )}
         </>
       )}
 
-      {children && (display !== 'plain' || hasMenu) && <div>{children}</div>}
+      {children && (display !== 'plain' || hasMenu) && (
+        <div onClick={onClick}>{children}</div>
+      )}
     </>
   );
 }

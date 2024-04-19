@@ -40,6 +40,7 @@ export default function IndexPage(): ReactElement {
         <Markprompt
           projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
           defaultView="search"
+          display="dialog"
           chat={{
             enabled: true,
             placeholder: 'Send a message',
@@ -83,15 +84,15 @@ export default function IndexPage(): ReactElement {
           close={{ visible: false }}
           linkAs={Link}
         >
-          <button id="search">
+          <div id="search">
             <SearchIcon
               style={{ strokeWidth: '2.5px', width: 16, height: 16 }}
             />
-            <span>Search documentation</span>
+            <span>Search or ask documentation</span>
             <kbd>
               <span>⌘ K</span>
             </kbd>
-          </button>
+          </div>
         </Markprompt>
       </div>
     </>
