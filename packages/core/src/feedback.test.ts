@@ -6,13 +6,18 @@ import { DEFAULT_OPTIONS, submitFeedback } from './index.js';
 
 let status = 200;
 
+const TEST_PROMPT_ID = 'test-id';
+
 const server = setupServer(
-  http.post(DEFAULT_OPTIONS.apiUrl, async () => {
-    return HttpResponse.json(
-      status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
-      { status: status },
-    );
-  }),
+  http.post(
+    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_PROMPT_ID}`,
+    async () => {
+      return HttpResponse.json(
+        status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
+        { status: status },
+      );
+    },
+  ),
 );
 
 beforeAll(() => {
@@ -40,12 +45,12 @@ describe('submitFeedback', () => {
     const response = await submitFeedback(
       {
         feedback: { vote: '1' },
-        promptId: 'test-id',
+        promptId: TEST_PROMPT_ID,
       },
       'testKey',
     );
 
-    expect(response).toStrictEqual({ status: 'ok' });
+    expect(response).toStrictEqual(undefined);
   });
 
   test('throws an error on invalid status code', async () => {
@@ -55,7 +60,7 @@ describe('submitFeedback', () => {
       submitFeedback(
         {
           feedback: { vote: '1' },
-          promptId: 'test-id',
+          promptId: TEST_PROMPT_ID,
         },
         'testKey',
       ),

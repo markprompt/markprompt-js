@@ -179,8 +179,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
     const onClose = (): void => {
       onDidRequestOpenChange?.(false);
-      if (display === 'dialog') {
-        // setOpenState({ open: false });
+      if (display === 'dialog' || display === 'sheet') {
+        setOpenViews({});
       }
     };
 

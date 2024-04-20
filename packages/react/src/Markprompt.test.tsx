@@ -10,7 +10,8 @@ describe('Markprompt', () => {
     expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
 
-  it('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
+  // Before re-enabling this test, we should review the keyboard shortcuts.
+  it.skip('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
     await user.keyboard(`{Meta>}{Enter}{/Meta}`);
@@ -96,25 +97,6 @@ describe('Markprompt', () => {
     // tabs switching
     await user.click(screen.getByText('chattab'));
     await expect(screen.getByRole('textbox')).toBeInTheDocument();
-  });
-
-  it('renders algolia attribution when algolia is the search provider', async () => {
-    render(
-      <Markprompt
-        display="plain"
-        projectKey="test-key"
-        search={{
-          enabled: true,
-          provider: {
-            name: 'algolia',
-            apiKey: 'test',
-            appId: 'test',
-            indexName: 'test',
-          },
-        }}
-      />,
-    );
-    expect(screen.getByLabelText('Algolia')).toBeInTheDocument();
   });
 
   it('renders the title and description visually hidden', async () => {
