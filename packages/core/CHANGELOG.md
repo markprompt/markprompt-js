@@ -1,5 +1,19 @@
 # @markprompt/core
 
+## 0.27.0
+
+### Minor Changes
+
+- [`5965259`](https://github.com/motifland/markprompt-js/commit/5965259eeebc2c952b01ffbf794f4bba507c723c) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
+- [#342](https://github.com/motifland/markprompt-js/pull/342) [`e9d3db2`](https://github.com/motifland/markprompt-js/commit/e9d3db28a0d6faa380d87946fd9ae0ba5e85ea1a) Thanks [@michaelfester](https://github.com/michaelfester)! - New screens
+
+### Patch Changes
+
+- [#342](https://github.com/motifland/markprompt-js/pull/342) [`e9d3db2`](https://github.com/motifland/markprompt-js/commit/e9d3db28a0d6faa380d87946fd9ae0ba5e85ea1a) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for PII flag
+
+- [`fde953d`](https://github.com/motifland/markprompt-js/commit/fde953d46e64cf0936482b0a543978aeb8a45e5f) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade `eventsource-parser`
+
 ## 0.26.3
 
 ### Patch Changes

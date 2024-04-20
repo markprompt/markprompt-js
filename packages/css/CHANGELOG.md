@@ -1,5 +1,15 @@
 # @markprompt/css
 
+## 0.27.0
+
+### Minor Changes
+
+- [#342](https://github.com/motifland/markprompt-js/pull/342) [`e9d3db2`](https://github.com/motifland/markprompt-js/commit/e9d3db28a0d6faa380d87946fd9ae0ba5e85ea1a) Thanks [@michaelfester](https://github.com/michaelfester)! - New screens
+
+### Patch Changes
+
+- [#342](https://github.com/motifland/markprompt-js/pull/342) [`e9d3db2`](https://github.com/motifland/markprompt-js/commit/e9d3db28a0d6faa380d87946fd9ae0ba5e85ea1a) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for PII flag
+
 ## 0.26.2
 
 ### Patch Changes
