@@ -23,7 +23,7 @@ let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
 
 const server = setupServer(
-  http.get(DEFAULT_OPTIONS.apiUrl!, async () => {
+  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, async () => {
     return HttpResponse.json(
       { data: searchResults },
       {
