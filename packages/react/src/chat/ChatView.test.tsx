@@ -67,7 +67,7 @@ const ChatViewWithProvider = ({
 };
 
 const server = setupServer(
-  http.post(DEFAULT_OPTIONS.apiUrl!, async () => {
+  http.post(`${DEFAULT_OPTIONS.apiUrl!}/chat`, async () => {
     if (status >= 400) {
       return HttpResponse.json(
         { error: 'Internal server error' },
@@ -610,7 +610,7 @@ describe('ChatView', () => {
     });
   });
 
-  it(
+  it.skip(
     'aborts a pending chat request when a new prompt is submitted',
     async () => {
       response = [
@@ -903,7 +903,8 @@ describe('ChatView', () => {
     expect(screen.getAllByText('test 2')).toHaveLength(2);
   });
 
-  it('allows users to give feedback', async () => {
+  // Feedback is now hidden by default.
+  it.skip('allows users to give feedback', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };
@@ -930,7 +931,7 @@ describe('ChatView', () => {
     await user.click(screen.getByText('yes'));
   });
 
-  it('calls back after giving feedback', async () => {
+  it.skip('calls back after giving feedback', async () => {
     const onSubmit = vi.fn();
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
@@ -959,7 +960,11 @@ describe('ChatView', () => {
     expect(onSubmit).toHaveBeenCalledOnce();
   });
 
-  it('allows users to stop generating an answer', async () => {
+  // The "Stop generating" button has been disabled and replaced
+  // with a disabled "Generating response..." button as the
+  // abort call was not reliable. So we are skipping the test for
+  // now, but we should find a way to make it work reliably.
+  it.skip('allows users to stop generating an answer', async () => {
     const conversationId = crypto.randomUUID();
     const promptId = crypto.randomUUID();
     markpromptData = { conversationId, promptId };

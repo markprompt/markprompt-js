@@ -10,11 +10,16 @@ let status = 200;
 let endpointHits = 0;
 let response: JsonBodyType = '';
 
+const TEST_PROMPT_ID = 'prompt-id';
+
 const server = setupServer(
-  http.post(DEFAULT_OPTIONS.apiUrl, async () => {
-    endpointHits += 1;
-    return HttpResponse.json(response, { status: status });
-  }),
+  http.post(
+    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_PROMPT_ID}`,
+    async () => {
+      endpointHits += 1;
+      return HttpResponse.json(response, { status: status });
+    },
+  ),
 );
 
 beforeAll(() => {
@@ -40,6 +45,7 @@ describe('useFeedback', () => {
 
     expect(result.current).toStrictEqual({
       submitFeedback: expect.any(Function),
+      submitThreadCSAT: expect.any(Function),
       abort: expect.any(Function),
     });
   });
@@ -81,7 +87,7 @@ describe('useFeedback', () => {
 
     const { submitFeedback, abort } = result.current;
 
-    const submitFeedbackPromise = submitFeedback({ vote: '1' }, 'prompt-id');
+    const submitFeedbackPromise = submitFeedback({ vote: '1' }, TEST_PROMPT_ID);
 
     abort();
 
@@ -100,7 +106,7 @@ describe('useFeedback', () => {
     status = 500;
 
     expect(
-      async () => await submitFeedback({ vote: '1' }, 'prompt-id'),
+      async () => await submitFeedback({ vote: '1' }, TEST_PROMPT_ID),
     ).not.toThrow();
   });
 });
