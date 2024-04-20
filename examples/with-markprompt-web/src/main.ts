@@ -24,7 +24,7 @@ if (el && el instanceof HTMLElement) {
     defaultView: 'chat',
     display: 'sheet',
     search: {
-      enabled: false,
+      enabled: true,
     },
     integrations: {
       createTicket: {
@@ -48,7 +48,6 @@ if (el && el instanceof HTMLElement) {
       model: 'gpt-4-turbo-preview',
       defaultView: {
         message: "Hello, I'm an AI assistant from Acme!",
-        // promptsHeading: 'Popular questions',
         prompts: [
           'What is Markprompt?',
           'How do I setup the React component?',
