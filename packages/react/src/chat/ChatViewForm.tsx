@@ -11,13 +11,15 @@ import {
 
 import { ConversationSelect } from './ConversationSelect.js';
 import { ChatContext, useChatStore } from './store.js';
-import { LoadingIcon, SendIcon, StopInsideLoadingIcon } from '../icons.js';
+import { LoadingIcon, SendIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
 
 interface ChatViewFormProps {
   activeView?: View;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
+  minInputRows?: number;
+  submitOnEnter?: boolean;
 }
 
 interface ChatSendIconProps {
@@ -29,9 +31,9 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
     return (
       <div>
         <LoadingIcon />
-        <div style={{ position: 'absolute', inset: 0 }}>
+        {/* <div style={{ position: 'absolute', inset: 0 }}>
           <StopInsideLoadingIcon />
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -39,7 +41,7 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {
-  const { activeView, chatOptions } = props;
+  const { activeView, chatOptions, minInputRows, submitOnEnter } = props;
 
   const [prompt, setPrompt] = useState('');
 
@@ -52,10 +54,13 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   // );
   // const conversations = useChatStore(selectProjectConversations);
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
-      inputRef.current?.blur();
+      textAreaRef.current?.blur();
       const data = new FormData(event.currentTarget);
       const value = data.get('markprompt-prompt');
 
@@ -70,11 +75,9 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     [submitChat],
   );
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
   useEffect(() => {
     // Bring form input in focus when activeView changes.
-    inputRef.current?.focus();
+    textAreaRef.current?.focus();
   }, [activeView]);
 
   // keep abortChat up to date, but do not trigger rerenders (and effect hooks calls) when it updates
@@ -113,26 +116,34 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
 
   return (
     <BaseMarkprompt.Form
+      ref={formRef}
       className="MarkpromptForm"
       onSubmit={handleSubmit}
       data-state={!didAcceptDisclaimer ? 'disabled' : undefined}
     >
       <div className="MarkpromptPromptWrapper">
         <BaseMarkprompt.Prompt
-          ref={inputRef}
+          ref={textAreaRef}
           className="MarkpromptPrompt"
           name="markprompt-prompt"
           type="text"
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
-          sendButtonClassName="MarkpromptPromptSubmitButton"
-          buttonLabel={isLoading ? 'Stop generating' : chatOptions?.buttonLabel}
+          textAreaContainerClassName="MarkpromptTextAreaContainer"
+          sendButtonClassName="MarkpromptButton"
+          buttonLabel={isLoading ? 'Generating...' : chatOptions?.buttonLabel}
           value={prompt}
           isLoading={isLoading}
           onChange={(event) => setPrompt(event.target.value)}
           Icon={<ChatSendIcon isLoading={isLoading} />}
           disabled={!didAcceptDisclaimer}
+          minRows={minInputRows}
+          submitOnEnter={submitOnEnter}
+          onSubmit={(e) => {
+            e.preventDefault();
+            formRef.current?.requestSubmit();
+          }}
         />
         {chatOptions.history && (
           <ConversationSelect disabled={!didAcceptDisclaimer} />

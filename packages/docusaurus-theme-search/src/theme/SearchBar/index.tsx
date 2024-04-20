@@ -47,7 +47,7 @@ export default function SearchBar(): ReactElement {
             aria-label="expand searchbar"
             role="button"
             className="search-icon"
-            onClick={openMarkprompt}
+            onClick={() => openMarkprompt()}
             tabIndex={0}
           />
           <input
@@ -58,7 +58,7 @@ export default function SearchBar(): ReactElement {
             }
             aria-label={markpromptProps.trigger?.label || 'Search or ask'}
             className="navbar__search-input search-bar"
-            onClick={openMarkprompt}
+            onClick={() => openMarkprompt()}
           />
           <Markprompt
             {...markpromptProps}

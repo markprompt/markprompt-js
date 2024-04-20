@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { SubmitSearchQueryOptions } from '@markprompt/core';
+import {
+  DEFAULT_OPTIONS,
+  type SubmitSearchQueryOptions,
+} from '@markprompt/core';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
@@ -30,6 +33,10 @@ import {
 import { useDefaults } from '../useDefaults.js';
 
 export interface SearchViewProps {
+  /**
+   * The base API URL.
+   */
+  apiUrl?: string;
   /**
    * The project key associated to the project.
    */
@@ -75,8 +82,14 @@ interface ActiveSearchResult {
 const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const { activeView, debug, onDidSelectResult, onDidSelectAsk, projectKey } =
-    props;
+  const {
+    activeView,
+    debug,
+    onDidSelectResult,
+    onDidSelectAsk,
+    projectKey,
+    apiUrl,
+  } = props;
 
   if (!projectKey) {
     throw new Error(
@@ -91,7 +104,8 @@ export function SearchView(props: SearchViewProps): ReactElement {
     DEFAULT_MARKPROMPT_OPTIONS.search,
   );
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {
     abort,
@@ -101,8 +115,9 @@ export function SearchView(props: SearchViewProps): ReactElement {
     setSearchQuery,
     submitSearchQuery,
   } = useSearch({
-    debug,
+    apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
     projectKey,
+    debug,
     searchOptions,
   });
 
@@ -140,7 +155,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   useEffect(() => {
     // Bring form input in focus when activeView changes.
-    inputRef.current?.focus();
+    textAreaRef.current?.focus();
   }, [activeView]);
 
   useEffect(() => {
@@ -268,18 +283,24 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   return (
     <div className="MarkpromptSearchView">
-      <BaseMarkprompt.Form className="MarkpromptForm" onSubmit={handleSubmit}>
+      <BaseMarkprompt.Form
+        ref={formRef}
+        className="MarkpromptForm"
+        onSubmit={handleSubmit}
+      >
         <div className="MarkpromptPromptWrapper">
           <BaseMarkprompt.Prompt
-            ref={inputRef}
+            ref={textAreaRef}
             className="MarkpromptPrompt"
             name={searchInputName}
             placeholder={searchOptions?.placeholder}
             labelClassName="MarkpromptPromptLabel"
+            textAreaContainerClassName="MarkpromptTextAreaContainer"
             value={searchQuery}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             showSubmitButton={false}
+            type="search"
             aria-controls="markprompt-search-results"
             aria-activedescendant={activeSearchResult?.id}
             label={
@@ -287,11 +308,15 @@ export function SearchView(props: SearchViewProps): ReactElement {
                 <SearchIcon className="MarkpromptSearchIconAccented" />
               </AccessibleIcon.Root>
             }
+            onSubmit={(e) => {
+              e.preventDefault();
+              formRef.current?.requestSubmit();
+            }}
           />
 
           <button
             className={
-              searchOptions.askLabel
+              searchOptions?.askLabel
                 ? 'MarkpromptBorderedButton'
                 : 'MarkpromptGhostButton'
             }
@@ -301,12 +326,12 @@ export function SearchView(props: SearchViewProps): ReactElement {
           >
             <SparklesIcon
               style={
-                searchOptions.askLabel
+                searchOptions?.askLabel
                   ? { width: 16, height: 16, opacity: 0.4 }
                   : { width: 18, height: 18 }
               }
             />
-            {searchOptions.askLabel && <span>{searchOptions.askLabel}</span>}
+            {searchOptions?.askLabel && <span>{searchOptions.askLabel}</span>}
           </button>
         </div>
       </BaseMarkprompt.Form>

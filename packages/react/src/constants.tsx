@@ -179,8 +179,9 @@ const defaultGetSearchResultSubtitle = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
-  display: 'dialog',
+  display: 'sheet',
   layout: 'panels',
+  apiUrl: 'https://api.markprompt.com',
   branding: {
     show: true,
     type: 'plain',
@@ -188,6 +189,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   close: {
     label: 'Close Markprompt',
     visible: true,
+    hasIcon: true,
   },
   description: {
     hide: true,
@@ -195,7 +197,10 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   },
   feedback: {
     enabled: true,
+    votes: true,
+    csat: true,
     heading: 'Was this response helpful?',
+    headingCSAT: 'How helpful was this?',
   },
   chat: {
     enabled: true,
@@ -223,7 +228,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
   },
   references: {
     loadingText: 'Fetching context…',
-    heading: 'Sources',
+    heading: 'Related articles',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
   },
@@ -251,27 +256,34 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     createTicket: {
       enabled: false,
       provider: 'zendesk',
-      apiUrl: 'https://api.markprompt.com/create-ticket',
       prompt:
         'I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets.',
-      messageText: 'Bot not being helpful?',
+      messageText: 'Is the AI not helpful?',
       messageButton: {
         text: 'Create a support ticket',
         hasIcon: true,
         hasText: true,
       },
-      view: {
-        title: 'Create a case',
-        nameLabel: 'Your Name',
-        namePlaceholder: 'Markprompt AI',
+      form: {
+        nameLabel: 'Name',
+        namePlaceholder: '',
         emailLabel: 'Email',
-        emailPlaceholder: 'bot@markprompt.com',
-        summaryLabel: 'How can we help?',
+        emailPlaceholder: '',
+        summaryLabel: 'Description',
         summaryPlaceholder: 'Please describe your issue',
         summaryLoading: 'Generating summary…',
         submitLabel: 'Submit case',
-        ticketCreatedOk: 'Ticket created successfully!',
-        ticketCreatedError: 'An error occurred while creating the case',
+        ticketCreatedOk: 'Thank you! We will get back to you shortly.',
+        ticketCreatedError: 'An error occurred while creating the case.',
+      },
+      chat: {
+        title: 'Get help',
+        subtitle: 'How can we help?',
+        placeholder: ['I am having trouble with...', 'Send a message'],
+        disclaimerView: {
+          message:
+            'Answers generated with AI. Consider checking important information.',
+        },
       },
     },
   },

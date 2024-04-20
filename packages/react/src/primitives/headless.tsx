@@ -15,23 +15,26 @@ import {
   useCallback,
   useState,
   type ComponentType,
+  type KeyboardEvent,
+  type FormEventHandler,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
+import TextareaAutoSize from 'react-textarea-autosize';
 import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
-import { Footer } from './footer.js';
 import { CheckIcon, ClipboardIcon } from '../icons.js';
 import type { ChatLoadingState } from '../index.js';
 import type {
+  MarkpromptDisplay,
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
   SearchResultComponentProps,
 } from '../types.js';
 
-type RootProps = Dialog.DialogProps & { display?: 'plain' | 'dialog' };
+type RootProps = Dialog.DialogProps & { display?: MarkpromptDisplay };
 
 /**
  * The Markprompt context provider and dialog root.
@@ -100,77 +103,38 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
-type ContentProps = ComponentPropsWithRef<typeof Dialog.Content> & {
-  /**
-   * Show the Markprompt footer.
-   */
-  branding?: { show?: boolean; type?: 'plain' | 'text' };
-  /**
-   * Show Algolia attribution in the footer.
-   **/
-  showAlgolia?: boolean;
-  /**
-   * Footer class name.
-   **/
-  footerClassName?: string;
-};
+type ContentProps = ComponentPropsWithRef<typeof Dialog.Content>;
 
 /**
  * The Markprompt dialog content.
  */
 const Content = forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
-    const {
-      branding = { show: true, type: 'plain' },
-      showAlgolia,
-      footerClassName,
-      ...rest
-    } = props;
-
     return (
-      <Dialog.Content {...rest} ref={ref}>
+      <Dialog.Content {...props} ref={ref}>
         {props.children}
-        {branding.show && (
-          <Footer
-            className={footerClassName}
-            brandingType={branding.type}
-            showAlgolia={showAlgolia}
-          />
-        )}
       </Dialog.Content>
     );
   },
 );
 Content.displayName = 'Markprompt.Content';
 
-type PlainContentProps = ComponentPropsWithRef<'div'> & {
+export interface BrandingProps {
   /**
    * Show the Markprompt footer.
-   */
-  branding?: { show?: boolean; type?: 'plain' | 'text' };
-  /**
-   * Show Algolia attribution in the footer.
    **/
-  showAlgolia?: boolean;
-};
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
+}
 
+type PlainContentProps = ComponentPropsWithRef<'div'>;
 /**
  * The Markprompt plain content.
  */
 const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
   function PlainContent(props, ref) {
-    const {
-      branding = { show: true, type: 'plain' },
-      showAlgolia,
-      ...rest
-    } = props;
-
     return (
-      <div {...rest} ref={ref}>
+      <div {...props} ref={ref}>
         {props.children}
-        {branding.show && (
-          <Footer brandingType={branding.type} showAlgolia={showAlgolia} />
-        )}
       </div>
     );
   },
@@ -232,6 +196,8 @@ interface PromptInnerProps {
   label?: ReactNode;
   /** The class name of the label element. */
   labelClassName?: string;
+  /** The class name of the text area container. */
+  textAreaContainerClassName?: string;
   /** The class name of the send button element. */
   sendButtonClassName?: string;
   /** The label for the submit button. */
@@ -242,6 +208,12 @@ interface PromptInnerProps {
   isLoading?: boolean;
   /** Icon for the button. */
   Icon?: ReactNode;
+  /** Minimum number of rows. */
+  minRows?: number;
+  /** Use an input field instead of a text area. */
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  /** Submit on enter. */
+  submitOnEnter?: boolean;
 }
 
 type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
@@ -249,7 +221,7 @@ type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
  */
-const Prompt = forwardRef<HTMLInputElement, PromptProps>(
+const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
   function Prompt(props, ref) {
     const {
       autoCapitalize = 'none',
@@ -259,6 +231,7 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       label,
       buttonLabel = 'Send',
       labelClassName,
+      textAreaContainerClassName,
       sendButtonClassName,
       placeholder,
       spellCheck = false,
@@ -267,8 +240,34 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
       isLoading,
       Icon,
       name,
+      className,
+      minRows,
+      submitOnEnter,
+      onSubmit,
+      onKeyDown,
       ...rest
-    } = props;
+    } = props as any;
+
+    const handleKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLTextAreaElement>): void => {
+        if (type === 'search') {
+          onKeyDown?.(event);
+          return;
+        }
+        if (event.key === 'Enter' && !event.shiftKey) {
+          if (submitOnEnter !== false) {
+            event.preventDefault();
+            onSubmit?.(event);
+          } else if (event.metaKey || event.ctrlKey) {
+            event.preventDefault();
+            onSubmit?.(event);
+          }
+        }
+      },
+      [onKeyDown, onSubmit, submitOnEnter, type],
+    );
+
+    const Comp = type === 'search' ? 'input' : TextareaAutoSize;
 
     return (
       <>
@@ -277,25 +276,34 @@ const Prompt = forwardRef<HTMLInputElement, PromptProps>(
             {label}
           </label>
         )}
-        <input
-          {...rest}
-          id={name}
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          ref={ref}
-          autoCapitalize={autoCapitalize}
-          autoComplete={autoComplete}
-          autoCorrect={autoCorrect}
-          autoFocus={autoFocus}
-          spellCheck={spellCheck}
-        />
+        <div className={textAreaContainerClassName}>
+          <Comp
+            {...rest}
+            id={name}
+            name={name}
+            type={type}
+            minRows={minRows}
+            placeholder={placeholder}
+            ref={ref as any}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            autoCorrect={autoCorrect}
+            autoFocus={autoFocus}
+            spellCheck={spellCheck}
+            className={className}
+            draggable={false}
+            style={{ resize: 'none', height: '100%' }}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
         {showSubmitButton && (
           <button
             className={sendButtonClassName}
             type="submit"
+            data-variant="primary"
             disabled={
-              (rest.value as string)?.trim()?.length === 0 && !isLoading
+              isLoading ||
+              ((rest.value as string)?.trim()?.length === 0 && !isLoading)
             }
           >
             {buttonLabel}
@@ -379,7 +387,7 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   }, [children, state]);
 
   return (
-    <pre {...rest} className={className}>
+    <pre style={{ overflow: 'auto' }} {...rest} className={className}>
       {children}
     </pre>
   );
@@ -419,7 +427,11 @@ function Answer(props: AnswerProps): ReactElement {
           const { children, className, ...rest } = props;
 
           return (
-            <div style={{ position: 'relative' }}>
+            <div
+              style={{
+                position: 'relative',
+              }}
+            >
               <div
                 style={{
                   position: 'absolute',
@@ -518,7 +530,11 @@ const AutoScroller = memo<AutoScrollerProps>(
 
     useEffect(() => {
       // When scrollTrigger changes, potentially trigger scroll.
+      // Scroll immediately (e.g. when opening an existing chat), and
+      // also after a small delay in case other DOM nodes (such as references)
+      // are appended.
       perhapsScroll();
+      setTimeout(perhapsScroll, 400);
     }, [perhapsScroll, scrollTrigger]);
 
     useEffect(() => {
@@ -527,6 +543,7 @@ const AutoScroller = memo<AutoScrollerProps>(
       // it can scroll down to the currently loading message.
       scrollLockOn.current = false;
       perhapsScroll();
+      setTimeout(perhapsScroll, 400);
     }, [discreteScrollTrigger, perhapsScroll]);
 
     const handleScroll = (): void => {
@@ -614,11 +631,13 @@ const References = function References<
     <RootComponent ref={ref}>
       {references.map((reference, index) => {
         return (
-          <ReferenceComponent
-            key={`${reference.file.path}-${index}`}
-            reference={reference}
-            index={index}
-          />
+          <>
+            <ReferenceComponent
+              key={`${reference.file.path}-${index}`}
+              reference={reference}
+              index={index}
+            />
+          </>
         );
       })}
     </RootComponent>

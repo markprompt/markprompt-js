@@ -6,7 +6,7 @@ import styles from './main.module.css';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class=${styles.centered}>
-    <p>Open the Markprompt dialog ⬇️</p>
+    <p>Open the Markprompt dialog</p>
     <button id="markprompt-trigger" class=${styles.customTrigger}>
       Open Markprompt
     </button>

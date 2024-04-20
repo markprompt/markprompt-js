@@ -1,7 +1,4 @@
-import {
-  DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
-  type SearchResult,
-} from '@markprompt/core';
+import { DEFAULT_OPTIONS, type SearchResult } from '@markprompt/core';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
@@ -21,7 +18,7 @@ import * as Markprompt from './headless.js';
 let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
-  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async () => {
+  http.get(DEFAULT_OPTIONS.apiUrl!, async () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -120,86 +117,6 @@ test('Trigger opens the dialog', async () => {
 
   const close = await screen.findByText('Close');
   expect(close).toBeVisible();
-});
-
-test('Branding is displayed in Content when set to true', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <Markprompt.Root>
-      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
-      <Markprompt.Portal>
-        <Markprompt.Content branding={{ show: true }}></Markprompt.Content>
-      </Markprompt.Portal>
-    </Markprompt.Root>,
-  );
-
-  const trigger = await screen.findByText('Trigger');
-  await user.click(trigger);
-
-  const branding = await screen.findByText('Powered by');
-  expect(branding).toBeInTheDocument();
-});
-
-test('Branding is not displayed in Content when set to false', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <Markprompt.Root>
-      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
-      <Markprompt.Portal>
-        <Markprompt.Content branding={{ show: false }}></Markprompt.Content>
-      </Markprompt.Portal>
-    </Markprompt.Root>,
-  );
-
-  const trigger = await screen.findByText('Trigger');
-  await user.click(trigger);
-
-  const branding = screen.queryByText('Powered by');
-  expect(branding).not.toBeInTheDocument();
-});
-
-test('Branding is displayed in PlainContent when set to true', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <Markprompt.Root>
-      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
-      <Markprompt.Portal>
-        <Markprompt.PlainContent
-          branding={{ show: true }}
-        ></Markprompt.PlainContent>
-      </Markprompt.Portal>
-    </Markprompt.Root>,
-  );
-
-  const trigger = await screen.findByText('Trigger');
-  await user.click(trigger);
-
-  const branding = await screen.findByText('Powered by');
-  expect(branding).toBeInTheDocument();
-});
-
-test('Branding is not displayed in PlainContent when set to false', async () => {
-  const user = userEvent.setup();
-
-  render(
-    <Markprompt.Root>
-      <Markprompt.DialogTrigger>Trigger</Markprompt.DialogTrigger>
-      <Markprompt.Portal>
-        <Markprompt.PlainContent
-          branding={{ show: false }}
-        ></Markprompt.PlainContent>
-      </Markprompt.Portal>
-    </Markprompt.Root>,
-  );
-
-  const trigger = await screen.findByText('Trigger');
-  await user.click(trigger);
-
-  const branding = screen.queryByText('Powered by');
-  expect(branding).not.toBeInTheDocument();
 });
 
 test('Close button closes the dialog', async () => {

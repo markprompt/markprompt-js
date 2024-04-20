@@ -4,13 +4,62 @@ const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" />
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M18.111 1.002a.815.815 0 0 1 .79.617l.28 1.125a2.86 2.86 0 0 0 2.075 2.074l1.125.28a.814.814 0 0 1 0 1.582l-1.125.28a2.86 2.86 0 0 0-2.074 2.074l-.28 1.125a.815.815 0 0 1-1.582 0l-.28-1.125a2.85 2.85 0 0 0-2.074-2.074l-1.125-.28a.814.814 0 0 1 0-1.582l1.125-.28a2.85 2.85 0 0 0 2.074-2.074l.28-1.125a.815.815 0 0 1 .791-.617"
+      clipRule="evenodd"
+      style={{
+        fillOpacity: 0.6,
+      }}
+    />
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M12.713 3.99a9 9 0 0 0-.626-.02c-4.697 0-8.606 3.503-8.606 7.943 0 2.127.904 4.049 2.36 5.465.205.2.245.378.225.48a3.3 3.3 0 0 1-.719 1.488.662.662 0 0 0 .389 1.079q.234.042.47.065a5.93 5.93 0 0 0 3.748-.88c.683.161 1.398.247 2.133.247 4.697 0 8.606-3.504 8.606-7.944 0-.63-.08-1.24-.228-1.826l-.107.433v.001a2.317 2.317 0 0 1-3.673 1.265 2.3 2.3 0 0 1-.82-1.265l-.28-1.123a1.35 1.35 0 0 0-.983-.983l-1.122-.28h-.001a2.314 2.314 0 0 1-.766-4.145"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const ChatIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+    />
+  </svg>
+);
+
+const BookIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+    />
   </svg>
 );
 
@@ -22,7 +71,11 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     stroke="currentColor"
     {...props}
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18 18 6M6 6l12 12"
+    />
   </svg>
 );
 
@@ -40,6 +93,24 @@ const ChevronLeftIcon = (
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M15.75 19.5 8.25 12l7.5-7.5"
+    />
+  </svg>
+);
+
+const ChevronDownIcon = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m19.5 8.25-7.5 7.5-7.5-7.5"
     />
   </svg>
 );
@@ -67,6 +138,25 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+    />
+  </svg>
+);
+
+const SearchIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
     stroke="currentColor"
     {...props}
   >
@@ -112,17 +202,15 @@ const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
+    stroke="none"
     {...props}
   >
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-    <path d="M5 3v4" />
-    <path d="M19 17v4" />
-    <path d="M3 5h4" />
-    <path d="M17 19h4" />
+    <path
+      fillRule="evenodd"
+      d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -293,13 +381,30 @@ const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M5 12h14" />
-    <path d="M12 5v14" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 4.5v15m7.5-7.5h-15"
+    />
+  </svg>
+);
+
+const PencilSquareMini = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    {...props}
+  >
+    <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+    <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
   </svg>
 );
 
@@ -413,33 +518,15 @@ const CircleDashedIcon = (
 const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
+    viewBox="0 0 24 24"
     fill="currentColor"
     {...props}
   >
     <path
       fillRule="evenodd"
-      d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z"
+      d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
       clipRule="evenodd"
     />
-  </svg>
-);
-
-const BotIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    {...props}
-  >
-    <path d="M12 8V4H8" />
-    <rect width="16" height="12" x="4" y="8" rx="2" />
-    <path d="M2 14h2" />
-    <path d="M20 14h2" />
-    <path d="M15 13v2" />
-    <path d="M9 13v2" />
   </svg>
 );
 
@@ -485,30 +572,111 @@ const StopInsideLoadingIcon = (
   </svg>
 );
 
-const MessageCircleQuestionIcon = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+const MenuIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
     {...props}
   >
-    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-    <path d="M12 17h.01" />
+    <path
+      fillRule="evenodd"
+      d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const NewspaperIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
+    />
+  </svg>
+);
+
+const SparklesIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+    />
+  </svg>
+);
+
+const MenuIconOutline = (
+  props: ComponentPropsWithoutRef<'svg'>,
+): ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+    />
+  </svg>
+);
+
+const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
+    <path
+      fill="currentColor"
+      d="M13.545 2.913a13.196 13.196 0 0 0-3.257-1.01.05.05 0 0 0-.052.025 9.18 9.18 0 0 0-.406.833 12.18 12.18 0 0 0-3.658 0 8.426 8.426 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.01a.047.047 0 0 0-.021.019C.356 6.03-.213 9.053.066 12.039a.055.055 0 0 0 .02.037 13.266 13.266 0 0 0 3.996 2.02.052.052 0 0 0 .056-.019c.308-.42.582-.863.818-1.33a.05.05 0 0 0-.028-.07 8.735 8.735 0 0 1-1.248-.595.05.05 0 0 1-.025-.04.052.052 0 0 1 .02-.045 6.8 6.8 0 0 0 .248-.194.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.006c.08.066.164.132.248.195a.05.05 0 0 1 .02.044.051.051 0 0 1-.024.041 8.19 8.19 0 0 1-1.249.595.052.052 0 0 0-.03.029.05.05 0 0 0 .003.042c.24.465.514.908.817 1.329a.05.05 0 0 0 .056.019 13.225 13.225 0 0 0 4.001-2.02.052.052 0 0 0 .021-.037c.334-3.451-.559-6.45-2.365-9.107a.04.04 0 0 0-.021-.019Zm-8.198 7.308c-.789 0-1.438-.724-1.438-1.613s.637-1.612 1.438-1.612c.807 0 1.45.73 1.438 1.612 0 .889-.637 1.613-1.438 1.613Zm5.316 0c-.788 0-1.438-.724-1.438-1.613s.637-1.612 1.438-1.612c.807 0 1.45.73 1.438 1.612 0 .889-.63 1.613-1.438 1.613Z"
+    ></path>
+  </svg>
+);
+
+const StarIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    {...props}
+    strokeWidth="1.5"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+    />
   </svg>
 );
 
 export {
-  BotIcon,
+  BookIconOutline,
   ChatIcon,
+  ChatIconOutline,
   CheckCircleIcon,
   CheckIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
@@ -520,16 +688,23 @@ export {
   CornerDownLeftIcon,
   CounterClockwiseClockIcon,
   CrossCircleIcon,
+  DiscordIcon,
   FileTextIcon,
   HashIcon,
   LoaderIcon,
   LoadingIcon,
-  MessageCircleQuestionIcon,
+  MenuIcon,
+  MenuIconOutline,
+  NewspaperIconOutline,
+  PencilSquareMini,
   PlusIcon,
   ReloadIcon,
   SearchIcon,
+  SearchIconOutline,
   SendIcon,
   SparklesIcon,
+  SparklesIconOutline,
+  StarIcon,
   StopIcon,
   StopInsideLoadingIcon,
   ThumbsDownIcon,

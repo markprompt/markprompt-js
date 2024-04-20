@@ -10,6 +10,7 @@ export {
 export {
   DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
   submitFeedback,
+  submitCSAT,
   type SubmitFeedbackBody,
   type SubmitFeedbackOptions,
 } from './feedback.js';
@@ -21,6 +22,8 @@ export {
   type SubmitSearchQueryOptions,
   type AlgoliaProvider,
 } from './search.js';
+
+import { type BaseOptions } from './types.js';
 
 export {
   OPENAI_CHAT_COMPLETIONS_MODELS,
@@ -69,3 +72,9 @@ export {
   isToolCalls,
   parseEncodedJSONHeader,
 } from './utils.js';
+
+export const DEFAULT_OPTIONS = {
+  apiUrl: 'https://api.markprompt.com',
+} satisfies BaseOptions;
+
+export type { BaseOptions };

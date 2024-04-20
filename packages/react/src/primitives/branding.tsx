@@ -1,19 +1,19 @@
 /* eslint-disable react/jsx-no-target-blank */
 import { type ComponentPropsWithoutRef, type ReactElement } from 'react';
 
-interface FooterProps {
+interface BrandingProps {
   showAlgolia?: boolean;
   brandingType?: 'plain' | 'text';
   className?: string;
 }
 
-export const Footer = (props: FooterProps): ReactElement => {
+export const Branding = (props: BrandingProps): ReactElement => {
   const { brandingType, showAlgolia, className } = props;
 
   if (brandingType === 'plain') {
     return (
       <p
-        className={className}
+        className="MarkpromptBranding"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -21,38 +21,34 @@ export const Footer = (props: FooterProps): ReactElement => {
           justifyContent: 'center',
           margin: 0,
           paddingInline: '0.75rem',
-          paddingBlock:
-            '0.5rem calc(0.5rem - var(--markprompt-prompt-focus-shadow-width, 3px))',
+          paddingBlock: '1rem',
           color: 'var(--markprompt-mutedForeground)',
           fontSize: '0.75rem',
-          fontWeight: 500,
+          fontWeight: 400,
           zIndex: 1,
+          marginTop: '-0.5rem',
         }}
       >
-        Powered by{' '}
         <a
           style={{
-            color: 'var(--markprompt-primary)',
             display: 'flex',
             alignItems: 'center',
             gap: '0.25rem',
+            padding: '0.25rem 0.5rem',
+            justifyContent: 'center',
             textDecoration: 'none',
+            color: 'var(--markprompt-mutedForeground)',
           }}
           target="_blank"
           href="https://markprompt.com"
         >
-          <MarkpromptIcon
-            style={{ width: '16px', height: '16px' }}
-            aria-hidden
-          />
-          Markprompt AI
+          Powered by Markprompt
         </a>
         {showAlgolia && (
           <>
             and{' '}
             <a
               style={{
-                color: 'var(--markprompt-primary)',
                 marginBottom: -1,
                 textDecoration: 'none',
                 display: 'flex',
@@ -124,7 +120,7 @@ export const Footer = (props: FooterProps): ReactElement => {
   );
 };
 
-Footer.displayName = 'Markprompt.Footer';
+Branding.displayName = 'Markprompt.Branding';
 
 export const MarkpromptIcon = ({
   className,

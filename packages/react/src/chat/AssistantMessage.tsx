@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isToolCalls } from '@markprompt/core';
+import { DEFAULT_OPTIONS, isToolCalls } from '@markprompt/core';
 import { useMemo, type ComponentType } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
@@ -7,19 +7,30 @@ import { MessageAnswer } from './MessageAnswer.js';
 import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
-import { BotIcon } from '../icons.js';
+import { SparklesIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 
-interface AssistantMessageProps {
+export interface AssistantMessageProps {
+  apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
   linkAs?: string | ComponentType<any>;
+  messageOnly?: boolean;
+  showFeedbackAlways?: boolean;
 }
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
-  const { feedbackOptions, message, projectKey, chatOptions } = props;
+  const {
+    apiUrl,
+    feedbackOptions,
+    message,
+    projectKey,
+    chatOptions,
+    messageOnly,
+    showFeedbackAlways,
+  } = props;
 
   const toolCalls = useMemo(
     () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
@@ -37,6 +48,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   );
 
   const { submitFeedback, abort: abortFeedbackRequest } = useFeedback({
+    apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
     projectKey,
     feedbackOptions,
   });
@@ -60,29 +72,33 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   }
 
   return (
-    <div className="MarkpromptMessageAnswerContainer">
+    <div
+      className="MarkpromptMessageAnswerContainer"
+      data-compact={messageOnly}
+    >
       {chatOptions?.avatars?.visible && (
-        <>
+        <div className="MarkpromptMessageAvatarContainer" data-role="assistant">
           {!chatOptions.avatars?.assistant ? (
-            <BotIcon className="MarkpromptMessageAvatar" />
+            <SparklesIcon
+              className="MarkpromptMessageAvatar"
+              data-type="icon"
+            />
           ) : typeof chatOptions.avatars?.assistant === 'string' ? (
             <img
               src={chatOptions.avatars.assistant}
-              className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+              className="MarkpromptMessageAvatarImage"
             />
           ) : (
             <div className="MarkpromptMessageAvatar">
               <chatOptions.avatars.assistant className="MarkpromptMessageAvatar" />
             </div>
           )}
-        </>
+        </div>
       )}
-
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', overflow: 'hidden' }}>
         <MessageAnswer state={message.state} linkAs={props.linkAs}>
           {message.content ?? ''}
         </MessageAnswer>
-
         {/*
         If this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
@@ -96,11 +112,13 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             confirmToolCalls={confirmToolCalls}
           />
         )}
-        {(chatOptions.showCopy || feedbackOptions?.enabled) &&
+        {!messageOnly &&
+          (chatOptions.showCopy || feedbackOptions?.enabled) &&
           message.state === 'done' && (
             <Feedback
               message={message.content ?? ''}
               variant="icons"
+              data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
               submitFeedback={(feedback, promptId) => {
                 submitFeedback(feedback, promptId);
@@ -114,6 +132,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               promptId={message.promptId}
               heading={feedbackOptions.heading}
               showFeedback={!!feedbackOptions?.enabled}
+              showVotes={feedbackOptions.votes}
               showCopy={chatOptions.showCopy}
             />
           )}

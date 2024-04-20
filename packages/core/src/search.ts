@@ -1,7 +1,10 @@
 import type { SearchOptions } from '@algolia/client-search';
+import defaults from 'defaults';
 
+import { DEFAULT_OPTIONS } from './index.js';
 import type {
   AlgoliaDocSearchResultsResponse,
+  BaseOptions,
   SearchResultsResponse,
 } from './types.js';
 import { getErrorMessage, isAbortError } from './utils.js';
@@ -12,11 +15,6 @@ export interface SubmitSearchQueryOptions {
    * @default 8
    **/
   limit?: number;
-  /**
-   * URL at which to fetch search results
-   * @default "https://api.markprompt.com/search"
-   **/
-  apiUrl?: string;
   /**
    * Custom provider configuration
    * @default undefined
@@ -51,7 +49,6 @@ export interface AlgoliaProvider {
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
   limit: 8,
-  apiUrl: 'https://api.markprompt.com/search',
 };
 
 /**
@@ -64,27 +61,37 @@ export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {
 export async function submitSearchQuery(
   query: string,
   projectKey: string,
-  options?: SubmitSearchQueryOptions,
+  options: SubmitSearchQueryOptions & BaseOptions = {},
 ): Promise<SearchResultsResponse | undefined> {
   try {
-    const {
-      limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit,
-      apiUrl = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl,
-    } = options ?? {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit, apiUrl } =
+      options ?? {};
+
+    const resolvedOptions = defaults(
+      { limit, apiUrl },
+      {
+        ...DEFAULT_OPTIONS,
+        ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+      },
+    );
 
     const params = new URLSearchParams({
       query,
       projectKey,
-      limit: String(limit),
+      limit: String(resolvedOptions.limit),
     });
 
-    const res = await fetch(`${apiUrl}?${params.toString()}`, {
-      method: 'GET',
-      signal: options?.signal,
-      headers: new Headers({
-        'X-Markprompt-API-Version': '2023-12-01',
-      }),
-    });
+    const res = await fetch(
+      `${resolvedOptions.apiUrl}/search?${params.toString()}`,
+      {
+        method: 'GET',
+        signal: options?.signal,
+        headers: new Headers({
+          'X-Markprompt-API-Version': '2023-12-01',
+        }),
+      },
+    );
 
     if (!res.ok) {
       const message = await getErrorMessage(res);

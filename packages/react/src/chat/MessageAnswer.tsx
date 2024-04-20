@@ -10,10 +10,26 @@ interface MessageAnswerProps {
   linkAs?: string | ComponentType<any>;
 }
 
+function LoadingDots(): JSX.Element {
+  return (
+    <div className="MarkpromptLoadingDots">
+      <span />
+      <span />
+      <span />
+    </div>
+  );
+}
+
 export function MessageAnswer(props: MessageAnswerProps): ReactElement {
   const { children, state } = props;
+
   return (
     <div className="MarkpromptMessageAnswer">
+      {(state === 'indeterminate' || state === 'preload') && (
+        <div className="MarkpromptLoadingContainer">
+          <LoadingDots />
+        </div>
+      )}
       <Answer answer={children} state={state} linkAs={props.linkAs} />
       {state === 'cancelled' && (
         <div className="MarkpromptCancelled">

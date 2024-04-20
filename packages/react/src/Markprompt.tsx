@@ -1,4 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
 import Emittery from 'emittery';
@@ -7,8 +8,9 @@ import {
   Suspense,
   useEffect,
   useState,
-  useTransition,
   type ReactElement,
+  useCallback,
+  type JSXElementConstructor,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
@@ -16,10 +18,13 @@ import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
 import { ChatProvider, useChatStore } from './index.js';
+import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
+import { TicketDeflectionForm } from './TicketDeflectionForm.js';
 import { type MarkpromptOptions, type View } from './types.js';
+import { NavigationMenu } from './ui/navigation-menu.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
 import { getDefaultView } from './utils.js';
@@ -37,14 +42,14 @@ type MarkpromptProps = MarkpromptOptions &
     onDidRequestOpenChange?: (open: boolean) => void;
   };
 
-const emitter = new Emittery<{ open: undefined; close: undefined }>();
+const emitter = new Emittery<{ open: { view?: View }; close: undefined }>();
 
 /**
  * Open Markprompt programmatically. Useful for building a custom trigger
  * or opening the Markprompt dialog in response to other user actions.
  */
-function openMarkprompt(): void {
-  emitter.emit('open');
+function openMarkprompt(view?: View): void {
+  emitter.emit('open', { view });
 }
 
 /**
@@ -53,6 +58,56 @@ function openMarkprompt(): void {
  */
 function closeMarkprompt(): void {
   emitter.emit('close');
+}
+
+type TriggerProps = Pick<
+  MarkpromptProps,
+  'display' | 'trigger' | 'children'
+> & {
+  hasMenu?: boolean;
+  onClick?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component: string | JSXElementConstructor<any>;
+};
+
+function Trigger(props: TriggerProps): JSX.Element {
+  const { display, trigger, hasMenu, Component, onClick, children } = props;
+
+  return (
+    <>
+      {!trigger?.customElement && !children && display !== 'plain' && (
+        <>
+          {trigger?.floating !== false ? (
+            <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
+              {trigger?.buttonLabel && <span>{trigger.buttonLabel}</span>}
+              <AccessibleIcon.Root label={trigger?.label || ''}>
+                {trigger?.iconSrc ? (
+                  <img
+                    className="MarkpromptChatIcon"
+                    width="20"
+                    height="20"
+                    src={trigger.iconSrc}
+                  />
+                ) : (
+                  <ChatIcon
+                    className="MarkpromptChatIcon"
+                    width="20"
+                    height="20"
+                  />
+                )}
+              </AccessibleIcon.Root>
+            </Component>
+          ) : (
+            <SearchBoxTrigger trigger={trigger} onClick={onClick} />
+          )}
+        </>
+      )}
+
+      {children && (display !== 'plain' || hasMenu) && (
+        <div onClick={onClick}>{children}</div>
+      )}
+    </>
+  );
 }
 
 function Markprompt(props: MarkpromptProps): JSX.Element {
@@ -65,12 +120,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   }
 
   const {
+    apiUrl,
     display,
     sticky,
     defaultView,
     close,
     description,
     feedback,
+    menu,
     chat,
     references,
     search,
@@ -84,12 +141,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     children,
   }: MarkpromptOptions = useDefaults(
     {
+      apiUrl: props.apiUrl,
       display: props.display,
       sticky: props.sticky,
       defaultView: getDefaultView(props.defaultView, props),
       close: props.close,
       description: props.description,
       feedback: props.feedback,
+      menu: props.menu,
       chat: props.chat,
       references: props.references,
       search: props.search,
@@ -105,19 +164,23 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS,
   );
 
-  const [open, setOpen] = useState(false);
+  const [openViews, setOpenViews] = useState<{ [key in View]?: boolean }>({});
 
   useEffect(() => {
-    const onOpen = (): void => {
+    const onOpen = ({ view = 'chat' }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
-      if (display === 'dialog') {
-        setOpen(true);
-      }
+      setOpenViews((v) => {
+        const closed = Object.keys(v).reduce((acc, value) => {
+          return { ...acc, [value]: false };
+        }, {});
+        return { ...closed, [view]: true };
+      });
     };
+
     const onClose = (): void => {
       onDidRequestOpenChange?.(false);
-      if (display === 'dialog') {
-        setOpen(false);
+      if (display === 'dialog' || display === 'sheet') {
+        setOpenViews({});
       }
     };
 
@@ -130,168 +193,203 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     };
   }, [trigger?.customElement, display, onDidRequestOpenChange]);
 
+  const onTriggerClicked = useCallback(() => {
+    openMarkprompt(menu ? 'menu' : 'chat');
+  }, [menu]);
+
   return (
-    <GlobalStoreProvider
-      options={{
-        branding,
-        chat,
-        close,
-        debug,
-        defaultView,
-        description,
-        display,
-        feedback,
-        integrations,
-        layout,
-        linkAs,
-        projectKey,
-        references,
-        search,
-        sticky,
-        title,
-        trigger,
-      }}
-    >
-      <ChatProvider chatOptions={chat} debug={debug} projectKey={projectKey}>
-        <BaseMarkprompt.Root
-          display={display}
-          open={open}
-          onOpenChange={(open) => {
-            onDidRequestOpenChange?.(open);
-            setOpen(open);
-          }}
-          {...dialogProps}
-        >
-          {!trigger?.customElement && !children && display === 'dialog' && (
-            <>
-              {trigger?.floating !== false ? (
-                <BaseMarkprompt.DialogTrigger className="MarkpromptFloatingTrigger">
-                  {trigger.buttonLabel && <span>{trigger.buttonLabel}</span>}
-                  <AccessibleIcon.Root label={trigger.label!}>
-                    {trigger.iconSrc ? (
-                      <img
-                        className="MarkpromptChatIcon"
-                        width="24"
-                        height="24"
-                        src={trigger.iconSrc}
-                      />
-                    ) : (
-                      <ChatIcon
-                        className="MarkpromptChatIcon"
-                        width="24"
-                        height="24"
-                      />
-                    )}
-                  </AccessibleIcon.Root>
-                </BaseMarkprompt.DialogTrigger>
-              ) : (
-                <SearchBoxTrigger
-                  trigger={trigger}
-                  setOpen={setOpen}
-                  open={open}
-                />
-              )}
-            </>
-          )}
-
-          {children && display === 'dialog' && (
-            <BaseMarkprompt.DialogTrigger asChild>
+    <>
+      {display !== 'plain' && (
+        <>
+          {!menu ? (
+            <Trigger
+              display={display}
+              trigger={trigger}
+              Component="button"
+              onClick={onTriggerClicked}
+            >
               {children}
-            </BaseMarkprompt.DialogTrigger>
+            </Trigger>
+          ) : (
+            <Menu
+              menu={menu}
+              open={openViews.menu}
+              onOpenChange={(open) => {
+                setOpenViews((v) => ({ ...v, menu: open }));
+              }}
+            >
+              <Trigger
+                display={display}
+                trigger={trigger}
+                hasMenu
+                Component={DropdownMenu.Trigger}
+              >
+                {children}
+              </Trigger>
+            </Menu>
           )}
+        </>
+      )}
 
-          {display === 'dialog' && (
-            <>
+      <GlobalStoreProvider
+        options={{
+          apiUrl,
+          branding,
+          chat,
+          close,
+          debug,
+          defaultView,
+          description,
+          display,
+          feedback,
+          integrations,
+          layout,
+          linkAs,
+          projectKey,
+          references,
+          search,
+          sticky,
+          title,
+          trigger,
+        }}
+      >
+        <ChatProvider
+          chatOptions={chat}
+          debug={debug}
+          projectKey={projectKey}
+          apiUrl={apiUrl}
+        >
+          {display !== 'plain' && (
+            <BaseMarkprompt.Root
+              display="dialog"
+              open={openViews.ticket}
+              onOpenChange={(open) => {
+                onDidRequestOpenChange?.(open);
+                setOpenViews((v) => ({ ...v, ticket: open }));
+              }}
+              {...dialogProps}
+            >
               <BaseMarkprompt.Portal>
-                {!sticky && (
-                  <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
-                )}
+                <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
                 <BaseMarkprompt.Content
                   className="MarkpromptContentDialog"
-                  footerClassName="MarkpromptFooter"
-                  branding={branding}
-                  showAlgolia={
-                    search?.enabled && search.provider?.name === 'algolia'
-                  }
-                  onPointerDownOutside={
-                    sticky
-                      ? (e) => {
-                          e.preventDefault();
-                        }
-                      : undefined
-                  }
+                  data-variant="dialog"
+                  data-size="adaptive"
+                  onPointerDownOutside={(e) => e.preventDefault()}
                 >
-                  <BaseMarkprompt.Title hide={title.hide}>
-                    {title.text}
-                  </BaseMarkprompt.Title>
-
-                  {description.text && (
-                    <BaseMarkprompt.Description hide={description.hide}>
-                      {description.text}
-                    </BaseMarkprompt.Description>
-                  )}
-
-                  <MarkpromptContent
-                    close={close}
-                    chat={chat}
-                    debug={debug}
-                    feedback={feedback}
-                    integrations={integrations}
+                  <TicketDeflectionForm
+                    apiUrl={apiUrl}
                     projectKey={projectKey}
-                    references={references}
-                    search={search}
-                    layout={layout}
-                    linkAs={linkAs}
+                    chat={chat}
+                    integrations={integrations}
                   />
                 </BaseMarkprompt.Content>
               </BaseMarkprompt.Portal>
-            </>
+            </BaseMarkprompt.Root>
           )}
+          <BaseMarkprompt.Root
+            display={display}
+            open={openViews.chat}
+            onOpenChange={(open) => {
+              onDidRequestOpenChange?.(open);
+              setOpenViews((v) => ({ ...v, chat: open }));
+            }}
+            {...dialogProps}
+          >
+            {display !== 'plain' && (
+              <>
+                <BaseMarkprompt.Portal>
+                  {!sticky && (
+                    <BaseMarkprompt.Overlay className="MarkpromptOverlay" />
+                  )}
+                  <BaseMarkprompt.Content
+                    className="MarkpromptContentDialog"
+                    data-variant={display}
+                    onPointerDownOutside={
+                      sticky
+                        ? (e) => {
+                            e.preventDefault();
+                          }
+                        : undefined
+                    }
+                  >
+                    <BaseMarkprompt.Title hide={title.hide}>
+                      {title.text}
+                    </BaseMarkprompt.Title>
 
-          {display === 'plain' && (
-            <BaseMarkprompt.PlainContent
-              className="MarkpromptContentPlain"
-              branding={branding}
-              showAlgolia={
-                search?.enabled && search.provider?.name === 'algolia'
-              }
-            >
-              <MarkpromptContent
-                chat={chat}
-                feedback={feedback}
-                integrations={integrations}
-                layout={layout}
-                linkAs={linkAs}
-                projectKey={projectKey}
-                references={references}
-                search={search}
-              />
-            </BaseMarkprompt.PlainContent>
-          )}
-        </BaseMarkprompt.Root>
-      </ChatProvider>
-    </GlobalStoreProvider>
+                    {description.text && (
+                      <BaseMarkprompt.Description hide={description.hide}>
+                        {description.text}
+                      </BaseMarkprompt.Description>
+                    )}
+
+                    <MarkpromptContent
+                      close={close}
+                      apiUrl={apiUrl}
+                      projectKey={projectKey}
+                      chat={chat}
+                      debug={debug}
+                      feedback={feedback}
+                      integrations={integrations}
+                      references={references}
+                      search={search}
+                      layout={layout}
+                      linkAs={linkAs}
+                      branding={branding}
+                      display={display}
+                    />
+                  </BaseMarkprompt.Content>
+                </BaseMarkprompt.Portal>
+              </>
+            )}
+
+            {display === 'plain' && (
+              <BaseMarkprompt.PlainContent className="MarkpromptContentPlain">
+                <MarkpromptContent
+                  chat={chat}
+                  feedback={feedback}
+                  layout={layout}
+                  linkAs={linkAs}
+                  projectKey={projectKey}
+                  references={references}
+                  branding={branding}
+                  display={display}
+                  // Currently, we don't support integrations and
+                  // search in the plain UI
+                  integrations={undefined}
+                  search={undefined}
+                />
+              </BaseMarkprompt.PlainContent>
+            )}
+          </BaseMarkprompt.Root>
+        </ChatProvider>
+      </GlobalStoreProvider>
+    </>
   );
 }
 
-interface MarkpromptContentProps {
+type MarkpromptContentProps = {
   projectKey: string;
+  apiUrl?: string;
   chat?: MarkpromptOptions['chat'];
   close?: MarkpromptOptions['close'];
   debug?: boolean;
+  display?: MarkpromptOptions['display'];
   layout?: MarkpromptOptions['layout'];
   feedback?: MarkpromptOptions['feedback'];
   references?: MarkpromptOptions['references'];
   search?: MarkpromptOptions['search'];
   linkAs?: MarkpromptOptions['linkAs'];
   integrations?: MarkpromptOptions['integrations'];
-}
+} & BaseMarkprompt.BrandingProps;
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
+    apiUrl,
     chat,
     close,
     debug,
+    display,
     feedback,
     integrations,
     layout,
@@ -299,36 +397,23 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
     projectKey,
     references,
     search,
+    branding,
   } = props;
 
   const activeView = useGlobalStore((state) => state.activeView);
   const setActiveView = useGlobalStore((state) => state.setActiveView);
   const submitChat = useChatStore((state) => state.submitChat);
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
-  const messages = useChatStore((state) => state.messages);
-  const conversationId = useChatStore((state) => state.conversationId);
-  const createTicketSummary = useGlobalStore(
-    (state) => state.tickets?.createTicketSummary,
-  );
-  const [, startTransition] = useTransition();
-
-  async function handleCreateTicket(): Promise<void> {
-    if (!integrations?.createTicket?.enabled) return;
-
-    setActiveView('create-ticket');
-
-    if (conversationId && messages.length > 0) {
-      startTransition(() => {
-        createTicketSummary?.(conversationId, messages);
-      });
-    }
-  }
 
   if (!search?.enabled) {
     return (
       <div className="MarkpromptTabsContainer">
         {/* We still include a div to preserve the grid-template-rows rules */}
-        <div></div>
+        <div>
+          {display !== 'plain' && (
+            <NavigationMenu title={chat?.title} close={close} />
+          )}
+        </div>
 
         <div className="MarkpromptViews">
           <div
@@ -337,36 +422,21 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               inset: 0,
             }}
           >
-            {close?.visible && (
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '0.5rem',
-                  top: '0.5rem',
-                  zIndex: 10,
-                }}
-              >
-                <BaseMarkprompt.Close className="MarkpromptClose">
-                  <AccessibleIcon.Root label={close!.label!}>
-                    {isTouchDevice || close.hasIcon ? (
-                      <CloseIcon width={20} height={20} />
-                    ) : (
-                      <kbd>Esc</kbd>
-                    )}
-                  </AccessibleIcon.Root>
-                </BaseMarkprompt.Close>
-              </div>
-            )}
             {chat?.enabled && (
               <ChatView
+                apiUrl={apiUrl}
                 activeView={activeView}
                 chatOptions={chat}
                 debug={debug}
                 feedbackOptions={feedback}
-                integrations={integrations}
-                handleCreateTicket={handleCreateTicket}
                 projectKey={projectKey}
                 referencesOptions={references}
+                branding={branding}
+                display={display}
+                // integrations={integrations}
+                // handleCreateTicket={() => {
+                //   openMarkprompt('ticket');
+                // }}
               />
             )}
           </div>
@@ -458,6 +528,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <Suspense fallback={null}>
               <SearchView
                 activeView={activeView}
+                apiUrl={apiUrl}
                 projectKey={projectKey}
                 layout={layout}
                 searchOptions={search}
@@ -484,24 +555,29 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             }}
           >
             <ChatView
+              apiUrl={apiUrl}
               activeView={activeView}
               chatOptions={chat}
               debug={debug}
               feedbackOptions={feedback}
-              integrations={integrations}
               onDidPressBack={() => setActiveView('search')}
-              handleCreateTicket={handleCreateTicket}
               projectKey={projectKey}
               referencesOptions={references}
               showBack={layout === 'panels'}
               linkAs={linkAs}
+              branding={branding}
+              display={display}
+              // integrations={integrations}
+              // handleCreateTicket={() => {
+              //   openMarkprompt('ticket');
+              // }}
             />
           </Tabs.Content>
         )}
 
         {integrations?.createTicket?.enabled && (
           <Tabs.Content
-            value="create-ticket"
+            value="ticket"
             style={{ position: 'absolute', inset: 0 }}
           >
             <CreateTicketView
@@ -515,4 +591,10 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export { closeMarkprompt, Markprompt, openMarkprompt, type MarkpromptProps };
+export {
+  closeMarkprompt,
+  Markprompt,
+  openMarkprompt,
+  type MarkpromptProps,
+  Trigger,
+};

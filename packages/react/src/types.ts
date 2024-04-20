@@ -19,7 +19,7 @@ import type {
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
 
-export type View = 'chat' | 'search' | 'create-ticket';
+export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -121,7 +121,9 @@ export interface CloseOptions {
    **/
   visible?: boolean;
   /**
-   * Show an × icon in the close button instead of the keyboard shortcut ('Esc')
+   * Show an × icon in the close button instead of the keyboard
+   * shortcut ('Esc').
+   * @default true
    */
   hasIcon?: boolean;
 }
@@ -146,10 +148,25 @@ export interface FeedbackOptions {
    * */
   enabled?: boolean;
   /**
+   * Enable votes.
+   * @default true
+   * */
+  votes?: boolean;
+  /**
+   * Enable thread CSAT.
+   * @default true
+   * */
+  csat?: boolean;
+  /**
    * Heading above the form
    * @default "Was this response helpful?"
    **/
   heading?: string;
+  /**
+   * Heading above the CSAT picker
+   * @default "How helpful was this?"
+   **/
+  headingCSAT?: string;
   /**
    * Called when feedback is submitted
    * @default undefined
@@ -179,11 +196,92 @@ export interface AvatarsOptions {
   assistant?: string | ComponentType<{ className: string }>;
 }
 
+export type ButtonTheme = 'purple';
+
+export type MenuIconId =
+  | 'book'
+  | 'chat'
+  | 'discord'
+  | 'magnifying-glass'
+  | 'newspaper'
+  | 'sparkles';
+
+export type MenuAction = 'chat' | 'ticket' | 'search';
+
+export interface MenuItemProps {
+  /**
+   * Entry title
+   **/
+  title: string;
+  /**
+   * Entry action
+   **/
+  action?: MenuAction;
+  /**
+   * Entry type
+   * @default link
+   **/
+  type?: 'link' | 'button';
+  /**
+   * Entry href
+   **/
+  href?: string;
+  /**
+   * Entry link target
+   **/
+  target?: string;
+  /**
+   * Entry icon id
+   **/
+  iconId?: MenuIconId;
+  /**
+   * Entry icon
+   **/
+  iconSrc?: string;
+  /**
+   * Entry id to pass as `data-id` attribute
+   **/
+  id?: string;
+  /**
+   * Theme to pass as `data-theme` attribute
+   **/
+  theme?: ButtonTheme;
+}
+
+export interface MenuSectionProps {
+  /**
+   * Section heading
+   **/
+  heading?: string;
+  /**
+   * Section entries
+   **/
+  entries: MenuItemProps[];
+}
+
+export interface MenuOptions {
+  /**
+   * Menu title
+   **/
+  title?: string;
+  /**
+   * Menu subtitle
+   **/
+  subtitle?: string;
+  /**
+   * Menu sections
+   **/
+  sections?: MenuSectionProps[];
+  /**
+   * Menu footer
+   **/
+  footer?: MenuItemProps[];
+}
+
 export interface ChatOptions {
   /**
-   * Show a chat-like prompt input allowing for conversation-style interaction
-   * rather than single question prompts.
-   * @default false
+   * Show a chat-like interface.
+   * @default true
    **/
   enabled?: boolean;
   /**
@@ -191,6 +289,11 @@ export interface ChatOptions {
    * @default "Ask AI"
    **/
   label?: string;
+  /**
+   * Title for the standalone chat view
+   * @default "Help"
+   **/
+  title?: string;
   /**
    * Label for the tab bar
    * @default "Ask AI"
@@ -237,6 +340,32 @@ export interface ChatOptions {
   avatars?: AvatarsOptions;
 }
 
+export interface CreateTicketIntegrationChatOptions {
+  /**
+   * Title for the view
+   * @default "Help"
+   **/
+  title?: string;
+  /**
+   * Subtitle for the view
+   **/
+  subtitle?: string;
+  /**
+   * Placeholder for the chat input
+   * @default "I am having trouble with…"
+   **/
+  placeholder?: string | string[];
+  /**
+   * Disclaimer view
+   */
+  disclaimerView?: DisclaimerViewProps;
+  /**
+   * Label for the submit button
+   * @default "Send"
+   **/
+  buttonLabel?: string;
+}
+
 export interface ReferencesOptions {
   /**
    * Display mode for the references. References can either be
@@ -250,7 +379,7 @@ export interface ReferencesOptions {
   getLabel?: (reference: FileSectionReference) => string | undefined;
   /**
    * Heading above the references
-   * @default "Sources"
+   * @default "Related articles"
    **/
   heading?: string;
   /** Loading text, default: `Fetching context…` */
@@ -389,12 +518,7 @@ export interface CreateTicketIntegrationMessageButtonOptions {
   hasText?: boolean;
 }
 
-export interface CreateTicketIntegrationViewOptions {
-  /**
-   * Title for the create ticket view
-   * @default "Create a case"
-   */
-  title: string;
+export interface CreateTicketIntegrationFormOptions {
   /**
    * Label for the name input
    * @default "Your Name"
@@ -402,7 +526,6 @@ export interface CreateTicketIntegrationViewOptions {
   nameLabel: string;
   /**
    * Placeholder for the name input
-   * @default "Markprompt AI"
    */
   namePlaceholder: string;
   /**
@@ -412,7 +535,6 @@ export interface CreateTicketIntegrationViewOptions {
   emailLabel: string;
   /**
    * Placeholder for the email input
-   * @default "bot@markprompt.com"
    * */
   emailPlaceholder: string;
   /**
@@ -437,7 +559,7 @@ export interface CreateTicketIntegrationViewOptions {
   submitLabel: string;
   /**
    * Text shown when the ticket was created ok
-   * @default "Ticket created successfully!"
+   * @default "Thank you! We will get back to you shortly."
    */
   ticketCreatedOk: string;
   /**
@@ -445,6 +567,17 @@ export interface CreateTicketIntegrationViewOptions {
    * @default "An error occurred while creating the case"
    */
   ticketCreatedError: string;
+}
+
+export interface CreateTicketIntegrationUserOptions {
+  /**
+   * The user's name
+   **/
+  name?: string;
+  /**
+   * The user's email
+   **/
+  email?: string;
 }
 
 export interface CreateTicketIntegrationOptions {
@@ -458,18 +591,13 @@ export interface CreateTicketIntegrationOptions {
    **/
   provider: 'zendesk';
   /**
-   * The API URL to use for creating tickets
-   * @default "https://api.markprompt.com/create-ticket"
-   **/
-  apiUrl?: string;
-  /**
    * The prompt to use to create a summary of the conversation between user and bot for the support agent
    * @default "I want to create a support case. Please summarize the conversation so far for sending it to a support agent. Return only the summary itself without assistant commentary. Use short paragraphs. Include relevant code snippets."
    **/
   prompt?: string;
   /**
    * Default text shown at the end of a chat message.
-   * @default "Bot not being helpful?"
+   * @default "Is the AI not helpful?"
    */
   messageText?: string;
   /**
@@ -477,9 +605,17 @@ export interface CreateTicketIntegrationOptions {
    */
   messageButton?: CreateTicketIntegrationMessageButtonOptions;
   /**
-   * Options for the create ticket view.
+   * Options for the create ticket form.
    */
-  view?: CreateTicketIntegrationViewOptions;
+  form?: CreateTicketIntegrationFormOptions;
+  /**
+   * Options for the create ticket chat.
+   */
+  chat?: CreateTicketIntegrationChatOptions;
+  /**
+   * User options
+   */
+  user?: CreateTicketIntegrationUserOptions;
 }
 
 export interface IntegrationsOptions {
@@ -490,17 +626,24 @@ export interface IntegrationsOptions {
   createTicket?: CreateTicketIntegrationOptions;
 }
 
+export type MarkpromptDisplay = 'plain' | 'dialog' | 'sheet';
+
 export interface MarkpromptOptions {
+  /**
+   * The base API URL.
+   * @default "https://api.markprompt.com"
+   */
+  apiUrl?: string;
   /**
    * Trigger component, such as a search button or a floating chat bubble.
    * @default undefined
    **/
   children?: React.ReactNode;
   /**
-   * The way to display the content, either as a plain view or as a dialog.
+   * The way to display the chat/search content.
    * @default "dialog"
    **/
-  display?: 'plain' | 'dialog';
+  display?: MarkpromptDisplay;
   /**
    * Enable user interactions outside of the dialog while keeping it open.
    * @default false
@@ -516,6 +659,10 @@ export interface MarkpromptOptions {
    * @default "panels"
    **/
   layout?: 'panels' | 'tabs';
+  /**
+   * Options for the menu component.
+   */
+  menu?: MenuOptions;
   /**
    * Options for the chat component.
    */

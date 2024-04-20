@@ -12,6 +12,8 @@
     // strictness
     "strict": true,
 
+    "types": ["@testing-library/jest-dom"],
+
     // transpilation
     "module": "nodenext",
     "moduleResolution": "nodenext",

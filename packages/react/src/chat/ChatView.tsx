@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { SubmitFeedbackOptions } from '@markprompt/core';
-import type { ComponentType, ReactElement } from 'react';
+import { type SubmitFeedbackOptions } from '@markprompt/core';
+import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { ConversationSidebar } from './ConversationSidebar.js';
@@ -12,9 +12,11 @@ import type {
   ChatOptions,
   FeedbackOptions,
   IntegrationsOptions,
+  MarkpromptOptions,
   ReferencesOptions,
   View,
 } from '../types.js';
+import { RichText } from '../ui/rich-text.js';
 import { useDefaults } from '../useDefaults.js';
 
 export interface ChatViewProps {
@@ -22,6 +24,10 @@ export interface ChatViewProps {
    * The project key associated to the project.
    */
   projectKey: string;
+  /**
+   * The base API URL.
+   */
+  apiUrl?: string;
   /**
    * The active view.
    */
@@ -61,25 +67,34 @@ export interface ChatViewProps {
    */
   linkAs?: string | ComponentType<any>;
   /**
+   * Minimum number of rows.
+   * @default 1
+   */
+  minInputRows?: number;
+  /**
+   * Submit on enter.
+   * @default true
+   */
+  submitOnEnter?: boolean;
+  /**
+   * Show the Markprompt footer.
+   **/
+  branding?: { show?: boolean; type?: 'plain' | 'text' };
+  /**
+   * The way to display the chat/search content.
+   * @default "dialog"
+   **/
+  display?: MarkpromptOptions['display'];
+  /**
    * Display debug info.
    * @default false
    **/
   debug?: boolean;
 }
 
-function DisclaimerMessage(props: {
-  message: string | ComponentType;
-}): ReactElement {
-  if (typeof props.message === 'string') {
-    return <span>{props.message}</span>;
-  } else {
-    const Message = props.message;
-    return <Message />;
-  }
-}
-
 export function ChatView(props: ChatViewProps): JSX.Element {
   const {
+    apiUrl,
     activeView,
     projectKey,
     showBack,
@@ -87,6 +102,10 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     integrations,
     handleCreateTicket,
     linkAs,
+    submitOnEnter,
+    branding,
+    display,
+    minInputRows,
   } = props;
 
   if (!projectKey) {
@@ -115,54 +134,68 @@ export function ChatView(props: ChatViewProps): JSX.Element {
   const didAcceptDisclaimer = useChatStore(
     (state) => state.didAcceptDisclaimer,
   );
+
   const setDidAcceptDisclaimer = useChatStore(
     (state) => state.setDidAcceptDisclaimer,
   );
 
   return (
     <div className="MarkpromptChatView">
-      <ConversationSidebar />
-      <div className="MarkpromptChatViewChat">
-        {showBack ? (
-          <div className="MarkpromptChatViewNavigation">
-            <button className="MarkpromptGhostButton" onClick={onDidPressBack}>
-              <ChevronLeftIcon
-                style={{ width: 16, height: 16 }}
-                strokeWidth={2.5}
-              />
-            </button>
-          </div>
-        ) : (
-          // Keep this for the grid template rows layout
-          <div />
-        )}
-        {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
-          <div className="MarkpromptDisclaimerView">
-            <div className="MarkpromptDisclaimerViewMessage">
-              <DisclaimerMessage message={chatOptions.disclaimerView.message} />
+      <ConversationSidebar display={display} />
+      <div className="MarkpromptChatViewChatContainer">
+        <div className="MarkpromptChatViewChat">
+          {showBack ? (
+            <div className="MarkpromptChatViewNavigation">
               <button
-                className="MarkpromptPromptSubmitButton"
-                type="submit"
-                onClick={() => {
-                  setDidAcceptDisclaimer(true);
-                }}
+                className="MarkpromptGhostButton"
+                onClick={onDidPressBack}
               >
-                {chatOptions.disclaimerView.cta || 'I agree'}
+                <ChevronLeftIcon
+                  style={{ width: 16, height: 16 }}
+                  strokeWidth={2.5}
+                />
               </button>
             </div>
-          </div>
-        ) : (
-          <Messages
+          ) : (
+            // Keep this for the grid template rows layout
+            <div />
+          )}
+          {!didAcceptDisclaimer && chatOptions?.disclaimerView ? (
+            <div className="MarkpromptDisclaimerView">
+              <div className="MarkpromptDisclaimerViewMessage">
+                <RichText>{chatOptions.disclaimerView.message}</RichText>
+                <button
+                  className="MarkpromptButton"
+                  data-variant="primary"
+                  type="submit"
+                  onClick={() => {
+                    setDidAcceptDisclaimer(true);
+                  }}
+                >
+                  {chatOptions.disclaimerView.cta || 'I agree'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Messages
+              apiUrl={apiUrl}
+              chatOptions={chatOptions}
+              feedbackOptions={feedbackOptions}
+              integrations={integrations}
+              projectKey={projectKey}
+              referencesOptions={referencesOptions}
+              handleCreateTicket={handleCreateTicket}
+              linkAs={linkAs}
+              branding={branding}
+            />
+          )}
+          <ChatViewForm
+            activeView={activeView}
             chatOptions={chatOptions}
-            feedbackOptions={feedbackOptions}
-            integrations={integrations}
-            projectKey={projectKey}
-            referencesOptions={referencesOptions}
-            handleCreateTicket={handleCreateTicket}
-            linkAs={linkAs}
+            minInputRows={minInputRows}
+            submitOnEnter={submitOnEnter}
           />
-        )}
-        <ChatViewForm activeView={activeView} chatOptions={chatOptions} />
+        </div>
       </div>
     </div>
   );

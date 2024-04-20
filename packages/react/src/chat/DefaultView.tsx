@@ -1,35 +1,63 @@
-import { type ComponentType, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 
-import type { DefaultViewProps } from '../types.js';
+import { AssistantMessage } from './AssistantMessage.js';
+import type { MessagesProps } from './Messages.js';
+import type { MarkpromptOptions } from '../types.js';
 
-export function DefaultMessage(props: {
-  message: string | ComponentType;
-}): ReactElement {
-  if (typeof props.message === 'string') {
-    return <p className="MarkpromptDefaultViewMessage">{props.message}</p>;
+export function DefaultMessage(props: MessagesProps): ReactElement {
+  const { chatOptions, feedbackOptions, projectKey, linkAs } = props;
+
+  if (!chatOptions.defaultView?.message) {
+    return <></>;
+  }
+
+  if (typeof chatOptions.defaultView?.message === 'string') {
+    return (
+      <AssistantMessage
+        message={{
+          id: '*-*-*-*-*',
+          state: 'done',
+          content: chatOptions.defaultView.message,
+        }}
+        projectKey={projectKey}
+        chatOptions={chatOptions}
+        feedbackOptions={feedbackOptions}
+        linkAs={linkAs}
+        messageOnly
+      />
+    );
   } else {
-    const Message = props.message;
+    const Message = chatOptions.defaultView.message;
     return <Message />;
   }
 }
 
-export function DefaultPrompts(props: {
-  promptsHeading?: string;
-  prompts: string[];
+export function DefaultPrompts({
+  chatOptions,
+  onDidSelectPrompt,
+}: {
+  // promptsHeading?: string;
+  // prompts: string[];
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
   onDidSelectPrompt: (prompt: string) => void;
 }): ReactElement {
-  if (props.prompts.length === 0) {
+  if (
+    !chatOptions.defaultView?.prompts ||
+    chatOptions.defaultView?.prompts.length === 0
+  ) {
     return <></>;
   }
   return (
     <div className="MarkpromptDefaultViewMessagePromptsContainer">
-      {props.promptsHeading && <h3>{props.promptsHeading}</h3>}
-      {props.prompts.map((prompt, i) => {
+      {chatOptions?.defaultView?.promptsHeading && (
+        <h3>{chatOptions.defaultView.promptsHeading}</h3>
+      )}
+      {chatOptions?.defaultView?.prompts.map((prompt, i) => {
         return (
           <a
             key={`markprompt-default-prompt-${i}`}
             onClick={() => {
-              props.onDidSelectPrompt(prompt);
+              onDidSelectPrompt?.(prompt);
             }}
           >
             {prompt}
@@ -41,20 +69,22 @@ export function DefaultPrompts(props: {
 }
 
 export function DefaultView(
-  props: DefaultViewProps & { onDidSelectPrompt: (prompt: string) => void },
+  props: MessagesProps & { onDidSelectPrompt: (prompt: string) => void },
 ): ReactElement {
-  if (!props.message && !props.prompts) {
+  const { onDidSelectPrompt, ...rest } = props;
+  const chatOptions = rest.chatOptions;
+
+  if (!chatOptions?.defaultView?.message && !chatOptions.defaultView?.prompts) {
     return <div />;
   }
 
   return (
     <div className="MarkpromptDefaultView">
-      {props.message && <DefaultMessage message={props.message} />}
-      {props.prompts && (
+      {chatOptions.defaultView?.message && <DefaultMessage {...rest} />}
+      {chatOptions.defaultView?.prompts && (
         <DefaultPrompts
-          prompts={props.prompts}
-          promptsHeading={props.promptsHeading}
-          onDidSelectPrompt={props.onDidSelectPrompt}
+          chatOptions={chatOptions}
+          onDidSelectPrompt={onDidSelectPrompt}
         />
       )}
     </div>

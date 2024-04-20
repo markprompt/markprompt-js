@@ -205,6 +205,10 @@ export interface ChatStoreState {
    **/
   projectKey: string;
   /**
+   * The base API URL.
+   **/
+  apiUrl?: string;
+  /**
    * Abort handler.
    **/
   abort?: () => void;
@@ -289,6 +293,7 @@ export interface ChatStoreState {
 export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
+  apiUrl?: string;
   persistChatHistory?: boolean;
   chatOptions?: MarkpromptOptions['chat'];
 }
@@ -304,7 +309,9 @@ export const createChatStore = ({
   chatOptions,
   debug,
   persistChatHistory,
-  projectKey, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  projectKey,
+  apiUrl,
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: CreateChatOptions) => {
   if (!projectKey) {
     throw new Error(
@@ -316,6 +323,7 @@ export const createChatStore = ({
     immer(
       persist(
         (set, get) => ({
+          apiUrl,
           projectKey,
           messages: [],
           didAcceptDisclaimer: false,
@@ -324,9 +332,7 @@ export const createChatStore = ({
           },
           messagesByConversationId: {},
           toolCallsByToolCallId: {},
-          didAcceptDisclaimerByProjectKey: {
-            [projectKey]: false,
-          },
+          didAcceptDisclaimerByProjectKey: {},
           setConversationId: (conversationId: string) => {
             set((state) => {
               // set the conversation id for this session
@@ -354,7 +360,9 @@ export const createChatStore = ({
             });
           },
           selectConversation: (conversationId?: string) => {
-            if (conversationId === get().conversationId) return;
+            if (conversationId && conversationId === get().conversationId) {
+              return;
+            }
 
             // abort the current request, if any
             get().abort?.();
@@ -502,6 +510,7 @@ export const createChatStore = ({
             }
 
             const options = {
+              apiUrl: get().apiUrl,
               conversationId: get().conversationId,
               signal: controller.signal,
               debug,
@@ -661,8 +670,7 @@ export const createChatStore = ({
               if (!state.projectKey) {
                 return;
               }
-              state.didAcceptDisclaimerByProjectKey[state.projectKey] ??=
-                accept;
+              state.didAcceptDisclaimerByProjectKey[state.projectKey] = accept;
               state.didAcceptDisclaimer = accept;
             });
           },
@@ -719,13 +727,15 @@ export const createChatStore = ({
             },
           ),
           // only store conversationsByProjectKey in local storage
-          partialize: (state) => ({
-            conversationIdsByProjectKey: state.conversationIdsByProjectKey,
-            messagesByConversationId: state.messagesByConversationId,
-            toolCallsByToolCallId: state.toolCallsByToolCallId,
-            didAcceptDisclaimerByProjectKey:
-              state.didAcceptDisclaimerByProjectKey,
-          }),
+          partialize: (state) => {
+            return {
+              conversationIdsByProjectKey: state.conversationIdsByProjectKey,
+              messagesByConversationId: state.messagesByConversationId,
+              toolCallsByToolCallId: state.toolCallsByToolCallId,
+              didAcceptDisclaimerByProjectKey:
+                state.didAcceptDisclaimerByProjectKey,
+            };
+          },
           // restore the last conversation for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
@@ -797,15 +807,17 @@ interface ChatProviderProps {
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
+  apiUrl?: string;
 }
 
 export function ChatProvider(props: ChatProviderProps): JSX.Element {
-  const { chatOptions, children, debug, projectKey } = props;
+  const { chatOptions, children, debug, projectKey, apiUrl } = props;
 
   const store = useRef<ChatStore>();
 
   if (!store.current) {
     store.current = createChatStore({
+      apiUrl,
       projectKey,
       chatOptions,
       debug,

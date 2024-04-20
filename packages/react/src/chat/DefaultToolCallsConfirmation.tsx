@@ -163,7 +163,11 @@ export function DefaultToolCallsConfirmation(
 
           {showConfirmButton && (
             <div>
-              <button className="MarkpromptButton" onClick={confirmToolCalls}>
+              <button
+                className="MarkpromptButton"
+                data-variant="outline"
+                onClick={confirmToolCalls}
+              >
                 Confirm
               </button>
             </div>

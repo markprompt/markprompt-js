@@ -231,7 +231,7 @@ interface MarkpromptOptions {
     getLabel?: (reference: FileSectionReference) => string | undefined;
     /**
      * Heading above the references
-     * @default "Sources"
+     * @default "Related articles"
      **/
     heading?: string;
     /** Loading text, default: `Fetching context…` */

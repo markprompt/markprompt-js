@@ -12,7 +12,7 @@ import {
 } from 'vitest';
 
 import {
-  DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
+  DEFAULT_OPTIONS,
   submitAlgoliaDocsearchQuery,
   submitSearchQuery,
   type AlgoliaDocSearchHit,
@@ -81,7 +81,7 @@ let status = 200;
 let wait = 0;
 
 const server = setupServer(
-  http.get(DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.apiUrl!, async ({ request }) => {
+  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, async ({ request }) => {
     const url = new URL(request.url);
     const limit = url.searchParams.get('limit');
     let data = searchResults;

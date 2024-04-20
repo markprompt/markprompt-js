@@ -20,21 +20,43 @@ async function get_random_activity(args: string): Promise<string> {
 }
 
 if (el && el instanceof HTMLElement) {
-  markprompt(import.meta.env.VITE_PROJECT_KEY, el, {
-    search: { enabled: true },
-    chat: {
+  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
+    defaultView: 'chat',
+    display: 'sheet',
+    search: {
       enabled: true,
-      model: 'gpt-4-1106-preview',
-      apiUrl: import.meta.env.VITE_API_URL + '/chat',
-      defaultView: {
+    },
+    integrations: {
+      createTicket: {
+        enabled: true,
+        provider: 'zendesk',
+        user: {
+          name: 'Jane Doe',
+          email: 'jane@doe.com',
+        },
+      },
+    },
+    chat: {
+      disclaimerView: {
         message:
-          "Welcome to Markprompt! We're here to assist you. Just type your question to get started.",
-        promptsHeading: 'Popular questions',
+          'I am an AI assistant. Consider checking important information.',
+        cta: 'I agree',
+      },
+      enabled: true,
+      placeholder: 'Ask a question...',
+      title: 'Help',
+      model: 'gpt-4-turbo-preview',
+      defaultView: {
+        message: "Hello, I'm an AI assistant from Acme!",
         prompts: [
           'What is Markprompt?',
           'How do I setup the React component?',
           'Do you have a REST API?',
         ],
+      },
+      avatars: {
+        user: '/avatars/user.png',
+        assistant: '/avatars/logo.png',
       },
       tool_choice: 'auto',
       tools: [
@@ -77,11 +99,60 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-
-    defaultView: 'chat',
-    trigger: {
-      buttonLabel: 'Ask AI',
+    menu: {
+      title: 'Need help?',
+      subtitle: 'Get help with setting up Acme',
+      sections: [
+        {
+          entries: [
+            {
+              title: 'Documentation',
+              type: 'link',
+              href: 'https://markprompt.com/docs',
+              iconId: 'book',
+            },
+            {
+              title: 'Ask a question',
+              type: 'link',
+              iconId: 'magnifying-glass',
+              action: 'chat',
+            },
+            {
+              title: 'Get help',
+              type: 'link',
+              iconId: 'chat',
+              action: 'ticket',
+            },
+          ],
+        },
+        {
+          heading: "What's new",
+          entries: [
+            {
+              title: 'Changelog',
+              type: 'link',
+              iconId: 'newspaper',
+              href: 'https://markprompt.com',
+              target: '_blank',
+            },
+          ],
+        },
+        {
+          entries: [
+            {
+              title: 'Join Discord',
+              type: 'button',
+              iconId: 'discord',
+              theme: 'purple',
+              href: 'https://discord.com',
+              target: '_blank',
+            },
+          ],
+        },
+      ],
     },
-    close: {},
+    // trigger: {
+    //   buttonLabel: 'Ask AI',
+    // },
   } satisfies MarkpromptOptions);
 }

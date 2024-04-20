@@ -1,6 +1,7 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 
-import { ChevronLeftIcon } from './icons.js';
+import { toApiMessages } from './chat/utils.js';
+import { ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { useChatStore, type MarkpromptOptions } from './index.js';
 import { useGlobalStore } from './store.js';
 
@@ -9,39 +10,50 @@ export interface CreateTicketViewProps {
   createTicketOptions: NonNullable<
     MarkpromptOptions['integrations']
   >['createTicket'];
+  includeNav?: boolean;
+  includeCTA?: boolean;
 }
 
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
-  const { handleGoBack, createTicketOptions } = props;
+  const { handleGoBack, createTicketOptions, includeNav, includeCTA } = props;
 
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const conversationId = useChatStore((state) => state.conversationId);
   const provider = useGlobalStore(
     (state) => state.options.integrations?.createTicket?.provider,
   );
-  const apiUrl = useGlobalStore(
-    (state) => state.options.integrations?.createTicket?.apiUrl,
-  );
+  const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const summary = useGlobalStore((state) =>
     conversationId
       ? state.tickets?.summaryByConversationId[conversationId]
       : undefined,
   );
+  const messages = useChatStore((state) => state.messages);
 
   const [result, setResult] = useState<Response>();
+  const [isSubmittingCase, setSubmittingCase] = useState(false);
 
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
 
-    if (!apiUrl || !projectKey || !provider) {
+    if (
+      !apiUrl ||
+      !projectKey ||
+      !provider ||
+      !event.currentTarget.email.value ||
+      !event.currentTarget.user_name.value ||
+      !event.currentTarget.summary.value
+    ) {
       return;
     }
 
     setResult(undefined);
 
-    const result = await fetch(apiUrl, {
+    setSubmittingCase(true);
+
+    const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,65 +67,83 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       }),
     });
 
+    setSubmittingCase(false);
     setResult(result);
   };
 
+  const description = useMemo(() => {
+    if (!messages || messages.length === 0) {
+      return '';
+    }
+    const transcript = toApiMessages(messages)
+      .map((m) => {
+        return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+      })
+      .join('\n\n');
+    return `${summary?.content || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+  }, [summary?.content, messages]);
+
   return (
     <div className="MarkpromptCreateTicketView">
-      <div className="MarkpromptChatViewNavigation">
-        <button className="MarkpromptGhostButton" onClick={handleGoBack}>
-          <ChevronLeftIcon
-            style={{ width: 16, height: 16 }}
-            strokeWidth={2.5}
-          />
-        </button>
-      </div>
-
+      {includeNav ? (
+        <div className="MarkpromptChatViewNavigation">
+          <button className="MarkpromptGhostButton" onClick={handleGoBack}>
+            <ChevronLeftIcon
+              style={{ width: 16, height: 16 }}
+              strokeWidth={2.5}
+            />
+          </button>
+        </div>
+      ) : (
+        <div />
+      )}
       <div className="MarkpromptCreateTicket">
-        <h1>{createTicketOptions?.view?.title}</h1>
         <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
           <div className="MarkpromptFormGroup">
             <label htmlFor="user_name">
-              {createTicketOptions?.view?.nameLabel}
+              {createTicketOptions?.form?.nameLabel || 'Name'}
             </label>
             <input
               required
               type="text"
               id="user_name"
               name="user_name"
-              placeholder={createTicketOptions?.view?.namePlaceholder}
+              value={createTicketOptions?.user?.name}
+              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
+              placeholder={createTicketOptions?.form?.namePlaceholder}
             />
           </div>
-
           <div className="MarkpromptFormGroup">
             <label htmlFor="email">
-              {createTicketOptions?.view?.emailLabel}
+              {createTicketOptions?.form?.emailLabel || 'Email'}
             </label>
             <input
               required
               type="email"
               id="email"
               name="email"
-              placeholder={createTicketOptions?.view?.emailPlaceholder}
+              value={createTicketOptions?.user?.email}
+              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
+              placeholder={createTicketOptions?.form?.emailPlaceholder}
             />
           </div>
-
-          <div className="MarkpromptFormGroup">
+          <div className="MarkpromptFormGroup MarkpromptFormGroupGrow">
             <label htmlFor="summary" id="summary-label">
-              {createTicketOptions?.view?.summaryLabel}
+              {createTicketOptions?.form?.summaryLabel || 'Description'}
             </label>
             <textarea
-              value={summary?.content ? summary.content : ''}
+              value={description}
               placeholder={
                 summary?.state &&
                 summary.state !== 'done' &&
                 summary?.state !== 'cancelled'
-                  ? createTicketOptions?.view?.summaryLoading
-                  : createTicketOptions?.view?.summaryPlaceholder
+                  ? createTicketOptions?.form?.summaryLoading
+                  : createTicketOptions?.form?.summaryPlaceholder
               }
               required
               aria-labelledby="summary-label"
               id="summary"
+              disabled={isSubmittingCase}
               style={{
                 color:
                   summary?.state &&
@@ -124,20 +154,30 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
             />
           </div>
-
-          <div className="MarkpromptTicketViewButtonRow">
-            <button type="submit" className="MarkpromptPromptSubmitButton">
-              {createTicketOptions?.view?.submitLabel}
-            </button>
-
-            {result && (
-              <p>
-                {result.ok
-                  ? createTicketOptions?.view?.ticketCreatedOk
-                  : createTicketOptions?.view?.ticketCreatedError}
-              </p>
-            )}
-          </div>
+          {includeCTA && (
+            <div className="MarkpromptTicketViewButtonRow">
+              <div>
+                {result && (
+                  <p className="MarkpromptTicketViewButtonRowMessage">
+                    {result.ok
+                      ? createTicketOptions?.form?.ticketCreatedOk
+                      : createTicketOptions?.form?.ticketCreatedError}
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="MarkpromptButton"
+                data-variant="primary"
+                disabled={isSubmittingCase}
+              >
+                {createTicketOptions?.form?.submitLabel || 'Send message'}
+                {isSubmittingCase && (
+                  <LoadingIcon style={{ width: 16, height: 16 }} />
+                )}
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>

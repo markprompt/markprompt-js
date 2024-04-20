@@ -67,7 +67,6 @@ Submit a prompt to the Markprompt Completions API.
 
 All options are optional.
 
-- `apiUrl` (`string`): URL at which to fetch completions
 - `conversationId` (`string`): Conversation ID
 - `iDontKnowMessage` (`string`): Message returned when the model does not have
   an answer
@@ -102,7 +101,6 @@ Submit a search query to the Markprompt Search API.
 
 #### Options
 
-- `apiUrl` (`string`): URL at which to fetch search results
 - `limit` (`number`): Maximum amount of results to return
 - `signal` (`AbortSignal`): AbortController signal
 
@@ -122,7 +120,6 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 - `feedback.promptId` (`string`): Prompt ID
 - `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters
-- `options.apiUrl` (`string`): URL at which to post feedback
 - `options.onFeedbackSubmitted` (`function`): Callback function when feedback is
   submitted
 - `options.signal` (`AbortSignal`): AbortController signal

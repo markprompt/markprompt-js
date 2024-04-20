@@ -1,4 +1,4 @@
-import { Fragment, forwardRef, memo, type ComponentType } from 'react';
+import { Fragment, forwardRef, memo, type ComponentType, useMemo } from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
 import { type SearchResultProps as BaseSearchResultProps } from '../index.js';
@@ -51,6 +51,14 @@ interface SearchResultProps extends BaseSearchResultProps {
   linkAs?: string | ComponentType<any>;
 }
 
+function cleanString(text: string | undefined): string | undefined {
+  return text
+    ?.replace(/\|/gi, '')
+    .replace(/-{2,}/gi, '')
+    .replace(/-{2,}/gi, '')
+    .replace(/\s{2,}/gi, ' ');
+}
+
 const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
   (props, ref) => {
     const {
@@ -66,6 +74,14 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
     } = props;
 
     const Link = linkAs ?? 'a';
+
+    const cleanedTitle = useMemo(() => {
+      return cleanString(title);
+    }, [title]);
+
+    const cleanedSubtitle = useMemo(() => {
+      return cleanString(subtitle);
+    }, [subtitle]);
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
@@ -89,11 +105,14 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
                 </div>
               )}
               <div className="MarkpromptSearchResultTitle">
-                <HighlightMatches value={title} match={searchQuery} />
+                <HighlightMatches value={cleanedTitle} match={searchQuery} />
               </div>
-              {subtitle && (
+              {cleanedSubtitle && (
                 <div className="MarkpromptSearchResultSubtitle">
-                  <HighlightMatches value={subtitle} match={searchQuery} />
+                  <HighlightMatches
+                    value={cleanedSubtitle}
+                    match={searchQuery}
+                  />
                 </div>
               )}
             </div>
