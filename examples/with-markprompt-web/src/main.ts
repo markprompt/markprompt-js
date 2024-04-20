@@ -24,7 +24,7 @@ if (el && el instanceof HTMLElement) {
     defaultView: 'chat',
     display: 'sheet',
     search: {
-      enabled: true,
+      enabled: false,
     },
     integrations: {
       createTicket: {

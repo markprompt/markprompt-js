@@ -641,7 +641,7 @@ export interface MarkpromptOptions {
   children?: React.ReactNode;
   /**
    * The way to display the chat/search content.
-   * @default "dialog"
+   * @default "sheet"
    **/
   display?: MarkpromptDisplay;
   /**
