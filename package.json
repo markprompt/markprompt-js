@@ -52,17 +52,17 @@
     "unified-prettier": "^2.0.1",
     "vitest": "^1.5.0"
   },
-  "overrides": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18"
-  },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@vitest/ui": "^1.5.0",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0"
+  },
+  "overrides": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18"
   }
 }

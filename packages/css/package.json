@@ -2,12 +2,12 @@
   "name": "@markprompt/css",
   "version": "0.27.0",
   "description": "Common CSS for Markprompt components",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt-js.git",
     "directory": "packages/css"
   },
+  "license": "MIT",
   "main": "markprompt.css",
   "types": "./index.d.ts",
   "files": [

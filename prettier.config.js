@@ -1,9 +1,10 @@
 module.exports = {
   arrowParens: 'always',
-  semi: true,
-  trailingComma: 'all',
-  singleQuote: true,
+  plugins: ['prettier-plugin-packagejson'],
   proseWrap: 'never',
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
   overrides: [
     {
       files: ['*.md', '*.mdx', '*.yml'],
