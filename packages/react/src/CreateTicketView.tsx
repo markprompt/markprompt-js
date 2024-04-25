@@ -69,6 +69,11 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       form.current?.reset();
     } catch (error) {
       setSubmittingCase(false);
+      setResult(undefined);
+
+      // eslint-disable-next-line no-console
+      console.error(error);
+
       if (error instanceof Error) {
         setError(error);
       } else {
@@ -202,6 +207,11 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                     {result.ok
                       ? createTicketOptions?.form?.ticketCreatedOk
                       : createTicketOptions?.form?.ticketCreatedError}
+                  </p>
+                )}
+                {error && (
+                  <p className="MarkpromptTicketViewButtonRowMessage">
+                    {createTicketOptions?.form?.ticketCreatedError}
                   </p>
                 )}
               </div>
