@@ -553,6 +553,16 @@ export interface CreateTicketIntegrationFormOptions {
    */
   summaryLoading: string;
   /**
+   * Should the form include a file attachment input, allowing users to upload files (eg. screenshots, log files, etc)?
+   * @default false;
+   */
+  hasFileUploadInput: boolean;
+  /**
+   * File attachment label
+   * @default "Attach a file"
+   */
+  uploadFileLabel: string;
+  /**
    * Label for the submit button
    * @default "Submit case"
    */
@@ -567,6 +577,11 @@ export interface CreateTicketIntegrationFormOptions {
    * @default "An error occurred while creating the case"
    */
   ticketCreatedError: string;
+  /**
+   * Text shown when the files added are too large (in total)
+   * @default "Total file size is too large to upload. Maximum allowed size is 4.5MB."
+   */
+  maxFileSizeError: string;
 }
 
 export interface CreateTicketIntegrationUserOptions {

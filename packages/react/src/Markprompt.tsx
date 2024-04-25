@@ -583,6 +583,8 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <CreateTicketView
               createTicketOptions={integrations.createTicket}
               handleGoBack={() => setActiveView('chat')}
+              includeCTA
+              includeNav
             />
           </Tabs.Content>
         )}

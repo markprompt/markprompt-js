@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 
 import { toApiMessages } from './chat/utils.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
@@ -17,6 +17,7 @@ export interface CreateTicketViewProps {
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const { handleGoBack, createTicketOptions, includeNav, includeCTA } = props;
 
+  const form = useRef<HTMLFormElement>(null);
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const conversationId = useChatStore((state) => state.conversationId);
   const provider = useGlobalStore(
@@ -30,7 +31,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   );
   const messages = useChatStore((state) => state.messages);
 
+  const [totalFileSize, setTotalFileSize] = useState<number>(0);
+
   const [result, setResult] = useState<Response>();
+  const [error, setError] = useState<Error>();
   const [isSubmittingCase, setSubmittingCase] = useState(false);
 
   const handleSubmit = async (
@@ -43,32 +47,48 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       !projectKey ||
       !provider ||
       !event.currentTarget.email.value ||
-      !event.currentTarget.user_name.value ||
+      !event.currentTarget.userName.value ||
       !event.currentTarget.summary.value
     ) {
       return;
     }
 
     setResult(undefined);
-
     setSubmittingCase(true);
 
-    const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        projectKey,
-        email: event.currentTarget.email.value,
-        name: event.currentTarget.user_name.value,
-        content: event.currentTarget.summary.value,
-        provider,
-      }),
-    });
+    try {
+      const data = new FormData(event.currentTarget);
+      // copy a field for legacy reasons
+      const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
+        method: 'POST',
+        // don't pass a Content-Type header here, the browser will
+        // generate a correct header which includes the boundary.
+        body: data,
+      });
 
-    setSubmittingCase(false);
-    setResult(result);
+      setSubmittingCase(false);
+      setResult(result);
+      setTotalFileSize(0);
+      setError(undefined);
+      form.current?.reset();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+
+      setSubmittingCase(false);
+      setResult(undefined);
+      setTotalFileSize(0);
+
+      if (error instanceof Error) {
+        setError(error);
+      } else {
+        setError(
+          new Error('Something went wrong while submitting your case', {
+            cause: error,
+          }),
+        );
+      }
+    }
   };
 
   const description = useMemo(() => {
@@ -98,18 +118,26 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         <div />
       )}
       <div className="MarkpromptCreateTicket">
-        <form onSubmit={handleSubmit} className="MarkpromptCreateTicketForm">
+        <form
+          onSubmit={handleSubmit}
+          className="MarkpromptCreateTicketForm"
+          ref={form}
+        >
+          <input type="hidden" name="projectKey" value={projectKey} />
+          <input type="hidden" name="provider" value={provider} />
+
           <div className="MarkpromptFormGroup">
-            <label htmlFor="user_name">
+            <label htmlFor="userName">
               {createTicketOptions?.form?.nameLabel || 'Name'}
             </label>
             <input
               required
               type="text"
-              id="user_name"
-              name="user_name"
+              id="userName"
+              name="userName"
               value={createTicketOptions?.user?.name}
-              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
+              readOnly={!!createTicketOptions?.user?.name}
+              disabled={isSubmittingCase}
               placeholder={createTicketOptions?.form?.namePlaceholder}
             />
           </div>
@@ -123,7 +151,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               id="email"
               name="email"
               value={createTicketOptions?.user?.email}
-              disabled={!!createTicketOptions?.user?.name || isSubmittingCase}
+              readOnly={!!createTicketOptions?.user?.email}
+              disabled={isSubmittingCase}
               placeholder={createTicketOptions?.form?.emailPlaceholder}
             />
           </div>
@@ -132,6 +161,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               {createTicketOptions?.form?.summaryLabel || 'Description'}
             </label>
             <textarea
+              name="summary"
+              id="summary"
               value={description}
               placeholder={
                 summary?.state &&
@@ -142,7 +173,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }
               required
               aria-labelledby="summary-label"
-              id="summary"
               disabled={isSubmittingCase}
               style={{
                 color:
@@ -154,6 +184,34 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
             />
           </div>
+          {createTicketOptions?.form?.hasFileUploadInput && (
+            <div className="MarkpromptFormGroup">
+              <label htmlFor="files">
+                {createTicketOptions?.form?.uploadFileLabel || 'Attach a file'}
+              </label>
+              <input
+                type="file"
+                name="files"
+                id="files"
+                disabled={isSubmittingCase}
+                onChange={(event) => {
+                  const files = event.currentTarget.files;
+                  if (!files) return;
+                  let _totalFileSize = 0;
+                  for (const file of files) {
+                    _totalFileSize += file.size / 1024 ** 2; // file size in MB
+                  }
+                  setTotalFileSize(_totalFileSize);
+                }}
+                multiple
+              />
+              {totalFileSize >= 4.5 && (
+                <p className="MarkpromptTicketViewFormGroupMessage">
+                  {createTicketOptions?.form?.maxFileSizeError}
+                </p>
+              )}
+            </div>
+          )}
           {includeCTA && (
             <div className="MarkpromptTicketViewButtonRow">
               <div>
@@ -164,12 +222,17 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                       : createTicketOptions?.form?.ticketCreatedError}
                   </p>
                 )}
+                {error && (
+                  <p className="MarkpromptTicketViewButtonRowMessage">
+                    {createTicketOptions?.form?.ticketCreatedError}
+                  </p>
+                )}
               </div>
               <button
                 type="submit"
                 className="MarkpromptButton"
                 data-variant="primary"
-                disabled={isSubmittingCase}
+                disabled={isSubmittingCase || totalFileSize >= 4.5}
               >
                 {createTicketOptions?.form?.submitLabel || 'Send message'}
                 {isSubmittingCase && (
