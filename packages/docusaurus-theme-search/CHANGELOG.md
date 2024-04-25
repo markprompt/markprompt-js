@@ -1,5 +1,35 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.22.0
+
+### Minor Changes
+
+- [#345](https://github.com/motifland/markprompt-js/pull/345) [`7509fba`](https://github.com/motifland/markprompt-js/commit/7509fba9205d204da69731bba0b05e4ed99bfe9b) Thanks [@nickrttn](https://github.com/nickrttn)! - Add file attachment support for create ticket view
+
+  Enable by adding the following option:
+
+  ```jsx
+  <Markprompt
+    ...
+    integrations={{
+      createTicket: {
+        ...
+        form: {
+          hasFileUploadInput: true,
+        },
+      },
+    }}
+  />
+  ```
+
+### Patch Changes
+
+- [`618ddc5`](https://github.com/motifland/markprompt-js/commit/618ddc5227bb1d881e10e8ab8e10639ea20ebedd) Thanks [@nickrttn](https://github.com/nickrttn)! - Update devDependencies
+
+- Updated dependencies [[`7509fba`](https://github.com/motifland/markprompt-js/commit/7509fba9205d204da69731bba0b05e4ed99bfe9b), [`618ddc5`](https://github.com/motifland/markprompt-js/commit/618ddc5227bb1d881e10e8ab8e10639ea20ebedd)]:
+  - @markprompt/react@0.42.0
+  - @markprompt/css@0.28.0
+
 ## 0.21.0
 
 ### Minor Changes
