@@ -1,5 +1,27 @@
 # @markprompt/css
 
+## 0.28.0
+
+### Minor Changes
+
+- [#345](https://github.com/motifland/markprompt-js/pull/345) [`7509fba`](https://github.com/motifland/markprompt-js/commit/7509fba9205d204da69731bba0b05e4ed99bfe9b) Thanks [@nickrttn](https://github.com/nickrttn)! - Add file attachment support for create ticket view
+
+  Enable by adding the following option:
+
+  ```jsx
+  <Markprompt
+    ...
+    integrations={{
+      createTicket: {
+        ...
+        form: {
+          hasFileUploadInput: true,
+        },
+      },
+    }}
+  />
+  ```
+
 ## 0.27.0
 
 ### Minor Changes
