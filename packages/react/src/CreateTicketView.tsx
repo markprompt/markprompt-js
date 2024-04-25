@@ -31,6 +31,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   );
   const messages = useChatStore((state) => state.messages);
 
+  const [totalFileSize, setTotalFileSize] = useState<number>(0);
+
   const [result, setResult] = useState<Response>();
   const [error, setError] = useState<Error>();
   const [isSubmittingCase, setSubmittingCase] = useState(false);
@@ -66,13 +68,16 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
       setSubmittingCase(false);
       setResult(result);
+      setTotalFileSize(0);
+      setError(undefined);
       form.current?.reset();
     } catch (error) {
-      setSubmittingCase(false);
-      setResult(undefined);
-
       // eslint-disable-next-line no-console
       console.error(error);
+
+      setSubmittingCase(false);
+      setResult(undefined);
+      setTotalFileSize(0);
 
       if (error instanceof Error) {
         setError(error);
@@ -189,8 +194,22 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 name="files"
                 id="files"
                 disabled={isSubmittingCase}
+                onChange={(event) => {
+                  const files = event.currentTarget.files;
+                  if (!files) return;
+                  let _totalFileSize = 0;
+                  for (const file of files) {
+                    _totalFileSize += file.size / 1024 ** 2; // file size in MB
+                  }
+                  setTotalFileSize(_totalFileSize);
+                }}
                 multiple
               />
+              {totalFileSize >= 4.5 && (
+                <p className="MarkpromptTicketViewFormGroupMessage">
+                  {createTicketOptions?.form?.maxFileSizeError}
+                </p>
+              )}
             </div>
           )}
           {includeCTA && (
@@ -213,7 +232,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 type="submit"
                 className="MarkpromptButton"
                 data-variant="primary"
-                disabled={isSubmittingCase}
+                disabled={isSubmittingCase || totalFileSize >= 4.5}
               >
                 {createTicketOptions?.form?.submitLabel || 'Send message'}
                 {isSubmittingCase && (

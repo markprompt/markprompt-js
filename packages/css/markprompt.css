@@ -2438,6 +2438,14 @@
   white-space: nowrap;
 }
 
+.MarkpromptTicketViewFormGroupMessage {
+  animation-fill-mode: both;
+  animation-name: markprompt-slide-down-subtle;
+  animation-duration: 500ms;
+  font-size: var(--markprompt-text-size);
+  margin: 0.25rem 0;
+}
+
 .MarkpromptTicketViewButtonRowMessage {
   animation-fill-mode: both;
   animation-name: markprompt-slide-down-subtle;

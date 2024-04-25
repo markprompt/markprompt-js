@@ -277,6 +277,8 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
         ticketCreatedOk: 'Thank you! We will get back to you shortly.',
         uploadFileLabel: 'Attach a file',
         hasFileUploadInput: false,
+        maxFileSizeError:
+          'Total file size is too large to upload. Maximum allowed size is 4.5MB.',
       },
       chat: {
         title: 'Get help',

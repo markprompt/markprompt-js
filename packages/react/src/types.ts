@@ -577,6 +577,11 @@ export interface CreateTicketIntegrationFormOptions {
    * @default "An error occurred while creating the case"
    */
   ticketCreatedError: string;
+  /**
+   * Text shown when the files added are too large (in total)
+   * @default "Total file size is too large to upload. Maximum allowed size is 4.5MB."
+   */
+  maxFileSizeError: string;
 }
 
 export interface CreateTicketIntegrationUserOptions {
