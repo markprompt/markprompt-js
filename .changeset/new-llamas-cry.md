@@ -6,3 +6,19 @@
 ---
 
 Add file attachment support for create ticket view
+
+Enable by adding the following option:
+
+```jsx
+<Markprompt
+  ...
+  integrations={{
+    createTicket: {
+      ...
+      form: {
+        hasFileUploadInput: true,
+      },
+    },
+  }}
+/>
+```
