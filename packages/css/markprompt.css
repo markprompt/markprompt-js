@@ -2516,13 +2516,42 @@
   font-family: inherit;
 
   /* upcoming future property */
-  /* stylelint-disable-next-line property-no-unknown */
   field-sizing: normal;
 }
 
-.MarkpromptFormGroup input:focus-within,
+.MarkpromptFormGroup input:not([type='file']):focus-within,
 .MarkpromptFormGroup textarea:focus-within {
   box-shadow: 0 0 0 3px var(--markprompt-border);
+  border-color: var(--markprompt-border-accent);
+}
+
+.MarkpromptFormGroup input[type='file'] {
+  font-family: inherit;
+  background-color: var(--markprompt-background);
+  border: 0;
+
+  /* allow the box-shadow outline to show without clipping */
+  padding: 3px;
+  margin: -3px;
+}
+
+.MarkpromptFormGroup input[type='file']::file-selector-button {
+  background: var(--markprompt-muted);
+  padding: 0.375rem 0.75rem;
+  outline: none;
+  border-radius: var(--markprompt-button-radius);
+  font-size: var(--markprompt-text-size);
+  font-weight: 600;
+  border: 1px solid var(--markprompt-border);
+  color: var(--markprompt-foreground);
+  background-color: var(--markprompt-muted);
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.MarkpromptFormGroup input[type='file']::file-selector-button:focus {
+  box-shadow: 0 0 0 var(--markprompt-input-focus-shadow-width)
+    var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
 }
 
@@ -2881,10 +2910,6 @@
 
 .MarkpromptTicketDeflectionForm .MarkpromptPromptWrapper .MarkpromptButton {
   margin-bottom: 1rem;
-}
-
-.MarkpromptDialogFooter .MarkpromptIconLink {
-  /* margin-left: -0.5rem; */
 }
 
 .MarkpromptIconLink {

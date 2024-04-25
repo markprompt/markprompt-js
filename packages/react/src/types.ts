@@ -553,6 +553,16 @@ export interface CreateTicketIntegrationFormOptions {
    */
   summaryLoading: string;
   /**
+   * Should the form include a file attachment input, allowing users to upload files (eg. screenshots, log files, etc)?
+   * @default false;
+   */
+  hasFileUploadInput: boolean;
+  /**
+   * File attachment label
+   * @default "Attach a file"
+   */
+  uploadFileLabel: string;
+  /**
    * Label for the submit button
    * @default "Submit case"
    */

@@ -23,6 +23,7 @@ if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
     display: 'sheet',
+    apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
     search: {
       enabled: false,
     },
@@ -33,6 +34,9 @@ if (el && el instanceof HTMLElement) {
         user: {
           name: 'Jane Doe',
           email: 'jane@doe.com',
+        },
+        form: {
+          hasFileUploadInput: true,
         },
       },
     },
