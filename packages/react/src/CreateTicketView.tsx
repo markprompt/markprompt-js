@@ -193,12 +193,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               />
             </div>
           )}
-          {error && (
-            <p style={{ color: 'red' }}>
-              Something went wrong when submitting your case. Please try again
-              or contact support.
-            </p>
-          )}
           {includeCTA && (
             <div className="MarkpromptTicketViewButtonRow">
               <div>
