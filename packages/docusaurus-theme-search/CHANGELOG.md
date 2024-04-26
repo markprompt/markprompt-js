@@ -1,5 +1,17 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.23.0
+
+### Minor Changes
+
+- [#346](https://github.com/motifland/markprompt-js/pull/346) [`90c8df3`](https://github.com/motifland/markprompt-js/commit/90c8df3f8dd4346a6286316ee887c9522ab75d0a) Thanks [@nickrttn](https://github.com/nickrttn)! - Add custom fields support for create ticket view
+
+### Patch Changes
+
+- Updated dependencies [[`90c8df3`](https://github.com/motifland/markprompt-js/commit/90c8df3f8dd4346a6286316ee887c9522ab75d0a)]:
+  - @markprompt/react@0.43.0
+  - @markprompt/css@0.29.0
+
 ## 0.22.0
 
 ### Minor Changes

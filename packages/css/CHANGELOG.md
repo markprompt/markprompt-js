@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.29.0
+
+### Minor Changes
+
+- [#346](https://github.com/motifland/markprompt-js/pull/346) [`90c8df3`](https://github.com/motifland/markprompt-js/commit/90c8df3f8dd4346a6286316ee887c9522ab75d0a) Thanks [@nickrttn](https://github.com/nickrttn)! - Add custom fields support for create ticket view
+
 ## 0.28.0
 
 ### Minor Changes
