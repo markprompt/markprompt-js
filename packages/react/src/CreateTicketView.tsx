@@ -1,8 +1,21 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react';
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
+import clsx from 'clsx';
+import { useSelect } from 'downshift';
+import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
 
 import { toApiMessages } from './chat/utils.js';
-import { ChevronLeftIcon, LoadingIcon } from './icons.js';
-import { useChatStore, type MarkpromptOptions } from './index.js';
+import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
+import {
+  useChatStore,
+  type CustomField,
+  type MarkpromptOptions,
+} from './index.js';
 import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
@@ -184,6 +197,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
             />
           </div>
+          {createTicketOptions?.form?.customFields &&
+            createTicketOptions?.form?.customFields.map((field) => (
+              <CustomFieldSelect key={field.id} customField={field} />
+            ))}
           {createTicketOptions?.form?.hasFileUploadInput && (
             <div className="MarkpromptFormGroup">
               <label htmlFor="files">
@@ -242,6 +259,115 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             </div>
           )}
         </form>
+      </div>
+    </div>
+  );
+}
+
+interface CustomFieldSelectProps {
+  customField: CustomField;
+}
+
+function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
+  const { customField } = props;
+
+  // refactor this to use flatMap instead of reduce
+  const flatItems = useMemo(
+    () => customField.items.flatMap((x) => ('items' in x ? x.items : x)),
+    [customField.items],
+  );
+
+  const {
+    isOpen,
+    selectedItem,
+    getToggleButtonProps,
+    getMenuProps,
+    highlightedIndex,
+    getItemProps,
+  } = useSelect({
+    items: flatItems,
+  });
+
+  const { refs, floatingStyles } = useFloating({
+    open: isOpen,
+    placement: 'bottom-start',
+    middleware: [offset(8), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const id = useId();
+
+  return (
+    <div className="MarkpromptFormGroup" style={isOpen ? { zIndex: 10 } : {}}>
+      <label htmlFor={`custom_field_${id}`}>{customField.label}</label>
+      <input
+        type="hidden"
+        id={`custom_field_${id}`}
+        name="customFields"
+        value={
+          selectedItem
+            ? JSON.stringify({ id: customField.id, value: selectedItem.value })
+            : undefined
+        }
+      />
+
+      <div className="MarkpromptSelect">
+        <button
+          type="button"
+          className={clsx(
+            'MarkpromptSelectToggle',
+            'MarkpromptSelectToggleWithIcon',
+            { MarkpromptSelectToggleMuted: !selectedItem },
+          )}
+          {...getToggleButtonProps({ ref: refs.setReference })}
+        >
+          {selectedItem?.label || 'Select…'}{' '}
+          <ChevronDownIcon width={16} height={16} aria-hidden />
+        </button>
+
+        <ul
+          {...getMenuProps({ ref: refs.setFloating })}
+          className="MarkpromptSelectMenu"
+          data-open={isOpen}
+          style={floatingStyles}
+        >
+          {customField.items.map((item) => {
+            if ('items' in item) {
+              return (
+                <li key={item.label}>
+                  <strong className="MarkpromptSelectGroupLabel">
+                    {item.label}
+                  </strong>
+                  <ul>
+                    {item.items.map((option) => (
+                      <li
+                        key={option.value}
+                        {...getItemProps({ item: option })}
+                        data-highlighted={
+                          highlightedIndex === flatItems.indexOf(option)
+                        }
+                      >
+                        {option.label}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              );
+            } else {
+              return (
+                <li
+                  key={item.value}
+                  {...getItemProps({ item })}
+                  data-highlighted={
+                    highlightedIndex === flatItems.indexOf(item)
+                  }
+                >
+                  {item.label}
+                </li>
+              );
+            }
+          })}
+        </ul>
       </div>
     </div>
   );

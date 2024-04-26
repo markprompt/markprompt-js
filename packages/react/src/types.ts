@@ -518,6 +518,44 @@ export interface CreateTicketIntegrationMessageButtonOptions {
   hasText?: boolean;
 }
 
+export interface CustomFieldOption {
+  /**
+   * The displayed label for this custom field option
+   */
+  label: string;
+  /**
+   * The value of the custom field that will be sent to the service provider
+   */
+  value: string;
+}
+
+export interface CustomFieldOptionGroup {
+  /**
+   * Options group label
+   */
+  label: string;
+
+  /**
+   * Grouped options
+   */
+  items: CustomFieldOption[];
+}
+
+export interface CustomField {
+  /**
+   * The displayed label for this custom field
+   */
+  label: string;
+  /**
+   * The custom field id.
+   */
+  id: string;
+  /**
+   * Options for this custom field
+   */
+  items: (CustomFieldOptionGroup | CustomFieldOption)[];
+}
+
 export interface CreateTicketIntegrationFormOptions {
   /**
    * Label for the name input
@@ -582,6 +620,12 @@ export interface CreateTicketIntegrationFormOptions {
    * @default "Total file size is too large to upload. Maximum allowed size is 4.5MB."
    */
   maxFileSizeError: string;
+  /**
+   * Custom fields
+   * @see https://developer.zendesk.com/documentation/ticketing/managing-tickets/creating-and-updating-tickets/#setting-custom-field-values
+   * @default undefined;
+   */
+  customFields?: CustomField[];
 }
 
 export interface CreateTicketIntegrationUserOptions {
@@ -602,7 +646,7 @@ export interface CreateTicketIntegrationOptions {
    **/
   enabled: boolean;
   /**
-   * The provider to use for creating tickets
+   * The provider to use for creating tickets.
    **/
   provider: 'zendesk';
   /**

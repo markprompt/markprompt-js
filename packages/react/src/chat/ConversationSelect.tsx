@@ -25,7 +25,7 @@ export function ConversationSelect({
       items={[
         ...conversations.map(([conversationId, { messages }]) => ({
           value: conversationId,
-          label: messages[0]?.content,
+          label: messages[0]?.content ?? '',
         })),
         {
           value: 'new',
