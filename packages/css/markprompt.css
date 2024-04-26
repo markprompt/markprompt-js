@@ -2091,6 +2091,15 @@
   background-color: var(--markprompt-muted);
 }
 
+.MarkpromptSelectToggleWithIcon {
+  min-width: 8rem;
+  justify-content: space-between;
+}
+
+.MarkpromptSelectToggleMuted {
+  color: var(--markprompt-mutedForeground);
+}
+
 .MarkpromptSelectMenu {
   display: none;
   background-color: var(--markprompt-background);
@@ -2105,6 +2114,7 @@
     var(--markprompt-ring-shadow, 0 0 #0000), var(--markprompt-shadow);
   max-width: 30ch;
   overflow: hidden;
+  will-change: auto;
 }
 
 .MarkpromptSelectMenu[data-open='true'] {
@@ -2133,6 +2143,19 @@
 
 .MarkpromptSelectMenu li[data-selected='true'] {
   font-weight: 600;
+}
+
+.MarkpromptSelectMenu ul {
+  padding-left: 0;
+}
+
+.MarkpromptSelectMenu li:has(.MarkpromptSelectGroupLabel) {
+  padding-bottom: 0;
+}
+
+.MarkpromptSelectGroupLabel {
+  display: flex;
+  margin-block-end: 0.25rem;
 }
 
 .MarkpromptNewChatOption {
@@ -2563,28 +2586,44 @@
   border-color: var(--markprompt-border-accent);
 }
 
-.MarkpromptCreateTicketForm :nth-child(1) {
+.MarkpromptCreateTicketForm > *:nth-child(1) {
   --form-group-index: 1;
 }
 
-.MarkpromptCreateTicketForm :nth-child(2) {
+.MarkpromptCreateTicketForm > *:nth-child(2) {
   --form-group-index: 2;
 }
 
-.MarkpromptCreateTicketForm :nth-child(3) {
+.MarkpromptCreateTicketForm > *:nth-child(3) {
   --form-group-index: 3;
 }
 
-.MarkpromptCreateTicketForm :nth-child(4) {
+.MarkpromptCreateTicketForm > *:nth-child(4) {
   --form-group-index: 4;
 }
 
-.MarkpromptCreateTicketForm :nth-child(5) {
+.MarkpromptCreateTicketForm > *:nth-child(5) {
   --form-group-index: 5;
 }
 
-.MarkpromptCreateTicketForm :nth-child(6) {
+.MarkpromptCreateTicketForm > *:nth-child(6) {
   --form-group-index: 6;
+}
+
+.MarkpromptCreateTicketForm > *:nth-child(7) {
+  --form-group-index: 7;
+}
+
+.MarkpromptCreateTicketForm > *:nth-child(8) {
+  --form-group-index: 8;
+}
+
+.MarkpromptCreateTicketForm > *:nth-child(9) {
+  --form-group-index: 9;
+}
+
+.MarkpromptCreateTicketForm > *:nth-child(10) {
+  --form-group-index: 10;
 }
 
 .MarkpromptCreateTicketForm > div {
@@ -3051,9 +3090,13 @@
     transform: translateY(10px);
   }
 
-  100% {
+  99% {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  100% {
+    transform: unset;
   }
 }
 

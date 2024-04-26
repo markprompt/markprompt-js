@@ -37,6 +37,53 @@ if (el && el instanceof HTMLElement) {
         },
         form: {
           hasFileUploadInput: true,
+          emailLabel: 'Email',
+          nameLabel: 'Name',
+          emailPlaceholder: 'jane@doe.com',
+          namePlaceholder: 'Jane Doe',
+          maxFileSizeError: 'File size should be less than 4.5MB',
+          submitLabel: 'Submit case',
+          summaryLabel: 'Summary',
+          summaryLoading: 'Generating summary…',
+          summaryPlaceholder: 'Please describe your issue',
+          ticketCreatedError: 'An error occurred while creating the case',
+          ticketCreatedOk: 'Thank you! We will get back to you shortly.',
+          uploadFileLabel: 'Attach files (optional)',
+          customFields: [
+            {
+              id: '12345678',
+              label: 'Case type',
+              items: [
+                { value: 'Bug', label: 'Bug' },
+                { value: 'Feature request', label: 'Feature request' },
+                { value: 'Other', label: 'Other' },
+              ],
+            },
+            {
+              id: '87654321',
+              label: 'Category',
+              items: [
+                {
+                  label: 'Legal',
+                  items: [
+                    { value: 'Contract', label: 'Contract' },
+                    { value: 'Compliance', label: 'Compliance' },
+                  ],
+                },
+                {
+                  label: 'Account & Billing',
+                  items: [
+                    { value: 'Payment', label: 'Payment' },
+                    { value: 'Invoice', label: 'Invoice' },
+                  ],
+                },
+                {
+                  value: 'Other',
+                  label: 'Other',
+                },
+              ],
+            },
+          ],
         },
       },
     },
