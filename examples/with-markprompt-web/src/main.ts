@@ -109,7 +109,7 @@ if (el && el instanceof HTMLElement) {
         user: '/avatars/user.png',
         assistant: '/avatars/logo.png',
       },
-      tool_choice: 'auto',
+      toolChoice: 'auto',
       tools: [
         {
           call: get_random_activity,
