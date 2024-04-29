@@ -82,7 +82,7 @@ All options are optional.
 - `sectionsMatchThreshold` (`number`): The similarity threshold between the
 - `signal` (`AbortSignal`): AbortController signal
 - `tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call
-- `tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
+- `toolChoice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
   any) function is called by the model
 
 #### Returns

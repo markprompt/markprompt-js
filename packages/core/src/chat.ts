@@ -53,7 +53,7 @@ export interface SubmitChatOptions {
    */
   debug?: boolean;
   /**
-   * Message returned when the model does not have an answer
+   * Message returned when the model does not have an answer.
    * @default "Sorry, I am not sure how to answer that."
    **/
   iDontKnowMessage?: string;
@@ -63,7 +63,7 @@ export interface SubmitChatOptions {
    **/
   doNotInjectContext?: boolean;
   /**
-   * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information. Default `true`.
+   * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information.
    * @default true
    **/
   allowFollowUpQuestions?: boolean;
@@ -73,52 +73,52 @@ export interface SubmitChatOptions {
    **/
   excludeFromInsights?: boolean;
   /**
-   * The OpenAI model to use
+   * The OpenAI model to use.
    * @default "gpt-3.5-turbo"
    **/
   model?: OpenAIModelId;
   /**
-   * The system prompt
+   * The system prompt.
    * @default "You are a very enthusiastic company representative who loves to help people!"
    **/
   systemPrompt?: string;
   /**
-   * The model temperature
+   * The model temperature.
    * @default 0.1
    **/
   temperature?: number;
   /**
-   * The model top P
+   * The model top P.
    * @default 1
    **/
   topP?: number;
   /**
-   * The model frequency penalty
+   * The model frequency penalty.
    * @default 0
    **/
   frequencyPenalty?: number;
   /**
-   * The model present penalty
+   * The model present penalty.
    * @default 0
    **/
   presencePenalty?: number;
   /**
-   * The max number of tokens to include in the response
+   * The max number of tokens to include in the response.
    * @default 500
    * */
   maxTokens?: number;
   /**
-   * The number of sections to include in the prompt context
+   * The number of sections to include in the prompt context.
    * @default 10
    * */
   sectionsMatchCount?: number;
   /**
-   * The similarity threshold between the input question and selected sections
+   * The similarity threshold between the input question and selected sections.
    * @default 0.5
    * */
   sectionsMatchThreshold?: number;
   /**
-   * AbortController signal
+   * AbortController signal.
    * @default undefined
    **/
   signal?: AbortSignal;
@@ -138,15 +138,14 @@ export interface SubmitChatOptions {
    * means the model can pick between generating a message or calling a
    * function. Specifying a particular function via
    * `{"type: "function", "function": {"name": "my_function"}}` forces the
-   * model to call that function.
-   *
-   * `none` is the default when no functions are present. `auto` is the default if functions are present.
+   * model to call that function. `none` is the default when no functions are present. `auto` is the default if functions are present.
    */
-  tool_choice?: ChatCompletionToolChoiceOption;
+  toolChoice?: ChatCompletionToolChoiceOption;
   /**
-   * The output format of the response
+   * The output format of the response.
+   * @default "markdown"
    */
-  outputFormat?: 'slack' | 'markdown';
+  outputFormat?: 'markdown' | 'slack' | 'html';
   /**
    * Remove PII from chat messages.
    */
@@ -194,7 +193,7 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
     'stream',
     'systemPrompt',
     'temperature',
-    'tool_choice',
+    'toolChoice',
     'tools',
     'topP',
     'redact',
@@ -238,7 +237,7 @@ export async function* submitChat(
     Object.entries(options).filter(([key]) => isValidSubmitChatOptionsKey(key)),
   );
 
-  const { signal, tools, ...cloneableOpts } = validOptions;
+  const { signal, tools, toolChoice, ...cloneableOpts } = validOptions;
   const { debug, ...resolvedOptions } = defaults(
     {
       ...cloneableOpts,
@@ -247,6 +246,7 @@ export async function* submitChat(
         function: tool.function,
         type: tool.type,
       })),
+      tool_choice: toolChoice,
     },
     { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
   );
