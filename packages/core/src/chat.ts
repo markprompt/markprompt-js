@@ -39,11 +39,13 @@ export interface SubmitChatOptions {
   /**
    * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
    * @default undefined
+   * @deprecated Use `threadId` instead.
    */
   conversationId?: string;
   /**
    * Conversation metadata. An arbitrary JSON payload to attach to the conversation.
    * @default undefined
+   * @deprecated Will be removed.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   conversationMetadata?: any;
@@ -55,6 +57,7 @@ export interface SubmitChatOptions {
   /**
    * Message returned when the model does not have an answer.
    * @default "Sorry, I am not sure how to answer that."
+   * @deprecated Will be removed.
    **/
   iDontKnowMessage?: string;
   /**
