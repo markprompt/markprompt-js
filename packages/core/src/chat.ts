@@ -37,47 +37,8 @@ export interface ChatMessage {
 }
 export interface SubmitChatOptions {
   /**
-   * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
-   * @default undefined
-   * @deprecated Use `threadId` instead.
-   */
-  conversationId?: string;
-  /**
-   * Conversation metadata. An arbitrary JSON payload to attach to the conversation.
-   * @default undefined
-   * @deprecated Will be removed.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  conversationMetadata?: any;
-  /**
-   * Enabled debug mode. This will log debug and error information to the console.
-   * @default false
-   */
-  debug?: boolean;
-  /**
-   * Message returned when the model does not have an answer.
-   * @default "Sorry, I am not sure how to answer that."
-   * @deprecated Will be removed.
-   **/
-  iDontKnowMessage?: string;
-  /**
-   * Whether or not to inject context relevant to the query.
-   * @default false
-   **/
-  doNotInjectContext?: boolean;
-  /**
-   * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information.
-   * @default true
-   **/
-  allowFollowUpQuestions?: boolean;
-  /**
-   * Whether or not to include message in insights.
-   * @default false
-   **/
-  excludeFromInsights?: boolean;
-  /**
    * The OpenAI model to use.
-   * @default "gpt-3.5-turbo"
+   * @default "gpt-4-turbo-preview"
    **/
   model?: OpenAIModelId;
   /**
@@ -120,6 +81,50 @@ export interface SubmitChatOptions {
    * @default 0.5
    * */
   sectionsMatchThreshold?: number;
+  /**
+   * Thread ID. Returned with the first, and every subsequent, chat response. Used to continue a conversation.
+   * @default undefined
+   */
+  threadId?: string;
+  /**
+   * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
+   * @default undefined
+   * @deprecated Use `threadId` instead.
+   */
+  conversationId?: string;
+  /**
+   * Conversation metadata. An arbitrary JSON payload to attach to the conversation.
+   * @default undefined
+   * @deprecated Will be removed.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  conversationMetadata?: any;
+  /**
+   * Enabled debug mode. This will log debug and error information to the console.
+   * @default false
+   */
+  debug?: boolean;
+  /**
+   * Message returned when the model does not have an answer.
+   * @default "Sorry, I am not sure how to answer that."
+   * @deprecated Will be removed.
+   **/
+  iDontKnowMessage?: string;
+  /**
+   * Whether or not to inject context relevant to the query.
+   * @default false
+   **/
+  doNotInjectContext?: boolean;
+  /**
+   * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information.
+   * @default true
+   **/
+  allowFollowUpQuestions?: boolean;
+  /**
+   * Whether or not to include message in insights.
+   * @default false
+   **/
+  excludeFromInsights?: boolean;
   /**
    * AbortController signal.
    * @default undefined
