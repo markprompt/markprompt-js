@@ -35,17 +35,86 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
+
+export interface PoliciesOptions {
+  /**
+   * If true, enable the use of policies.
+   * @default true
+   **/
+  enabled?: boolean;
+  /**
+   * If true, use all policies added in the project.
+   * Otherwise, only use the ones excplicitly specified
+   * in the `ids` list.
+   * @default true
+   **/
+  useAll?: boolean
+  /**
+   * Only use specific policies for retrieval.
+   * @default []
+   **/
+  ids?: string[]
+}
+
+export interface RetrievalOptions {
+  /**
+   * If true, enable retrieval.
+   * @default true
+   **/
+  enabled?: boolean;
+  /**
+   * If true, use all sources connected in the project.
+   * Otherwise, only use the ones excplicitly specified
+   * in the `ids` list.
+   * @default true
+   **/
+  useAll?: boolean
+  /**
+   * Only use specific sources for retrieval.
+   * @default []
+   **/
+  ids?: string[]
+}
+
 export interface SubmitChatOptions {
+  /**
+   * The system prompt.
+   * @default "You are a very enthusiastic company representative who loves to help people!"
+   **/
+  systemPrompt?: string;
+  /**
+   * Context to use for template variable replacements in the system prompt.
+   * @default {}
+   **/
+  context?: any;
   /**
    * The OpenAI model to use.
    * @default "gpt-4-turbo-preview"
    **/
   model?: OpenAIModelId;
   /**
-   * The system prompt.
-   * @default "You are a very enthusiastic company representative who loves to help people!"
+   * Options for the use of policies.
    **/
-  systemPrompt?: string;
+  policiesOptions?: PoliciesOptions;
+  /**
+   * Options for retrieval.
+   **/
+  retrievalOptions?: RetrievalOptions;
+  /**
+   * The output format of the response.
+   * @default "markdown"
+   */
+  outputFormat?: 'markdown' | 'slack' | 'html';
+  /**
+   * If true, output the response in JSON format.
+   * @default false
+   */
+  jsonOutput?: boolean;
+  /**
+   * Remove PII from chat messages.
+   * @default false
+   */
+  redact?: boolean;
   /**
    * The model temperature.
    * @default 0.1
@@ -82,34 +151,25 @@ export interface SubmitChatOptions {
    * */
   sectionsMatchThreshold?: number;
   /**
-   * Thread ID. Returned with the first, and every subsequent, chat response. Used to continue a conversation.
+   * Thread ID. Returned with the first, and every subsequent, chat response. Used to continue a thread.
    * @default undefined
    */
   threadId?: string;
   /**
-   * Conversation ID. Returned with the first response of a conversation. Used to continue a conversation.
-   * @default undefined
-   * @deprecated Use `threadId` instead.
+   * A list of tools the model may call. Currently, only functions are
+   * supported as a tool. Use this to provide a list of functions the model may
+   * generate JSON inputs for.
    */
-  conversationId?: string;
+  tools?: ChatCompletionTool[];
   /**
-   * Conversation metadata. An arbitrary JSON payload to attach to the conversation.
-   * @default undefined
-   * @deprecated Will be removed.
+   * Controls which (if any) function is called by the model. `none` means the
+   * model will not call a function and instead generates a message. `auto`
+   * means the model can pick between generating a message or calling a
+   * function. Specifying a particular function via
+   * `{"type: "function", "function": {"name": "my_function"}}` forces the
+   * model to call that function. `none` is the default when no functions are present. `auto` is the default if functions are present.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  conversationMetadata?: any;
-  /**
-   * Enabled debug mode. This will log debug and error information to the console.
-   * @default false
-   */
-  debug?: boolean;
-  /**
-   * Message returned when the model does not have an answer.
-   * @default "Sorry, I am not sure how to answer that."
-   * @deprecated Will be removed.
-   **/
-  iDontKnowMessage?: string;
+  toolChoice?: ChatCompletionToolChoiceOption;
   /**
    * Whether or not to inject context relevant to the query.
    * @default false
@@ -131,33 +191,20 @@ export interface SubmitChatOptions {
    **/
   signal?: AbortSignal;
   /**
+   * Enabled debug mode. This will log debug and error information to the console.
+   * @default false
+   */
+  debug?: boolean;
+  /**
+   * Message returned when the model does not have an answer.
+   * @default "Sorry, I am not sure how to answer that."
+   * @deprecated Will be removed.
+   **/
+  iDontKnowMessage?: string;
+  /**
    * Disable streaming and return the entire response at once.
    */
   stream?: boolean;
-  /**
-   * A list of tools the model may call. Currently, only functions are
-   * supported as a tool. Use this to provide a list of functions the model may
-   * generate JSON inputs for.
-   */
-  tools?: ChatCompletionTool[];
-  /**
-   * Controls which (if any) function is called by the model. `none` means the
-   * model will not call a function and instead generates a message. `auto`
-   * means the model can pick between generating a message or calling a
-   * function. Specifying a particular function via
-   * `{"type: "function", "function": {"name": "my_function"}}` forces the
-   * model to call that function. `none` is the default when no functions are present. `auto` is the default if functions are present.
-   */
-  toolChoice?: ChatCompletionToolChoiceOption;
-  /**
-   * The output format of the response.
-   * @default "markdown"
-   */
-  outputFormat?: 'markdown' | 'slack' | 'html';
-  /**
-   * Remove PII from chat messages.
-   */
-  redact?: boolean;
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
@@ -185,26 +232,29 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
   [
     'apiUrl',
     'allowFollowUpQuestions',
-    'conversationId',
-    'conversationMetadata',
+    'context',
     'debug',
     'doNotInjectContext',
     'excludeFromInsights',
     'frequencyPenalty',
     'iDontKnowMessage',
+    'jsonOutput',
     'maxTokens',
     'model',
     'outputFormat',
+    'policiesOptions',
     'presencePenalty',
+    'redact',
+    'retrievalOptions',
     'sectionsMatchCount',
     'sectionsMatchThreshold',
     'stream',
     'systemPrompt',
     'temperature',
+    'threadId',
     'toolChoice',
     'tools',
     'topP',
-    'redact',
   ];
 
 const isValidSubmitChatOptionsKey = (
@@ -246,7 +296,7 @@ export async function* submitChat(
   );
 
   const { signal, tools, toolChoice, ...cloneableOpts } = validOptions;
-  const { debug, ...resolvedOptions } = defaults(
+  const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } = defaults(
     {
       ...cloneableOpts,
       // only include known tool properties
@@ -254,10 +304,11 @@ export async function* submitChat(
         function: tool.function,
         type: tool.type,
       })),
-      tool_choice: toolChoice,
+      toolChoice: toolChoice,
     },
     { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
-  );
+  ) as BaseOptions & SubmitChatOptions;
+
 
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
     method: 'POST',
@@ -270,6 +321,8 @@ export async function* submitChat(
       messages,
       debug,
       ...resolvedOptions,
+      policies: policiesOptions,
+      retrieval: retrievalOptions,
     }),
     signal,
   });

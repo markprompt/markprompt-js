@@ -174,7 +174,7 @@ export interface FeedbackOptions {
   onFeedbackSubmit?: (
     feedback: PromptFeedback,
     messages: ChatViewMessage[],
-    promptId?: string,
+    messageId?: string,
   ) => void;
 }
 

@@ -483,7 +483,7 @@
   padding-block: 0.5rem;
 }
 
-.MarkpromptConversationSelect {
+.MarkpromptThreadSelect {
   align-self: flex-end;
 }
 
@@ -500,7 +500,7 @@
     grid-column: 2;
   }
 
-  .MarkpromptContentPlain .MarkpromptConversationSelect {
+  .MarkpromptContentPlain .MarkpromptThreadSelect {
     display: none;
   }
 }
@@ -513,7 +513,7 @@
   color: var(--markprompt-foreground);
 }
 
-.MarkpromptChatConversationList {
+.MarkpromptChatThreadList {
   list-style-type: none;
   margin: 0;
   padding: 0.5rem;
@@ -524,7 +524,7 @@
   gap: 0.5rem;
 }
 
-.MarkpromptChatConversationListItem {
+.MarkpromptChatThreadListItem {
   display: flex;
   all: unset;
   overflow: hidden;
@@ -534,7 +534,7 @@
   place-self: stretch;
 }
 
-.MarkpromptChatConversationListItem button {
+.MarkpromptChatThreadListItem button {
   all: unset;
   box-sizing: border-box;
   display: flex;
@@ -551,28 +551,28 @@
   place-self: stretch;
 }
 
-.MarkpromptChatConversationList p {
+.MarkpromptChatThreadList p {
   margin: 0;
   overflow: hidden;
   width: 100%;
   flex-grow: 1;
 }
 
-.MarkpromptChatConversationList p:first-of-type {
+.MarkpromptChatThreadList p:first-of-type {
   margin: 0;
   color: var(--markprompt-foreground);
 }
 
-.MarkpromptChatConversationList p:last-of-type {
+.MarkpromptChatThreadList p:last-of-type {
   color: var(--markprompt-mutedForeground);
 }
 
-.MarkpromptChatConversationList button:hover,
-.MarkpromptChatConversationList [data-selected='true'] button {
+.MarkpromptChatThreadList button:hover,
+.MarkpromptChatThreadList [data-selected='true'] button {
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptChatConversationList [data-selected='true'] button {
+.MarkpromptChatThreadList [data-selected='true'] button {
   border-color: var(--markprompt-border);
 }
 
@@ -2229,7 +2229,6 @@
   transition-duration: 200ms;
   white-space: nowrap;
   cursor: pointer;
-  opacity: 0;
   animation-delay: calc(var(--base-delay) * (var(--index) - 1));
   animation-fill-mode: both;
   animation-name: markprompt-slide-up-subtle;
@@ -2950,7 +2949,7 @@
   .MarkpromptButton,
 :not(.MarkpromptTicketDeflectionForm)
   .MarkpromptPromptWrapper
-  .MarkpromptConversationSelect {
+  .MarkpromptThreadSelect {
   align-self: flex-end;
   margin-bottom: 0.5rem;
 }

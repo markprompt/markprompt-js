@@ -32,15 +32,13 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
   const form = useRef<HTMLFormElement>(null);
   const projectKey = useGlobalStore((state) => state.options.projectKey);
-  const conversationId = useChatStore((state) => state.conversationId);
+  const threadId = useChatStore((state) => state.threadId);
   const provider = useGlobalStore(
     (state) => state.options.integrations?.createTicket?.provider,
   );
   const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const summary = useGlobalStore((state) =>
-    conversationId
-      ? state.tickets?.summaryByConversationId[conversationId]
-      : undefined,
+    threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
   const messages = useChatStore((state) => state.messages);
 

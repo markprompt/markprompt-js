@@ -208,10 +208,10 @@ describe('submitChat', () => {
     expect(chunkWithReferences?.references).toStrictEqual(references);
   });
 
-  test('yields promptId', async () => {
-    const promptId = 'test-id';
+  test('yields messageId', async () => {
+    const messageId = 'test-id';
 
-    markpromptData = { promptId };
+    markpromptData = { messageId };
 
     response = ['According to my calculator ', '1 + 2 = 3'];
 
@@ -224,14 +224,14 @@ describe('submitChat', () => {
       chunks.push(chunk);
     }
 
-    const chunkWithPromptId = chunks.find((x) => x.promptId);
-    expect(chunkWithPromptId?.promptId).toStrictEqual(promptId);
+    const chunkWithMessageId = chunks.find((x) => x.messageId);
+    expect(chunkWithMessageId?.messageId).toStrictEqual(messageId);
   });
 
-  test('yields conversationId', async () => {
-    const conversationId = 'test-id';
+  test('yields threadId', async () => {
+    const threadId = 'test-id';
 
-    markpromptData = { conversationId };
+    markpromptData = { threadId };
 
     response = ['According to my calculator ', '1 + 2 = 3'];
 
@@ -243,10 +243,8 @@ describe('submitChat', () => {
       chunks.push(chunk);
     }
 
-    const chunkWithConversationId = chunks.find((x) => x.conversationId);
-    expect(chunkWithConversationId?.conversationId).toStrictEqual(
-      conversationId,
-    );
+    const chunkWithThreadId = chunks.find((x) => x.threadId);
+    expect(chunkWithThreadId?.threadId).toStrictEqual(threadId);
   });
 
   test('throws errors when they occur', async () => {
@@ -289,9 +287,9 @@ describe('submitChat', () => {
   });
 
   test('throws when malformatted json is provided', async () => {
-    const conversationId = 'test-id';
+    const threadId = 'test-id';
 
-    markpromptData = { conversationId };
+    markpromptData = { threadId };
 
     response = ['{ "foo": "bar" }'];
 
@@ -327,8 +325,8 @@ describe('submitChat', () => {
       ],
     } satisfies OpenAI.ChatCompletion;
 
-    const conversationId = 'test-id';
-    const promptId = 'test-id';
+    const threadId = 'test-id';
+    const messageId = 'test-id';
     const references = [
       {
         file: { path: '/page1', source: { type: 'file-upload' } },
@@ -336,7 +334,7 @@ describe('submitChat', () => {
       },
     ];
 
-    markpromptData = { conversationId, promptId, references };
+    markpromptData = { threadId, messageId, references };
 
     for await (const json of submitChat(
       [{ content: 'How much is 1+2?', role: 'user' }],
@@ -346,8 +344,8 @@ describe('submitChat', () => {
       await expect(json).toStrictEqual({
         content: 'According to my calculator 1 + 2 = 3',
         role: 'assistant',
-        promptId,
-        conversationId,
+        messageId,
+        threadId,
         references,
       });
     }

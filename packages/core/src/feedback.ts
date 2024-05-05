@@ -7,7 +7,7 @@ export interface SubmitFeedbackBody {
   /** Prompt feedback */
   feedback: PromptFeedback;
   /** ID of the prompt for which feedback is being submitted. */
-  promptId: string;
+  messageId: string;
 }
 
 export interface SubmitFeedbackOptions {
@@ -48,7 +48,7 @@ export async function submitFeedback(
 
   try {
     const response = await fetch(
-      `${resolvedOptions.apiUrl}/messages/${body.promptId}`,
+      `${resolvedOptions.apiUrl}/messages/${body.messageId}`,
       {
         method: 'POST',
         headers: new Headers({

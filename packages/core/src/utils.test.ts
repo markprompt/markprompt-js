@@ -106,8 +106,8 @@ describe('isMarkpromptMetadata', () => {
   test('identifies ChatCompletionMetadata types', () => {
     expect(
       isMarkpromptMetadata({
-        conversationId: 'test',
-        promptId: 'test',
+        threadId: 'test',
+        messageId: 'test',
         references: [{ file: { path: 'test', source: { type: 'website' } } }],
       }),
     ).toBeTruthy();

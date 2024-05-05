@@ -148,8 +148,8 @@ export interface PromptFeedback {
 }
 
 export interface ChatCompletionMetadata {
-  conversationId?: string;
-  promptId?: string;
+  threadId?: string;
+  messageId?: string;
   references?: FileSectionReference[];
 }
 

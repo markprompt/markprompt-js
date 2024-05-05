@@ -120,16 +120,16 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               variant="icons"
               data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
-              submitFeedback={(feedback, promptId) => {
-                submitFeedback(feedback, promptId);
+              submitFeedback={(feedback, messageId) => {
+                submitFeedback(feedback, messageId);
                 feedbackOptions.onFeedbackSubmit?.(
                   feedback,
                   messages,
-                  promptId,
+                  messageId,
                 );
               }}
               abortFeedbackRequest={abortFeedbackRequest}
-              promptId={message.promptId}
+              messageId={message.messageId}
               heading={feedbackOptions.heading}
               showFeedback={!!feedbackOptions?.enabled}
               showVotes={feedbackOptions.votes}

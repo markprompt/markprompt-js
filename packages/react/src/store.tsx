@@ -52,9 +52,9 @@ interface State {
   setActiveView: (view: View) => void;
 
   tickets?: {
-    summaryByConversationId: { [conversationId: string]: ChatViewMessage };
+    summaryByThreadId: { [threadId: string]: ChatViewMessage };
     createTicketSummary: (
-      conversationId: string,
+      threadId: string,
       messages: ChatViewMessage[],
     ) => void;
   };
@@ -70,15 +70,15 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
       setActiveView: (view: View) => set({ activeView: view }),
       ...(options.integrations?.createTicket && {
         tickets: {
-          summaryByConversationId: {},
+          summaryByThreadId: {},
           createTicketSummary: async (
-            conversationId: string,
+            threadId: string,
             messages: ChatViewMessage[],
           ) => {
             const summaryId = crypto.randomUUID();
 
             set((state) => {
-              state.tickets!.summaryByConversationId[conversationId] = {
+              state.tickets!.summaryByThreadId[threadId] = {
                 id: summaryId,
                 references: [],
                 state: 'indeterminate',
@@ -86,7 +86,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             });
 
             const options = {
-              conversationId: conversationId,
+              threadId: threadId,
               ...get().options.chat,
               apiUrl: get().options.apiUrl,
               tools: get().options?.chat?.tools?.map((x) => x.tool),
@@ -112,8 +112,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             ] as ChatCompletionMessageParam[];
 
             set((state) => {
-              state.tickets!.summaryByConversationId[conversationId].state =
-                'preload';
+              state.tickets!.summaryByThreadId[threadId].state = 'preload';
             });
 
             try {
@@ -123,8 +122,8 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
                 options,
               )) {
                 set((state) => {
-                  state.tickets!.summaryByConversationId[conversationId] = {
-                    ...state.tickets!.summaryByConversationId[conversationId],
+                  state.tickets!.summaryByThreadId[threadId] = {
+                    ...state.tickets!.summaryByThreadId[threadId],
                     state: 'streaming-answer',
                     ...chunk,
                   };
@@ -132,8 +131,8 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
               }
             } catch (error) {
               set((state) => {
-                state.tickets!.summaryByConversationId[conversationId] = {
-                  ...state.tickets!.summaryByConversationId[conversationId],
+                state.tickets!.summaryByThreadId[threadId] = {
+                  ...state.tickets!.summaryByThreadId[threadId],
                   state: 'cancelled',
                 };
               });
@@ -147,8 +146,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             }
 
             set((state) => {
-              state.tickets!.summaryByConversationId[conversationId].state =
-                'done';
+              state.tickets!.summaryByThreadId[threadId].state = 'done';
             });
           },
         },

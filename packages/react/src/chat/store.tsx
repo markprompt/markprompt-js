@@ -44,8 +44,7 @@ export interface ToolCall {
   result?: string;
 }
 
-export interface ChatViewMessage
-  extends Omit<SubmitChatYield, 'conversationId'> {
+export interface ChatViewMessage extends Omit<SubmitChatYield, 'threadId'> {
   /**
    * Message id.
    */
@@ -194,7 +193,7 @@ export type SubmitChatMessage =
     }
   | { content: string; role: 'tool'; name: string; tool_call_id: string };
 
-export interface ConversationData {
+export interface ThreadData {
   lastUpdated: string;
   messages: ChatViewMessage[];
 }
@@ -213,19 +212,19 @@ export interface ChatStoreState {
    **/
   abort?: () => void;
   /**
-   * The current conversation id.
+   * The current thread id.
    **/
-  conversationId?: string;
+  threadId?: string;
   /**
-   * Set a conversation id.
+   * Set a thread id.
    **/
-  setConversationId: (conversationId: string) => void;
+  setThreadId: (threadId: string) => void;
   /**
-   * Select a conversation.
+   * Select a thread.
    **/
-  selectConversation: (conversationId?: string) => void;
+  selectThread: (threadId?: string) => void;
   /**
-   * The messages in the current conversation.
+   * The messages in the current thread.
    **/
   messages: ChatViewMessage[];
   /**
@@ -245,13 +244,13 @@ export interface ChatStoreState {
    **/
   setToolCallById: (toolCallId: string, next: Partial<ToolCall>) => void;
   /**
-   * Dictionary of conversations by project id.
+   * Dictionary of threads by project id.
    **/
-  conversationIdsByProjectKey: { [projectKey: string]: string[] };
+  threadIdsByProjectKey: { [projectKey: string]: string[] };
   /**
-   * Dictionary of messages by conversation id.
+   * Dictionary of messages by thread id.
    **/
-  messagesByConversationId: { [conversationId: string]: ConversationData };
+  messagesByThreadId: { [threadId: string]: ThreadData };
   /**
    * Dictionary of tool calls by id.
    **/
@@ -300,7 +299,7 @@ export interface CreateChatOptions {
 
 /**
  * Creates a chat store for a given project key.
- * Keeps track of messages by project key and conversation id.
+ * Keeps track of messages by project key and thread id.
  *
  * @param projectKey - Markprompt project key
  * @param persistChatHistory - Should chat history be persisted in local storage?
@@ -327,40 +326,40 @@ export const createChatStore = ({
           projectKey,
           messages: [],
           didAcceptDisclaimer: false,
-          conversationIdsByProjectKey: {
+          threadIdsByProjectKey: {
             [projectKey]: [],
           },
-          messagesByConversationId: {},
+          messagesByThreadId: {},
           toolCallsByToolCallId: {},
           didAcceptDisclaimerByProjectKey: {},
-          setConversationId: (conversationId: string) => {
+          setThreadId: (threadId: string) => {
             set((state) => {
-              // set the conversation id for this session
-              state.conversationIdsByProjectKey[projectKey] ??= [];
-              state.conversationId = conversationId;
+              // Set the thread id for this session
+              state.threadIdsByProjectKey[projectKey] ??= [];
+              state.threadId = threadId;
 
-              if (!isIterable(state.conversationIdsByProjectKey[projectKey])) {
+              if (!isIterable(state.threadIdsByProjectKey[projectKey])) {
                 // Backward-compatibility
-                state.conversationIdsByProjectKey[projectKey] = [];
+                state.threadIdsByProjectKey[projectKey] = [];
               }
 
-              // save the conversation id for this project, for later sessions
-              state.conversationIdsByProjectKey[projectKey] = [
+              // Save the thread id for this project, for later sessions
+              state.threadIdsByProjectKey[projectKey] = [
                 ...new Set([
-                  ...state.conversationIdsByProjectKey[projectKey],
-                  conversationId,
+                  ...state.threadIdsByProjectKey[projectKey],
+                  threadId,
                 ]),
               ];
 
-              // save the messages for this conversation
-              state.messagesByConversationId[conversationId] = {
+              // Save the messages for this thread
+              state.messagesByThreadId[threadId] = {
                 lastUpdated: new Date().toISOString(),
                 messages: state.messages,
               };
             });
           },
-          selectConversation: (conversationId?: string) => {
-            if (conversationId && conversationId === get().conversationId) {
+          selectThread: (threadId?: string) => {
+            if (threadId && threadId === get().threadId) {
               return;
             }
 
@@ -368,28 +367,28 @@ export const createChatStore = ({
             get().abort?.();
 
             set((state) => {
-              if (!conversationId) {
-                // start a new conversation
-                state.conversationId = undefined;
+              if (!threadId) {
+                // Start a new thread
+                state.threadId = undefined;
                 state.messages = [];
                 return;
               }
 
-              // restore an existing conversation
-              state.conversationId = conversationId;
+              // Restore an existing thread
+              state.threadId = threadId;
               state.messages =
-                state.messagesByConversationId[conversationId]?.messages ?? [];
+                state.messagesByThreadId[threadId]?.messages ?? [];
             });
           },
           setMessages: (messages: ChatViewMessage[]) => {
             set((state) => {
               state.messages = messages;
 
-              const conversationId = state.conversationId;
-              if (!conversationId) return;
+              const threadId = state.threadId;
+              if (!threadId) return;
 
               // save the message to local storage
-              state.messagesByConversationId[conversationId] = {
+              state.messagesByThreadId[threadId] = {
                 lastUpdated: new Date().toISOString(),
                 messages,
               };
@@ -406,11 +405,11 @@ export const createChatStore = ({
               currentMessage = { ...currentMessage, ...next };
               state.messages[index] = currentMessage;
 
-              const conversationId = state.conversationId;
-              if (!conversationId) return;
+              const threadId = state.threadId;
+              if (!threadId) return;
 
               // save the message to local storage
-              state.messagesByConversationId[conversationId] = {
+              state.messagesByThreadId[threadId] = {
                 lastUpdated: new Date().toISOString(),
                 messages: state.messages,
               };
@@ -428,11 +427,11 @@ export const createChatStore = ({
               };
               state.messages[index] = currentMessage;
 
-              const conversationId = state.conversationId;
-              if (!conversationId) return;
+              const threadId = state.threadId;
+              if (!threadId) return;
 
               // save the message to local storage
-              state.messagesByConversationId[conversationId] = {
+              state.messagesByThreadId[threadId] = {
                 lastUpdated: new Date().toISOString(),
                 messages: state.messages,
               };
@@ -511,7 +510,7 @@ export const createChatStore = ({
 
             const options = {
               apiUrl: get().apiUrl,
-              conversationId: get().conversationId,
+              threadId: get().threadId,
               signal: controller.signal,
               debug,
               ...get().options,
@@ -527,8 +526,8 @@ export const createChatStore = ({
               )) {
                 if (controller.signal.aborted) continue;
 
-                if (chunk.conversationId) {
-                  get().setConversationId(chunk.conversationId);
+                if (chunk.threadId) {
+                  get().setThreadId(chunk.threadId);
                 }
 
                 for (const id of messageIds) {
@@ -726,17 +725,17 @@ export const createChatStore = ({
               },
             },
           ),
-          // only store conversationsByProjectKey in local storage
+          // Only store threadsByProjectKey in local storage
           partialize: (state) => {
             return {
-              conversationIdsByProjectKey: state.conversationIdsByProjectKey,
-              messagesByConversationId: state.messagesByConversationId,
+              threadIdsByProjectKey: state.threadIdsByProjectKey,
+              messagesByThreadId: state.messagesByThreadId,
               toolCallsByToolCallId: state.toolCallsByToolCallId,
               didAcceptDisclaimerByProjectKey:
                 state.didAcceptDisclaimerByProjectKey,
             };
           },
-          // restore the last conversation for this project if it's < 4 hours old
+          // Restore the last tjread for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
 
@@ -748,21 +747,18 @@ export const createChatStore = ({
               state.setDidAcceptDisclaimer(true);
             }
 
-            const { conversationIdsByProjectKey, messagesByConversationId } =
-              state;
+            const { threadIdsByProjectKey, messagesByThreadId } = state;
 
-            const conversationIds =
-              conversationIdsByProjectKey?.[projectKey] ?? [];
+            const threadIds = threadIdsByProjectKey?.[projectKey] ?? [];
 
             const now = new Date();
             const fourHoursAgo = new Date(now.getTime() - 4 * 60 * 60 * 1000);
 
-            const projectConversations = Object.entries(
-              messagesByConversationId,
-            )
-              // filter out conversations that are not in the list of conversations for this project
-              .filter(([id]) => conversationIds.includes(id))
-              // filter out conversations older than 4 hours
+            const projectThreads = Object.entries(messagesByThreadId)
+              // Filter out threads that are not in the list of threads for
+              // this project
+              .filter(([id]) => threadIds.includes(id))
+              // Filter out threads older than 4 hours
               .filter(([, { lastUpdated }]) => {
                 const lastUpdatedDate = new Date(lastUpdated);
                 return lastUpdatedDate > fourHoursAgo;
@@ -772,15 +768,12 @@ export const createChatStore = ({
                 b.localeCompare(a),
               );
 
-            if (
-              projectConversations.length === 0 ||
-              !isPresent(projectConversations[0])
-            ) {
+            if (projectThreads.length === 0 || !isPresent(projectThreads[0])) {
               return;
             }
-            const [conversationId, { messages }] = projectConversations[0];
+            const [threadId, { messages }] = projectThreads[0];
 
-            state.setConversationId(conversationId);
+            state.setThreadId(threadId);
             state.setMessages(
               messages.map((x) => ({
                 ...x,
@@ -803,7 +796,7 @@ type ChatStore = ReturnType<typeof createChatStore>;
 export const ChatContext = createContext<ChatStore | null>(null);
 
 interface ChatProviderProps {
-  chatOptions: MarkpromptOptions['chat'];
+  chatOptions?: MarkpromptOptions['chat'];
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
@@ -844,27 +837,26 @@ export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
   return useStore(store, selector);
 }
 
-export const selectProjectConversations = (
+export const selectProjectThreads = (
   state: ChatStoreState,
 ): [
-  conversationId: string,
+  threadId: string,
   { lastUpdated: string; messages: ChatViewMessage[] },
 ][] => {
   const projectKey = state.projectKey;
 
-  const conversationIds = state.conversationIdsByProjectKey[projectKey];
-  if (!conversationIds || conversationIds.length === 0) return [];
+  const threadIds = state.threadIdsByProjectKey[projectKey];
+  if (!threadIds || threadIds.length === 0) return [];
 
-  const messagesByConversationId = Object.entries(
-    state.messagesByConversationId,
-  )
-    .filter(([id]) => conversationIds.includes(id))
-    // ascending order, so the newest conversation will be closest to the dropdown toggle
+  const messagesByThreadId = Object.entries(state.messagesByThreadId)
+    .filter(([id]) => threadIds.includes(id))
+    // Ascending order, so the newest thread will be closest to the
+    // dropdown toggle
     .sort(([, { lastUpdated: a }], [, { lastUpdated: b }]) =>
       a.localeCompare(b),
     );
 
-  if (!messagesByConversationId) return [];
+  if (!messagesByThreadId) return [];
 
-  return messagesByConversationId;
+  return messagesByThreadId;
 };

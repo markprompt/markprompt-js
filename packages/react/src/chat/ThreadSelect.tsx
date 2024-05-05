@@ -1,19 +1,19 @@
-import { selectProjectConversations, useChatStore } from './store.js';
+import { selectProjectThreads, useChatStore } from './store.js';
 import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
 import { Select } from '../primitives/Select.js';
 
-export function ConversationSelect({
+export function ThreadSelect({
   disabled,
 }: {
   disabled?: boolean;
 }): JSX.Element {
-  const conversations = useChatStore(selectProjectConversations);
-  const selectConversation = useChatStore((state) => state.selectConversation);
+  const threads = useChatStore(selectProjectThreads);
+  const selectThread = useChatStore((state) => state.selectThread);
 
   return (
     <Select
-      className="MarkpromptConversationSelect"
-      label="Select previous conversation"
+      className="MarkpromptThreadSelect"
+      label="Select previous thread"
       disabled={disabled}
       toggle={
         <CounterClockwiseClockIcon
@@ -23,8 +23,8 @@ export function ConversationSelect({
         />
       }
       items={[
-        ...conversations.map(([conversationId, { messages }]) => ({
-          value: conversationId,
+        ...threads.map(([threadId, { messages }]) => ({
+          value: threadId,
           label: messages[0]?.content ?? '',
         })),
         {
@@ -48,7 +48,7 @@ export function ConversationSelect({
         return item!.label;
       }}
       onSelectedItemChange={({ selectedItem }) => {
-        selectConversation(
+        selectThread(
           selectedItem!.value === 'new' ? undefined : selectedItem!.value,
         );
       }}
