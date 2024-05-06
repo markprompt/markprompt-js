@@ -46,7 +46,9 @@ function MenuEntry(
   return (
     <DropdownMenu.Item asChild>
       <Comp
-        className={`MarkpromptDropdownMenuItem ${props.type === 'button' ? 'MarkpromptHighlightButton' : ''}`}
+        className={`MarkpromptDropdownMenuItem ${
+          props.type === 'button' ? 'MarkpromptHighlightButton' : ''
+        }`}
         data-type={props.type || 'link'}
         data-id={props.id}
         data-theme={props.theme}

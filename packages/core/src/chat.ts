@@ -48,12 +48,12 @@ export interface PoliciesOptions {
    * in the `ids` list.
    * @default true
    **/
-  useAll?: boolean
+  useAll?: boolean;
   /**
    * Only use specific policies for retrieval.
    * @default []
    **/
-  ids?: string[]
+  ids?: string[];
 }
 
 export interface RetrievalOptions {
@@ -68,12 +68,12 @@ export interface RetrievalOptions {
    * in the `ids` list.
    * @default true
    **/
-  useAll?: boolean
+  useAll?: boolean;
   /**
    * Only use specific sources for retrieval.
    * @default []
    **/
-  ids?: string[]
+  ids?: string[];
 }
 
 export interface SubmitChatOptions {
@@ -86,6 +86,7 @@ export interface SubmitChatOptions {
    * Context to use for template variable replacements in the system prompt.
    * @default {}
    **/
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: any;
   /**
    * The OpenAI model to use.
@@ -296,19 +297,19 @@ export async function* submitChat(
   );
 
   const { signal, tools, toolChoice, ...cloneableOpts } = validOptions;
-  const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } = defaults(
-    {
-      ...cloneableOpts,
-      // only include known tool properties
-      tools: tools?.map((tool) => ({
-        function: tool.function,
-        type: tool.type,
-      })),
-      toolChoice: toolChoice,
-    },
-    { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
-  ) as BaseOptions & SubmitChatOptions;
-
+  const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } =
+    defaults(
+      {
+        ...cloneableOpts,
+        // only include known tool properties
+        tools: tools?.map((tool) => ({
+          function: tool.function,
+          type: tool.type,
+        })),
+        toolChoice: toolChoice,
+      },
+      { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
+    ) as BaseOptions & SubmitChatOptions;
 
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
     method: 'POST',

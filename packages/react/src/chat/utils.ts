@@ -26,9 +26,9 @@ export function toValidApiMessages(
               // If this is a tool_calls assistant message and the next
               // message is not a tool message, ignore it, as it will
               // result in an invalid API request.
-              const nextMessage = messages[i+1]
+              const nextMessage = messages[i + 1];
               if (nextMessage && nextMessage.role !== 'tool') {
-                return undefined
+                return undefined;
               }
             }
 
