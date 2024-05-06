@@ -59,6 +59,9 @@
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.17.2"
+  },
   "overrides": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
