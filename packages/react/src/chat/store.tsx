@@ -11,6 +11,7 @@ import {
   type SubmitChatOptions,
   type SubmitChatYield,
   type ChatCompletionChunk,
+  type ChatCompletionSystemMessageParam,
 } from '@markprompt/core';
 import {
   createContext,
@@ -30,6 +31,7 @@ import {
   isPresent,
   isStoredError,
 } from '../utils.js';
+import { toValidApiMessages } from './utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -61,69 +63,6 @@ export interface ChatViewMessage extends Omit<SubmitChatYield, 'threadId'> {
    * Error associated to the message.
    */
   error?: Error;
-}
-
-function toApiMessages(
-  messages: (ChatViewMessage & { tool_call_id?: string })[],
-): ChatCompletionMessageParam[] {
-  return (
-    messages
-      .map(({ content, role, tool_calls, tool_call_id, name }) => {
-        if (!content && !tool_calls) {
-          // Ignore empty messages unless it's a tool_call
-          return undefined;
-        }
-        switch (role) {
-          case 'assistant': {
-            const msg: ChatCompletionAssistantMessageParam = {
-              content: content ?? null,
-              role,
-            };
-
-            if (isToolCalls(tool_calls)) {
-              msg.tool_calls = tool_calls;
-            }
-
-            return msg;
-          }
-          // case 'system': {
-          //   return {
-          //     content: content ?? null,
-          //     role,
-          //   } satisfies ChatCompletionSystemMessageParam;
-          // }
-          case 'tool': {
-            if (!tool_call_id) throw new Error('tool_call_id is required');
-            if (!content) throw new Error('content is required');
-            return {
-              content,
-              role,
-              tool_call_id,
-            } satisfies ChatCompletionToolMessageParam;
-          }
-          case 'user': {
-            if (!content) throw new Error('content is required');
-            return {
-              content,
-              role,
-              ...(name ? { name } : {}),
-            } satisfies ChatCompletionMessageParam;
-          }
-        }
-      })
-      .filter(isPresent)
-      // remove the last message if role is assistant and content is null
-      // we add this message locally as a placeholder for ourself and OpenAI errors out
-      // if we send it to them
-      .filter(
-        (m, i, arr) =>
-          !(
-            i === arr.length - 1 &&
-            m.role === 'assistant' &&
-            m.content === null
-          ),
-      )
-  );
 }
 
 export interface ConfirmationProps {
@@ -500,7 +439,7 @@ export const createChatStore = ({
             });
 
             // Get ready to do the request
-            const apiMessages = toApiMessages(get().messages);
+            const apiMessages = toValidApiMessages(get().messages);
 
             for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {

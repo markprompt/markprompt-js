@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { useSelect } from 'downshift';
 import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
 
-import { toApiMessages } from './chat/utils.js';
+import { toValidApiMessages } from './chat/utils.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import {
   useChatStore,
@@ -106,7 +106,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     if (!messages || messages.length === 0) {
       return '';
     }
-    const transcript = toApiMessages(messages)
+    const transcript = toValidApiMessages(messages)
       .map((m) => {
         return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
       })

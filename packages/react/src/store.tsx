@@ -13,7 +13,7 @@ import {
 import { createStore, useStore, type StoreApi } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { toApiMessages } from './chat/utils.js';
+import { toValidApiMessages } from './chat/utils.js';
 import type { ChatViewMessage } from './index.js';
 import type { MarkpromptOptions, View } from './types.js';
 import { getDefaultView } from './utils.js';
@@ -98,7 +98,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
               allowFollowUpQuestions: true,
             };
 
-            const conversation = toApiMessages(messages)
+            const conversation = toValidApiMessages(messages)
               .map((m) => {
                 return `${m.role === 'user' ? 'User' : 'AI'}:\n\n${m.content}`;
               })
