@@ -28,7 +28,6 @@ export function toValidApiMessages(
               // result in an invalid API request.
               const nextMessage = messages[i+1]
               if (nextMessage && nextMessage.role !== 'tool') {
-                console.log("Omitting", JSON.stringify(nextMessage, null, 2))
                 return undefined
               }
             }
