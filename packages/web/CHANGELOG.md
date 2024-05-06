@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.34.0
+
+### Minor Changes
+
+- [#349](https://github.com/motifland/markprompt-js/pull/349) [`44e7cda`](https://github.com/motifland/markprompt-js/commit/44e7cda4073bfa96911630080aabc4c988af4dd6) Thanks [@michaelfester](https://github.com/michaelfester)! - Rename conversationId and promptId to threadId and messageId. Improve function calling state management.
+
+### Patch Changes
+
+- Updated dependencies [[`44e7cda`](https://github.com/motifland/markprompt-js/commit/44e7cda4073bfa96911630080aabc4c988af4dd6)]:
+  - @markprompt/react@0.44.0
+  - @markprompt/core@0.28.0
+
 ## 0.33.0
 
 ### Minor Changes
