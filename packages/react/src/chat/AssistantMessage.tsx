@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_OPTIONS, isToolCalls } from '@markprompt/core';
 import { useMemo, type ComponentType } from 'react';
 
@@ -16,6 +15,7 @@ export interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   linkAs?: string | ComponentType<any>;
   messageOnly?: boolean;
   showFeedbackAlways?: boolean;
@@ -41,8 +41,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
   const toolCallsByToolCallId = useChatStore((state) =>
     Object.fromEntries(
-      Object.entries(state.toolCallsByToolCallId).filter(
-        ([id]) => toolCalls?.some((x) => x.id === id),
+      Object.entries(state.toolCallsByToolCallId).filter(([id]) =>
+        toolCalls?.some((x) => x.id === id),
       ),
     ),
   );
