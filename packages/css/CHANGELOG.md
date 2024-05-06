@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.30.0
+
+### Minor Changes
+
+- [#349](https://github.com/motifland/markprompt-js/pull/349) [`44e7cda`](https://github.com/motifland/markprompt-js/commit/44e7cda4073bfa96911630080aabc4c988af4dd6) Thanks [@michaelfester](https://github.com/michaelfester)! - Rename conversationId and promptId to threadId and messageId. Improve function calling state management.
+
 ## 0.29.0
 
 ### Minor Changes
