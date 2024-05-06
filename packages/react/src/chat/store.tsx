@@ -1,17 +1,12 @@
 import {
   isAbortError,
   isToolCall,
-  isToolCalls,
   submitChat,
-  type ChatCompletionAssistantMessageParam,
-  type ChatCompletionMessageParam,
   type ChatCompletionMessageToolCall,
   type ChatCompletionTool,
-  type ChatCompletionToolMessageParam,
   type SubmitChatOptions,
   type SubmitChatYield,
   type ChatCompletionChunk,
-  type ChatCompletionSystemMessageParam,
 } from '@markprompt/core';
 import {
   createContext,
@@ -24,6 +19,7 @@ import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import { toValidApiMessages } from './utils.js';
 import type { MarkpromptOptions } from '../types.js';
 import {
   hasValueAtKey,
@@ -31,7 +27,6 @@ import {
   isPresent,
   isStoredError,
 } from '../utils.js';
-import { toValidApiMessages } from './utils.js';
 
 export type ChatLoadingState =
   | 'indeterminate'
@@ -248,8 +243,7 @@ export const createChatStore = ({
   debug,
   persistChatHistory,
   projectKey,
-  apiUrl,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  apiUrl, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: CreateChatOptions) => {
   if (!projectKey) {
     throw new Error(
