@@ -37,7 +37,7 @@ export function Messages(props: MessagesProps): ReactElement {
   } = props;
 
   const messages = useChatStore((state) => state.messages);
-  const threadId = useChatStore((state) => state.conversationId);
+  const threadId = useChatStore((state) => state.threadId);
   const submitChat = useChatStore((state) => state.submitChat);
 
   const welcomeMessage = useMemo(() => {

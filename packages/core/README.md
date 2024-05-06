@@ -67,7 +67,7 @@ Submit a prompt to the Markprompt Completions API.
 
 All options are optional.
 
-- `conversationId` (`string`): Conversation ID
+- `threadId` (`string`): Thread ID
 - `iDontKnowMessage` (`string`): Message returned when the model does not have
   an answer
 - `model` (`OpenAIModelId`): The OpenAI model to use
@@ -82,7 +82,7 @@ All options are optional.
 - `sectionsMatchThreshold` (`number`): The similarity threshold between the
 - `signal` (`AbortSignal`): AbortController signal
 - `tools`: (`OpenAI.ChatCompletionTool[]`): A list of tools the model may call
-- `tool_choice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
+- `toolChoice`: (`OpenAI.ChatCompletionToolChoiceOption`): Controls which (if
   any) function is called by the model
 
 #### Returns
@@ -117,7 +117,7 @@ Submit feedback to the Markprompt Feedback API about a specific prompt.
 - `feedback` (`object`): Feedback to submit
 - `feedback.feedback` (`object`): Feedback data
 - `feedback.feedback.vote` (`"1" | "-1" | "escalated"`): Vote
-- `feedback.promptId` (`string`): Prompt ID
+- `feedback.messageId` (`string`): Message ID
 - `projectKey` (`string`): Project key for the project
 - `options` (`object`): Optional parameters
 - `options.onFeedbackSubmitted` (`function`): Callback function when feedback is

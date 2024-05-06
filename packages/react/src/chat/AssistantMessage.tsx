@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_OPTIONS, isToolCalls } from '@markprompt/core';
 import { useMemo, type ComponentType } from 'react';
 
@@ -16,6 +15,7 @@ export interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   linkAs?: string | ComponentType<any>;
   messageOnly?: boolean;
   showFeedbackAlways?: boolean;
@@ -120,16 +120,16 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               variant="icons"
               data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
-              submitFeedback={(feedback, promptId) => {
-                submitFeedback(feedback, promptId);
+              submitFeedback={(feedback, messageId) => {
+                submitFeedback(feedback, messageId);
                 feedbackOptions.onFeedbackSubmit?.(
                   feedback,
                   messages,
-                  promptId,
+                  messageId,
                 );
               }}
               abortFeedbackRequest={abortFeedbackRequest}
-              promptId={message.promptId}
+              messageId={message.messageId}
               heading={feedbackOptions.heading}
               showFeedback={!!feedbackOptions?.enabled}
               showVotes={feedbackOptions.votes}

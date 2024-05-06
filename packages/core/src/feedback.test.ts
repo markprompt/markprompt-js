@@ -6,11 +6,11 @@ import { DEFAULT_OPTIONS, submitFeedback } from './index.js';
 
 let status = 200;
 
-const TEST_PROMPT_ID = 'test-id';
+const TEST_MESSAGE_ID = 'test-id';
 
 const server = setupServer(
   http.post(
-    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_PROMPT_ID}`,
+    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_MESSAGE_ID}`,
     async () => {
       return HttpResponse.json(
         status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
@@ -45,7 +45,7 @@ describe('submitFeedback', () => {
     const response = await submitFeedback(
       {
         feedback: { vote: '1' },
-        promptId: TEST_PROMPT_ID,
+        messageId: TEST_MESSAGE_ID,
       },
       'testKey',
     );
@@ -60,7 +60,7 @@ describe('submitFeedback', () => {
       submitFeedback(
         {
           feedback: { vote: '1' },
-          promptId: TEST_PROMPT_ID,
+          messageId: TEST_MESSAGE_ID,
         },
         'testKey',
       ),

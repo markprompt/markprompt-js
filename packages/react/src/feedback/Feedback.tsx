@@ -18,7 +18,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
   submitFeedback: UseFeedbackResult['submitFeedback'];
   abortFeedbackRequest: UseFeedbackResult['abort'];
   variant: 'text' | 'icons';
-  promptId?: string;
+  messageId?: string;
   showFeedback?: boolean;
   showVotes?: boolean;
   showCopy?: boolean;
@@ -34,7 +34,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
     submitFeedback,
     abortFeedbackRequest,
     variant,
-    promptId,
+    messageId,
     showFeedback = true,
     showVotes = true,
     showCopy,
@@ -44,7 +44,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
   function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback, promptId);
+    submitFeedback(feedback, messageId);
     setFeedback(feedback);
   }
 

@@ -66,8 +66,8 @@ export function isMarkpromptMetadata(
   return (
     typeof json === 'object' &&
     json !== null &&
-    (('conversationId' in json && typeof json.conversationId === 'string') ||
-      ('promptId' in json && typeof json.promptId === 'string') ||
+    (('threadId' in json && typeof json.threadId === 'string') ||
+      ('messageId' in json && typeof json.messageId === 'string') ||
       ('references' in json && isFileSectionReferences(json.references)))
   );
 }

@@ -68,7 +68,7 @@ describe('useFeedback', () => {
     await waitFor(() => expect(endpointHits).toBe(1));
   });
 
-  it("doesn't submit feedback if promptId is not provided", async () => {
+  it("doesn't submit feedback if messageId is not provided", async () => {
     const { result } = renderHook(() =>
       useFeedback({ projectKey: 'TEST_PROJECT_KEY' }),
     );

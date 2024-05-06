@@ -24,8 +24,8 @@ import type { MarkpromptOptions, View } from '../types.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {
-  conversationId?: string;
-  promptId?: string;
+  threadId?: string;
+  messageId?: string;
   references?: FileSectionReference[];
   debug?: unknown;
 } = {};
@@ -190,9 +190,9 @@ describe('ChatView', () => {
   });
 
   it('allows users to ask multiple questions', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -206,8 +206,8 @@ describe('ChatView', () => {
       expect(screen.getAllByText('answer')).toHaveLength(2);
     });
 
-    const nextPromptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId: nextPromptId };
+    const nextMessageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId: nextMessageId };
     response = [{ content: 'a different answer' }];
 
     await user.type(screen.getByRole('textbox'), 'test 2');
@@ -220,10 +220,10 @@ describe('ChatView', () => {
     expect(screen.queryAllByText('answer')).toHaveLength(2);
   });
 
-  it('allows users to switch between conversations', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+  it('allows users to switch between threads', async () => {
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -239,11 +239,11 @@ describe('ChatView', () => {
 
     await user.click(screen.getByText('New chat'));
 
-    const nextConversationId = crypto.randomUUID();
-    const nextPromptId = crypto.randomUUID();
+    const nextThreadId = crypto.randomUUID();
+    const nextMessageId = crypto.randomUUID();
     markpromptData = {
-      conversationId: nextConversationId,
-      promptId: nextPromptId,
+      threadId: nextThreadId,
+      messageId: nextMessageId,
     };
     response = [{ content: 'a different answer' }];
 
@@ -268,7 +268,7 @@ describe('ChatView', () => {
       <ChatViewWithProvider
         projectKey={crypto.randomUUID()}
         chatOptions={{
-          tool_choice: 'auto',
+          toolChoice: 'auto',
           tools: [
             {
               call: do_a_thing,
@@ -326,7 +326,7 @@ describe('ChatView', () => {
       <ChatViewWithProvider
         projectKey={crypto.randomUUID()}
         chatOptions={{
-          tool_choice: 'auto',
+          toolChoice: 'auto',
           tools: [
             {
               call: do_a_thing,
@@ -390,7 +390,7 @@ describe('ChatView', () => {
       <ChatViewWithProvider
         projectKey={crypto.randomUUID()}
         chatOptions={{
-          tool_choice: 'auto',
+          toolChoice: 'auto',
           tools: [
             {
               call: do_a_thing,
@@ -439,7 +439,7 @@ describe('ChatView', () => {
       <ChatViewWithProvider
         projectKey={crypto.randomUUID()}
         chatOptions={{
-          tool_choice: 'auto',
+          toolChoice: 'auto',
           tools: [
             {
               call: do_a_thing,
@@ -572,9 +572,9 @@ describe('ChatView', () => {
   });
 
   it('aborts a pending chat request when the view changes', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [
       { content: 'testing' },
       { content: 'testing' },
@@ -677,9 +677,9 @@ describe('ChatView', () => {
   });
 
   it('starts a new chat when the "New chat" option is selected', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -697,15 +697,15 @@ describe('ChatView', () => {
     await user.click(screen.getByRole('option', { name: 'New chat' }));
 
     await waitFor(() => {
-      // only the sidebar is shown, not the conversation itself
+      // only the sidebar is shown, not the thread itself
       expect(screen.getAllByText('answer')).toHaveLength(1);
     });
   });
 
-  it('saves conversations', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+  it('saves threads', async () => {
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -727,12 +727,12 @@ describe('ChatView', () => {
   });
 
   // TODO Michael: cannot make this test pass
-  it.skip('saves conversations with serialized errors', async () => {
+  it.skip('saves threads with serialized errors', async () => {
     const projectKey = crypto.randomUUID();
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
 
-    markpromptData = { conversationId, promptId };
+    markpromptData = { threadId, messageId };
     status = 500;
 
     render(<ChatViewWithProvider projectKey={projectKey} />);
@@ -749,8 +749,9 @@ describe('ChatView', () => {
     expect(localStorage.getItem('markprompt')).not.toBeNull();
 
     expect(
-      JSON.parse(localStorage.getItem('markprompt')!).state
-        .messagesByConversationId[conversationId].messages[1].error,
+      JSON.parse(localStorage.getItem('markprompt')!).state.messagesByThreadId[
+        threadId
+      ].messages[1].error,
     ).toEqual({
       type: 'error',
       name: 'Error',
@@ -759,10 +760,10 @@ describe('ChatView', () => {
     });
   });
 
-  it('does not save conversations to LocalStorage when history is disabled', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+  it('does not save threads to LocalStorage when history is disabled', async () => {
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -785,9 +786,9 @@ describe('ChatView', () => {
   });
 
   // TODO Michael: cannot make this test pass
-  it.skip("does not restore a conversation if it's older than 4 hours", () => {
+  it.skip("does not restore a thread if it's older than 4 hours", () => {
     const projectKey = crypto.randomUUID();
-    const conversationId = crypto.randomUUID();
+    const threadId = crypto.randomUUID();
     const lastUpdated = new Date(
       new Date().getTime() - 1000 * 60 * 60 * 5,
     ).toISOString();
@@ -796,23 +797,23 @@ describe('ChatView', () => {
       'markprompt',
       JSON.stringify({
         state: {
-          conversationIdsByProjectKey: {
-            [projectKey]: [conversationId],
+          threadIdsByProjectKey: {
+            [projectKey]: [threadId],
           },
-          messagesByConversationId: {
-            [conversationId]: {
+          messagesByThreadId: {
+            [threadId]: {
               lastUpdated,
               messages: [
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   role: 'user',
                   content: 'test',
                   state: 'done',
                 },
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   role: 'assistant',
                   content: 'answer',
                   state: 'done',
@@ -832,10 +833,10 @@ describe('ChatView', () => {
   });
 
   // TODO Michael: cannot make this test pass
-  it.skip('restores the latest conversation that is < 4 hours old', () => {
+  it.skip('restores the latest thread that is < 4 hours old', () => {
     const projectKey = crypto.randomUUID();
-    const conversationId1 = crypto.randomUUID();
-    const conversationId2 = crypto.randomUUID();
+    const threadId1 = crypto.randomUUID();
+    const threadId2 = crypto.randomUUID();
     const lastUpdated1 = new Date(
       new Date().getTime() - 1000 * 60 * 60 * 3,
     ).toISOString();
@@ -847,23 +848,23 @@ describe('ChatView', () => {
       'markprompt',
       JSON.stringify({
         state: {
-          conversationIdsByProjectKey: {
-            [projectKey]: [conversationId1, conversationId2],
+          threadIdsByProjectKey: {
+            [projectKey]: [threadId1, threadId2],
           },
-          messagesByConversationId: {
-            [conversationId1]: {
+          messagesByThreadId: {
+            [threadId1]: {
               lastUpdated: lastUpdated1,
               messages: [
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   content: 'test 1',
                   role: 'user',
                   state: 'done',
                 },
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   content: 'answer 1',
                   role: 'assistant',
                   state: 'done',
@@ -871,19 +872,19 @@ describe('ChatView', () => {
                 },
               ] satisfies ChatViewMessage[],
             },
-            [conversationId2]: {
+            [threadId2]: {
               lastUpdated: lastUpdated2,
               messages: [
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   content: 'test 2',
                   role: 'user',
                   state: 'done',
                 },
                 {
                   id: crypto.randomUUID(),
-                  promptId: crypto.randomUUID(),
+                  messageId: crypto.randomUUID(),
                   content: 'answer 2',
                   role: 'assistant',
                   state: 'done',
@@ -905,9 +906,9 @@ describe('ChatView', () => {
 
   // Feedback is now hidden by default.
   it.skip('allows users to give feedback', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -933,9 +934,9 @@ describe('ChatView', () => {
 
   it.skip('calls back after giving feedback', async () => {
     const onSubmit = vi.fn();
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
     const user = await userEvent.setup();
@@ -965,9 +966,9 @@ describe('ChatView', () => {
   // abort call was not reliable. So we are skipping the test for
   // now, but we should find a way to make it work reliably.
   it.skip('allows users to stop generating an answer', async () => {
-    const conversationId = crypto.randomUUID();
-    const promptId = crypto.randomUUID();
-    markpromptData = { conversationId, promptId };
+    const threadId = crypto.randomUUID();
+    const messageId = crypto.randomUUID();
+    markpromptData = { threadId, messageId };
     response = [
       { content: 'testing ' },
       { content: 'testing ' },

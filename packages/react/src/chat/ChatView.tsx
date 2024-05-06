@@ -3,9 +3,9 @@ import { type SubmitFeedbackOptions } from '@markprompt/core';
 import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
-import { ConversationSidebar } from './ConversationSidebar.js';
 import { Messages } from './Messages.js';
 import { useChatStore, type UserConfigurableOptions } from './store.js';
+import { ThreadSidebar } from './ThreadSidebar.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronLeftIcon } from '../icons.js';
 import type {
@@ -141,7 +141,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
 
   return (
     <div className="MarkpromptChatView">
-      <ConversationSidebar display={display} />
+      <ThreadSidebar display={display} />
       <div className="MarkpromptChatViewChatContainer">
         <div className="MarkpromptChatViewChat">
           {showBack ? (

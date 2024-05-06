@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { useSelect } from 'downshift';
 import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
 
-import { toApiMessages } from './chat/utils.js';
+import { toValidApiMessages } from './chat/utils.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import {
   useChatStore,
@@ -32,15 +32,13 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
   const form = useRef<HTMLFormElement>(null);
   const projectKey = useGlobalStore((state) => state.options.projectKey);
-  const conversationId = useChatStore((state) => state.conversationId);
+  const threadId = useChatStore((state) => state.threadId);
   const provider = useGlobalStore(
     (state) => state.options.integrations?.createTicket?.provider,
   );
   const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const summary = useGlobalStore((state) =>
-    conversationId
-      ? state.tickets?.summaryByConversationId[conversationId]
-      : undefined,
+    threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
   const messages = useChatStore((state) => state.messages);
 
@@ -108,7 +106,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     if (!messages || messages.length === 0) {
       return '';
     }
-    const transcript = toApiMessages(messages)
+    const transcript = toValidApiMessages(messages)
       .map((m) => {
         return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
       })

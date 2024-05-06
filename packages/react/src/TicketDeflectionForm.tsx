@@ -34,17 +34,17 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
   const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
   const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
-  const conversationId = useChatStore((state) => state.conversationId);
+  const threadId = useChatStore((state) => state.threadId);
   const messages = useChatStore((state) => state.messages);
-  const selectConversation = useChatStore((state) => state.selectConversation);
+  const selectThread = useChatStore((state) => state.selectThread);
   const createTicketSummary = useGlobalStore(
     (state) => state.tickets?.createTicketSummary,
   );
 
   useEffect(() => {
-    // Clear past conversations
-    selectConversation(undefined);
-  }, [selectConversation]);
+    // Clear past thread
+    selectThread(undefined);
+  }, [selectThread]);
 
   const placeholder = useMemo(() => {
     const _placeholder = integrations?.createTicket?.chat?.placeholder;
@@ -68,17 +68,17 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       return;
     }
 
-    if (!messages || messages.length === 0 || !conversationId) {
+    if (!messages || messages.length === 0 || !threadId) {
       setView('ticket');
       return;
     }
 
     setIsCreatingTicketSummary(true);
-    await createTicketSummary?.(conversationId, messages);
+    await createTicketSummary?.(threadId, messages);
     setIsCreatingTicketSummary(false);
     setView('ticket');
   }, [
-    conversationId,
+    threadId,
     createTicketSummary,
     integrations?.createTicket?.enabled,
     messages,

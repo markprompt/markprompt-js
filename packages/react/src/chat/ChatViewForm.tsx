@@ -9,8 +9,8 @@ import {
   useMemo,
 } from 'react';
 
-import { ConversationSelect } from './ConversationSelect.js';
 import { ChatContext, useChatStore } from './store.js';
+import { ThreadSelect } from './ThreadSelect.js';
 import { LoadingIcon, SendIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions, View } from '../types.js';
@@ -49,10 +49,6 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
   const lastMessageState = useChatStore(
     (state) => state.messages[state.messages.length - 1]?.state,
   );
-  // const regenerateLastAnswer = useChatStore(
-  //   (state) => state.regenerateLastAnswer,
-  // );
-  // const conversations = useChatStore(selectProjectConversations);
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -146,7 +142,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
           }}
         />
         {chatOptions.history && (
-          <ConversationSelect disabled={!didAcceptDisclaimer} />
+          <ThreadSelect disabled={!didAcceptDisclaimer} />
         )}
         <div />
       </div>

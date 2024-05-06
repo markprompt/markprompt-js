@@ -142,7 +142,7 @@ interface MarkpromptOptions {
     onFeedbackSubmit?: (
       feedback: PromptFeedback,
       messages: ChatViewMessage[],
-      promptId?: string,
+      messageId?: string,
     ) => void;
   };
   /**
