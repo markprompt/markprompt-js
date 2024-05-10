@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.44.1
+
+### Patch Changes
+
+- [#351](https://github.com/motifland/markprompt-js/pull/351) [`50bc076`](https://github.com/motifland/markprompt-js/commit/50bc07604267eb3d7e821defa621cd9d428a857e) Thanks [@michaelfester](https://github.com/michaelfester)! - Add store key parameter
+
+- Updated dependencies [[`50bc076`](https://github.com/motifland/markprompt-js/commit/50bc07604267eb3d7e821defa621cd9d428a857e)]:
+  - @markprompt/core@0.28.1
+
 ## 0.44.0
 
 ### Minor Changes
