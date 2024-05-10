@@ -715,7 +715,7 @@ export const createChatStore = ({
                 ...x,
                 state:
                   // cancel any pending or streaming requests
-                  (x.state === 'preload' || x.state === 'streaming-answer')
+                  x.state === 'preload' || x.state === 'streaming-answer'
                     ? 'cancelled'
                     : x.state,
               })),
