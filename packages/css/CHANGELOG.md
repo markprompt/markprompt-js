@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.30.1
+
+### Patch Changes
+
+- [#351](https://github.com/motifland/markprompt-js/pull/351) [`50bc076`](https://github.com/motifland/markprompt-js/commit/50bc07604267eb3d7e821defa621cd9d428a857e) Thanks [@michaelfester](https://github.com/michaelfester)! - Add store key parameter
+
 ## 0.30.0
 
 ### Minor Changes
