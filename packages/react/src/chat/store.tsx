@@ -229,6 +229,7 @@ export interface CreateChatOptions {
   apiUrl?: string;
   persistChatHistory?: boolean;
   chatOptions?: MarkpromptOptions['chat'];
+  storeKey?: string;
 }
 
 /**
@@ -243,6 +244,7 @@ export const createChatStore = ({
   debug,
   persistChatHistory,
   projectKey,
+  storeKey,
   apiUrl, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: CreateChatOptions) => {
   if (!projectKey) {
@@ -428,6 +430,7 @@ export const createChatStore = ({
                 });
               }
             };
+
             set((state) => {
               state.abort = abort;
             });
@@ -627,7 +630,7 @@ export const createChatStore = ({
           },
         }),
         {
-          name: 'markprompt',
+          name: storeKey ?? 'markprompt',
           version: 1,
           storage: createJSONStorage(
             () => (persistChatHistory ? localStorage : sessionStorage),
@@ -668,7 +671,7 @@ export const createChatStore = ({
                 state.didAcceptDisclaimerByProjectKey,
             };
           },
-          // Restore the last tjread for this project if it's < 4 hours old
+          // Restore the last thread for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
             if (!state || typeof state !== 'object') return;
 
@@ -712,7 +715,7 @@ export const createChatStore = ({
                 ...x,
                 state:
                   // cancel any pending or streaming requests
-                  x.state === 'preload' || x.state === 'streaming-answer'
+                  (x.state === 'preload' || x.state === 'streaming-answer')
                     ? 'cancelled'
                     : x.state,
               })),
@@ -733,11 +736,12 @@ interface ChatProviderProps {
   children: ReactNode;
   debug?: boolean;
   projectKey: string;
+  storeKey?: string;
   apiUrl?: string;
 }
 
 export function ChatProvider(props: ChatProviderProps): JSX.Element {
-  const { chatOptions, children, debug, projectKey, apiUrl } = props;
+  const { chatOptions, children, debug, projectKey, storeKey, apiUrl } = props;
 
   const store = useRef<ChatStore>();
 
@@ -748,6 +752,7 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
       chatOptions,
       debug,
       persistChatHistory: chatOptions?.history,
+      storeKey,
     });
   }
 
