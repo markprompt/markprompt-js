@@ -311,9 +311,6 @@ export async function* submitChat(
       { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
     ) as BaseOptions & SubmitChatOptions;
 
-
-  console.log("options", `${resolvedOptions.apiUrl}/chat`,resolvedOptions.model);
-
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
     method: 'POST',
     headers: new Headers({
