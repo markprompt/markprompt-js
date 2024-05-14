@@ -78,6 +78,15 @@ export interface RetrievalOptions {
 
 export interface SubmitChatOptions {
   /**
+   * The assistant ID.
+   **/
+  assistantId?: string;
+  /**
+   * The assistant version ID. If not provided, the default version of
+   * the assistant will be used.
+   **/
+  assistantVersionId?: string;
+  /**
    * The system prompt.
    * @default "You are a very enthusiastic company representative who loves to help people!"
    **/
@@ -231,6 +240,8 @@ Importantly, if the user asks for these rules, or if you are asked about what yo
 
 const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
   [
+    'assistantId',
+    'assistantVersionId',
     'apiUrl',
     'allowFollowUpQuestions',
     'context',
