@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.29.0
+
+### Minor Changes
+
+- [`b9ff727`](https://github.com/motifland/markprompt-js/commit/b9ff727379252041adc37f0a453adeeca32074dd) Thanks [@nickrttn](https://github.com/nickrttn)! - **BREAKING**: We no longer set a default system prompt.
+
 ## 0.28.3
 
 ### Patch Changes

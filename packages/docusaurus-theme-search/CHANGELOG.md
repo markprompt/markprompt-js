@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.24.0
+
+### Minor Changes
+
+- [`b9ff727`](https://github.com/motifland/markprompt-js/commit/b9ff727379252041adc37f0a453adeeca32074dd) Thanks [@nickrttn](https://github.com/nickrttn)! - **BREAKING**: We no longer set a default system prompt.
+
+### Patch Changes
+
+- Updated dependencies [[`0681c5f`](https://github.com/motifland/markprompt-js/commit/0681c5f74884928f6da0258e514441e11f611cc7), [`b9ff727`](https://github.com/motifland/markprompt-js/commit/b9ff727379252041adc37f0a453adeeca32074dd)]:
+  - @markprompt/react@0.46.0
+
 ## 0.23.3
 
 ### Patch Changes
