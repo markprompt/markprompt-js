@@ -205,7 +205,7 @@ export function StandaloneTicketDeflectionForm(
 
   return (
     <GlobalStoreProvider options={options}>
-      <ChatProvider projectKey={projectKey}>
+      <ChatProvider projectKey={projectKey} apiUrl={apiUrl} chatOptions={chat}>
         <div className="MarkpromptStandaloneTicketDeflectionForm">
           <TicketDeflectionForm isStandalone />
         </div>
