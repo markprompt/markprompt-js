@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.28.3
+
+### Patch Changes
+
+- [#355](https://github.com/motifland/markprompt-js/pull/355) [`6148733`](https://github.com/motifland/markprompt-js/commit/6148733d38100715592fdf1a8c12acc8203812d9) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for assistantId and assistantVersionId
+
 ## 0.28.2
 
 ### Patch Changes
