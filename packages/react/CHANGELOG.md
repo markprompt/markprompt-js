@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.47.0
+
+### Minor Changes
+
+- [`310e718`](https://github.com/motifland/markprompt-js/commit/310e71820589d314ad16a58a015bb245e1a56173) Thanks [@nickrttn](https://github.com/nickrttn)! - Allow passing a custom case form to the standalone ticket deflection component
+
 ## 0.46.0
 
 ### Minor Changes
