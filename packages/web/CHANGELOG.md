@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.35.0
+
+### Minor Changes
+
+- [`d762155`](https://github.com/motifland/markprompt-js/commit/d762155c2115060925e1c38f133da20f7b6b4764) Thanks [@nickrttn](https://github.com/nickrttn)! - Add standalone ticket deflection form
+
+### Patch Changes
+
+- Updated dependencies [[`d762155`](https://github.com/motifland/markprompt-js/commit/d762155c2115060925e1c38f133da20f7b6b4764)]:
+  - @markprompt/react@0.45.0
+
 ## 0.34.3
 
 ### Patch Changes
