@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.31.0
+
+### Minor Changes
+
+- [`d762155`](https://github.com/motifland/markprompt-js/commit/d762155c2115060925e1c38f133da20f7b6b4764) Thanks [@nickrttn](https://github.com/nickrttn)! - Add standalone ticket deflection form
+
 ## 0.30.1
 
 ### Patch Changes
