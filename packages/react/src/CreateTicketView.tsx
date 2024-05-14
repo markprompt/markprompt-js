@@ -7,39 +7,40 @@ import {
 } from '@floating-ui/react-dom';
 import clsx from 'clsx';
 import { useSelect } from 'downshift';
-import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
+import {
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+  type FormEvent,
+} from 'react';
 
 import { toValidApiMessages } from './chat/utils.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
-import {
-  useChatStore,
-  type CustomField,
-  type MarkpromptOptions,
-} from './index.js';
+import { useChatStore, type CustomField } from './index.js';
 import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
-  createTicketOptions: NonNullable<
-    MarkpromptOptions['integrations']
-  >['createTicket'];
   includeNav?: boolean;
   includeCTA?: boolean;
 }
 
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
-  const { handleGoBack, createTicketOptions, includeNav, includeCTA } = props;
+  const { handleGoBack, includeNav, includeCTA } = props;
 
   const form = useRef<HTMLFormElement>(null);
+  const createTicketOptions = useGlobalStore(
+    (state) => state.options.integrations?.createTicket,
+  );
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const threadId = useChatStore((state) => state.threadId);
-  const provider = useGlobalStore(
-    (state) => state.options.integrations?.createTicket?.provider,
-  );
   const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
+
   const messages = useChatStore((state) => state.messages);
 
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
@@ -47,6 +48,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const [result, setResult] = useState<Response>();
   const [error, setError] = useState<Error>();
   const [isSubmittingCase, setSubmittingCase] = useState(false);
+
+  const provider = createTicketOptions?.provider;
 
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
@@ -369,4 +372,30 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
       </div>
     </div>
   );
+}
+
+export function CustomCaseFormRenderer(props: {
+  CustomCaseForm: ComponentType<{ summary?: string }>;
+}): JSX.Element {
+  const { CustomCaseForm } = props;
+
+  const messages = useChatStore((state) => state.messages);
+  const threadId = useChatStore((state) => state.threadId);
+  const summary = useGlobalStore((state) =>
+    threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
+  );
+
+  const description = useMemo(() => {
+    if (!messages || messages.length === 0) {
+      return '';
+    }
+    const transcript = toValidApiMessages(messages)
+      .map((m) => {
+        return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+      })
+      .join('\n\n');
+    return `${summary?.content || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+  }, [summary?.content, messages]);
+
+  return <CustomCaseForm summary={description} />;
 }

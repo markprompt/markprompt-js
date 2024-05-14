@@ -452,10 +452,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 referencesOptions={references}
                 branding={branding}
                 display={display}
-                // integrations={integrations}
-                // handleCreateTicket={() => {
-                //   openMarkprompt('ticket');
-                // }}
               />
             )}
           </div>
@@ -586,10 +582,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
               linkAs={linkAs}
               branding={branding}
               display={display}
-              // integrations={integrations}
-              // handleCreateTicket={() => {
-              //   openMarkprompt('ticket');
-              // }}
             />
           </Tabs.Content>
         )}
@@ -600,7 +592,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             style={{ position: 'absolute', inset: 0 }}
           >
             <CreateTicketView
-              createTicketOptions={integrations.createTicket}
               handleGoBack={() => setActiveView('chat')}
               includeCTA
               includeNav

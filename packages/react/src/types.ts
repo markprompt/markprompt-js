@@ -668,6 +668,10 @@ export interface CreateTicketIntegrationOptions {
    */
   form?: CreateTicketIntegrationFormOptions;
   /**
+   * Provide a custom case form component
+   */
+  CustomCaseForm?: ComponentType<{ summary?: string }>;
+  /**
    * Options for the create ticket chat.
    */
   chat?: CreateTicketIntegrationChatOptions;

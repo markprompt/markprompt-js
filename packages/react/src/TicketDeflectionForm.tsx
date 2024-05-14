@@ -1,8 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ComponentType,
+} from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { ChatProvider, useChatStore } from './chat/store.js';
-import { CreateTicketView } from './CreateTicketView.js';
+import {
+  CreateTicketView,
+  CustomCaseFormRenderer,
+} from './CreateTicketView.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from './index.js';
 import {
@@ -19,12 +28,13 @@ type TicketDeflectionFormView = 'chat' | 'ticket';
 interface TicketDeflectionFormProps {
   isStandalone?: boolean;
   defaultView?: TicketDeflectionFormView;
+  CustomCaseForm?: ComponentType<{ summary?: string }>;
 }
 
 export function TicketDeflectionForm(
   props: TicketDeflectionFormProps,
 ): JSX.Element {
-  const { defaultView = 'chat', isStandalone } = props;
+  const { defaultView = 'chat', isStandalone, CustomCaseForm } = props;
 
   const apiUrl = useGlobalStore((state) => state.options.apiUrl);
   const chat = useGlobalStore((state) => state.options.chat);
@@ -87,6 +97,16 @@ export function TicketDeflectionForm(
     createTicketSummary,
   ]);
 
+  const caseForm = CustomCaseForm ? (
+    <CustomCaseFormRenderer CustomCaseForm={CustomCaseForm} />
+  ) : (
+    <CreateTicketView
+      handleGoBack={() => setView('chat')}
+      includeNav={false}
+      includeCTA={true}
+    />
+  );
+
   return (
     <div
       className="MarkpromptTicketDeflectionForm"
@@ -117,15 +137,10 @@ export function TicketDeflectionForm(
             referencesOptions={references}
             branding={{ show: false }}
             submitOnEnter={false}
-            minInputRows={10}
+            minInputRows={3}
           />
         ) : (
-          <CreateTicketView
-            createTicketOptions={integrations?.createTicket}
-            handleGoBack={() => setView('chat')}
-            includeNav={false}
-            includeCTA={true}
-          />
+          caseForm
         )}
       </div>
       <div className="MarkpromptDialogFooter">
@@ -205,11 +220,22 @@ export function StandaloneTicketDeflectionForm(
 
   return (
     <GlobalStoreProvider options={options}>
-      <ChatProvider projectKey={projectKey} apiUrl={apiUrl} chatOptions={chat}>
+      <ChatProvider
+        projectKey={projectKey}
+        apiUrl={apiUrl}
+        chatOptions={chat}
+        storeKey="ticket-deflection"
+      >
         <div className="MarkpromptStandaloneTicketDeflectionForm">
-          <TicketDeflectionForm isStandalone />
+          <TicketDeflectionForm
+            isStandalone
+            CustomCaseForm={integrations?.createTicket?.CustomCaseForm}
+          />
         </div>
       </ChatProvider>
     </GlobalStoreProvider>
   );
 }
+
+// make sure we can use these with the bubble side by side
+// eg. set different store keys
