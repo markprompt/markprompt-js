@@ -5,6 +5,8 @@ import {
   type MarkpromptOptions,
   type ChatViewProps,
   ChatView,
+  type StandaloneTicketDeflectionFormProps,
+  StandaloneTicketDeflectionForm,
 } from '@markprompt/react';
 import { createRoot, type Root } from 'react-dom/client';
 
@@ -65,10 +67,36 @@ function markpromptChat(
   );
 }
 
+let ticketDeflectionFormRoot: Root;
+
+type TicketDeflectionFormOptions = StandaloneTicketDeflectionFormProps;
+
+/**
+ * Render the Markprompt ticket deflection form.
+ * Useful for incorporating the ticket deflection form into your own UI.
+ * @param container The element or selector to render the form into
+ * @param options Options for customizing the form
+ */
+function ticketDeflectionForm(
+  container: HTMLElement | string,
+  options: TicketDeflectionFormOptions,
+): void {
+  if (!ticketDeflectionFormRoot) {
+    ticketDeflectionFormRoot = createRoot(getHTMLElement(container));
+  }
+
+  ticketDeflectionFormRoot.render(
+    <StandaloneTicketDeflectionForm {...options} />,
+  );
+}
+
 export {
   markprompt,
   openMarkprompt,
   closeMarkprompt,
   type MarkpromptOptions,
   markpromptChat,
+  type ChatOptions,
+  ticketDeflectionForm,
+  type TicketDeflectionFormOptions,
 };

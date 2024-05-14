@@ -11,6 +11,7 @@ import {
   type ReactElement,
   useCallback,
   type JSXElementConstructor,
+  useMemo,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
@@ -166,6 +167,49 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
   const [openViews, setOpenViews] = useState<{ [key in View]?: boolean }>({});
 
+  const globalStoreOptions = useMemo(
+    () => ({
+      apiUrl,
+      branding,
+      chat,
+      close,
+      debug,
+      defaultView,
+      description,
+      display,
+      feedback,
+      integrations,
+      layout,
+      linkAs,
+      projectKey,
+      references,
+      search,
+      sticky,
+      title,
+      trigger,
+    }),
+    [
+      apiUrl,
+      branding,
+      chat,
+      close,
+      debug,
+      defaultView,
+      description,
+      display,
+      feedback,
+      integrations,
+      layout,
+      linkAs,
+      projectKey,
+      references,
+      search,
+      sticky,
+      title,
+      trigger,
+    ],
+  );
+
   useEffect(() => {
     const onOpen = ({ view = 'chat' }: { view?: View }): void => {
       onDidRequestOpenChange?.(true);
@@ -231,28 +275,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         </>
       )}
 
-      <GlobalStoreProvider
-        options={{
-          apiUrl,
-          branding,
-          chat,
-          close,
-          debug,
-          defaultView,
-          description,
-          display,
-          feedback,
-          integrations,
-          layout,
-          linkAs,
-          projectKey,
-          references,
-          search,
-          sticky,
-          title,
-          trigger,
-        }}
-      >
+      <GlobalStoreProvider options={globalStoreOptions}>
         <ChatProvider
           chatOptions={chat}
           debug={debug}
@@ -277,16 +300,12 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   data-size="adaptive"
                   onPointerDownOutside={(e) => e.preventDefault()}
                 >
-                  <TicketDeflectionForm
-                    apiUrl={apiUrl}
-                    projectKey={projectKey}
-                    chat={chat}
-                    integrations={integrations}
-                  />
+                  <TicketDeflectionForm />
                 </BaseMarkprompt.Content>
               </BaseMarkprompt.Portal>
             </BaseMarkprompt.Root>
           )}
+
           <BaseMarkprompt.Root
             display={display}
             open={openViews.chat}

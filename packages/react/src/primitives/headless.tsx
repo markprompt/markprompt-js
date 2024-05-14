@@ -316,7 +316,6 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
 );
 Prompt.displayName = 'Markprompt.Prompt';
 
-// TODO: find the right type definition for children. There is a mismatch
 // between the type that react-markdown exposes, and what is actually
 // serves.
 interface CopyContentButtonProps {

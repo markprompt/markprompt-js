@@ -2813,6 +2813,12 @@
   overflow: hidden;
 }
 
+.MarkpromptStandaloneTicketDeflectionForm {
+  border: 1px solid var(--markprompt-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
 .MarkpromptTicketDeflectionForm .MarkpromptNavigationMenu {
   flex: none;
 }
@@ -2832,6 +2838,7 @@
   flex-direction: column;
   animation-duration: 200ms;
   animation-fill-mode: forwards;
+  background-color: var(--markprompt-background);
 }
 
 .MarkpromptTicketDeflectionForm[data-expanded='true'] {
@@ -2846,9 +2853,8 @@
 /* MarkpromptDialogFooter */
 
 .MarkpromptDialogFooter {
-  display: flex;
-  flex-direction: row;
-  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   padding-block: 0.5rem;
   padding-inline: 1rem;
@@ -2861,14 +2867,13 @@
   gap: 0.5rem;
 }
 
-.MarkpromptDialogFooter :first-child {
-  flex-grow: 1;
+.MarkpromptDialogFooter > :first-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.MarkpromptDialogFooter :last-child {
+.MarkpromptDialogFooter > :last-child {
   flex: none;
 }
 
@@ -2899,8 +2904,8 @@
 .MarkpromptButton[data-variant='primary']:not(:disabled)::before {
   content: '';
   background-image: linear-gradient(
-    rgba(255 255 255 / 25%),
-    rgba(255 255 255 / 0%)
+    oklch(100% 0 0deg / 25%),
+    oklch(100% 0 0deg / 0%)
   );
   position: absolute;
   inset: 0;

@@ -1,45 +1,48 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
-import { useChatStore } from './chat/store.js';
+import { ChatProvider, useChatStore } from './chat/store.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
-import { useGlobalStore } from './store.js';
-import type { MarkpromptOptions } from './types.js';
+import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from './index.js';
+import {
+  GlobalStoreProvider,
+  useGlobalStore,
+  type GlobalOptions,
+} from './store.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { RichText } from './ui/rich-text.js';
+import { useDefaults } from './useDefaults.js';
 
 type TicketDeflectionFormView = 'chat' | 'ticket';
 
-type TicketDeflectionFormProps = Pick<
-  MarkpromptOptions,
-  'apiUrl' | 'chat' | 'branding' | 'feedback' | 'references' | 'integrations'
-> & {
-  projectKey: string;
+interface TicketDeflectionFormProps {
+  isStandalone?: boolean;
   defaultView?: TicketDeflectionFormView;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-};
+}
 
-function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
-  const {
-    apiUrl,
-    projectKey,
-    chat,
-    feedback,
-    references,
-    integrations,
-    defaultView = 'chat',
-  } = props;
-  const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
-  const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
-  const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
-  const threadId = useChatStore((state) => state.threadId);
-  const messages = useChatStore((state) => state.messages);
-  const selectThread = useChatStore((state) => state.selectThread);
+export function TicketDeflectionForm(
+  props: TicketDeflectionFormProps,
+): JSX.Element {
+  const { defaultView = 'chat', isStandalone } = props;
+
+  const apiUrl = useGlobalStore((state) => state.options.apiUrl);
+  const chat = useGlobalStore((state) => state.options.chat);
+  const feedback = useGlobalStore((state) => state.options.feedback);
+  const integrations = useGlobalStore((state) => state.options.integrations);
+  const projectKey = useGlobalStore((state) => state.options.projectKey);
+  const references = useGlobalStore((state) => state.options.references);
   const createTicketSummary = useGlobalStore(
     (state) => state.tickets?.createTicketSummary,
   );
+
+  const threadId = useChatStore((state) => state.threadId);
+  const messages = useChatStore((state) => state.messages);
+  const selectThread = useChatStore((state) => state.selectThread);
+
+  const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
+  const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
+  const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
 
   useEffect(() => {
     // Clear past thread
@@ -78,10 +81,10 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
     setIsCreatingTicketSummary(false);
     setView('ticket');
   }, [
-    threadId,
-    createTicketSummary,
     integrations?.createTicket?.enabled,
     messages,
+    threadId,
+    createTicketSummary,
   ]);
 
   return (
@@ -90,11 +93,13 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
       data-expanded={(messages && messages.length > 0) || view === 'ticket'}
       data-animate-shrink={didTransitionViewOnce}
     >
-      <NavigationMenu
-        title={integrations?.createTicket?.chat?.title}
-        subtitle={integrations?.createTicket?.chat?.subtitle}
-        close={{ visible: true, hasIcon: true }}
-      />
+      {!isStandalone && (
+        <NavigationMenu
+          title={integrations?.createTicket?.chat?.title}
+          subtitle={integrations?.createTicket?.chat?.subtitle}
+          close={{ visible: true, hasIcon: true }}
+        />
+      )}
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
         {view === 'chat' ? (
           <ChatView
@@ -165,4 +170,46 @@ function TicketDeflectionForm(props: TicketDeflectionFormProps): JSX.Element {
   );
 }
 
-export { TicketDeflectionForm };
+export interface StandaloneTicketDeflectionFormProps
+  extends Pick<
+    MarkpromptOptions,
+    'apiUrl' | 'chat' | 'feedback' | 'integrations' | 'references'
+  > {
+  projectKey: string;
+}
+
+export function StandaloneTicketDeflectionForm(
+  props: StandaloneTicketDeflectionFormProps,
+): JSX.Element {
+  const { apiUrl, chat, feedback, integrations, references, projectKey } =
+    props;
+
+  const options = useDefaults(
+    {
+      projectKey,
+      apiUrl,
+      chat,
+      feedback,
+      integrations: {
+        ...integrations,
+        createTicket: {
+          ...integrations?.createTicket,
+          // always enable the integration for the standalone form
+          enabled: true,
+        },
+      },
+      references,
+    },
+    DEFAULT_MARKPROMPT_OPTIONS,
+  ) satisfies GlobalOptions;
+
+  return (
+    <GlobalStoreProvider options={options}>
+      <ChatProvider projectKey={projectKey}>
+        <div className="MarkpromptStandaloneTicketDeflectionForm">
+          <TicketDeflectionForm isStandalone />
+        </div>
+      </ChatProvider>
+    </GlobalStoreProvider>
+  );
+}

@@ -44,7 +44,7 @@ function getEnabledViews(options: MarkpromptOptions): View[] {
   return views;
 }
 
-type GlobalOptions = MarkpromptOptions & { projectKey: string };
+export type GlobalOptions = MarkpromptOptions & { projectKey: string };
 
 interface State {
   options: GlobalOptions;

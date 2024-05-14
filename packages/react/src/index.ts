@@ -64,7 +64,13 @@ export {
   type ToolCall,
   type ChatViewTool,
 } from './chat/store.js';
+
 export { SearchView, type SearchViewProps } from './search/SearchView.js';
+
+export {
+  StandaloneTicketDeflectionForm,
+  type StandaloneTicketDeflectionFormProps,
+} from './TicketDeflectionForm.js';
 
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
