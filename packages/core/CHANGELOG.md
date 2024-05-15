@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.29.1
+
+### Patch Changes
+
+- [#360](https://github.com/motifland/markprompt-js/pull/360) [`4d72013`](https://github.com/motifland/markprompt-js/commit/4d7201392d1c64594575ae8d910493e985cf5f27) Thanks [@michaelfester](https://github.com/michaelfester)! - Default to GPT-4o
+
 ## 0.29.0
 
 ### Minor Changes
