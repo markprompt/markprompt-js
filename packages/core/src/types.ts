@@ -31,8 +31,11 @@ export const OPENAI_CHAT_COMPLETIONS_MODELS = [
   'gpt-4-turbo-preview',
 ] as const;
 
-export type OpenAIChatCompletionsModelId =
-  (typeof OPENAI_CHAT_COMPLETIONS_MODELS)[number];
+
+type ArrayToUnion<T> = T extends (infer U)[] ? U : T extends readonly (infer U)[] ? U : never;
+
+export type OpenAIChatCompletionsModelId = ArrayToUnion<typeof OPENAI_CHAT_COMPLETIONS_MODELS>;
+
 
 export const OPENAI_COMPLETIONS_MODELS = [
   'ada',
@@ -46,8 +49,7 @@ export const OPENAI_COMPLETIONS_MODELS = [
   'text-davinci-003',
 ] as const;
 
-export type OpenAICompletionsModelId =
-  (typeof OPENAI_COMPLETIONS_MODELS)[number];
+export type OpenAICompletionsModelId = ArrayToUnion<typeof OPENAI_COMPLETIONS_MODELS>;
 
 export const OPENAI_EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
 
