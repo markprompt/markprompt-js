@@ -43,7 +43,7 @@ for await (const chunk of submitChat(
   [{ content: 'What is Markprompt?', role: 'user' }],
   'YOUR-PROJECT-KEY',
   {
-    model: 'gpt-4-turbo-preview',
+    model: 'gpt-4o',
     systemPrompt: 'You are a helpful AI assistant'
   }
 )) {

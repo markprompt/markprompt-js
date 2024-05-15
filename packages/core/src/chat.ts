@@ -98,7 +98,7 @@ export interface SubmitChatOptions {
   context?: any;
   /**
    * The OpenAI model to use.
-   * @default "gpt-4-turbo-preview"
+   * @default "gpt-4o"
    **/
   model?: OpenAIModelId;
   /**
@@ -219,7 +219,7 @@ export interface SubmitChatOptions {
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
   frequencyPenalty: 0,
   iDontKnowMessage: 'Sorry, I am not sure how to answer that.',
-  model: 'gpt-4-turbo-preview',
+  model: 'gpt-4o',
   presencePenalty: 0,
   temperature: 0.1,
   topP: 1,

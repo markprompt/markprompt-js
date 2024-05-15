@@ -96,7 +96,7 @@ if (el && el instanceof HTMLElement) {
       enabled: true,
       placeholder: 'Ask a question...',
       title: 'Help',
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o',
       defaultView: {
         message: "Hello, I'm an AI assistant from Acme!",
         prompts: [
