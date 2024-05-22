@@ -19,26 +19,27 @@ export type {
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
-export const OPENAI_CHAT_COMPLETIONS_MODELS = [
-  'gpt-3.5-turbo',
-  'gpt-4',
-  'gpt-4o',
-  'gpt-4-32k',
-  'gpt-4-1106-preview',
-  'gpt-4-turbo-preview',
-] as const;
-
 type ArrayToUnion<T> = T extends (infer U)[]
   ? U
   : T extends readonly (infer U)[]
     ? U
     : never;
 
-export type OpenAIChatCompletionsModelId = ArrayToUnion<
-  typeof OPENAI_CHAT_COMPLETIONS_MODELS
->;
+export const CHAT_COMPLETIONS_MODELS = [
+  'gpt-3.5-turbo',
+  'gpt-4',
+  'gpt-4o',
+  'gpt-4-32k',
+  'gpt-4-1106-preview',
+  'gpt-4-turbo-preview',
+  'meta-llama-3-70b-instruct',
+  'meta-llama-3-8b-instruct',
+  'mixtral-8x7b-instruct-v0.1',
+] as const;
 
-export const OPENAI_COMPLETIONS_MODELS = [
+export type ChatCompletionsModel = ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>;
+
+export const COMPLETIONS_MODELS = [
   'ada',
   'babbage',
   'curie',
@@ -50,18 +51,13 @@ export const OPENAI_COMPLETIONS_MODELS = [
   'text-davinci-003',
 ] as const;
 
-export type OpenAICompletionsModelId = ArrayToUnion<
-  typeof OPENAI_COMPLETIONS_MODELS
->;
+export type CompletionsModel = ArrayToUnion<typeof COMPLETIONS_MODELS>;
 
-export const OPENAI_EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
+export const EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
 
-export type OpenAIEmbeddingsModelId = typeof OPENAI_EMBEDDINGS_MODEL;
+export type EmbeddingsModel = typeof EMBEDDINGS_MODEL;
 
-export type OpenAIModelId =
-  | OpenAIChatCompletionsModelId
-  | OpenAICompletionsModelId
-  | OpenAIEmbeddingsModelId;
+export type Model = ChatCompletionsModel | CompletionsModel | EmbeddingsModel;
 
 export type SourceType =
   | 'github'

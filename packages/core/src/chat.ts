@@ -11,7 +11,7 @@ import type {
   ChatCompletionMetadata,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
-  OpenAIModelId,
+  ChatCompletionsModel,
 } from './types.js';
 import {
   isChatCompletion,
@@ -95,12 +95,12 @@ export interface SubmitChatOptions {
    * @default {}
    **/
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: any;
+  context?: Record<string, any>;
   /**
    * The OpenAI model to use.
    * @default "gpt-4o"
    **/
-  model?: OpenAIModelId;
+  model?: ChatCompletionsModel;
   /**
    * Options for the use of policies.
    **/
