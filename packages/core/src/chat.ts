@@ -95,7 +95,7 @@ export interface SubmitChatOptions {
    * @default {}
    **/
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any>;
+  context?: any;
   /**
    * The OpenAI model to use.
    * @default "gpt-4o"
