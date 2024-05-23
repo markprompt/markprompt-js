@@ -315,7 +315,7 @@ export async function* submitChat(
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'X-Markprompt-API-Version': '2023-12-01',
+      'X-Markprompt-API-Version': '2024-05-21',
     }),
     body: JSON.stringify({
       projectKey,
