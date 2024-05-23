@@ -19,7 +19,11 @@ export type {
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
 
-type ArrayToUnion<T> = T extends (infer U)[] ? U : T extends readonly (infer U)[] ? U : never;
+type ArrayToUnion<T> = T extends (infer U)[]
+  ? U
+  : T extends readonly (infer U)[]
+    ? U
+    : never;
 
 export const OPENAI_CHAT_COMPLETIONS_MODELS = [
   'gpt-3.5-turbo',
