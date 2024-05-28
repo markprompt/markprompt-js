@@ -16,7 +16,7 @@
     "lint:md": "remark . --frail",
     "lint:ts": "pnpm build",
     "prepare": "husky",
-    "publish": "pnpm build:packages && changeset publish",
+    "publish": "pnpm publish -r",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch --coverage",
     "version": "changeset version && pnpm install"
