@@ -15,6 +15,10 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "dependsOn": ["^build"]
     },
+    "dev": {
+      "persistent": true,
+      "cache": false
+    },
     "//#lint:css": {},
     "//#lint:format": {},
     "//#lint:js": {},
