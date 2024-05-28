@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm lint
         env:
           MARKPROMPT_PROJECT_KEY: ${{ secrets.MARKPROMPT_PROJECT_KEY }}
@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm test
       - uses: codecov/codecov-action@v4
         env:
@@ -50,7 +50,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - uses: preactjs/compressed-size-action@v2
         with:
           build-script: '"build:packages"'
