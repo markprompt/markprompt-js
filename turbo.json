@@ -25,7 +25,6 @@
     "//#lint:md": {},
     "//#lint:ts": {},
     "//#test": {
-      "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
     }
   }

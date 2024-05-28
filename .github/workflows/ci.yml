@@ -36,6 +36,7 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install
+      - run: pnpm build:packages
       - run: pnpm turbo run test
       - uses: codecov/codecov-action@v4
         env:
