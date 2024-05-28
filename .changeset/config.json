@@ -8,5 +8,18 @@
   ],
   "commit": false,
   "privatePackages": false,
-  "updateInternalDependencies": "patch"
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "with-css-modules",
+    "with-custom-trigger-react",
+    "with-custom-trigger",
+    "with-docusaurus-algolia",
+    "with-docusaurus-swizzled",
+    "with-docusaurus",
+    "with-function-calling",
+    "with-init",
+    "with-markprompt-web",
+    "with-next",
+    "with-standalone-ticket-deflection"
+  ]
 }
