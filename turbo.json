@@ -1,5 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    ".editorconfig",
+    ".eslintrc.js",
+    ".npmrc",
+    ".prettierignore",
+    ".stylelintignore",
+    ".stylelintrc.json",
+    "prettier.config.js",
+    "vitest.workspace.json"
+  ],
   "pipeline": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],

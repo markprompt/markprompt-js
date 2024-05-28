@@ -24,7 +24,6 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
-    "@eslint/js": "^9.0.0",
     "@manypkg/cli": "^0.21.4",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
