@@ -14,7 +14,7 @@
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --quiet",
     "lint:md": "remark . --frail",
-    "lint:ts": "pnpm build",
+    "lint:ts": "pnpm build:packages",
     "prepare": "husky",
     "publish": "pnpm publish -r",
     "test": "vitest run --coverage",
