@@ -23,6 +23,7 @@ build/
 *.pem
 .idea/
 .direnv/
+.turbo/
 
 # debug
 *.log*

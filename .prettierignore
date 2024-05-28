@@ -7,3 +7,4 @@ dist/
 **/CHANGELOG.md
 **/README.md
 pnpm-lock.yaml
+.direnv/

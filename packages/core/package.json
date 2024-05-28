@@ -15,9 +15,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build --clean && tsc --build",
-    "dev": "tsc --build --clean && tsc --build --watch",
-    "prepack": "tsc --build --clean && tsc --build"
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "prepack": "tsc --build"
   },
   "dependencies": {
     "@algolia/client-search": "^4.23.3",

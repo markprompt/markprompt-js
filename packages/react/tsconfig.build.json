@@ -1,10 +1,5 @@
 {
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.ts", "**/*.test.tsx"],
-  "references": [{ "path": "../core" }],
-  "compilerOptions": {
-    "paths": {
-      "@markprompt/core": ["../core/src"]
-    }
-  }
+  "references": [{ "path": "../core" }]
 }

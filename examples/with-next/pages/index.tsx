@@ -38,7 +38,9 @@ export default function IndexPage(): ReactElement {
         }}
       >
         <Markprompt
-          projectKey={process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY!}
+          projectKey={
+            process.env.NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY ?? 'enter-a-key'
+          }
           defaultView="search"
           display="dialog"
           chat={{

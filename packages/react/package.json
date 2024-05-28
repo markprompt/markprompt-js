@@ -16,9 +16,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build tsconfig.build.json --clean && tsc --build tsconfig.build.json",
-    "dev": "tsc --build tsconfig.build.json --clean && tsc --build tsconfig.build.json --watch",
-    "prepack": "tsc --build tsconfig.build.json --clean && tsc --build tsconfig.build.json"
+    "build": "tsc --build tsconfig.build.json",
+    "dev": "tsc --build tsconfig.build.json --watch",
+    "prepack": "tsc --build tsconfig.build.json"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.12",
