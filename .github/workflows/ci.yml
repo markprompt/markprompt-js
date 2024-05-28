@@ -13,37 +13,45 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm lint
         env:
           MARKPROMPT_PROJECT_KEY: ${{ secrets.MARKPROMPT_PROJECT_KEY }}
+          NEXT_PUBLIC_MARKPROMPT_PROJECT_KEY:
+            ${{ secrets.MARKPROMPT_PROJECT_KEY }}
 
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
-      - run: npm ci
-      - run: npm test
-      - uses: codecov/codecov-action@v3
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm build:packages
+      - run: pnpm turbo run test
+      - uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   bundle-size:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
-      - run: npm ci
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install
       - uses: preactjs/compressed-size-action@v2
         with:
           build-script: '"build:packages"'

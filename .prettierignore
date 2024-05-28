@@ -3,7 +3,8 @@
 build/
 coverage/
 dist/
-.changeset/
+.changeset/*.md
 **/CHANGELOG.md
 **/README.md
-package-lock.json
+pnpm-lock.yaml
+.direnv/

@@ -14,7 +14,7 @@ export type {
   ChatCompletionToolChoiceOption,
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
-} from 'openai/resources/index.mjs';
+} from 'openai/resources/chat/index.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;
