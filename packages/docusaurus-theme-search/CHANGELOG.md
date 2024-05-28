@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.25.0
+
+### Minor Changes
+
+- [#365](https://github.com/motifland/markprompt-js/pull/365) [`38f4f51`](https://github.com/motifland/markprompt-js/commit/38f4f51315e2aecbd352ac42a7dee9c2686f06d6) Thanks [@nickrttn](https://github.com/nickrttn)! - Update monorepo to use pnpm and Turborepo
+
+### Patch Changes
+
+- Updated dependencies [[`38f4f51`](https://github.com/motifland/markprompt-js/commit/38f4f51315e2aecbd352ac42a7dee9c2686f06d6)]:
+  - @markprompt/react@0.48.0
+
 ## 0.24.1
 
 ### Patch Changes

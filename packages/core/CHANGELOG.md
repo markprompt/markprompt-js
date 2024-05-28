@@ -1,5 +1,15 @@
 # @markprompt/core
 
+## 0.30.0
+
+### Minor Changes
+
+- [#365](https://github.com/motifland/markprompt-js/pull/365) [`38f4f51`](https://github.com/motifland/markprompt-js/commit/38f4f51315e2aecbd352ac42a7dee9c2686f06d6) Thanks [@nickrttn](https://github.com/nickrttn)! - Update monorepo to use pnpm and Turborepo
+
+### Patch Changes
+
+- [`741ad14`](https://github.com/motifland/markprompt-js/commit/741ad14791c280a19e145d446d4a0e616aed0c8f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add ArrayToUnion type helper
+
 ## 0.29.1
 
 ### Patch Changes
