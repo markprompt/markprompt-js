@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@markprompt/css": "*",
-    "@markprompt/web": "*"
+    "@markprompt/css": "workspace:*",
+    "@markprompt/web": "workspace:*"
   },
   "devDependencies": {
     "@vitejs/plugin-react-swc": "^3.6.0",
