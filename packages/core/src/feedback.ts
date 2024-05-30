@@ -53,7 +53,7 @@ export async function submitFeedback(
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
-          'X-Markprompt-API-Version': '2024-03-23',
+          'X-Markprompt-API-Version': '2024-05-21',
         }),
         body: JSON.stringify({
           projectKey,
@@ -114,7 +114,7 @@ export async function submitCSAT(
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
-          'X-Markprompt-API-Version': '2024-03-23',
+          'X-Markprompt-API-Version': '2024-05-21',
         }),
         body: JSON.stringify({ projectKey, csat: body.csat }),
         signal: signal,
