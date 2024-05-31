@@ -11,7 +11,7 @@ import type {
   ChatCompletionMetadata,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
-  OpenAIModelId,
+  ChatCompletionsModel,
 } from './types.js';
 import {
   isChatCompletion,
@@ -100,7 +100,7 @@ export interface SubmitChatOptions {
    * The OpenAI model to use.
    * @default "gpt-4o"
    **/
-  model?: OpenAIModelId;
+  model?: ChatCompletionsModel;
   /**
    * Options for the use of policies.
    **/
@@ -315,7 +315,7 @@ export async function* submitChat(
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'X-Markprompt-API-Version': '2023-12-01',
+      'X-Markprompt-API-Version': '2024-05-21',
     }),
     body: JSON.stringify({
       projectKey,

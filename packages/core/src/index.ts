@@ -26,9 +26,9 @@ export {
 import { type BaseOptions } from './types.js';
 
 export {
-  OPENAI_CHAT_COMPLETIONS_MODELS,
-  OPENAI_COMPLETIONS_MODELS,
-  OPENAI_EMBEDDINGS_MODEL,
+  CHAT_COMPLETIONS_MODELS,
+  COMPLETIONS_MODELS,
+  EMBEDDINGS_MODEL,
   type AlgoliaDocSearchHit,
   type AlgoliaDocSearchResultsResponse,
   type Chat,
@@ -47,10 +47,10 @@ export {
   type FileReferenceFileData,
   type FileSectionReference,
   type FileSectionReferenceSectionData,
-  type OpenAIChatCompletionsModelId,
-  type OpenAICompletionsModelId,
-  type OpenAIEmbeddingsModelId,
-  type OpenAIModelId,
+  type ChatCompletionsModel,
+  type CompletionsModel,
+  type EmbeddingsModel,
+  type Model,
   type PromptFeedback,
   type SearchResult,
   type SearchResultSection,
