@@ -1,5 +1,15 @@
 # @markprompt/web
 
+## 0.37.2
+
+### Patch Changes
+
+- [`305eac7`](https://github.com/motifland/markprompt-js/commit/305eac7f82d5af7b14f528497a926347b9819814) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix for publishing releases to GH Releases
+
+- Updated dependencies [[`305eac7`](https://github.com/motifland/markprompt-js/commit/305eac7f82d5af7b14f528497a926347b9819814)]:
+  - @markprompt/core@0.31.1
+  - @markprompt/react@0.48.2
+
 ## 0.37.1
 
 ### Patch Changes
