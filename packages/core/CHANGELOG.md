@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.31.0
+
+### Minor Changes
+
+- [#363](https://github.com/motifland/markprompt-js/pull/363) [`0b1481b`](https://github.com/motifland/markprompt-js/commit/0b1481bd64d85fcb08a7fa70e5543bcdba307a1b) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for new models (Llama 3 8B/70B Instruct and Mixtral 8x7B Instruct), use by passing `meta-llama-3-8b-instruct`, `meta-llama-3-70b-instruct` or `mixtral-8x7b-instruct-v0.1` as your model for chat completions, or configuring your assistant to use one of the new models.
+
 ## 0.30.0
 
 ### Minor Changes
