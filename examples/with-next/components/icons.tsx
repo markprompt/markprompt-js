@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   <svg

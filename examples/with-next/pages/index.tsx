@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Markprompt, openMarkprompt } from '@markprompt/react';

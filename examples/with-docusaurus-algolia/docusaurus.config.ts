@@ -1,6 +1,6 @@
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
-import { ThemeConfig as MarkpromptThemeConfig } from '@markprompt/docusaurus-theme-search';
+import type { ThemeConfig as MarkpromptThemeConfig } from '@markprompt/docusaurus-theme-search';
 import dotenv from 'dotenv';
 import { themes } from 'prism-react-renderer';
 

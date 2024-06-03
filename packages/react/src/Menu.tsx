@@ -1,7 +1,7 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import {
-  type ComponentPropsWithoutRef,
-  type JSXElementConstructor,
+import type {
+  ComponentPropsWithoutRef,
+  JSXElementConstructor,
 } from 'react';
 
 import {

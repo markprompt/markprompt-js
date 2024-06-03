@@ -1,7 +1,7 @@
 import { Fragment, forwardRef, memo, type ComponentType, useMemo } from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
-import { type SearchResultProps as BaseSearchResultProps } from '../index.js';
+import type { SearchResultProps as BaseSearchResultProps } from '../index.js';
 
 interface HighlightMatchesProps {
   value?: string;

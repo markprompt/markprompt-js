@@ -24,11 +24,11 @@ import { useSearch, type SearchLoadingState } from './useSearch.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import {
-  type MarkpromptOptions,
-  type SearchOptions,
-  type SearchResultComponentProps,
-  type View,
+import type {
+  MarkpromptOptions,
+  SearchOptions,
+  SearchResultComponentProps,
+  View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 

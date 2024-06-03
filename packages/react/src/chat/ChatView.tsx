@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type SubmitFeedbackOptions } from '@markprompt/core';
+import type { SubmitFeedbackOptions } from '@markprompt/core';
 import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';

@@ -1,6 +1,6 @@
-import { type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
-import { type ChatViewMessage } from './store.js';
+import type { ChatViewMessage } from './store.js';
 import { UserIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../types.js';
 

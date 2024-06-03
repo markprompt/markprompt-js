@@ -3,7 +3,7 @@ import '@markprompt/css';
 
 import type { WrapperProps } from '@docusaurus/types';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { type MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
+import type { MarkpromptConfig } from '@markprompt/docusaurus-theme-search';
 import type SearchBarType from '@theme/SearchBar';
 import SearchBar from '@theme-original/SearchBar';
 import { Suspense, lazy } from 'react';

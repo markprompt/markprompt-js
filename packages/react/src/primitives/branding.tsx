@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-target-blank */
-import { type ComponentPropsWithoutRef, type ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 interface BrandingProps {
   showAlgolia?: boolean;

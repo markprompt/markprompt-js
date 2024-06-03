@@ -1,7 +1,7 @@
-import { FileSectionReference } from '@markprompt/core';
+import type { FileSectionReference } from '@markprompt/core';
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import styles from './markprompt.module.css';
 

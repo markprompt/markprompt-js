@@ -24,7 +24,7 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
 import { TicketDeflectionForm } from './TicketDeflectionForm.js';
-import { type MarkpromptOptions, type View } from './types.js';
+import type { MarkpromptOptions, View } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';

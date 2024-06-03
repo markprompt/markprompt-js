@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { http, delay, HttpResponse, StrictRequest, DefaultBodyType } from 'msw';
+import { http, delay, HttpResponse, type StrictRequest, type DefaultBodyType } from 'msw';
 import { setupServer } from 'msw/node';
 import type { OpenAI } from 'openai';
 import {
@@ -17,9 +17,9 @@ import {
   DEFAULT_OPTIONS,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   submitChat,
-  SubmitChatOptions,
-  SubmitChatReturn,
-  SubmitChatYield,
+  type SubmitChatOptions,
+  type SubmitChatReturn,
+  type SubmitChatYield,
 } from './index.js';
 import { formatEvent, getChunk } from '../../../test/utils.js';
 

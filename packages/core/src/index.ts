@@ -23,7 +23,7 @@ export {
   type AlgoliaProvider,
 } from './search.js';
 
-import { type BaseOptions } from './types.js';
+import type { BaseOptions } from './types.js';
 
 export {
   CHAT_COMPLETIONS_MODELS,

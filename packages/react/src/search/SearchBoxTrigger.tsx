@@ -1,5 +1,5 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import { type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import {
   ChevronUpIcon,
@@ -7,7 +7,7 @@ import {
   CornerDownLeftIcon,
   SearchIcon,
 } from '../icons.js';
-import { type MarkpromptOptions } from '../types.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface SearchBoxTriggerProps {
   trigger: MarkpromptOptions['trigger'];

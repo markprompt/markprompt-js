@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { act } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
-import * as zustand from 'zustand';
+import type * as zustand from 'zustand';
 
 const {
   create: actualCreate,

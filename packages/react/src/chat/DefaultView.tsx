@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import type { MessagesProps } from './Messages.js';

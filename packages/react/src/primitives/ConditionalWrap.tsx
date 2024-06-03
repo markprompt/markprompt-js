@@ -1,5 +1,5 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { type ReactNode, type ReactElement } from 'react';
+import type { ReactNode, ReactElement } from 'react';
 
 interface ConditionalWrapProps {
   condition?: boolean;

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ComponentType, type ReactElement } from 'react';
+import type { ComponentType, ReactElement } from 'react';
 
 import { Answer } from './Answer.js';
-import { type ChatViewMessage } from './store.js';
+import type { ChatViewMessage } from './store.js';
 
 interface MessageAnswerProps {
   children: string;

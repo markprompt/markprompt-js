@@ -1,11 +1,11 @@
 import {
-  ChatCompletionMessageParam,
-  SubmitChatYield,
+  type ChatCompletionMessageParam,
+  type SubmitChatYield,
   submitChat,
 } from '@markprompt/core';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
-import { ReactElement, useCallback, useState } from 'react';
+import { type ReactElement, useCallback, useState } from 'react';
 
 interface ChatCompletionExecution {
   run?: (args: unknown) => void;
