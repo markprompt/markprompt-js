@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.31.2
+
+### Patch Changes
+
+- [`785893d`](https://github.com/motifland/markprompt-js/commit/785893d0feeccb764c60642a8d01909e6d245d16) Thanks [@nickrttn](https://github.com/nickrttn)! - Update type imports
+
 ## 0.31.1
 
 ### Patch Changes

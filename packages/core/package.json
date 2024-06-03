@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/core",
-  "version": "0.31.1",
+  "version": "0.31.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motifland/markprompt-js.git",
