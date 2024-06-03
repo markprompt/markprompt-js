@@ -1,8 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import type {
-  ComponentPropsWithoutRef,
-  JSXElementConstructor,
-} from 'react';
+import type { ComponentPropsWithoutRef, JSXElementConstructor } from 'react';
 
 import {
   BookIconOutline,

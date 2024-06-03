@@ -1,6 +1,12 @@
 import crypto from 'node:crypto';
 
-import { http, delay, HttpResponse, type StrictRequest, type DefaultBodyType } from 'msw';
+import {
+  http,
+  delay,
+  HttpResponse,
+  type StrictRequest,
+  type DefaultBodyType,
+} from 'msw';
 import { setupServer } from 'msw/node';
 import type { OpenAI } from 'openai';
 import {
