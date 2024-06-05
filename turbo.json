@@ -1,16 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    ".editorconfig",
-    ".eslintrc.js",
-    ".npmrc",
-    ".prettierignore",
-    ".stylelintignore",
-    ".stylelintrc.json",
-    "prettier.config.js",
-    "vitest.workspace.json"
-  ],
-  "pipeline": {
+  "globalDependencies": ["NODE_ENV"],
+  "tasks": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "build/**"],
       "dependsOn": ["^build"]
