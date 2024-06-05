@@ -1,26 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    ".editorconfig",
-    ".eslintrc.js",
-    ".npmrc",
-    ".prettierignore",
-    ".stylelintignore",
-    ".stylelintrc.json",
-    "prettier.config.js",
-    "vitest.workspace.json"
-  ],
+  "globalDependencies": ["NODE_ENV"],
   "tasks": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**",
-        "build/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "build/**"],
+      "dependsOn": ["^build"]
     },
     "dev": {
       "persistent": true,
@@ -32,9 +16,7 @@
     "//#lint:md": {},
     "//#lint:ts": {},
     "//#test": {
-      "outputs": [
-        "coverage/**"
-      ]
+      "outputs": ["coverage/**"]
     }
   }
 }
