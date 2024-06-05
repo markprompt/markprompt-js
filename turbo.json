@@ -10,10 +10,17 @@
     "prettier.config.js",
     "vitest.workspace.json"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "build/**"],
-      "dependsOn": ["^build"]
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "build/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
     },
     "dev": {
       "persistent": true,
@@ -25,7 +32,9 @@
     "//#lint:md": {},
     "//#lint:ts": {},
     "//#test": {
-      "outputs": ["coverage/**"]
+      "outputs": [
+        "coverage/**"
+      ]
     }
   }
 }
