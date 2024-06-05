@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "build:packages": "turbo run build --filter core... --filter docusaurus-theme-search... --filter react... --filter web...",
+    "build:packages": "turbo run build --filter @markprompt/*...",
     "postinstall": "manypkg check",
     "lint": "turbo run lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "stylelint \"**/*.css\"",
