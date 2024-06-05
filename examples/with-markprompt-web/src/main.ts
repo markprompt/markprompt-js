@@ -27,6 +27,69 @@ if (el && el instanceof HTMLElement) {
     search: {
       enabled: false,
     },
+    chat: {
+      assistantId: import.meta.env.VITE_ASSISTANT_ID,
+      disclaimerView: {
+        message:
+          'I am an AI assistant. Consider checking important information.',
+        cta: 'I agree',
+      },
+      enabled: true,
+      placeholder: 'Ask a question...',
+      title: 'Help',
+      defaultView: {
+        message: "Hello, I'm an AI assistant from Acme!",
+        prompts: [
+          'What is Markprompt?',
+          'How do I setup the React component?',
+          'Do you have a REST API?',
+        ],
+      },
+      avatars: {
+        user: '/avatars/user.png',
+        assistant: '/avatars/logo.png',
+      },
+      toolChoice: 'auto',
+      tools: [
+        {
+          call: get_random_activity,
+          tool: {
+            type: 'function',
+            function: {
+              name: 'get_random_activity',
+              description: 'Get a random activity from the Bored API',
+              parameters: {
+                type: 'object',
+                properties: {
+                  type: {
+                    type: 'string',
+                    description: 'Find a random activity with a given type',
+                    enum: [
+                      'education',
+                      'recreational',
+                      'social',
+                      'diy',
+                      'charity',
+                      'cooking',
+                      'relaxation',
+                      'music',
+                      'busywork',
+                    ],
+                  },
+                  participants: {
+                    type: 'integer',
+                    description:
+                      'Find a random activity for a given number of participants',
+                  },
+                },
+                required: [],
+              },
+            },
+          },
+          requireConfirmation: true,
+        },
+      ],
+    },
     integrations: {
       createTicket: {
         enabled: true,
@@ -87,69 +150,6 @@ if (el && el instanceof HTMLElement) {
         },
       },
     },
-    chat: {
-      disclaimerView: {
-        message:
-          'I am an AI assistant. Consider checking important information.',
-        cta: 'I agree',
-      },
-      enabled: true,
-      placeholder: 'Ask a question...',
-      title: 'Help',
-      model: 'gpt-4o',
-      defaultView: {
-        message: "Hello, I'm an AI assistant from Acme!",
-        prompts: [
-          'What is Markprompt?',
-          'How do I setup the React component?',
-          'Do you have a REST API?',
-        ],
-      },
-      avatars: {
-        user: '/avatars/user.png',
-        assistant: '/avatars/logo.png',
-      },
-      toolChoice: 'auto',
-      tools: [
-        {
-          call: get_random_activity,
-          tool: {
-            type: 'function',
-            function: {
-              name: 'get_random_activity',
-              description: 'Get a random activity from the Bored API',
-              parameters: {
-                type: 'object',
-                properties: {
-                  type: {
-                    type: 'string',
-                    description: 'Find a random activity with a given type',
-                    enum: [
-                      'education',
-                      'recreational',
-                      'social',
-                      'diy',
-                      'charity',
-                      'cooking',
-                      'relaxation',
-                      'music',
-                      'busywork',
-                    ],
-                  },
-                  participants: {
-                    type: 'integer',
-                    description:
-                      'Find a random activity for a given number of participants',
-                  },
-                },
-                required: [],
-              },
-            },
-          },
-          requireConfirmation: true,
-        },
-      ],
-    },
     menu: {
       title: 'Need help?',
       subtitle: 'Get help with setting up Acme',
@@ -202,8 +202,5 @@ if (el && el instanceof HTMLElement) {
         },
       ],
     },
-    // trigger: {
-    //   buttonLabel: 'Ask AI',
-    // },
   } satisfies MarkpromptOptions);
 }
