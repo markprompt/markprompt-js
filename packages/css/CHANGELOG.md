@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.31.2
+
+### Patch Changes
+
+- [#373](https://github.com/motifland/markprompt-js/pull/373) [`393e80c`](https://github.com/motifland/markprompt-js/commit/393e80c51f19707090ae5521abfa0e8d07889026) Thanks [@michaelfester](https://github.com/michaelfester)! - Add deprecation flags
+
 ## 0.31.1
 
 ### Patch Changes
