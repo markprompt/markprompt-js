@@ -27,6 +27,14 @@ if (el && el instanceof HTMLElement) {
     search: {
       enabled: false,
     },
+    references: {
+      getLabel: (f) => {
+        if (f.meta?.leadHeading?.value?.length === 1) {
+          return `${f.file.title} - ${f.meta?.leadHeading?.value}`;
+        }
+        return f.meta?.leadHeading?.value ?? f.file.title;
+      },
+    },
     chat: {
       assistantId: import.meta.env.VITE_ASSISTANT_ID,
       disclaimerView: {
