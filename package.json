@@ -60,7 +60,7 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.17.2"
   },
-  "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9",
+  "packageManager": "pnpm@9.2.0+sha256.94fab213df221c55b6956b14a2264c21c6203cca9f0b3b95ff2fe9b84b120390",
   "pnpm": {
     "overrides": {
       "@types/react": "^18.2",
