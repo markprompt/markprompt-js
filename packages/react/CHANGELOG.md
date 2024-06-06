@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.48.5
+
+### Patch Changes
+
+- [#373](https://github.com/motifland/markprompt-js/pull/373) [`393e80c`](https://github.com/motifland/markprompt-js/commit/393e80c51f19707090ae5521abfa0e8d07889026) Thanks [@michaelfester](https://github.com/michaelfester)! - Add deprecation flags
+
+- Updated dependencies [[`393e80c`](https://github.com/motifland/markprompt-js/commit/393e80c51f19707090ae5521abfa0e8d07889026)]:
+  - @markprompt/core@0.31.4
+
 ## 0.48.4
 
 ### Patch Changes
