@@ -165,6 +165,12 @@ export interface SubmitChatOptions {
    */
   threadId?: string;
   /**
+   * Metadata to attach to the thread.
+   * @default undefined
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  threadMetadata?: any;
+  /**
    * A list of tools the model may call. Currently, only functions are
    * supported as a tool. Use this to provide a list of functions the model may
    * generate JSON inputs for.
@@ -253,6 +259,7 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
     'systemPrompt',
     'temperature',
     'threadId',
+    'threadMetadata',
     'toolChoice',
     'tools',
     'topP',
@@ -301,14 +308,21 @@ export async function* submitChat(
     defaults(
       {
         ...cloneableOpts,
-        // only include known tool properties
+        // Only include known tool properties
         tools: tools?.map((tool) => ({
           function: tool.function,
           type: tool.type,
         })),
         toolChoice: toolChoice,
       },
-      { ...DEFAULT_OPTIONS, ...DEFAULT_SUBMIT_CHAT_OPTIONS },
+      {
+        ...DEFAULT_OPTIONS,
+        // If assistantId is provided, do not set default values,
+        // as it will then override the assistant-provided values
+        // in case that allowClientSideOverrides is set for the
+        // assistant.
+        ...(validOptions.assistantId ? {} : DEFAULT_SUBMIT_CHAT_OPTIONS),
+      },
     ) as BaseOptions & SubmitChatOptions;
 
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
