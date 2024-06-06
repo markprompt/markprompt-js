@@ -49,6 +49,10 @@ if (el && el instanceof HTMLElement) {
         user: '/avatars/user.png',
         assistant: '/avatars/logo.png',
       },
+      threadMetadata: {
+        userId: 'user-123',
+        plan: 'hobby',
+      },
       toolChoice: 'auto',
       tools: [
         {

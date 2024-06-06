@@ -165,6 +165,12 @@ export interface SubmitChatOptions {
    */
   threadId?: string;
   /**
+   * Metadata to attach to the thread.
+   * @default undefined
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  threadMetadata?: any;
+  /**
    * A list of tools the model may call. Currently, only functions are
    * supported as a tool. Use this to provide a list of functions the model may
    * generate JSON inputs for.
@@ -253,6 +259,7 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
     'systemPrompt',
     'temperature',
     'threadId',
+    'threadMetadata',
     'toolChoice',
     'tools',
     'topP',

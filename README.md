@@ -46,6 +46,14 @@ and some example implementations:
 - [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js.
 - [`with-function-calling`](examples/with-function-calling#readme) — a web application based on `@markprompt/react` and Next.js showcasing the use for [OpenAI function calling](https://platform.openai.com/docs/guides/function-calling).
 
+## Running examples
+
+To run examples from this monorepo:
+
+```sh
+pnpm turbo dev --filter with-markprompt-web...
+```
+
 ## Documentation
 
 To use the Markprompt platform as is, please refer to the
