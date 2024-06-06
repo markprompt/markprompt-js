@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.31.3
+
+### Patch Changes
+
+- [#370](https://github.com/motifland/markprompt-js/pull/370) [`6ab025f`](https://github.com/motifland/markprompt-js/commit/6ab025fd0f89a0aee0beb1ec3a01e1a962b2485e) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for thread metadata
+
 ## 0.31.2
 
 ### Patch Changes
