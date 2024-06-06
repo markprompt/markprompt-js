@@ -73,6 +73,10 @@ export interface Source {
   data?: {
     url?: string;
     domain?: string;
+    /**
+     * @deprecated No longer user
+     */
+    name?: string;
   };
 }
 
@@ -153,6 +157,10 @@ export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
   references?: FileSectionReference[];
+  /**
+   * @deprecated Use `messageId` instead.
+   */
+  promptId?: string;
 }
 
 export interface NoStreamingData {
