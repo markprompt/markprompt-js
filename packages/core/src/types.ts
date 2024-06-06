@@ -74,7 +74,7 @@ export interface Source {
     url?: string;
     domain?: string;
     /**
-     * @deprecated No longer user
+     * @deprecated No longer used
      */
     name?: string;
   };
