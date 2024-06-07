@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.48.6
+
+### Patch Changes
+
+- [#377](https://github.com/motifland/markprompt-js/pull/377) [`cd156c5`](https://github.com/motifland/markprompt-js/commit/cd156c51cfd5977f46a57e4212d04bc3cb30e183) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix passing of apiUrl
+
 ## 0.48.5
 
 ### Patch Changes
