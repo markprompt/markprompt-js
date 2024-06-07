@@ -7,10 +7,10 @@ import { useChatStore, type ChatViewMessage } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
+import { useGlobalStore } from '../store.js';
 import type { MarkpromptOptions } from '../types.js';
 
 export interface AssistantMessageProps {
-  apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
@@ -23,7 +23,6 @@ export interface AssistantMessageProps {
 
 export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
   const {
-    apiUrl,
     feedbackOptions,
     message,
     projectKey,
@@ -31,6 +30,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
     messageOnly,
     showFeedbackAlways,
   } = props;
+
+  const apiUrl = useGlobalStore((state) => state.options.apiUrl);
 
   const toolCalls = useMemo(
     () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),

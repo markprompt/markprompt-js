@@ -25,10 +25,6 @@ export interface ChatViewProps {
    */
   projectKey: string;
   /**
-   * The base API URL.
-   */
-  apiUrl?: string;
-  /**
    * The active view.
    */
   activeView?: View;
@@ -94,7 +90,6 @@ export interface ChatViewProps {
 
 export function ChatView(props: ChatViewProps): JSX.Element {
   const {
-    apiUrl,
     activeView,
     projectKey,
     showBack,
@@ -178,7 +173,6 @@ export function ChatView(props: ChatViewProps): JSX.Element {
             </div>
           ) : (
             <Messages
-              apiUrl={apiUrl}
               chatOptions={chatOptions}
               feedbackOptions={feedbackOptions}
               integrations={integrations}

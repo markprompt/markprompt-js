@@ -344,7 +344,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
 
                     <MarkpromptContent
                       close={close}
-                      apiUrl={apiUrl}
                       projectKey={projectKey}
                       chat={chat}
                       debug={debug}
@@ -404,7 +403,6 @@ type MarkpromptContentProps = {
 
 function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const {
-    apiUrl,
     chat,
     close,
     debug,
@@ -443,7 +441,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
           >
             {chat?.enabled && (
               <ChatView
-                apiUrl={apiUrl}
                 activeView={activeView}
                 chatOptions={chat}
                 debug={debug}
@@ -543,7 +540,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             <Suspense fallback={null}>
               <SearchView
                 activeView={activeView}
-                apiUrl={apiUrl}
                 projectKey={projectKey}
                 layout={layout}
                 searchOptions={search}
@@ -570,7 +566,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
             }}
           >
             <ChatView
-              apiUrl={apiUrl}
               activeView={activeView}
               chatOptions={chat}
               debug={debug}

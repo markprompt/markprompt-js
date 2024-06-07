@@ -13,7 +13,6 @@ import * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
 export type MessagesProps = {
-  apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   integrations: MarkpromptOptions['integrations'];
@@ -25,7 +24,6 @@ export type MessagesProps = {
 
 export function Messages(props: MessagesProps): ReactElement {
   const {
-    apiUrl,
     chatOptions,
     feedbackOptions,
     integrations,
@@ -107,7 +105,6 @@ export function Messages(props: MessagesProps): ReactElement {
 
               {message.role === 'assistant' && (
                 <AssistantMessage
-                  apiUrl={apiUrl}
                   message={message}
                   projectKey={projectKey}
                   feedbackOptions={feedbackOptions}
@@ -166,7 +163,6 @@ export function Messages(props: MessagesProps): ReactElement {
                 index === lastAssistantMessageIndex && (
                   <div className="MarkpromptMessageCSATContainer">
                     <CSATPicker
-                      apiUrl={apiUrl}
                       projectKey={projectKey}
                       threadId={threadId}
                       feedbackOptions={feedbackOptions}

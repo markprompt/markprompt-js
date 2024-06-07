@@ -36,7 +36,6 @@ export function TicketDeflectionForm(
 ): JSX.Element {
   const { defaultView = 'chat', isStandalone, CustomCaseForm } = props;
 
-  const apiUrl = useGlobalStore((state) => state.options.apiUrl);
   const chat = useGlobalStore((state) => state.options.chat);
   const feedback = useGlobalStore((state) => state.options.feedback);
   const integrations = useGlobalStore((state) => state.options.integrations);
@@ -123,7 +122,6 @@ export function TicketDeflectionForm(
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
         {view === 'chat' ? (
           <ChatView
-            apiUrl={apiUrl}
             activeView="chat"
             chatOptions={{
               ...chat,

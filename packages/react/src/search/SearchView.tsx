@@ -24,6 +24,7 @@ import { useSearch, type SearchLoadingState } from './useSearch.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronRightIcon, SearchIcon, SparklesIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
+import { useGlobalStore } from '../store.js';
 import type {
   MarkpromptOptions,
   SearchOptions,
@@ -33,10 +34,6 @@ import type {
 import { useDefaults } from '../useDefaults.js';
 
 export interface SearchViewProps {
-  /**
-   * The base API URL.
-   */
-  apiUrl?: string;
   /**
    * The project key associated to the project.
    */
@@ -82,14 +79,10 @@ interface ActiveSearchResult {
 const searchInputName = 'markprompt-search';
 
 export function SearchView(props: SearchViewProps): ReactElement {
-  const {
-    activeView,
-    debug,
-    onDidSelectResult,
-    onDidSelectAsk,
-    projectKey,
-    apiUrl,
-  } = props;
+  const { activeView, debug, onDidSelectResult, onDidSelectAsk, projectKey } =
+    props;
+
+  const apiUrl = useGlobalStore((state) => state.options.apiUrl);
 
   if (!projectKey) {
     throw new Error(

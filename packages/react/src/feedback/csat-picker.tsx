@@ -10,9 +10,9 @@ import { useFeedback } from './useFeedback.js';
 import type { CSAT } from '../../../core/src/types.js';
 import { StarIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../index.js';
+import { useGlobalStore } from '../store.js';
 
 interface CSATPickerProps extends ComponentPropsWithoutRef<'aside'> {
-  apiUrl?: string;
   projectKey: string;
   threadId: string;
   csat?: CSAT;
@@ -36,10 +36,12 @@ function getHeading(csat: CSAT): string | undefined {
 }
 
 export function CSATPicker(props: CSATPickerProps): ReactElement {
-  const { csat = 0, projectKey, apiUrl, threadId, feedbackOptions } = props;
+  const { csat = 0, projectKey, threadId, feedbackOptions } = props;
   const [tempValue, setTempValue] = useState<CSAT>(csat);
   const [permanentValue, setPermanentValue] = useState<CSAT>(csat);
   const [isHovering, setIsHovering] = useState(false);
+
+  const apiUrl = useGlobalStore((state) => state.options.apiUrl);
 
   const { submitThreadCSAT } = useFeedback({
     apiUrl: apiUrl || DEFAULT_OPTIONS.apiUrl,
