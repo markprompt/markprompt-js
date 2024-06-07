@@ -343,7 +343,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                     )}
 
                     <MarkpromptContent
-                      close={close}
                       apiUrl={apiUrl}
                       projectKey={projectKey}
                       chat={chat}
@@ -356,6 +355,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                       linkAs={linkAs}
                       branding={branding}
                       display={display}
+                      close={close}
                     />
                   </BaseMarkprompt.Content>
                 </BaseMarkprompt.Portal>
@@ -365,6 +365,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             {display === 'plain' && (
               <BaseMarkprompt.PlainContent className="MarkpromptContentPlain">
                 <MarkpromptContent
+                  apiUrl={apiUrl}
                   chat={chat}
                   feedback={feedback}
                   layout={layout}
