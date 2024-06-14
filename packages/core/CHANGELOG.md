@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.31.5
+
+### Patch Changes
+
+- [#379](https://github.com/motifland/markprompt-js/pull/379) [`0223183`](https://github.com/motifland/markprompt-js/commit/0223183063320a749ae4d440c2297866c09500d0) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix empty choices object
+
 ## 0.31.4
 
 ### Patch Changes
