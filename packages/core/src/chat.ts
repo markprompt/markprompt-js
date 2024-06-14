@@ -352,7 +352,7 @@ export async function* submitChat(
     if (
       isChatCompletion(json) &&
       isMarkpromptMetadata(data) &&
-      json.choices[0]
+      json.choices?.[0]
     ) {
       return { ...json.choices[0].message, ...data };
     } else {
@@ -427,7 +427,7 @@ export async function* submitChat(
       });
     }
 
-    mergeWith(completion, json.choices[0]?.delta, concatStrings);
+    mergeWith(completion, json.choices?.[0]?.delta, concatStrings);
 
     checkAbortSignal(options.signal);
     /**
