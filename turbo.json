@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["NODE_ENV"],
+  "globalDependencies": ["NODE_ENV", "ENABLE_EXPERIMENTAL_COREPACK"],
   "tasks": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "build/**"],
