@@ -220,6 +220,7 @@ export interface SubmitChatOptions {
    * Disable streaming and return the entire response at once.
    */
   stream?: boolean;
+  additionalMetadata?: Record<string, unknown>;
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
@@ -263,6 +264,7 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
     'toolChoice',
     'tools',
     'topP',
+    'additionalMetadata',
   ];
 
 const isValidSubmitChatOptionsKey = (
@@ -303,7 +305,8 @@ export async function* submitChat(
     Object.entries(options).filter(([key]) => isValidSubmitChatOptionsKey(key)),
   );
 
-  const { signal, tools, toolChoice, ...cloneableOpts } = validOptions;
+  const { signal, tools, toolChoice, additionalMetadata, ...cloneableOpts } =
+    validOptions;
   const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } =
     defaults(
       {
@@ -332,6 +335,7 @@ export async function* submitChat(
       'X-Markprompt-API-Version': '2024-05-21',
     }),
     body: JSON.stringify({
+      ...additionalMetadata,
       projectKey,
       messages,
       debug,
