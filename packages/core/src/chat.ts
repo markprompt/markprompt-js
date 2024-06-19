@@ -335,13 +335,13 @@ export async function* submitChat(
       'X-Markprompt-API-Version': '2024-05-21',
     }),
     body: JSON.stringify({
-      ...additionalMetadata,
       projectKey,
       messages,
       debug,
       ...resolvedOptions,
       policies: policiesOptions,
       retrieval: retrievalOptions,
+      additionalMetadata,
     }),
     signal,
   });
