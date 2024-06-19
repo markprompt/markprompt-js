@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.31.6
+
+### Patch Changes
+
+- [#381](https://github.com/motifland/markprompt-js/pull/381) [`ed14adb`](https://github.com/motifland/markprompt-js/commit/ed14adbe848d6cc9e81dfc6ea7361e71a0834b49) Thanks [@ethanniser](https://github.com/ethanniser)! - add `additionalMetadata` parameter to `submitChat`, allowing for additional arbitrary data to be sent along with the request
+
 ## 0.31.5
 
 ### Patch Changes
