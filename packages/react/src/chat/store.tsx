@@ -192,7 +192,12 @@ export interface ChatStoreState {
   /**
    * Submit a list of new messages.
    **/
-  submitChat: (messages: SubmitChatMessage[]) => void;
+  submitChat: (
+    messages: SubmitChatMessage[],
+    additionalMetadata?: {
+      [key: string]: unknown;
+    },
+  ) => void;
   /**
    * Submit tool calls.
    **/
@@ -380,7 +385,7 @@ export const createChatStore = ({
               };
             });
           },
-          submitChat: async (messages) => {
+          submitChat: async (messages, additionalMetadata) => {
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
             );
@@ -451,6 +456,7 @@ export const createChatStore = ({
               debug,
               ...get().options,
               tools: get().options?.tools?.map((x) => x.tool),
+              additionalMetadata,
             };
 
             // do the chat completion request

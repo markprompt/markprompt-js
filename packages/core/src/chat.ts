@@ -220,6 +220,9 @@ export interface SubmitChatOptions {
    * Disable streaming and return the entire response at once.
    */
   stream?: boolean;
+  additionalMetadata?: {
+    [key: string]: unknown;
+  };
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
@@ -263,6 +266,7 @@ const validSubmitChatOptionsKeys: (keyof (SubmitChatOptions & BaseOptions))[] =
     'toolChoice',
     'tools',
     'topP',
+    'additionalMetadata',
   ];
 
 const isValidSubmitChatOptionsKey = (
@@ -303,7 +307,8 @@ export async function* submitChat(
     Object.entries(options).filter(([key]) => isValidSubmitChatOptionsKey(key)),
   );
 
-  const { signal, tools, toolChoice, ...cloneableOpts } = validOptions;
+  const { signal, tools, toolChoice, additionalMetadata, ...cloneableOpts } =
+    validOptions;
   const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } =
     defaults(
       {
@@ -338,6 +343,7 @@ export async function* submitChat(
       ...resolvedOptions,
       policies: policiesOptions,
       retrieval: retrievalOptions,
+      additionalMetadata,
     }),
     signal,
   });
