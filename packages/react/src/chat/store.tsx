@@ -194,7 +194,9 @@ export interface ChatStoreState {
    **/
   submitChat: (
     messages: SubmitChatMessage[],
-    additionalMetadata?: Record<string, unknown>,
+    additionalMetadata?: {
+      [key: string]: unknown;
+    },
   ) => void;
   /**
    * Submit tool calls.

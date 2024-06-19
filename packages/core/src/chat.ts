@@ -220,7 +220,9 @@ export interface SubmitChatOptions {
    * Disable streaming and return the entire response at once.
    */
   stream?: boolean;
-  additionalMetadata?: Record<string, unknown>;
+  additionalMetadata?: {
+    [key: string]: unknown;
+  };
 }
 
 export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
