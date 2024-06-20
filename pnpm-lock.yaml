@@ -340,6 +340,9 @@ importers:
         specifier: ^18.2
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      '@next/eslint-plugin-next':
+        specifier: ^14.2.1
+        version: 14.2.4
       '@types/react':
         specifier: ^18.2
         version: 18.2.79
