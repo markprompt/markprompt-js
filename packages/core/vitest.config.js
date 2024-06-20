@@ -1,12 +1,16 @@
-import { defineProject } from 'vitest/config';
+import { defineProject, mergeConfig } from 'vitest/config';
 
-export default defineProject({
-  test: {
-    pool: 'forks',
+export default mergeConfig(
+  {
     coverage: {
       enabled: true,
       provider: 'v8',
       include: ['./src/**/*'],
     },
   },
-});
+  defineProject({
+    test: {
+      pool: 'forks',
+    },
+  }),
+);
