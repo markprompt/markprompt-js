@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@markprompt/core": "workspace:*",
-    "@markprompt/react": "workspace:*"
+    "@markprompt/react": "workspace:*",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/react": "^18.2",

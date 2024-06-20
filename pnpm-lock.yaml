@@ -612,6 +612,9 @@ importers:
       '@markprompt/react':
         specifier: workspace:*
         version: link:../react
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
     devDependencies:
       '@types/react':
         specifier: ^18.2

@@ -19,6 +19,7 @@ const config = {
   alias: {
     react: 'preact/compat',
     'react-dom': 'preact/compat',
+    lodash: 'lodash-es',
   },
   plugins: [tscPlugin],
 };
