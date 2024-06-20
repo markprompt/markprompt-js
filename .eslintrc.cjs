@@ -2,34 +2,29 @@
 module.exports = {
   extends: [
     'eslint:recommended',
+    'plugin:promise/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    // 'plugin:react/recommended',
-    // 'plugin:react/jsx-runtime',
-    // 'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/stylistic',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    emitDecoratorMetadata: true,
+    ecmaVersion: 'latest',
+    allowAutomaticSingleRunInference: true,
     tsconfigRootDir: __dirname,
-    project: ['tsconfig.lint.json'],
+    project: 'tsconfig.json',
   },
   settings: {
-    // 'import/parsers': {
-    //   '@typescript-eslint/parser': ['.ts', '.tsx'],
-    // },
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        project: ['tsconfig.lint.json'],
+        project: ['tsconfig.json'],
       },
       node: true,
     },
-    // react: {
-    //   version: 'detect',
-    // },
   },
   plugins: ['@typescript-eslint'],
   root: true,
@@ -60,6 +55,7 @@ module.exports = {
       },
     ],
     'import/no-unresolved': 'off',
+    'promise/catch-or-return': ['error', { allowFinally: true }],
     '@typescript-eslint/consistent-indexed-object-style': [
       'error',
       'index-signature',

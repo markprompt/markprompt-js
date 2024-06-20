@@ -3,10 +3,10 @@ import {
   submitCSAT as submitCSATCore,
   type PromptFeedback,
   type SubmitFeedbackOptions,
+  type CSAT,
 } from '@markprompt/core';
 import { useCallback } from 'react';
 
-import type { CSAT } from '../../../core/src/types.js';
 import { useAbortController } from '../useAbortController.js';
 
 export interface UseFeedbackOptions {
@@ -50,21 +50,19 @@ export function useFeedback({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitFeedbackCore({ feedback, messageId }, projectKey, {
-        ...feedbackOptions,
-        signal: controller.signal,
-        apiUrl,
-      });
-
-      promise.catch(() => {
+      try {
+        await submitFeedbackCore({ feedback, messageId }, projectKey, {
+          ...feedbackOptions,
+          signal: controller.signal,
+          apiUrl,
+        });
+      } catch {
         // ignore submitFeedback errors
-      });
-
-      promise.finally(() => {
+      } finally {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
         }
-      });
+      }
     },
     [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
   );
@@ -76,21 +74,19 @@ export function useFeedback({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      const promise = submitCSATCore({ threadId, csat }, projectKey, {
-        ...feedbackOptions,
-        apiUrl,
-        signal: controller.signal,
-      });
-
-      promise.catch(() => {
+      try {
+        await submitCSATCore({ threadId, csat }, projectKey, {
+          ...feedbackOptions,
+          apiUrl,
+          signal: controller.signal,
+        });
+      } catch {
         // ignore submitFeedback errors
-      });
-
-      promise.finally(() => {
+      } finally {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
         }
-      });
+      }
     },
     [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
   );

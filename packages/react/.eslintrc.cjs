@@ -4,7 +4,6 @@ module.exports = {
   root: false,
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.lint.json'],
   },
   settings: {
     react: {

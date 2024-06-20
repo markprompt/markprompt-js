@@ -51,7 +51,7 @@ export function useSearch({
   const { ref: controllerRef, abort } = useAbortController();
 
   const submitSearchQuery = useCallback(
-    (searchQuery: string) => {
+    async (searchQuery: string) => {
       abort();
 
       // reset state if the query was set (back) to empty
@@ -67,34 +67,39 @@ export function useSearch({
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      let promise: Promise<SearchResult[] | AlgoliaDocSearchHit[] | undefined>;
-
-      if (searchOptions?.provider?.name === 'algolia') {
-        promise = (
-          submitAlgoliaDocsearchQuery(searchQuery, {
-            ...searchOptions,
-            signal: controller.signal,
-          }) as Promise<AlgoliaDocSearchResultsResponse>
-        ).then((result) => result?.hits || []) as Promise<
-          AlgoliaDocSearchHit[]
+      try {
+        let promise: Promise<
+          SearchResult[] | AlgoliaDocSearchHit[] | undefined
         >;
-      } else {
-        promise = (
-          submitSearchQueryToMarkprompt(searchQuery, projectKey, {
-            apiUrl,
-            ...searchOptions,
-            signal: controller.signal,
-          }) as Promise<SearchResultsResponse>
-        ).then((result) => {
-          if (debug) {
-            // Show debug info return from Markprompt search API
-            // eslint-disable-next-line no-console
-            console.debug(JSON.stringify(result?.debug, null, 2));
-          }
-          return result?.data || [];
-        });
-      }
-      promise.then((searchResults) => {
+
+        if (searchOptions?.provider?.name === 'algolia') {
+          promise = (
+            submitAlgoliaDocsearchQuery(searchQuery, {
+              ...searchOptions,
+              signal: controller.signal,
+            }) as Promise<AlgoliaDocSearchResultsResponse>
+          ).then((result) => result?.hits || []) as Promise<
+            AlgoliaDocSearchHit[]
+          >;
+        } else {
+          promise = (
+            submitSearchQueryToMarkprompt(searchQuery, projectKey, {
+              apiUrl,
+              ...searchOptions,
+              signal: controller.signal,
+            }) as Promise<SearchResultsResponse>
+          ).then((result) => {
+            if (debug) {
+              // Show debug info return from Markprompt search API
+              // eslint-disable-next-line no-console
+              console.debug(JSON.stringify(result?.debug, null, 2));
+            }
+            return result?.data || [];
+          });
+        }
+
+        const searchResults = await promise;
+
         if (controller.signal.aborted) return;
         if (!searchResults) return;
 
@@ -108,22 +113,18 @@ export function useSearch({
 
         // initially focus the first result
         setState('done');
-      });
-
-      promise?.catch((error: unknown) => {
+      } catch (error) {
         // ignore abort errors
         if (isAbortError(error)) return;
 
         // todo: surface errors to the user in the UI
         // eslint-disable-next-line no-console
         console.error(error);
-      });
-
-      promise?.finally(() => {
+      } finally {
         if (controllerRef.current === controller) {
           controllerRef.current = undefined;
         }
-      });
+      }
     },
     [abort, controllerRef, searchOptions, projectKey, apiUrl, debug],
   );

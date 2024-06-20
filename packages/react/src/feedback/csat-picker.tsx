@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS } from '@markprompt/core';
+import { DEFAULT_OPTIONS, type CSAT } from '@markprompt/core';
 import {
   type ReactElement,
   type ComponentPropsWithoutRef,
@@ -7,7 +7,6 @@ import {
 } from 'react';
 
 import { useFeedback } from './useFeedback.js';
-import type { CSAT } from '../../../core/src/types.js';
 import { StarIcon } from '../icons.js';
 import type { MarkpromptOptions } from '../index.js';
 

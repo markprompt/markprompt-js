@@ -13,6 +13,7 @@ export {
   submitCSAT,
   type SubmitFeedbackBody,
   type SubmitFeedbackOptions,
+  type CSAT,
 } from './feedback.js';
 
 export {

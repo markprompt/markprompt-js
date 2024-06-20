@@ -26,6 +26,7 @@
     "build": "node scripts/build.js",
     "dev": "node scripts/dev.js",
     "lint:js": "eslint .",
+    "lint:ts": "tsc -b tsconfig.json",
     "prepack": "node scripts/build.js"
   },
   "dependencies": {

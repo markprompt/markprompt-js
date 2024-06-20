@@ -9,6 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:packages": "turbo run build --filter @markprompt/*...",
+    "clean": "git clean -fdx -e .direnv/ -e \"examples/**/.env*\" -e \"*.ts*\"",
     "postinstall": "manypkg check",
     "lint": "turbo run lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "stylelint \"**/*.css\"",
@@ -37,6 +38,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest-dom": "^5.4.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-testing-library": "^6.2.2",
