@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-// import { tscPlugin } from './tsc-plugin.js';
+import { tscPlugin } from './tsc-plugin.js';
 
 /**
  * Shared configuration options for esbuild
@@ -20,7 +20,7 @@ const config = {
     react: 'preact/compat',
     'react-dom': 'preact/compat',
   },
-  // plugins: [tscPlugin],
+  plugins: [tscPlugin],
 };
 
 export { config };

@@ -7,7 +7,7 @@ import { execSync } from 'node:child_process';
 export const tscPlugin = {
   name: 'tsc',
   setup(build) {
-    build.onEnd(() => {
+    build.onEnd(async () => {
       execSync('tsc -b tsconfig.build.json', {
         stdio: 'inherit',
       });
