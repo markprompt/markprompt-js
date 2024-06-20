@@ -316,8 +316,8 @@ importers:
   examples/with-function-calling:
     dependencies:
       '@markprompt/core':
-        specifier: '*'
-        version: 0.27.0
+        specifier: workspace:*
+        version: link:../../packages/core
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
@@ -2046,9 +2046,6 @@ packages:
   '@manypkg/tools@1.1.0':
     resolution: {integrity: sha512-SkAyKAByB9l93Slyg8AUHGuM2kjvWioUTCckT/03J09jYnfEzMO/wSXmEhnKGYs6qx9De8TH4yJCl0Y9lRgnyQ==}
     engines: {node: '>=14.18.0'}
-
-  '@markprompt/core@0.27.0':
-    resolution: {integrity: sha512-ieoRz2w2U0CV8vk+iYyzGWK/4XEsnnd8/14RSF/EhutoCjc0EgDoXbqlG+yNIE4xnar8Y6QvT2msJZn0gt/gYQ==}
 
   '@mdx-js/mdx@3.0.1':
     resolution: {integrity: sha512-eIQ4QTrOWyL3LWEe/bu6Taqzq2HQvHcyTMaOrI95P2/LmJE7AsfPfgJGuFLPVqBUE1BC1rik3VIhU+s9u72arA==}
@@ -6429,10 +6426,6 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
-  openai@4.38.3:
-    resolution: {integrity: sha512-mIL9WtrFNOanpx98mJ+X/wkoepcxdqqu0noWFoNQHl/yODQ47YM7NEYda7qp8JfjqpLFVxY9mQhshoS/Fqac0A==}
-    hasBin: true
-
   openai@4.46.0:
     resolution: {integrity: sha512-l0Betzsx3WIjdagqQiH14hWmwYouUzUCcB1ENvKyfG5XOqh6YC2XT7OukzEBTnweutMC91pW2ToddWn8uyD4SA==}
     hasBin: true
@@ -10770,18 +10763,6 @@ snapshots:
       globby: 11.1.0
       jju: 1.4.0
       read-yaml-file: 1.1.0
-
-  '@markprompt/core@0.27.0':
-    dependencies:
-      '@algolia/client-search': 4.23.3
-      '@types/lodash-es': 4.17.12
-      defaults: 3.0.0
-      eventsource-parser: 1.1.2
-      lodash-es: 4.17.21
-      openai: 4.38.3
-      type-fest: 4.17.0
-    transitivePeerDependencies:
-      - encoding
 
   '@mdx-js/mdx@3.0.1':
     dependencies:
@@ -15927,19 +15908,6 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
-
-  openai@4.38.3:
-    dependencies:
-      '@types/node': 18.19.31
-      '@types/node-fetch': 2.6.11
-      abort-controller: 3.0.0
-      agentkeepalive: 4.5.0
-      form-data-encoder: 1.7.2
-      formdata-node: 4.4.1
-      node-fetch: 2.7.0
-      web-streams-polyfill: 3.3.3
-    transitivePeerDependencies:
-      - encoding
 
   openai@4.46.0:
     dependencies:
