@@ -64,6 +64,7 @@ export default function IndexPage(): ReactElement {
 
       const submitChatOptions = {
         tools: tools.map((tool) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { run, ...rest } = tool;
           return rest;
         }),

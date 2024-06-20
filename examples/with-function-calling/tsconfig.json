@@ -17,5 +17,5 @@
     "strict": true,
     "target": "es2021"
   },
-  "references": [{ "path": "../../packages/react" }]
+  "references": [{ "path": "../../packages/react/tsconfig.build.json" }]
 }
