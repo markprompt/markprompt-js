@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import type { ComponentType, ReactElement } from 'react';
 
 import type { ChatLoadingState } from '../chat/store.js';

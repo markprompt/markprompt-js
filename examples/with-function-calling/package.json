@@ -6,6 +6,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "lint:js": "eslint .",
+    "lint:ts": "tsc -b tsconfig.json",
     "start": "next start"
   },
   "dependencies": {
@@ -19,6 +21,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.1",
     "@types/react": "^18.2",
     "@types/react-dom": "^18.2"
   }

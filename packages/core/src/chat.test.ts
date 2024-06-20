@@ -129,7 +129,7 @@ describe('submitChat', () => {
 
       expect.fail('Expected an error to be thrown');
     } catch (error) {
-      expect(error.message).toBe('A projectKey is required.');
+      expect((error as Error).message).toBe('A projectKey is required.');
     }
   });
 
@@ -268,7 +268,7 @@ describe('submitChat', () => {
 
       expect.fail('Expected an error to be thrown');
     } catch (error) {
-      expect(error.message).toBe('test');
+      expect((error as Error).message).toBe('test');
     } finally {
       mockFetch.mockRestore();
     }
@@ -288,7 +288,7 @@ describe('submitChat', () => {
 
       expect.fail('Expected an error to be thrown');
     } catch (error) {
-      expect(error.message).toBe('Internal Server Error');
+      expect((error as Error).message).toBe('Internal Server Error');
     }
   });
 
@@ -308,7 +308,9 @@ describe('submitChat', () => {
         chunks.push(chunk);
       }
     } catch (error) {
-      expect(error.message).toBe('Malformed response from Markprompt API');
+      expect((error as Error).message).toBe(
+        'Malformed response from Markprompt API',
+      );
     }
   });
 
@@ -371,7 +373,9 @@ describe('submitChat', () => {
         // nothing
       }
     } catch (error) {
-      expect(error.message).toBe('Malformed response from Markprompt API');
+      expect((error as Error).message).toBe(
+        'Malformed response from Markprompt API',
+      );
     }
   });
 });

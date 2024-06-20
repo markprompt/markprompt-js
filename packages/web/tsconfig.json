@@ -1,10 +1,4 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
-  "references": [
-    { "path": "../core" },
-    { "path": "../react/tsconfig.build.json" }
-  ],
-  "include": ["src/*"],
   "compilerOptions": {
     // base
     "esModuleInterop": true,
@@ -21,12 +15,13 @@
     // transpilation
     "module": "esnext",
     "moduleResolution": "bundler",
+    "noEmit": true,
     "outDir": "dist/",
-    "rootDir": "src/",
+    "rootDir": ".",
+
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
     "composite": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
@@ -38,5 +33,11 @@
       "react": ["./node_modules/preact/compat"],
       "react-dom": ["./node_modules/preact/compat"]
     }
-  }
+  },
+  "references": [
+    { "path": "../core/tsconfig.build.json" },
+    { "path": "../react/tsconfig.build.json" }
+  ],
+  "include": [".", ".eslintrc.cjs"],
+  "exclude": ["dist/", ".turbo/"]
 }

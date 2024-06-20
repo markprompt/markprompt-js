@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { tscPlugin } from './tsc-plugin.js';
 
 /**
@@ -9,6 +11,7 @@ const config = {
   outdir: 'dist/',
   format: 'esm',
   target: 'esnext',
+  tsconfig: path.resolve(import.meta.dirname, '..', 'tsconfig.build.json'),
   bundle: true,
   treeShaking: true,
   sourcemap: true,
@@ -16,6 +19,7 @@ const config = {
   alias: {
     react: 'preact/compat',
     'react-dom': 'preact/compat',
+    lodash: 'lodash-es',
   },
   plugins: [tscPlugin],
 };

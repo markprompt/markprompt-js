@@ -25,16 +25,19 @@
     "analyze": "node scripts/analyze.js",
     "build": "node scripts/build.js",
     "dev": "node scripts/dev.js",
+    "lint:js": "eslint .",
+    "lint:ts": "tsc -b tsconfig.json",
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
     "@markprompt/core": "workspace:*",
-    "@markprompt/react": "workspace:*"
+    "@markprompt/react": "workspace:*",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/react": "^18.2",
     "@types/react-dom": "^18.2",
-    "esbuild": "^0.20.2",
+    "esbuild": "^0.21.5",
     "preact": "^10.20.2",
     "react": "npm:@preact/compat",
     "react-dom": "npm:@preact/compat"

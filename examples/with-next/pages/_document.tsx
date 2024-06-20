@@ -1,6 +1,7 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
-export default function Document() {
+export default function Document(): React.JSX.Element {
   return (
     <Html>
       <Head>
@@ -10,8 +11,8 @@ export default function Document() {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
         />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" />
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js" />
       </Head>
       <body>
         <Main />

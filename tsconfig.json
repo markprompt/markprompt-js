@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include": [".eslintrc.cjs", "prettier.config.js", "test/"],
+  "exclude": ["examples/", "packages/"]
+}

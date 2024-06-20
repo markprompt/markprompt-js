@@ -1,7 +1,8 @@
-import { type ReactElement, useEffect } from 'react';
+import { Markprompt, openMarkprompt } from '@markprompt/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Markprompt, openMarkprompt } from '@markprompt/react';
+import { type ReactElement, useEffect } from 'react';
+
 import { SearchIcon } from '../components/icons';
 
 export default function IndexPage(): ReactElement {
@@ -79,8 +80,6 @@ export default function IndexPage(): ReactElement {
               appId: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
               indexName: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME!,
             },
-            getHref: (result: any) => result.href,
-            getHeading: (result: any) => result.heading,
             getTitle: (result) => result.content || undefined,
           }}
           close={{ visible: false }}

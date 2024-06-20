@@ -147,8 +147,6 @@ export interface AlgoliaDocSearchResultsResponse {
   hits: AlgoliaDocSearchHit[];
 }
 
-export type CSAT = 0 | 1 | 2 | 3 | 4 | 5;
-
 export interface PromptFeedback {
   vote: '1' | '-1';
 }

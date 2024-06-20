@@ -1,9 +1,4 @@
 {
-  "include": ["src"],
-  "references": [
-    { "path": "../core" },
-    { "path": "../react/tsconfig.build.json" }
-  ],
   "compilerOptions": {
     // base
     "esModuleInterop": true,
@@ -11,6 +6,7 @@
     "target": "es2022",
     "moduleDetection": "force",
     "isolatedModules": true,
+    "checkJs": true,
 
     // strictness
     "strict": true,
@@ -19,8 +15,9 @@
     // transpilation
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "noEmit": true,
     "outDir": "dist/",
-    "rootDir": "src/",
+    "rootDir": ".",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -32,5 +29,11 @@
     "lib": ["dom", "dom.iterable", "es2023"],
 
     "types": ["@docusaurus/module-type-aliases"]
-  }
+  },
+  "references": [
+    { "path": "../core/tsconfig.build.json" },
+    { "path": "../react/tsconfig.build.json" }
+  ],
+  "include": [".", ".eslintrc.cjs"],
+  "exclude": ["dist/", ".turbo/"]
 }

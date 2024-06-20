@@ -1,5 +1,5 @@
 {
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".eslintrc.cjs"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "allowJs": true,
@@ -17,5 +17,8 @@
     "strict": true,
     "target": "es2021"
   },
-  "references": [{ "path": "../../packages/react" }]
+  "references": [
+    { "path": "../../packages/core/tsconfig.build.json" },
+    { "path": "../../packages/react/tsconfig.build.json" }
+  ]
 }

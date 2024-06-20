@@ -1,7 +1,9 @@
 import defaults from 'defaults';
 
 import { DEFAULT_OPTIONS } from './index.js';
-import type { PromptFeedback, CSAT, BaseOptions } from './types.js';
+import type { PromptFeedback, BaseOptions } from './types.js';
+
+export type CSAT = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface SubmitFeedbackBody {
   /** Prompt feedback */

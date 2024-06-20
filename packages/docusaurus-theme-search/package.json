@@ -17,8 +17,10 @@
     "src/theme"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "prepack": "tsc --build"
+    "build": "tsc --build tsconfig.build.json",
+    "lint:js": "eslint .",
+    "lint:ts": "tsc --build",
+    "prepack": "tsc --build tsconfig.build.json"
   },
   "dependencies": {
     "@docusaurus/types": "^3.2.1",

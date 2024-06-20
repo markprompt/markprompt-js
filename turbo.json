@@ -13,8 +13,12 @@
     "//#lint:css": {},
     "//#lint:format": {},
     "//#lint:js": {},
+    "lint:js": {
+      "dependsOn": ["^build"]
+    },
     "//#lint:md": {},
     "//#lint:ts": {},
+    "lint:ts": {},
     "//#test": {
       "outputs": ["coverage/**"]
     }
