@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.48.9
+
+### Patch Changes
+
+- [#383](https://github.com/motifland/markprompt-js/pull/383) [`b5e23d0`](https://github.com/motifland/markprompt-js/commit/b5e23d0f0e15f10797a7caa7ac24805a800c5dc9) Thanks [@nickrttn](https://github.com/nickrttn)! - Update linting setup and fix various linting issues surfaced by the change
+
+- Updated dependencies [[`b5e23d0`](https://github.com/motifland/markprompt-js/commit/b5e23d0f0e15f10797a7caa7ac24805a800c5dc9)]:
+  - @markprompt/core@0.31.7
+
 ## 0.48.8
 
 ### Patch Changes

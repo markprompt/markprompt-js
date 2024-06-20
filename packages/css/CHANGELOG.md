@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.31.3
+
+### Patch Changes
+
+- [#383](https://github.com/motifland/markprompt-js/pull/383) [`b5e23d0`](https://github.com/motifland/markprompt-js/commit/b5e23d0f0e15f10797a7caa7ac24805a800c5dc9) Thanks [@nickrttn](https://github.com/nickrttn)! - Update linting setup and fix various linting issues surfaced by the change
+
 ## 0.31.2
 
 ### Patch Changes
