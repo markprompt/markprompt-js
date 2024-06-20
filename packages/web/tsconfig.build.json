@@ -4,7 +4,7 @@
   "include": ["src/"],
   "compilerOptions": {
     "noEmit": false,
-    "rootDir": "src/",
-    "emitDeclarationOnly": true
+    "rootDir": "src/"
+    // "emitDeclarationOnly": true
   }
 }

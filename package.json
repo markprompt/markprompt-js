@@ -9,7 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:packages": "turbo run build --filter @markprompt/*...",
-    "clean": "git clean -fdx -e .direnv/ -e \"examples/**/.env*\" -e \"*.ts*\"",
+    "clean": "git clean -fdx -e .direnv/ -e \"examples/**/.env*\"",
     "postinstall": "manypkg check",
     "lint": "turbo run lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "stylelint \"**/*.css\"",
