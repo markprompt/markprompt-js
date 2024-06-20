@@ -1,28 +1,9 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    // base
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "moduleDetection": "force",
-    "isolatedModules": true,
-
-    // strictness
-    "strict": true,
-
-    // transpilation
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
     "noEmit": false,
     "outDir": "dist/",
-    "rootDir": "src/",
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true,
-
-    // runtime
-    "lib": ["dom", "dom.iterable", "es2023"]
+    "rootDir": "src/"
   },
   "include": ["src/"],
   "exclude": ["src/*.test.ts"]

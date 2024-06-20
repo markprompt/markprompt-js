@@ -1,42 +1,10 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "references": [
-    { "path": "../core/tsconfig.build.json" },
-    { "path": "../react/tsconfig.build.json" }
-  ],
-  "include": ["src/*"],
+  "extends": "./tsconfig.json",
+  "include": ["src/"],
   "compilerOptions": {
-    // base
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "allowJs": true,
-    "checkJs": true,
-
-    // strictness
-    "strict": true,
-
-    // transpilation
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "outDir": "dist/",
+    "noEmit": false,
     "rootDir": "src/",
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "composite": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-
-    // runtime
-    "lib": ["dom", "dom.iterable", "es2023"],
-
-    "paths": {
-      "react": ["./node_modules/preact/compat"],
-      "react-dom": ["./node_modules/preact/compat"]
-    }
+    "emitDeclarationOnly": true
   }
 }

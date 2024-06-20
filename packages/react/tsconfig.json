@@ -1,10 +1,34 @@
 {
-  "extends": "./tsconfig.build.json",
   "references": [{ "path": "../core/tsconfig.build.json" }],
   "compilerOptions": {
-    "noEmit": true,
+    // base
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "moduleDetection": "force",
+    "isolatedModules": true,
     "checkJs": true,
-    "rootDir": "."
+
+    // strictness
+    "strict": true,
+    "types": ["@testing-library/jest-dom"],
+
+    // transpilation
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
+    "outDir": "dist/",
+    "rootDir": ".",
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+
+    // runtime
+    "lib": ["dom", "dom.iterable", "es2023"]
   },
   "include": [".", ".eslintrc.cjs"],
   "exclude": ["dist/", ".turbo/"]
