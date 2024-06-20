@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "lint:js": "eslint .",
     "prepack": "tsc --build"
   },
   "dependencies": {

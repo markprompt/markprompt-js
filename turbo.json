@@ -13,6 +13,7 @@
     "//#lint:css": {},
     "//#lint:format": {},
     "//#lint:js": {},
+    "lint:js": {},
     "//#lint:md": {},
     "//#lint:ts": {},
     "//#test": {

@@ -5,7 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
 import {
   useId,

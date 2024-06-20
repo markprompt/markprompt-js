@@ -1,4 +1,5 @@
-module.exports = {
+/** @type {import('prettier').Config} */
+export default {
   arrowParens: 'always',
   plugins: ['prettier-plugin-packagejson'],
   proseWrap: 'never',

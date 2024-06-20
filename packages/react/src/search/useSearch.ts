@@ -125,7 +125,7 @@ export function useSearch({
         }
       });
     },
-    [searchOptions, abort, controllerRef, projectKey, debug],
+    [abort, controllerRef, searchOptions, projectKey, apiUrl, debug],
   );
 
   return {

@@ -6,7 +6,7 @@ import {
   useFloating,
 } from '@floating-ui/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useSelect, type UseSelectProps } from 'downshift';
 import type { ReactNode } from 'react';
 

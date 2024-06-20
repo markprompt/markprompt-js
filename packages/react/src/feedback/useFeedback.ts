@@ -92,7 +92,7 @@ export function useFeedback({
         }
       });
     },
-    [abort, controllerRef, projectKey, feedbackOptions],
+    [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
   );
 
   return { submitFeedback, submitThreadCSAT, abort };
