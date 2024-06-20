@@ -3,9 +3,14 @@
  */
 module.exports = {
   root: false,
-  extends: ['next/core-web-vitals'],
+  extends: ['plugin:@next/next/core-web-vitals'],
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
+  },
+  settings: {
+    next: {
+      rootDir: __dirname,
+    },
   },
 };
