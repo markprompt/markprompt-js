@@ -26,12 +26,13 @@ type ArrayToUnion<T> = T extends (infer U)[]
     : never;
 
 export const CHAT_COMPLETIONS_MODELS = [
+  'claude-3-5-sonnet-20240620',
   'gpt-3.5-turbo',
+  'gpt-4-1106-preview',
+  'gpt-4-32k',
+  'gpt-4-turbo-preview',
   'gpt-4',
   'gpt-4o',
-  'gpt-4-32k',
-  'gpt-4-1106-preview',
-  'gpt-4-turbo-preview',
   'meta-llama-3-70b-instruct',
   'meta-llama-3-8b-instruct',
   'mixtral-8x7b-instruct-v0.1',
