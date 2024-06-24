@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.26.0
+
+### Minor Changes
+
+- [`e719a62`](https://github.com/motifland/markprompt-js/commit/e719a627d04ec116c60db77dba63a7d04468d072) Thanks [@nickrttn](https://github.com/nickrttn)! - Add Claude 3.5 Sonnet support
+
+### Patch Changes
+
+- Updated dependencies [[`e719a62`](https://github.com/motifland/markprompt-js/commit/e719a627d04ec116c60db77dba63a7d04468d072)]:
+  - @markprompt/react@0.49.0
+
 ## 0.25.9
 
 ### Patch Changes
