@@ -737,7 +737,7 @@ type ChatStore = ReturnType<typeof createChatStore>;
 
 export const ChatContext = createContext<ChatStore | null>(null);
 
-interface ChatProviderProps {
+export interface ChatProviderProps {
   chatOptions?: MarkpromptOptions['chat'];
   children: ReactNode;
   debug?: boolean;
