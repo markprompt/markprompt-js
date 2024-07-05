@@ -3,11 +3,11 @@ export {
   AutoScroller,
   Close,
   Content,
-  PlainContent,
   Description,
   DialogTrigger,
   Form,
   Overlay,
+  PlainContent,
   Portal,
   Prompt,
   References,
@@ -46,23 +46,24 @@ export {
 } from './search/useSearch.js';
 
 export {
-  Markprompt,
-  type MarkpromptProps,
-  openMarkprompt,
   closeMarkprompt,
+  Markprompt,
+  openMarkprompt,
+  type MarkpromptProps,
 } from './Markprompt.js';
 
 export { ChatView, type ChatViewProps } from './chat/ChatView.js';
 export {
   ChatProvider,
-  useChatStore,
   createChatStore,
-  type CreateChatOptions,
-  type ChatViewMessage,
+  useChatStore,
   type ChatLoadingState,
-  type ConfirmationProps,
-  type ToolCall,
+  type ChatProviderProps,
+  type ChatViewMessage,
   type ChatViewTool,
+  type ConfirmationProps,
+  type CreateChatOptions,
+  type ToolCall,
 } from './chat/store.js';
 
 export { SearchView, type SearchViewProps } from './search/SearchView.js';

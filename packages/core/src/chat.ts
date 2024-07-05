@@ -120,10 +120,13 @@ export interface SubmitChatOptions {
    */
   jsonOutput?: boolean;
   /**
-   * Remove PII from chat messages.
-   * @default false
+   * Storage and PII redaction options for user input and model output.
+   * @default { input: 'store', output: 'store' }
    */
-  redact?: boolean;
+  redact?: {
+    input?: 'store' | 'redact_pii' | 'no_store';
+    output?: 'store' | 'redact_pii' | 'no_store';
+  };
   /**
    * The model temperature.
    * @default 0.1
