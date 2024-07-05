@@ -1,5 +1,18 @@
 # @markprompt/react
 
+## 0.50.0
+
+### Minor Changes
+
+- [#389](https://github.com/motifland/markprompt-js/pull/389) [`25ddaab`](https://github.com/motifland/markprompt-js/commit/25ddaab7a5660386717464741556ff843908c1a5) Thanks [@nickrttn](https://github.com/nickrttn)! - Update the `redact` option to have options for both input/output
+
+### Patch Changes
+
+- [#385](https://github.com/motifland/markprompt-js/pull/385) [`6046e0a`](https://github.com/motifland/markprompt-js/commit/6046e0a76c311a8d1c1b8793655f716f336f0625) Thanks [@ethanniser](https://github.com/ethanniser)! - Pin radix dropdown to 2.0.6
+
+- Updated dependencies [[`25ddaab`](https://github.com/motifland/markprompt-js/commit/25ddaab7a5660386717464741556ff843908c1a5)]:
+  - @markprompt/core@0.33.0
+
 ## 0.49.0
 
 ### Minor Changes

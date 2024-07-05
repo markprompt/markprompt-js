@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.33.0
+
+### Minor Changes
+
+- [#389](https://github.com/motifland/markprompt-js/pull/389) [`25ddaab`](https://github.com/motifland/markprompt-js/commit/25ddaab7a5660386717464741556ff843908c1a5) Thanks [@nickrttn](https://github.com/nickrttn)! - Update the `redact` option to have options for both input/output
+
 ## 0.32.0
 
 ### Minor Changes
