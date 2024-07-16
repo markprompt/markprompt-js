@@ -34,10 +34,6 @@
       "react-dom": ["./node_modules/preact/compat"]
     }
   },
-  "references": [
-    { "path": "../core/tsconfig.build.json" },
-    { "path": "../react/tsconfig.build.json" }
-  ],
   "include": [".", ".eslintrc.cjs"],
   "exclude": ["dist/", ".turbo/"]
 }
