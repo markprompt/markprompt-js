@@ -18,7 +18,9 @@
     },
     "//#lint:md": {},
     "//#lint:ts": {},
-    "lint:ts": {},
+    "lint:ts": {
+      "dependsOn": ["^build"]
+    },
     "//#test": {
       "outputs": ["coverage/**"]
     }

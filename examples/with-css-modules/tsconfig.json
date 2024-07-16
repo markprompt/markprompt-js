@@ -1,5 +1,4 @@
 {
-  "references": [{ "path": "../../packages/react/tsconfig.build.json" }],
   "compilerOptions": {
     "target": "es2021",
     "skipLibCheck": true,
