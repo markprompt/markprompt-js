@@ -21,7 +21,6 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "composite": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
 
@@ -30,10 +29,6 @@
 
     "types": ["@docusaurus/module-type-aliases"]
   },
-  "references": [
-    { "path": "../core/tsconfig.build.json" },
-    { "path": "../react/tsconfig.build.json" }
-  ],
   "include": [".", ".eslintrc.cjs"],
   "exclude": ["dist/", ".turbo/"]
 }
