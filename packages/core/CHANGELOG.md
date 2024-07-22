@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.33.1
+
+### Patch Changes
+
+- [#391](https://github.com/markprompt/markprompt-js/pull/391) [`b826c70`](https://github.com/markprompt/markprompt-js/commit/b826c70031d454ef24f3625bf5bbfaa07f061f55) Thanks [@michaelfester](https://github.com/michaelfester)! - Add support for GPT-4o Mini
+
 ## 0.33.0
 
 ### Minor Changes
