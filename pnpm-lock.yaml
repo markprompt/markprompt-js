@@ -17,6 +17,9 @@ importers:
       '@changesets/changelog-github':
         specifier: ^0.5.0
         version: 0.5.0
+      '@changesets/cli':
+        specifier: ^2.27.1
+        version: 2.27.1
       '@manypkg/cli':
         specifier: ^0.21.4
         version: 0.21.4
@@ -117,10 +120,6 @@ importers:
       '@rollup/rollup-linux-x64-gnu':
         specifier: ^4.17.2
         version: 4.17.2
-    devDependencies:
-      '@changesets/cli':
-        specifier: ^2.27.1
-        version: 2.27.1
 
   examples/with-css-modules:
     dependencies:
