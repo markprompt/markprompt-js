@@ -33,6 +33,7 @@ export const CHAT_COMPLETIONS_MODELS = [
   'gpt-4-turbo-preview',
   'gpt-4',
   'gpt-4o',
+  'gpt-4o-mini',
   'meta-llama-3-70b-instruct',
   'meta-llama-3-8b-instruct',
   'mixtral-8x7b-instruct-v0.1',
