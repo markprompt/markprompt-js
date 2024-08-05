@@ -20,14 +20,21 @@ import {
 } from 'vitest';
 
 import {
-  DEFAULT_OPTIONS,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
+  isChatCompletion,
+  isChatCompletionChunk,
+  isChatCompletionMessage,
+  isMarkpromptMetadata,
+  isToolCall,
+  isToolCalls,
+  parseEncodedJSONHeader,
   submitChat,
   type SubmitChatOptions,
   type SubmitChatReturn,
   type SubmitChatYield,
 } from './index.js';
-import { formatEvent, getChunk } from '../../../test/utils.js';
+import { formatEvent, getChunk } from '../../../../test/utils.js';
+import { DEFAULT_OPTIONS } from '../constants.js';
 
 describe('submitChat', () => {
   const encoder = new TextEncoder();
@@ -377,5 +384,163 @@ describe('submitChat', () => {
         'Malformed response from Markprompt API',
       );
     }
+  });
+});
+
+describe('parseEncodedJSONHeader', () => {
+  const encoder = new TextEncoder();
+  const unencodedObject = { data: 'Some text' };
+  const encodedObject = encoder
+    .encode(JSON.stringify(unencodedObject))
+    .toString();
+  const unencodedText = 'Some text';
+  const encodedText = encoder.encode(unencodedText).toString();
+
+  test('parses and returns the decoded JSON value from the header', () => {
+    const mockResponse = new Response(null, {
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'X-Encoded-Data': encodedObject,
+      },
+    });
+
+    const parsedValue = parseEncodedJSONHeader(mockResponse, 'X-Encoded-Data');
+
+    expect(parsedValue).toEqual(unencodedObject);
+  });
+
+  test('returns undefined if the header is missing or decoding fails', () => {
+    const mockResponse = new Response(null, {
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+    });
+
+    const parsedValue = parseEncodedJSONHeader(mockResponse, 'X-Encoded-Data');
+
+    expect(parsedValue).toBeUndefined();
+  });
+
+  test('returns undefined if the header is not a JSON object', () => {
+    const mockResponse = new Response(null, {
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'X-Encoded-Data': encodedText,
+      },
+    });
+
+    const parsedValue = parseEncodedJSONHeader(mockResponse, 'X-Encoded-Data');
+
+    expect(parsedValue).toBeUndefined();
+  });
+});
+
+describe('isMarkpromptMetadata', () => {
+  test('identifies ChatCompletionMetadata types', () => {
+    expect(
+      isMarkpromptMetadata({
+        threadId: 'test',
+        messageId: 'test',
+        references: [{ file: { path: 'test', source: { type: 'website' } } }],
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isMarkpromptMetadata({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletion', () => {
+  test('identifies ChatCompletionMessage types', () => {
+    expect(
+      isChatCompletion({
+        object: 'chat.completion',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletion({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isToolCall(s)', () => {
+  test('identifies ChatCompletionMessageToolCall types', () => {
+    expect(
+      isToolCall({
+        id: 'test',
+        type: 'function',
+        function: {},
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isToolCall({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+
+    expect(
+      isToolCalls([
+        {
+          id: 'test',
+          type: 'function',
+          function: {},
+        },
+      ]),
+    ).toBeTruthy();
+
+    expect(
+      isToolCalls([
+        {
+          foo: 'bar',
+        },
+      ]),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletionChunk', () => {
+  test('identifies ChatCompletionChunk types', () => {
+    expect(
+      isChatCompletionChunk({
+        object: 'chat.completion.chunk',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionChunk({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
+  });
+});
+
+describe('isChatCompletionMessage', () => {
+  test('identifies ChatCompletionMessage types', () => {
+    expect(
+      isChatCompletionMessage({
+        content: 'test',
+        role: 'assistant',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionMessage({
+        content: null,
+        role: 'assistant',
+      }),
+    ).toBeTruthy();
+
+    expect(
+      isChatCompletionMessage({
+        foo: 'bar',
+      }),
+    ).toBeFalsy();
   });
 });

@@ -1,4 +1,5 @@
-import { DEFAULT_OPTIONS, type CSAT } from '@markprompt/core';
+import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
+import type { CSAT } from '@markprompt/core/feedback';
 import {
   type ReactElement,
   type ComponentPropsWithoutRef,

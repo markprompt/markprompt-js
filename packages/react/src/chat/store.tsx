@@ -1,13 +1,13 @@
 import {
-  isAbortError,
   isToolCall,
   submitChat,
+  type ChatCompletionChunk,
   type ChatCompletionMessageToolCall,
   type ChatCompletionTool,
   type SubmitChatOptions,
   type SubmitChatYield,
-  type ChatCompletionChunk,
-} from '@markprompt/core';
+} from '@markprompt/core/chat';
+import { isAbortError } from '@markprompt/core/utils';
 import {
   createContext,
   useContext,

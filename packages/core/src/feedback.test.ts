@@ -2,7 +2,8 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'vitest';
 
-import { DEFAULT_OPTIONS, submitFeedback } from './index.js';
+import { DEFAULT_OPTIONS } from './constants.js';
+import { submitFeedback } from './feedback.js';
 
 let status = 200;
 

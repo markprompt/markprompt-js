@@ -1,13 +1,13 @@
 import {
   submitAlgoliaDocsearchQuery,
   submitSearchQuery as submitSearchQueryToMarkprompt,
+  type SubmitSearchQueryOptions,
   type AlgoliaDocSearchHit,
   type AlgoliaDocSearchResultsResponse,
   type SearchResult,
   type SearchResultsResponse,
-  isAbortError,
-  type SubmitSearchQueryOptions,
-} from '@markprompt/core';
+} from '@markprompt/core/search';
+import { isAbortError } from '@markprompt/core/utils';
 import debounce from 'p-debounce';
 import { useCallback, useState } from 'react';
 

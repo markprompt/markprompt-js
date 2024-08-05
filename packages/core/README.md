@@ -37,7 +37,7 @@ In browsers with [esm.sh](https://esm.sh):
 ## Usage
 
 ```js
-import { submitChat } from '@markprompt/core';
+import { submitChat } from '@markprompt/core/chat';
 
 for await (const chunk of submitChat(
   [{ content: 'What is Markprompt?', role: 'user' }],

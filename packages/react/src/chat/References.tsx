@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FileSectionReference } from '@markprompt/core';
+import type { FileSectionReference } from '@markprompt/core/types';
 import {
   useCallback,
   useMemo,

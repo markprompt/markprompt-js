@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
-  AlgoliaDocSearchHit,
-  FileSectionReference,
-  PromptFeedback,
-  SearchResult,
   SubmitFeedbackOptions,
+  PromptFeedback,
+} from '@markprompt/core/feedback';
+import type {
+  AlgoliaDocSearchHit,
+  SearchResult,
   SubmitSearchQueryOptions,
-} from '@markprompt/core';
+} from '@markprompt/core/search';
+import type { FileSectionReference } from '@markprompt/core/types';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,

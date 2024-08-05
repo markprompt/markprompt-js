@@ -1,8 +1,8 @@
 import type {
   AlgoliaDocSearchHit,
-  FileSectionReference,
   SearchResult,
-} from '@markprompt/core';
+} from '@markprompt/core/search';
+import type { FileSectionReference } from '@markprompt/core/types';
 
 import type { MarkpromptOptions } from './types.js';
 

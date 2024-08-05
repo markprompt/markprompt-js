@@ -1,10 +1,10 @@
 import {
   submitFeedback as submitFeedbackCore,
   submitCSAT as submitCSATCore,
-  type PromptFeedback,
   type SubmitFeedbackOptions,
   type CSAT,
-} from '@markprompt/core';
+  type PromptFeedback,
+} from '@markprompt/core/feedback';
 import { useCallback } from 'react';
 
 import { useAbortController } from '../useAbortController.js';

@@ -2,7 +2,7 @@ import {
   type ChatCompletionMessageParam,
   type SubmitChatYield,
   submitChat,
-} from '@markprompt/core';
+} from '@markprompt/core/chat';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { type ReactElement, useCallback, useState } from 'react';

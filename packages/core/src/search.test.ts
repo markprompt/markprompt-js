@@ -11,14 +11,14 @@ import {
   vi,
 } from 'vitest';
 
+import { DEFAULT_OPTIONS } from './constants.js';
 import {
-  DEFAULT_OPTIONS,
   submitAlgoliaDocsearchQuery,
   submitSearchQuery,
   type AlgoliaDocSearchHit,
   type SearchResult,
-} from './index.js';
-import type { AlgoliaProvider } from './search.js';
+  AlgoliaProvider,
+} from './search.js';
 
 const searchResults: SearchResult[] = [
   {
