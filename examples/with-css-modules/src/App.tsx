@@ -1,4 +1,4 @@
-import type { FileSectionReference } from '@markprompt/core';
+import type { FileSectionReference } from '@markprompt/core/types';
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import type { ReactElement } from 'react';
