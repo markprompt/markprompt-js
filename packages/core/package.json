@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/core",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/markprompt/markprompt-js.git",

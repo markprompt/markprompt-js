@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.51.0
+
+### Minor Changes
+
+- [`14c2074`](https://github.com/markprompt/markprompt-js/commit/14c207457ddff436c6dd3153015ab19ae71a6043) Thanks [@nickrttn](https://github.com/nickrttn)! - Update package.json repository URL
+
+### Patch Changes
+
+- Updated dependencies [[`14c2074`](https://github.com/markprompt/markprompt-js/commit/14c207457ddff436c6dd3153015ab19ae71a6043)]:
+  - @markprompt/core@0.35.0
+
 ## 0.50.2
 
 ### Patch Changes
