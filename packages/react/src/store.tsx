@@ -1,8 +1,8 @@
 import {
-  isAbortError,
   submitChat,
   type ChatCompletionMessageParam,
-} from '@markprompt/core';
+} from '@markprompt/core/chat';
+import { isAbortError } from '@markprompt/core/utils';
 import {
   createContext,
   useContext,

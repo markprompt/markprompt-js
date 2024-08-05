@@ -20,14 +20,14 @@ import {
 } from 'vitest';
 
 import {
-  DEFAULT_OPTIONS,
   DEFAULT_SUBMIT_CHAT_OPTIONS,
   submitChat,
   type SubmitChatOptions,
   type SubmitChatReturn,
   type SubmitChatYield,
 } from './index.js';
-import { formatEvent, getChunk } from '../../../test/utils.js';
+import { formatEvent, getChunk } from '../../../../test/utils.js';
+import { DEFAULT_OPTIONS } from '../constants.js';
 
 describe('submitChat', () => {
   const encoder = new TextEncoder();

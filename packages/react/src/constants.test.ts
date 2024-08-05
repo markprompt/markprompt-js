@@ -1,8 +1,8 @@
 import type {
   AlgoliaDocSearchHit,
   SearchResult,
-  Source,
-} from '@markprompt/core';
+} from '@markprompt/core/search';
+import type { Source } from '@markprompt/core/types';
 import { describe, expect, test } from 'vitest';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';

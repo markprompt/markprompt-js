@@ -1,4 +1,5 @@
-import { DEFAULT_OPTIONS, type SearchResult } from '@markprompt/core';
+import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
+import type { SearchResult } from '@markprompt/core/search';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';

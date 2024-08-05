@@ -3,7 +3,7 @@ import {
   type ChatCompletionAssistantMessageParam,
   type ChatCompletionMessageParam,
   type ChatCompletionToolMessageParam,
-} from '@markprompt/core';
+} from '@markprompt/core/chat';
 
 import type { ChatViewMessage } from './store.js';
 import { isPresent } from '../utils.js';

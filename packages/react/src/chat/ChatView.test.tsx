@@ -1,4 +1,5 @@
-import { DEFAULT_OPTIONS, type FileSectionReference } from '@markprompt/core';
+import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
+import { type FileSectionReference } from '@markprompt/core/types';
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, delay, HttpResponse } from 'msw';

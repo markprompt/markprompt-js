@@ -1,11 +1,12 @@
 import type { SearchOptions } from '@algolia/client-search';
 import defaults from 'defaults';
 
-import { DEFAULT_OPTIONS } from './index.js';
+import { DEFAULT_OPTIONS } from './constants.js';
+import { DocSearchHit } from './docsearch.js';
 import type {
-  AlgoliaDocSearchResultsResponse,
   BaseOptions,
-  SearchResultsResponse,
+  FileReferenceFileData,
+  FileSectionReferenceSectionData,
 } from './types.js';
 import { getErrorMessage, isAbortError } from './utils.js';
 
@@ -45,6 +46,33 @@ export interface AlgoliaProvider {
    * Algolia search parameters, like `facetFilters`
    **/
   searchParameters?: SearchOptions;
+}
+
+export interface SearchResultSection extends FileSectionReferenceSectionData {
+  content?: string;
+  snippet?: string;
+}
+
+export interface SearchResult extends SearchResultSection {
+  /**
+   * Reference file.
+   */
+  file: FileReferenceFileData;
+  /**
+   * Match type.
+   */
+  matchType: 'title' | 'leadHeading' | 'content';
+}
+
+export interface SearchResultsResponse {
+  debug?: unknown;
+  data: SearchResult[];
+}
+
+export type AlgoliaDocSearchHit = DocSearchHit;
+
+export interface AlgoliaDocSearchResultsResponse {
+  hits: AlgoliaDocSearchHit[];
 }
 
 export const DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS: SubmitSearchQueryOptions = {

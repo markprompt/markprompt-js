@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS } from '@markprompt/core';
+import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
 import { waitFor, renderHook } from '@testing-library/react';
 import { http, HttpResponse, type JsonBodyType } from 'msw';
 import { setupServer } from 'msw/node';
