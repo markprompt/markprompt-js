@@ -1,5 +1,17 @@
 # @markprompt/core
 
+## 0.34.0
+
+### Minor Changes
+
+- [#393](https://github.com/markprompt/markprompt-js/pull/393) [`2672ab9`](https://github.com/markprompt/markprompt-js/commit/2672ab956b178b09b7079fd2f573d55a114c7901) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove the barrel file in `@markprompt/core` in favor of package.json exports.
+
+  You will now need to import from specific exports, eg. `import { submitChat } from '@markprompt/core/chat'` instead of `import { submitChat } from '@markprompt/core'`.
+
+### Patch Changes
+
+- [#393](https://github.com/markprompt/markprompt-js/pull/393) [`2672ab9`](https://github.com/markprompt/markprompt-js/commit/2672ab956b178b09b7079fd2f573d55a114c7901) Thanks [@nickrttn](https://github.com/nickrttn)! - Group related utils and types. All types and utils that are related to a specific featured are now grouped with that feature's code. You might need to update your imports.
+
 ## 0.33.1
 
 ### Patch Changes
