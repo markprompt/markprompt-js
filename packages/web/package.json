@@ -4,7 +4,7 @@
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motifland/markprompt-js.git",
+    "url": "git+https://github.com/markprompt/markprompt-js.git",
     "directory": "packages/web"
   },
   "license": "MIT",

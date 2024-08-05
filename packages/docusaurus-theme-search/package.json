@@ -4,8 +4,8 @@
   "description": "A Markprompt search theme for Docusaurus",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motifland/markprompt-js.git",
-    "directory": "packages/react"
+    "url": "git+https://github.com/markprompt/markprompt-js.git",
+    "directory": "packages/docusaurus-theme-search"
   },
   "license": "MIT",
   "sideEffects": false,
