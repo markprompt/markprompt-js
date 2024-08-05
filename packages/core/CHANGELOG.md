@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.35.0
+
+### Minor Changes
+
+- [`14c2074`](https://github.com/markprompt/markprompt-js/commit/14c207457ddff436c6dd3153015ab19ae71a6043) Thanks [@nickrttn](https://github.com/nickrttn)! - Update package.json repository URL
+
 ## 0.34.0
 
 ### Minor Changes
