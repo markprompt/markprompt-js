@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.35.1
+
+### Patch Changes
+
+- [#397](https://github.com/markprompt/markprompt-js/pull/397) [`dbda62a`](https://github.com/markprompt/markprompt-js/commit/dbda62a25ce1984abe8facb5f9639a1966b8b877) Thanks [@michaelfester](https://github.com/michaelfester)! - Rename skip system instructions
+
 ## 0.35.0
 
 ### Minor Changes
