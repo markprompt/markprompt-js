@@ -1,5 +1,12 @@
 # @markprompt/react
 
+## 0.51.1
+
+### Patch Changes
+
+- Updated dependencies [[`dbda62a`](https://github.com/markprompt/markprompt-js/commit/dbda62a25ce1984abe8facb5f9639a1966b8b877)]:
+  - @markprompt/core@0.35.1
+
 ## 0.51.0
 
 ### Minor Changes
