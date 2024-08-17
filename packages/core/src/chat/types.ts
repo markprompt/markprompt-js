@@ -237,7 +237,7 @@ export interface SubmitChatOptions {
    **/
   doNotInjectContext?: boolean;
   /**
-   * Whether or not to skip system instructions.
+   * Whether or not to skip the system instructions.
    * @default false
    **/
   skipSystemInstructions?: boolean;
