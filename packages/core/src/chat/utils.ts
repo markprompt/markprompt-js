@@ -18,6 +18,7 @@ const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'context',
   'debug',
   'doNotInjectContext',
+  'skipSystemInstructions',
   'excludeFromInsights',
   'frequencyPenalty',
   'iDontKnowMessage',

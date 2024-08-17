@@ -237,6 +237,11 @@ export interface SubmitChatOptions {
    **/
   doNotInjectContext?: boolean;
   /**
+   * Whether or not to skip the system instructions.
+   * @default false
+   **/
+  skipSystemInstructions?: boolean;
+  /**
    * If true, the bot may encourage the user to ask a follow-up question, for instance to gather additional information.
    * @default true
    **/
