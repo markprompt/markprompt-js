@@ -27,8 +27,6 @@
           mkShell {
             buildInputs = [
               corepackEnable
-              bun
-              deno
               node
             ];
           };
