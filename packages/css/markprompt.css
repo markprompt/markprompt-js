@@ -1243,6 +1243,10 @@
   color: inherit;
 }
 
+.MarkpromptMessageAnswer img {
+  max-width: 100%;
+  max-height: 80vh;
+}
 .MarkpromptAnswer img {
   margin-top: 1.7142857em;
   margin-bottom: 1.7142857em;

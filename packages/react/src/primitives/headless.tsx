@@ -422,15 +422,6 @@ function Answer(props: AnswerProps): ReactElement {
       remarkPlugins={remarkPlugins}
       components={{
         a: (props) => <LinkComponent {...props} />,
-        img: (props) => (
-          <img
-            {...props}
-            style={{
-              maxWidth: '100%',
-              maxHeight: '50vh',
-            }}
-          />
-        ),
         pre: (props) => {
           const { children, className, ...rest } = props;
 
