@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.51.2
+
+### Patch Changes
+
+- [#399](https://github.com/markprompt/markprompt-js/pull/399) [`eee804b`](https://github.com/markprompt/markprompt-js/commit/eee804b2dcf0152daf71fe69677da70c8db46b0d) Thanks [@michaelfester](https://github.com/michaelfester)! - Add constraints on image size
+
 ## 0.51.1
 
 ### Patch Changes
