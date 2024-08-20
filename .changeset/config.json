@@ -4,7 +4,7 @@
   "baseBranch": "main",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "motifland/markprompt-js" }
+    { "repo": "markprompt/markprompt-js" }
   ],
   "commit": false,
   "privatePackages": false,
