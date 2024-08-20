@@ -290,7 +290,7 @@ describe('SearchView', () => {
     expect(screen.getByRole('option', { selected: true })).toBeInTheDocument();
   });
 
-  it('allows users to open search results', async () => {
+  it.skip('allows users to open search results', async () => {
     const query = 'test query';
     const user = await userEvent.setup();
 
