@@ -86,6 +86,7 @@ export async function* submitChat(
     headers: new Headers({
       'Content-Type': 'application/json',
       'X-Markprompt-API-Version': '2024-05-21',
+      ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
     }),
     body: JSON.stringify({
       projectKey,

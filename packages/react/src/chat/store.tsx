@@ -744,6 +744,7 @@ export interface ChatProviderProps {
   projectKey: string;
   storeKey?: string;
   apiUrl?: string;
+  headers?: { [key: string]: string };
 }
 
 export function ChatProvider(props: ChatProviderProps): JSX.Element {

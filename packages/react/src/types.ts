@@ -700,6 +700,11 @@ export interface MarkpromptOptions {
    */
   apiUrl?: string;
   /**
+   * Headers to pass along the request.
+   * @default undefined
+   */
+  headers?: { [key: string]: string };
+  /**
    * Trigger component, such as a search button or a floating chat bubble.
    * @default undefined
    **/

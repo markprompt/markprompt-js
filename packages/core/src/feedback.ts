@@ -22,7 +22,7 @@ export interface SubmitFeedbackOptions {
   signal?: AbortSignal;
 }
 
-const allowedOptionKeys = ['signal', 'apiUrl'];
+const allowedOptionKeys = ['signal', 'apiUrl', 'headers'];
 
 export const DEFAULT_SUBMIT_FEEDBACK_OPTIONS =
   {} satisfies SubmitFeedbackOptions;
@@ -58,6 +58,7 @@ export async function submitFeedback(
         headers: new Headers({
           'Content-Type': 'application/json',
           'X-Markprompt-API-Version': '2024-05-21',
+          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
         }),
         body: JSON.stringify({
           projectKey,
@@ -121,6 +122,7 @@ export async function submitCSAT(
         headers: new Headers({
           'Content-Type': 'application/json',
           'X-Markprompt-API-Version': '2024-05-21',
+          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
         }),
         body: JSON.stringify({ projectKey, csat: body.csat }),
         signal: signal,

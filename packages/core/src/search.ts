@@ -117,6 +117,7 @@ export async function submitSearchQuery(
         signal: options?.signal,
         headers: new Headers({
           'X-Markprompt-API-Version': '2023-12-01',
+          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
         }),
       },
     );

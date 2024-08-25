@@ -61,4 +61,5 @@ export interface FileReferenceFileData {
 
 export interface BaseOptions {
   apiUrl?: string;
+  headers?: { [key: string]: string };
 }

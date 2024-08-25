@@ -37,6 +37,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const projectKey = useGlobalStore((state) => state.options.projectKey);
   const threadId = useChatStore((state) => state.threadId);
   const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
+  const headers = useGlobalStore((state) => state.options?.headers);
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
@@ -78,6 +79,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         // don't pass a Content-Type header here, the browser will
         // generate a correct header which includes the boundary.
         body: data,
+        headers,
       });
 
       setSubmittingCase(false);
