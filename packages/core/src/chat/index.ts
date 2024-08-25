@@ -81,6 +81,12 @@ export async function* submitChat(
       },
     ) as BaseOptions & SubmitChatOptions;
 
+  console.log('resolvedOptions.apiUrl', resolvedOptions.apiUrl);
+  console.log(
+    'resolvedOptions.headers',
+    JSON.stringify(resolvedOptions.headers),
+  );
+
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
     method: 'POST',
     headers: new Headers({
