@@ -11,16 +11,17 @@ import { BaseOptions } from '../types.js';
 import { isFileSectionReferences } from '../utils.js';
 
 const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
+  'additionalMetadata',
+  'allowFollowUpQuestions',
+  'apiUrl',
   'assistantId',
   'assistantVersionId',
-  'apiUrl',
-  'allowFollowUpQuestions',
   'context',
   'debug',
   'doNotInjectContext',
-  'skipSystemInstructions',
   'excludeFromInsights',
   'frequencyPenalty',
+  'headers',
   'iDontKnowMessage',
   'jsonOutput',
   'maxTokens',
@@ -32,6 +33,7 @@ const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'retrievalOptions',
   'sectionsMatchCount',
   'sectionsMatchThreshold',
+  'skipSystemInstructions',
   'stream',
   'systemPrompt',
   'temperature',
@@ -40,7 +42,6 @@ const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'toolChoice',
   'tools',
   'topP',
-  'additionalMetadata',
 ];
 
 export const isValidSubmitChatOptionsKey = (

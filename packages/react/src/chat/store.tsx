@@ -142,6 +142,10 @@ export interface ChatStoreState {
    **/
   apiUrl?: string;
   /**
+   * Headers to pass along the request.
+   */
+  headers?: { [key: string]: string };
+  /**
    * Abort handler.
    **/
   abort?: () => void;
@@ -232,6 +236,7 @@ export interface CreateChatOptions {
   debug?: boolean;
   projectKey: string;
   apiUrl?: string;
+  headers?: { [key: string]: string };
   persistChatHistory?: boolean;
   chatOptions?: MarkpromptOptions['chat'];
   storeKey?: string;
@@ -250,7 +255,8 @@ export const createChatStore = ({
   persistChatHistory,
   projectKey,
   storeKey,
-  apiUrl, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  apiUrl,
+  headers, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 }: CreateChatOptions) => {
   if (!projectKey) {
     throw new Error(
@@ -263,6 +269,7 @@ export const createChatStore = ({
       persist(
         (set, get) => ({
           apiUrl,
+          headers,
           projectKey,
           messages: [],
           didAcceptDisclaimer: false,
@@ -451,6 +458,7 @@ export const createChatStore = ({
 
             const options = {
               apiUrl: get().apiUrl,
+              headers: get().headers,
               threadId: get().threadId,
               signal: controller.signal,
               debug,
@@ -748,13 +756,22 @@ export interface ChatProviderProps {
 }
 
 export function ChatProvider(props: ChatProviderProps): JSX.Element {
-  const { chatOptions, children, debug, projectKey, storeKey, apiUrl } = props;
+  const {
+    chatOptions,
+    children,
+    debug,
+    projectKey,
+    storeKey,
+    apiUrl,
+    headers,
+  } = props;
 
   const store = useRef<ChatStore>();
 
   if (!store.current) {
     store.current = createChatStore({
       apiUrl,
+      headers,
       projectKey,
       chatOptions,
       debug,
