@@ -628,7 +628,7 @@ const References = function References<
 
   return (
     <RootComponent ref={ref}>
-      {references.map((reference, index) => {
+      {references.slice(0, 5).map((reference, index) => {
         return (
           <>
             <ReferenceComponent

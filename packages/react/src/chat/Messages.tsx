@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo, type ComponentType, type ReactElement } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type ComponentType,
+  type ReactElement,
+} from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import { DefaultMessage, DefaultView } from './DefaultView.js';
@@ -7,9 +13,11 @@ import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
 import { CSATPicker } from '../feedback/csat-picker.js';
-import { ChatIconOutline } from '../icons.js';
+import { ChatIconOutline, LoadingIcon } from '../icons.js';
+import { openMarkprompt } from '../Markprompt.js';
 import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
+import { useGlobalStore } from '../store.js';
 import type { MarkpromptOptions } from '../types.js';
 
 export type MessagesProps = {
@@ -19,9 +27,75 @@ export type MessagesProps = {
   integrations: MarkpromptOptions['integrations'];
   projectKey: string;
   referencesOptions: NonNullable<MarkpromptOptions['references']>;
-  handleCreateTicket?: () => void;
   linkAs?: string | ComponentType<any>;
 } & BaseMarkprompt.BrandingProps;
+
+export function CreateTicketButton({
+  integrations,
+}: {
+  integrations: MarkpromptOptions['integrations'];
+}): ReactElement {
+  const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
+  const threadId = useChatStore((state) => state.threadId);
+  const messages = useChatStore((state) => state.messages);
+  const createTicketSummary = useGlobalStore(
+    (state) => state.tickets?.createTicketSummary,
+  );
+
+  const createTicketAndOpenForm = useCallback(async () => {
+    if (!integrations?.createTicket?.enabled) {
+      return;
+    }
+
+    if (!messages || messages.length === 0 || !threadId) {
+      openMarkprompt('ticket');
+      return;
+    }
+
+    setIsCreatingTicketSummary(true);
+    await createTicketSummary?.(threadId, messages);
+    setIsCreatingTicketSummary(false);
+    openMarkprompt('ticket', {
+      ticketDeflectionFormOptions: {
+        defaultView: 'ticket',
+        showBackLink: false,
+        threadId,
+      },
+    });
+  }, [
+    integrations?.createTicket?.enabled,
+    messages,
+    threadId,
+    createTicketSummary,
+  ]);
+
+  if (!integrations?.createTicket) {
+    return <></>;
+  }
+
+  return (
+    <button
+      className="MarkpromptButton"
+      onClick={createTicketAndOpenForm}
+      data-variant="outline"
+      disabled={isCreatingTicketSummary}
+      aria-label={
+        integrations.createTicket.messageButton?.hasText
+          ? undefined
+          : integrations.createTicket.messageButton?.text
+      }
+    >
+      {isCreatingTicketSummary ? (
+        <LoadingIcon style={{ width: 16, height: 16 }} />
+      ) : (
+        <ChatIconOutline className="MarkpromptMenuIcon" aria-hidden={true} />
+      )}
+      {integrations.createTicket.messageButton?.hasText && (
+        <span>{integrations.createTicket.messageButton?.text}</span>
+      )}
+    </button>
+  );
+}
 
 export function Messages(props: MessagesProps): ReactElement {
   const {
@@ -31,7 +105,6 @@ export function Messages(props: MessagesProps): ReactElement {
     integrations,
     referencesOptions,
     projectKey,
-    handleCreateTicket,
     linkAs,
     branding = { show: true, type: 'plain' },
   } = props;
@@ -129,37 +202,6 @@ export function Messages(props: MessagesProps): ReactElement {
                 />
               )}
 
-              {integrations?.createTicket?.enabled &&
-                message.role === 'assistant' &&
-                message.state === 'done' &&
-                index === lastAssistantMessageIndex && (
-                  <div className="MarkpromptMessageCreateTicket">
-                    <p className="MarkpromptMessageSectionHeading">
-                      {integrations.createTicket.messageText}
-                    </p>
-                    <button
-                      className="MarkpromptButton"
-                      onClick={handleCreateTicket}
-                      data-variant="outline"
-                      aria-label={
-                        integrations.createTicket.messageButton?.hasText
-                          ? undefined
-                          : integrations.createTicket.messageButton?.text
-                      }
-                    >
-                      <ChatIconOutline
-                        className="MarkpromptMenuIcon"
-                        aria-hidden={true}
-                      />
-                      {integrations.createTicket.messageButton?.hasText && (
-                        <span>
-                          {integrations.createTicket.messageButton?.text}
-                        </span>
-                      )}
-                    </button>
-                  </div>
-                )}
-
               {threadId &&
                 message.role === 'assistant' &&
                 (message.state === 'done' || message.state === 'cancelled') &&
@@ -171,6 +213,18 @@ export function Messages(props: MessagesProps): ReactElement {
                       threadId={threadId}
                       feedbackOptions={feedbackOptions}
                     />
+                  </div>
+                )}
+
+              {integrations?.createTicket?.enabled &&
+                message.role === 'assistant' &&
+                message.state === 'done' &&
+                index === lastAssistantMessageIndex && (
+                  <div className="MarkpromptMessageCreateTicket">
+                    <p className="MarkpromptMessageSectionHeading">
+                      {integrations.createTicket.messageText}
+                    </p>
+                    <CreateTicketButton integrations={integrations} />
                   </div>
                 )}
             </div>

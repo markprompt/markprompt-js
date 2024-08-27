@@ -86,14 +86,26 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             });
 
             const options = {
+              model: 'gpt-4o-mini' as const,
               threadId: threadId,
-              ...get().options.chat,
               apiUrl: get().options.apiUrl,
               headers: get().options.headers,
-              tools: get().options?.chat?.tools?.map((x) => x.tool),
               systemPrompt:
                 get().options?.integrations?.createTicket?.prompt ??
-                'You are an expert summarizer. Your task is to summarize a conversation between a user and an AI. Your summary is concise, and allows a human support agent to quickly inspect what is going on. You should only output the summary, nothing else. You output the content in plain text.',
+                `You act as an expert summarizer.
+
+- You must write in the first person, as if you were the user writing a support ticket. Failure to do so will result in severe penalties.
+- Your task is to generate a short and precise summary of the user's input only.
+- You focus on the user message, and omit assistant messages unless strictly needed.
+- You must not include any references to creating a support ticket.
+- You must write a standalone summary, with no greetings or other extra text.
+- The summary must not be longer than the user messages. You will be penalized if it is longer.
+- You must output your response in plain text.
+- You must stricly adhere to these rules to avoid penalties.
+
+Example:
+- I am having an issue with setting up my payment processor.
+- I can no longer log in to my account.`,
               excludeFromInsights: true,
               doNotInjectContext: true,
               allowFollowUpQuestions: true,
@@ -101,14 +113,14 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
 
             const conversation = toValidApiMessages(messages)
               .map((m) => {
-                return `${m.role === 'user' ? 'User' : 'AI'}:\n\n${m.content}`;
+                return `${m.role === 'user' ? 'User' : 'Assistant'}:\n\n${m.content}`;
               })
               .join('\n\n==============================\n\n');
 
             const apiMessages = [
               {
                 role: 'user',
-                content: `Here is the full transcript of the conversation:\n\n${conversation}`,
+                content: `Full transcript:\n\n${conversation}\n\nSummary of my conversation with the assistant:`,
               } as const,
             ] as ChatCompletionMessageParam[];
 

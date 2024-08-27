@@ -58,10 +58,6 @@ export interface ChatViewProps {
    */
   onDidPressBack?: () => void;
   /**
-   * Handler when a ticket is created.
-   */
-  handleCreateTicket?: () => void;
-  /**
    * Component to use in place of <a>.
    * @default "a"
    */
@@ -100,7 +96,6 @@ export function ChatView(props: ChatViewProps): JSX.Element {
     showBack,
     onDidPressBack,
     integrations,
-    handleCreateTicket,
     linkAs,
     submitOnEnter,
     branding,
@@ -184,7 +179,6 @@ export function ChatView(props: ChatViewProps): JSX.Element {
               integrations={integrations}
               projectKey={projectKey}
               referencesOptions={referencesOptions}
-              handleCreateTicket={handleCreateTicket}
               linkAs={linkAs}
               branding={branding}
             />

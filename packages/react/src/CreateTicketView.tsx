@@ -25,24 +25,33 @@ export interface CreateTicketViewProps {
   handleGoBack: () => void;
   includeNav?: boolean;
   includeCTA?: boolean;
+  forceThreadId?: string;
 }
 
 export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
-  const { handleGoBack, includeNav, includeCTA } = props;
+  const { handleGoBack, includeNav, includeCTA, forceThreadId } = props;
 
   const form = useRef<HTMLFormElement>(null);
   const createTicketOptions = useGlobalStore(
     (state) => state.options.integrations?.createTicket,
   );
   const projectKey = useGlobalStore((state) => state.options.projectKey);
-  const threadId = useChatStore((state) => state.threadId);
+  const storeThreadId = useChatStore((state) => state.threadId);
+
+  // When the form is opened from another chat modal, the threadId is
+  // not carried over in the state. Instead, we need to pass it
+  // explicitly.
+  const threadId = forceThreadId ?? storeThreadId;
+
   const apiUrl = useGlobalStore((state) => state.options?.apiUrl);
   const headers = useGlobalStore((state) => state.options?.headers);
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
 
-  const messages = useChatStore((state) => state.messages);
+  const messages = useChatStore((state) =>
+    threadId ? state.messagesByThreadId[threadId]?.messages : undefined,
+  );
 
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
 
@@ -111,6 +120,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     if (!messages || messages.length === 0) {
       return '';
     }
+
     const transcript = toValidApiMessages(messages)
       .map((m) => {
         return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
