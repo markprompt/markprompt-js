@@ -61,46 +61,6 @@ if (el && el instanceof HTMLElement) {
         userId: 'user-123',
         plan: 'hobby',
       },
-      toolChoice: 'auto',
-      tools: [
-        {
-          call: get_random_activity,
-          tool: {
-            type: 'function',
-            function: {
-              name: 'get_random_activity',
-              description: 'Get a random activity from the Bored API',
-              parameters: {
-                type: 'object',
-                properties: {
-                  type: {
-                    type: 'string',
-                    description: 'Find a random activity with a given type',
-                    enum: [
-                      'education',
-                      'recreational',
-                      'social',
-                      'diy',
-                      'charity',
-                      'cooking',
-                      'relaxation',
-                      'music',
-                      'busywork',
-                    ],
-                  },
-                  participants: {
-                    type: 'integer',
-                    description:
-                      'Find a random activity for a given number of participants',
-                  },
-                },
-                required: [],
-              },
-            },
-          },
-          requireConfirmation: true,
-        },
-      ],
     },
     integrations: {
       createTicket: {
