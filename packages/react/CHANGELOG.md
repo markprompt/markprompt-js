@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.51.3
+
+### Patch Changes
+
+- [#403](https://github.com/markprompt/markprompt-js/pull/403) [`e13e098`](https://github.com/markprompt/markprompt-js/commit/e13e0985d2c285b7908b157f2baa293e1b67bcfc) Thanks [@michaelfester](https://github.com/michaelfester)! - Open ticket creation form from chat
+
 ## 0.51.2
 
 ### Patch Changes
