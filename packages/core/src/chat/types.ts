@@ -36,7 +36,10 @@ export const CHAT_COMPLETIONS_MODELS = [
   'mixtral-8x7b-instruct-v0.1',
 ] as const;
 
-export type ChatCompletionsModel = ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>;
+// todo: update this once we have proper ft model schemas
+export type ChatCompletionsModel =
+  | ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>
+  | string;
 
 export const COMPLETIONS_MODELS = [
   'ada',
@@ -50,10 +53,7 @@ export const COMPLETIONS_MODELS = [
   'text-davinci-003',
 ] as const;
 
-// todo: update this once we have proper ft model schemas
-export type ChatCompletionsModel =
-  | ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>
-  | string;
+export type CompletionsModel = ArrayToUnion<typeof COMPLETIONS_MODELS>;
 
 export const EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
 
