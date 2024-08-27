@@ -14,6 +14,7 @@ import {
 } from './CreateTicketView.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from './index.js';
+import type { TicketDeflectionFormView } from './Markprompt.js';
 import {
   GlobalStoreProvider,
   useGlobalStore,
@@ -23,18 +24,24 @@ import { NavigationMenu } from './ui/navigation-menu.js';
 import { RichText } from './ui/rich-text.js';
 import { useDefaults } from './useDefaults.js';
 
-type TicketDeflectionFormView = 'chat' | 'ticket';
-
 interface TicketDeflectionFormProps {
   isStandalone?: boolean;
+  forceThreadId?: string;
   defaultView?: TicketDeflectionFormView;
+  showBackLink?: boolean;
   CustomCaseForm?: ComponentType<{ summary?: string }>;
 }
 
 export function TicketDeflectionForm(
   props: TicketDeflectionFormProps,
 ): JSX.Element {
-  const { defaultView = 'chat', isStandalone, CustomCaseForm } = props;
+  const {
+    forceThreadId,
+    defaultView = 'chat',
+    showBackLink,
+    isStandalone,
+    CustomCaseForm,
+  } = props;
 
   const apiUrl = useGlobalStore((state) => state.options.apiUrl);
   const chat = useGlobalStore((state) => state.options.chat);
@@ -46,9 +53,14 @@ export function TicketDeflectionForm(
     (state) => state.tickets?.createTicketSummary,
   );
 
-  const threadId = useChatStore((state) => state.threadId);
+  const storeThreadId = useChatStore((state) => state.threadId);
   const messages = useChatStore((state) => state.messages);
   const selectThread = useChatStore((state) => state.selectThread);
+
+  // When the form is opened from another chat modal, the threadId is
+  // not carried over in the state. Instead, we need to pass it
+  // explicitly.
+  const threadId = forceThreadId ?? storeThreadId;
 
   const [view, setView] = useState<TicketDeflectionFormView>(defaultView);
   const [didTransitionViewOnce, setDidTransitionViewOnce] = useState(false);
@@ -104,6 +116,7 @@ export function TicketDeflectionForm(
       handleGoBack={() => setView('chat')}
       includeNav={false}
       includeCTA={true}
+      forceThreadId={threadId}
     />
   );
 
@@ -143,26 +156,27 @@ export function TicketDeflectionForm(
           caseForm
         )}
       </div>
-      <div className="MarkpromptDialogFooter">
-        {view === 'chat' ? (
-          <>
-            <RichText>
-              {integrations?.createTicket?.chat?.disclaimerView?.message || ''}
-            </RichText>
-            <button
-              className="MarkpromptButton"
-              data-variant="outline"
-              disabled={isCreatingTicketSummary}
-              onClick={() => handleCreateTicketSummary()}
-            >
-              {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
-              {isCreatingTicketSummary && (
-                <LoadingIcon style={{ width: 16, height: 16 }} />
-              )}
-            </button>
-          </>
-        ) : (
-          <>
+      {(view === 'chat' || showBackLink) && (
+        <div className="MarkpromptDialogFooter">
+          {view === 'chat' ? (
+            <>
+              <RichText>
+                {integrations?.createTicket?.chat?.disclaimerView?.message ||
+                  ''}
+              </RichText>
+              <button
+                className="MarkpromptButton"
+                data-variant="outline"
+                disabled={isCreatingTicketSummary}
+                onClick={() => handleCreateTicketSummary()}
+              >
+                {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
+                {isCreatingTicketSummary && (
+                  <LoadingIcon style={{ width: 16, height: 16 }} />
+                )}
+              </button>
+            </>
+          ) : (
             <div
               style={{
                 display: 'flex',
@@ -178,9 +192,9 @@ export function TicketDeflectionForm(
                 Back to help
               </div>
             </div>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -43,14 +43,27 @@ type MarkpromptProps = MarkpromptOptions &
     onDidRequestOpenChange?: (open: boolean) => void;
   };
 
-const emitter = new Emittery<{ open: { view?: View }; close: undefined }>();
+export type TicketDeflectionFormView = 'chat' | 'ticket';
+
+interface ViewOptions {
+  ticketDeflectionFormOptions?: {
+    defaultView: TicketDeflectionFormView;
+    showBackLink?: boolean;
+    threadId?: string;
+  };
+}
+
+const emitter = new Emittery<{
+  open: { view?: View; options?: ViewOptions };
+  close: undefined;
+}>();
 
 /**
  * Open Markprompt programmatically. Useful for building a custom trigger
  * or opening the Markprompt dialog in response to other user actions.
  */
-function openMarkprompt(view?: View): void {
-  emitter.emit('open', { view });
+function openMarkprompt(view?: View, options?: ViewOptions): void {
+  emitter.emit('open', { view, options });
 }
 
 /**
@@ -166,6 +179,9 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 
   const [openViews, setOpenViews] = useState<{ [key in View]?: boolean }>({});
+  const [viewOptions, setViewOptions] = useState<ViewOptions | undefined>(
+    undefined,
+  );
 
   const globalStoreOptions = useMemo(
     () => ({
@@ -211,7 +227,13 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   );
 
   useEffect(() => {
-    const onOpen = ({ view = 'chat' }: { view?: View }): void => {
+    const onOpen = ({
+      view = 'chat',
+      options,
+    }: {
+      view?: View;
+      options?: ViewOptions;
+    }): void => {
       onDidRequestOpenChange?.(true);
       setOpenViews((v) => {
         const closed = Object.keys(v).reduce((acc, value) => {
@@ -219,12 +241,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
         }, {});
         return { ...closed, [view]: true };
       });
+      setViewOptions(options);
     };
 
     const onClose = (): void => {
       onDidRequestOpenChange?.(false);
       if (display === 'dialog' || display === 'sheet') {
         setOpenViews({});
+        setViewOptions(undefined);
       }
     };
 
@@ -300,7 +324,17 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                   data-size="adaptive"
                   onPointerDownOutside={(e) => e.preventDefault()}
                 >
-                  <TicketDeflectionForm />
+                  <TicketDeflectionForm
+                    forceThreadId={
+                      viewOptions?.ticketDeflectionFormOptions?.threadId
+                    }
+                    defaultView={
+                      viewOptions?.ticketDeflectionFormOptions?.defaultView
+                    }
+                    showBackLink={
+                      viewOptions?.ticketDeflectionFormOptions?.showBackLink
+                    }
+                  />
                 </BaseMarkprompt.Content>
               </BaseMarkprompt.Portal>
             </BaseMarkprompt.Root>
@@ -335,13 +369,11 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                     <BaseMarkprompt.Title hide={title.hide}>
                       {title.text}
                     </BaseMarkprompt.Title>
-
                     {description.text && (
                       <BaseMarkprompt.Description hide={description.hide}>
                         {description.text}
                       </BaseMarkprompt.Description>
                     )}
-
                     <MarkpromptContent
                       apiUrl={apiUrl}
                       projectKey={projectKey}
@@ -423,6 +455,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   const activeView = useGlobalStore((state) => state.activeView);
   const setActiveView = useGlobalStore((state) => state.setActiveView);
   const submitChat = useChatStore((state) => state.submitChat);
+
   const isTouchDevice = useMediaQuery('(pointer: coarse)');
 
   if (!search?.enabled) {
@@ -449,6 +482,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 chatOptions={chat}
                 debug={debug}
                 feedbackOptions={feedback}
+                integrations={integrations}
                 projectKey={projectKey}
                 referencesOptions={references}
                 branding={branding}
