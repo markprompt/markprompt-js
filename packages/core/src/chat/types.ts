@@ -50,7 +50,10 @@ export const COMPLETIONS_MODELS = [
   'text-davinci-003',
 ] as const;
 
-export type CompletionsModel = ArrayToUnion<typeof COMPLETIONS_MODELS>;
+// todo: update this once we have proper ft model schemas
+export type ChatCompletionsModel =
+  | ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>
+  | string;
 
 export const EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
 
