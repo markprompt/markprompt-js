@@ -419,6 +419,25 @@ importers:
         specifier: ^5.2.9
         version: 5.2.10(@types/node@20.12.7)(terser@5.30.4)
 
+  examples/with-ticket-creation:
+    dependencies:
+      '@markprompt/css':
+        specifier: workspace:*
+        version: link:../../packages/css
+      '@markprompt/web':
+        specifier: workspace:*
+        version: link:../../packages/web
+      preact:
+        specifier: ^10.20.2
+        version: 10.20.2
+      randomuuid:
+        specifier: ^1.0.1
+        version: 1.0.1
+    devDependencies:
+      vite:
+        specifier: ^5.2.9
+        version: 5.2.10(@types/node@20.12.7)(terser@5.30.4)
+
   packages/core:
     dependencies:
       '@algolia/client-search':
