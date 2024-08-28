@@ -36,10 +36,14 @@ export const CHAT_COMPLETIONS_MODELS = [
   'mixtral-8x7b-instruct-v0.1',
 ] as const;
 
+export type ChatCompletionsBaseModel = ArrayToUnion<
+  typeof CHAT_COMPLETIONS_MODELS
+>;
+
+export type FinetunedModelId = string; // uuid
+
 // todo: update this once we have proper ft model schemas
-export type ChatCompletionsModel =
-  | ArrayToUnion<typeof CHAT_COMPLETIONS_MODELS>
-  | string;
+export type ChatCompletionsModel = ChatCompletionsBaseModel | FinetunedModelId;
 
 export const COMPLETIONS_MODELS = [
   'ada',
