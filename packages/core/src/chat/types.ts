@@ -1,4 +1,5 @@
 import type {
+  ChatCompletionMessageToolCall,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
 } from 'openai/resources/chat/index.js';
@@ -62,6 +63,7 @@ export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
   references?: FileSectionReference[];
+  steps?: ChatCompletionMessageToolCall[];
   /**
    * @deprecated Use `messageId` instead.
    */
@@ -71,6 +73,7 @@ export interface ChatCompletionMetadata {
 export interface NoStreamingData {
   text: string;
   references?: FileSectionReference[];
+  steps?: ChatCompletionMessageToolCall[];
   responseId: string;
 }
 

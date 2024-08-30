@@ -122,6 +122,7 @@ export async function* submitChat(
         yield {
           content: json.text,
           references: json.references,
+          steps: json.steps,
           role: 'assistant',
         };
 
