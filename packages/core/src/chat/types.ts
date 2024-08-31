@@ -199,6 +199,16 @@ export interface SubmitChatOptions {
    * */
   maxTokens?: number;
   /**
+   * Whether or not to use the agentic architecture
+   * @default false
+   * */
+  agentic?: boolean;
+  /**
+   * Whether or not to rerank retrieved context sections
+   * @default false
+   * */
+  useReranker?: boolean;
+  /**
    * The number of sections to include in the prompt context.
    * @default 10
    * */
