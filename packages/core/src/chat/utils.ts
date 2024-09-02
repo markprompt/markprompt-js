@@ -42,6 +42,7 @@ const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'toolChoice',
   'tools',
   'topP',
+  'useReranker',
 ];
 
 export const isValidSubmitChatOptionsKey = (
