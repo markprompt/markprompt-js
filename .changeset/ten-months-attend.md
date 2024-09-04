@@ -3,4 +3,4 @@
 "@markprompt/web": minor
 ---
 
-Add create ticket functionality for Salesforce
+Add Salesforce support to create ticket functionality
