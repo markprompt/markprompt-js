@@ -105,7 +105,7 @@ if (el && el instanceof HTMLElement) {
     integrations: {
       createTicket: {
         enabled: true,
-        provider: 'zendesk',
+        provider: 'salesforce',
         user: {
           name: 'Jane Doe',
           email: 'jane@doe.com',
