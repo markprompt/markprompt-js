@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.35.2
+
+### Patch Changes
+
+- [#406](https://github.com/markprompt/markprompt-js/pull/406) [`ed8ed6c`](https://github.com/markprompt/markprompt-js/commit/ed8ed6c1cf2f189e335e1ce30fe5e9d5980bf98c) Thanks [@elliotdauber](https://github.com/elliotdauber)! - Add agent steps
+
 ## 0.35.1
 
 ### Patch Changes
