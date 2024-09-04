@@ -1,4 +1,5 @@
 import type {
+  ChatCompletionMessageToolCall,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
 } from 'openai/resources/chat/index.js';
@@ -62,6 +63,7 @@ export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
   references?: FileSectionReference[];
+  steps?: ChatCompletionMessageToolCall[];
   /**
    * @deprecated Use `messageId` instead.
    */
@@ -71,6 +73,7 @@ export interface ChatCompletionMetadata {
 export interface NoStreamingData {
   text: string;
   references?: FileSectionReference[];
+  steps?: ChatCompletionMessageToolCall[];
   responseId: string;
 }
 
@@ -195,6 +198,16 @@ export interface SubmitChatOptions {
    * @default 500
    * */
   maxTokens?: number;
+  /**
+   * Whether or not to use the agentic architecture
+   * @default false
+   * */
+  agentic?: boolean;
+  /**
+   * Whether or not to rerank retrieved context sections
+   * @default false
+   * */
+  useReranker?: boolean;
   /**
    * The number of sections to include in the prompt context.
    * @default 10
