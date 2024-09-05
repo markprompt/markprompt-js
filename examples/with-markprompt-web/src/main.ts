@@ -17,7 +17,7 @@ async function get_random_activity(args: string): Promise<string> {
 }
 
 if (el && el instanceof HTMLElement) {
-  markprompt("OhoyCo96D3Bv0qP8WyxYitPIBvP5XWsS", el, {
+  markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',
     display: 'sheet',
     apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
@@ -34,7 +34,7 @@ if (el && el instanceof HTMLElement) {
       filter: (f) => !f.file.title?.includes('internal'),
     },
     chat: {
-      assistantId: "0fa2dda3-e569-4f2d-91df-760826e0d3b9",
+      assistantId: import.meta.env.VITE_ASSISTANT_ID,
       disclaimerView: {
         message:
           'I am an AI assistant. Consider checking important information.',
