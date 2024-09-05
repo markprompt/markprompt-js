@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.52.1
+
+### Patch Changes
+
+- [#412](https://github.com/markprompt/markprompt-js/pull/412) [`a854475`](https://github.com/markprompt/markprompt-js/commit/a8544757e1ed1892d4d5607ee0f34b9fd2ee52f8) Thanks [@elliotdauber](https://github.com/elliotdauber)! - add filter option to references
+
 ## 0.52.0
 
 ### Minor Changes

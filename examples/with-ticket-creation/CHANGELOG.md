@@ -1,5 +1,12 @@
 # with-ticket-creation
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @markprompt/web@0.40.1
+
 ## 0.0.3
 
 ### Patch Changes
