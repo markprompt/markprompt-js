@@ -12,9 +12,6 @@ export interface Source {
   data?: {
     url?: string;
     domain?: string;
-    /**
-     * @deprecated No longer used
-     */
     name?: string;
   };
 }
