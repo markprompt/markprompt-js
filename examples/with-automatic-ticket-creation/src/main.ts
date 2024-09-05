@@ -1,13 +1,62 @@
 import '@markprompt/css';
 import './style.css';
 import { markprompt, type MarkpromptOptions } from '@markprompt/web';
+import { z } from 'zod';
 
 const el = document.querySelector('#markprompt');
 
-async function createTicket(args: string): Promise<string> {
-  console.log(args);
-  return ''
-};
+const argsSchema = z.object({
+  summary: z.string(),
+  customFields: z.array(
+    z.object({
+      id: z.enum(['Reason']),
+      value: z.enum(['Bug', 'Feature request', 'Feedback', 'Other']),
+    }),
+  ),
+});
+
+function getCreateTicket(
+  projectKey: string,
+  provider: string,
+  name: string,
+  email: string,
+  userName: string,
+) {
+  return async function createTicket(args: string) {
+    const { summary, customFields } = await argsSchema.parseAsync(
+      JSON.parse(args),
+    );
+
+    const data = new FormData();
+
+    data.append('projectKey', projectKey);
+    data.append('provider', provider);
+    data.append('name', name);
+    data.append('email', email);
+    data.append('userName', userName);
+    data.append('summary', summary);
+
+    for (let field of customFields) {
+      data.append('customFields', JSON.stringify(field));
+    }
+
+    const res = await fetch(
+      import.meta.env.VITE_MARKPROMPT_API_URL + '/integrations/create-ticket',
+      {
+        cache: 'no-cache',
+        credentials: 'omit',
+        mode: 'cors',
+        method: 'POST',
+        body: data,
+        headers: { 'X-Markprompt-API-Version': '2024-05-21' },
+      },
+    );
+
+    if (res.ok) return 'Case created successfully';
+
+    return 'An error occurred while creating the case';
+  };
+}
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
@@ -27,6 +76,7 @@ if (el && el instanceof HTMLElement) {
     },
     chat: {
       assistantId: import.meta.env.VITE_ASSISTANT_ID,
+      assistantVersionId: import.meta.env.VITE_ASSISTANT_VERSION_ID,
       disclaimerView: {
         message:
           'I am an AI assistant. Consider checking important information.',
@@ -54,35 +104,22 @@ if (el && el instanceof HTMLElement) {
       toolChoice: 'auto',
       tools: [
         {
-          call: createTicket,
+          call: getCreateTicket(
+            import.meta.env.VITE_PROJECT_API_KEY,
+            'salesforce',
+            'Jane Doe',
+            'jane@doe.com',
+            'Jane Doe',
+          ),
           tool: {
             type: 'function',
             function: {
               name: 'create_ticket',
-              description: 'Create a support case for this user, allowing them to speak to a human support agent about their issue.',
+              description:
+                'Create a support case for this user, allowing them to speak to a human support agent about their issue. Prefill the summary parameter with a summary of the conversation so far. Prefill the reason custom field with the most relevant reason for creating the case.',
               parameters: {
                 type: 'object',
                 properties: {
-                  provider: {
-                    type: 'string',
-                    description: 'The ticket or case support provider',
-                    enum: [
-                      'salesforce',
-                      'zendesk',
-                    ],
-                  },
-                  name: {
-                    type: 'string',
-                    description: 'The name of the user submitting the ticket',
-                  },
-                  userName: {
-                    type: 'string',
-                    description: 'The user name of the user submitting the ticket',
-                  },
-                  email: {
-                    type: 'string',
-                    description: 'The email address of the user submitting the ticket',
-                  },
                   content: {
                     type: 'string',
                     description: 'The content of the ticket or case',
@@ -91,30 +128,28 @@ if (el && el instanceof HTMLElement) {
                     type: 'string',
                     description: 'The summary of the ticket or case',
                   },
-                  projectKey: {
-                    type: 'string',
-                    description: 'The project key of the Markprompt project to create the ticket or case in',
-                  },
                   customFields: {
                     type: 'array',
                     description: 'Custom fields to add to the ticket or case',
                     items: {
                       type: 'object',
+                      description: 'The reason for creating the case',
                       properties: {
                         id: {
-                          type: 'string',
+                          enum: ['Reason'],
                           description: 'The ID of the custom field',
                         },
                         value: {
-                          type: 'string',
+                          enum: ['Bug', 'Feature request', 'Feedback', 'Other'],
                           description: 'The value of the custom field',
                         },
                       },
                       required: ['id', 'value'],
                     },
-                  }
+                    maxContains: 1,
+                  },
                 },
-                required: ['email', 'provider', 'projectKey'],
+                required: [],
               },
             },
           },

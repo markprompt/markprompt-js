@@ -11,7 +11,8 @@
   "dependencies": {
     "@markprompt/css": "workspace:*",
     "@markprompt/web": "workspace:*",
-    "preact": "^10.20.2"
+    "preact": "^10.20.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "vite": "^5.2.9"
