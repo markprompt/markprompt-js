@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.40.0
+
+### Minor Changes
+
+- [#409](https://github.com/markprompt/markprompt-js/pull/409) [`7c9b837`](https://github.com/markprompt/markprompt-js/commit/7c9b837fd0f73dae3baf3e1dc4207737d2347f43) Thanks [@nickrttn](https://github.com/nickrttn)! - Add Salesforce support to create ticket functionality
+
+### Patch Changes
+
+- Updated dependencies [[`7c9b837`](https://github.com/markprompt/markprompt-js/commit/7c9b837fd0f73dae3baf3e1dc4207737d2347f43)]:
+  - @markprompt/react@0.52.0
+
 ## 0.39.4
 
 ### Patch Changes
