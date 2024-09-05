@@ -1,5 +1,12 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.27.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @markprompt/react@0.52.2
+
 ## 0.27.6
 
 ### Patch Changes

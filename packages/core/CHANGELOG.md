@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.35.3
+
+### Patch Changes
+
+- [#414](https://github.com/markprompt/markprompt-js/pull/414) [`2d18d52`](https://github.com/markprompt/markprompt-js/commit/2d18d52a94c0bd0b24b4d7f84417f9bf473321f9) Thanks [@elliotdauber](https://github.com/elliotdauber)! - undeprecate reference source name
+
 ## 0.35.2
 
 ### Patch Changes
