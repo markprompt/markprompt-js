@@ -231,6 +231,7 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     heading: 'Related articles',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
+    filter: undefined,
   },
   search: {
     enabled: false,

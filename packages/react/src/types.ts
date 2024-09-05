@@ -380,6 +380,12 @@ export interface ReferencesOptions {
   /** Callback to transform a reference into a label */
   getLabel?: (reference: FileSectionReference) => string | undefined;
   /**
+   * Callback to filter references. If filter returns false, the reference is not displayed.
+   * If filter is not defined, all references are displayed.
+   * @default undefined
+   **/
+  filter?: (reference: FileSectionReference) => boolean;
+  /**
    * Heading above the references
    * @default "Related articles"
    **/
