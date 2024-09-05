@@ -195,6 +195,7 @@ export function Messages(props: MessagesProps): ReactElement {
                   references={message.references || []}
                   getHref={referencesOptions?.getHref}
                   getLabel={referencesOptions?.getLabel}
+                  filter={referencesOptions?.filter}
                   loadingText={referencesOptions?.loadingText}
                   heading={referencesOptions?.heading}
                   state={message.state}

@@ -31,6 +31,7 @@ if (el && el instanceof HTMLElement) {
         }
         return f.meta?.leadHeading?.value ?? f.file.title;
       },
+      filter: (f) => !f.file.title?.includes('internal'),
     },
     chat: {
       assistantId: import.meta.env.VITE_ASSISTANT_ID,

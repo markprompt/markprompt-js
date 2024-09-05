@@ -14,6 +14,7 @@ import * as Markprompt from '../primitives/headless.js';
 interface ReferenceProps {
   getHref?: (reference: FileSectionReference) => string | undefined;
   getLabel?: (reference: FileSectionReference) => string | undefined;
+  filter?: (reference: FileSectionReference) => boolean;
   reference: FileSectionReference;
   index: number;
   // Backwards compatibility
@@ -29,6 +30,7 @@ export const Reference = (props: ReferenceProps): ReactElement => {
   const {
     getHref = DEFAULT_MARKPROMPT_OPTIONS.references!.getHref!,
     getLabel = DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel,
+    filter = DEFAULT_MARKPROMPT_OPTIONS.references!.filter,
     index,
     reference,
     transformReferenceId,
@@ -46,6 +48,10 @@ export const Reference = (props: ReferenceProps): ReactElement => {
       label: getLabel?.(reference),
     };
   }, [transformReferenceId, getHref, reference, getLabel]);
+
+  if (filter && !filter(reference)) {
+    return <></>;
+  }
 
   const LinkComponent = props.linkAs ?? 'a';
   return (
@@ -71,6 +77,7 @@ interface ReferencesProps {
   heading?: string;
   getHref?: (reference: FileSectionReference) => string | undefined;
   getLabel?: (reference: FileSectionReference) => string | undefined;
+  filter?: (reference: FileSectionReference) => boolean;
   // Backwards compatibility
   transformReferenceId?: (referenceId: string) => {
     href: string;
@@ -86,6 +93,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
   const {
     getHref,
     getLabel,
+    filter,
     heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
     transformReferenceId,
     references,
@@ -98,13 +106,14 @@ const References = (props: ReferencesProps): ReactElement | null => {
       <Reference
         getHref={getHref}
         getLabel={getLabel}
+        filter={filter}
         // Backwards compatibility
         transformReferenceId={transformReferenceId}
         linkAs={linkAs}
         {...props}
       />
     ),
-    [getHref, getLabel, transformReferenceId, linkAs],
+    [getHref, getLabel, filter, transformReferenceId, linkAs],
   );
 
   let adjustedState: ChatLoadingState = state;
