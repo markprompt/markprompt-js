@@ -39,7 +39,6 @@ if (!projectKey) {
 
 markprompt(projectKey, container, options);
 
-console.log('Setting open/close');
 window.markprompt.open = (view?: View) => {
   openMarkprompt(view);
 };
