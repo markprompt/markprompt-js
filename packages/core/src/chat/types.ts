@@ -204,6 +204,16 @@ export interface SubmitChatOptions {
    * */
   agentic?: boolean;
   /**
+   * Settings that determine the agent's capabilities.
+   * @default undefined
+   * */
+  agentSettings?: {
+    type: string;
+    data: {
+      [key: string]: unknown;
+    };
+  };
+  /**
    * Whether or not to rerank retrieved context sections
    * @default false
    * */
