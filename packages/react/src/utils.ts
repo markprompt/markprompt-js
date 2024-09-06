@@ -1,8 +1,9 @@
+import type { View } from '@markprompt/core/types';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import type { MarkpromptOptions, View } from './types.js';
+import type { MarkpromptOptions } from './types.js';
 
 export function isPresent<T>(t: T | undefined | null | void): t is T {
   return t !== undefined && t !== null;

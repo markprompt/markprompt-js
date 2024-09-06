@@ -15,5 +15,13 @@
     <!-- 2. Load Markprompt -->
     <link rel="stylesheet" href="https://esm.sh/@markprompt/css?css" />
     <script type="module" src="https://esm.sh/@markprompt/web/init"></script>
+    <button id="open">Click</button>
+    <script>
+      const button = document.getElementById('open');
+      button.addEventListener('click', function () {
+        window.markprompt_open('chat')
+        console.log('Button was clicked!');
+      });
+    </script>
   </body>
 </html>

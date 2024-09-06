@@ -4,7 +4,10 @@ import './style.css';
 window.markprompt = {
   projectKey: import.meta.env.VITE_PROJECT_API_KEY,
   options: {
-    search: { enabled: true },
+    apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
+    chat: {
+      assistantId: import.meta.env.VITE_ASSISTANT_ID
+    },
   },
 };
 

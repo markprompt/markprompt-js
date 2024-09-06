@@ -1,5 +1,5 @@
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
-import { type FileSectionReference } from '@markprompt/core/types';
+import { type FileSectionReference, type View } from '@markprompt/core/types';
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, delay, HttpResponse } from 'msw';
@@ -21,7 +21,7 @@ import {
   type ChatViewMessage,
   ChatProvider,
 } from './store.js';
-import type { MarkpromptOptions, View } from '../types.js';
+import type { MarkpromptOptions } from '../types.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {
