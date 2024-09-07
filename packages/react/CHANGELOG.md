@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.53.0
+
+### Minor Changes
+
+- [#417](https://github.com/markprompt/markprompt-js/pull/417) [`6490a91`](https://github.com/markprompt/markprompt-js/commit/6490a91149517d8908e6d5e505b576fb7d3f2118) Thanks [@michaelfester](https://github.com/michaelfester)! - Expose open/close in global scope
+
+### Patch Changes
+
+- Updated dependencies [[`6490a91`](https://github.com/markprompt/markprompt-js/commit/6490a91149517d8908e6d5e505b576fb7d3f2118)]:
+  - @markprompt/core@0.36.0
+
 ## 0.52.2
 
 ### Patch Changes
