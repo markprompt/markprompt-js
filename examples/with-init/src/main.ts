@@ -9,9 +9,3 @@ window.markprompt = {
     },
   },
 };
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <p>Open the Markprompt dialog ↘️</p>
-  </div>
-`;
