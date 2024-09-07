@@ -12,7 +12,6 @@ import { isFileSectionReferences } from '../utils.js';
 
 const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'additionalMetadata',
-  'agentic',
   'agentSettings',
   'allowFollowUpQuestions',
   'apiUrl',

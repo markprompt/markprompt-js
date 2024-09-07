@@ -199,11 +199,6 @@ export interface SubmitChatOptions {
    * */
   maxTokens?: number;
   /**
-   * Whether or not to use the agentic architecture
-   * @default false
-   * */
-  agentic?: boolean;
-  /**
    * Settings that determine the agent's capabilities.
    * @default undefined
    * */
