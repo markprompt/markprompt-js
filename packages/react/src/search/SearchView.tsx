@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
 import type { SubmitSearchQueryOptions } from '@markprompt/core/search';
+import type { View } from '@markprompt/core/types';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
@@ -26,7 +27,6 @@ import type {
   MarkpromptOptions,
   SearchOptions,
   SearchResultComponentProps,
-  View,
 } from '../types.js';
 import { useDefaults } from '../useDefaults.js';
 

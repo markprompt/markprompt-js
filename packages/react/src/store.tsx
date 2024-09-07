@@ -2,6 +2,7 @@ import {
   submitChat,
   type ChatCompletionMessageParam,
 } from '@markprompt/core/chat';
+import type { View } from '@markprompt/core/types';
 import { isAbortError } from '@markprompt/core/utils';
 import {
   createContext,
@@ -15,7 +16,7 @@ import { immer } from 'zustand/middleware/immer';
 
 import { toValidApiMessages } from './chat/utils.js';
 import type { ChatViewMessage } from './index.js';
-import type { MarkpromptOptions, View } from './types.js';
+import type { MarkpromptOptions } from './types.js';
 import { getDefaultView } from './utils.js';
 
 function getInitialView(options: MarkpromptOptions): View {

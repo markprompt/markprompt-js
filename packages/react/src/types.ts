@@ -8,7 +8,7 @@ import type {
   SearchResult,
   SubmitSearchQueryOptions,
 } from '@markprompt/core/search';
-import type { FileSectionReference } from '@markprompt/core/types';
+import type { FileSectionReference, View } from '@markprompt/core/types';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
@@ -20,8 +20,6 @@ import type {
 
 import type { UserConfigurableOptions } from './chat/store.js';
 import type { ChatViewMessage } from './index.js';
-
-export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
 interface AsProp<C extends ElementType> {
   as?: C;
