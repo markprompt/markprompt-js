@@ -59,11 +59,29 @@ export type EmbeddingsModel = typeof EMBEDDINGS_MODEL;
 
 export type Model = ChatCompletionsModel | CompletionsModel | EmbeddingsModel;
 
+export type SystemActionName =
+  | 'AskQuestionToUser'
+  | 'RespondToUser'
+  | 'RetrieveKnowledge'
+  | 'LookupInfoInFiles'
+  | 'ReportStatus'
+  | 'ChooseCategory'
+  | 'LookupCategories'
+  | 'LookupExamples';
+
+export interface SystemAction {
+  function: {
+    name: SystemActionName;
+    arguments: string;
+  };
+  type: 'function';
+}
+
 export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
   references?: FileSectionReference[];
-  steps?: ChatCompletionMessageToolCall[];
+  steps?: (SystemAction | ChatCompletionMessageToolCall)[];
   /**
    * @deprecated Use `messageId` instead.
    */
