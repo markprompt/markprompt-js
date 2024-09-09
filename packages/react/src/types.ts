@@ -158,17 +158,33 @@ export interface FeedbackOptions {
    * */
   csat?: boolean;
   /**
-   * Heading above the form
+   * Enable thread CSAT reason.
+   * @default false
+   * */
+  csatReason?: boolean;
+  /**
+   * Heading above the form.
    * @default "Was this response helpful?"
    **/
   heading?: string;
   /**
-   * Heading above the CSAT picker
+   * Heading above the CSAT picker.
    * @default "How helpful was this?"
    **/
   headingCSAT?: string;
   /**
-   * Called when feedback is submitted
+   * Heading above the CSAT reason input field.
+   * @default "Could you tell us more?"
+   **/
+  headingCSATReason?: string;
+  /**
+   * Heading above the CSAT reason input field when the user
+   * has submitted a reason.
+   * @default "Thank you!"
+   **/
+  thankYouCSATReason?: string;
+  /**
+   * Called when feedback is submitted.
    * @default undefined
    */
   onFeedbackSubmit?: (

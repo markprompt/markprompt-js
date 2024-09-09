@@ -1,6 +1,7 @@
 import {
   submitFeedback as submitFeedbackCore,
   submitCSAT as submitCSATCore,
+  submitCSATReason as submitCSATReasonCore,
   type SubmitFeedbackOptions,
   type CSAT,
   type PromptFeedback,
@@ -25,6 +26,8 @@ export interface UseFeedbackResult {
   submitFeedback: (feedback: PromptFeedback, messageId?: string) => void;
   /** Submit CSAT for a thread */
   submitThreadCSAT: (threadId: string, csat: CSAT) => void;
+  /** Submit CSAT reason for a thread */
+  submitThreadCSATReason: (threadId: string, reason: string) => void;
 }
 
 export function useFeedback({
@@ -91,5 +94,29 @@ export function useFeedback({
     [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
   );
 
-  return { submitFeedback, submitThreadCSAT, abort };
+  const submitThreadCSATReason = useCallback(
+    async (threadId: string, reason: string) => {
+      abort();
+
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      try {
+        await submitCSATReasonCore({ threadId, reason }, projectKey, {
+          ...feedbackOptions,
+          apiUrl,
+          signal: controller.signal,
+        });
+      } catch {
+        // ignore submitFeedback errors
+      } finally {
+        if (controllerRef.current === controller) {
+          controllerRef.current = undefined;
+        }
+      }
+    },
+    [abort, controllerRef, projectKey, feedbackOptions, apiUrl],
+  );
+
+  return { submitFeedback, submitThreadCSAT, submitThreadCSATReason, abort };
 }
