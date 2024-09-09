@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.32.0
+
+### Minor Changes
+
+- [#419](https://github.com/markprompt/markprompt-js/pull/419) [`08b31ac`](https://github.com/markprompt/markprompt-js/commit/08b31ac4a361c1bddb0b0d2a431fd6f4d46e2dac) Thanks [@michaelfester](https://github.com/michaelfester)! - Add CSAT reason component
+
 ## 0.31.5
 
 ### Patch Changes
