@@ -142,3 +142,62 @@ export async function submitCSAT(
     }
   }
 }
+
+export interface SubmitCSATReasonBody {
+  /** Thread id */
+  threadId: string;
+  /** CSAT reason. */
+  reason: string;
+}
+
+export async function submitCSATReason(
+  body: SubmitCSATReasonBody,
+  projectKey: string,
+  options: SubmitFeedbackOptions & BaseOptions = {},
+): Promise<void> {
+  if (!projectKey) {
+    throw new Error('A projectKey is required.');
+  }
+
+  const allowedOptions: SubmitFeedbackOptions & BaseOptions =
+    Object.fromEntries(
+      Object.entries(options ?? {}).filter(([key]) =>
+        allowedOptionKeys.includes(key),
+      ),
+    );
+
+  const { signal, ...cloneableOpts } = allowedOptions ?? {};
+
+  const resolvedOptions = defaults(cloneableOpts, {
+    ...DEFAULT_OPTIONS,
+    ...DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
+  });
+
+  try {
+    const response = await fetch(
+      `${resolvedOptions.apiUrl}/threads/${body.threadId}`,
+      {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'X-Markprompt-API-Version': '2024-05-21',
+          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
+        }),
+        body: JSON.stringify({ projectKey, csatReason: body.reason }),
+        signal: signal,
+      },
+    );
+
+    if (!response.ok) {
+      const error = (await response.json())?.error;
+      throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      // do nothing on AbortError's, this is expected
+      return undefined;
+    } else {
+      throw error;
+    }
+  }
+}

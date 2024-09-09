@@ -25,6 +25,7 @@ if (el && el instanceof HTMLElement) {
       enabled: false,
     },
     references: {
+      display: 'none',
       getLabel: (f) => {
         if (f.meta?.leadHeading?.value?.length === 1) {
           return `${f.file.title} - ${f.meta?.leadHeading?.value}`;
@@ -99,6 +100,10 @@ if (el && el instanceof HTMLElement) {
           requireConfirmation: true,
         },
       ],
+    },
+    feedback: {
+      csat: true,
+      csatReason: true,
     },
     integrations: {
       createTicket: {

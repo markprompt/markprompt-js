@@ -680,9 +680,23 @@
   gap: 0.5rem;
 }
 
+.MarkpromptCSATReasonWrapper {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
+  min-height: 70px;
+}
+
+.MarkpromptCSATReasonWrapper button {
+  align-self: flex-end;
+}
+
 :not(.MarkpromptTicketDeflectionForm)
   .MarkpromptChatView
-  .MarkpromptPromptWrapper {
+  .MarkpromptPromptWrapper,
+.MarkpromptCSATReasonWrapper {
   background-color: var(--markprompt-muted);
   border: 1px solid var(--markprompt-border);
   border-radius: calc(var(--markprompt-radius));
@@ -2393,7 +2407,8 @@
   align-items: flex-start;
   gap: 0.25rem;
   padding-top: 0.5rem;
-  padding-inline: 4rem;
+  padding-left: 4rem;
+  padding-right: 1rem;
 }
 
 .MarkpromptMessageCSATStar {

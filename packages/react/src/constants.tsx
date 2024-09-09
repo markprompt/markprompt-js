@@ -199,8 +199,11 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     enabled: true,
     votes: true,
     csat: true,
+    csatReason: true,
     heading: 'Was this response helpful?',
     headingCSAT: 'How helpful was this?',
+    headingCSATReason: 'Could you tell us more?',
+    thankYouCSATReason: 'Thank you!',
   },
   chat: {
     enabled: true,
