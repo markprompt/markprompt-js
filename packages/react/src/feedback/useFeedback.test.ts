@@ -46,6 +46,7 @@ describe('useFeedback', () => {
     expect(result.current).toStrictEqual({
       submitFeedback: expect.any(Function),
       submitThreadCSAT: expect.any(Function),
+      submitThreadCSATReason: expect.any(Function),
       abort: expect.any(Function),
     });
   });
