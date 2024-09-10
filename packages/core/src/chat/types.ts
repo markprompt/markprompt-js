@@ -67,7 +67,9 @@ export type SystemActionName =
   | 'ReportStatus'
   | 'ChooseCategory'
   | 'LookupCategories'
-  | 'LookupExamples';
+  | 'LookupExamples'
+  | 'Think'
+  | 'Observe';
 
 export interface SystemAction {
   function: {
