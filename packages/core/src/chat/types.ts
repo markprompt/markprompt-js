@@ -59,11 +59,31 @@ export type EmbeddingsModel = typeof EMBEDDINGS_MODEL;
 
 export type Model = ChatCompletionsModel | CompletionsModel | EmbeddingsModel;
 
+export type SystemActionName =
+  | 'AskQuestionToUser'
+  | 'RespondToUser'
+  | 'RetrieveKnowledge'
+  | 'LookupInfoInFiles'
+  | 'ReportStatus'
+  | 'ChooseCategory'
+  | 'LookupCategories'
+  | 'LookupExamples'
+  | 'Think'
+  | 'Observe';
+
+export interface SystemAction {
+  function: {
+    name: SystemActionName;
+    arguments: string;
+  };
+  type: 'function';
+}
+
 export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
   references?: FileSectionReference[];
-  steps?: ChatCompletionMessageToolCall[];
+  steps?: (SystemAction | ChatCompletionMessageToolCall)[];
   /**
    * @deprecated Use `messageId` instead.
    */
@@ -199,10 +219,15 @@ export interface SubmitChatOptions {
    * */
   maxTokens?: number;
   /**
-   * Whether or not to use the agentic architecture
-   * @default false
+   * Settings that determine the agent's capabilities.
+   * @default undefined
    * */
-  agentic?: boolean;
+  agentSettings?: {
+    type: string;
+    data: {
+      [key: string]: unknown;
+    };
+  };
   /**
    * Whether or not to rerank retrieved context sections
    * @default false
