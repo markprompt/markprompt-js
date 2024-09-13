@@ -1,4 +1,3 @@
-import type { View } from '@markprompt/core/types';
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Tabs from '@radix-ui/react-tabs';
@@ -25,7 +24,7 @@ import * as BaseMarkprompt from './primitives/headless.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
 import { TicketDeflectionForm } from './TicketDeflectionForm.js';
-import type { MarkpromptOptions } from './types.js';
+import type { MarkpromptOptions, View } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';

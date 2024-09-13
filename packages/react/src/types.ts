@@ -8,7 +8,7 @@ import type {
   SearchResult,
   SubmitSearchQueryOptions,
 } from '@markprompt/core/search';
-import type { FileSectionReference, View } from '@markprompt/core/types';
+import type { FileSectionReference } from '@markprompt/core/types';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
@@ -45,6 +45,8 @@ export type PolymorphicComponentPropWithRef<
 // This is the type for the "ref" only
 export type PolymorphicRef<C extends ElementType> =
   ComponentPropsWithRef<C>['ref'];
+
+export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
 export interface SectionHeading {
   value?: string | undefined;
