@@ -1,4 +1,3 @@
-import type { View } from '@markprompt/core/types';
 import type { MarkpromptOptions } from '@markprompt/react';
 
 import { closeMarkprompt, markprompt, openMarkprompt } from './index.js';
@@ -9,8 +8,8 @@ declare global {
       projectKey: string;
       container?: HTMLElement | string;
       options?: MarkpromptOptions;
-      open?: (view?: View) => void;
-      close?: () => void;
+      open?: typeof openMarkprompt;
+      close?: typeof closeMarkprompt;
     };
   }
 }
@@ -37,14 +36,9 @@ if (!projectKey) {
   );
 }
 
+window.markprompt.open = openMarkprompt;
+window.markprompt.close = closeMarkprompt;
+
 markprompt(projectKey, container, options);
-
-window.markprompt.open = (view?: View) => {
-  openMarkprompt(view);
-};
-
-window.markprompt.close = () => {
-  closeMarkprompt();
-};
 
 export {};

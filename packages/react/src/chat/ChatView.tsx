@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core/feedback';
-import type { View } from '@markprompt/core/types';
 import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
@@ -15,6 +14,7 @@ import type {
   IntegrationsOptions,
   MarkpromptOptions,
   ReferencesOptions,
+  View,
 } from '../types.js';
 import { RichText } from '../ui/rich-text.js';
 import { useDefaults } from '../useDefaults.js';

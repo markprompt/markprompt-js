@@ -60,5 +60,3 @@ export interface BaseOptions {
   apiUrl?: string;
   headers?: { [key: string]: string };
 }
-
-export type View = 'chat' | 'search' | 'ticket' | 'menu';

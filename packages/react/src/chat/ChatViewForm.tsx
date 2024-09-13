@@ -1,4 +1,3 @@
-import type { View } from '@markprompt/core/types';
 import {
   useCallback,
   useContext,
@@ -14,7 +13,7 @@ import { ChatContext, useChatStore } from './store.js';
 import { ThreadSelect } from './ThreadSelect.js';
 import { LoadingIcon, SendIcon } from '../icons.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { MarkpromptOptions, View } from '../types.js';
 
 interface ChatViewFormProps {
   activeView?: View;
