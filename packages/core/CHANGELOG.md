@@ -1,5 +1,15 @@
 # @markprompt/core
 
+## 0.38.0
+
+### Minor Changes
+
+- [#416](https://github.com/markprompt/markprompt-js/pull/416) [`93eef9c`](https://github.com/markprompt/markprompt-js/commit/93eef9c99f6916b4ff6911465019ae0afb845009) Thanks [@elliotdauber](https://github.com/elliotdauber)! - Agentic architecture
+
+### Patch Changes
+
+- [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove View type
+
 ## 0.37.0
 
 ### Minor Changes

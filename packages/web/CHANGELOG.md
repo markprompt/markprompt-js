@@ -1,5 +1,17 @@
 # @markprompt/web
 
+## 0.42.0
+
+### Minor Changes
+
+- [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6) Thanks [@nickrttn](https://github.com/nickrttn)! - Expose `openMarkprompt` on `window.markprompt.open` and `closeMarkprompt` on `window.markprompt.close` when using the init script. This was already the case but now the functions are exposed directly.
+
+### Patch Changes
+
+- Updated dependencies [[`93eef9c`](https://github.com/markprompt/markprompt-js/commit/93eef9c99f6916b4ff6911465019ae0afb845009), [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6), [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6)]:
+  - @markprompt/core@0.38.0
+  - @markprompt/react@0.54.1
+
 ## 0.41.1
 
 ### Patch Changes

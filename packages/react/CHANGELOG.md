@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.54.1
+
+### Patch Changes
+
+- [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6) Thanks [@nickrttn](https://github.com/nickrttn)! - Restore View type
+
+- Updated dependencies [[`93eef9c`](https://github.com/markprompt/markprompt-js/commit/93eef9c99f6916b4ff6911465019ae0afb845009), [`2647c28`](https://github.com/markprompt/markprompt-js/commit/2647c283532fa99fa823c44dda8cdfbc235819a6)]:
+  - @markprompt/core@0.38.0
+
 ## 0.54.0
 
 ### Minor Changes
