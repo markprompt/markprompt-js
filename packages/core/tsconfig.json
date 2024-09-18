@@ -12,7 +12,6 @@
     "strict": true,
 
     // transpilation
-    "noEmit": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "rootDir": "src/",
