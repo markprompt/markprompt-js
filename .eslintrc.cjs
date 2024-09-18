@@ -11,12 +11,9 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    emitDecoratorMetadata: true,
-    ecmaVersion: 'latest',
-    allowAutomaticSingleRunInference: true,
-    // @ts-expect-error -- __dirname should be available in a .cjs file 🤔
+    // @ts-expect-error -- __dirname should be available in a .cjs file
     tsconfigRootDir: __dirname,
-    project: 'tsconfig.json',
+    projectService: true,
   },
   settings: {
     'import/resolver': {

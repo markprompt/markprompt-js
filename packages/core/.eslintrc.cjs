@@ -4,6 +4,6 @@ module.exports = {
   ignorePatterns: ['.turbo/', 'dist/'],
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: 'tsconfig.json',
+    projectService: true,
   },
 };

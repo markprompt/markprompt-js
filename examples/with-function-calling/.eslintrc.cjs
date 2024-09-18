@@ -6,7 +6,7 @@ module.exports = {
   extends: ['plugin:@next/next/core-web-vitals'],
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.json'],
+    projectService: true,
   },
   settings: {
     next: {

@@ -4,6 +4,6 @@ module.exports = {
   parserOptions: {
     // @ts-expect-error - ts can't find __dirname but this is a cjs file so it should
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.json'],
+    projectService: true,
   },
 };
