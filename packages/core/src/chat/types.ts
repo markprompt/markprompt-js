@@ -69,7 +69,8 @@ export type SystemActionName =
   | 'LookupCategories'
   | 'LookupExamples'
   | 'Think'
-  | 'Observe';
+  | 'Observe'
+  | 'CallExternalAPI';
 
 export interface SystemAction {
   function: {
