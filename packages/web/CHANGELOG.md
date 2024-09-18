@@ -1,5 +1,15 @@
 # @markprompt/web
 
+## 0.42.1
+
+### Patch Changes
+
+- [`3f68044`](https://github.com/markprompt/markprompt-js/commit/3f6804454fb214d49d4271b576f26e3bb8b32640) Thanks [@nickrttn](https://github.com/nickrttn)! - Update linting setup
+
+- Updated dependencies [[`fa281d7`](https://github.com/markprompt/markprompt-js/commit/fa281d7d55b5d4a7a633874b169a635ec6261dea), [`3f68044`](https://github.com/markprompt/markprompt-js/commit/3f6804454fb214d49d4271b576f26e3bb8b32640)]:
+  - @markprompt/core@0.38.1
+  - @markprompt/react@0.54.2
+
 ## 0.42.0
 
 ### Minor Changes

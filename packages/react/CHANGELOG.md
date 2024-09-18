@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.54.2
+
+### Patch Changes
+
+- [`fa281d7`](https://github.com/markprompt/markprompt-js/commit/fa281d7d55b5d4a7a633874b169a635ec6261dea) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix linting issues as a result of upgrading `@typescript-eslint/*`
+
+- [`3f68044`](https://github.com/markprompt/markprompt-js/commit/3f6804454fb214d49d4271b576f26e3bb8b32640) Thanks [@nickrttn](https://github.com/nickrttn)! - Update linting setup
+
+- Updated dependencies [[`fa281d7`](https://github.com/markprompt/markprompt-js/commit/fa281d7d55b5d4a7a633874b169a635ec6261dea), [`3f68044`](https://github.com/markprompt/markprompt-js/commit/3f6804454fb214d49d4271b576f26e3bb8b32640)]:
+  - @markprompt/core@0.38.1
+
 ## 0.54.1
 
 ### Patch Changes
