@@ -1,6 +1,6 @@
 {
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".eslintrc.cjs"],
-  "exclude": ["node_modules"],
+  "exclude": ["**/node_modules", ".next/"],
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
