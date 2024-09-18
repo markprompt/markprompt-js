@@ -15,9 +15,8 @@
     // transpilation
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "noEmit": true,
     "outDir": "dist/",
-    "rootDir": ".",
+    "rootDir": "src/",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -29,6 +28,6 @@
 
     "types": ["@docusaurus/module-type-aliases"]
   },
-  "include": [".", ".eslintrc.cjs"],
-  "exclude": ["dist/", ".turbo/"]
+  "include": ["src/"],
+  "exclude": ["**/node_modules", "dist/", ".turbo/"]
 }

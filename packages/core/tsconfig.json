@@ -15,7 +15,7 @@
     "noEmit": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "rootDir": "../../",
+    "rootDir": "src/",
     "outDir": "dist/",
 
     "sourceMap": true,
@@ -25,6 +25,6 @@
     // runtime
     "lib": ["dom", "dom.iterable", "es2023"]
   },
-  "include": [".", ".eslintrc.cjs", "../../test/utils.ts"],
-  "exclude": ["dist/", ".turbo/"]
+  "include": ["src/"],
+  "exclude": ["**/node_modules", "src/**/*.test.ts", "dist/"]
 }

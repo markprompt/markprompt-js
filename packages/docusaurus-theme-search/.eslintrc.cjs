@@ -4,7 +4,9 @@ module.exports = {
   root: false,
   parserOptions: {
     tsconfigRootDir: __dirname,
-    projectService: true,
+    projectService: {
+      allowDefaultProject: ['vitest.config.js'],
+    },
   },
   settings: {
     react: {

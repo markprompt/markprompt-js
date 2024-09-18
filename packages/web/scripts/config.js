@@ -11,7 +11,7 @@ const config = {
   outdir: 'dist/',
   format: 'esm',
   target: 'esnext',
-  tsconfig: path.resolve(import.meta.dirname, '..', 'tsconfig.build.json'),
+  tsconfig: path.resolve(import.meta.dirname, '..', 'tsconfig.json'),
   bundle: true,
   treeShaking: true,
   sourcemap: true,

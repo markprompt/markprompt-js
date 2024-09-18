@@ -15,9 +15,9 @@
     // transpilation
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noEmit": true,
+    "emitDeclarationOnly": true,
     "outDir": "dist/",
-    "rootDir": ".",
+    "rootDir": "src/",
 
     "sourceMap": true,
     "declaration": true,
@@ -34,6 +34,6 @@
       "react-dom": ["./node_modules/preact/compat"]
     }
   },
-  "include": [".", ".eslintrc.cjs"],
-  "exclude": ["dist/", ".turbo/"]
+  "include": ["src/"],
+  "exclude": ["**/node_modules/", "dist/", ".turbo/"]
 }

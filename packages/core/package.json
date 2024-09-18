@@ -39,11 +39,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build tsconfig.build.json",
-    "dev": "tsc --build tsconfig.build.json --watch",
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
     "lint:js": "eslint .",
-    "lint:ts": "tsc --build tsconfig.json",
-    "prepack": "tsc --build tsconfig.build.json"
+    "lint:ts": "tsc --build --noEmit",
+    "prepack": "tsc --build"
   },
   "dependencies": {
     "@algolia/client-search": "^4.23.3",

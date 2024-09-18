@@ -4,6 +4,12 @@ module.exports = {
   ignorePatterns: ['.turbo/', 'dist/'],
   parserOptions: {
     tsconfigRootDir: __dirname,
-    projectService: true,
+    projectService: {
+      allowDefaultProject: [
+        'vitest.config.js',
+        'src/*.test.ts',
+        'src/*/*.test.ts',
+      ],
+    },
   },
 };

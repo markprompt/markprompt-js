@@ -5,5 +5,5 @@
     "noEmit": true
   },
   "include": [".eslintrc.cjs", "prettier.config.js", "test/"],
-  "exclude": ["examples/", "packages/"]
+  "exclude": ["**/node_modules", "examples/", "packages/"]
 }

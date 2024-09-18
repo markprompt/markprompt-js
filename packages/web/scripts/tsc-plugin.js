@@ -8,7 +8,7 @@ export const tscPlugin = {
   name: 'tsc',
   setup(build) {
     build.onEnd(async () => {
-      execSync('tsc -b tsconfig.build.json', {
+      execSync('tsc --build', {
         stdio: 'inherit',
       });
     });

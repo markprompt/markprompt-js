@@ -4,7 +4,13 @@ module.exports = {
   root: false,
   parserOptions: {
     tsconfigRootDir: __dirname,
-    projectService: true,
+    projectService: {
+      allowDefaultProject: [
+        '__mocks__/*.ts',
+        'vitest.config.ts',
+        'vitest.setup.ts',
+      ],
+    },
   },
   settings: {
     react: {
