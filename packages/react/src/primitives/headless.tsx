@@ -103,7 +103,7 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
-type ContentProps = ComponentPropsWithRef<typeof Dialog.Content>;
+type ContentProps = ComponentPropsWithoutRef<typeof Dialog.Content>;
 
 /**
  * The Markprompt dialog content.
@@ -617,7 +617,6 @@ const References = function References<
     reference: FileSectionReference;
     index: number;
   }>,
-  // eslint-disable-next-line @typescript-eslint/ban-types
   P extends ReferencesProps<TRoot, TReference> = { references: [] },
 >(props: P, ref: PolymorphicRef<TRoot>): ReactElement {
   const {

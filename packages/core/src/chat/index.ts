@@ -149,7 +149,7 @@ export async function* submitChat(
       if (json.error) {
         throw new Error(json.error);
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
 

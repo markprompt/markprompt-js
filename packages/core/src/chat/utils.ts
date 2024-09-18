@@ -74,7 +74,7 @@ export const parseEncodedJSONHeader = (
       const decodedValue = decoder.decode(headerArray);
       return JSON.parse(decodedValue);
     }
-  } catch (e) {
+  } catch {
     // Do nothing
   }
   return undefined;
