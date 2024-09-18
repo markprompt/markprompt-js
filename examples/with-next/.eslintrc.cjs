@@ -7,6 +7,7 @@ module.exports = {
   parserOptions: {
     tsconfigRootDir: __dirname,
     projectService: true,
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   settings: {
     next: {

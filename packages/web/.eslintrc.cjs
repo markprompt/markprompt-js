@@ -7,6 +7,7 @@ module.exports = {
     projectService: {
       allowDefaultProject: ['vitest.config.js', 'scripts/*.js'],
     },
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   settings: {
     react: {

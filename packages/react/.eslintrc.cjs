@@ -11,6 +11,7 @@ module.exports = {
         'vitest.setup.ts',
       ],
     },
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   settings: {
     react: {

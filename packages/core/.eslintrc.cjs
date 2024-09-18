@@ -11,5 +11,6 @@ module.exports = {
         'src/*/*.test.ts',
       ],
     },
+    warnOnUnsupportedTypeScriptVersion: false,
   },
 };
