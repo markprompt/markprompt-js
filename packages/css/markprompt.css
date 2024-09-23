@@ -37,7 +37,7 @@
 
 @media (prefers-color-scheme: dark) {
   /* Support Docusaurus dark theme data attribute */
-  :not([data-theme='light']):root {
+  :not([data-theme="light"]):root {
     --markprompt-background: #121212;
     --markprompt-background-accent: #0d0d0d;
     --markprompt-foreground: #d4d4d4;
@@ -63,7 +63,7 @@
 }
 
 /* Support Docusaurus dark theme data attribute */
-[data-theme='dark']:root {
+[data-theme="dark"]:root {
   --markprompt-background: #050505;
   --markprompt-foreground: #d4d4d4;
   --markprompt-muted: #171717;
@@ -81,17 +81,17 @@
   --markprompt-ring: #fff;
 }
 
-[class^='Markprompt'] {
+[class^="Markprompt"] {
   box-sizing: border-box;
 }
 
-[class^='Markprompt'] textarea {
+[class^="Markprompt"] textarea {
   font-family: unset;
 }
 
-[class^='Markprompt'] *,
-[class^='Markprompt'] *::before,
-[class^='Markprompt'] *::after {
+[class^="Markprompt"] *,
+[class^="Markprompt"] *::before,
+[class^="Markprompt"] *::after {
   box-sizing: inherit;
 }
 
@@ -102,11 +102,8 @@
 }
 
 .MarkpromptFloatingTrigger {
-  box-shadow:
-    rgb(255 255 255) 0 0 0 0,
-    rgba(0 0 0 / 7.5%) 0 0 0 6px,
-    rgba(255 255 255 / 10%) 0 1px 0 0 inset,
-    rgba(33 33 38 / 20%) 0 1px 3px 0,
+  box-shadow: rgb(255 255 255) 0 0 0 0, rgba(0 0 0 / 7.5%) 0 0 0 6px,
+    rgba(255 255 255 / 10%) 0 1px 0 0 inset, rgba(33 33 38 / 20%) 0 1px 3px 0,
     rgb(33 33 38) 0 0 0 1px;
   box-sizing: border-box;
   display: grid;
@@ -127,16 +124,13 @@
 }
 
 .MarkpromptFloatingTrigger:hover {
-  box-shadow:
-    rgb(255 255 255) 0 0 0 0,
-    rgba(0 0 0 / 7.5%) 0 0 0 8px,
-    rgba(255 255 255 / 10%) 0 1px 0 0 inset,
-    rgba(33 33 38 / 20%) 0 1px 3px 0,
+  box-shadow: rgb(255 255 255) 0 0 0 0, rgba(0 0 0 / 7.5%) 0 0 0 8px,
+    rgba(255 255 255 / 10%) 0 1px 0 0 inset, rgba(33 33 38 / 20%) 0 1px 3px 0,
     rgb(33 33 38) 0 0 0 1px;
 }
 
 .MarkpromptFloatingTrigger::before {
-  content: '';
+  content: "";
   background-image: linear-gradient(
     rgba(255 255 255 / 25%),
     rgba(255 255 255 / 0%)
@@ -154,7 +148,7 @@
 }
 
 .MarkpromptFloatingTrigger::after {
-  content: '';
+  content: "";
   mix-blend-mode: overlay;
   background-image: linear-gradient(
     rgba(255 255 255 / 10%) 45%,
@@ -169,8 +163,7 @@
 }
 
 .MarkpromptHighlightButton {
-  box-shadow:
-    rgba(255 255 255 / 10%) 0 1px 0 0 inset,
+  box-shadow: rgba(255 255 255 / 10%) 0 1px 0 0 inset,
     var(--markprompt-button-background) 0 0 0 1px;
   box-sizing: border-box;
   display: grid;
@@ -186,7 +179,7 @@
 }
 
 .MarkpromptHighlightButton::before {
-  content: '';
+  content: "";
   background-image: linear-gradient(
     rgba(255 255 255 / 25%),
     rgba(255 255 255 / 0%)
@@ -205,7 +198,7 @@
 }
 
 .MarkpromptHighlightButton::after {
-  content: '';
+  content: "";
   mix-blend-mode: overlay;
   background-image: linear-gradient(
     rgba(255 255 255 / 10%) 45%,
@@ -272,7 +265,7 @@
   background-color: var(--markprompt-overlay);
 }
 
-.MarkpromptOverlay[data-state='closed'] {
+.MarkpromptOverlay[data-state="closed"] {
   animation: markprompt-fade-out 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -284,14 +277,13 @@
   grid-template-rows: 1fr auto;
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
-  box-shadow:
-    hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+  box-shadow: hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
     hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.MarkpromptContentDialog[data-variant='dialog'] {
+.MarkpromptContentDialog[data-variant="dialog"] {
   z-index: 50;
   position: fixed;
   top: 50%;
@@ -306,21 +298,21 @@
   max-height: 40rem;
 }
 
-.MarkpromptContentDialog[data-variant='dialog']:not([data-size='adaptive']) {
+.MarkpromptContentDialog[data-variant="dialog"]:not([data-size="adaptive"]) {
   height: 80vh;
   max-height: 600px;
 }
 
-.MarkpromptContentDialog[data-variant='dialog'][data-size='adaptive'] {
+.MarkpromptContentDialog[data-variant="dialog"][data-size="adaptive"] {
   max-height: 80vh;
 }
 
-.MarkpromptContentDialog[data-variant='dialog'][data-state='closed'] {
+.MarkpromptContentDialog[data-variant="dialog"][data-state="closed"] {
   animation-name: markprompt-hide-content;
   animation-duration: 100ms;
 }
 
-.MarkpromptContentDialog[data-variant='sheet'] {
+.MarkpromptContentDialog[data-variant="sheet"] {
   z-index: 100;
   position: fixed;
   top: 0.5rem;
@@ -334,7 +326,7 @@
   transition-timing-function: cubic-bezier(0.64, 0.57, 0.67, 1.53);
 }
 
-.MarkpromptContentDialog[data-variant='sheet'][data-state='closed'] {
+.MarkpromptContentDialog[data-variant="sheet"][data-state="closed"] {
   animation-name: markprompt-hide-sheet;
   animation-duration: 100ms;
 }
@@ -380,13 +372,13 @@
   color: var(--markprompt-mutedForeground);
 }
 
-.MarkpromptTab[data-state='active'] {
+.MarkpromptTab[data-state="active"] {
   border-top: 2px solid transparent;
   border-bottom: 2px solid var(--markprompt-primary);
   color: var(--markprompt-primary);
 }
 
-.MarkpromptTab:not([data-state='active']) {
+.MarkpromptTab:not([data-state="active"]) {
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
 }
@@ -465,11 +457,11 @@
   flex-direction: column;
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='false'] .MarkpromptMessages {
+.MarkpromptTicketDeflectionForm[data-expanded="false"] .MarkpromptMessages {
   display: none;
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='true'] .MarkpromptMessages {
+.MarkpromptTicketDeflectionForm[data-expanded="true"] .MarkpromptMessages {
   flex-grow: 1;
 }
 
@@ -568,11 +560,11 @@
 }
 
 .MarkpromptChatThreadList button:hover,
-.MarkpromptChatThreadList [data-selected='true'] button {
+.MarkpromptChatThreadList [data-selected="true"] button {
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptChatThreadList [data-selected='true'] button {
+.MarkpromptChatThreadList [data-selected="true"] button {
   border-color: var(--markprompt-border);
 }
 
@@ -587,12 +579,12 @@
   transition-duration: 200ms;
 }
 
-.MarkpromptClose[data-type='icon'] {
+.MarkpromptClose[data-type="icon"] {
   color: var(--markprompt-mutedForeground);
   padding: 0.375rem;
 }
 
-.MarkpromptClose[data-type='kbd'] {
+.MarkpromptClose[data-type="kbd"] {
   color: var(--markprompt-foreground);
   padding: 0.125rem 0.375rem;
   border-style: solid;
@@ -601,17 +593,17 @@
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptClose[data-type='icon']:hover {
+.MarkpromptClose[data-type="icon"]:hover {
   color: var(--markprompt-foreground);
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptClose[data-type='kbd']:hover {
+.MarkpromptClose[data-type="kbd"]:hover {
   opacity: 0.8;
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptClose[data-type='kbd']:focus {
+.MarkpromptClose[data-type="kbd"]:focus {
   box-shadow: inset 0 0 0 2px var(--markprompt-primary);
 }
 
@@ -628,12 +620,12 @@
   background-color: var(--markprompt-background-accent);
 }
 
-.MarkpromptForm[data-state='disabled'] {
+.MarkpromptForm[data-state="disabled"] {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.MarkpromptForm[data-state='disabled']:hover * {
+.MarkpromptForm[data-state="disabled"]:hover * {
   pointer-events: none;
 }
 
@@ -660,14 +652,14 @@
   overflow-y: hidden;
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='false']
+.MarkpromptTicketDeflectionForm[data-expanded="false"]
   .MarkpromptChatView
   .MarkpromptForm {
   border-top: 0;
   box-shadow: none;
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='true']
+.MarkpromptTicketDeflectionForm[data-expanded="true"]
   .MarkpromptChatView
   .MarkpromptForm {
   max-height: 120px;
@@ -756,7 +748,7 @@
   overflow: hidden;
 }
 
-.MarkpromptMessageAnswerContainer[data-compact='true'] .MarkpromptAnswer > p {
+.MarkpromptMessageAnswerContainer[data-compact="true"] .MarkpromptAnswer > p {
   margin-bottom: 1rem;
 }
 
@@ -842,14 +834,14 @@
   opacity: 0;
 }
 
-[data-loading-state='preload'] .MarkpromptMessageAvatarContainer,
-[data-loading-state='preload'] .MarkpromptMessagePromptText,
-[data-loading-state='preload'] .MarkpromptMessageAnswer,
-[data-loading-state='preload'] .MarkpromptLoadingContainer,
-[data-loading-state='indeterminate'] .MarkpromptMessageAvatarContainer,
-[data-loading-state='indeterminate'] .MarkpromptMessagePromptText,
-[data-loading-state='indeterminate'] .MarkpromptMessageAnswer,
-[data-loading-state='indeterminate'] .MarkpromptLoadingContainer {
+[data-loading-state="preload"] .MarkpromptMessageAvatarContainer,
+[data-loading-state="preload"] .MarkpromptMessagePromptText,
+[data-loading-state="preload"] .MarkpromptMessageAnswer,
+[data-loading-state="preload"] .MarkpromptLoadingContainer,
+[data-loading-state="indeterminate"] .MarkpromptMessageAvatarContainer,
+[data-loading-state="indeterminate"] .MarkpromptMessagePromptText,
+[data-loading-state="indeterminate"] .MarkpromptMessageAnswer,
+[data-loading-state="indeterminate"] .MarkpromptLoadingContainer {
   --markprompt-slide-up-translation-from: 4px;
   --markprompt-slide-up-translation-to: 0;
 
@@ -861,31 +853,31 @@
   opacity: 0;
 }
 
-[data-loading-state='preload']
+[data-loading-state="preload"]
   .MarkpromptMessagePrompt
   .MarkpromptMessageAvatarContainer,
-[data-loading-state='indeterminate']
+[data-loading-state="indeterminate"]
   .MarkpromptMessagePrompt
   .MarkpromptMessageAvatarContainer {
   --markprompt-preload-delay: 0;
 }
 
-[data-loading-state='preload'] .MarkpromptMessagePromptText,
-[data-loading-state='indeterminate'] .MarkpromptMessagePromptText {
+[data-loading-state="preload"] .MarkpromptMessagePromptText,
+[data-loading-state="indeterminate"] .MarkpromptMessagePromptText {
   --markprompt-preload-delay: 100ms;
 }
 
-[data-loading-state='preload']
+[data-loading-state="preload"]
   .MarkpromptMessageAnswerContainer
   .MarkpromptMessageAvatarContainer,
-[data-loading-state='indeterminate']
+[data-loading-state="indeterminate"]
   .MarkpromptMessageAnswerContainer
   .MarkpromptMessageAvatarContainer {
   --markprompt-preload-delay: 500ms;
 }
 
-[data-loading-state='preload'] .MarkpromptLoadingContainer,
-[data-loading-state='indeterminate'] .MarkpromptLoadingContainer {
+[data-loading-state="preload"] .MarkpromptLoadingContainer,
+[data-loading-state="indeterminate"] .MarkpromptLoadingContainer {
   --markprompt-preload-delay: 600ms;
 }
 
@@ -1007,27 +999,27 @@
 }
 
 /* Remove 2px padding that some browsers add to input */
-.MarkpromptPrompt[type='search' i] {
+.MarkpromptPrompt[type="search" i] {
   padding: 1rem 3rem 1rem 0;
 }
 
 /* Remove the 'x' clear button from the search (.MarkpromptPrompt field */
-.MarkpromptPrompt[type='search']::-ms-clear {
+.MarkpromptPrompt[type="search"]::-ms-clear {
   display: none;
   width: 0;
   height: 0;
 }
 
-.MarkpromptPrompt[type='search']::-ms-reveal {
+.MarkpromptPrompt[type="search"]::-ms-reveal {
   display: none;
   width: 0;
   height: 0;
 }
 
-.MarkpromptPrompt[type='search']::-webkit-search-decoration,
-.MarkpromptPrompt[type='search']::-webkit-search-cancel-button,
-.MarkpromptPrompt[type='search']::-webkit-search-results-button,
-.MarkpromptPrompt[type='search']::-webkit-search-results-decoration {
+.MarkpromptPrompt[type="search"]::-webkit-search-decoration,
+.MarkpromptPrompt[type="search"]::-webkit-search-cancel-button,
+.MarkpromptPrompt[type="search"]::-webkit-search-results-button,
+.MarkpromptPrompt[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
 
@@ -1123,39 +1115,39 @@
   padding-left: 1.5714286em;
 }
 
-.MarkpromptAnswer ol[type='A'] {
+.MarkpromptAnswer ol[type="A"] {
   list-style-type: upper-alpha;
 }
 
-.MarkpromptAnswer ol[type='a'] {
+.MarkpromptAnswer ol[type="a"] {
   list-style-type: lower-alpha;
 }
 
-.MarkpromptAnswer ol[type='A' s] {
+.MarkpromptAnswer ol[type="A" s] {
   list-style-type: upper-alpha;
 }
 
-.MarkpromptAnswer ol[type='a' s] {
+.MarkpromptAnswer ol[type="a" s] {
   list-style-type: lower-alpha;
 }
 
-.MarkpromptAnswer ol[type='I'] {
+.MarkpromptAnswer ol[type="I"] {
   list-style-type: upper-roman;
 }
 
-.MarkpromptAnswer ol[type='i'] {
+.MarkpromptAnswer ol[type="i"] {
   list-style-type: lower-roman;
 }
 
-.MarkpromptAnswer ol[type='I' s] {
+.MarkpromptAnswer ol[type="I" s] {
   list-style-type: upper-roman;
 }
 
-.MarkpromptAnswer ol[type='i' s] {
+.MarkpromptAnswer ol[type="i" s] {
   list-style-type: lower-roman;
 }
 
-.MarkpromptAnswer ol[type='1'] {
+.MarkpromptAnswer ol[type="1"] {
   list-style-type: decimal;
 }
 
@@ -1188,7 +1180,7 @@
   color: var(--markprompt-foreground);
   border-left-width: 0.25rem;
   border-left-color: var(--markprompt-border);
-  quotes: '\201C' '\201D' '\2018' '\2019';
+  quotes: "\201C" "\201D" "\2018" "\2019";
   margin-top: 1.3333333em;
   margin-bottom: 1.3333333em;
   padding-left: 1.1111111em;
@@ -1290,11 +1282,11 @@
 }
 
 .MarkpromptAnswer code::before {
-  content: '`';
+  content: "`";
 }
 
 .MarkpromptAnswer code::after {
-  content: '`';
+  content: "`";
 }
 
 .MarkpromptAnswer a code {
@@ -1519,7 +1511,7 @@
   display: inline-block;
 } */
 
-.MarkpromptPromptFeedback:not([data-show-feedback-always='true']) {
+.MarkpromptPromptFeedback:not([data-show-feedback-always="true"]) {
   transition-timing-function: cubic-bezier(0.4, 0.36, 0, 1);
   transition-property: all;
   transition-duration: 300ms;
@@ -1532,17 +1524,17 @@
   transform: translateY(0);
 }
 
-.MarkpromptPromptFeedback[data-variant='text'] {
+.MarkpromptPromptFeedback[data-variant="text"] {
   margin: 0 2rem 1rem;
   padding: 0.75rem 0;
   border-top: 1px solid var(--markprompt-border);
 }
 
-.MarkpromptPromptFeedback[data-variant='icons'] {
+.MarkpromptPromptFeedback[data-variant="icons"] {
   margin-top: -0.5rem;
 }
 
-.MarkpromptPromptFeedback[data-variant='text'] h3 {
+.MarkpromptPromptFeedback[data-variant="text"] h3 {
   animation: markprompt-fade-in 500ms ease-out forwards 1;
   font-size: var(--markprompt-text-size-xs);
   font-weight: 600;
@@ -1551,7 +1543,7 @@
   margin-bottom: 0.5rem;
 }
 
-.MarkpromptPromptFeedback[data-variant='icons'] h3 {
+.MarkpromptPromptFeedback[data-variant="icons"] h3 {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
@@ -1568,7 +1560,7 @@
   gap: 0.375rem;
 }
 
-.MarkpromptPromptFeedback[data-variant='icons'] div {
+.MarkpromptPromptFeedback[data-variant="icons"] div {
   justify-content: flex-end;
 }
 
@@ -1590,17 +1582,17 @@
   border: none;
 }
 
-.MarkpromptPromptFeedback[data-variant='text'] button {
+.MarkpromptPromptFeedback[data-variant="text"] button {
   border: 1px solid var(--markprompt-border);
 }
 
-.MarkpromptGhostThumbButton[data-active='true'] {
+.MarkpromptGhostThumbButton[data-active="true"] {
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
   border-color: var(--markprompt-primaryForeground);
 }
 
-.MarkpromptGhostThumbButton[data-active='true']:hover {
+.MarkpromptGhostThumbButton[data-active="true"]:hover {
   background-color: var(--markprompt-primary);
 }
 
@@ -1676,7 +1668,7 @@
   opacity: 0;
 }
 
-[data-loading-state='preload'] .MarkpromptProgress {
+[data-loading-state="preload"] .MarkpromptProgress {
   opacity: 1;
 }
 
@@ -1700,7 +1692,7 @@
   width: 100%;
 }
 
-.MarkpromptReferences[data-loading-state='cancelled'] {
+.MarkpromptReferences[data-loading-state="cancelled"] {
   display: none;
 }
 
@@ -1722,7 +1714,7 @@
   margin-top: 0;
 }
 
-.MarkpromptReferences[data-loading-state='preload'] {
+.MarkpromptReferences[data-loading-state="preload"] {
   overflow-x: hidden;
 }
 
@@ -1917,7 +1909,7 @@
   background-color: var(--markprompt-muted);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultLink {
+[aria-selected="true"] .MarkpromptSearchResultLink {
   background-color: var(--markprompt-primary);
   color: var(--markprompt-primaryForeground);
 }
@@ -1946,7 +1938,7 @@
   border-color: var(--markprompt-border);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultIconWrapperBordered {
+[aria-selected="true"] .MarkpromptSearchResultIconWrapperBordered {
   background-color: transparent;
   border-color: var(--markprompt-primaryMuted);
 }
@@ -1958,7 +1950,7 @@
   height: var(--markprompt-button-icon-size);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultIcon {
+[aria-selected="true"] .MarkpromptSearchResultIcon {
   color: var(--markprompt-primaryForeground);
 }
 
@@ -1995,7 +1987,7 @@
   margin-bottom: 0.25rem;
 }
 
-[aria-selected='true'] .MarkpromptSearchResultHeading {
+[aria-selected="true"] .MarkpromptSearchResultHeading {
   background-color: var(--markprompt-primaryMuted);
   border-color: var(--markprompt-primaryMuted);
 }
@@ -2021,7 +2013,7 @@
   color: var(--markprompt-mutedForeground);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultSubtitle {
+[aria-selected="true"] .MarkpromptSearchResultSubtitle {
   color: var(--markprompt-primaryForeground);
 }
 
@@ -2031,12 +2023,12 @@
   border-bottom: 0.1rem solid var(--markprompt-primary);
 }
 
-[aria-selected='true'] .MarkpromptSearchResultHeading .MarkpromptMatch,
+[aria-selected="true"] .MarkpromptSearchResultHeading .MarkpromptMatch,
 .MarkpromptSearchResultHeading .MarkpromptMatch {
   border-bottom-color: transparent;
 }
 
-[aria-selected='true'] .MarkpromptMatch {
+[aria-selected="true"] .MarkpromptMatch {
   border-color: var(--markprompt-primaryForeground);
   color: var(--markprompt-primaryForeground);
 }
@@ -2125,12 +2117,12 @@
   will-change: auto;
 }
 
-.MarkpromptSelectMenu[data-open='true'] {
+.MarkpromptSelectMenu[data-open="true"] {
   display: block;
   animation: markprompt-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.MarkpromptSelectMenu[data-open='false'] {
+.MarkpromptSelectMenu[data-open="false"] {
   animation: markprompt-fade-out 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -2145,11 +2137,11 @@
   width: 100%;
 }
 
-.MarkpromptSelectMenu li[data-highlighted='true'] {
+.MarkpromptSelectMenu li[data-highlighted="true"] {
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptSelectMenu li[data-selected='true'] {
+.MarkpromptSelectMenu li[data-selected="true"] {
   font-weight: 600;
 }
 
@@ -2407,11 +2399,11 @@
   cursor: pointer;
 }
 
-.MarkpromptMessageCSATStar[data-active='false'] {
+.MarkpromptMessageCSATStar[data-active="false"] {
   color: var(--markprompt-mutedForeground);
 }
 
-.MarkpromptMessageCSATStar[data-active='true'] {
+.MarkpromptMessageCSATStar[data-active="true"] {
   color: var(--markprompt-star-active);
 }
 
@@ -2560,13 +2552,13 @@
   field-sizing: normal;
 }
 
-.MarkpromptFormGroup input:not([type='file']):focus-within,
+.MarkpromptFormGroup input:not([type="file"]):focus-within,
 .MarkpromptFormGroup textarea:focus-within {
   box-shadow: 0 0 0 3px var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
 }
 
-.MarkpromptFormGroup input[type='file'] {
+.MarkpromptFormGroup input[type="file"] {
   font-family: inherit;
   background-color: var(--markprompt-background);
   border: 0;
@@ -2576,7 +2568,7 @@
   margin: -3px;
 }
 
-.MarkpromptFormGroup input[type='file']::file-selector-button {
+.MarkpromptFormGroup input[type="file"]::file-selector-button {
   background: var(--markprompt-muted);
   padding: 0.375rem 0.75rem;
   outline: none;
@@ -2590,7 +2582,7 @@
   margin-right: 1rem;
 }
 
-.MarkpromptFormGroup input[type='file']::file-selector-button:focus {
+.MarkpromptFormGroup input[type="file"]::file-selector-button:focus {
   box-shadow: 0 0 0 var(--markprompt-input-focus-shadow-width)
     var(--markprompt-border);
   border-color: var(--markprompt-border-accent);
@@ -2656,19 +2648,18 @@
   border: 1px solid var(--markprompt-border);
   border-radius: var(--markprompt-radius);
   padding: 1rem 1rem 0.5rem;
-  box-shadow:
-    0 10px 38px -10px rgba(22 23 24 / 35%),
-    0 10px 20px -15px rgba(22 23 24 / 20%);
+  box-shadow: 0 10px 38px -10px rgba(22 23 24 / 35%), 0 10px 20px -15px
+    rgba(22 23 24 / 20%);
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
 
-.MarkpromptDropdownMenuContent[data-state='open'] {
+.MarkpromptDropdownMenuContent[data-state="open"] {
   animation-name: dropdownMenuSlideGrow;
 }
 
-.MarkpromptDropdownMenuContent[data-state='closed'] {
+.MarkpromptDropdownMenuContent[data-state="closed"] {
   animation-name: dropdownMenuSlideGrowReverse;
 }
 
@@ -2727,28 +2718,28 @@
   text-decoration: none;
 }
 
-.MarkpromptDropdownMenuItem[data-type='link'] {
+.MarkpromptDropdownMenuItem[data-type="link"] {
   color: var(--markprompt-foreground);
   height: 28px;
 }
 
-.MarkpromptDropdownMenuItem[data-theme='purple'] {
+.MarkpromptDropdownMenuItem[data-theme="purple"] {
   --markprompt-button-background: var(--markprompt-background-purple);
 
   color: #fff;
 }
 
-.MarkpromptDropdownMenuItem[data-type='button'] {
+.MarkpromptDropdownMenuItem[data-type="button"] {
   background-color: var(--markprompt-button-background);
   height: 30px;
   justify-content: center;
 }
 
-.MarkpromptDropdownMenuItem[data-highlighted][data-type='link'] {
+.MarkpromptDropdownMenuItem[data-highlighted][data-type="link"] {
   background-color: var(--markprompt-highlight);
 }
 
-.MarkpromptDropdownMenuItem[data-highlighted][data-type='button']::before {
+.MarkpromptDropdownMenuItem[data-highlighted][data-type="button"]::before {
   opacity: 1;
 }
 
@@ -2852,12 +2843,12 @@
   background-color: var(--markprompt-background);
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='true'] {
+.MarkpromptTicketDeflectionForm[data-expanded="true"] {
   transition-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1.4);
   animation-name: markprompt-grow-dialog;
 }
 
-.MarkpromptTicketDeflectionForm[data-expanded='false'][data-animate-shrink='true'] {
+.MarkpromptTicketDeflectionForm[data-expanded="false"][data-animate-shrink="true"] {
   animation-name: markprompt-shrink-dialog;
 }
 
@@ -2912,8 +2903,8 @@
   background-color: transparent !important;
 }
 
-.MarkpromptButton[data-variant='primary']:not(:disabled)::before {
-  content: '';
+.MarkpromptButton[data-variant="primary"]:not(:disabled)::before {
+  content: "";
   background-image: linear-gradient(
     oklch(100% 0 0deg / 25%),
     oklch(100% 0 0deg / 0%)
@@ -2938,25 +2929,25 @@
   border-color: var(--markprompt-border-accent);
 }
 
-.MarkpromptButton[data-variant='primary'] {
+.MarkpromptButton[data-variant="primary"] {
   border: 1px solid transparent;
   color: var(--markprompt-primaryForeground);
   background-color: var(--markprompt-primary);
 }
 
-.MarkpromptButton[data-variant='primary']:disabled {
+.MarkpromptButton[data-variant="primary"]:disabled {
   border: 1px solid var(--markprompt-border);
   color: var(--markprompt-mutedForeground);
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptButton[data-variant='outline'] {
+.MarkpromptButton[data-variant="outline"] {
   border: 1px solid var(--markprompt-border);
   color: var(--markprompt-foreground);
   background-color: var(--markprompt-muted);
 }
 
-.MarkpromptButton[data-variant='outline']:disabled {
+.MarkpromptButton[data-variant="outline"]:disabled {
   color: var(--markprompt-mutedForeground);
 }
 
