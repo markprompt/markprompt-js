@@ -2,13 +2,13 @@
 import type {
   SubmitFeedbackOptions,
   PromptFeedback,
-} from "@markprompt/core/feedback";
+} from '@markprompt/core/feedback';
 import type {
   AlgoliaDocSearchHit,
   SearchResult,
   SubmitSearchQueryOptions,
-} from "@markprompt/core/search";
-import type { FileSectionReference } from "@markprompt/core/types";
+} from '@markprompt/core/search';
+import type { FileSectionReference } from '@markprompt/core/types';
 import type {
   ComponentPropsWithRef,
   ComponentPropsWithoutRef,
@@ -16,10 +16,10 @@ import type {
   ElementType,
   PropsWithChildren,
   ReactNode,
-} from "react";
+} from 'react';
 
-import type { UserConfigurableOptions } from "./chat/store.js";
-import type { ChatViewMessage } from "./index.js";
+import type { UserConfigurableOptions } from './chat/store.js';
+import type { ChatViewMessage } from './index.js';
 
 interface AsProp<C extends ElementType> {
   as?: C;
@@ -44,9 +44,9 @@ export type PolymorphicComponentPropWithRef<
 
 // This is the type for the "ref" only
 export type PolymorphicRef<C extends ElementType> =
-  ComponentPropsWithRef<C>["ref"];
+  ComponentPropsWithRef<C>['ref'];
 
-export type View = "chat" | "search" | "ticket" | "menu";
+export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
 export interface SectionHeading {
   value?: string | undefined;
@@ -214,17 +214,17 @@ export interface AvatarsOptions {
   assistant?: string | ComponentType<{ className: string }>;
 }
 
-export type ButtonTheme = "purple";
+export type ButtonTheme = 'purple';
 
 export type MenuIconId =
-  | "book"
-  | "chat"
-  | "discord"
-  | "magnifying-glass"
-  | "newspaper"
-  | "sparkles";
+  | 'book'
+  | 'chat'
+  | 'discord'
+  | 'magnifying-glass'
+  | 'newspaper'
+  | 'sparkles';
 
-export type MenuAction = "chat" | "ticket" | "search";
+export type MenuAction = 'chat' | 'ticket' | 'search';
 
 export interface MenuItemProps {
   /**
@@ -239,7 +239,7 @@ export interface MenuItemProps {
    * Entry type
    * @default link
    **/
-  type?: "link" | "button";
+  type?: 'link' | 'button';
   /**
    * Entry href
    **/
@@ -390,7 +390,7 @@ export interface ReferencesOptions {
    * displayed after the response or not displayed at all.
    * @default 'end'
    * */
-  display?: "none" | "end";
+  display?: 'none' | 'end';
   /** Callback to transform a reference into an href */
   getHref?: (reference: FileSectionReference) => string | undefined;
   /** Callback to transform a reference into a label */
@@ -521,7 +521,7 @@ export interface BrandingOptions {
    * Branding display type.
    * @default true
    **/
-  type?: "plain" | "text";
+  type?: 'plain' | 'text';
 }
 
 export interface CreateTicketIntegrationMessageButtonOptions {
@@ -672,7 +672,7 @@ export interface CreateTicketIntegrationOptions {
   /**
    * The provider to use for creating tickets.
    **/
-  provider: "salesforce" | "zendesk";
+  provider: 'salesforce' | 'zendesk';
   /**
    * The prompt to use to create a summary of the conversation between user and bot for the support agent
    * @default `You act as an expert summarizer.\n\n- You must write in the first person, as if you were the user writing a support ticket. Failure to do so will result in severe penalties.\n- Your task is to generate a short and precise summary of the user's input only.\n- You focus on the user message, and omit assistant messages unless strictly needed.\n- You must not include any references to creating a support ticket.\n- You must write a standalone summary, with no greetings or other extra text.\n- The summary must not be longer than the user messages. You will be penalized if it is longer.\n- You must output your response in plain text.\n- You must stricly adhere to these rules to avoid penalties.\n\nExample:\n- I am having an issue with setting up my payment processor.\n- I can no longer log in to my account.`
@@ -713,7 +713,7 @@ export interface IntegrationsOptions {
   createTicket?: CreateTicketIntegrationOptions;
 }
 
-export type MarkpromptDisplay = "plain" | "dialog" | "sheet";
+export type MarkpromptDisplay = 'plain' | 'dialog' | 'sheet';
 
 export interface MarkpromptOptions {
   /**
@@ -750,7 +750,7 @@ export interface MarkpromptOptions {
    * Multi-pane layout when both search and chat are enabled.
    * @default "panels"
    **/
-  layout?: "panels" | "tabs";
+  layout?: 'panels' | 'tabs';
   /**
    * Options for the menu component.
    */
