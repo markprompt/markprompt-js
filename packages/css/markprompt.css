@@ -1910,17 +1910,6 @@
   text-decoration: none;
 }
 
-.MarkpromptSearchResultIndented {
-  margin-left: 1.75rem;
-  padding-left: 1rem;
-  padding-right: 0;
-  border-left: 1px solid var(--markprompt-border);
-}
-
-:first-child(.MarkpromptSearchResultIndented) {
-  padding-top: 1.5rem;
-}
-
 .MarkpromptSearchResultLink {
   display: block;
   border-radius: 0.5rem;
