@@ -38,7 +38,7 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: var(--markprompt-primary);
   --ifm-color-primary-dark: var(--markprompt-primary);
   --ifm-color-primary-darker: var(--markprompt-primary);
@@ -96,7 +96,7 @@ ul.MarkpromptSearchResults {
   text-decoration: none !important;
 }
 
-:where([aria-selected='true'] .MarkpromptSearchResultLink) {
+:where([aria-selected="true"] .MarkpromptSearchResultLink) {
   background-color: var(--markprompt-primary) !important;
   color: var(--markprompt-primaryForeground) !important;
 }

@@ -113,7 +113,8 @@ export function DefaultToolCallsConfirmation(
                   />
                 </AccessibleIcon>
                 <strong>
-                  {tool.tool.function.description ?? tool.tool.function.name}{' '}
+                  {tool.tool.function.description ??
+                    tool.tool.function.name}{' '}
                 </strong>
               </p>
             );
@@ -154,7 +155,8 @@ export function DefaultToolCallsConfirmation(
                     />
                   </AccessibleIcon>
                   <strong>
-                    {tool.tool.function.description ?? tool.tool.function.name}{' '}
+                    {tool.tool.function.description ??
+                      tool.tool.function.name}{' '}
                   </strong>
                 </p>
               );

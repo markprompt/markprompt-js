@@ -79,8 +79,7 @@ button {
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
-  box-shadow:
-    hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+  box-shadow: hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
     hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   position: fixed;
   top: 50%;
@@ -217,39 +216,39 @@ button {
   padding-left: 1.5714286em;
 }
 
-.MarkpromptAnswer ol[type='A'] {
+.MarkpromptAnswer ol[type="A"] {
   list-style-type: upper-alpha;
 }
 
-.MarkpromptAnswer ol[type='a'] {
+.MarkpromptAnswer ol[type="a"] {
   list-style-type: lower-alpha;
 }
 
-.MarkpromptAnswer ol[type='A' s] {
+.MarkpromptAnswer ol[type="A" s] {
   list-style-type: upper-alpha;
 }
 
-.MarkpromptAnswer ol[type='a' s] {
+.MarkpromptAnswer ol[type="a" s] {
   list-style-type: lower-alpha;
 }
 
-.MarkpromptAnswer ol[type='I'] {
+.MarkpromptAnswer ol[type="I"] {
   list-style-type: upper-roman;
 }
 
-.MarkpromptAnswer ol[type='i'] {
+.MarkpromptAnswer ol[type="i"] {
   list-style-type: lower-roman;
 }
 
-.MarkpromptAnswer ol[type='I' s] {
+.MarkpromptAnswer ol[type="I" s] {
   list-style-type: upper-roman;
 }
 
-.MarkpromptAnswer ol[type='i' s] {
+.MarkpromptAnswer ol[type="i" s] {
   list-style-type: lower-roman;
 }
 
-.MarkpromptAnswer ol[type='1'] {
+.MarkpromptAnswer ol[type="1"] {
   list-style-type: decimal;
 }
 
@@ -282,7 +281,7 @@ button {
   color: var(--markprompt-foreground);
   border-left-width: 0.25rem;
   border-left-color: var(--markprompt-border);
-  quotes: '\201C' '\201D' '\2018' '\2019';
+  quotes: "\201C" "\201D" "\2018" "\2019";
   margin-top: 1.3333333em;
   margin-bottom: 1.3333333em;
   padding-left: 1.1111111em;
@@ -383,11 +382,11 @@ button {
 }
 
 .MarkpromptAnswer code::before {
-  content: '`';
+  content: "`";
 }
 
 .MarkpromptAnswer code::after {
-  content: '`';
+  content: "`";
 }
 
 .MarkpromptAnswer a code {
@@ -555,11 +554,11 @@ button {
   transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
 }
 
-[data-loading-state='preload'] .caret {
+[data-loading-state="preload"] .caret {
   display: inline-block;
 }
 
-[data-loading-state]:not([data-loading-state='done']) .caret {
+[data-loading-state]:not([data-loading-state="done"]) .caret {
   display: none;
 }
 
@@ -567,7 +566,7 @@ button {
   display: none;
 }
 
-[data-loading-state='preload'] .progress {
+[data-loading-state="preload"] .progress {
   position: absolute;
   top: -2px;
   left: 0;
@@ -587,12 +586,12 @@ button {
   opacity: 1;
 }
 
-[data-loading-state]:not([data-loading-state='preload']) .progress {
+[data-loading-state]:not([data-loading-state="preload"]) .progress {
   opacity: 0;
 }
 
 .references {
-  position: 'relative';
+  position: "relative";
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: var(--markprompt-muted);
@@ -606,16 +605,16 @@ button {
   box-sizing: border-box;
 }
 
-.references[data-loading-state='preload'] {
+.references[data-loading-state="preload"] {
   height: 50px;
 }
 
-.references[data-loading-state='streaming-answer'],
-.references[data-loading-state='done'] {
+.references[data-loading-state="streaming-answer"],
+.references[data-loading-state="done"] {
   height: 95px;
 }
 
-.references[data-loading-state='indeterminate'] {
+.references[data-loading-state="indeterminate"] {
   display: none;
   height: 0;
 }
@@ -637,19 +636,19 @@ button {
   margin-bottom: 0.5714286em;
 }
 
-.references[data-loading-state='preload'] > p:first-of-type {
+.references[data-loading-state="preload"] > p:first-of-type {
   opacity: 1;
 }
 
-.references[data-loading-state='preload'] > p:last-of-type {
+.references[data-loading-state="preload"] > p:last-of-type {
   opacity: 0;
 }
 
-[data-loading-state]:not([data-loading-state='preload']) > p:first-of-type {
+[data-loading-state]:not([data-loading-state="preload"]) > p:first-of-type {
   opacity: 0 !important;
 }
 
-[data-loading-state]:not([data-loading-state='preload']) > p:last-of-type {
+[data-loading-state]:not([data-loading-state="preload"]) > p:last-of-type {
   opacity: 1;
 }
 
