@@ -13,7 +13,6 @@
     "//#lint:biome": {},
     "//#lint:biome:ci": {},
     "//#lint:css": {},
-    "//#lint:format": {},
     "//#lint:js": {},
     "lint:js": {
       "dependsOn": ["^build"]
