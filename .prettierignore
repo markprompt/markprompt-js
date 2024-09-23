@@ -8,3 +8,4 @@ dist/
 **/README.md
 pnpm-lock.yaml
 .direnv/
+biome.jsonc
