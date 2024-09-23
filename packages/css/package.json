@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/css",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "description": "Common CSS for Markprompt components",
   "repository": {
     "type": "git",
@@ -10,5 +10,8 @@
   "license": "MIT",
   "main": "markprompt.css",
   "types": "./index.d.ts",
-  "files": ["markprompt.css", "index.d.ts"]
+  "files": [
+    "markprompt.css",
+    "index.d.ts"
+  ]
 }

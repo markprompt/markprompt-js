@@ -1,5 +1,15 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.27.12
+
+### Patch Changes
+
+- [#428](https://github.com/markprompt/markprompt-js/pull/428) [`a847eeb`](https://github.com/markprompt/markprompt-js/commit/a847eeb1c6d728aa770f663d31df37e82bb5e753) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix formatting using Biome
+
+- Updated dependencies [[`4aced34`](https://github.com/markprompt/markprompt-js/commit/4aced34c13ece1d22eb6e4827a598fd8d2afa53d), [`a847eeb`](https://github.com/markprompt/markprompt-js/commit/a847eeb1c6d728aa770f663d31df37e82bb5e753)]:
+  - @markprompt/css@0.32.1
+  - @markprompt/react@0.54.3
+
 ## 0.27.11
 
 ### Patch Changes
