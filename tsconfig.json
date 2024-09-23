@@ -4,6 +4,6 @@
     "checkJs": true,
     "noEmit": true
   },
-  "include": [".eslintrc.cjs", "prettier.config.js", "test/"],
+  "include": [".eslintrc.cjs", "test/"],
   "exclude": ["**/node_modules", "examples/", "packages/"]
 }
