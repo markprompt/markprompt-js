@@ -11,7 +11,10 @@
     "build:packages": "turbo run build --filter @markprompt/*...",
     "clean": "git clean -fdx -e .direnv/ -e \"examples/**/.env*\" -e \".husky/\"",
     "postinstall": "manypkg check",
-    "lint": "turbo run lint:css lint:format lint:js lint:md lint:ts",
+    "lint": "turbo run lint:biome lint:css lint:format lint:js lint:md lint:ts",
+    "lint:biome": "biome check",
+    "lint:biome:ci": "biome ci --reporter=github",
+    "lint:ci": "turbo run lint:biome:ci lint:css lint:format lint:js lint:md lint:ts",
     "lint:css": "stylelint \"**/*.css\"",
     "lint:format": "prettier --check .",
     "lint:js": "eslint . --ignore-pattern \"coverage/\" --ignore-pattern \"examples/\" --ignore-pattern \"packages/\"",
@@ -24,6 +27,7 @@
     "version": "changeset version && pnpm install"
   },
   "dependencies": {
+    "@biomejs/biome": "1.9.2",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@manypkg/cli": "^0.21.4",

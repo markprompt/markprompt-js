@@ -10,6 +10,8 @@
       "persistent": true,
       "cache": false
     },
+    "//#lint:biome": {},
+    "//#lint:biome:ci": {},
     "//#lint:css": {},
     "//#lint:format": {},
     "//#lint:js": {},
