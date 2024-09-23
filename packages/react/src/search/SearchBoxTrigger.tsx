@@ -1,5 +1,5 @@
-import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
-import type { ReactElement } from 'react';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
+import { useEffect, type ReactElement } from 'react';
 
 import {
   ChevronUpIcon,
@@ -22,25 +22,56 @@ interface SearchBoxTriggerProps {
 export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
   const { trigger, onClick } = props;
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        (event.metaKey && event.key === 'Enter') ||
+        (event.ctrlKey && event.key === 'Enter')
+      ) {
+        event.preventDefault();
+        onClick?.();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClick]);
+
   return (
-    <button onClick={onClick} className="MarkpromptSearchBoxTrigger">
-      <AccessibleIcon.Root label={trigger?.label ?? ''}>
-        <span className="MarkpromptSearchBoxTriggerContent">
-          <span className="MarkpromptSearchBoxTriggerText">
-            <SearchIcon width={16} height={16} />{' '}
-            {trigger?.placeholder || 'Search'}{' '}
-          </span>
+    <button
+      onClick={onClick}
+      className="MarkpromptSearchBoxTrigger"
+      aria-label={trigger?.label ?? 'Ask AI'}
+      type="button"
+    >
+      <span className="MarkpromptSearchBoxTriggerContent">
+        <span className="MarkpromptSearchBoxTriggerText">
+          <SearchIcon width={16} height={16} aria-hidden />{' '}
+          {trigger?.placeholder || 'Search'}{' '}
+        </span>
+        <kbd>
           <kbd>
             {navigator.platform.indexOf('Mac') === 0 ||
             navigator.platform === 'iPhone' ? (
-              <CommandIcon className="MarkpromptKeyboardKey" />
+              <AccessibleIcon label="Command">
+                <CommandIcon className="MarkpromptKeyboardKey" />
+              </AccessibleIcon>
             ) : (
-              <ChevronUpIcon className="MarkpromptKeyboardKey" />
+              <AccessibleIcon label="Ctrl">
+                <ChevronUpIcon className="MarkpromptKeyboardKey" />
+              </AccessibleIcon>
             )}
-            <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
           </kbd>
-        </span>
-      </AccessibleIcon.Root>
+          <kbd>
+            <AccessibleIcon label="Enter">
+              <CornerDownLeftIcon className="MarkpromptKeyboardKey" />
+            </AccessibleIcon>
+          </kbd>
+        </kbd>
+      </span>
     </button>
   );
 }

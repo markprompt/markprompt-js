@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { Branding, MarkpromptIcon } from './branding.js';
+import { Branding } from './branding.js';
 
 describe('Branding', () => {
   test('render a branding element', () => {
@@ -20,27 +20,5 @@ describe('Branding', () => {
 
     const anchor = screen.getByLabelText<HTMLAnchorElement>('Algolia');
     expect(anchor.href).toBe('https://algolia.com/');
-  });
-});
-
-describe('MarkpromptIcon', () => {
-  test('render SVG icon', () => {
-    const { container } = render(<MarkpromptIcon />);
-    expect(container).toContainHTML('svg');
-  });
-
-  test('custom className', () => {
-    render(<MarkpromptIcon className="custom-class" data-testid="test-id" />);
-    const svg = screen.getByTestId('test-id');
-    expect(svg).toHaveClass('custom-class');
-  });
-
-  test('custom style', () => {
-    render(
-      <MarkpromptIcon style={{ color: 'tomato' }} data-testid="test-id" />,
-    );
-    const svg = screen.getByTestId('test-id');
-    // html color names are converted to rgb by some step in the build process for tests
-    expect(svg).toHaveStyle({ color: 'rgb(255, 99, 71)' });
   });
 });

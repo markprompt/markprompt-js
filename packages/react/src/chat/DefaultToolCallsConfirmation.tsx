@@ -168,6 +168,7 @@ export function DefaultToolCallsConfirmation(
               <button
                 className="MarkpromptButton"
                 data-variant="outline"
+                type="button"
                 onClick={confirmToolCalls}
               >
                 Confirm

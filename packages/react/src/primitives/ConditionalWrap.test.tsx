@@ -11,7 +11,7 @@ describe('ConditionalWrap', () => {
     const { rerender } = render(
       <ConditionalWrap
         condition
-        wrap={(children) => <button>{children}</button>}
+        wrap={(children) => <button type="button">{children}</button>}
       >
         test
       </ConditionalWrap>,
@@ -20,7 +20,9 @@ describe('ConditionalWrap', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
 
     rerender(
-      <ConditionalWrap wrap={(children) => <button>{children}</button>}>
+      <ConditionalWrap
+        wrap={(children) => <button type="button">{children}</button>}
+      >
         test
       </ConditionalWrap>,
     );

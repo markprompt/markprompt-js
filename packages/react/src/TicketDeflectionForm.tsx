@@ -168,11 +168,15 @@ export function TicketDeflectionForm(
                 className="MarkpromptButton"
                 data-variant="outline"
                 disabled={isCreatingTicketSummary}
+                type="button"
                 onClick={() => handleCreateTicketSummary()}
               >
                 {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
                 {isCreatingTicketSummary && (
-                  <LoadingIcon style={{ width: 16, height: 16 }} />
+                  <LoadingIcon
+                    style={{ width: 16, height: 16 }}
+                    aria-label="creating summary"
+                  />
                 )}
               </button>
             </>
@@ -184,13 +188,17 @@ export function TicketDeflectionForm(
                 marginLeft: '-0.5rem',
               }}
             >
-              <div
+              <button
                 className="MarkpromptIconLink"
+                type="button"
                 onClick={() => setView('chat')}
               >
-                <ChevronLeftIcon className="MarkpromptButtonIcon" />
+                <ChevronLeftIcon
+                  className="MarkpromptButtonIcon"
+                  aria-hidden="true"
+                />
                 Back to help
-              </div>
+              </button>
             </div>
           )}
         </div>

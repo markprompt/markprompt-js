@@ -342,25 +342,28 @@ function CopyContentButton(props: CopyContentButtonProps): ReactElement {
       style={{ animationDelay: '100ms' }}
       data-active={false}
       onClick={handleClick}
+      aria-live="polite"
+      aria-label={didJustCopy ? 'copied' : 'copy'}
+      type="button"
     >
-      <AccessibleIcon label={didJustCopy ? 'copied' : 'copy'}>
-        <div style={{ position: 'relative' }}>
-          <ClipboardIcon
-            style={{ opacity: didJustCopy ? 0 : 1 }}
+      <div style={{ position: 'relative' }}>
+        <ClipboardIcon
+          style={{ opacity: didJustCopy ? 0 : 1 }}
+          width={16}
+          height={16}
+          strokeWidth={2}
+          aria-hidden
+        />
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <CheckIcon
+            style={{ opacity: didJustCopy ? 1 : 0 }}
             width={16}
             height={16}
             strokeWidth={2}
+            aria-hidden
           />
-          <div style={{ position: 'absolute', inset: 0 }}>
-            <CheckIcon
-              style={{ opacity: didJustCopy ? 1 : 0 }}
-              width={16}
-              height={16}
-              strokeWidth={2}
-            />
-          </div>
         </div>
-      </AccessibleIcon>
+      </div>
     </button>
   );
 }

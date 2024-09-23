@@ -131,7 +131,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
       }}
       className="MarkpromptReferences"
       data-loading-state={adjustedState}
-      role="status"
     >
       {state !== 'preload' && <p>{heading}</p>}
 

@@ -32,9 +32,10 @@ export function ThreadSidebar(props: ThreadSidebarProps): JSX.Element {
       </p>
       <ul className="MarkpromptChatThreadList">
         <li className="MarkpromptChatThreadListItem">
-          <button onClick={() => selectThread(undefined)}>
+          <button onClick={() => selectThread(undefined)} type="button">
             <span className="MarkpromptNewChatOption">
-              <PlusIcon className="MarkpromptNewChatIcon" /> New chat
+              <PlusIcon className="MarkpromptNewChatIcon" aria-hidden /> New
+              chat
             </span>
           </button>
         </li>
@@ -44,7 +45,7 @@ export function ThreadSidebar(props: ThreadSidebarProps): JSX.Element {
             data-selected={selectedThreadId === threadId}
             className="MarkpromptChatThreadListItem"
           >
-            <button onClick={() => selectThread(threadId)}>
+            <button onClick={() => selectThread(threadId)} type="button">
               <p>
                 <strong>{messages[0]?.content ?? 'Unknown thread'}</strong>
               </p>

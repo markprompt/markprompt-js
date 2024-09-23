@@ -25,14 +25,14 @@ if (el && el instanceof HTMLElement) {
       enabled: false,
     },
     references: {
-      display: 'none',
+      display: 'end',
       getLabel: (f) => {
         if (f.meta?.leadHeading?.value?.length === 1) {
           return `${f.file.title} - ${f.meta?.leadHeading?.value}`;
         }
         return f.meta?.leadHeading?.value ?? f.file.title;
       },
-      filter: (f) => !f.file.title?.includes('internal'),
+      // filter: (f) => !f.file.title?.includes('internal'),
     },
     chat: {
       assistantId: import.meta.env.VITE_ASSISTANT_ID,

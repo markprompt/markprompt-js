@@ -83,11 +83,14 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
             <SparklesIcon
               className="MarkpromptMessageAvatar"
               data-type="icon"
+              role="img"
+              aria-label=""
             />
           ) : typeof chatOptions.avatars?.assistant === 'string' ? (
             <img
               src={chatOptions.avatars.assistant}
               className="MarkpromptMessageAvatarImage"
+              alt=""
             />
           ) : (
             <div className="MarkpromptMessageAvatar">

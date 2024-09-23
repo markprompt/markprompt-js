@@ -85,17 +85,21 @@ const SearchResult = forwardRef<HTMLLIElement, SearchResultProps>(
 
     return (
       <li {...rest} ref={ref} className="MarkpromptSearchResult">
-        <Link href={href} className="MarkpromptSearchResultLink">
-          <div
-            onMouseMove={onMouseMove}
-            onClick={onClick}
-            className="MarkpromptSearchResultContainer"
-          >
+        <Link
+          href={href}
+          onMouseMove={onMouseMove}
+          onClick={onClick}
+          className="MarkpromptSearchResultLink"
+        >
+          <div className="MarkpromptSearchResultContainer">
             <div className="MarkpromptSearchResultIconWrapper MarkpromptSearchResultIconWrapperBordered">
               {href?.includes('#') ? (
-                <HashIcon className="MarkpromptSearchResultIcon" />
+                <HashIcon className="MarkpromptSearchResultIcon" aria-hidden />
               ) : (
-                <FileTextIcon className="MarkpromptSearchResultIcon" />
+                <FileTextIcon
+                  className="MarkpromptSearchResultIcon"
+                  aria-hidden
+                />
               )}
             </div>
             <div className="MarkpromptSearchResultContentWrapper">

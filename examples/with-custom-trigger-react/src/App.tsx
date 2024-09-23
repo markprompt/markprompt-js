@@ -15,6 +15,7 @@ function App(): ReactElement {
           trigger={{ customElement: true }}
         />
         <button
+          type="button"
           className={styles.customTrigger}
           onClick={() => openMarkprompt()}
         >

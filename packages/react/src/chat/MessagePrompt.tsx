@@ -18,11 +18,17 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
       {chatOptions.avatars?.visible && (
         <div className="MarkpromptMessageAvatarContainer">
           {!chatOptions.avatars?.user ? (
-            <UserIcon className="MarkpromptMessageAvatar" data-type="icon" />
+            <UserIcon
+              className="MarkpromptMessageAvatar"
+              data-type="icon"
+              role="img"
+              aria-label=""
+            />
           ) : typeof chatOptions.avatars?.user === 'string' ? (
             <img
               src={chatOptions.avatars.user}
               className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
+              alt=""
             />
           ) : (
             <div className="MarkpromptMessageAvatar">

@@ -94,22 +94,25 @@ function Trigger(props: TriggerProps): JSX.Element {
           {trigger?.floating !== false ? (
             <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
               {trigger?.buttonLabel && <span>{trigger.buttonLabel}</span>}
-              <AccessibleIcon.Root label={trigger?.label || ''}>
-                {trigger?.iconSrc ? (
-                  <img
-                    className="MarkpromptChatIcon"
-                    width="20"
-                    height="20"
-                    src={trigger.iconSrc}
-                  />
-                ) : (
+
+              {trigger?.iconSrc ? (
+                <img
+                  className="MarkpromptChatIcon"
+                  width="20"
+                  height="20"
+                  src={trigger.iconSrc}
+                  alt={!trigger.buttonLabel ? (trigger?.label ?? '') : ''}
+                />
+              ) : (
+                <AccessibleIcon.Root label={trigger?.label ?? ''}>
                   <ChatIcon
                     className="MarkpromptChatIcon"
                     width="20"
                     height="20"
+                    aria-hidden="true"
                   />
-                )}
-              </AccessibleIcon.Root>
+                </AccessibleIcon.Root>
+              )}
             </Component>
           ) : (
             <SearchBoxTrigger trigger={trigger} onClick={onClick} />
@@ -118,7 +121,17 @@ function Trigger(props: TriggerProps): JSX.Element {
       )}
 
       {children && (display !== 'plain' || hasMenu) && (
-        <div onClick={onClick}>{children}</div>
+        <div
+          onClick={onClick}
+          onKeyDown={(event) => {
+            if (!onClick) return;
+            if (event.key === 'Enter' || event.key === ' ') {
+              onClick?.();
+            }
+          }}
+        >
+          {children}
+        </div>
       )}
     </>
   );
@@ -291,6 +304,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
                 trigger={trigger}
                 hasMenu
                 Component={DropdownMenu.Trigger}
+                onClick={onTriggerClicked}
               >
                 {children}
               </Trigger>
@@ -520,6 +534,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                 onClick={() => setActiveView('chat')}
               >
                 <SparklesIcon
+                  aria-hidden="true"
                   focusable={false}
                   className={clsx('MarkpromptBaseIcon', {
                     MarkpromptPrimaryIcon: activeView === 'chat',

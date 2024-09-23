@@ -18,6 +18,7 @@ import type {
 } from '../types.js';
 import { RichText } from '../ui/rich-text.js';
 import { useDefaults } from '../useDefaults.js';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 export interface ChatViewProps {
   /**
@@ -142,13 +143,16 @@ export function ChatView(props: ChatViewProps): JSX.Element {
           {showBack ? (
             <div className="MarkpromptChatViewNavigation">
               <button
+                type="button"
                 className="MarkpromptGhostButton"
                 onClick={onDidPressBack}
               >
-                <ChevronLeftIcon
-                  style={{ width: 16, height: 16 }}
-                  strokeWidth={2.5}
-                />
+                <AccessibleIcon label="back">
+                  <ChevronLeftIcon
+                    style={{ width: 16, height: 16 }}
+                    strokeWidth={2.5}
+                  />
+                </AccessibleIcon>
               </button>
             </div>
           ) : (
@@ -162,7 +166,7 @@ export function ChatView(props: ChatViewProps): JSX.Element {
                 <button
                   className="MarkpromptButton"
                   data-variant="primary"
-                  type="submit"
+                  type="button"
                   onClick={() => {
                     setDidAcceptDisclaimer(true);
                   }}
