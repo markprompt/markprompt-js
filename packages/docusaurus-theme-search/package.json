@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/docusaurus-theme-search",
-  "version": "0.27.11",
+  "version": "0.27.12",
   "description": "A Markprompt search theme for Docusaurus",
   "repository": {
     "type": "git",
@@ -12,7 +12,10 @@
   "type": "module",
   "exports": "./dist/index.js",
   "main": "dist/index.js",
-  "files": ["dist", "src/theme"],
+  "files": [
+    "dist",
+    "src/theme"
+  ],
   "scripts": {
     "build": "tsc --build",
     "lint:js": "eslint .",

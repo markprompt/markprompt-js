@@ -1,5 +1,13 @@
 # @markprompt/css
 
+## 0.32.1
+
+### Patch Changes
+
+- [#426](https://github.com/markprompt/markprompt-js/pull/426) [`4aced34`](https://github.com/markprompt/markprompt-js/commit/4aced34c13ece1d22eb6e4827a598fd8d2afa53d) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove unused class
+
+- [#428](https://github.com/markprompt/markprompt-js/pull/428) [`a847eeb`](https://github.com/markprompt/markprompt-js/commit/a847eeb1c6d728aa770f663d31df37e82bb5e753) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix formatting using Biome
+
 ## 0.32.0
 
 ### Minor Changes

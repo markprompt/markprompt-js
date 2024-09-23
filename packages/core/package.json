@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/core",
-  "version": "0.38.1",
+  "version": "0.38.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/markprompt/markprompt-js.git",
@@ -35,7 +35,9 @@
       "import": "./dist/utils.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",

@@ -1,5 +1,15 @@
 # @markprompt/web
 
+## 0.42.2
+
+### Patch Changes
+
+- [#428](https://github.com/markprompt/markprompt-js/pull/428) [`a847eeb`](https://github.com/markprompt/markprompt-js/commit/a847eeb1c6d728aa770f663d31df37e82bb5e753) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix formatting using Biome
+
+- Updated dependencies [[`a847eeb`](https://github.com/markprompt/markprompt-js/commit/a847eeb1c6d728aa770f663d31df37e82bb5e753)]:
+  - @markprompt/react@0.54.3
+  - @markprompt/core@0.38.2
+
 ## 0.42.1
 
 ### Patch Changes
