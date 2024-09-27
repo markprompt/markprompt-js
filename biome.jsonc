@@ -47,7 +47,9 @@
         "useDateNow": "error"
       },
       "correctness": {
-        "recommended": true
+        "recommended": true,
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error"
       }
     }
   },
