@@ -1,4 +1,3 @@
-import type { FileSectionReference } from '@markprompt/core/types';
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import type { ReactElement } from 'react';
@@ -45,84 +44,6 @@ function Component(): ReactElement {
     </Markprompt.Root>
   );
 }
-
-interface CaretProps {
-  answer?: string;
-}
-
-const Caret = (props: CaretProps): ReactElement | null => {
-  const { answer } = props;
-
-  if (answer) {
-    return null;
-  }
-
-  return <span className={styles.caret} />;
-};
-
-const capitalize = (text: string): string => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
-
-const removeFileExtension = (fileName: string): string => {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  if (lastDotIndex === -1) {
-    return fileName;
-  }
-  return fileName.substring(0, lastDotIndex);
-};
-
-const Reference = ({
-  reference,
-  index,
-}: {
-  reference: FileSectionReference;
-  index: number;
-}): ReactElement => {
-  return (
-    <li
-      key={`${reference.file?.path}-${index}`}
-      className={styles.reference}
-      style={{
-        animationDelay: `${100 * index}ms`,
-      }}
-    >
-      <a href={removeFileExtension(reference.file.path)}>
-        {reference.file.title ||
-          capitalize(removeFileExtension(reference.file.path))}
-      </a>
-    </li>
-  );
-};
-
-interface ReferencesProps {
-  references: FileSectionReference[];
-  state: string;
-}
-
-const References = (props: ReferencesProps): ReactElement | null => {
-  const { references, state } = props;
-
-  if (state === 'indeterminate') return null;
-
-  let adjustedState: string = state;
-  if (state === 'done' && references.length === 0) {
-    adjustedState = 'indeterminate';
-  }
-
-  return (
-    <div data-loading-state={adjustedState} className={styles.references}>
-      <div className={styles.progress} />
-      <p>Fetching context…</p>
-      <p>Sources</p>
-      <Markprompt.References
-        RootComponent="ul"
-        ReferenceComponent={Reference}
-        references={references}
-      />
-    </div>
-  );
-};
 
 const CloseIcon = ({ className }: { className?: string }): ReactElement => (
   <svg
