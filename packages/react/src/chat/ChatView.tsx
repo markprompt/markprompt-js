@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core/feedback';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import type { ComponentType } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
@@ -18,7 +19,6 @@ import type {
 } from '../types.js';
 import { RichText } from '../ui/rich-text.js';
 import { useDefaults } from '../useDefaults.js';
-import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 export interface ChatViewProps {
   /**

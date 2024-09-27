@@ -23,7 +23,7 @@ export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
   const { trigger, onClick } = props;
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
       if (
         (event.metaKey && event.key === 'Enter') ||
         (event.ctrlKey && event.key === 'Enter')

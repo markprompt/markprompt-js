@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
   useMemo,
@@ -19,7 +20,6 @@ import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
 import { useGlobalStore } from '../store.js';
 import type { MarkpromptOptions } from '../types.js';
-import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 export type MessagesProps = {
   apiUrl?: string;

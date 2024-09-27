@@ -5,6 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
 import {
@@ -20,7 +21,6 @@ import { toValidApiMessages } from './chat/utils.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import { useChatStore, type CustomField } from './index.js';
 import { useGlobalStore } from './store.js';
-import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
