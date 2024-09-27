@@ -20,7 +20,27 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false
+      "recommended": false,
+      "a11y": {
+        "recommended": true,
+        "noLabelWithoutControl": {
+          "level": "error",
+          "options": {
+            // FormLabel is purposefully not included here as it automatically attaches an htmlFor attribute
+            "labelComponents": ["Label"],
+            "labelAttributes": ["htmlFor"],
+            "inputComponents": [
+              "Checkbox",
+              "IndeterminateCheckbox",
+              "Input",
+              "Select",
+              "Slider",
+              "Switch",
+              "Textarea"
+            ]
+          }
+        }
+      }
     }
   },
   "javascript": {
