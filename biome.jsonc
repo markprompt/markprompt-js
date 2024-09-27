@@ -42,7 +42,9 @@
         }
       },
       "complexity": {
-        "recommended": true
+        "recommended": true,
+        "noUselessUndefinedInitialization": "error",
+        "useDateNow": "error"
       }
     }
   },
