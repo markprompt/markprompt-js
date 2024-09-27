@@ -22,13 +22,13 @@ export function MessagePrompt(props: MessagePromptProps): ReactElement {
               className="MarkpromptMessageAvatar"
               data-type="icon"
               role="img"
-              aria-label=""
+              aria-label="user"
             />
           ) : typeof chatOptions.avatars?.user === 'string' ? (
             <img
               src={chatOptions.avatars.user}
               className="MarkpromptMessageAvatar MarkpromptMessageAvatarImage"
-              alt=""
+              alt="user"
             />
           ) : (
             <div className="MarkpromptMessageAvatar">
