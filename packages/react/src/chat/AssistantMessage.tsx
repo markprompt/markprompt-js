@@ -84,17 +84,20 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               className="MarkpromptMessageAvatar"
               data-type="icon"
               role="img"
-              aria-label=""
+              aria-label="Markprompt"
             />
           ) : typeof chatOptions.avatars?.assistant === 'string' ? (
             <img
               src={chatOptions.avatars.assistant}
               className="MarkpromptMessageAvatarImage"
-              alt=""
+              alt="Markprompt"
             />
           ) : (
             <div className="MarkpromptMessageAvatar">
-              <chatOptions.avatars.assistant className="MarkpromptMessageAvatar" />
+              <chatOptions.avatars.assistant
+                className="MarkpromptMessageAvatar"
+                aria-label="Markprompt"
+              />
             </div>
           )}
         </div>
