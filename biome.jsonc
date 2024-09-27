@@ -40,6 +40,9 @@
             ]
           }
         }
+      },
+      "complexity": {
+        "recommended": true
       }
     }
   },

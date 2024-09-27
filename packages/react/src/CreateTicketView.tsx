@@ -217,10 +217,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
             />
           </div>
-          {createTicketOptions?.form?.customFields &&
-            createTicketOptions?.form?.customFields.map((field) => (
-              <CustomFieldSelect key={field.id} customField={field} />
-            ))}
+          {createTicketOptions?.form?.customFields?.map((field) => (
+            <CustomFieldSelect key={field.id} customField={field} />
+          ))}
           {createTicketOptions?.form?.hasFileUploadInput && (
             <div className="MarkpromptFormGroup">
               <label htmlFor="files">

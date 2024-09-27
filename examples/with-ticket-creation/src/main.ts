@@ -11,9 +11,9 @@ async function get_random_activity(args: string): Promise<string> {
   const parsed = JSON.parse(args);
   const url = new URL('https://www.boredapi.com/api/activity');
 
-  Object.entries(parsed).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(parsed)) {
     if (value) url.searchParams.append(key, value.toString());
-  });
+  }
 
   const res = await fetch(url);
   return await res.text();

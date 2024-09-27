@@ -50,13 +50,12 @@ export const createStore = (<T>(stateCreator: zustand.StateCreator<T>) => {
     : createStoreUncurried;
 }) as typeof zustand.createStore;
 
-// reset all stores after each test run
 afterEach(() => {
   act(() => {
     localStorage.clear();
-    storeResetFns.forEach((resetFn) => {
+    for (const resetFn of storeResetFns) {
       resetFn();
-    });
+    }
   });
 });
 

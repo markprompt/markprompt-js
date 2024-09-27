@@ -42,11 +42,8 @@ export function isIterable(obj: unknown): boolean {
  * why is that useful.
  */
 export function hasPresentKey<K extends string | number | symbol>(k: K) {
-  return function <T, V>(
-    a: T & { [k in K]?: V | null },
-  ): a is T & { [k in K]: V } {
-    return a[k] !== undefined && a[k] !== null;
-  };
+  return <T, V>(a: T & { [k in K]?: V | null }): a is T & { [k in K]: V } =>
+    a[k] !== undefined && a[k] !== null;
 }
 
 /**
@@ -76,9 +73,7 @@ export function hasValueAtKey<K extends string | number | symbol, V>(
   v: V,
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return function <T>(a: T & { [k in K]: any }): a is T & { [k in K]: V } {
-    return a[k] === v;
-  };
+  return <T>(a: T & { [k in K]: any }): a is T & { [k in K]: V } => a[k] === v;
 }
 
 export const isStoredError = (
