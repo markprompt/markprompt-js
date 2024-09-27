@@ -376,6 +376,7 @@ type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
 function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   const { children, className, state, ...rest } = props;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when children/state changes
   useEffect(() => {
     if (state === 'done') {
       // If highlight.js script/css tags were added globally,
@@ -529,6 +530,7 @@ const AutoScroller = memo<AutoScrollerProps>(
       didScrollOnce.current = true;
     }, [autoScroll, scrollBehavior]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when scrollTrigger changes
     useEffect(() => {
       // When scrollTrigger changes, potentially trigger scroll.
       // Scroll immediately (e.g. when opening an existing chat), and
@@ -538,6 +540,7 @@ const AutoScroller = memo<AutoScrollerProps>(
       setTimeout(perhapsScroll, 400);
     }, [perhapsScroll, scrollTrigger]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when discreteScrollTrigger changes
     useEffect(() => {
       // When discreteScrollTrigger changes (typically when a new message
       // is appended to the list of messages), reset the scroll lock, so

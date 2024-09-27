@@ -45,6 +45,9 @@
         "recommended": true,
         "noUselessUndefinedInitialization": "error",
         "useDateNow": "error"
+      },
+      "correctness": {
+        "recommended": true
       }
     }
   },

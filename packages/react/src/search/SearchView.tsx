@@ -130,6 +130,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
     return activeSearchResult?.id === 'ask';
   }, [activeSearchResult?.id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when searchQuery changes
   useEffect(() => {
     if (isAskVisible) {
       return;
@@ -151,6 +152,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
     }
   }, [searchResults, isAskVisible]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when activeView changes
   useEffect(() => {
     // Bring form input in focus when activeView changes.
     textAreaRef.current?.focus();
@@ -412,6 +414,7 @@ function SearchResultsContainer(
     searchOptions?.defaultView?.searches,
   ]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we also want to run the effect when searchResults changes
   useEffect(() => {
     // Do not scroll into view unless using keyboard navigation.
     // While using the mouse, we don't want movable hit targets.

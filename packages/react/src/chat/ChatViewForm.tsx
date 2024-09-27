@@ -71,6 +71,7 @@ export function ChatViewForm(props: ChatViewFormProps): ReactElement {
     [submitChat],
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when activeView changes
   useEffect(() => {
     // Bring form input in focus when activeView changes.
     textAreaRef.current?.focus();

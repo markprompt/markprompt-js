@@ -273,7 +273,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       emitter.off('open', onOpen);
       emitter.off('close', onClose);
     };
-  }, [trigger?.customElement, display, onDidRequestOpenChange]);
+  }, [display, onDidRequestOpenChange]);
 
   const onTriggerClicked = useCallback(() => {
     openMarkprompt(menu ? 'menu' : 'chat');
