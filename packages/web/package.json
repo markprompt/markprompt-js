@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/web",
-  "version": "0.42.2",
+  "version": "0.42.3",
   "description": "A web component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -15,7 +15,12 @@
     "./init": "./dist/init.js"
   },
   "main": "dist/index.js",
-  "files": ["dist/globals.*", "dist/index.*", "dist/init.*", "dist/types.*"],
+  "files": [
+    "dist/globals.*",
+    "dist/index.*",
+    "dist/init.*",
+    "dist/types.*"
+  ],
   "scripts": {
     "analyze": "node scripts/analyze.js",
     "build": "node scripts/build.js",
