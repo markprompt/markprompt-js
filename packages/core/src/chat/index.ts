@@ -153,7 +153,9 @@ export async function* submitChat(
       // ignore
     }
 
-    throw new Error(text);
+    throw new Error(text, {
+      cause: { status: res.status, statusText: res.statusText },
+    });
   }
 
   checkAbortSignal(options.signal);
