@@ -12,9 +12,7 @@
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
