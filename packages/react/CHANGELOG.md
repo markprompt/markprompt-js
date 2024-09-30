@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.54.6
+
+### Patch Changes
+
+- [`34047ec`](https://github.com/markprompt/markprompt-js/commit/34047ec1a128d5bb1d68ef1c69f4686f30303c13) Thanks [@nickrttn](https://github.com/nickrttn)! - Enable Biome performance ruleset and fix issues
+
 ## 0.54.5
 
 ### Patch Changes
