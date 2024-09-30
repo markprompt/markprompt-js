@@ -20,7 +20,7 @@
     "publish": "pnpm build:packages && changeset publish",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch --coverage",
-    "version": "changeset version && pnpm install"
+    "version": "changeset version && biome check --write . && pnpm install"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.2",
