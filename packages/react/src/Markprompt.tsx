@@ -90,6 +90,7 @@ function Trigger(props: TriggerProps): JSX.Element {
   return (
     <>
       {!trigger?.customElement && !children && display !== 'plain' && (
+        // biome-ignore lint/complexity/noUselessFragments: This fragment is not useless
         <>
           {trigger?.floating !== false ? (
             <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
@@ -272,7 +273,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
       emitter.off('open', onOpen);
       emitter.off('close', onClose);
     };
-  }, [trigger?.customElement, display, onDidRequestOpenChange]);
+  }, [display, onDidRequestOpenChange]);
 
   const onTriggerClicked = useCallback(() => {
     openMarkprompt(menu ? 'menu' : 'chat');
@@ -281,6 +282,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
   return (
     <>
       {display !== 'plain' && (
+        // biome-ignore lint/complexity/noUselessFragments: This fragment is not useless
         <>
           {!menu ? (
             <Trigger
@@ -364,6 +366,7 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
             {...dialogProps}
           >
             {display !== 'plain' && (
+              // biome-ignore lint/complexity/noUselessFragments: This fragment is not useless
               <>
                 <BaseMarkprompt.Portal>
                   {!sticky && (

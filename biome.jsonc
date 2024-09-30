@@ -40,6 +40,16 @@
             ]
           }
         }
+      },
+      "complexity": {
+        "recommended": true,
+        "noUselessUndefinedInitialization": "error",
+        "useDateNow": "error"
+      },
+      "correctness": {
+        "recommended": true,
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error"
       }
     }
   },

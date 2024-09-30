@@ -7,18 +7,6 @@ import { markprompt, type MarkpromptOptions } from '@markprompt/web';
 
 const el = document.querySelector('#markprompt');
 
-async function get_random_activity(args: string): Promise<string> {
-  const parsed = JSON.parse(args);
-  const url = new URL('https://www.boredapi.com/api/activity');
-
-  Object.entries(parsed).forEach(([key, value]) => {
-    if (value) url.searchParams.append(key, value.toString());
-  });
-
-  const res = await fetch(url);
-  return await res.text();
-}
-
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
     defaultView: 'chat',

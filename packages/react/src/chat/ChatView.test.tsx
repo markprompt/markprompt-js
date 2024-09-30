@@ -792,9 +792,7 @@ describe('ChatView', () => {
   it.skip("does not restore a thread if it's older than 4 hours", () => {
     const projectKey = crypto.randomUUID();
     const threadId = crypto.randomUUID();
-    const lastUpdated = new Date(
-      new Date().getTime() - 1000 * 60 * 60 * 5,
-    ).toISOString();
+    const lastUpdated = new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString();
 
     localStorage.setItem(
       'markprompt',
@@ -841,10 +839,10 @@ describe('ChatView', () => {
     const threadId1 = crypto.randomUUID();
     const threadId2 = crypto.randomUUID();
     const lastUpdated1 = new Date(
-      new Date().getTime() - 1000 * 60 * 60 * 3,
+      Date.now() - 1000 * 60 * 60 * 3,
     ).toISOString();
     const lastUpdated2 = new Date(
-      new Date().getTime() - 1000 * 60 * 60 * 2,
+      Date.now() - 1000 * 60 * 60 * 2,
     ).toISOString();
 
     localStorage.setItem(

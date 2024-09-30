@@ -40,5 +40,3 @@ window.markprompt.open = openMarkprompt;
 window.markprompt.close = closeMarkprompt;
 
 markprompt(projectKey, container, options);
-
-export {};
