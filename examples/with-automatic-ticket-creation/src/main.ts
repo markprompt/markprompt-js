@@ -36,7 +36,7 @@ function getCreateTicket(
     data.append('userName', userName);
     data.append('summary', summary);
 
-    for (let field of customFields) {
+    for (const field of customFields) {
       data.append('customFields', JSON.stringify(field));
     }
 

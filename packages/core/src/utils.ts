@@ -1,4 +1,4 @@
-import { FileSectionReference } from './types.js';
+import type { FileSectionReference } from './types.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>;

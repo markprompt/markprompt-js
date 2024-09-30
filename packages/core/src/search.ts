@@ -2,7 +2,7 @@ import type { SearchOptions } from '@algolia/client-search';
 import defaults from 'defaults';
 
 import { DEFAULT_OPTIONS } from './constants.js';
-import { DocSearchHit } from './docsearch.js';
+import type { DocSearchHit } from './docsearch.js';
 import type {
   BaseOptions,
   FileReferenceFileData,

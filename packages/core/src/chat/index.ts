@@ -2,12 +2,12 @@ import defaults from 'defaults';
 import { EventSourceParserStream } from 'eventsource-parser/stream';
 import mergeWith from 'lodash-es/mergeWith.js';
 
-import {
+import type {
   Chat,
   SubmitChatOptions,
-  type ChatCompletionMessage,
-  type ChatCompletionMessageParam,
-  type ChatCompletionMetadata,
+  ChatCompletionMessage,
+  ChatCompletionMessageParam,
+  ChatCompletionMetadata,
 } from './types.js';
 import {
   checkAbortSignal,
@@ -20,7 +20,7 @@ import {
   parseEncodedJSONHeader,
 } from './utils.js';
 import { DEFAULT_OPTIONS } from '../constants.js';
-import { BaseOptions } from '../types.js';
+import type { BaseOptions } from '../types.js';
 
 export * from './types.js';
 export * from './utils.js';
@@ -161,7 +161,7 @@ export async function* submitChat(
   checkAbortSignal(options.signal);
 
   // eslint-disable-next-line prefer-const
-  let completion = {};
+  const completion = {};
 
   const stream = res.body
     .pipeThrough(new TextDecoderStream())
@@ -180,7 +180,7 @@ export async function* submitChat(
     }
 
     // eslint-disable-next-line prefer-const
-    let json = JSON.parse(event.data);
+    const json = JSON.parse(event.data);
 
     if (!isChatCompletionChunk(json)) {
       throw new Error('Malformed response from Markprompt API', {

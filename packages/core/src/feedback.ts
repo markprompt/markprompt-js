@@ -62,7 +62,7 @@ export async function submitFeedback(
         }),
         body: JSON.stringify({
           projectKey,
-          vote: parseInt(body.feedback.vote),
+          vote: Number.parseInt(body.feedback.vote),
         }),
         signal: signal,
       },

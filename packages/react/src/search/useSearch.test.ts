@@ -1,7 +1,7 @@
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
-import {
-  type SearchResult,
-  type AlgoliaDocSearchHit,
+import type {
+  SearchResult,
+  AlgoliaDocSearchHit,
 } from '@markprompt/core/search';
 import { waitFor, renderHook, act } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
