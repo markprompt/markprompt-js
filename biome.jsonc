@@ -50,6 +50,9 @@
         "recommended": true,
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error"
+      },
+      "performance": {
+        "recommended": true
       }
     }
   },
