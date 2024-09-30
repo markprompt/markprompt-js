@@ -263,7 +263,7 @@ console.log('Hello world!');
   );
   const button = await screen.findByRole('button');
   await user.click(button);
-  expect(button).toHaveTextContent('copied');
+  expect(button).toHaveAccessibleName('copied');
 });
 
 test('ErrorMessage renders', () => {

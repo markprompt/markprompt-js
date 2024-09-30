@@ -350,7 +350,9 @@ describe('ChatView', () => {
               <div>
                 <p>custom confirmation</p>
                 {/* eslint-disable react/prop-types */}
-                <button onClick={props.confirmToolCalls}>Confirm</button>
+                <button onClick={props.confirmToolCalls} type="button">
+                  Confirm
+                </button>
               </div>
             );
           },

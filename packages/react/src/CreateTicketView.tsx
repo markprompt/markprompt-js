@@ -5,6 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
 import {
@@ -133,11 +134,17 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     <div className="MarkpromptCreateTicketView">
       {includeNav ? (
         <div className="MarkpromptChatViewNavigation">
-          <button className="MarkpromptGhostButton" onClick={handleGoBack}>
-            <ChevronLeftIcon
-              style={{ width: 16, height: 16 }}
-              strokeWidth={2.5}
-            />
+          <button
+            className="MarkpromptGhostButton"
+            onClick={handleGoBack}
+            type="button"
+          >
+            <AccessibleIcon label="go back">
+              <ChevronLeftIcon
+                style={{ width: 16, height: 16 }}
+                strokeWidth={2.5}
+              />
+            </AccessibleIcon>
           </button>
         </div>
       ) : (
@@ -266,7 +273,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               >
                 {createTicketOptions?.form?.submitLabel || 'Send message'}
                 {isSubmittingCase && (
-                  <LoadingIcon style={{ width: 16, height: 16 }} />
+                  <LoadingIcon
+                    style={{ width: 16, height: 16 }}
+                    aria-label="submitting case"
+                  />
                 )}
               </button>
             </div>

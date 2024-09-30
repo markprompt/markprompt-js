@@ -30,14 +30,14 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
   if (props.isLoading) {
     return (
       <div>
-        <LoadingIcon />
+        <LoadingIcon role="img" aria-label="generating answer" />
         {/* <div style={{ position: 'absolute', inset: 0 }}>
           <StopInsideLoadingIcon />
         </div> */}
       </div>
     );
   }
-  return <SendIcon />;
+  return <SendIcon role="img" aria-label="send" />;
 }
 
 export function ChatViewForm(props: ChatViewFormProps): ReactElement {

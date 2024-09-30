@@ -67,6 +67,7 @@ export function Select<T = Option>(props: SelectProps<T>): JSX.Element {
   return (
     <div className={clsx('MarkpromptSelect', className)}>
       <VisuallyHidden asChild>
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: htmlFor is added by getLabelProps */}
         <label {...getLabelProps()}>{label}</label>
       </VisuallyHidden>
 

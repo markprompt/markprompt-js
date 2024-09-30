@@ -2214,13 +2214,14 @@
   margin: 0 0 0.25rem;
 }
 
-.MarkpromptDefaultViewMessagePromptsContainer a {
+.MarkpromptDefaultViewExamplePromptButton {
   --base-delay: 0.05s;
 
   font-size: var(--markprompt-text-size);
   display: inline-block;
   text-decoration: none;
   padding: 0.125rem 0.75rem;
+  background-color: var(--markprompt-background);
   border: 1px solid var(--markprompt-border);
   border-radius: 9999px;
   color: var(--markprompt-primary);

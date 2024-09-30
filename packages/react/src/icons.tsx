@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -28,6 +29,7 @@ const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const ChatIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -47,6 +49,7 @@ const ChatIconOutline = (
 const BookIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -64,6 +67,7 @@ const BookIconOutline = (
 );
 
 const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -82,6 +86,7 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const ChevronLeftIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -100,6 +105,7 @@ const ChevronLeftIcon = (
 const ChevronDownIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -118,6 +124,7 @@ const ChevronDownIcon = (
 const ChevronRightIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -134,6 +141,7 @@ const ChevronRightIcon = (
 );
 
 const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -152,6 +160,7 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const SearchIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -171,6 +180,7 @@ const SearchIconOutline = (
 const ClipboardIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -184,6 +194,7 @@ const ClipboardIcon = (
 );
 
 const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -199,6 +210,7 @@ const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -217,6 +229,7 @@ const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const CornerDownLeftIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -232,6 +245,7 @@ const CornerDownLeftIcon = (
 );
 
 const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -248,6 +262,7 @@ const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const CounterClockwiseClockIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -267,6 +282,7 @@ const CounterClockwiseClockIcon = (
 const ChevronUpIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -281,6 +297,7 @@ const ChevronUpIcon = (
 );
 
 const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -299,6 +316,7 @@ const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -316,6 +334,7 @@ const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     {...props}
     xmlns="http://www.w3.org/2000/svg"
@@ -333,6 +352,7 @@ const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const ThumbsDownIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     {...props}
     xmlns="http://www.w3.org/2000/svg"
@@ -348,6 +368,7 @@ const ThumbsDownIcon = (
 );
 
 const ReloadIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     stroke="currentColor"
     fill="none"
@@ -363,6 +384,7 @@ const ReloadIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const StopIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     stroke="currentColor"
     fill="none"
@@ -376,6 +398,7 @@ const StopIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -394,37 +417,8 @@ const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const PencilSquareMini = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    {...props}
-  >
-    <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
-    <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
-  </svg>
-);
-
-const CopyIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-  </svg>
-);
-
 const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -440,6 +434,7 @@ const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -457,6 +452,7 @@ const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 const CheckCircleIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -475,6 +471,7 @@ const CheckCircleIcon = (
 const CrossCircleIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -494,6 +491,7 @@ const CrossCircleIcon = (
 const CircleDashedIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -516,6 +514,7 @@ const CircleDashedIcon = (
 );
 
 const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -531,6 +530,7 @@ const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -553,44 +553,10 @@ const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const StopInsideLoadingIcon = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth={2}
-    {...props}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
-    />
-  </svg>
-);
-
-const MenuIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    {...props}
-  >
-    <path
-      fillRule="evenodd"
-      d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
 const NewspaperIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -610,6 +576,7 @@ const NewspaperIconOutline = (
 const SparklesIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -629,6 +596,7 @@ const SparklesIconOutline = (
 const MenuIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
 ): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -646,7 +614,8 @@ const MenuIconOutline = (
 );
 
 const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
-  <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
+  <svg viewBox="0 0 16 16" {...props}>
     <path
       fill="currentColor"
       d="M13.545 2.913a13.196 13.196 0 0 0-3.257-1.01.05.05 0 0 0-.052.025 9.18 9.18 0 0 0-.406.833 12.18 12.18 0 0 0-3.658 0 8.426 8.426 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.01a.047.047 0 0 0-.021.019C.356 6.03-.213 9.053.066 12.039a.055.055 0 0 0 .02.037 13.266 13.266 0 0 0 3.996 2.02.052.052 0 0 0 .056-.019c.308-.42.582-.863.818-1.33a.05.05 0 0 0-.028-.07 8.735 8.735 0 0 1-1.248-.595.05.05 0 0 1-.025-.04.052.052 0 0 1 .02-.045 6.8 6.8 0 0 0 .248-.194.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.006c.08.066.164.132.248.195a.05.05 0 0 1 .02.044.051.051 0 0 1-.024.041 8.19 8.19 0 0 1-1.249.595.052.052 0 0 0-.03.029.05.05 0 0 0 .003.042c.24.465.514.908.817 1.329a.05.05 0 0 0 .056.019 13.225 13.225 0 0 0 4.001-2.02.052.052 0 0 0 .021-.037c.334-3.451-.559-6.45-2.365-9.107a.04.04 0 0 0-.021-.019Zm-8.198 7.308c-.789 0-1.438-.724-1.438-1.613s.637-1.612 1.438-1.612c.807 0 1.45.73 1.438 1.612 0 .889-.637 1.613-1.438 1.613Zm5.316 0c-.788 0-1.438-.724-1.438-1.613s.637-1.612 1.438-1.612c.807 0 1.45.73 1.438 1.612 0 .889-.63 1.613-1.438 1.613Z"
@@ -655,13 +624,8 @@ const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 );
 
 const StarIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    {...props}
-    strokeWidth="1.5"
-    stroke="currentColor"
-  >
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
+  <svg viewBox="0 0 24 24" {...props} strokeWidth="1.5" stroke="currentColor">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -684,7 +648,6 @@ export {
   ClipboardIcon,
   CloseIcon,
   CommandIcon,
-  CopyIcon,
   CornerDownLeftIcon,
   CounterClockwiseClockIcon,
   CrossCircleIcon,
@@ -693,10 +656,8 @@ export {
   HashIcon,
   LoaderIcon,
   LoadingIcon,
-  MenuIcon,
   MenuIconOutline,
   NewspaperIconOutline,
-  PencilSquareMini,
   PlusIcon,
   ReloadIcon,
   SearchIcon,
@@ -706,7 +667,6 @@ export {
   SparklesIconOutline,
   StarIcon,
   StopIcon,
-  StopInsideLoadingIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
   UserIcon,

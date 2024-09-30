@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import {
   useCallback,
   useMemo,
@@ -79,16 +80,21 @@ export function CreateTicketButton({
       onClick={createTicketAndOpenForm}
       data-variant="outline"
       disabled={isCreatingTicketSummary}
-      aria-label={
-        integrations.createTicket.messageButton?.hasText
-          ? undefined
-          : integrations.createTicket.messageButton?.text
-      }
+      type="button"
     >
       {isCreatingTicketSummary ? (
-        <LoadingIcon style={{ width: 16, height: 16 }} />
+        <AccessibleIcon label={'loading summary'}>
+          <LoadingIcon style={{ width: 16, height: 16 }} />
+        </AccessibleIcon>
       ) : (
-        <ChatIconOutline className="MarkpromptMenuIcon" aria-hidden={true} />
+        <AccessibleIcon
+          label={
+            integrations.createTicket.messageButton?.text ??
+            'create a support case'
+          }
+        >
+          <ChatIconOutline className="MarkpromptMenuIcon" />
+        </AccessibleIcon>
       )}
       {integrations.createTicket.messageButton?.hasText && (
         <span>{integrations.createTicket.messageButton?.text}</span>

@@ -28,14 +28,15 @@ export function RegenerateButton(props: RegenerateButtonProps): ReactElement {
     >
       {(lastMessageState === 'done' || lastMessageState === 'cancelled') && (
         <>
-          <ReloadIcon className="MarkpromptSearchIcon" /> Regenerate
+          <ReloadIcon className="MarkpromptSearchIcon" aria-hidden /> Regenerate
         </>
       )}
 
       {(lastMessageState === 'preload' ||
         lastMessageState === 'streaming-answer') && (
         <>
-          <StopIcon className="MarkpromptSearchIcon" /> Stop generating
+          <StopIcon className="MarkpromptSearchIcon" aria-hidden /> Stop
+          generating
         </>
       )}
     </button>

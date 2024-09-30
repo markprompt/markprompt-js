@@ -17,7 +17,10 @@ function Component(): ReactElement {
       <Markprompt.Portal>
         <Markprompt.Overlay className={styles.MarkpromptOverlay} />
         <Markprompt.Content className={styles.MarkpromptContentDialog}>
-          <Markprompt.Close className={styles.MarkpromptClose}>
+          <Markprompt.Close
+            aria-label="Close"
+            className={styles.MarkpromptClose}
+          >
             <CloseIcon />
           </Markprompt.Close>
 
@@ -121,22 +124,6 @@ const References = (props: ReferencesProps): ReactElement | null => {
   );
 };
 
-const SearchIcon = ({ className }: { className?: string }): ReactElement => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
-  </svg>
-);
-
 const CloseIcon = ({ className }: { className?: string }): ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -147,6 +134,7 @@ const CloseIcon = ({ className }: { className?: string }): ReactElement => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     <line x1="18" x2="6" y1="6" y2="18"></line>
     <line x1="6" x2="18" y1="6" y2="18"></line>
@@ -163,6 +151,7 @@ const ChatIcon = ({ className }: { className?: string }): ReactElement => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path>
   </svg>

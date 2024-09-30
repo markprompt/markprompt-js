@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+  // biome-ignore lint/a11y/noSvgWithoutTitle: label/hidden via props
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

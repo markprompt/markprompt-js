@@ -65,6 +65,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
                   className="MarkpromptGhostThumbButton"
                   onClick={() => handleFeedback({ vote: '1' })}
                   data-active={feedback?.vote === '1'}
+                  type="button"
                 >
                   {variant === 'text' && 'Yes'}
                   {variant === 'icons' && (
@@ -78,6 +79,7 @@ export function Feedback(props: FeedbackProps): ReactElement {
                   onClick={() => handleFeedback({ vote: '-1' })}
                   data-active={feedback?.vote === '-1'}
                   style={{ animationDelay: '100ms' }}
+                  type="button"
                 >
                   {variant === 'text' && 'No'}
                   {variant === 'icons' && (

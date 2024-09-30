@@ -52,16 +52,18 @@ export function DefaultPrompts({
       {chatOptions?.defaultView?.promptsHeading && (
         <h3>{chatOptions.defaultView.promptsHeading}</h3>
       )}
-      {chatOptions?.defaultView?.prompts.map((prompt, i) => {
+      {chatOptions?.defaultView?.prompts.map((prompt) => {
         return (
-          <a
-            key={`markprompt-default-prompt-${i}`}
+          <button
+            type="button"
+            className="MarkpromptDefaultViewExamplePromptButton"
+            key={`markprompt-default-prompt-${prompt}`}
             onClick={() => {
               onDidSelectPrompt?.(prompt);
             }}
           >
             {prompt}
-          </a>
+          </button>
         );
       })}
     </div>

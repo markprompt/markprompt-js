@@ -88,6 +88,7 @@ export default function IndexPage(): ReactElement {
           <div id="search">
             <SearchIcon
               style={{ strokeWidth: '2.5px', width: 16, height: 16 }}
+              aria-hidden
             />
             <span>Search or ask documentation</span>
             <kbd>

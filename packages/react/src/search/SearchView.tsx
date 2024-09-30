@@ -321,8 +321,10 @@ export function SearchView(props: SearchViewProps): ReactElement {
             type="button"
             style={{ flexGrow: 'none', marginRight: '0.25rem' }}
             onClick={() => onDidSelectAsk?.()}
+            aria-label={searchOptions?.askLabel ?? 'Ask AI'}
           >
             <SparklesIcon
+              aria-hidden="true"
               style={
                 searchOptions?.askLabel
                   ? { width: 16, height: 16, opacity: 0.4 }
@@ -447,6 +449,12 @@ function SearchResultsContainer(
             return true;
           }}
           onClick={onDidSelectAsk}
+          onKeyDown={(event) => {
+            if (!onDidSelectAsk) return;
+            if (event.key === 'Enter' || event.key === ' ') {
+              onDidSelectAsk();
+            }
+          }}
         >
           <div className="MarkpromptSearchResultLink">
             <div className="MarkpromptSearchResultContainer">
@@ -461,7 +469,10 @@ function SearchResultsContainer(
                   {searchQuery}
                 </div>
               </div>
-              <ChevronRightIcon className="MarkpromptSearchResultIcon" />
+              <ChevronRightIcon
+                className="MarkpromptSearchResultIcon"
+                aria-hidden
+              />
             </div>
           </div>
         </div>

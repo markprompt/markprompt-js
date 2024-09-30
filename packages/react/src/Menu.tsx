@@ -68,7 +68,9 @@ function MenuEntry(
           }
         }}
       >
-        {props.iconId && <Icon className="MarkpromptMenuIcon" />}
+        {props.iconId && (
+          <Icon className="MarkpromptMenuIcon" aria-hidden="true" />
+        )}
         {props.title}
       </Comp>
     </DropdownMenu.Item>
@@ -101,11 +103,13 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
           align="end"
         >
           {menuConfig.title && (
+            // biome-ignore lint/a11y/noLabelWithoutControl: this is a div, not a label
             <DropdownMenu.Label className="MarkpromptDropdownMenuTitle">
               {menuConfig.title}
             </DropdownMenu.Label>
           )}
           {menuConfig.subtitle && (
+            // biome-ignore lint/a11y/noLabelWithoutControl: this is a div, not a label
             <DropdownMenu.Label className="MarkpromptDropdownMenuSubtitle">
               {menuConfig.subtitle}
             </DropdownMenu.Label>
@@ -124,6 +128,7 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
                     className="MarkpromptDropdownMenuSection"
                   >
                     {section.heading && (
+                      // biome-ignore lint/a11y/noLabelWithoutControl: this is a div, not a label
                       <DropdownMenu.Label className="MarkpromptDropdownMenuLabel">
                         {section.heading}
                       </DropdownMenu.Label>

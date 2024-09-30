@@ -48,6 +48,11 @@ export default function SearchBar(): ReactElement {
             role="button"
             className="search-icon"
             onClick={() => openMarkprompt()}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                openMarkprompt();
+              }
+            }}
             tabIndex={0}
           />
           <input
