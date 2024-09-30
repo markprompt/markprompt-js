@@ -1,5 +1,12 @@
 # @markprompt/web
 
+## 0.42.5
+
+### Patch Changes
+
+- Updated dependencies [[`34047ec`](https://github.com/markprompt/markprompt-js/commit/34047ec1a128d5bb1d68ef1c69f4686f30303c13)]:
+  - @markprompt/react@0.54.6
+
 ## 0.42.4
 
 ### Patch Changes
