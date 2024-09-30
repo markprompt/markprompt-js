@@ -57,8 +57,8 @@ const CloseIcon = ({ className }: { className?: string }): ReactElement => (
     strokeLinejoin="round"
     aria-hidden="true"
   >
-    <line x1="18" x2="6" y1="6" y2="18"></line>
-    <line x1="6" x2="18" y1="6" y2="18"></line>
+    <line x1="18" x2="6" y1="6" y2="18" />
+    <line x1="6" x2="18" y1="6" y2="18" />
   </svg>
 );
 
@@ -74,7 +74,7 @@ const ChatIcon = ({ className }: { className?: string }): ReactElement => (
     strokeLinejoin="round"
     aria-hidden="true"
   >
-    <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path>
+    <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" />
   </svg>
 );
 

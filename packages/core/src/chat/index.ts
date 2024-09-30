@@ -113,26 +113,25 @@ export async function* submitChat(
       json.choices?.[0]
     ) {
       return { ...json.choices[0].message, ...data };
-    } else {
-      if (isMarkpromptMetadata(data)) {
-        yield data;
-      }
-
-      if (isNoStreamingData(json)) {
-        yield {
-          content: json.text,
-          references: json.references,
-          steps: json.steps,
-          role: 'assistant',
-        };
-
-        return;
-      }
-
-      throw new Error('Malformed response from Markprompt API', {
-        cause: json,
-      });
     }
+    if (isMarkpromptMetadata(data)) {
+      yield data;
+    }
+
+    if (isNoStreamingData(json)) {
+      yield {
+        content: json.text,
+        references: json.references,
+        steps: json.steps,
+        role: 'assistant',
+      };
+
+      return;
+    }
+
+    throw new Error('Malformed response from Markprompt API', {
+      cause: json,
+    });
   }
 
   if (isMarkpromptMetadata(data)) {

@@ -76,9 +76,8 @@ export async function submitFeedback(
     if (error instanceof DOMException && error.name === 'AbortError') {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }
 
@@ -137,9 +136,8 @@ export async function submitCSAT(
     if (error instanceof DOMException && error.name === 'AbortError') {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }
 
@@ -196,8 +194,7 @@ export async function submitCSATReason(
     if (error instanceof DOMException && error.name === 'AbortError') {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }

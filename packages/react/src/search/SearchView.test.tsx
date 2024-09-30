@@ -35,7 +35,7 @@ const server = setupServer(
 
     return HttpResponse.json({ data: results, debug }, { status: status });
   }),
-  http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, () => {
+  http.post('https://test-dsn.algolia.net/1/indexes/test/query', () => {
     return HttpResponse.json({ hits: results }, { status: status });
   }),
 );

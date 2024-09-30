@@ -375,19 +375,16 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
                   </ul>
                 </li>
               );
-            } else {
-              return (
-                <li
-                  key={item.value}
-                  {...getItemProps({ item })}
-                  data-highlighted={
-                    highlightedIndex === flatItems.indexOf(item)
-                  }
-                >
-                  {item.label}
-                </li>
-              );
             }
+            return (
+              <li
+                key={item.value}
+                {...getItemProps({ item })}
+                data-highlighted={highlightedIndex === flatItems.indexOf(item)}
+              >
+                {item.label}
+              </li>
+            );
           })}
         </ul>
       </div>

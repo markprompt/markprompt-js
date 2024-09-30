@@ -177,7 +177,7 @@ describe('submitAlgoliaDocsearchQuery', () => {
         // @ts-expect-error - provider is not a valid provider
         provider: { name: 'test' },
       }),
-    ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
+    ).rejects.toStrictEqual(new Error('Unknown provider: test'));
   });
 
   test('throws with faulty response', async () => {

@@ -118,7 +118,7 @@ export default function IndexPage(): ReactElement {
             type="text"
             placeholder="What is the weather in Paris?"
             onChange={(e) => setInput(e.target.value)}
-          ></input>
+          />
         </form>
         <div className="Output">
           <p className="label">Output</p>

@@ -37,7 +37,7 @@ export function useFeedback({
 }: UseFeedbackOptions): UseFeedbackResult {
   if (!projectKey) {
     throw new Error(
-      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.`,
+      'Markprompt: a project key is required. Make sure to pass your Markprompt project key to useFeedback.',
     );
   }
 

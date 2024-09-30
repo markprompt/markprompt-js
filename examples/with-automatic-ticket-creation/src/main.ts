@@ -41,7 +41,7 @@ function getCreateTicket(
     }
 
     const res = await fetch(
-      import.meta.env.VITE_MARKPROMPT_API_URL + '/integrations/create-ticket',
+      `${import.meta.env.VITE_MARKPROMPT_API_URL}/integrations/create-ticket`,
       {
         cache: 'no-cache',
         credentials: 'omit',

@@ -30,7 +30,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
 export function Feedback(props: FeedbackProps): ReactElement {
   const {
     message,
-    heading = DEFAULT_MARKPROMPT_OPTIONS.feedback!.heading,
+    heading = DEFAULT_MARKPROMPT_OPTIONS.feedback?.heading,
     submitFeedback,
     abortFeedbackRequest,
     variant,

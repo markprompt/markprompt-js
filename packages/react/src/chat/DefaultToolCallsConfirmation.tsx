@@ -109,7 +109,7 @@ export function DefaultToolCallsConfirmation(
                   <StatusIcon
                     width={16}
                     height={16}
-                    className={`MarkpromptToolCallStatusIcon`}
+                    className={'MarkpromptToolCallStatusIcon'}
                   />
                 </AccessibleIcon>
                 <strong>
@@ -151,7 +151,7 @@ export function DefaultToolCallsConfirmation(
                     <StatusIcon
                       width={16}
                       height={16}
-                      className={`MarkpromptToolCallStatusIcon`}
+                      className={'MarkpromptToolCallStatusIcon'}
                     />
                   </AccessibleIcon>
                   <strong>

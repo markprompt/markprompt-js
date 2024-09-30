@@ -134,9 +134,8 @@ export async function submitSearchQuery(
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }
 
@@ -188,8 +187,7 @@ export async function submitAlgoliaDocsearchQuery(
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }

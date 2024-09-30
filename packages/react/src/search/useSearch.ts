@@ -146,19 +146,19 @@ function searchResultsToSearchComponentProps(
 ): SearchResultComponentProps[] {
   return searchResults.map((result) => {
     return {
-      href: (options?.getHref || DEFAULT_MARKPROMPT_OPTIONS.search!.getHref)?.(
+      href: (options?.getHref || DEFAULT_MARKPROMPT_OPTIONS.search?.getHref)?.(
         result,
       ),
       heading: (
-        options?.getHeading || DEFAULT_MARKPROMPT_OPTIONS.search!.getHeading
+        options?.getHeading || DEFAULT_MARKPROMPT_OPTIONS.search?.getHeading
       )?.(result, query),
       title:
-        (options?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getTitle)?.(
+        (options?.getTitle || DEFAULT_MARKPROMPT_OPTIONS.search?.getTitle)?.(
           result,
           query,
         ) || 'Untitled',
       subtitle: (
-        options?.getSubtitle || DEFAULT_MARKPROMPT_OPTIONS.search!.getSubtitle
+        options?.getSubtitle || DEFAULT_MARKPROMPT_OPTIONS.search?.getSubtitle
       )?.(result, query),
     };
   });

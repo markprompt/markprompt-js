@@ -78,7 +78,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
             const summaryId = crypto.randomUUID();
 
             set((state) => {
-              state.tickets!.summaryByThreadId[threadId] = {
+              state.tickets?.summaryByThreadId[threadId] = {
                 id: summaryId,
                 references: [],
                 state: 'indeterminate',
@@ -125,7 +125,7 @@ Example:
             ] as ChatCompletionMessageParam[];
 
             set((state) => {
-              state.tickets!.summaryByThreadId[threadId].state = 'preload';
+              state.tickets?.summaryByThreadId[threadId].state = 'preload';
             });
 
             try {
@@ -135,8 +135,8 @@ Example:
                 options,
               )) {
                 set((state) => {
-                  state.tickets!.summaryByThreadId[threadId] = {
-                    ...state.tickets!.summaryByThreadId[threadId],
+                  state.tickets?.summaryByThreadId[threadId] = {
+                    ...state.tickets?.summaryByThreadId[threadId],
                     state: 'streaming-answer',
                     ...chunk,
                   };
@@ -144,8 +144,8 @@ Example:
               }
             } catch (error) {
               set((state) => {
-                state.tickets!.summaryByThreadId[threadId] = {
-                  ...state.tickets!.summaryByThreadId[threadId],
+                state.tickets?.summaryByThreadId[threadId] = {
+                  ...state.tickets?.summaryByThreadId[threadId],
                   state: 'cancelled',
                 };
               });
@@ -159,7 +159,7 @@ Example:
             }
 
             set((state) => {
-              state.tickets!.summaryByThreadId[threadId].state = 'done';
+              state.tickets?.summaryByThreadId[threadId].state = 'done';
             });
           },
         },

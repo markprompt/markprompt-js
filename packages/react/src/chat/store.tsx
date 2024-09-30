@@ -260,7 +260,7 @@ export const createChatStore = ({
 }: CreateChatOptions) => {
   if (!projectKey) {
     throw new Error(
-      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.`,
+      'Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.',
     );
   }
 
@@ -602,9 +602,9 @@ export const createChatStore = ({
                 .filter((x) => x.value)
                 .map((x) => ({
                   role: 'tool',
-                  name: x.value!.tool.tool.function.name,
-                  tool_call_id: x.value!.tool_call.id!,
-                  content: x.value!.result,
+                  name: x.value?.tool.tool.function.name,
+                  tool_call_id: x.value?.tool_call.id!,
+                  content: x.value?.result,
                 })),
             );
           },

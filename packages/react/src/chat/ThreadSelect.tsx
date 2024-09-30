@@ -45,11 +45,11 @@ export function ThreadSelect({
       itemToString={(item) => item?.value ?? ''}
       itemToChildren={(item) => {
         if ('children' in item!) return item.children;
-        return item!.label;
+        return item?.label;
       }}
       onSelectedItemChange={({ selectedItem }) => {
         selectThread(
-          selectedItem!.value === 'new' ? undefined : selectedItem!.value,
+          selectedItem?.value === 'new' ? undefined : selectedItem?.value,
         );
       }}
     />

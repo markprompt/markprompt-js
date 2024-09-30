@@ -7,8 +7,7 @@ export function RichText(props: {
 }): ReactElement {
   if (typeof props.children === 'string') {
     return <Markdown className={props.className}>{props.children}</Markdown>;
-  } else {
-    const Message = props.children;
-    return <Message />;
   }
+  const Message = props.children;
+  return <Message />;
 }
