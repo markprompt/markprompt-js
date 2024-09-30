@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.38.3
+
+### Patch Changes
+
+- [#433](https://github.com/markprompt/markprompt-js/pull/433) [`e9c998b`](https://github.com/markprompt/markprompt-js/commit/e9c998b00d20de932b114702e7f772803d99066e) Thanks [@michaelfester](https://github.com/michaelfester)! - Improve errors
+
+- [#432](https://github.com/markprompt/markprompt-js/pull/432) [`439283a`](https://github.com/markprompt/markprompt-js/commit/439283ad208c0f6c02f08a42ba5a151831774290) Thanks [@michaelfester](https://github.com/michaelfester)! - Add error cause
+
 ## 0.38.2
 
 ### Patch Changes
