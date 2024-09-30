@@ -78,6 +78,7 @@ module.exports = {
     'no-constructor-return': 'off',
     'no-empty-character-class': 'off',
     'no-empty-pattern': 'off',
+    'no-eval': 'off',
     'no-extra-boolean-cast': 'off',
     'no-extra-label': 'off',
     'no-inner-declarations': 'off',
