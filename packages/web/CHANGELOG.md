@@ -1,5 +1,15 @@
 # @markprompt/web
 
+## 0.42.4
+
+### Patch Changes
+
+- [`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add Biome a11y/correctness/complexity formatting and fix errors
+
+- Updated dependencies [[`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f)]:
+  - @markprompt/core@0.38.4
+  - @markprompt/react@0.54.5
+
 ## 0.42.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.32.2
+
+### Patch Changes
+
+- [`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add Biome a11y/correctness/complexity formatting and fix errors
+
 ## 0.32.1
 
 ### Patch Changes
