@@ -58,7 +58,8 @@
         "recommended": true
       },
       "style": {
-        "recommended": true
+        "recommended": true,
+        "noNonNullAssertion": "warn"
       }
     }
   },

@@ -573,7 +573,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                   bottom: '0rem',
                 }}
               >
-                <AccessibleIcon.Root label={close?.label!}>
+                <AccessibleIcon.Root label={close?.label ?? 'close'}>
                   {isTouchDevice ? (
                     <CloseIcon width={20} height={20} />
                   ) : (

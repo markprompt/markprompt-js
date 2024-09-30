@@ -35,7 +35,7 @@ const NavigationMenu = ({
             className="MarkpromptClose"
             data-type={isTouchDevice || close?.hasIcon ? 'icon' : 'kbd'}
           >
-            <AccessibleIcon.Root label={close?.label!}>
+            <AccessibleIcon.Root label={close?.label ?? 'close'}>
               {isTouchDevice || close?.hasIcon ? (
                 <CloseIcon strokeWidth={2} width={18} height={18} />
               ) : (

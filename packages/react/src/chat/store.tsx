@@ -22,6 +22,7 @@ import { immer } from 'zustand/middleware/immer';
 import { toValidApiMessages } from './utils.js';
 import type { MarkpromptOptions } from '../types.js';
 import {
+  hasPresentKey,
   hasValueAtKey,
   isIterable,
   isPresent,
@@ -125,7 +126,7 @@ export type SubmitChatMessage =
       role: 'assistant';
       tool_calls: ChatCompletionChunk.Choice.Delta.ToolCall[];
     }
-  | { content: string; role: 'tool'; name: string; tool_call_id: string };
+  | { content: string; role: 'tool'; name: string; tool_call_id?: string };
 
 export interface ThreadData {
   lastUpdated: string;
@@ -599,11 +600,11 @@ export const createChatStore = ({
             get().submitChat(
               toolCallResults
                 .filter(hasValueAtKey('status', 'fulfilled' as const))
-                .filter((x) => x.value)
+                .filter(hasPresentKey('value'))
                 .map((x) => ({
                   role: 'tool',
                   name: x.value?.tool.tool.function.name,
-                  tool_call_id: x.value?.tool_call.id!,
+                  tool_call_id: x.value.tool_call.id!,
                   content: x.value?.result,
                 })),
             );
