@@ -250,9 +250,14 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     }): void => {
       onDidRequestOpenChange?.(true);
       setOpenViews((v) => {
-        const closed = Object.keys(v).reduce((acc, value) => {
-          return { ...acc, [value]: false };
-        }, {});
+        const closed = (Object.keys(v) as View[]).reduce(
+          (acc, value) => {
+            acc[value] = false;
+            return acc;
+          },
+          {} as { [key in View]?: boolean },
+        );
+
         return { ...closed, [view]: true };
       });
       setViewOptions(options);
