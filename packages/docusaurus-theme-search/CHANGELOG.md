@@ -1,5 +1,15 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.27.14
+
+### Patch Changes
+
+- [`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add Biome a11y/correctness/complexity formatting and fix errors
+
+- Updated dependencies [[`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f)]:
+  - @markprompt/css@0.32.2
+  - @markprompt/react@0.54.5
+
 ## 0.27.13
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # with-automatic-ticket-creation
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`6bc0132`](https://github.com/markprompt/markprompt-js/commit/6bc01327a6a4510cf9bfb3204f325dc0b9668e2f)]:
+  - @markprompt/css@0.32.2
+  - @markprompt/web@0.42.4
+
 ## 0.0.9
 
 ### Patch Changes
