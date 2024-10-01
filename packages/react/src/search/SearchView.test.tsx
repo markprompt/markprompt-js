@@ -1,7 +1,7 @@
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
-import {
-  type AlgoliaDocSearchHit,
-  type SearchResult,
+import type {
+  AlgoliaDocSearchHit,
+  SearchResult,
 } from '@markprompt/core/search';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -35,7 +35,7 @@ const server = setupServer(
 
     return HttpResponse.json({ data: results, debug }, { status: status });
   }),
-  http.post(`https://test-dsn.algolia.net/1/indexes/test/query`, () => {
+  http.post('https://test-dsn.algolia.net/1/indexes/test/query', () => {
     return HttpResponse.json({ hits: results }, { status: status });
   }),
 );

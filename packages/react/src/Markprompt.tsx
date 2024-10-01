@@ -573,7 +573,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
                   bottom: '0rem',
                 }}
               >
-                <AccessibleIcon.Root label={close!.label!}>
+                <AccessibleIcon.Root label={close?.label ?? 'close'}>
                   {isTouchDevice ? (
                     <CloseIcon width={20} height={20} />
                   ) : (
@@ -586,7 +586,7 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         </div>
       ) : (
         // We still include a div to preserve the grid-template-rows rules
-        <div></div>
+        <div />
       )}
 
       <div className="MarkpromptViews">

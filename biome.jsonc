@@ -56,6 +56,13 @@
       },
       "security": {
         "recommended": true
+      },
+      "style": {
+        "recommended": true,
+        "noDefaultExport": "warn",
+        "noNonNullAssertion": "warn",
+        "useCollapsedElseIf": "error",
+        "useThrowOnlyError": "error"
       }
     }
   },

@@ -38,42 +38,39 @@ export default function SearchBar(): ReactElement {
 
   if (markpromptProps.trigger?.floating) {
     return <Markprompt {...markpromptProps} />;
-  } else {
-    return (
-      <>
-        <div id="markprompt" />
-        <div className="navbar__search" key="search-box">
-          <span
-            aria-label="expand searchbar"
-            role="button"
-            className="search-icon"
-            onClick={() => openMarkprompt()}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                openMarkprompt();
-              }
-            }}
-            tabIndex={0}
-          />
-          <input
-            id="search_input_react"
-            type="search"
-            placeholder={
-              markpromptProps.trigger?.placeholder || 'Search or ask'
-            }
-            aria-label={markpromptProps.trigger?.label || 'Search or ask'}
-            className="navbar__search-input search-bar"
-            onClick={() => openMarkprompt()}
-          />
-          <Markprompt
-            {...markpromptProps}
-            trigger={{
-              ...markpromptProps.trigger,
-              customElement: true,
-            }}
-          />
-        </div>
-      </>
-    );
   }
+  return (
+    <>
+      <div id="markprompt" />
+      <div className="navbar__search" key="search-box">
+        <span
+          aria-label="expand searchbar"
+          role="button"
+          className="search-icon"
+          onClick={() => openMarkprompt()}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              openMarkprompt();
+            }
+          }}
+          tabIndex={0}
+        />
+        <input
+          id="search_input_react"
+          type="search"
+          placeholder={markpromptProps.trigger?.placeholder || 'Search or ask'}
+          aria-label={markpromptProps.trigger?.label || 'Search or ask'}
+          className="navbar__search-input search-bar"
+          onClick={() => openMarkprompt()}
+        />
+        <Markprompt
+          {...markpromptProps}
+          trigger={{
+            ...markpromptProps.trigger,
+            customElement: true,
+          }}
+        />
+      </div>
+    </>
+  );
 }

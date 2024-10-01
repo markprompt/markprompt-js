@@ -91,7 +91,7 @@ export function SearchView(props: SearchViewProps): ReactElement {
 
   if (!projectKey) {
     throw new Error(
-      `Markprompt: a project key is required. Make sure to pass your Markprompt project key to <SearchView />.`,
+      'Markprompt: a project key is required. Make sure to pass your Markprompt project key to <SearchView />.',
     );
   }
 

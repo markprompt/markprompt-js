@@ -17,7 +17,7 @@ import {
   submitSearchQuery,
   type AlgoliaDocSearchHit,
   type SearchResult,
-  AlgoliaProvider,
+  type AlgoliaProvider,
 } from './search.js';
 
 const searchResults: SearchResult[] = [
@@ -86,7 +86,7 @@ const server = setupServer(
     const limit = url.searchParams.get('limit');
     let data = searchResults;
     if (limit !== null) {
-      data = searchResults.slice(0, parseInt(limit));
+      data = searchResults.slice(0, Number.parseInt(limit));
     }
     if (wait > 0) {
       await new Promise((resolve) => setTimeout(resolve, wait));
@@ -177,7 +177,7 @@ describe('submitAlgoliaDocsearchQuery', () => {
         // @ts-expect-error - provider is not a valid provider
         provider: { name: 'test' },
       }),
-    ).rejects.toStrictEqual(new Error(`Unknown provider: test`));
+    ).rejects.toStrictEqual(new Error('Unknown provider: test'));
   });
 
   test('throws with faulty response', async () => {

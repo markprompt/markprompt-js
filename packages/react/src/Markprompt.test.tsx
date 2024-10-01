@@ -14,7 +14,7 @@ describe('Markprompt', () => {
   it.skip('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
     const user = await userEvent.setup();
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
-    await user.keyboard(`{Meta>}{Enter}{/Meta}`);
+    await user.keyboard('{Meta>}{Enter}{/Meta}');
     await expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 

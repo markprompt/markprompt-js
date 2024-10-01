@@ -36,12 +36,12 @@ function getCreateTicket(
     data.append('userName', userName);
     data.append('summary', summary);
 
-    for (let field of customFields) {
+    for (const field of customFields) {
       data.append('customFields', JSON.stringify(field));
     }
 
     const res = await fetch(
-      import.meta.env.VITE_MARKPROMPT_API_URL + '/integrations/create-ticket',
+      `${import.meta.env.VITE_MARKPROMPT_API_URL}/integrations/create-ticket`,
       {
         cache: 'no-cache',
         credentials: 'omit',

@@ -26,10 +26,9 @@ export function DefaultMessage(props: MessagesProps): ReactElement {
         messageOnly
       />
     );
-  } else {
-    const Message = chatOptions.defaultView.message;
-    return <Message />;
   }
+  const Message = chatOptions.defaultView.message;
+  return <Message />;
 }
 
 export function DefaultPrompts({

@@ -130,14 +130,12 @@ const defaultGetSearchResultHeading = (
 
   if (result.matchType === 'title') {
     return undefined;
-  } else {
-    const leadHeading = result.meta?.leadHeading;
-    if (result.matchType === 'leadHeading' && leadHeading?.value) {
-      return result.file.title;
-    } else {
-      return leadHeading?.value || result.file.title;
-    }
   }
+  const leadHeading = result.meta?.leadHeading;
+  if (result.matchType === 'leadHeading' && leadHeading?.value) {
+    return result.file.title;
+  }
+  return leadHeading?.value || result.file.title;
 };
 
 const defaultGetSearchResultTitle = (

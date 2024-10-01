@@ -17,7 +17,7 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
   const splitText = value ? value.split('') : [];
   const escapedSearch = match.trim().replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
-  const regexp = RegExp('(' + escapedSearch.replaceAll(' ', '|') + ')', 'ig');
+  const regexp = RegExp(`(${escapedSearch.replaceAll(' ', '|')})`, 'ig');
   let result;
   let id = 0;
   let index = 0;

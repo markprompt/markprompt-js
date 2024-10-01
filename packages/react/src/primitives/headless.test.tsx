@@ -196,7 +196,7 @@ test('Search result title and description should be visible', async () => {
           subtitle: 'Test subtitle',
         },
       ]}
-    ></Markprompt.SearchResults>,
+    />,
   );
 
   const heading = await screen.findByText('Test title');

@@ -2,7 +2,7 @@ import type { SearchOptions } from '@algolia/client-search';
 import defaults from 'defaults';
 
 import { DEFAULT_OPTIONS } from './constants.js';
-import { DocSearchHit } from './docsearch.js';
+import type { DocSearchHit } from './docsearch.js';
 import type {
   BaseOptions,
   FileReferenceFileData,
@@ -134,9 +134,8 @@ export async function submitSearchQuery(
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }
 
@@ -188,8 +187,7 @@ export async function submitAlgoliaDocsearchQuery(
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
       return undefined;
-    } else {
-      throw error;
     }
+    throw error;
   }
 }

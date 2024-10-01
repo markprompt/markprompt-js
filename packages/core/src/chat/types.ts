@@ -4,7 +4,7 @@ import type {
   ChatCompletionToolChoiceOption,
 } from 'openai/resources/chat/index.js';
 
-import { FileSectionReference } from '../types.js';
+import type { FileSectionReference } from '../types.js';
 import type { ArrayToUnion } from '../utils.js';
 
 export type {

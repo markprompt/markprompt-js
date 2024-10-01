@@ -28,9 +28,9 @@ interface ReferenceProps {
 
 export const Reference = (props: ReferenceProps): ReactElement => {
   const {
-    getHref = DEFAULT_MARKPROMPT_OPTIONS.references!.getHref!,
-    getLabel = DEFAULT_MARKPROMPT_OPTIONS.references!.getLabel,
-    filter = DEFAULT_MARKPROMPT_OPTIONS.references!.filter,
+    getHref = DEFAULT_MARKPROMPT_OPTIONS.references.getHref,
+    getLabel = DEFAULT_MARKPROMPT_OPTIONS.references.getLabel,
+    filter = DEFAULT_MARKPROMPT_OPTIONS.references.filter,
     index,
     reference,
     transformReferenceId,
@@ -94,7 +94,7 @@ const References = (props: ReferencesProps): ReactElement | null => {
     getHref,
     getLabel,
     filter,
-    heading = DEFAULT_MARKPROMPT_OPTIONS.references!.heading,
+    heading = DEFAULT_MARKPROMPT_OPTIONS.references?.heading,
     transformReferenceId,
     references,
     state,

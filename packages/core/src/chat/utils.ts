@@ -1,4 +1,4 @@
-import {
+import type {
   ChatCompletion,
   ChatCompletionChunk,
   ChatCompletionMessage,
@@ -7,7 +7,7 @@ import {
   NoStreamingData,
   SubmitChatOptions,
 } from './types.js';
-import { BaseOptions } from '../types.js';
+import type { BaseOptions } from '../types.js';
 import { isFileSectionReferences } from '../utils.js';
 
 const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [

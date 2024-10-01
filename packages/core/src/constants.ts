@@ -1,4 +1,4 @@
-import { BaseOptions } from './types.js';
+import type { BaseOptions } from './types.js';
 
 export const DEFAULT_OPTIONS = {
   apiUrl: 'https://api.markprompt.com',
