@@ -59,7 +59,10 @@
       },
       "style": {
         "recommended": true,
-        "noNonNullAssertion": "warn"
+        "noDefaultExport": "warn",
+        "noNonNullAssertion": "warn",
+        "useCollapsedElseIf": "error",
+        "useThrowOnlyError": "error"
       }
     }
   },
