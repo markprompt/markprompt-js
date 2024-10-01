@@ -1,5 +1,14 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.27.16
+
+### Patch Changes
+
+- [#439](https://github.com/markprompt/markprompt-js/pull/439) [`fcda971`](https://github.com/markprompt/markprompt-js/commit/fcda97148c5c07b0d21d41e0374eb09138e9f05f) Thanks [@nickrttn](https://github.com/nickrttn)! - Enable Biome style ruleset and fix issues
+
+- Updated dependencies [[`fcda971`](https://github.com/markprompt/markprompt-js/commit/fcda97148c5c07b0d21d41e0374eb09138e9f05f)]:
+  - @markprompt/react@0.54.7
+
 ## 0.27.15
 
 ### Patch Changes

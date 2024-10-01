@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.38.5
+
+### Patch Changes
+
+- [#439](https://github.com/markprompt/markprompt-js/pull/439) [`fcda971`](https://github.com/markprompt/markprompt-js/commit/fcda97148c5c07b0d21d41e0374eb09138e9f05f) Thanks [@nickrttn](https://github.com/nickrttn)! - Enable Biome style ruleset and fix issues
+
 ## 0.38.4
 
 ### Patch Changes
