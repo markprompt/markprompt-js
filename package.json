@@ -2,7 +2,10 @@
   "name": "markprompt",
   "private": true,
   "type": "module",
-  "workspaces": ["examples/*", "packages/*"],
+  "workspaces": [
+    "examples/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "build:packages": "turbo run build --filter @markprompt/*...",
@@ -58,7 +61,7 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.17.2"
   },
-  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
+  "packageManager": "pnpm@9.12.0+sha512.4abf725084d7bcbafbd728bfc7bee61f2f791f977fd87542b3579dcb23504d170d46337945e4c66485cd12d588a0c0e570ed9c477e7ccdd8507cf05f3f92eaca",
   "pnpm": {
     "overrides": {
       "@types/react": "^18.2",
