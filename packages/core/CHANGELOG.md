@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.38.6
+
+### Patch Changes
+
+- [#441](https://github.com/markprompt/markprompt-js/pull/441) [`01ed29d`](https://github.com/markprompt/markprompt-js/commit/01ed29d17a471d34273dd211b874999bede01019) Thanks [@elliotdauber](https://github.com/elliotdauber)! - add ExtractFeedback action
+
 ## 0.38.5
 
 ### Patch Changes
