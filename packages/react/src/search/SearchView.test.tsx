@@ -421,7 +421,7 @@ describe('SearchView', () => {
       timing: 100.7,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional
     const consoleSpy = vi.spyOn(console, 'debug').mockImplementation(() => {});
 
     render(<SearchView debug projectKey="test-key" />);

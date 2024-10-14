@@ -1,4 +1,11 @@
-import { Fragment, forwardRef, memo, type ComponentType, useMemo } from 'react';
+import {
+  Fragment,
+  forwardRef,
+  memo,
+  type ComponentType,
+  useMemo,
+  type ReactNode,
+} from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
 import type { SearchResultProps as BaseSearchResultProps } from '../index.js';
@@ -20,7 +27,7 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
   const regexp = RegExp(`(${escapedSearch.replaceAll(' ', '|')})`, 'ig');
   let id = 0;
   let index = 0;
-  const res = [];
+  const res: ReactNode[] = [];
 
   if (value) {
     while (true) {

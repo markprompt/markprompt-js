@@ -16,9 +16,9 @@ beforeAll(() => {
     dispatchEvent: vi.fn(),
   }));
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional
   Element.prototype.scrollTo = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional
   Element.prototype.scrollIntoView = () => {};
 });
 
