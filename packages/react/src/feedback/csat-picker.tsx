@@ -184,7 +184,7 @@ export function CSATPicker(props: CSATPickerProps): ReactElement {
               onClick={() => {
                 submitCSAT((i + 1) as CSAT);
               }}
-              key={`star-${i}`}
+              key={`star-${_}`}
               className="MarkpromptMessageCSATStar"
               data-active={isActive}
               aria-label={`Rate ${i + 1}`}

@@ -4,7 +4,7 @@ import { toString } from 'mdast-util-to-string';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import type { MarkpromptOptions, View } from './types.js';
 
-export function isPresent<T>(t: T | undefined | null | void): t is T {
+export function isPresent<T>(t: T | undefined | null): t is T {
   return t !== undefined && t !== null;
 }
 

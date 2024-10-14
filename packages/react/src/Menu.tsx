@@ -121,10 +121,10 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
 
           {menuConfig.sections && menuConfig.sections?.length > 0 && (
             <div className="MarkpromptDropdownMenuSections">
-              {menuConfig.sections?.map((section, i) => {
+              {menuConfig.sections?.map((section) => {
                 return (
                   <div
-                    key={`menu-section-${i}`}
+                    key={`menu-section-${section.heading}-${section.entries.map((x) => x.title).join('-')}`}
                     className="MarkpromptDropdownMenuSection"
                   >
                     {section.heading && (
@@ -133,10 +133,10 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
                         {section.heading}
                       </DropdownMenu.Label>
                     )}
-                    {section.entries?.map((entry, j) => {
+                    {section.entries?.map((entry) => {
                       return (
                         <MenuEntry
-                          key={`menu-section-${i}-entry-${j}`}
+                          key={`menu-section-entry-${entry.title}`}
                           {...entry}
                           linkAs={linkAs}
                         />
@@ -150,10 +150,10 @@ function Menu(props: MarkpromptMenuProps): JSX.Element {
           {menuConfig.footer && (
             <>
               <DropdownMenu.Separator className="MarkpromptDropdownMenuSeparatorLine" />
-              {menuConfig.footer?.map((entry, i) => {
+              {menuConfig.footer?.map((entry) => {
                 return (
                   <MenuEntry
-                    key={`menu-footer-${i}`}
+                    key={`menu-footer-${entry.title}`}
                     {...entry}
                     linkAs={linkAs}
                   />
