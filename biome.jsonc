@@ -39,7 +39,8 @@
               "Textarea"
             ]
           }
-        }
+        },
+        "useSemanticElements": "off"
       },
       "complexity": {
         "recommended": true,
