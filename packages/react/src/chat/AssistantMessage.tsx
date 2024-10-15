@@ -16,7 +16,7 @@ export interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   linkAs?: string | ComponentType<any>;
   messageOnly?: boolean;
   showFeedbackAlways?: boolean;

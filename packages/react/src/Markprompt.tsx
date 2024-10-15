@@ -80,7 +80,7 @@ type TriggerProps = Pick<
 > & {
   hasMenu?: boolean;
   onClick?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   Component: string | JSXElementConstructor<any>;
 };
 

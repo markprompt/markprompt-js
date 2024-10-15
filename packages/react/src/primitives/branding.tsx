@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-target-blank */
 import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 interface BrandingProps {

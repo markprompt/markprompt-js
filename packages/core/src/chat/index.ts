@@ -159,7 +159,6 @@ export async function* submitChat(
 
   checkAbortSignal(options.signal);
 
-  // eslint-disable-next-line prefer-const
   const completion = {};
 
   const stream = res.body
@@ -167,7 +166,6 @@ export async function* submitChat(
     .pipeThrough(new EventSourceParserStream())
     .getReader();
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const { value: event, done } = await stream.read();
 
@@ -178,7 +176,6 @@ export async function* submitChat(
       continue;
     }
 
-    // eslint-disable-next-line prefer-const
     const json = JSON.parse(event.data);
 
     if (!isChatCompletionChunk(json)) {

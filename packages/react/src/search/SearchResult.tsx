@@ -55,7 +55,7 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 interface SearchResultProps extends BaseSearchResultProps {
   searchQuery: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   linkAs?: string | ComponentType<any>;
 }
 

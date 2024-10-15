@@ -9,7 +9,6 @@ import {
 import { useEffect, type ReactElement, useState } from 'react';
 
 export default function SearchBar(): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [markpromptExtras, setMarkpromptExtras] = useState<any>({});
   const { siteConfig } = useDocusaurusContext();
 
@@ -18,7 +17,6 @@ export default function SearchBar(): ReactElement {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setMarkpromptExtras((window as any).markpromptConfigExtras || {});
   }, []);
 

@@ -20,6 +20,7 @@ import {
   useChatStore,
   type ChatViewMessage,
   ChatProvider,
+  type ConfirmationProps,
 } from './store.js';
 import { getChunk, formatEvent } from '../test-utils.js';
 import type { MarkpromptOptions, View } from '../types.js';
@@ -346,11 +347,10 @@ describe('ChatView', () => {
               requireConfirmation: true,
             },
           ],
-          ToolCallsConfirmation(props) {
+          ToolCallsConfirmation(props: ConfirmationProps) {
             return (
               <div>
                 <p>custom confirmation</p>
-                {/* eslint-disable react/prop-types */}
                 <button onClick={props.confirmToolCalls} type="button">
                   Confirm
                 </button>

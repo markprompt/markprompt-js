@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { act } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 import type * as zustand from 'zustand';

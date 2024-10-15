@@ -38,7 +38,7 @@ function MenuEntry(
   props: MenuItemProps & { linkAs?: MarkpromptOptions['linkAs'] },
 ): JSX.Element {
   const Icon = getMenuIconById(props.iconId);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const Comp: any = props.href ? props.linkAs || 'a' : 'div';
   return (
     <DropdownMenu.Item asChild>

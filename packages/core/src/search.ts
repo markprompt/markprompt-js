@@ -92,7 +92,6 @@ export async function submitSearchQuery(
   options: SubmitSearchQueryOptions & BaseOptions = {},
 ): Promise<SearchResultsResponse | undefined> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { limit = DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS.limit, apiUrl } =
       options ?? {};
 
