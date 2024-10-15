@@ -111,7 +111,7 @@ const server = setupServer(
       },
     });
   }),
-  http.post(DEFAULT_OPTIONS.apiUrl!, async () => {
+  http.post(DEFAULT_OPTIONS.apiUrl!, () => {
     return HttpResponse.json({ status: 'ok' }, { status: 200 });
   }),
 );
@@ -256,8 +256,8 @@ describe('ChatView', () => {
   });
 
   it('allows users to confirm tool calls', async () => {
-    async function do_a_thing(): Promise<string> {
-      return 'test function result';
+    function do_a_thing(): Promise<string> {
+      return Promise.resolve('test function result');
     }
 
     const user = await userEvent.setup();
@@ -314,8 +314,8 @@ describe('ChatView', () => {
   });
 
   it('allows users to confirm tool calls with a custom confirmation', async () => {
-    async function do_a_thing(): Promise<string> {
-      return 'test function result';
+    function do_a_thing(): Promise<string> {
+      return Promise.resolve('test function result');
     }
 
     const user = await userEvent.setup();
@@ -380,8 +380,8 @@ describe('ChatView', () => {
   });
 
   it('automatically calls tools that do not require confirmation', async () => {
-    async function do_a_thing(): Promise<string> {
-      return 'test function result';
+    function do_a_thing(): Promise<string> {
+      return Promise.resolve('test function result');
     }
 
     const user = await userEvent.setup();
@@ -429,7 +429,7 @@ describe('ChatView', () => {
   });
 
   it('shows an error state for failed tool calls', async () => {
-    async function do_a_thing(): Promise<string> {
+    function do_a_thing(): Promise<string> {
       throw new Error('tool call failed');
     }
 

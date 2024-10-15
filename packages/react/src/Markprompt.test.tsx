@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Markprompt, closeMarkprompt, openMarkprompt } from './index.js';
 
 describe('Markprompt', () => {
-  it('renders', async () => {
+  it('renders', () => {
     render(<Markprompt projectKey="test-key" />);
     expect(screen.getByText('Ask AI')).toBeInTheDocument();
   });
@@ -18,7 +18,7 @@ describe('Markprompt', () => {
     await expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
-  it('renders no dialog when display = plain', async () => {
+  it('renders no dialog when display = plain', () => {
     render(
       <Markprompt
         projectKey="test-key"

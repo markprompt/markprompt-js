@@ -94,7 +94,7 @@ const algoliaSearchHits = [
 ] as AlgoliaDocSearchHit[];
 
 describe('constants', () => {
-  test('default references.getHref', async () => {
+  test('default references.getHref', () => {
     expect(DEFAULT_MARKPROMPT_OPTIONS.references?.getHref?.(results[0]!)).toBe(
       `${basePath}#${headingSlug}`,
     );
@@ -103,7 +103,7 @@ describe('constants', () => {
     ).toEqual(basePath);
   });
 
-  test('default references.getLabel', async () => {
+  test('default references.getLabel', () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.references?.getLabel?.(results[0]!),
     ).toEqual(heading);
@@ -118,7 +118,7 @@ describe('constants', () => {
     ).toEqual(noTitleFileName);
   });
 
-  test('default search.getHref', async () => {
+  test('default search.getHref', () => {
     expect(DEFAULT_MARKPROMPT_OPTIONS.search?.getHref?.(results[0]!)).toBe(
       `${basePath}#${headingSlug}`,
     );
@@ -130,7 +130,7 @@ describe('constants', () => {
     ).toEqual(algoliaSearchHits[0]?.url);
   });
 
-  test('default search.getHeading', async () => {
+  test('default search.getHeading', () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.search?.getHeading?.(results[0]!),
     ).toEqual(results[0]?.file.title);
@@ -145,7 +145,7 @@ describe('constants', () => {
     ).toEqual(algoliaSearchHits[1]?.hierarchy.lvl0);
   });
 
-  test('default search.getTitle', async () => {
+  test('default search.getTitle', () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.search?.getTitle?.(results[0]!, ''),
     ).toEqual(results[0]?.meta?.leadHeading?.value);
@@ -163,7 +163,7 @@ describe('constants', () => {
     ).toEqual(algoliaSearchHits[0]?.hierarchy.lvl1);
   });
 
-  test('default search.getSubtitle', async () => {
+  test('default search.getSubtitle', () => {
     expect(
       DEFAULT_MARKPROMPT_OPTIONS.search?.getSubtitle?.(results[0]!),
     ).toBeUndefined();

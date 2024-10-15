@@ -13,13 +13,10 @@ let response: JsonBodyType = '';
 const TEST_PROMPT_ID = 'prompt-id';
 
 const server = setupServer(
-  http.post(
-    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_PROMPT_ID}`,
-    async () => {
-      endpointHits += 1;
-      return HttpResponse.json(response, { status: status });
-    },
-  ),
+  http.post(`${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_PROMPT_ID}`, () => {
+    endpointHits += 1;
+    return HttpResponse.json(response, { status: status });
+  }),
 );
 
 beforeAll(() => {

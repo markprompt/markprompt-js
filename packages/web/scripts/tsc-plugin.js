@@ -7,7 +7,7 @@ import { execSync } from 'node:child_process';
 export const tscPlugin = {
   name: 'tsc',
   setup(build) {
-    build.onEnd(async () => {
+    build.onEnd(() => {
       execSync('tsc --build', {
         stdio: 'inherit',
       });
