@@ -6,7 +6,7 @@ This example contains a reference implementation of
 
 
 
-https://github.com/motifland/markprompt-js/assets/504893/6b9809d7-2ac7-44a3-9ae8-8b017441da7d
+https://github.com/markprompt/markprompt-js/assets/504893/6b9809d7-2ac7-44a3-9ae8-8b017441da7d
 
 
 

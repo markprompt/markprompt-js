@@ -1,5 +1,5 @@
 // The @docsearch/react dependency is problematic due to ESM transpilation
-// issues (cf. https://github.com/motifland/markprompt-js/issues/156). So
+// issues (cf. https://github.com/markprompt/markprompt-js/issues/156). So
 // instead of importing the types from the package, we declare them here
 // and avoid the package dependency altogether.
 declare type ContentType =

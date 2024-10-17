@@ -6,7 +6,7 @@ Markprompt is AI for customer support.
   <a href="https://x.com/markprompt">
     <img src="https://img.shields.io/twitter/follow/markprompt?style=flat&label=%40markprompt&logo=twitter&color=0bf&logoColor=fff" alt="X" />
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/LICENSE">
+  <a aria-label="License" href="https://github.com/markprompt/markprompt-js/blob/main/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/markprompt">
   </a>
 </p>
