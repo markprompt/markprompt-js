@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.54.9
+
+### Patch Changes
+
+- [#444](https://github.com/markprompt/markprompt-js/pull/444) [`b66ee9b`](https://github.com/markprompt/markprompt-js/commit/b66ee9bcb0d62f116d2ea99798c9d504a4440995) Thanks [@nickrttn](https://github.com/nickrttn)! - Enable and fix Biome suspicious ruleset
+
+- Updated dependencies [[`b66ee9b`](https://github.com/markprompt/markprompt-js/commit/b66ee9bcb0d62f116d2ea99798c9d504a4440995)]:
+  - @markprompt/core@0.38.7
+
 ## 0.54.8
 
 ### Patch Changes
