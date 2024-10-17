@@ -10,15 +10,12 @@ let status = 200;
 const TEST_MESSAGE_ID = 'test-id';
 
 const server = setupServer(
-  http.post(
-    `${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_MESSAGE_ID}`,
-    async () => {
-      return HttpResponse.json(
-        status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
-        { status: status },
-      );
-    },
-  ),
+  http.post(`${DEFAULT_OPTIONS.apiUrl}/messages/${TEST_MESSAGE_ID}`, () => {
+    return HttpResponse.json(
+      status === 200 ? { status: 'ok' } : { error: 'Internal Server Error' },
+      { status: status },
+    );
+  }),
 );
 
 beforeAll(() => {

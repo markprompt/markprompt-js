@@ -21,7 +21,7 @@ describe('utils', () => {
     expect(result1).toBe(true);
 
     // Test case with a null value
-    const value2 = null;
+    const value2: null = null;
     const result2 = isPresent(value2);
     expect(result2).toBe(false);
 

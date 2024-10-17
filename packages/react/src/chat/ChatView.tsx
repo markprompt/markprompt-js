@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SubmitFeedbackOptions } from '@markprompt/core/feedback';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import type { ComponentType } from 'react';

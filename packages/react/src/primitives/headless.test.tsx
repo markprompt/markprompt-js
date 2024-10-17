@@ -19,7 +19,7 @@ import * as Markprompt from './headless.js';
 let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
-  http.get(DEFAULT_OPTIONS.apiUrl!, async () => {
+  http.get(DEFAULT_OPTIONS.apiUrl!, () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -70,7 +70,7 @@ test('Initial state', async () => {
   expect(trigger).toHaveAttribute('data-state', 'closed');
 });
 
-test('Returns children when display is plain', async () => {
+test('Returns children when display is plain', () => {
   render(
     <Markprompt.Root display="plain">
       <Markprompt.Form>

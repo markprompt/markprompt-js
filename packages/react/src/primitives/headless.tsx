@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FileSectionReference } from '@markprompt/core/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
@@ -318,7 +317,6 @@ Prompt.displayName = 'Markprompt.Prompt';
 // between the type that react-markdown exposes, and what is actually
 // serves.
 interface CopyContentButtonProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: string;
   className?: string;
 }
@@ -383,7 +381,7 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
       // we can syntax highlight. This trick allows us to provide
       // syntax highlighting without imposing a large extra
       // package as part of the markprompt-js bundle.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       ((globalThis as any).hljs as any)?.highlightAll();
     }
   }, [children, state]);
@@ -505,13 +503,9 @@ type AutoScrollerProps = ComponentPropsWithoutRef<'div'> &
 const AutoScroller = memo<AutoScrollerProps>(
   forwardRef<HTMLDivElement, AutoScrollerProps>((props, ref) => {
     const {
-      // eslint-disable-next-line react/prop-types
       autoScroll = true,
-      // eslint-disable-next-line react/prop-types
       scrollBehavior = 'smooth',
-      // eslint-disable-next-line react/prop-types
       scrollTrigger,
-      // eslint-disable-next-line react/prop-types
       discreteScrollTrigger,
       ...rest
     } = props;
@@ -634,13 +628,11 @@ const References = function References<
     <RootComponent ref={ref}>
       {references.slice(0, 5).map((reference, index) => {
         return (
-          <>
-            <ReferenceComponent
-              key={`${reference.file.path}-${index}`}
-              reference={reference}
-              index={index}
-            />
-          </>
+          <ReferenceComponent
+            key={`${reference.file.path}-${reference.meta?.leadHeading?.id}`}
+            reference={reference}
+            index={index}
+          />
         );
       })}
     </RootComponent>

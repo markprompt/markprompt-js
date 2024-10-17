@@ -98,7 +98,7 @@ const server = setupServer(
   }),
   http.post(
     `https://${algoliaProvider.appId}-dsn.algolia.net/1/indexes/${algoliaProvider.indexName}/query`,
-    async () => {
+    () => {
       return HttpResponse.json(
         { hits: algoliaSearchHits },
         {

@@ -9,6 +9,7 @@ module.exports = {
         '__mocks__/*.ts',
         'vitest.config.ts',
         'vitest.setup.ts',
+        'test-utils.ts',
       ],
     },
     warnOnUnsupportedTypeScriptVersion: false,

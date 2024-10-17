@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import {
   useCallback,

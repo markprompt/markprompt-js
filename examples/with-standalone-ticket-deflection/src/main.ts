@@ -5,7 +5,7 @@ import { ticketDeflectionForm } from '@markprompt/web';
 
 const el = document.querySelector('#ticket-deflection-form');
 
-const renderTicketDeflectionForm = async (): Promise<void> => {
+const renderTicketDeflectionForm = (): void => {
   if (!el || !(el instanceof HTMLElement)) return;
   ticketDeflectionForm(el, {
     projectKey: import.meta.env.VITE_MARKPROMPT_PROJECT_KEY,

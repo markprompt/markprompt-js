@@ -1,4 +1,11 @@
-import { Fragment, forwardRef, memo, type ComponentType, useMemo } from 'react';
+import {
+  Fragment,
+  forwardRef,
+  memo,
+  type ComponentType,
+  useMemo,
+  type ReactNode,
+} from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
 import type { SearchResultProps as BaseSearchResultProps } from '../index.js';
@@ -18,13 +25,14 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
   const splitText = value ? value.split('') : [];
   const escapedSearch = match.trim().replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
   const regexp = RegExp(`(${escapedSearch.replaceAll(' ', '|')})`, 'ig');
-  let result;
   let id = 0;
   let index = 0;
-  const res = [];
+  const res: ReactNode[] = [];
 
   if (value) {
-    while ((result = regexp.exec(value)) !== null) {
+    while (true) {
+      const result = regexp.exec(value);
+      if (result === null) break;
       res.push(
         <Fragment key={id++}>
           {splitText.splice(0, result.index - index).join('')}
@@ -47,7 +55,7 @@ const HighlightMatches = memo<HighlightMatchesProps>(function HighlightMatches({
 
 interface SearchResultProps extends BaseSearchResultProps {
   searchQuery: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   linkAs?: string | ComponentType<any>;
 }
 

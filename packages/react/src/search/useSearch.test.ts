@@ -23,7 +23,7 @@ let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
 
 const server = setupServer(
-  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, async () => {
+  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -31,7 +31,7 @@ const server = setupServer(
       },
     );
   }),
-  http.post('https://test-dsn.algolia.net/1/indexes/test/query', async () => {
+  http.post('https://test-dsn.algolia.net/1/indexes/test/query', () => {
     return HttpResponse.json(
       { data: searchResults },
       {

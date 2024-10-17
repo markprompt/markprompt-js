@@ -10,7 +10,6 @@ export interface ThemeConfig {
   markprompt?: MarkpromptConfig;
 }
 
-// eslint-disable-next-line no-redeclare
 const themeSearchMarkprompt: PluginModule = async () => ({
   name: '@markprompt/docusaurus-theme-search',
   getThemePath: () => '../dist/theme',

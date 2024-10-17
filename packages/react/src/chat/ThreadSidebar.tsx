@@ -39,9 +39,9 @@ export function ThreadSidebar(props: ThreadSidebarProps): JSX.Element {
             </span>
           </button>
         </li>
-        {sortedThreads.map(([threadId, { messages }], index) => (
+        {sortedThreads.map(([threadId, { messages }]) => (
           <li
-            key={`${threadId}-${index}`}
+            key={threadId}
             data-selected={selectedThreadId === threadId}
             className="MarkpromptChatThreadListItem"
           >

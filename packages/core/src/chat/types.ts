@@ -161,7 +161,7 @@ export interface SubmitChatOptions {
    * Context to use for template variable replacements in the system prompt.
    * @default {}
    **/
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   context?: any;
   /**
    * The OpenAI model to use.
@@ -253,7 +253,7 @@ export interface SubmitChatOptions {
    * Metadata to attach to the thread.
    * @default undefined
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   threadMetadata?: any;
   /**
    * A list of tools the model may call. Currently, only functions are

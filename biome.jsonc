@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -20,9 +20,8 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false,
+      "recommended": true,
       "a11y": {
-        "recommended": true,
         "noLabelWithoutControl": {
           "level": "error",
           "options": {
@@ -39,36 +38,48 @@
               "Textarea"
             ]
           }
-        }
+        },
+        "useSemanticElements": "off"
       },
       "complexity": {
-        "recommended": true,
         "noUselessUndefinedInitialization": "error",
         "useDateNow": "error"
       },
       "correctness": {
-        "recommended": true,
         "noUnusedFunctionParameters": "error",
-        "noUnusedImports": "error"
-      },
-      "performance": {
-        "recommended": true
-      },
-      "security": {
-        "recommended": true
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useArrayLiterals": "error",
+        "useHookAtTopLevel": "error"
       },
       "style": {
-        "recommended": true,
         "noDefaultExport": "warn",
         "noNonNullAssertion": "warn",
         "useCollapsedElseIf": "error",
         "useThrowOnlyError": "error"
+      },
+      "suspicious": {
+        "noEmptyBlockStatements": "error",
+        "noEvolvingTypes": "error",
+        "noExplicitAny": "warn",
+        "noMisplacedAssertion": "error",
+        "noReactSpecificProps": "off",
+        "noShadowRestrictedNames": "off",
+        "noSkippedTests": "warn",
+        "useAwait": "error",
+        "useErrorMessage": "error",
+        "useNumberToFixedDigitsArgument": "error"
       }
     }
   },
   "javascript": {
     "formatter": {
       "quoteStyle": "single"
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": true
     }
   }
 }

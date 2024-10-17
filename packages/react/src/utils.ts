@@ -4,7 +4,7 @@ import { toString } from 'mdast-util-to-string';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import type { MarkpromptOptions, View } from './types.js';
 
-export function isPresent<T>(t: T | undefined | null | void): t is T {
+export function isPresent<T>(t: T | undefined | null): t is T {
   return t !== undefined && t !== null;
 }
 
@@ -21,7 +21,6 @@ export function isIterable(obj: unknown): boolean {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return typeof (obj as any)[Symbol.iterator] === 'function';
 }
 
@@ -72,7 +71,6 @@ export function hasValueAtKey<K extends string | number | symbol, V>(
   k: K,
   v: V,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <T>(a: T & { [k in K]: any }): a is T & { [k in K]: V } => a[k] === v;
 }
 
