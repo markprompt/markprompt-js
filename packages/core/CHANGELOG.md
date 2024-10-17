@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.38.7
+
+### Patch Changes
+
+- [#444](https://github.com/markprompt/markprompt-js/pull/444) [`b66ee9b`](https://github.com/markprompt/markprompt-js/commit/b66ee9bcb0d62f116d2ea99798c9d504a4440995) Thanks [@nickrttn](https://github.com/nickrttn)! - Enable and fix Biome suspicious ruleset
+
 ## 0.38.6
 
 ### Patch Changes
