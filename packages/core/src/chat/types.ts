@@ -225,9 +225,7 @@ export interface SubmitChatOptions {
    * */
   agentSettings?: {
     type: string;
-    data: {
-      [key: string]: unknown;
-    };
+    data: { [key: string]: unknown };
   };
   /**
    * Whether or not to rerank retrieved context sections
@@ -310,7 +308,5 @@ export interface SubmitChatOptions {
    * Disable streaming and return the entire response at once.
    */
   stream?: boolean;
-  additionalMetadata?: {
-    [key: string]: unknown;
-  };
+  additionalMetadata?: { [key: string]: unknown };
 }

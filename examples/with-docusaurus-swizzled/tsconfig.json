@@ -1,6 +1,5 @@
 {
   "extends": "@docusaurus/tsconfig",
-  "references": [{ "path": "../../packages/docusaurus-theme-search" }],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
