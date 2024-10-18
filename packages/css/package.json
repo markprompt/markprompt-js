@@ -10,8 +10,5 @@
   "license": "MIT",
   "main": "markprompt.css",
   "types": "./index.d.ts",
-  "files": [
-    "markprompt.css",
-    "index.d.ts"
-  ]
+  "files": ["markprompt.css", "index.d.ts"]
 }
