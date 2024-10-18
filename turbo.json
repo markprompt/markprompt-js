@@ -13,9 +13,11 @@
     "//#lint:biome": {},
     "//#lint:biome:ci": {},
     "//#lint:css": {},
-    "//#lint:js": {},
+    "//#lint:js": {
+      "dependsOn": ["@markprompt/eslint-config#build"]
+    },
     "lint:js": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "@markprompt/eslint-config#build"]
     },
     "//#lint:md": {},
     "//#lint:ts": {},
