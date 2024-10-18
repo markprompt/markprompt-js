@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.54.11
+
+### Patch Changes
+
+- [`9d57632`](https://github.com/markprompt/markprompt-js/commit/9d576327a3b0bb9cbc75f309b1bd03944cc7f57c) Thanks [@nickrttn](https://github.com/nickrttn)! - Version bump for botched release
+
+- Updated dependencies [[`9d57632`](https://github.com/markprompt/markprompt-js/commit/9d576327a3b0bb9cbc75f309b1bd03944cc7f57c)]:
+  - @markprompt/core@0.38.9
+
 ## 0.54.10
 
 ### Patch Changes
