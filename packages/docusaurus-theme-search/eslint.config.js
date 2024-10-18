@@ -20,6 +20,6 @@ export default [
     },
   },
   ...configs.react,
-  { files: ['**/*.test.{js,ts}'], ...configs.vitest },
+  ...configs.vitest,
   ...configs.biome,
 ];

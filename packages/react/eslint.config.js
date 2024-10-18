@@ -1,5 +1,4 @@
 import { configs } from '@markprompt/eslint-config';
-import testingLibrary from 'eslint-plugin-testing-library';
 
 export default [
   ...configs.base(import.meta.dirname, [
@@ -18,7 +17,6 @@ export default [
     },
   },
   ...configs.react,
-  { files: ['**/*.test.{js,ts}'], ...configs.vitest },
-  { files: ['**/*.test.{js,ts}'], ...testingLibrary.configs['flat/react'] },
+  ...configs.vitest,
   ...configs.biome,
 ];

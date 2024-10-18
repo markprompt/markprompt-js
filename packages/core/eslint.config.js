@@ -7,7 +7,6 @@ export default [
     'src/*.test.ts',
     'src/*/*.test.ts',
   ]),
-  { files: ['**/*.test.{js,ts}'], ...configs.vitest },
   {
     rules: {
       '@typescript-eslint/consistent-indexed-object-style': [
@@ -16,5 +15,6 @@ export default [
       ],
     },
   },
+  ...configs.vitest,
   ...configs.biome,
 ];
