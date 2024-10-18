@@ -3,6 +3,7 @@ import type { Linter } from 'eslint';
 export const biome: Linter.Config[] = [
   // these rules have been superseded by Biome
   {
+    name: 'biome',
     rules: {
       // eslint builtin rules
       'constructor-super': 'off',

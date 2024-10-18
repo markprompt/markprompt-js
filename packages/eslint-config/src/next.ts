@@ -8,6 +8,7 @@ export const next: Linter.Config[] = [
     ignores: ['.next/'],
   },
   {
+    name: 'next',
     plugins: { '@next/next': fixupPluginRules(nextPlugin) },
     rules: {
       ...(nextPlugin.configs?.recommended as Linter.Config<Linter.RulesRecord>)

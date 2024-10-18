@@ -6,6 +6,7 @@ import globals from 'globals';
 
 export const react = [
   {
+    name: 'react',
     ...pluginReact.configs.flat.recommended,
     ...pluginReact.configs.flat['jsx-runtime'],
     ...importX.flatConfigs.react,
