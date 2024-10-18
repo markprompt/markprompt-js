@@ -25,6 +25,6 @@ without having to restart the server.
 If you don't have an existing search plugin installed in your Docusaurus
 project, you can use the Markprompt Docusaurus plugin without swizzling. Please
 refer to the
-[Docusaurus example](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus)
+[Docusaurus example](https://github.com/markprompt/markprompt-js/tree/main/examples/with-docusaurus)
 for a simpler configuration-based setup using the
 `@markprompt/docusaurus-theme-search` plugin.

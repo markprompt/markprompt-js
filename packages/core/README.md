@@ -11,7 +11,7 @@ abstractions on top of it.
   <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/core">
     <img alt="" src="https://badgen.net/npm/v/@markprompt/core">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/core/LICENSE">
+  <a aria-label="License" href="https://github.com/markprompt/markprompt-js/blob/main/packages/core/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/core">
   </a>
 </p>

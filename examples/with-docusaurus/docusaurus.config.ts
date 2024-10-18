@@ -59,7 +59,7 @@ const config = {
       },
       items: [
         {
-          href: 'https://github.com/motifland/markprompt-js/blob/main/examples/with-docusaurus',
+          href: 'https://github.com/markprompt/markprompt-js/blob/main/examples/with-docusaurus',
           label: 'GitHub',
           position: 'right',
         },

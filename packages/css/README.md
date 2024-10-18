@@ -7,7 +7,7 @@ Common CSS for [Markprompt](https://markprompt.com) components.
   <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/css">
     <img alt="" src="https://badgen.net/npm/v/@markprompt/css">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/css/LICENSE">
+  <a aria-label="License" href="https://github.com/markprompt/markprompt-js/blob/main/packages/css/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/css">
   </a>
 </p>

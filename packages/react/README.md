@@ -15,7 +15,7 @@ The `Markprompt.*` primitives offer you a fully customizable way to build your
 own UI and have full control.
 
 In combination with
-[`@markprompt/css`](https://github.com/motifland/markprompt-js/tree/main/packages/css),
+[`@markprompt/css`](https://github.com/markprompt/markprompt-js/tree/main/packages/css),
 the `<Markprompt />` component is a drop-in solution for most websites. You can
 also opt to provide your own styles, or override ours to your liking.
 
@@ -24,7 +24,7 @@ also opt to provide your own styles, or override ours to your liking.
   <a aria-label="NPM version" href="https://www.npmjs.com/package/@markprompt/react">
     <img alt="" src="https://badgen.net/npm/v/@markprompt/react">
   </a>
-  <a aria-label="License" href="https://github.com/motifland/markprompt-js/blob/main/packages/react/LICENSE">
+  <a aria-label="License" href="https://github.com/markprompt/markprompt-js/blob/main/packages/react/LICENSE">
     <img alt="" src="https://badgen.net/npm/license/@markprompt/react">
   </a>
 </p>

@@ -26,11 +26,11 @@ without having to restart the server.
 If you are using another search provider, you can:
 
 1. Use swizzling to combine both search plugins. Please refer to the
-   [Docusaurus example with swizzling](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-swizzled)
+   [Docusaurus example with swizzling](https://github.com/markprompt/markprompt-js/tree/main/examples/with-docusaurus-swizzled)
    for an example with Algolia.
 2. If using Algolia specifically, use the Markprompt Algolia integration. Please
    refer to the
-   [Docusaurus example with Algolia](https://github.com/motifland/markprompt-js/tree/main/examples/with-docusaurus-algolia)
+   [Docusaurus example with Algolia](https://github.com/markprompt/markprompt-js/tree/main/examples/with-docusaurus-algolia)
    for an example.
 
 ### Custom link mappings
