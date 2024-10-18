@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.38.8
+
+### Patch Changes
+
+- [#446](https://github.com/markprompt/markprompt-js/pull/446) [`ec9ac70`](https://github.com/markprompt/markprompt-js/commit/ec9ac7066dabc6a679290d5cfc15cf3c38c48909) Thanks [@nickrttn](https://github.com/nickrttn)! - Migrate to ESLint 9, flat config, and fix new linting issues
+
 ## 0.38.7
 
 ### Patch Changes
