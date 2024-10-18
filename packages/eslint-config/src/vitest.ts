@@ -2,6 +2,7 @@ import vitestPlugin from '@vitest/eslint-plugin';
 import testingLibrary from 'eslint-plugin-testing-library';
 
 export const vitest = [
+  { ignores: ['coverage/'] },
   {
     files: ['**/*.test.{js,jsx,ts,tsx}'],
     plugins: { vitest: vitestPlugin },
