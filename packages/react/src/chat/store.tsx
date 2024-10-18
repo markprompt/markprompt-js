@@ -257,7 +257,7 @@ export const createChatStore = ({
   projectKey,
   storeKey,
   apiUrl,
-  headers, // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  headers,
 }: CreateChatOptions) => {
   if (!projectKey) {
     throw new Error(
@@ -493,7 +493,6 @@ export const createChatStore = ({
                 });
               }
             } catch (error) {
-              // eslint-disable-next-line no-console
               console.error(error);
 
               if (isAbortError(error)) return;

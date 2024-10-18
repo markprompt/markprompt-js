@@ -7,6 +7,7 @@ export default [
     'vitest.setup.ts',
     'src/*.test.ts',
     'src/*/*.test.ts',
+    '__mocks__/*.ts',
   ]),
   {
     rules: {

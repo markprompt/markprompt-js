@@ -4,8 +4,7 @@ export default [
   ...configs.base(import.meta.dirname, [
     'eslint.config.js',
     'vitest.config.js',
-    'src/*.test.ts',
-    'src/*/*.test.ts',
+    'scripts/*.js',
   ]),
   {
     rules: {

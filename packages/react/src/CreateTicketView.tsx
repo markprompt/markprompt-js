@@ -98,7 +98,6 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       setError(undefined);
       form.current?.reset();
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
 
       setSubmittingCase(false);
