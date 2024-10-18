@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/eslint__eslintrc": "^2.1.2",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^20",
     "eslint": "^9.12.0"
   },
