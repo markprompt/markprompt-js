@@ -81,5 +81,23 @@
     "formatter": {
       "enabled": true
     }
-  }
+  },
+  "overrides": [
+    {
+      // these files must specify a default export
+      "include": [
+        "**/*/eslint.config.js",
+        "**/*/eslint.config.mjs",
+        "**/*/vite.config.ts",
+        "**/*/vitest.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ]
 }

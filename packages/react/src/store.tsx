@@ -156,7 +156,6 @@ Example:
 
               if (isAbortError(error)) return;
 
-              // eslint-disable-next-line no-console
               console.error({ error });
 
               return;

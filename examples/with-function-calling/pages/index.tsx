@@ -30,7 +30,6 @@ const tools: (OpenAI.ChatCompletionTool & ChatCompletionExecution)[] = [
       },
     },
     run: (args) => {
-      // eslint-disable-next-line no-console
       console.debug(
         'Calling get_current_weather with arguments',
         JSON.stringify(args, null, 2),
@@ -64,7 +63,6 @@ export default function IndexPage(): ReactElement {
 
       const submitChatOptions = {
         tools: tools.map((tool) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { run, ...rest } = tool;
           return rest;
         }),

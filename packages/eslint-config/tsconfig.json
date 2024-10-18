@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     /* Base Options: */
     "esModuleInterop": true,
@@ -17,13 +16,21 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
-    /* If NOT transpiling with TypeScript: */
-    "module": "preserve",
-    "noEmit": true,
+    /* If transpiling with TypeScript: */
+    "module": "NodeNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "sourceMap": true,
+
+    /* AND if you're building for a library: */
+    "declaration": true,
+
+    /* AND if you're building for a library in a monorepo: */
+    "composite": true,
+    "declarationMap": true,
 
     /* If your code doesn't run in the DOM: */
     "lib": ["es2022"]
   },
-  "include": ["eslint.config.mjs", "test/"],
-  "exclude": ["**/node_modules", "examples/", "packages/"]
+  "include": ["src/"]
 }

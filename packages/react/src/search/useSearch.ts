@@ -91,7 +91,6 @@ export function useSearch({
           ).then((result) => {
             if (debug) {
               // Show debug info return from Markprompt search API
-              // eslint-disable-next-line no-console
               console.debug(JSON.stringify(result?.debug, null, 2));
             }
             return result?.data || [];
@@ -118,7 +117,6 @@ export function useSearch({
         if (isAbortError(error)) return;
 
         // todo: surface errors to the user in the UI
-        // eslint-disable-next-line no-console
         console.error(error);
       } finally {
         if (controllerRef.current === controller) {
