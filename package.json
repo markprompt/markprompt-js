@@ -13,7 +13,7 @@
     "lint:biome:ci": "biome ci --reporter=github",
     "lint:ci": "turbo run lint:biome:ci lint:css lint:js lint:md lint:ts",
     "lint:css": "stylelint \"**/*.css\"",
-    "lint:js": "eslint . --ignore-pattern \"coverage/\" --ignore-pattern \"examples/\" --ignore-pattern \"packages/\"",
+    "lint:js": "eslint .",
     "lint:md": "remark . --frail",
     "lint:ts": "pnpm build:packages",
     "prepare": "husky",
