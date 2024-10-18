@@ -1,5 +1,12 @@
 # with-automatic-ticket-creation
 
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies [[`ec9ac70`](https://github.com/markprompt/markprompt-js/commit/ec9ac7066dabc6a679290d5cfc15cf3c38c48909)]:
+  - @markprompt/web@0.42.9
+
 ## 0.0.14
 
 ### Patch Changes
