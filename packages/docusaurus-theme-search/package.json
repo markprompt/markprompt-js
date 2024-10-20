@@ -12,10 +12,7 @@
   "type": "module",
   "exports": "./dist/index.js",
   "main": "dist/index.js",
-  "files": [
-    "dist",
-    "src/theme"
-  ],
+  "files": ["dist", "src/theme"],
   "scripts": {
     "build": "tsc --build",
     "lint:js": "eslint .",
