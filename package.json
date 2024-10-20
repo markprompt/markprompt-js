@@ -30,7 +30,7 @@
     "@manypkg/cli": "^0.21.4",
     "@markprompt/eslint-config": "workspace:*",
     "@vitest/coverage-v8": "^1.6.0",
-    "eslint": "^9.12.0",
+    "eslint": "^9.13.0",
     "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "msw": "^2.2.13",
