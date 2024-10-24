@@ -1,5 +1,15 @@
 # @markprompt/web
 
+## 0.42.11
+
+### Patch Changes
+
+- [`756af7a`](https://github.com/markprompt/markprompt-js/commit/756af7a723e838c90e469577a62fbf717376448f) Thanks [@nickrttn](https://github.com/nickrttn)! - Update Typescript
+
+- Updated dependencies [[`756af7a`](https://github.com/markprompt/markprompt-js/commit/756af7a723e838c90e469577a62fbf717376448f), [`d5ecf0d`](https://github.com/markprompt/markprompt-js/commit/d5ecf0d0537ae77af2fdce8b8dc4907716be94a7)]:
+  - @markprompt/core@0.38.10
+  - @markprompt/react@0.54.12
+
 ## 0.42.10
 
 ### Patch Changes
