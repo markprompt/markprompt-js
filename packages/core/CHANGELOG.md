@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.38.10
+
+### Patch Changes
+
+- [`756af7a`](https://github.com/markprompt/markprompt-js/commit/756af7a723e838c90e469577a62fbf717376448f) Thanks [@nickrttn](https://github.com/nickrttn)! - Update Typescript
+
+- [#450](https://github.com/markprompt/markprompt-js/pull/450) [`d5ecf0d`](https://github.com/markprompt/markprompt-js/commit/d5ecf0d0537ae77af2fdce8b8dc4907716be94a7) Thanks [@elliotdauber](https://github.com/elliotdauber)! - add analyzefile action
+
 ## 0.38.9
 
 ### Patch Changes
