@@ -70,7 +70,8 @@ export type SystemActionName =
   | 'LookupExamples'
   | 'Think'
   | 'Observe'
-  | 'ExtractFeedback';
+  | 'ExtractFeedback'
+  | 'AnalyzeFile';
 
 export interface SystemAction {
   function: {
