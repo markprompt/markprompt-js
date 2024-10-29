@@ -60,26 +60,31 @@ export async function* submitChat(
 
   const { signal, tools, toolChoice, additionalMetadata, ...cloneableOpts } =
     validOptions;
-  const { debug, policiesOptions, messageTagOptions, retrievalOptions, ...resolvedOptions } =
-    defaults(
-      {
-        ...cloneableOpts,
-        // Only include known tool properties
-        tools: tools?.map((tool) => ({
-          function: tool.function,
-          type: tool.type,
-        })),
-        toolChoice: toolChoice,
-      },
-      {
-        ...DEFAULT_OPTIONS,
-        // If assistantId is provided, do not set default values,
-        // as it will then override the assistant-provided values
-        // in case that allowClientSideOverrides is set for the
-        // assistant.
-        ...(validOptions.assistantId ? {} : DEFAULT_SUBMIT_CHAT_OPTIONS),
-      },
-    ) as BaseOptions & SubmitChatOptions;
+  const {
+    debug,
+    policiesOptions,
+    messageTagOptions,
+    retrievalOptions,
+    ...resolvedOptions
+  } = defaults(
+    {
+      ...cloneableOpts,
+      // Only include known tool properties
+      tools: tools?.map((tool) => ({
+        function: tool.function,
+        type: tool.type,
+      })),
+      toolChoice: toolChoice,
+    },
+    {
+      ...DEFAULT_OPTIONS,
+      // If assistantId is provided, do not set default values,
+      // as it will then override the assistant-provided values
+      // in case that allowClientSideOverrides is set for the
+      // assistant.
+      ...(validOptions.assistantId ? {} : DEFAULT_SUBMIT_CHAT_OPTIONS),
+    },
+  ) as BaseOptions & SubmitChatOptions;
 
   const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
     method: 'POST',
