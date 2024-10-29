@@ -29,6 +29,7 @@ const VALID_OPTIONS_KEYS: (keyof (SubmitChatOptions & BaseOptions))[] = [
   'model',
   'outputFormat',
   'policiesOptions',
+  'messageTagOptions',
   'presencePenalty',
   'redact',
   'retrievalOptions',

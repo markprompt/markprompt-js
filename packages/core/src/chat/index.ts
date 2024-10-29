@@ -60,7 +60,7 @@ export async function* submitChat(
 
   const { signal, tools, toolChoice, additionalMetadata, ...cloneableOpts } =
     validOptions;
-  const { debug, policiesOptions, retrievalOptions, ...resolvedOptions } =
+  const { debug, policiesOptions, messageTagOptions, retrievalOptions, ...resolvedOptions } =
     defaults(
       {
         ...cloneableOpts,
@@ -94,6 +94,7 @@ export async function* submitChat(
       debug,
       ...resolvedOptions,
       policies: policiesOptions,
+      messageTags: messageTagOptions,
       retrieval: retrievalOptions,
       additionalMetadata,
     }),

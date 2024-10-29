@@ -112,13 +112,33 @@ export interface PoliciesOptions {
   enabled?: boolean;
   /**
    * If true, use all policies added in the project.
-   * Otherwise, only use the ones excplicitly specified
+   * Otherwise, only use the ones explicitly specified
    * in the `ids` list.
    * @default true
    **/
   useAll?: boolean;
   /**
    * Only use specific policies for retrieval.
+   * @default []
+   **/
+  ids?: string[];
+}
+
+export interface MessageTagOptions {
+  /**
+   * If true, enable the use of message tags.
+   * @default true
+   **/
+  enabled?: boolean;
+  /**
+   * If true, use all message tags added in the project.
+   * Otherwise, only use the ones explicitly specified
+   * in the `ids` list.
+   * @default true
+   **/
+  useAll?: boolean;
+  /**
+   * Only use specific message tags for retrieval.
    * @default []
    **/
   ids?: string[];
@@ -132,7 +152,7 @@ export interface RetrievalOptions {
   enabled?: boolean;
   /**
    * If true, use all sources connected in the project.
-   * Otherwise, only use the ones excplicitly specified
+   * Otherwise, only use the ones explicitly specified
    * in the `ids` list.
    * @default true
    **/
@@ -173,6 +193,10 @@ export interface SubmitChatOptions {
    * Options for the use of policies.
    **/
   policiesOptions?: PoliciesOptions;
+  /**
+   * Options for the use of message tags.
+   **/
+  messageTagOptions?: MessageTagOptions;
   /**
    * Options for retrieval.
    **/
