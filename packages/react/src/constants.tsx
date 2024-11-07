@@ -1,13 +1,13 @@
 import type {
   AlgoliaDocSearchHit,
   SearchResult,
-} from "@markprompt/core/search";
-import type { FileSectionReference } from "@markprompt/core/types";
+} from '@markprompt/core/search';
+import type { FileSectionReference } from '@markprompt/core/types';
 
-import type { MarkpromptOptions } from "./types.js";
+import type { MarkpromptOptions } from './types.js';
 
 const removeFileExtension = (fileName: string): string => {
-  const lastDotIndex = fileName.lastIndexOf(".");
+  const lastDotIndex = fileName.lastIndexOf('.');
 
   if (lastDotIndex === -1) {
     return fileName;
@@ -17,13 +17,13 @@ const removeFileExtension = (fileName: string): string => {
 };
 
 const filePathToHref = (path: string): string => {
-  const lastDotIndex = path.lastIndexOf(".");
+  const lastDotIndex = path.lastIndexOf('.');
   let cleanPath = path;
   if (lastDotIndex >= 0) {
     cleanPath = path.substring(0, lastDotIndex);
   }
-  if (cleanPath.endsWith("/index")) {
-    cleanPath = cleanPath.replace(/\/index/gi, "");
+  if (cleanPath.endsWith('/index')) {
+    cleanPath = cleanPath.replace(/\/index/gi, '');
   }
   return cleanPath;
 };
@@ -47,14 +47,14 @@ function removeLeadHeading(text: string, heading?: string): string {
     return trimmedContent;
   }
   const pattern = new RegExp(`^#{1,}\\s${heading}\\s?`);
-  return trimContent(trimmedContent.replace(pattern, ""));
+  return trimContent(trimmedContent.replace(pattern, ''));
 }
 
 function createKWICSnippet(
   content: string,
   normalizedSearchQuery: string,
 ): string {
-  const trimmedContent = content.trim().replace(/\n/g, " ");
+  const trimmedContent = content.trim().replace(/\n/g, ' ');
   const index = trimmedContent
     .toLocaleLowerCase()
     .indexOf(normalizedSearchQuery);
@@ -67,9 +67,9 @@ function createKWICSnippet(
 
   const words = rawSnippet.split(/\s+/);
   if (words.length > 3) {
-    return words.slice(1, words.length - 1).join(" ");
+    return words.slice(1, words.length - 1).join(' ');
   }
-  return words.join(" ");
+  return words.join(' ');
 }
 
 const defaultPromptGetLabel = (reference: FileSectionReference): string => {
@@ -81,7 +81,7 @@ const defaultPromptGetLabel = (reference: FileSectionReference): string => {
     return reference.file.title;
   }
 
-  const fileName = reference.file.path.split("/").pop();
+  const fileName = reference.file.path.split('/').pop();
   if (fileName) return removeFileExtension(fileName);
 
   return reference.file?.path;
@@ -90,7 +90,7 @@ const defaultPromptGetLabel = (reference: FileSectionReference): string => {
 const isAlgoliaSearchResult = (
   result: FileSectionReference | SearchResult | AlgoliaDocSearchHit,
 ): result is AlgoliaDocSearchHit => {
-  return "_highlightResult" in result;
+  return '_highlightResult' in result;
 };
 
 const defaultGetHref = (
@@ -100,9 +100,9 @@ const defaultGetHref = (
     return result.url;
   }
 
-  let path = "";
+  let path = '';
 
-  if (result.file.source.type === "github") {
+  if (result.file.source.type === 'github') {
     // If it's a repo, it's probably a file with an extension,
     // and names such as "index".
     path = filePathToHref(result.file.path);
@@ -128,11 +128,11 @@ const defaultGetSearchResultHeading = (
     return result.hierarchy?.lvl0 || undefined;
   }
 
-  if (result.matchType === "title") {
+  if (result.matchType === 'title') {
     return undefined;
   }
   const leadHeading = result.meta?.leadHeading;
-  if (result.matchType === "leadHeading" && leadHeading?.value) {
+  if (result.matchType === 'leadHeading' && leadHeading?.value) {
     return result.file.title;
   }
   return leadHeading?.value || result.file.title;
@@ -146,12 +146,12 @@ const defaultGetSearchResultTitle = (
     return result.hierarchy?.lvl1 || undefined;
   }
 
-  if (result.matchType === "title") {
+  if (result.matchType === 'title') {
     return result.file.title;
   }
 
   const leadHeading = result.meta?.leadHeading;
-  if (result.matchType === "leadHeading" && leadHeading?.value) {
+  if (result.matchType === 'leadHeading' && leadHeading?.value) {
     return leadHeading.value;
   }
 
@@ -159,7 +159,7 @@ const defaultGetSearchResultTitle = (
   // Fast and hacky way to remove the lead heading from
   // the content, which we don't want to be part of the snippet.
   const trimmedContent = removeLeadHeading(
-    result.snippet || "",
+    result.snippet || '',
     result.meta?.leadHeading?.value,
   );
 
@@ -177,37 +177,37 @@ const defaultGetSearchResultSubtitle = (
 };
 
 export const DEFAULT_MARKPROMPT_OPTIONS = {
-  display: "sheet",
-  layout: "panels",
-  apiUrl: "https://api.markprompt.com",
+  display: 'sheet',
+  layout: 'panels',
+  apiUrl: 'https://api.markprompt.com',
   branding: {
     show: true,
-    type: "plain",
+    type: 'plain',
   },
   close: {
-    label: "Close Markprompt",
+    label: 'Close Markprompt',
     visible: true,
     hasIcon: true,
   },
   description: {
     hide: true,
-    text: "Markprompt",
+    text: 'Markprompt',
   },
   feedback: {
     enabled: true,
     votes: true,
     csat: true,
     csatReason: true,
-    heading: "Was this response helpful?",
-    headingCSAT: "How helpful was this?",
-    headingCSATReason: "Could you tell us more?",
-    thankYouCSATReason: "Thank you!",
+    heading: 'Was this response helpful?',
+    headingCSAT: 'How helpful was this?',
+    headingCSATReason: 'Could you tell us more?',
+    thankYouCSATReason: 'Thank you!',
   },
   chat: {
     enabled: true,
-    label: "Ask AI",
-    tabLabel: "Ask AI",
-    placeholder: "Ask AI…",
+    label: 'Ask AI',
+    tabLabel: 'Ask AI',
+    placeholder: 'Ask AI…',
     history: true,
     showCopy: true,
     errorText: () => {
@@ -223,8 +223,8 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     },
   },
   references: {
-    loadingText: "Fetching context…",
-    heading: "Related articles",
+    loadingText: 'Fetching context…',
+    heading: 'Related articles',
     getHref: defaultGetHref,
     getLabel: defaultPromptGetLabel,
     filter: undefined,
@@ -235,24 +235,24 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     getHeading: defaultGetSearchResultHeading,
     getTitle: defaultGetSearchResultTitle,
     getSubtitle: defaultGetSearchResultSubtitle,
-    label: "Search documentation",
-    tabLabel: "Search",
-    placeholder: "Search documentation",
+    label: 'Search documentation',
+    tabLabel: 'Search',
+    placeholder: 'Search documentation',
   },
   trigger: {
-    label: "Ask AI",
-    placeholder: "Ask AI",
+    label: 'Ask AI',
+    placeholder: 'Ask AI',
     floating: true,
     customElement: false,
   },
   title: {
     hide: true,
-    text: "Ask AI",
+    text: 'Ask AI',
   },
   integrations: {
     createTicket: {
       enabled: false,
-      provider: "zendesk",
+      provider: 'zendesk',
       prompt: `You act as an expert summarizer.
 
 - You must write in the first person, as if you were the user writing a support ticket. Failure to do so will result in severe penalties.
@@ -267,37 +267,37 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
 Example:
 - I am having an issue with setting up my payment processor.
 - I can no longer log in to my account.`,
-      messageText: "Need more help?",
+      messageText: 'Need more help?',
       messageButton: {
-        text: "Create a support ticket",
+        text: 'Create a support ticket',
         hasIcon: true,
         hasText: true,
       },
       form: {
-        emailLabel: "Email",
-        emailPlaceholder: "",
-        nameLabel: "Name",
-        namePlaceholder: "",
-        submitLabel: "Submit case",
-        summaryLabel: "How can we help?",
-        summaryLoading: "Generating summary…",
-        summaryPlaceholder: "Please describe your issue",
-        ticketCreatedError: "An error occurred while creating the case.",
-        ticketCreatedOk: "Thank you! We will get back to you shortly.",
-        uploadFileLabel: "Attach a file",
+        emailLabel: 'Email',
+        emailPlaceholder: '',
+        nameLabel: 'Name',
+        namePlaceholder: '',
+        submitLabel: 'Submit case',
+        summaryLabel: 'How can we help?',
+        summaryLoading: 'Generating summary…',
+        summaryPlaceholder: 'Please describe your issue',
+        ticketCreatedError: 'An error occurred while creating the case.',
+        ticketCreatedOk: 'Thank you! We will get back to you shortly.',
+        uploadFileLabel: 'Attach a file',
         hasFileUploadInput: false,
         maxFileSizeError:
-          "Total file size is too large to upload. Maximum allowed size is 4.5MB.",
+          'Total file size is too large to upload. Maximum allowed size is 4.5MB.',
       },
       chat: {
-        title: "Get help",
-        subtitle: "How can we help?",
-        placeholder: ["I am having trouble with...", "Send a message"],
-        openTicketFormLabel: "Create case",
-        openTicketFormLoading: "Creating case…",
+        title: 'Get help',
+        subtitle: 'How can we help?',
+        placeholder: ['I am having trouble with...', 'Send a message'],
+        openTicketFormLabel: 'Create case',
+        openTicketFormLoading: 'Creating case…',
         disclaimerView: {
           message:
-            "Answers generated with AI. Consider checking important information.",
+            'Answers generated with AI. Consider checking important information.',
         },
       },
     },

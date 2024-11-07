@@ -4,25 +4,25 @@ import {
   useMemo,
   useState,
   type ComponentType,
-} from "react";
+} from 'react';
 
-import { ChatView } from "./chat/ChatView.js";
-import { ChatProvider, useChatStore } from "./chat/store.js";
+import { ChatView } from './chat/ChatView.js';
+import { ChatProvider, useChatStore } from './chat/store.js';
 import {
   CreateTicketView,
   CustomCaseFormRenderer,
-} from "./CreateTicketView.js";
-import { ChevronLeftIcon, LoadingIcon } from "./icons.js";
-import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from "./index.js";
-import type { TicketDeflectionFormView } from "./Markprompt.js";
+} from './CreateTicketView.js';
+import { ChevronLeftIcon, LoadingIcon } from './icons.js';
+import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from './index.js';
+import type { TicketDeflectionFormView } from './Markprompt.js';
 import {
   GlobalStoreProvider,
   useGlobalStore,
   type GlobalOptions,
-} from "./store.js";
-import { NavigationMenu } from "./ui/navigation-menu.js";
-import { RichText } from "./ui/rich-text.js";
-import { useDefaults } from "./useDefaults.js";
+} from './store.js';
+import { NavigationMenu } from './ui/navigation-menu.js';
+import { RichText } from './ui/rich-text.js';
+import { useDefaults } from './useDefaults.js';
 
 interface TicketDeflectionFormProps {
   isStandalone?: boolean;
@@ -37,7 +37,7 @@ export function TicketDeflectionForm(
 ): JSX.Element {
   const {
     forceThreadId,
-    defaultView = "chat",
+    defaultView = 'chat',
     showBackLink,
     isStandalone,
     CustomCaseForm,
@@ -73,7 +73,7 @@ export function TicketDeflectionForm(
 
   const placeholder = useMemo(() => {
     const _placeholder = integrations?.createTicket?.chat?.placeholder;
-    if (typeof _placeholder === "string") {
+    if (typeof _placeholder === 'string') {
       return _placeholder;
     }
     if (messages.length > 0) {
@@ -94,14 +94,14 @@ export function TicketDeflectionForm(
     }
 
     if (!messages || messages.length === 0 || !threadId) {
-      setView("ticket");
+      setView('ticket');
       return;
     }
 
     setIsCreatingTicketSummary(true);
     await createTicketSummary?.(threadId, messages);
     setIsCreatingTicketSummary(false);
-    setView("ticket");
+    setView('ticket');
   }, [
     integrations?.createTicket?.enabled,
     messages,
@@ -113,7 +113,7 @@ export function TicketDeflectionForm(
     <CustomCaseFormRenderer CustomCaseForm={CustomCaseForm} />
   ) : (
     <CreateTicketView
-      handleGoBack={() => setView("chat")}
+      handleGoBack={() => setView('chat')}
       includeNav={false}
       includeCTA={true}
       forceThreadId={threadId}
@@ -123,7 +123,7 @@ export function TicketDeflectionForm(
   return (
     <div
       className="MarkpromptTicketDeflectionForm"
-      data-expanded={(messages && messages.length > 0) || view === "ticket"}
+      data-expanded={(messages && messages.length > 0) || view === 'ticket'}
       data-animate-shrink={didTransitionViewOnce}
     >
       {!isStandalone && (
@@ -133,8 +133,8 @@ export function TicketDeflectionForm(
           close={{ visible: true, hasIcon: true }}
         />
       )}
-      <div style={{ flexGrow: 1, overflow: "hidden" }}>
-        {view === "chat" ? (
+      <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+        {view === 'chat' ? (
           <ChatView
             apiUrl={apiUrl}
             activeView="chat"
@@ -156,13 +156,13 @@ export function TicketDeflectionForm(
           caseForm
         )}
       </div>
-      {(view === "chat" || showBackLink) && (
+      {(view === 'chat' || showBackLink) && (
         <div className="MarkpromptDialogFooter">
-          {view === "chat" ? (
+          {view === 'chat' ? (
             <>
               <RichText>
                 {integrations?.createTicket?.chat?.disclaimerView?.message ||
-                  ""}
+                  ''}
               </RichText>
               <button
                 className="MarkpromptButton"
@@ -172,12 +172,12 @@ export function TicketDeflectionForm(
                 onClick={() => handleCreateTicketSummary()}
               >
                 {isCreatingTicketSummary
-                  ? integrations?.createTicket?.chat?.openTicketFormLoading ??
+                  ? (integrations?.createTicket?.chat?.openTicketFormLoading ??
                     DEFAULT_MARKPROMPT_OPTIONS.integrations.createTicket.chat
-                      .openTicketFormLoading
-                  : integrations?.createTicket?.chat?.openTicketFormLabel ??
+                      .openTicketFormLoading)
+                  : (integrations?.createTicket?.chat?.openTicketFormLabel ??
                     DEFAULT_MARKPROMPT_OPTIONS.integrations.createTicket.chat
-                      .openTicketFormLabel}
+                      .openTicketFormLabel)}
                 {isCreatingTicketSummary && (
                   <LoadingIcon
                     style={{ width: 16, height: 16 }}
@@ -189,15 +189,15 @@ export function TicketDeflectionForm(
           ) : (
             <div
               style={{
-                display: "flex",
-                justifyItems: "start",
-                marginLeft: "-0.5rem",
+                display: 'flex',
+                justifyItems: 'start',
+                marginLeft: '-0.5rem',
               }}
             >
               <button
                 className="MarkpromptIconLink"
                 type="button"
-                onClick={() => setView("chat")}
+                onClick={() => setView('chat')}
               >
                 <ChevronLeftIcon
                   className="MarkpromptButtonIcon"
@@ -216,7 +216,7 @@ export function TicketDeflectionForm(
 export interface StandaloneTicketDeflectionFormProps
   extends Pick<
     MarkpromptOptions,
-    "apiUrl" | "chat" | "feedback" | "integrations" | "references"
+    'apiUrl' | 'chat' | 'feedback' | 'integrations' | 'references'
   > {
   projectKey: string;
 }
