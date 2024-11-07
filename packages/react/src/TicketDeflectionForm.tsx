@@ -171,7 +171,13 @@ export function TicketDeflectionForm(
                 type="button"
                 onClick={() => handleCreateTicketSummary()}
               >
-                {isCreatingTicketSummary ? 'Creating case...' : 'Create case'}
+                {isCreatingTicketSummary
+                  ? (integrations?.createTicket?.chat?.openTicketFormLoading ??
+                    DEFAULT_MARKPROMPT_OPTIONS.integrations.createTicket.chat
+                      .openTicketFormLoading)
+                  : (integrations?.createTicket?.chat?.openTicketFormLabel ??
+                    DEFAULT_MARKPROMPT_OPTIONS.integrations.createTicket.chat
+                      .openTicketFormLabel)}
                 {isCreatingTicketSummary && (
                   <LoadingIcon
                     style={{ width: 16, height: 16 }}

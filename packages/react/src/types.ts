@@ -377,6 +377,16 @@ export interface CreateTicketIntegrationChatOptions {
    */
   disclaimerView?: DisclaimerViewProps;
   /**
+   * Open ticket form label
+   * @default "Create case"
+   */
+  openTicketFormLabel?: string;
+  /**
+   * Open ticket form loading label
+   * @default "Creating case…"
+   */
+  openTicketFormLoading?: string;
+  /**
    * Label for the submit button
    * @default "Send"
    **/

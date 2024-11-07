@@ -293,6 +293,8 @@ Example:
         title: 'Get help',
         subtitle: 'How can we help?',
         placeholder: ['I am having trouble with...', 'Send a message'],
+        openTicketFormLabel: 'Create case',
+        openTicketFormLoading: 'Creating case…',
         disclaimerView: {
           message:
             'Answers generated with AI. Consider checking important information.',
