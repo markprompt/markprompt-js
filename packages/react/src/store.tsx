@@ -53,7 +53,12 @@ interface State {
 
   tickets?: {
     summaryByThreadId: { [threadId: string]: ChatViewMessage };
+    subjectByThreadId: { [threadId: string]: ChatViewMessage };
     createTicketSummary: (
+      threadId: string,
+      messages: ChatViewMessage[],
+    ) => void;
+    createTicketSubject: (
       threadId: string,
       messages: ChatViewMessage[],
     ) => void;
@@ -71,6 +76,7 @@ export const createGlobalStore = (options: GlobalOptions): GlobalStore => {
       ...(options.integrations?.createTicket && {
         tickets: {
           summaryByThreadId: {},
+          subjectByThreadId: {},
           createTicketSummary: async (
             threadId: string,
             messages: ChatViewMessage[],
@@ -164,6 +170,101 @@ Example:
             set((state) => {
               if (!state.tickets) return;
               state.tickets.summaryByThreadId[threadId].state = 'done';
+            });
+          },
+          createTicketSubject: async (
+            threadId: string,
+            messages: ChatViewMessage[],
+          ) => {
+            const subjectId = crypto.randomUUID();
+
+            set((state) => {
+              if (!state.tickets) return;
+              state.tickets.subjectByThreadId[threadId] = {
+                id: subjectId,
+                references: [],
+                state: 'indeterminate',
+              };
+            });
+
+            const options = {
+              model: 'gpt-4o-mini' as const,
+              threadId: threadId,
+              apiUrl: get().options.apiUrl,
+              headers: get().options.headers,
+              systemPrompt:
+                get().options?.integrations?.createTicket?.prompt ??
+                `You act as an expert summarizer.
+
+- Your task is to generate a 1-line summary of the user's input only, for an email subject.
+- You should write the subject as if you were the user writing an email subject for a support team.
+- You focus on the user message, and omit assistant messages unless strictly needed.
+- You must not include any references to creating a support ticket.
+- You must write a standalone summary, with no greetings or other extra text.
+- The summary must not be longer than the user messages. You will be penalized if it is longer.
+- You must output your response in plain text.
+- You must stricly adhere to these rules to avoid penalties.
+
+Example:
+- Issue with setting up my payment processor.
+- Can no longer log in to my account.`,
+              excludeFromInsights: true,
+              doNotInjectContext: true,
+              allowFollowUpQuestions: true,
+            };
+
+            const conversation = toValidApiMessages(messages)
+              .map((m) => {
+                return `${m.role === 'user' ? 'User' : 'Assistant'}:\n\n${m.content}`;
+              })
+              .join('\n\n==============================\n\n');
+
+            const apiMessages = [
+              {
+                role: 'user',
+                content: `Full transcript:\n\n${conversation}\n\nSummary of my conversation with the assistant:`,
+              } as const,
+            ] as ChatCompletionMessageParam[];
+
+            set((state) => {
+              if (!state.tickets) return;
+              state.tickets.subjectByThreadId[threadId].state = 'preload';
+            });
+
+            try {
+              for await (const chunk of submitChat(
+                apiMessages,
+                get().options.projectKey,
+                options,
+              )) {
+                set((state) => {
+                  if (!state.tickets) return;
+                  state.tickets.subjectByThreadId[threadId] = {
+                    ...state.tickets?.subjectByThreadId[threadId],
+                    state: 'streaming-answer',
+                    ...chunk,
+                  };
+                });
+              }
+            } catch (error) {
+              set((state) => {
+                if (!state.tickets) return;
+                state.tickets.subjectByThreadId[threadId] = {
+                  ...state.tickets?.subjectByThreadId[threadId],
+                  state: 'cancelled',
+                };
+              });
+
+              if (isAbortError(error)) return;
+
+              console.error({ error });
+
+              return;
+            }
+
+            set((state) => {
+              if (!state.tickets) return;
+              state.tickets.subjectByThreadId[threadId].state = 'done';
             });
           },
         },

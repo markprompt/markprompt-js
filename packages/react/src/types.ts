@@ -609,6 +609,16 @@ export interface CreateTicketIntegrationFormOptions {
    * */
   emailPlaceholder: string;
   /**
+   * Label for the subject input
+   * @default "Subject"
+   */
+  subjectLabel: string;
+  /**
+   * Placeholder for the subject input
+   * @default ""
+   */
+  subjectPlaceholder: string;
+  /**
    * Label for the summary input
    * @default "How can we help?"
    */

@@ -3,17 +3,9 @@ import 'randomuuid';
 
 import '@markprompt/css';
 import './style.css';
-import {
-  markprompt,
-  type MarkpromptOptions,
-  openMarkprompt,
-} from '@markprompt/web';
+import { markprompt, type MarkpromptOptions } from '@markprompt/web';
 
 const el = document.querySelector('#markprompt');
-
-setTimeout(() => {
-  openMarkprompt('ticket');
-}, 200);
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
@@ -75,6 +67,8 @@ if (el && el instanceof HTMLElement) {
           maxFileSizeError: 'File size should be less than 4.5MB',
           submitLabel: 'Submit case',
           summaryLabel: 'Summary',
+          subjectLabel: 'Subject',
+          subjectPlaceholder: '',
           summaryLoading: 'Generating summary…',
           summaryPlaceholder: 'Please describe your issue',
           ticketCreatedError: 'An error occurred while creating the case',

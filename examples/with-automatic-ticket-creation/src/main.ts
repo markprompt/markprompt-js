@@ -173,6 +173,8 @@ if (el && el instanceof HTMLElement) {
           namePlaceholder: 'Jane Doe',
           maxFileSizeError: 'File size should be less than 4.5MB',
           submitLabel: 'Submit case',
+          subjectLabel: 'Subject',
+          subjectPlaceholder: '',
           summaryLabel: 'Summary',
           summaryLoading: 'Generating summary…',
           summaryPlaceholder: 'Please describe your issue',

@@ -279,6 +279,8 @@ Example:
         nameLabel: 'Name',
         namePlaceholder: '',
         submitLabel: 'Submit case',
+        subjectLabel: 'Subject',
+        subjectPlaceholder: '',
         summaryLabel: 'How can we help?',
         summaryLoading: 'Generating summary…',
         summaryPlaceholder: 'Please describe your issue',
