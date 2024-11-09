@@ -62,10 +62,10 @@ if (el && el instanceof HTMLElement) {
       createTicket: {
         enabled: true,
         provider: "zendesk",
-        // user: {
-        //   name: "Jane Doe",
-        //   email: "jane@doe.com",
-        // },
+        user: {
+          name: "Jane Doe",
+          email: "jane@doe.com",
+        },
         form: {
           hasFileUploadInput: true,
           emailLabel: "Email",
