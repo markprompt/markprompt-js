@@ -54,12 +54,16 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
+  const generatedSubject = useGlobalStore((state) =>
+    threadId ? state.tickets?.subjectByThreadId[threadId] : undefined,
+  );
 
   const messages = useChatStore((state) =>
     threadId ? state.messagesByThreadId[threadId]?.messages : undefined,
   );
 
   const [message, setMessage] = useState<string>('');
+  const [subject, setSubject] = useState<string>('');
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
 
   const [result, setResult] = useState<Response>();
@@ -129,6 +133,13 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     setMessage(getTranscript(messages, summary?.content));
   }, [summary?.content, messages]);
 
+  useEffect(() => {
+    if (!generatedSubject?.content) {
+      return;
+    }
+    setSubject(generatedSubject.content);
+  }, [generatedSubject?.content]);
+
   return (
     <div className="MarkpromptCreateTicketView">
       {includeNav ? (
@@ -186,6 +197,24 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               readOnly={!!createTicketOptions?.user?.email}
               disabled={isSubmittingCase}
               placeholder={createTicketOptions?.form?.emailPlaceholder}
+            />
+          </div>
+          <div className="MarkpromptFormGroup">
+            <label htmlFor="subject" id="subject-label">
+              {createTicketOptions?.form?.subjectLabel || 'Description'}
+            </label>
+            <input
+              name="subject"
+              id="subject"
+              value={subject}
+              onChange={(event) => {
+                setSubject(event.target.value);
+              }}
+              placeholder={createTicketOptions?.form?.subjectPlaceholder}
+              required
+              aria-labelledby="subject-label"
+              disabled={isSubmittingCase}
+              style={{ color: 'var(--markprompt-foreground)' }}
             />
           </div>
           <div className="MarkpromptFormGroup MarkpromptFormGroupGrow">
@@ -407,7 +436,7 @@ function getTranscript(
 }
 
 export function CustomCaseFormRenderer(props: {
-  CustomCaseForm: ComponentType<{ summary?: string }>;
+  CustomCaseForm: ComponentType<{ summary?: string; subject?: string }>;
 }): JSX.Element {
   const { CustomCaseForm } = props;
 
@@ -416,6 +445,10 @@ export function CustomCaseFormRenderer(props: {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
+  const generatedSubject = useGlobalStore((state) =>
+    threadId ? state.tickets?.subjectByThreadId[threadId] : undefined,
+  );
+
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
@@ -425,5 +458,10 @@ export function CustomCaseFormRenderer(props: {
     setMessage(getTranscript(messages, summary?.content));
   }, [summary?.content, messages]);
 
-  return <CustomCaseForm summary={message} />;
+  return (
+    <CustomCaseForm
+      summary={message}
+      subject={generatedSubject?.content ?? ''}
+    />
+  );
 }
