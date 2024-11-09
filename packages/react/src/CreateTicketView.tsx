@@ -4,10 +4,10 @@ import {
   offset,
   shift,
   useFloating,
-} from "@floating-ui/react-dom";
-import { AccessibleIcon } from "@radix-ui/react-accessible-icon";
-import { clsx } from "clsx";
-import { useSelect } from "downshift";
+} from '@floating-ui/react-dom';
+import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
+import { clsx } from 'clsx';
+import { useSelect } from 'downshift';
 import {
   useEffect,
   useId,
@@ -16,16 +16,16 @@ import {
   useState,
   type ComponentType,
   type FormEvent,
-} from "react";
+} from 'react';
 
-import { toValidApiMessages } from "./chat/utils.js";
-import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from "./icons.js";
+import { toValidApiMessages } from './chat/utils.js';
+import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import {
   useChatStore,
   type ChatViewMessage,
   type CustomField,
-} from "./index.js";
-import { useGlobalStore } from "./store.js";
+} from './index.js';
+import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
@@ -59,7 +59,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     threadId ? state.messagesByThreadId[threadId]?.messages : undefined,
   );
 
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
 
   const [result, setResult] = useState<Response>();
@@ -91,7 +91,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
       const data = new FormData(event.currentTarget);
       // copy a field for legacy reasons
       const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
-        method: "POST",
+        method: 'POST',
         // don't pass a Content-Type header here, the browser will
         // generate a correct header which includes the boundary.
         body: data,
@@ -114,7 +114,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         setError(error);
       } else {
         setError(
-          new Error("Something went wrong while submitting your case", {
+          new Error('Something went wrong while submitting your case', {
             cause: error,
           }),
         );
@@ -160,7 +160,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
           <div className="MarkpromptFormGroup">
             <label htmlFor="userName">
-              {createTicketOptions?.form?.nameLabel || "Name"}
+              {createTicketOptions?.form?.nameLabel || 'Name'}
             </label>
             <input
               required
@@ -175,7 +175,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
           <div className="MarkpromptFormGroup">
             <label htmlFor="email">
-              {createTicketOptions?.form?.emailLabel || "Email"}
+              {createTicketOptions?.form?.emailLabel || 'Email'}
             </label>
             <input
               required
@@ -190,7 +190,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           </div>
           <div className="MarkpromptFormGroup MarkpromptFormGroupGrow">
             <label htmlFor="summary" id="summary-label">
-              {createTicketOptions?.form?.summaryLabel || "Description"}
+              {createTicketOptions?.form?.summaryLabel || 'Description'}
             </label>
             <textarea
               name="summary"
@@ -201,8 +201,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
               placeholder={
                 summary?.state &&
-                summary.state !== "done" &&
-                summary?.state !== "cancelled"
+                summary.state !== 'done' &&
+                summary?.state !== 'cancelled'
                   ? createTicketOptions?.form?.summaryLoading
                   : createTicketOptions?.form?.summaryPlaceholder
               }
@@ -212,10 +212,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               style={{
                 color:
                   summary?.state &&
-                  summary.state !== "done" &&
-                  summary?.state !== "cancelled"
-                    ? "var(--markprompt-mutedForeground)"
-                    : "var(--markprompt-foreground)",
+                  summary.state !== 'done' &&
+                  summary?.state !== 'cancelled'
+                    ? 'var(--markprompt-mutedForeground)'
+                    : 'var(--markprompt-foreground)',
               }}
             />
           </div>
@@ -225,7 +225,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           {createTicketOptions?.form?.hasFileUploadInput && (
             <div className="MarkpromptFormGroup">
               <label htmlFor="files">
-                {createTicketOptions?.form?.uploadFileLabel || "Attach a file"}
+                {createTicketOptions?.form?.uploadFileLabel || 'Attach a file'}
               </label>
               <input
                 type="file"
@@ -272,7 +272,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                 data-variant="primary"
                 disabled={isSubmittingCase || totalFileSize >= 4.5}
               >
-                {createTicketOptions?.form?.submitLabel || "Send message"}
+                {createTicketOptions?.form?.submitLabel || 'Send message'}
                 {isSubmittingCase && (
                   <LoadingIcon
                     style={{ width: 16, height: 16 }}
@@ -297,7 +297,7 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
 
   // refactor this to use flatMap instead of reduce
   const flatItems = useMemo(
-    () => customField.items.flatMap((x) => ("items" in x ? x.items : x)),
+    () => customField.items.flatMap((x) => ('items' in x ? x.items : x)),
     [customField.items],
   );
 
@@ -314,7 +314,7 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
 
   const { refs, floatingStyles } = useFloating({
     open: isOpen,
-    placement: "bottom-start",
+    placement: 'bottom-start',
     middleware: [offset(8), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
@@ -339,13 +339,13 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
         <button
           type="button"
           className={clsx(
-            "MarkpromptSelectToggle",
-            "MarkpromptSelectToggleWithIcon",
+            'MarkpromptSelectToggle',
+            'MarkpromptSelectToggleWithIcon',
             { MarkpromptSelectToggleMuted: !selectedItem },
           )}
           {...getToggleButtonProps({ ref: refs.setReference })}
         >
-          {selectedItem?.label || "Select…"}{" "}
+          {selectedItem?.label || 'Select…'}{' '}
           <ChevronDownIcon width={16} height={16} aria-hidden />
         </button>
 
@@ -356,7 +356,7 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
           style={floatingStyles}
         >
           {customField.items.map((item) => {
-            if ("items" in item) {
+            if ('items' in item) {
               return (
                 <li key={item.label}>
                   <strong className="MarkpromptSelectGroupLabel">
@@ -400,10 +400,10 @@ function getTranscript(
 ) {
   const transcript = toValidApiMessages(messages)
     .map((m) => {
-      return `${m.role === "user" ? "Me" : "AI"}: ${m.content}`;
+      return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
     })
-    .join("\n\n");
-  return `${summary || ""}\n\n---\n\nFull transcript:\n\n${transcript}`;
+    .join('\n\n');
+  return `${summary || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
 }
 
 export function CustomCaseFormRenderer(props: {
@@ -416,7 +416,7 @@ export function CustomCaseFormRenderer(props: {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     if (!messages || messages.length === 0) {
