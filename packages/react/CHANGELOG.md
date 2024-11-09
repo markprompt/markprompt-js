@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.55.1
+
+### Patch Changes
+
+- [#457](https://github.com/markprompt/markprompt-js/pull/457) [`2d24ffe`](https://github.com/markprompt/markprompt-js/commit/2d24ffea22f18fcb9e20924d0727d080b19032a9) Thanks [@michaelfester](https://github.com/michaelfester)! - Add ticket summary
+
 ## 0.55.0
 
 ### Minor Changes
