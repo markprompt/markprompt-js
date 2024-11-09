@@ -35,7 +35,9 @@
       "import": "./dist/utils.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
@@ -54,6 +56,6 @@
   },
   "devDependencies": {
     "@types/defaults": "^1.0.6",
-    "msw": "^2.2.13"
+    "msw": "^2.6.2"
   }
 }

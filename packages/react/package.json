@@ -12,7 +12,9 @@
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "dev": "tsc --build tsconfig.build.json --watch",
@@ -58,10 +60,10 @@
     "@types/react": "^18.3",
     "@types/react-dom": "^18.2",
     "@vitejs/plugin-react-swc": "^3.6.0",
-    "msw": "^2.2.13",
+    "msw": "^2.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^5.1.1"
   },
   "peerDependencies": {
     "react": "^18",
