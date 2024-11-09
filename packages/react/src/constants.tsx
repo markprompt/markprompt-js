@@ -253,20 +253,6 @@ export const DEFAULT_MARKPROMPT_OPTIONS = {
     createTicket: {
       enabled: false,
       provider: 'zendesk',
-      prompt: `You act as an expert summarizer.
-
-- You must write in the first person, as if you were the user writing a support ticket. Failure to do so will result in severe penalties.
-- Your task is to generate a short and precise summary of the user's input only.
-- You focus on the user message, and omit assistant messages unless strictly needed.
-- You must not include any references to creating a support ticket.
-- You must write a standalone summary, with no greetings or other extra text.
-- The summary must not be longer than the user messages. You will be penalized if it is longer.
-- You must output your response in plain text.
-- You must stricly adhere to these rules to avoid penalties.
-
-Example:
-- I am having an issue with setting up my payment processor.
-- I can no longer log in to my account.`,
       messageText: 'Need more help?',
       messageButton: {
         text: 'Create a support ticket',

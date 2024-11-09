@@ -1,0 +1,14 @@
+{
+  "console.log": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "con",
+    "body": ["console.log(\"$1\")"],
+    "description": "console.log",
+  },
+  "JSON.stringify": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "json",
+    "body": ["console.log(\"$1\", JSON.stringify($2, null, 2));"],
+    "description": "JSON.stringify",
+  },
+}

@@ -29,7 +29,9 @@ interface TicketDeflectionFormProps {
   forceThreadId?: string;
   defaultView?: TicketDeflectionFormView;
   showBackLink?: boolean;
-  CustomCaseForm?: ComponentType<{ summary?: string }>;
+  CustomCaseForm?: ComponentType<{
+    summaryData?: { subject: string; body: string };
+  }>;
 }
 
 export function TicketDeflectionForm(

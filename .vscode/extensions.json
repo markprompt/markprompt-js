@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "financialforce.lana",
+    "redhat.vscode-xml",
+    "salesforce.salesforcedx-vscode",
+    "unifiedjs.vscode-mdx"
+  ]
+}
