@@ -15,12 +15,7 @@
     "./init": "./dist/init.js"
   },
   "main": "dist/index.js",
-  "files": [
-    "dist/globals.*",
-    "dist/index.*",
-    "dist/init.*",
-    "dist/types.*"
-  ],
+  "files": ["dist/globals.*", "dist/index.*", "dist/init.*", "dist/types.*"],
   "scripts": {
     "analyze": "node scripts/analyze.js",
     "build": "node scripts/build.js",
