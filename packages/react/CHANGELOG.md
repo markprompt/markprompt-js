@@ -1,5 +1,15 @@
 # @markprompt/react
 
+## 0.55.0
+
+### Minor Changes
+
+- [`080ec77`](https://github.com/markprompt/markprompt-js/commit/080ec775a6c3fbe7bc8c7d22ddb74c2cad1b7266) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade @radix-ui/\*
+
+### Patch Changes
+
+- [#456](https://github.com/markprompt/markprompt-js/pull/456) [`d3b19f9`](https://github.com/markprompt/markprompt-js/commit/d3b19f9ea238ae64b1a97df51fad6d3e4e1f2fb7) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix attachments
+
 ## 0.54.13
 
 ### Patch Changes
