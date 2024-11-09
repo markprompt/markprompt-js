@@ -3,9 +3,17 @@ import 'randomuuid';
 
 import '@markprompt/css';
 import './style.css';
-import { markprompt, type MarkpromptOptions } from '@markprompt/web';
+import {
+  markprompt,
+  type MarkpromptOptions,
+  openMarkprompt,
+} from '@markprompt/web';
 
 const el = document.querySelector('#markprompt');
+
+setTimeout(() => {
+  openMarkprompt('ticket');
+}, 200);
 
 if (el && el instanceof HTMLElement) {
   markprompt(import.meta.env.VITE_PROJECT_API_KEY, el, {
@@ -59,7 +67,7 @@ if (el && el instanceof HTMLElement) {
           email: 'jane@doe.com',
         },
         form: {
-          hasFileUploadInput: false,
+          hasFileUploadInput: true,
           emailLabel: 'Email',
           nameLabel: 'Name',
           emailPlaceholder: 'jane@doe.com',

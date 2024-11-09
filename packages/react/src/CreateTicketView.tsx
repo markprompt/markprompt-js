@@ -9,6 +9,7 @@ import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
 import {
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -19,7 +20,11 @@ import {
 
 import { toValidApiMessages } from './chat/utils.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
-import { useChatStore, type CustomField } from './index.js';
+import {
+  useChatStore,
+  type ChatViewMessage,
+  type CustomField,
+} from './index.js';
 import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
@@ -54,6 +59,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     threadId ? state.messagesByThreadId[threadId]?.messages : undefined,
   );
 
+  const [message, setMessage] = useState<string>('');
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
 
   const [result, setResult] = useState<Response>();
@@ -116,17 +122,11 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     }
   };
 
-  const description = useMemo(() => {
+  useEffect(() => {
     if (!messages || messages.length === 0) {
-      return '';
+      return;
     }
-
-    const transcript = toValidApiMessages(messages)
-      .map((m) => {
-        return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
-      })
-      .join('\n\n');
-    return `${summary?.content || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+    setMessage(getTranscript(messages, summary?.content));
   }, [summary?.content, messages]);
 
   return (
@@ -195,7 +195,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             <textarea
               name="summary"
               id="summary"
-              value={description}
+              value={message}
+              onChange={(event) => {
+                setMessage(event.target.value);
+              }}
               placeholder={
                 summary?.state &&
                 summary.state !== 'done' &&
@@ -391,6 +394,18 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
   );
 }
 
+function getTranscript(
+  messages: ChatViewMessage[],
+  summary: string | undefined | null,
+) {
+  const transcript = toValidApiMessages(messages)
+    .map((m) => {
+      return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+    })
+    .join('\n\n');
+  return `${summary || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+}
+
 export function CustomCaseFormRenderer(props: {
   CustomCaseForm: ComponentType<{ summary?: string }>;
 }): JSX.Element {
@@ -401,18 +416,14 @@ export function CustomCaseFormRenderer(props: {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
+  const [message, setMessage] = useState<string>('');
 
-  const description = useMemo(() => {
+  useEffect(() => {
     if (!messages || messages.length === 0) {
-      return '';
+      return;
     }
-    const transcript = toValidApiMessages(messages)
-      .map((m) => {
-        return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
-      })
-      .join('\n\n');
-    return `${summary?.content || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+    setMessage(getTranscript(messages, summary?.content));
   }, [summary?.content, messages]);
 
-  return <CustomCaseForm summary={description} />;
+  return <CustomCaseForm summary={message} />;
 }
