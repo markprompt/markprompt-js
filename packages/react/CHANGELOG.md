@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.56.0
+
+### Minor Changes
+
+- [#455](https://github.com/markprompt/markprompt-js/pull/455) [`eebe0f8`](https://github.com/markprompt/markprompt-js/commit/eebe0f8d27d7e2ad66e27bba42d5cb9781224e36) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
+### Patch Changes
+
+- Updated dependencies [[`eebe0f8`](https://github.com/markprompt/markprompt-js/commit/eebe0f8d27d7e2ad66e27bba42d5cb9781224e36)]:
+  - @markprompt/core@0.39.0
+
 ## 0.55.1
 
 ### Patch Changes

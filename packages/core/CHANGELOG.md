@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.39.0
+
+### Minor Changes
+
+- [#455](https://github.com/markprompt/markprompt-js/pull/455) [`eebe0f8`](https://github.com/markprompt/markprompt-js/commit/eebe0f8d27d7e2ad66e27bba42d5cb9781224e36) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade dependencies
+
 ## 0.38.10
 
 ### Patch Changes
