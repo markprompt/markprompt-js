@@ -694,7 +694,6 @@ export interface CreateTicketIntegrationOptions {
   provider: 'salesforce' | 'zendesk';
   /**
    * The prompt to use to create a summary of the conversation between user and bot for the support agent
-   * @default `You act as an expert summarizer.\n\n- You must write in the first person, as if you were the user writing a support ticket. Failure to do so will result in severe penalties.\n- Your task is to generate a short and precise summary of the user's input only.\n- You focus on the user message, and omit assistant messages unless strictly needed.\n- You must not include any references to creating a support ticket.\n- You must write a standalone summary, with no greetings or other extra text.\n- The summary must not be longer than the user messages. You will be penalized if it is longer.\n- You must output your response in plain text.\n- You must stricly adhere to these rules to avoid penalties.\n\nExample:\n- I am having an issue with setting up my payment processor.\n- I can no longer log in to my account.`
    **/
   prompt?: string;
   /**
@@ -713,7 +712,9 @@ export interface CreateTicketIntegrationOptions {
   /**
    * Provide a custom case form component
    */
-  CustomCaseForm?: ComponentType<{ summary?: string }>;
+  CustomCaseForm?: ComponentType<{
+    summaryData?: { subject: string; body: string };
+  }>;
   /**
    * Options for the create ticket chat.
    */

@@ -1,0 +1,40 @@
+{
+  "eslint.workingDirectories": [{"mode": "auto"}],
+  "eslint.useFlatConfig": true,
+  "prettier.requireConfig": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // parse CSS files as Tailwind
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  // improve suggestions UX when working with Tailwind
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.fixAll.eslint": "explicit",
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[tailwindcss]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+}

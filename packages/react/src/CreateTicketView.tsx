@@ -54,16 +54,15 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
-  const generatedSubject = useGlobalStore((state) =>
-    threadId ? state.tickets?.subjectByThreadId[threadId] : undefined,
-  );
 
   const messages = useChatStore((state) =>
     threadId ? state.messagesByThreadId[threadId]?.messages : undefined,
   );
 
-  const [message, setMessage] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
+  const [summaryData, setSummaryData] = useState<{
+    subject: string;
+    body: string;
+  }>({ subject: '', body: '' });
   const [totalFileSize, setTotalFileSize] = useState<number>(0);
 
   const [result, setResult] = useState<Response>();
@@ -130,15 +129,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     if (!messages || messages.length === 0) {
       return;
     }
-    setMessage(getTranscript(messages, summary?.content));
-  }, [summary?.content, messages]);
-
-  useEffect(() => {
-    if (!generatedSubject?.content) {
-      return;
-    }
-    setSubject(generatedSubject.content);
-  }, [generatedSubject?.content]);
+    setSummaryData(getFullSummaryData(summary, messages));
+  }, [summary, messages]);
 
   return (
     <div className="MarkpromptCreateTicketView">
@@ -206,9 +198,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             <input
               name="subject"
               id="subject"
-              value={subject}
+              value={summaryData.subject}
               onChange={(event) => {
-                setSubject(event.target.value);
+                setSummaryData((d) => ({ ...d, subject: event.target.value }));
               }}
               placeholder={createTicketOptions?.form?.subjectPlaceholder}
               required
@@ -224,9 +216,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
             <textarea
               name="summary"
               id="summary"
-              value={message}
+              value={summaryData.body}
               onChange={(event) => {
-                setMessage(event.target.value);
+                setSummaryData((d) => ({ ...d, body: event.target.value }));
               }}
               placeholder={
                 summary?.state &&
@@ -423,20 +415,36 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
   );
 }
 
-function getTranscript(
+function getFullSummaryData(
+  summary: ChatViewMessage | undefined,
   messages: ChatViewMessage[],
-  summary: string | undefined | null,
-) {
-  const transcript = toValidApiMessages(messages)
+): { subject: string; body: string } {
+  const transcript = `Full transcript:\n\n${toValidApiMessages(messages)
     .map((m) => {
       return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
     })
-    .join('\n\n');
-  return `${summary || ''}\n\n---\n\nFull transcript:\n\n${transcript}`;
+    .join('\n\n')}`;
+
+  let subject = '';
+  let body = transcript;
+
+  if (summary?.content) {
+    try {
+      const data = JSON.parse(summary.content);
+      subject = data.subject;
+      body = `${data.fullSummary || ''}\n\n---\n\n${transcript}`;
+    } catch {
+      // Do nothing
+    }
+  }
+
+  return { subject, body };
 }
 
 export function CustomCaseFormRenderer(props: {
-  CustomCaseForm: ComponentType<{ summary?: string; subject?: string }>;
+  CustomCaseForm: ComponentType<{
+    summaryData?: { subject: string; body: string };
+  }>;
 }): JSX.Element {
   const { CustomCaseForm } = props;
 
@@ -445,23 +453,8 @@ export function CustomCaseFormRenderer(props: {
   const summary = useGlobalStore((state) =>
     threadId ? state.tickets?.summaryByThreadId[threadId] : undefined,
   );
-  const generatedSubject = useGlobalStore((state) =>
-    threadId ? state.tickets?.subjectByThreadId[threadId] : undefined,
-  );
 
-  const [message, setMessage] = useState<string>('');
+  const summaryData = getFullSummaryData(summary, messages);
 
-  useEffect(() => {
-    if (!messages || messages.length === 0) {
-      return;
-    }
-    setMessage(getTranscript(messages, summary?.content));
-  }, [summary?.content, messages]);
-
-  return (
-    <CustomCaseForm
-      summary={message}
-      subject={generatedSubject?.content ?? ''}
-    />
-  );
+  return <CustomCaseForm summaryData={summaryData} />;
 }
