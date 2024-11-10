@@ -54,6 +54,6 @@
   },
   "devDependencies": {
     "@types/defaults": "^1.0.6",
-    "msw": "^2.2.13"
+    "msw": "^2.6.2"
   }
 }

@@ -55,13 +55,13 @@
     "@testing-library/react": "^15.0.2",
     "@testing-library/user-event": "^14.5.2",
     "@types/lodash": "^4.17.0",
-    "@types/react": "^18.2",
+    "@types/react": "^18.3",
     "@types/react-dom": "^18.2",
     "@vitejs/plugin-react-swc": "^3.6.0",
-    "msw": "^2.2.13",
+    "msw": "^2.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^5.1.1"
   },
   "peerDependencies": {
     "react": "^18",
