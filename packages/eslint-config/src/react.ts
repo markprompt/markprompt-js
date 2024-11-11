@@ -1,5 +1,6 @@
 import type { ESLint, Linter } from 'eslint';
 import pluginReact from 'eslint-plugin-react';
+import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 
 export const react = [
@@ -7,7 +8,10 @@ export const react = [
     name: 'react',
     ...pluginReact.configs.flat.recommended,
     ...pluginReact.configs.flat['jsx-runtime'],
-    plugins: { react: pluginReact as ESLint.Plugin },
+    plugins: {
+      react: pluginReact as ESLint.Plugin,
+      'react-refresh': pluginReactRefresh,
+    },
     languageOptions: {
       ...pluginReact.configs.flat.recommended.languageOptions,
       ...pluginReact.configs.flat['jsx-runtime'].languageOptions,
@@ -24,6 +28,7 @@ export const react = [
     rules: {
       ...pluginReact.configs.flat.recommended.rules,
       ...pluginReact.configs.flat['jsx-runtime'].rules,
+      'react-refresh/only-export-components': 'warn',
     },
   },
 ] satisfies Linter.Config[];
