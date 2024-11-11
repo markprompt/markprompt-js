@@ -37,13 +37,11 @@ const config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     markprompt: {
-      // Set the project key here, on in a `.env` file. You can obtain
-      // the project key in the Markprompt dashboard, under
-      // project settings.
       projectKey: 'YOUR-PROJECT-KEY',
       trigger: { floating: false },
       chat: {
-        systemPrompt: 'You are a friendly AI who loves to help people.',
+        enabled: true,
+        assistantId: 'YOUR-ASSISTANT-ID',
       },
       search: {
         enabled: true,
