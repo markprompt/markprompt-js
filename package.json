@@ -2,10 +2,7 @@
   "name": "markprompt",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "examples/*",
-    "packages/*"
-  ],
+  "workspaces": ["examples/*", "packages/*"],
   "scripts": {
     "build:packages": "turbo run build --filter @markprompt/*...",
     "build": "turbo run build",
