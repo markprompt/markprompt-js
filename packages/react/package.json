@@ -21,7 +21,9 @@
     }
   },
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "dev": "tsc --build tsconfig.build.json --watch",
@@ -66,7 +68,7 @@
     "@types/lodash": "^4.17.0",
     "@types/react": "^18.3",
     "@types/react-dom": "^18.2",
-    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitejs/plugin-react-swc": "^3.7.1",
     "msw": "^2.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
