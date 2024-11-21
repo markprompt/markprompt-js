@@ -60,6 +60,8 @@ export const base = (
     rules: {
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
+      // https://github.com/import-js/eslint-plugin-import/issues/2340
+      "import/namespace": "off",
       'import-x/order': [
         'error',
         {
