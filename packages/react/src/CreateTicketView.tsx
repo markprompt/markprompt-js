@@ -98,7 +98,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
         // don't pass a Content-Type header here, the browser will
         // generate a correct header which includes the boundary.
         body: data,
-        headers,
+        headers: {
+          ...headers,
+          'X-Markprompt-Project-Key': projectKey,
+        },
       });
 
       setSubmittingCase(false);
@@ -245,10 +248,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           ))}
           {createTicketOptions?.form?.hasFileUploadInput && (
             <div className="MarkpromptFormGroup">
-              <label htmlFor="files">
+              {/* <label htmlFor="files">
                 {createTicketOptions?.form?.uploadFileLabel || 'Attach a file'}
-              </label>
-              <input
+              </label> */}
+              {/* <input
                 type="file"
                 name="files"
                 id="files"
@@ -263,7 +266,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                   setTotalFileSize(_totalFileSize);
                 }}
                 multiple
-              />
+              /> */}
               {totalFileSize >= 4.5 && (
                 <p className="MarkpromptTicketViewFormGroupMessage">
                   {createTicketOptions?.form?.maxFileSizeError}
