@@ -48,9 +48,7 @@ function getCreateTicket(
         mode: 'cors',
         method: 'POST',
         body: data,
-        headers: {
-          'X-Markprompt-API-Version': '2024-05-21',
-        },
+        headers: { 'X-Markprompt-API-Version': '2024-05-21' },
       },
     );
 
