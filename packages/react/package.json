@@ -54,7 +54,7 @@
     "react-textarea-autosize": "^8.5.3",
     "remark-gfm": "^4.0.0",
     "tabbable": "^6.2.0",
-    "tailwind-merge": "^2.2.2",
+    "tailwind-merge": "^2.5.4",
     "use-sync-external-store": "^1.2.0",
     "zustand": "^4.5.2"
   },
