@@ -41,7 +41,7 @@ function getCreateTicket(
     }
 
     const res = await fetch(
-      `${import.meta.env.VITE_MARKPROMPT_API_URL}/integrations/create-ticket`,
+      `${import.meta.env.VITE_MARKPROMPT_API_URL}/integrations/create-ticket?projectKey=${projectKey}`,
       {
         cache: 'no-cache',
         credentials: 'omit',
@@ -50,7 +50,6 @@ function getCreateTicket(
         body: data,
         headers: {
           'X-Markprompt-API-Version': '2024-05-21',
-          'X-Markprompt-Project-Key': projectKey,
         },
       },
     );

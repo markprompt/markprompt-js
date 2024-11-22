@@ -93,16 +93,16 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
     try {
       const data = new FormData(event.currentTarget);
       // copy a field for legacy reasons
-      const result = await fetch(`${apiUrl}/integrations/create-ticket`, {
-        method: 'POST',
-        // don't pass a Content-Type header here, the browser will
-        // generate a correct header which includes the boundary.
-        body: data,
-        headers: {
-          ...headers,
-          'X-Markprompt-Project-Key': projectKey,
+      const result = await fetch(
+        `${apiUrl}/integrations/create-ticket?projectKey=${projectKey}`,
+        {
+          method: 'POST',
+          // don't pass a Content-Type header here, the browser will
+          // generate a correct header which includes the boundary.
+          body: data,
+          headers,
         },
-      });
+      );
 
       setSubmittingCase(false);
       setResult(result);
@@ -248,10 +248,10 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
           ))}
           {createTicketOptions?.form?.hasFileUploadInput && (
             <div className="MarkpromptFormGroup">
-              {/* <label htmlFor="files">
+              <label htmlFor="files">
                 {createTicketOptions?.form?.uploadFileLabel || 'Attach a file'}
-              </label> */}
-              {/* <input
+              </label>
+              <input
                 type="file"
                 name="files"
                 id="files"
@@ -266,7 +266,7 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
                   setTotalFileSize(_totalFileSize);
                 }}
                 multiple
-              /> */}
+              />
               {totalFileSize >= 4.5 && (
                 <p className="MarkpromptTicketViewFormGroupMessage">
                   {createTicketOptions?.form?.maxFileSizeError}
