@@ -1,5 +1,11 @@
 # @markprompt/core
 
+## 0.40.0
+
+### Minor Changes
+
+- [`03b258f`](https://github.com/markprompt/markprompt-js/commit/03b258f1764707a91fb22bb74afff1991c6169f6) Thanks [@michaelfester](https://github.com/michaelfester)! - Update create-ticket call
+
 ## 0.39.0
 
 ### Minor Changes
