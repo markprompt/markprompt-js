@@ -1,5 +1,22 @@
 # @markprompt/react
 
+## 0.57.0
+
+### Minor Changes
+
+- [`03b258f`](https://github.com/markprompt/markprompt-js/commit/03b258f1764707a91fb22bb74afff1991c6169f6) Thanks [@michaelfester](https://github.com/michaelfester)! - Update create-ticket call
+
+- [`c57ec6a`](https://github.com/markprompt/markprompt-js/commit/c57ec6abd2fa95dd7a536c662e0952d7d9f820a8) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade tailwind-merge
+
+- [`200215c`](https://github.com/markprompt/markprompt-js/commit/200215ce547e752bcc7d88c54c3973b047b17d3f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add ./Markprompt export key to package.json
+
+- [`9db6a09`](https://github.com/markprompt/markprompt-js/commit/9db6a09bbbda24120521a2158e2e64bf8f407bd9) Thanks [@nickrttn](https://github.com/nickrttn)! - Use lodash-es instead of lodash
+
+### Patch Changes
+
+- Updated dependencies [[`03b258f`](https://github.com/markprompt/markprompt-js/commit/03b258f1764707a91fb22bb74afff1991c6169f6)]:
+  - @markprompt/core@0.40.0
+
 ## 0.56.0
 
 ### Minor Changes

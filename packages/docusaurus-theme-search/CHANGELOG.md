@@ -1,5 +1,17 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.29.0
+
+### Minor Changes
+
+- [`03b258f`](https://github.com/markprompt/markprompt-js/commit/03b258f1764707a91fb22bb74afff1991c6169f6) Thanks [@michaelfester](https://github.com/michaelfester)! - Update create-ticket call
+
+### Patch Changes
+
+- Updated dependencies [[`03b258f`](https://github.com/markprompt/markprompt-js/commit/03b258f1764707a91fb22bb74afff1991c6169f6), [`c57ec6a`](https://github.com/markprompt/markprompt-js/commit/c57ec6abd2fa95dd7a536c662e0952d7d9f820a8), [`200215c`](https://github.com/markprompt/markprompt-js/commit/200215ce547e752bcc7d88c54c3973b047b17d3f), [`9db6a09`](https://github.com/markprompt/markprompt-js/commit/9db6a09bbbda24120521a2158e2e64bf8f407bd9)]:
+  - @markprompt/css@0.33.0
+  - @markprompt/react@0.57.0
+
 ## 0.28.0
 
 ### Minor Changes
