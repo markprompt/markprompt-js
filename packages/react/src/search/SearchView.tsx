@@ -430,6 +430,8 @@ function SearchResultsContainer(
   return (
     <div className="MarkpromptSearchResultsContainer">
       {isAskVisible && (
+        // todo: should this use a different (interactive) element?
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
           className="MarkpromptSearchResult"
           aria-selected={

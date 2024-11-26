@@ -108,6 +108,7 @@ export function CSATReasonTextArea({
           className="MarkpromptPrompt"
           name="markprompt-csat-reason"
           type="text"
+          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
           labelClassName="MarkpromptPromptLabel"
           textAreaContainerClassName="MarkpromptTextAreaContainer"

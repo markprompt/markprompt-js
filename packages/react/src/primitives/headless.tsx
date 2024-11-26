@@ -286,6 +286,7 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
             autoCapitalize={autoCapitalize}
             autoComplete={autoComplete}
             autoCorrect={autoCorrect}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={autoFocus}
             spellCheck={spellCheck}
             className={className}

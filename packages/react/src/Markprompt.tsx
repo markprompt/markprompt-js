@@ -122,6 +122,8 @@ function Trigger(props: TriggerProps): JSX.Element {
       )}
 
       {children && (display !== 'plain' || hasMenu) && (
+        // todo: update element to button
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
           onClick={onClick}
           onKeyDown={(event) => {
