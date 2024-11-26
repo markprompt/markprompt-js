@@ -1,20 +1,10 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import type { Linter } from 'eslint';
+import turbo from 'eslint-config-turbo/flat';
 import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
 import ts, { parser } from 'typescript-eslint';
-
-const __pathname = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__pathname);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 export const base = (
   rootDir: string,
@@ -31,7 +21,7 @@ export const base = (
   ...(ts.configs.stylistic as Linter.Config[]),
   importX.flatConfigs.recommended as Linter.Config,
   importX.flatConfigs.typescript,
-  ...(compat.extends('turbo') as Linter.Config[]),
+  ...turbo,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
     languageOptions: {
