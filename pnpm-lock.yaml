@@ -645,9 +645,6 @@ importers:
 
   packages/web:
     dependencies:
-      '@markprompt/core':
-        specifier: workspace:*
-        version: link:../core
       '@markprompt/react':
         specifier: workspace:*
         version: link:../react
