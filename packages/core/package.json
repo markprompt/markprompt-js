@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@types/defaults": "^1.0.6",
+    "@vitest/coverage-v8": "^2.1.6",
     "msw": "^2.6.2"
   }
 }
