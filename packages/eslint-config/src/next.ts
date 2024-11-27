@@ -1,6 +1,5 @@
 import { fixupPluginRules } from '@eslint/compat';
 import nextPlugin from '@next/eslint-plugin-next';
-import tanstack from '@tanstack/eslint-plugin-query';
 import type { Linter } from 'eslint';
 
 export const next: Linter.Config[] = [
@@ -20,5 +19,4 @@ export const next: Linter.Config[] = [
       ).rules,
     },
   },
-  ...tanstack.configs['flat/recommended'],
 ];
