@@ -439,9 +439,6 @@ importers:
       '@types/defaults':
         specifier: ^1.0.6
         version: 1.0.6
-      '@vitest/coverage-v8':
-        specifier: ^2.1.6
-        version: 2.1.6(vitest@2.1.6(@types/node@22.10.0)(jsdom@25.0.1)(msw@2.6.6(@types/node@22.10.0)(typescript@5.7.2))(terser@5.36.0))
       msw:
         specifier: ^2.6.2
         version: 2.6.6(@types/node@22.10.0)(typescript@5.7.2)
@@ -630,9 +627,6 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.1
         version: 3.7.2(@swc/helpers@0.5.5)(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))
-      '@vitest/coverage-v8':
-        specifier: ^2.1.6
-        version: 2.1.6(vitest@2.1.6(@types/node@22.10.0)(jsdom@25.0.1)(msw@2.6.6(@types/node@22.10.0)(typescript@5.7.2))(terser@5.36.0))
       msw:
         specifier: ^2.6.2
         version: 2.6.6(@types/node@22.10.0)(typescript@5.7.2)
