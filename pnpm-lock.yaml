@@ -29,6 +29,9 @@ importers:
       '@markprompt/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
+      '@vitest/coverage-v8':
+        specifier: ^2.1.6
+        version: 2.1.6(vitest@2.1.6(@types/node@22.10.0)(jsdom@25.0.1)(msw@2.6.6(@types/node@22.10.0)(typescript@5.7.2))(terser@5.36.0))
       eslint:
         specifier: ^9.15.0
         version: 9.15.0(jiti@1.21.6)
