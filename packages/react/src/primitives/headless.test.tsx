@@ -217,7 +217,6 @@ test('Prompt changes trigger user-defined callbacks', async () => {
 
   await user.type(input, 'test');
   expect(input).toHaveValue('test');
-  // eslint-disable-next-line promise/no-callback-in-promise
   expect(cb).toHaveBeenCalled();
 });
 
