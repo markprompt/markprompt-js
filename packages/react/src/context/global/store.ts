@@ -8,7 +8,6 @@ import { createStore, type StoreApi } from 'zustand';
 import { useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import type {} from './store.js';
 import { getInitialView } from './utils.js';
 import type { ChatViewMessage } from '../../chat/store.js';
 import { toValidApiMessages } from '../../chat/utils.js';
