@@ -12,13 +12,13 @@ import { DefaultMessage, DefaultView } from './DefaultView.js';
 import { MessagePrompt } from './MessagePrompt.js';
 import { References } from './References.js';
 import { useChatStore } from './store.js';
+import { useGlobalStore } from '../context/global/store.js';
 import { CSATPicker } from '../feedback/csat-picker.js';
 import { ChatIconOutline, LoadingIcon } from '../icons.js';
-import { openMarkprompt } from '../Markprompt.js';
 import { Branding } from '../primitives/branding.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
-import { useGlobalStore } from '../store.js';
 import type { MarkpromptOptions } from '../types.js';
+import { openMarkprompt } from '../utils.js';
 
 export type MessagesProps = {
   apiUrl?: string;

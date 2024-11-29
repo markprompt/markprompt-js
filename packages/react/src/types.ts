@@ -47,6 +47,16 @@ export type PolymorphicRef<C extends ElementType> =
 
 export type View = 'chat' | 'search' | 'ticket' | 'menu';
 
+export type TicketDeflectionFormView = 'chat' | 'ticket';
+
+export interface ViewOptions {
+  ticketDeflectionFormOptions?: {
+    defaultView: TicketDeflectionFormView;
+    showBackLink?: boolean;
+    threadId?: string;
+  };
+}
+
 export interface SectionHeading {
   value?: string | undefined;
   id?: string | undefined;

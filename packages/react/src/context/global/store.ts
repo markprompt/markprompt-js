@@ -3,46 +3,16 @@ import {
   type ChatCompletionMessageParam,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
-import {
-  createContext,
-  useContext,
-  type ReactNode,
-  useRef,
-  useEffect,
-} from 'react';
-import { createStore, useStore, type StoreApi } from 'zustand';
+import { createContext, useContext } from 'react';
+import { createStore, type StoreApi } from 'zustand';
+import { useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { toValidApiMessages } from './chat/utils.js';
-import type { ChatViewMessage, View } from './index.js';
-import type { MarkpromptOptions } from './types.js';
-import { getDefaultView } from './utils.js';
-
-function getInitialView(options: MarkpromptOptions): View {
-  if (options.defaultView) {
-    return getDefaultView(options.defaultView, options);
-  }
-
-  if (options?.search?.enabled) {
-    return 'search';
-  }
-
-  return 'chat';
-}
-
-function getEnabledViews(options: MarkpromptOptions): View[] {
-  const views: View[] = ['chat'];
-
-  if (options?.search?.enabled) {
-    views.push('search');
-  }
-
-  if (typeof options?.integrations?.createTicket === 'string') {
-    views.push('ticket');
-  }
-
-  return views;
-}
+import type {} from './store.js';
+import { getInitialView } from './utils.js';
+import type { ChatViewMessage } from '../../chat/store.js';
+import { toValidApiMessages } from '../../chat/utils.js';
+import type { MarkpromptOptions, View } from '../../types.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };
 
@@ -50,7 +20,6 @@ interface State {
   options: GlobalOptions;
   activeView: View;
   setActiveView: (view: View) => void;
-
   tickets?: {
     summaryByThreadId: {
       [threadId: string]: ChatViewMessage;
@@ -200,51 +169,6 @@ Output:
 export const GlobalStoreContext = createContext<GlobalStore | undefined>(
   undefined,
 );
-
-interface GlobalStoreProviderProps {
-  options: GlobalOptions;
-  children: ReactNode;
-}
-
-function updateStateOnOptionsChange(
-  store: GlobalStore,
-  nextOptions: GlobalOptions,
-): void {
-  const activeView = store.getState().activeView;
-  const nextInitialView = getInitialView(nextOptions);
-  const nextEnabledViews = getEnabledViews(nextOptions);
-
-  // only change the active view to the nextInitialView if the current view is no longer enabled
-  store?.setState({
-    activeView: nextEnabledViews.includes(activeView)
-      ? activeView
-      : nextInitialView,
-    options: nextOptions,
-  });
-}
-
-export function GlobalStoreProvider(
-  props: GlobalStoreProviderProps,
-): JSX.Element {
-  const { options, children } = props;
-
-  const store = useRef<GlobalStore>();
-
-  if (!store.current) {
-    store.current = createGlobalStore(options);
-  }
-
-  useEffect(() => {
-    if (!store.current) return;
-    updateStateOnOptionsChange(store.current, options);
-  }, [options]);
-
-  return (
-    <GlobalStoreContext.Provider value={store.current}>
-      {children}
-    </GlobalStoreContext.Provider>
-  );
-}
 
 export function useGlobalStore<T>(selector: (state: State) => T): T {
   const store = useContext(GlobalStoreContext);

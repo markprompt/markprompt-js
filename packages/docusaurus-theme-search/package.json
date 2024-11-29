@@ -22,7 +22,8 @@
   "dependencies": {
     "@docusaurus/types": "^3.2.1",
     "@markprompt/css": "workspace:*",
-    "@markprompt/react": "workspace:*"
+    "@markprompt/react": "workspace:*",
+    "acorn": "^8.14.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.2.1",

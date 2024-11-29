@@ -29,7 +29,10 @@ export const react = [
     rules: {
       ...pluginReact.configs.flat.recommended.rules,
       ...pluginReact.configs.flat['jsx-runtime'].rules,
-      'react-refresh/only-export-components': 'warn',
+      'react-refresh/only-export-components': [
+        'error',
+        { allowConstantExport: true },
+      ],
     },
   },
   {

@@ -19,13 +19,13 @@ import {
 } from 'react';
 
 import { toValidApiMessages } from './chat/utils.js';
+import { useGlobalStore } from './context/global/store.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import {
   useChatStore,
   type ChatViewMessage,
   type CustomField,
 } from './index.js';
-import { useGlobalStore } from './store.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;

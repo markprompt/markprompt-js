@@ -10,8 +10,8 @@ import {
   SearchIconOutline,
   SparklesIconOutline,
 } from './icons.js';
-import { openMarkprompt } from './Markprompt.js';
 import type { MarkpromptOptions, MenuIconId, MenuItemProps } from './types.js';
+import { openMarkprompt } from './utils.js';
 
 function getMenuIconById(
   iconId: MenuIconId | undefined,
