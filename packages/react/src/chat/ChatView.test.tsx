@@ -15,11 +15,11 @@ import {
 } from 'vitest';
 
 import { ChatView } from './ChatView.js';
+import { ChatProvider } from './provider.js';
 import {
   createChatStore,
   useChatStore,
   type ChatViewMessage,
-  ChatProvider,
   type ConfirmationProps,
 } from './store.js';
 import { getChunk, formatEvent } from '../test-utils.js';

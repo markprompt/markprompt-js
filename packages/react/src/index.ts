@@ -54,17 +54,19 @@ export { Trigger } from './Trigger.js';
 
 export { ChatView, type ChatViewProps } from './chat/ChatView.js';
 export {
-  ChatProvider,
   createChatStore,
   useChatStore,
   type ChatLoadingState,
-  type ChatProviderProps,
   type ChatViewMessage,
   type ChatViewTool,
   type ConfirmationProps,
   type CreateChatOptions,
   type ToolCall,
 } from './chat/store.js';
+export {
+  ChatProvider,
+  type ChatProviderProps,
+} from './chat/provider.js';
 
 export { SearchView, type SearchViewProps } from './search/SearchView.js';
 
@@ -72,6 +74,12 @@ export {
   StandaloneTicketDeflectionForm,
   type StandaloneTicketDeflectionFormProps,
 } from './TicketDeflectionForm.js';
+
+export {
+  emitter,
+  openMarkprompt,
+  closeMarkprompt,
+} from './utils.js';
 
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 

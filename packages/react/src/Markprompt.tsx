@@ -14,12 +14,13 @@ import {
 
 import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
+import { GlobalStoreProvider } from './context/global/provider.js';
+import { useGlobalStore } from './context/global/store.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { CloseIcon, SparklesIcon } from './icons.js';
 import { ChatProvider, useChatStore } from './index.js';
 import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { GlobalStoreProvider, useGlobalStore } from './store.js';
 import { TicketDeflectionForm } from './TicketDeflectionForm.js';
 import { Trigger } from './Trigger.js';
 import type { MarkpromptOptions, View, ViewOptions } from './types.js';

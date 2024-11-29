@@ -8,13 +8,7 @@ import {
   type SubmitChatYield,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext } from 'react';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -741,57 +735,9 @@ export const createChatStore = ({
   );
 };
 
-type ChatStore = ReturnType<typeof createChatStore>;
+export type ChatStore = ReturnType<typeof createChatStore>;
 
 export const ChatContext = createContext<ChatStore | null>(null);
-
-export interface ChatProviderProps {
-  chatOptions?: MarkpromptOptions['chat'];
-  children: ReactNode;
-  debug?: boolean;
-  projectKey: string;
-  storeKey?: string;
-  apiUrl?: string;
-  headers?: { [key: string]: string };
-}
-
-export function ChatProvider(props: ChatProviderProps): JSX.Element {
-  const {
-    chatOptions,
-    children,
-    debug,
-    projectKey,
-    storeKey,
-    apiUrl,
-    headers,
-  } = props;
-
-  const store = useRef<ChatStore>();
-
-  if (!store.current) {
-    store.current = createChatStore({
-      apiUrl,
-      headers,
-      projectKey,
-      chatOptions,
-      debug,
-      persistChatHistory: chatOptions?.history,
-      storeKey,
-    });
-  }
-
-  // update chat options when they change
-  useEffect(() => {
-    if (!chatOptions) return;
-    store.current?.getState().setOptions(chatOptions);
-  }, [chatOptions]);
-
-  return (
-    <ChatContext.Provider value={store.current}>
-      {children}
-    </ChatContext.Provider>
-  );
-}
 
 export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
   const store = useContext(ChatContext);
