@@ -1,8 +1,9 @@
+import Emittery from 'emittery';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
-import type { MarkpromptOptions, View } from './types.js';
+import type { MarkpromptOptions, View, ViewOptions } from './types.js';
 
 export function isPresent<T>(t: T | undefined | null): t is T {
   return t !== undefined && t !== null;
@@ -117,4 +118,25 @@ export function getDefaultView(
   }
 
   return 'chat';
+}
+
+export const emitter = new Emittery<{
+  open: { view?: View; options?: ViewOptions };
+  close: undefined;
+}>();
+
+/**
+ * Open Markprompt programmatically. Useful for building a custom trigger
+ * or opening the Markprompt dialog in response to other user actions.
+ */
+export function openMarkprompt(view?: View, options?: ViewOptions): void {
+  emitter.emit('open', { view, options });
+}
+
+/**
+ * Close Markprompt programmatically. Useful for building a custom trigger
+ * or closing the Markprompt dialog in response to other user actions.
+ */
+export function closeMarkprompt(): void {
+  emitter.emit('close');
 }

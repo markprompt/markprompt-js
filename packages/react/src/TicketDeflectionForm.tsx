@@ -13,8 +13,11 @@ import {
   CustomCaseFormRenderer,
 } from './CreateTicketView.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
-import { DEFAULT_MARKPROMPT_OPTIONS, type MarkpromptOptions } from './index.js';
-import type { TicketDeflectionFormView } from './Markprompt.js';
+import {
+  DEFAULT_MARKPROMPT_OPTIONS,
+  type MarkpromptOptions,
+  type TicketDeflectionFormView,
+} from './index.js';
 import {
   GlobalStoreProvider,
   useGlobalStore,

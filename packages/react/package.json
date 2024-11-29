@@ -18,6 +18,10 @@
     "./Markprompt": {
       "types": "./dist/Markprompt.d.ts",
       "import": "./dist/Markprompt.js"
+    },
+    "./Trigger": {
+      "types": "./dist/Trigger.d.ts",
+      "import": "./dist/Trigger.js"
     }
   },
   "main": "./dist/index.js",

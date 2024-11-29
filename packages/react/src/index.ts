@@ -46,11 +46,11 @@ export {
 } from './search/useSearch.js';
 
 export {
-  closeMarkprompt,
   Markprompt,
-  openMarkprompt,
   type MarkpromptProps,
 } from './Markprompt.js';
+
+export { Trigger } from './Trigger.js';
 
 export { ChatView, type ChatViewProps } from './chat/ChatView.js';
 export {

@@ -2,7 +2,6 @@ import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Tabs from '@radix-ui/react-tabs';
 import { clsx } from 'clsx';
-import Emittery from 'emittery';
 import {
   lazy,
   Suspense,
@@ -10,25 +9,24 @@ import {
   useState,
   type ReactElement,
   useCallback,
-  type JSXElementConstructor,
   useMemo,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { CreateTicketView } from './CreateTicketView.js';
-import { ChatIcon, CloseIcon, SparklesIcon } from './icons.js';
+import { CloseIcon, SparklesIcon } from './icons.js';
 import { ChatProvider, useChatStore } from './index.js';
 import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
-import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
 import { GlobalStoreProvider, useGlobalStore } from './store.js';
 import { TicketDeflectionForm } from './TicketDeflectionForm.js';
-import type { MarkpromptOptions, View } from './types.js';
+import { Trigger } from './Trigger.js';
+import type { MarkpromptOptions, View, ViewOptions } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { useDefaults } from './useDefaults.js';
 import { useMediaQuery } from './useMediaQuery.js';
-import { getDefaultView } from './utils.js';
+import { emitter, getDefaultView, openMarkprompt } from './utils.js';
 
 const SearchView = lazy(() =>
   import('./search/SearchView.js').then((m) => ({ default: m.SearchView })),
@@ -42,103 +40,6 @@ type MarkpromptProps = MarkpromptOptions &
     projectKey: string;
     onDidRequestOpenChange?: (open: boolean) => void;
   };
-
-export type TicketDeflectionFormView = 'chat' | 'ticket';
-
-interface ViewOptions {
-  ticketDeflectionFormOptions?: {
-    defaultView: TicketDeflectionFormView;
-    showBackLink?: boolean;
-    threadId?: string;
-  };
-}
-
-const emitter = new Emittery<{
-  open: { view?: View; options?: ViewOptions };
-  close: undefined;
-}>();
-
-/**
- * Open Markprompt programmatically. Useful for building a custom trigger
- * or opening the Markprompt dialog in response to other user actions.
- */
-function openMarkprompt(view?: View, options?: ViewOptions): void {
-  emitter.emit('open', { view, options });
-}
-
-/**
- * Close Markprompt programmatically. Useful for building a custom trigger
- * or closing the Markprompt dialog in response to other user actions.
- */
-function closeMarkprompt(): void {
-  emitter.emit('close');
-}
-
-type TriggerProps = Pick<
-  MarkpromptProps,
-  'display' | 'trigger' | 'children'
-> & {
-  hasMenu?: boolean;
-  onClick?: () => void;
-
-  Component: string | JSXElementConstructor<any>;
-};
-
-function Trigger(props: TriggerProps): JSX.Element {
-  const { display, trigger, hasMenu, Component, onClick, children } = props;
-
-  return (
-    <>
-      {!trigger?.customElement && !children && display !== 'plain' && (
-        // biome-ignore lint/complexity/noUselessFragments: This fragment is not useless
-        <>
-          {trigger?.floating !== false ? (
-            <Component className="MarkpromptFloatingTrigger" onClick={onClick}>
-              {trigger?.buttonLabel && <span>{trigger.buttonLabel}</span>}
-
-              {trigger?.iconSrc ? (
-                <img
-                  className="MarkpromptChatIcon"
-                  width="20"
-                  height="20"
-                  src={trigger.iconSrc}
-                  alt={!trigger.buttonLabel ? (trigger?.label ?? '') : ''}
-                />
-              ) : (
-                <AccessibleIcon.Root label={trigger?.label ?? ''}>
-                  <ChatIcon
-                    className="MarkpromptChatIcon"
-                    width="20"
-                    height="20"
-                    aria-hidden="true"
-                  />
-                </AccessibleIcon.Root>
-              )}
-            </Component>
-          ) : (
-            <SearchBoxTrigger trigger={trigger} onClick={onClick} />
-          )}
-        </>
-      )}
-
-      {children && (display !== 'plain' || hasMenu) && (
-        // todo: update element to button
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div
-          onClick={onClick}
-          onKeyDown={(event) => {
-            if (!onClick) return;
-            if (event.key === 'Enter' || event.key === ' ') {
-              onClick?.();
-            }
-          }}
-        >
-          {children}
-        </div>
-      )}
-    </>
-  );
-}
 
 function Markprompt(props: MarkpromptProps): JSX.Element {
   const { projectKey, onDidRequestOpenChange, ...dialogProps } = props;
@@ -663,10 +564,4 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
   );
 }
 
-export {
-  closeMarkprompt,
-  Markprompt,
-  openMarkprompt,
-  type MarkpromptProps,
-  Trigger,
-};
+export { Markprompt, type MarkpromptProps };
