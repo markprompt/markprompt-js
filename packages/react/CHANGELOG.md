@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.58.1
+
+### Patch Changes
+
+- [#468](https://github.com/markprompt/markprompt-js/pull/468) [`d19c870`](https://github.com/markprompt/markprompt-js/commit/d19c870722a8bb2d0f4381049f8a1f45d468d60c) Thanks [@michaelfester](https://github.com/michaelfester)! - Serve context in tool call
+
 ## 0.58.0
 
 ### Minor Changes
