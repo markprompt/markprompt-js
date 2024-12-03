@@ -1,5 +1,18 @@
 # @markprompt/web
 
+## 0.45.0
+
+### Minor Changes
+
+- [#466](https://github.com/markprompt/markprompt-js/pull/466) [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix fast refresh issues by splitting up files
+
+### Patch Changes
+
+- [#466](https://github.com/markprompt/markprompt-js/pull/466) [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix reported missing peer deps
+
+- Updated dependencies [[`2ff826d`](https://github.com/markprompt/markprompt-js/commit/2ff826dc75529bbd510b3c28892e3d7fc8403249), [`a28859c`](https://github.com/markprompt/markprompt-js/commit/a28859cbe55128a65b73cfe50bd4fc60d54ad5e1), [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9), [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9), [`345b7fd`](https://github.com/markprompt/markprompt-js/commit/345b7fd7908fe955ffac29fd4cbc22409b9170a8), [`a3fee0d`](https://github.com/markprompt/markprompt-js/commit/a3fee0d6efc57cfc4dd3362d438ac623c1dc8f7c)]:
+  - @markprompt/react@0.58.0
+
 ## 0.44.0
 
 ### Minor Changes

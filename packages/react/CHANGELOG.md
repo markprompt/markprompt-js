@@ -1,5 +1,23 @@
 # @markprompt/react
 
+## 0.58.0
+
+### Minor Changes
+
+- [#466](https://github.com/markprompt/markprompt-js/pull/466) [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix fast refresh issues by splitting up files
+
+### Patch Changes
+
+- [`2ff826d`](https://github.com/markprompt/markprompt-js/commit/2ff826dc75529bbd510b3c28892e3d7fc8403249) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix circular dependency
+
+- [`a28859c`](https://github.com/markprompt/markprompt-js/commit/a28859cbe55128a65b73cfe50bd4fc60d54ad5e1) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove unused dependencies
+
+- [#466](https://github.com/markprompt/markprompt-js/pull/466) [`74cd531`](https://github.com/markprompt/markprompt-js/commit/74cd53178a1e84e1d8115768ad3bc059330128c9) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix reported missing peer deps
+
+- [`345b7fd`](https://github.com/markprompt/markprompt-js/commit/345b7fd7908fe955ffac29fd4cbc22409b9170a8) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove unused component file
+
+- [#467](https://github.com/markprompt/markprompt-js/pull/467) [`a3fee0d`](https://github.com/markprompt/markprompt-js/commit/a3fee0d6efc57cfc4dd3362d438ac623c1dc8f7c) Thanks [@elliotdauber](https://github.com/elliotdauber)! - Changed encoding of create-ticket api call when no files present
+
 ## 0.57.0
 
 ### Minor Changes
