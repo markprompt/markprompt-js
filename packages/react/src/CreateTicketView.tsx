@@ -92,16 +92,28 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
     try {
       const data = new FormData(event.currentTarget);
+      const files = data.get('files');
+      const requestBody =
+        files && (files as any).size > 0
+          ? {
+              method: 'POST',
+              // don't pass a Content-Type header here, the browser will
+              // generate a correct header which includes the boundary.
+              body: data,
+              headers,
+            }
+          : {
+              method: 'POST',
+              body: JSON.stringify(Object.fromEntries(data.entries())),
+              headers: {
+                ...headers,
+                'Content-Type': 'application/json',
+              },
+            };
       // copy a field for legacy reasons
       const result = await fetch(
         `${apiUrl}/integrations/create-ticket?projectKey=${projectKey}`,
-        {
-          method: 'POST',
-          // don't pass a Content-Type header here, the browser will
-          // generate a correct header which includes the boundary.
-          body: data,
-          headers,
-        },
+        requestBody,
       );
 
       setSubmittingCase(false);
