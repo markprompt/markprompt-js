@@ -27,18 +27,15 @@ function getCreateTicket(
       JSON.parse(args),
     );
 
-    const data = new FormData();
-
-    data.append('projectKey', projectKey);
-    data.append('provider', provider);
-    data.append('name', name);
-    data.append('email', email);
-    data.append('userName', userName);
-    data.append('summary', summary);
-
-    for (const field of customFields) {
-      data.append('customFields', JSON.stringify(field));
-    }
+    const data = {
+      projectKey,
+      provider,
+      name,
+      email,
+      userName,
+      summary,
+      customFields,
+    };
 
     const res = await fetch(
       `${import.meta.env.VITE_MARKPROMPT_API_URL}/integrations/create-ticket?projectKey=${projectKey}`,
@@ -47,8 +44,11 @@ function getCreateTicket(
         credentials: 'omit',
         mode: 'cors',
         method: 'POST',
-        body: data,
-        headers: { 'X-Markprompt-API-Version': '2024-05-21' },
+        body: JSON.stringify(data),
+        headers: {
+          'X-Markprompt-API-Version': '2024-05-21',
+          'Content-Type': 'application/json',
+        },
       },
     );
 
