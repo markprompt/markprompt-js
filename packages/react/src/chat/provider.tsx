@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
-import { ChatContext, type ChatStore } from './store.js';
-import { createChatStore, type MarkpromptOptions } from '../index.js';
+import { createChatStore, ChatContext, type ChatStore } from './store.js';
+import type { MarkpromptOptions } from '../types.js';
 
 export interface ChatProviderProps {
   chatOptions?: MarkpromptOptions['chat'];
