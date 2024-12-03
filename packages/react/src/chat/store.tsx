@@ -81,7 +81,7 @@ export interface ChatViewTool {
    * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
    * arguments. Must return a string to feed the result back into OpenAI.
    **/
-  call: (args: string) => Promise<string>;
+  call: (args: string, context?: { threadId: string }) => Promise<string>;
   /**
    * Whether user needs to confirm a call to this function or function calls
    * will be executed right away.
@@ -570,8 +570,10 @@ export const createChatStore = ({
                     status: 'loading',
                   });
 
+                  const threadId = get().threadId!;
                   const result = await tool.call(
                     tool_call.function?.arguments || '{}',
+                    { threadId },
                   );
 
                   get().setToolCallById(tool_call.id!, {
