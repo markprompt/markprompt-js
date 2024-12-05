@@ -10,7 +10,7 @@ const config = {
   entryPoints: ['src/index.tsx', 'src/init.ts'],
   outdir: 'dist/',
   format: 'esm',
-  target: 'esnext',
+  target: 'es2023',
   tsconfig: path.resolve(import.meta.dirname, '..', 'tsconfig.json'),
   bundle: true,
   treeShaking: true,
