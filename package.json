@@ -2,10 +2,7 @@
   "name": "markprompt",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "examples/*",
-    "packages/*"
-  ],
+  "workspaces": ["examples/*", "packages/*"],
   "scripts": {
     "build:packages": "turbo run build --filter @markprompt/*...",
     "build": "turbo run build",
@@ -33,7 +30,7 @@
     "@manypkg/cli": "^0.22.0",
     "@markprompt/eslint-config": "workspace:*",
     "@vitest/coverage-v8": "^2.1.6",
-    "eslint": "^9.15.0",
+    "eslint": "^9.16.0",
     "husky": "^9.0.11",
     "jsdom": "^25.0.1",
     "prettier": "^3.4.2",

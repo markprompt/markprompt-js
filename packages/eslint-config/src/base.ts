@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import type { Linter } from 'eslint';
 import turbo from 'eslint-config-turbo/flat';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
@@ -44,6 +45,13 @@ export const base = (
         ...globals.browser,
         ...globals.node,
       },
+    },
+    settings: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+        }),
+      ],
     },
   },
   {
