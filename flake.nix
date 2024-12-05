@@ -17,7 +17,7 @@
     devShells = forAllSystems (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        node = pkgs.nodejs_20;
+        node = pkgs.nodejs_22;
         corepackEnable = pkgs.runCommand "corepack-enable" {} ''
           mkdir -p $out/bin
           ${node}/bin/corepack enable --install-directory $out/bin
