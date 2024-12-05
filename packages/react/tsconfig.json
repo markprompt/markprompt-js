@@ -3,7 +3,7 @@
     // base
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "es2024",
     "moduleDetection": "force",
     "isolatedModules": true,
     "checkJs": true,

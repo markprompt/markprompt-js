@@ -3,7 +3,7 @@
     /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "es2024",
     "allowJs": true,
     "checkJs": true,
     "resolveJsonModule": true,
@@ -30,7 +30,7 @@
     "declarationMap": true,
 
     /* If your code doesn't run in the DOM: */
-    "lib": ["es2022"]
+    "lib": ["es2023"]
   },
   "include": ["src/"]
 }
