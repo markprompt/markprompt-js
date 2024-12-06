@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.59.0
+
+### Minor Changes
+
+- [#470](https://github.com/markprompt/markprompt-js/pull/470) [`32b9f8c`](https://github.com/markprompt/markprompt-js/commit/32b9f8c368e485f478e9687be66095147494031f) Thanks [@nickrttn](https://github.com/nickrttn)! - Set TypeScript `target` to `es2023`
+
+### Patch Changes
+
+- Updated dependencies [[`32b9f8c`](https://github.com/markprompt/markprompt-js/commit/32b9f8c368e485f478e9687be66095147494031f)]:
+  - @markprompt/core@0.41.0
+
 ## 0.58.1
 
 ### Patch Changes

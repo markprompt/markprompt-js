@@ -1,5 +1,16 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.30.0
+
+### Minor Changes
+
+- [#470](https://github.com/markprompt/markprompt-js/pull/470) [`32b9f8c`](https://github.com/markprompt/markprompt-js/commit/32b9f8c368e485f478e9687be66095147494031f) Thanks [@nickrttn](https://github.com/nickrttn)! - Set TypeScript `target` to `es2023`
+
+### Patch Changes
+
+- Updated dependencies [[`32b9f8c`](https://github.com/markprompt/markprompt-js/commit/32b9f8c368e485f478e9687be66095147494031f)]:
+  - @markprompt/react@0.59.0
+
 ## 0.29.2
 
 ### Patch Changes
