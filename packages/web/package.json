@@ -15,7 +15,12 @@
     "./init": "./dist/init.js"
   },
   "main": "dist/index.js",
-  "files": ["dist/globals.*", "dist/index.*", "dist/init.*", "dist/types.*"],
+  "files": [
+    "dist/globals.*",
+    "dist/index.*",
+    "dist/init.*",
+    "dist/types.*"
+  ],
   "scripts": {
     "analyze": "node scripts/analyze.js",
     "build": "node scripts/build.js",
@@ -34,8 +39,7 @@
     "esbuild": "^0.24.0",
     "preact": "^10.20.2",
     "react": "npm:@preact/compat",
-    "react-dom": "npm:@preact/compat",
-    "typescript": "^5.7.2"
+    "react-dom": "npm:@preact/compat"
   },
   "publishConfig": {
     "access": "public"
