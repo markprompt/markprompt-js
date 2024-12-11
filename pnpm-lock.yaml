@@ -139,7 +139,7 @@ importers:
         version: link:../../packages/web
     devDependencies:
       '@vitejs/plugin-react-swc':
-        specifier: ^3.7.1
+        specifier: ^3.7.2
         version: 3.7.2(@swc/helpers@0.5.5)(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))
       vite:
         specifier: ^5.2.9
@@ -167,7 +167,7 @@ importers:
         specifier: ^18.2
         version: 18.3.1
       '@vitejs/plugin-react-swc':
-        specifier: ^3.7.1
+        specifier: ^3.7.2
         version: 3.7.2(@swc/helpers@0.5.5)(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))
       vite:
         specifier: ^5.2.9
@@ -652,7 +652,7 @@ importers:
         specifier: ^18.2
         version: 18.3.1
       '@vitejs/plugin-react-swc':
-        specifier: ^3.7.1
+        specifier: ^3.7.2
         version: 3.7.2(@swc/helpers@0.5.5)(vite@5.4.11(@types/node@22.10.0)(terser@5.36.0))
       msw:
         specifier: ^2.6.2
