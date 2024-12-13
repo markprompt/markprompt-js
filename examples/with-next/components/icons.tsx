@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, JSX } from 'react';
 
-const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label/hidden via props
   <svg
     xmlns="http://www.w3.org/2000/svg"

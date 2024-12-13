@@ -4,7 +4,7 @@ import {
   useMemo,
   useState,
   type ComponentType,
-  type ReactElement,
+  type JSX,
 } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
@@ -34,7 +34,7 @@ export function CreateTicketButton({
   integrations,
 }: {
   integrations: MarkpromptOptions['integrations'];
-}): ReactElement {
+}): JSX.Element {
   const [isCreatingTicketSummary, setIsCreatingTicketSummary] = useState(false);
   const threadId = useChatStore((state) => state.threadId);
   const messages = useChatStore((state) => state.messages);
@@ -102,7 +102,7 @@ export function CreateTicketButton({
   );
 }
 
-export function Messages(props: MessagesProps): ReactElement {
+export function Messages(props: MessagesProps): JSX.Element {
   const {
     apiUrl,
     chatOptions,

@@ -7,7 +7,6 @@ import {
   Suspense,
   useEffect,
   useState,
-  type ReactElement,
   type JSX,
   useCallback,
   useMemo,
@@ -224,7 +223,6 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
           )}
         </>
       )}
-
       <GlobalStoreProvider options={globalStoreOptions}>
         <ChatProvider
           chatOptions={chat}
@@ -362,7 +360,7 @@ type MarkpromptContentProps = {
   integrations?: MarkpromptOptions['integrations'];
 } & BaseMarkprompt.BrandingProps;
 
-function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
+function MarkpromptContent(props: MarkpromptContentProps): JSX.Element {
   const {
     apiUrl,
     chat,
@@ -493,7 +491,6 @@ function MarkpromptContent(props: MarkpromptContentProps): ReactElement {
         // We still include a div to preserve the grid-template-rows rules
         <div />
       )}
-
       <div className="MarkpromptViews">
         {search.enabled && (
           <Tabs.Content

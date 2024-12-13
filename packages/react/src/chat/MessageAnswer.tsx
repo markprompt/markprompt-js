@@ -1,4 +1,4 @@
-import type { ComponentType, ReactElement, JSX } from 'react';
+import type { ComponentType, JSX } from 'react';
 
 import { Answer } from './Answer.js';
 import type { ChatViewMessage } from './store.js';
@@ -19,7 +19,7 @@ function LoadingDots(): JSX.Element {
   );
 }
 
-export function MessageAnswer(props: MessageAnswerProps): ReactElement {
+export function MessageAnswer(props: MessageAnswerProps): JSX.Element {
   const { children, state } = props;
 
   return (

@@ -1,5 +1,5 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import type { ReactNode, ReactElement } from 'react';
+import type { ReactNode, JSX } from 'react';
 
 interface ConditionalWrapProps {
   condition?: boolean;
@@ -7,9 +7,9 @@ interface ConditionalWrapProps {
   children: ReactNode;
 }
 
-export const ConditionalWrap = (props: ConditionalWrapProps): ReactElement => {
+export const ConditionalWrap = (props: ConditionalWrapProps): ReactNode => {
   const { condition, wrap, children } = props;
-  return (condition ? wrap(children) : children) as ReactElement;
+  return condition ? wrap(children) : children;
 };
 
 interface ConditionalVisuallyHiddenProps {
@@ -20,7 +20,7 @@ interface ConditionalVisuallyHiddenProps {
 
 export const ConditionalVisuallyHidden = (
   props: ConditionalVisuallyHiddenProps,
-): ReactElement => {
+): JSX.Element => {
   const { asChild, hide, children } = props;
   return (
     <ConditionalWrap

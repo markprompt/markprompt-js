@@ -1,11 +1,10 @@
 import '@markprompt/css';
-
-import { Markprompt, openMarkprompt } from '@markprompt/react';
-import type { ReactElement } from 'react';
-
 import styles from './App.module.css';
 
-function App(): ReactElement {
+import { Markprompt, openMarkprompt } from '@markprompt/react';
+import type { JSX } from 'react';
+
+function App(): JSX.Element {
   return (
     <div className={styles.app}>
       <div className={styles.centered}>

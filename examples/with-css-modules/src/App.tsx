@@ -1,10 +1,10 @@
 import * as Markprompt from '@markprompt/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import type { ReactElement } from 'react';
+import type { JSX } from 'react';
 
 import styles from './markprompt.module.css';
 
-function Component(): ReactElement {
+function Component(): JSX.Element {
   return (
     <Markprompt.Root>
       <Markprompt.DialogTrigger
@@ -45,7 +45,7 @@ function Component(): ReactElement {
   );
 }
 
-const CloseIcon = ({ className }: { className?: string }): ReactElement => (
+const CloseIcon = ({ className }: { className?: string }): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}
@@ -62,7 +62,7 @@ const CloseIcon = ({ className }: { className?: string }): ReactElement => (
   </svg>
 );
 
-const ChatIcon = ({ className }: { className?: string }): ReactElement => (
+const ChatIcon = ({ className }: { className?: string }): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}

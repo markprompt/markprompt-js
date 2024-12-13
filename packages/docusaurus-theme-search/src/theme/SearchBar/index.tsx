@@ -6,9 +6,10 @@ import {
   type MarkpromptProps,
   openMarkprompt,
 } from '@markprompt/react';
-import { useEffect, type ReactElement, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { JSX } from 'react';
 
-export default function SearchBar(): ReactElement {
+export default function SearchBar(): JSX.Element {
   const [markpromptExtras, setMarkpromptExtras] = useState<any>({});
   const { siteConfig } = useDocusaurusContext();
 

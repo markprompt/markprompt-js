@@ -1,11 +1,11 @@
 import { Markprompt, openMarkprompt } from '@markprompt/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { type ElementType, type ReactElement, useEffect } from 'react';
+import { type ElementType, useEffect, type JSX } from 'react';
 
 import { SearchIcon } from '../components/icons';
 
-export default function IndexPage(): ReactElement {
+export default function IndexPage(): JSX.Element {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (

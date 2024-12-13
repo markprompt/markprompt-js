@@ -1,5 +1,6 @@
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import { useEffect, type ReactElement } from 'react';
+import { useEffect } from 'react';
+import type { JSX } from 'react';
 
 import {
   ChevronUpIcon,
@@ -19,7 +20,7 @@ interface SearchBoxTriggerProps {
  * input, displaying a keyboard shortcut. This trigger is relatively positioned
  * in the container where Markprompt is rendered.
  */
-export function SearchBoxTrigger(props: SearchBoxTriggerProps): ReactElement {
+export function SearchBoxTrigger(props: SearchBoxTriggerProps): JSX.Element {
   const { trigger, onClick } = props;
 
   useEffect(() => {

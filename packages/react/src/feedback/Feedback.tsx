@@ -2,9 +2,9 @@ import type { PromptFeedback } from '@markprompt/core/feedback';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import {
   useState,
-  type ReactElement,
   type ComponentPropsWithoutRef,
   useEffect,
+  type JSX,
 } from 'react';
 
 import type { UseFeedbackResult } from './useFeedback.js';
@@ -27,7 +27,7 @@ interface FeedbackProps extends ComponentPropsWithoutRef<'aside'> {
 // Historically, this component held the thumbs up/down buttons only.
 // This is evolving into a more general "Actions" component, which now
 // also includes a copy button.
-export function Feedback(props: FeedbackProps): ReactElement {
+export function Feedback(props: FeedbackProps): JSX.Element {
   const {
     message,
     heading = DEFAULT_MARKPROMPT_OPTIONS.feedback?.heading,

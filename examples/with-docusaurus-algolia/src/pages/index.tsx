@@ -1,9 +1,8 @@
-import Layout from '@theme/Layout';
-import type { ReactElement } from 'react';
-
 import styles from './index.module.css';
+import type { JSX } from 'react';
+import Layout from '@theme/Layout';
 
-export default function Home(): ReactElement {
+export default function Home(): JSX.Element {
   return (
     <Layout description="A demo showing Markprompt + Algolia in Docusaurus">
       <main className={styles.main}>

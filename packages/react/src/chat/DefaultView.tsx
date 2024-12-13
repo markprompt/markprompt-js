@@ -1,10 +1,10 @@
-import type { ReactElement } from 'react';
+import type { JSX } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
 import type { MessagesProps } from './Messages.js';
 import type { MarkpromptOptions } from '../types.js';
 
-export function DefaultMessage(props: MessagesProps): ReactElement {
+export function DefaultMessage(props: MessagesProps): JSX.Element {
   const { chatOptions, feedbackOptions, projectKey, linkAs } = props;
 
   if (!chatOptions.defaultView?.message) {
@@ -39,7 +39,7 @@ export function DefaultPrompts({
   // prompts: string[];
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   onDidSelectPrompt: (prompt: string) => void;
-}): ReactElement {
+}): JSX.Element {
   if (
     !chatOptions.defaultView?.prompts ||
     chatOptions.defaultView?.prompts.length === 0
@@ -71,7 +71,7 @@ export function DefaultPrompts({
 
 export function DefaultView(
   props: MessagesProps & { onDidSelectPrompt: (prompt: string) => void },
-): ReactElement {
+): JSX.Element {
   const { onDidSelectPrompt, ...rest } = props;
   const chatOptions = rest.chatOptions;
 

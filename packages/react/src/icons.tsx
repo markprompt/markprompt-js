@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, JSX } from 'react';
 
-const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ const ChatIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const ChatIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ const ChatIconOutline = (
 
 const BookIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ const BookIconOutline = (
   </svg>
 );
 
-const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@ const CloseIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const ChevronLeftIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +104,7 @@ const ChevronLeftIcon = (
 
 const ChevronDownIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +123,7 @@ const ChevronDownIcon = (
 
 const ChevronRightIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@ const ChevronRightIcon = (
   </svg>
 );
 
-const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@ const SearchIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const SearchIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -177,9 +177,7 @@ const SearchIconOutline = (
   </svg>
 );
 
-const ClipboardIcon = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+const ClipboardIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +191,7 @@ const ClipboardIcon = (
   </svg>
 );
 
-const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +207,7 @@ const SendIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -228,7 +226,7 @@ const SparklesIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const CornerDownLeftIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +242,7 @@ const CornerDownLeftIcon = (
   </svg>
 );
 
-const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +259,7 @@ const CommandIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const CounterClockwiseClockIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -279,9 +277,7 @@ const CounterClockwiseClockIcon = (
   </svg>
 );
 
-const ChevronUpIcon = (
-  props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+const ChevronUpIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +292,7 @@ const ChevronUpIcon = (
   </svg>
 );
 
-const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -315,7 +311,7 @@ const FileTextIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -333,7 +329,7 @@ const HashIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     {...props}
@@ -351,7 +347,7 @@ const ThumbsUpIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const ThumbsDownIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     {...props}
@@ -367,7 +363,7 @@ const ThumbsDownIcon = (
   </svg>
 );
 
-const ReloadIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const ReloadIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     stroke="currentColor"
@@ -383,7 +379,7 @@ const ReloadIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const StopIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const StopIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     stroke="currentColor"
@@ -397,7 +393,7 @@ const StopIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -417,7 +413,7 @@ const PlusIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -433,7 +429,7 @@ const CheckIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +447,7 @@ const LoaderIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const CheckCircleIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -470,7 +466,7 @@ const CheckCircleIcon = (
 
 const CrossCircleIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -490,7 +486,7 @@ const CrossCircleIcon = (
 
 const CircleDashedIcon = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -513,7 +509,7 @@ const CircleDashedIcon = (
   </svg>
 );
 
-const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -529,7 +525,7 @@ const UserIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -555,7 +551,7 @@ const LoadingIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
 
 const NewspaperIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -575,7 +571,7 @@ const NewspaperIconOutline = (
 
 const SparklesIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -595,7 +591,7 @@ const SparklesIconOutline = (
 
 const MenuIconOutline = (
   props: ComponentPropsWithoutRef<'svg'>,
-): ReactElement => (
+): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -613,7 +609,7 @@ const MenuIconOutline = (
   </svg>
 );
 
-const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg viewBox="0 0 16 16" {...props}>
     <path
@@ -623,7 +619,7 @@ const DiscordIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
   </svg>
 );
 
-const StarIcon = (props: ComponentPropsWithoutRef<'svg'>): ReactElement => (
+const StarIcon = (props: ComponentPropsWithoutRef<'svg'>): JSX.Element => (
   // biome-ignore lint/a11y/noSvgWithoutTitle: label provided elsewhere
   <svg viewBox="0 0 24 24" {...props} strokeWidth="1.5" stroke="currentColor">
     <path

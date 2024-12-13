@@ -1,7 +1,7 @@
 import { useCallback, useRef, type RefObject } from 'react';
 
 interface useAbortControllerResult {
-  ref: RefObject<AbortController | undefined>;
+  ref: RefObject<AbortController | undefined | null>;
   abort: () => void;
 }
 

@@ -5,7 +5,8 @@ import {
 } from '@markprompt/core/chat';
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
-import { type ReactElement, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import type { JSX } from 'react';
 
 interface ChatCompletionExecution {
   run?: (args: unknown) => void;
@@ -38,7 +39,7 @@ const tools: (OpenAI.ChatCompletionTool & ChatCompletionExecution)[] = [
   },
 ];
 
-export default function IndexPage(): ReactElement {
+export default function IndexPage(): JSX.Element {
   const [input, setInput] = useState('');
   const [streamedMessage, setStreamedMessage] = useState('');
 

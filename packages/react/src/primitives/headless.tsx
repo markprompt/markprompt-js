@@ -14,7 +14,6 @@ import {
   type FormEventHandler,
   type JSX,
   type KeyboardEvent,
-  type ReactElement,
   type ReactNode,
 } from 'react';
 import Markdown from 'react-markdown';
@@ -38,7 +37,7 @@ type RootProps = Dialog.DialogProps & { display?: MarkpromptDisplay };
 /**
  * The Markprompt context provider and dialog root.
  */
-function Root(props: RootProps): ReactElement {
+function Root(props: RootProps): JSX.Element {
   const {
     children,
     display = 'dialog',
@@ -64,7 +63,7 @@ function Root(props: RootProps): ReactElement {
   );
 }
 
-function DialogRootWithAbort(props: Dialog.DialogProps): ReactElement {
+function DialogRootWithAbort(props: Dialog.DialogProps): JSX.Element {
   const { modal = true, ...rest } = props;
   return (
     <Dialog.Root {...rest} modal={modal}>
@@ -88,7 +87,7 @@ type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
 /**
  * The Markprompt dialog portal.
  */
-function Portal(props: PortalProps): ReactElement {
+function Portal(props: PortalProps): JSX.Element {
   return <Dialog.Portal {...props} />;
 }
 Portal.displayName = 'Markprompt.Portal';
@@ -323,7 +322,7 @@ interface CopyContentButtonProps {
   className?: string;
 }
 
-function CopyContentButton(props: CopyContentButtonProps): ReactElement {
+function CopyContentButton(props: CopyContentButtonProps): JSX.Element {
   const { content, className } = props;
   const [didJustCopy, setDidJustCopy] = useState(false);
 
@@ -408,7 +407,7 @@ type AnswerProps = Omit<
 /**
  * Render the markdown answer from the Markprompt API.
  */
-function Answer(props: AnswerProps): ReactElement {
+function Answer(props: AnswerProps): JSX.Element {
   const {
     answer,
     state,
@@ -619,7 +618,7 @@ const References = function References<
     index: number;
   }>,
   P extends ReferencesProps<TRoot, TReference> = { references: [] },
->(props: P, ref: PolymorphicRef<TRoot>): ReactElement {
+>(props: P, ref: PolymorphicRef<TRoot>): JSX.Element {
   const {
     RootComponent = 'ul',
     ReferenceComponent = 'li',
@@ -742,7 +741,7 @@ interface ErrorMessageProps {
   children: ReactNode;
 }
 
-function ErrorMessage(props: ErrorMessageProps): ReactElement {
+function ErrorMessage(props: ErrorMessageProps): JSX.Element {
   const { className, children } = props;
   return (
     <div className={className}>

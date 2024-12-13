@@ -1,12 +1,12 @@
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
 import type { CSAT } from '@markprompt/core/feedback';
 import {
-  type ReactElement,
   type ComponentPropsWithoutRef,
   useState,
   useCallback,
   useRef,
   type FormEventHandler,
+  type JSX,
 } from 'react';
 
 import { useFeedback } from './useFeedback.js';
@@ -46,7 +46,7 @@ export function CSATReasonTextArea({
   onSubmit: (reason: string) => void;
   heading: string | undefined;
   thankYou: string | undefined;
-}): ReactElement {
+}): JSX.Element {
   const formRef = useRef<HTMLFormElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +130,7 @@ export function CSATReasonTextArea({
   );
 }
 
-export function CSATPicker(props: CSATPickerProps): ReactElement {
+export function CSATPicker(props: CSATPickerProps): JSX.Element {
   const { csat = 0, projectKey, apiUrl, threadId, feedbackOptions } = props;
   const [tempValue, setTempValue] = useState<CSAT>(csat);
   const [permanentValue, setPermanentValue] = useState<CSAT>(csat);

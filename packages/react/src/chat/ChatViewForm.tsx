@@ -4,7 +4,6 @@ import {
   useEffect,
   useRef,
   type FormEventHandler,
-  type ReactElement,
   useState,
   useMemo,
   type JSX,
@@ -41,7 +40,7 @@ function ChatSendIcon(props: ChatSendIconProps): JSX.Element {
   return <SendIcon role="img" aria-label="send" />;
 }
 
-export function ChatViewForm(props: ChatViewFormProps): ReactElement {
+export function ChatViewForm(props: ChatViewFormProps): JSX.Element {
   const { activeView, chatOptions, minInputRows, submitOnEnter } = props;
 
   const [prompt, setPrompt] = useState('');
