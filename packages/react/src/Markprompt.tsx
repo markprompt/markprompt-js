@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
   type ReactElement,
+  type JSX,
   useCallback,
   useMemo,
 } from 'react';

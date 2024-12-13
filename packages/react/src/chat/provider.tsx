@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type JSX, type ReactNode } from 'react';
 
 import { createChatStore, ChatContext, type ChatStore } from './store.js';
 import type { MarkpromptOptions } from '../types.js';
@@ -24,7 +24,7 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
     headers,
   } = props;
 
-  const store = useRef<ChatStore>();
+  const store = useRef<ChatStore>(null);
 
   if (!store.current) {
     store.current = createChatStore({

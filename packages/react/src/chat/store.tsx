@@ -8,7 +8,7 @@ import {
   type SubmitChatYield,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, type JSX } from 'react';
 import { createStore, useStore } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

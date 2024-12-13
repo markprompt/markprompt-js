@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode, type JSX } from 'react';
 
 import {
   createGlobalStore,
@@ -35,7 +35,7 @@ export function GlobalStoreProvider(
 ): JSX.Element {
   const { options, children } = props;
 
-  const store = useRef<GlobalStore>();
+  const store = useRef<GlobalStore>(null);
 
   if (!store.current) {
     store.current = createGlobalStore(options);

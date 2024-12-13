@@ -1,6 +1,6 @@
 import type { SubmitFeedbackOptions } from '@markprompt/core/feedback';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import type { ComponentType } from 'react';
+import type { ComponentType, JSX } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { Messages } from './Messages.js';

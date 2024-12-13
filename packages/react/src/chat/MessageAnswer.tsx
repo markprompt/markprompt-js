@@ -1,4 +1,4 @@
-import type { ComponentType, ReactElement } from 'react';
+import type { ComponentType, ReactElement, JSX } from 'react';
 
 import { Answer } from './Answer.js';
 import type { ChatViewMessage } from './store.js';

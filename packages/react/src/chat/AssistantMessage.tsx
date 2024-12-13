@@ -1,6 +1,6 @@
 import { isToolCalls } from '@markprompt/core/chat';
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
-import { useMemo, type ComponentType } from 'react';
+import { useMemo, type ComponentType, type JSX } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
 import { MessageAnswer } from './MessageAnswer.js';

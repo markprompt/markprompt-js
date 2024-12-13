@@ -11,7 +11,7 @@
   "dependencies": {
     "@markprompt/css": "workspace:*",
     "@markprompt/web": "workspace:*",
-    "preact": "^10.20.2",
+    "preact": "^10.25.2",
     "randomuuid": "^1.0.1"
   },
   "devDependencies": {

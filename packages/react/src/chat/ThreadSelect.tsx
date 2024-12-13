@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { selectProjectThreads, useChatStore } from './store.js';
 import { CounterClockwiseClockIcon, PlusIcon } from '../icons.js';
 import { Select } from '../primitives/Select.js';

@@ -1,7 +1,7 @@
 import { Markprompt, openMarkprompt } from '@markprompt/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { type ReactElement, useEffect } from 'react';
+import { type ElementType, type ReactElement, useEffect } from 'react';
 
 import { SearchIcon } from '../components/icons';
 
@@ -83,7 +83,7 @@ export default function IndexPage(): ReactElement {
             getTitle: (result) => result.content || undefined,
           }}
           close={{ visible: false }}
-          linkAs={Link}
+          linkAs={Link as ElementType<{ href?: string }>}
         >
           <div id="search">
             <SearchIcon

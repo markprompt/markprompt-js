@@ -1,5 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import type { ComponentPropsWithoutRef, JSXElementConstructor } from 'react';
+import type { ComponentProps, ElementType, JSX } from 'react';
 
 import {
   BookIconOutline,
@@ -15,7 +15,7 @@ import { openMarkprompt } from './utils.js';
 
 function getMenuIconById(
   iconId: MenuIconId | undefined,
-): JSXElementConstructor<ComponentPropsWithoutRef<'svg'>> {
+): ElementType<ComponentProps<'svg'>> {
   switch (iconId) {
     case 'book':
       return BookIconOutline;
@@ -39,7 +39,8 @@ function MenuEntry(
 ): JSX.Element {
   const Icon = getMenuIconById(props.iconId);
 
-  const Comp: any = props.href ? props.linkAs || 'a' : 'div';
+  const Comp = props.href ? (props.linkAs ?? 'a') : 'div';
+
   return (
     <DropdownMenu.Item asChild>
       <Comp

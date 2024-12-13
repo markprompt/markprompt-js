@@ -7,6 +7,7 @@ import {
   type ReactElement,
   useState,
   useMemo,
+  type JSX,
 } from 'react';
 
 import { ChatContext, useChatStore } from './store.js';

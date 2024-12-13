@@ -4,6 +4,7 @@ import {
   useMemo,
   useState,
   type ComponentType,
+  type JSX,
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';

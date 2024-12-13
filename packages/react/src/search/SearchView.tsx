@@ -13,7 +13,6 @@ import {
   type SetStateAction,
   useState,
   useMemo,
-  type ComponentType,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -63,7 +62,7 @@ export interface SearchViewProps {
    * Component to use in place of <a>.
    * @default "a"
    */
-  linkAs?: string | ComponentType<any>;
+  linkAs?: MarkpromptOptions['linkAs'];
   /**
    * Display debug info.
    * @default false

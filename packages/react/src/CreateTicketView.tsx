@@ -16,6 +16,7 @@ import {
   useState,
   type ComponentType,
   type FormEvent,
+  type JSX,
 } from 'react';
 
 import { toValidApiMessages } from './chat/utils.js';

@@ -825,7 +825,7 @@ export interface MarkpromptOptions {
    * Component to use in place of <a>.
    * @default "a"
    */
-  linkAs?: string | ComponentType<any>;
+  linkAs?: ElementType<{ href?: string }>;
   /**
    * Options for the title component.
    * @default true

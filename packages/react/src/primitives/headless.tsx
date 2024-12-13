@@ -2,19 +2,20 @@ import type { FileSectionReference } from '@markprompt/core/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
   forwardRef,
-  useEffect,
-  useRef,
-  type ComponentPropsWithRef,
-  type ComponentPropsWithoutRef,
-  type ElementType,
-  type ReactElement,
-  type ReactNode,
   memo,
   useCallback,
+  useEffect,
+  useRef,
   useState,
+  type ComponentPropsWithRef,
+  type ComponentPropsWithoutRef,
   type ComponentType,
-  type KeyboardEvent,
+  type ElementType,
   type FormEventHandler,
+  type JSX,
+  type KeyboardEvent,
+  type ReactElement,
+  type ReactNode,
 } from 'react';
 import Markdown from 'react-markdown';
 import { mergeRefs } from 'react-merge-refs';
