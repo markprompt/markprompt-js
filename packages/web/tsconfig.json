@@ -23,16 +23,11 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "verbatimModuleSyntax": true,
 
     // runtime
-    "lib": ["dom", "dom.iterable", "es2023"],
-
-    "paths": {
-      "react": ["./node_modules/preact/compat"],
-      "react-dom": ["./node_modules/preact/compat"]
-    }
+    "lib": ["dom", "dom.iterable", "es2023"]
   },
   "include": ["src/"],
   "exclude": ["**/node_modules/", "dist/", ".turbo/"]
