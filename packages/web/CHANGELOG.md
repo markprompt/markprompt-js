@@ -1,5 +1,16 @@
 # @markprompt/web
 
+## 0.47.0
+
+### Minor Changes
+
+- [#474](https://github.com/markprompt/markprompt-js/pull/474) [`f1c1e96`](https://github.com/markprompt/markprompt-js/commit/f1c1e962981970c3335b4e9872d8d06f5baca48a) Thanks [@nickrttn](https://github.com/nickrttn)! - Upgrade `preact`
+
+### Patch Changes
+
+- Updated dependencies [[`f1c1e96`](https://github.com/markprompt/markprompt-js/commit/f1c1e962981970c3335b4e9872d8d06f5baca48a)]:
+  - @markprompt/react@0.60.0
+
 ## 0.46.0
 
 ### Minor Changes
