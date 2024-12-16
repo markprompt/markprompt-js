@@ -1,5 +1,5 @@
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import type { ElementType } from 'react';
+import type { ElementType, JSX } from 'react';
 
 import { ChatIcon } from './icons.js';
 import type { MarkpromptProps } from './Markprompt.js';

@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { ComponentType, ReactElement } from 'react';
+import type { ComponentType, JSX } from 'react';
 
 import type { ChatLoadingState } from '../chat/store.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
@@ -8,7 +8,7 @@ interface CaretProps {
   answer: string;
 }
 
-export function Caret(props: CaretProps): ReactElement | null {
+export function Caret(props: CaretProps): JSX.Element | null {
   const { answer } = props;
 
   if (answer) {
@@ -38,7 +38,7 @@ interface AnswerProps {
   linkAs?: string | ComponentType<any>;
 }
 
-export function Answer(props: AnswerProps): ReactElement {
+export function Answer(props: AnswerProps): JSX.Element {
   const { answer, className, state, linkAs } = props;
 
   return (

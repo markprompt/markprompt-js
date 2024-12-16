@@ -4,6 +4,7 @@ import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { http, delay, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import type { JSX } from 'react';
 import {
   afterAll,
   beforeAll,

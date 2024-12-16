@@ -1,5 +1,6 @@
 import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
+import type { JSX } from 'react';
 
 import { cn } from './utils.js';
 import { CloseIcon } from '../icons.js';

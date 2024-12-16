@@ -1,10 +1,5 @@
 import type { FileSectionReference } from '@markprompt/core/types';
-import {
-  useCallback,
-  useMemo,
-  type ReactElement,
-  type ComponentType,
-} from 'react';
+import { useCallback, useMemo, type ComponentType, type JSX } from 'react';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import type { ChatLoadingState } from '../index.js';
@@ -25,7 +20,7 @@ interface ReferenceProps {
   linkAs?: string | ComponentType<any>;
 }
 
-export const Reference = (props: ReferenceProps): ReactElement => {
+export const Reference = (props: ReferenceProps): JSX.Element => {
   const {
     getHref = DEFAULT_MARKPROMPT_OPTIONS.references.getHref,
     getLabel = DEFAULT_MARKPROMPT_OPTIONS.references.getLabel,
@@ -88,7 +83,7 @@ interface ReferencesProps {
   linkAs?: string | ComponentType<any>;
 }
 
-const References = (props: ReferencesProps): ReactElement | null => {
+const References = (props: ReferencesProps): JSX.Element | null => {
   const {
     getHref,
     getLabel,

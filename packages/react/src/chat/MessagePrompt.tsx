@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { JSX } from 'react';
 
 import type { ChatViewMessage } from './store.js';
 import { UserIcon } from '../icons.js';
@@ -11,7 +11,7 @@ interface MessagePromptProps {
   referencesOptions?: MarkpromptOptions['references'];
 }
 
-export function MessagePrompt(props: MessagePromptProps): ReactElement {
+export function MessagePrompt(props: MessagePromptProps): JSX.Element {
   const { children, chatOptions, state } = props;
   return (
     <div className="MarkpromptMessagePrompt" data-loading-state={state}>

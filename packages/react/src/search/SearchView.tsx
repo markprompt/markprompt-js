@@ -9,11 +9,10 @@ import {
   type Dispatch,
   type FormEventHandler,
   type KeyboardEventHandler,
-  type ReactElement,
   type SetStateAction,
   useState,
   useMemo,
-  type ComponentType,
+  type JSX,
 } from 'react';
 
 import { SearchResult } from './SearchResult.js';
@@ -63,7 +62,7 @@ export interface SearchViewProps {
    * Component to use in place of <a>.
    * @default "a"
    */
-  linkAs?: string | ComponentType<any>;
+  linkAs?: MarkpromptOptions['linkAs'];
   /**
    * Display debug info.
    * @default false
@@ -78,7 +77,7 @@ interface ActiveSearchResult {
 
 const searchInputName = 'markprompt-search';
 
-export function SearchView(props: SearchViewProps): ReactElement {
+export function SearchView(props: SearchViewProps): JSX.Element {
   const {
     activeView,
     debug,
@@ -369,7 +368,7 @@ interface SearchResultsContainerProps {
 
 function SearchResultsContainer(
   props: SearchResultsContainerProps,
-): ReactElement {
+): JSX.Element {
   const {
     searchQuery,
     searchResults,
@@ -481,7 +480,6 @@ function SearchResultsContainer(
           </div>
         </div>
       )}
-
       {state === 'done' &&
         searchResults.length === 0 &&
         searchQuery.trim().length > 0 && (
@@ -491,7 +489,6 @@ function SearchResultsContainer(
             </p>
           </div>
         )}
-
       <BaseMarkprompt.SearchResults
         searchResults={searchResults}
         searchOptions={searchOptions}

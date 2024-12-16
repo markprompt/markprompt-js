@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type JSX } from 'react';
 
 import { selectProjectThreads, useChatStore } from './store.js';
 import { PlusIcon } from '../icons.js';

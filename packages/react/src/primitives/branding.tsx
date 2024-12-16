@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, JSX } from 'react';
 
 interface BrandingProps {
   showAlgolia?: boolean;
@@ -6,7 +6,7 @@ interface BrandingProps {
   className?: string;
 }
 
-export const Branding = (props: BrandingProps): ReactElement => {
+export const Branding = (props: BrandingProps): JSX.Element => {
   const { brandingType, showAlgolia, className } = props;
 
   if (brandingType === 'plain') {
@@ -129,7 +129,7 @@ export const AlgoliaIcon = ({
   className,
   style,
   ...props
-}: ComponentPropsWithoutRef<'svg'>): ReactElement => {
+}: ComponentPropsWithoutRef<'svg'>): JSX.Element => {
   return (
     <svg
       className={className}
