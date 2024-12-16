@@ -10,7 +10,7 @@ import {
   type StandaloneTicketDeflectionFormProps,
   StandaloneTicketDeflectionForm,
 } from '@markprompt/react';
-import { createRoot, type Root } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 function getHTMLElement(
   value: HTMLElement | string,
@@ -21,6 +21,8 @@ function getHTMLElement(
   if (!el) throw new Error(`Could not find element with selector "${value}"`);
   return el;
 }
+
+type Root = ReturnType<typeof createRoot>;
 
 let root: Root;
 
