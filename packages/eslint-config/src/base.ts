@@ -24,17 +24,8 @@ export const base = (
   {
     ignores: ['.turbo/', 'dist/'],
   },
-  js.configs.recommended,
-  promise.configs['flat/recommended'],
-  ...(ts.configs.recommended as Linter.Config[]),
-  ...(ts.configs.stylistic as Linter.Config[]),
-  importX.flatConfigs.typescript,
-  ...turbo,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
-    plugins: {
-      'import-x': importX as unknown as ESLint.Plugin,
-    },
     languageOptions: {
       parser: parser as Linter.Parser,
       parserOptions: {
@@ -56,6 +47,12 @@ export const base = (
         ...globals.node,
       },
     },
+  },
+
+  {
+    plugins: {
+      'import-x': importX as unknown as ESLint.Plugin,
+    },
     settings: {
       'import-x/extensions': allExtensions,
       'import-x/external-module-folders': [
@@ -72,6 +69,14 @@ export const base = (
       ],
     },
   },
+
+  js.configs.recommended,
+  promise.configs['flat/recommended'],
+  importX.flatConfigs.typescript,
+  ...(ts.configs.recommended as Linter.Config[]),
+  ...(ts.configs.stylistic as Linter.Config[]),
+  ...turbo,
+
   {
     rules: {
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
