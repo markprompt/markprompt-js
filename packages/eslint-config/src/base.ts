@@ -1,11 +1,21 @@
 import js from '@eslint/js';
-import type { Linter } from 'eslint';
+import type { ESLint, Linter } from 'eslint';
 import turbo from 'eslint-config-turbo/flat';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
 import ts, { parser } from 'typescript-eslint';
+
+const typeScriptExtensions = ['.ts', '.tsx', '.cts', '.mts'] as const;
+
+const allExtensions = [
+  ...typeScriptExtensions,
+  '.js',
+  '.jsx',
+  '.cjs',
+  '.mjs',
+] as const;
 
 export const base = (
   rootDir: string,
@@ -16,15 +26,15 @@ export const base = (
   },
   js.configs.recommended,
   promise.configs['flat/recommended'],
-  // eslint-disable-next-line import-x/no-named-as-default-member
   ...(ts.configs.recommended as Linter.Config[]),
-  // eslint-disable-next-line import-x/no-named-as-default-member
   ...(ts.configs.stylistic as Linter.Config[]),
-  // importX.flatConfigs.recommended as Linter.Config,
   importX.flatConfigs.typescript,
   ...turbo,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
+    plugins: {
+      'import-x': importX as unknown as ESLint.Plugin,
+    },
     languageOptions: {
       parser: parser as Linter.Parser,
       parserOptions: {
@@ -47,6 +57,14 @@ export const base = (
       },
     },
     settings: {
+      'import-x/extensions': allExtensions,
+      'import-x/external-module-folders': [
+        'node_modules',
+        'node_modules/@types',
+      ],
+      'import-x/parsers': {
+        '@typescript-eslint/parser': [...typeScriptExtensions],
+      },
       'import-x/resolver-next': [
         createTypeScriptImportResolver({
           alwaysTryTypes: true,
@@ -60,6 +78,8 @@ export const base = (
       '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
       // https://github.com/import-js/eslint-plugin-import/issues/2340
       'import-x/namespace': 'off',
+      // TypeScript compilation already ensures that named imports exist in the referenced module
+      'import-x/named': 'off',
       'import-x/order': [
         'error',
         {
