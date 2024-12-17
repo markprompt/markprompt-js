@@ -20,7 +20,7 @@ export const base = (
   ...(ts.configs.recommended as Linter.Config[]),
   // eslint-disable-next-line import-x/no-named-as-default-member
   ...(ts.configs.stylistic as Linter.Config[]),
-  importX.flatConfigs.recommended as Linter.Config,
+  // importX.flatConfigs.recommended as Linter.Config,
   importX.flatConfigs.typescript,
   ...turbo,
   {
