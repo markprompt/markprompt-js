@@ -6,7 +6,7 @@ import {
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { useCallback, useState } from 'react';
-import type { JSX } from 'react';
+import type { FormEvent, JSX } from 'react';
 
 interface ChatCompletionExecution {
   run?: (args: unknown) => void;
@@ -44,7 +44,7 @@ export default function IndexPage(): JSX.Element {
   const [streamedMessage, setStreamedMessage] = useState('');
 
   const submitForm = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       setStreamedMessage('Fetching response...');

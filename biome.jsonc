@@ -111,6 +111,18 @@
           }
         }
       }
+    },
+    {
+      // .d.ts files import types inside their declare, which isn't parsed correctly by Biome, yet.
+      "include": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
     }
   ]
 }
