@@ -80,7 +80,8 @@
       },
       "nursery": {
         "noDuplicateElseIf": "error",
-        "noIrregularWhitespace": "error"
+        "noIrregularWhitespace": "error",
+        "noUselessEscapeInRegex": "error"
       }
     }
   },

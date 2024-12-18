@@ -14,9 +14,12 @@ export const base = (
     ignores: ['.turbo/', 'dist/'],
   },
   {
+    // only enable rules that Biome doesn't cover
     rules: {
       'no-constant-binary-expression': 'error',
+      'no-delete-var': 'error',
       'no-invalid-regexp': 'error',
+      'no-octal': 'error',
       'no-unexpected-multiline': 'error',
       'no-useless-backreference': 'error',
     },
