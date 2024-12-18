@@ -1,4 +1,3 @@
-import js from '@eslint/js';
 import type { Linter } from 'eslint';
 import turbo from 'eslint-config-turbo/flat';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
@@ -14,11 +13,18 @@ export const base = (
   {
     ignores: ['.turbo/', 'dist/'],
   },
-  js.configs.recommended,
+  {
+    rules: {
+      'no-constant-binary-expression': 'error',
+      'no-invalid-regexp': 'error',
+      'no-unexpected-multiline': 'error',
+      'no-useless-backreference': 'error',
+    },
+  },
   promise.configs['flat/recommended'],
-  // eslint-disable-next-line import-x/no-named-as-default-member
+
   ...(ts.configs.recommended as Linter.Config[]),
-  // eslint-disable-next-line import-x/no-named-as-default-member
+
   ...(ts.configs.stylistic as Linter.Config[]),
   importX.flatConfigs.recommended as Linter.Config,
   importX.flatConfigs.typescript,

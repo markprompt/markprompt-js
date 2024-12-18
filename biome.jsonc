@@ -46,8 +46,16 @@
         "useDateNow": "error"
       },
       "correctness": {
+        "noUndeclaredVariables": {
+          "level": "error"
+          // enable when biome@2.0.0 is released
+          // "options": {
+          //   "checkTypes": true
+          // }
+        },
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
+        "noUnusedPrivateClassMembers": "error",
         "noUnusedVariables": "error",
         "useArrayLiterals": "error",
         "useHookAtTopLevel": "error"
@@ -69,6 +77,10 @@
         "useAwait": "error",
         "useErrorMessage": "error",
         "useNumberToFixedDigitsArgument": "error"
+      },
+      "nursery": {
+        "noDuplicateElseIf": "error",
+        "noIrregularWhitespace": "error"
       }
     }
   },
