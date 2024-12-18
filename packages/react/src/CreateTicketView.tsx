@@ -19,14 +19,11 @@ import {
   type JSX,
 } from 'react';
 
+import { useChatStore, type ChatViewMessage } from './chat/store.js';
 import { toValidApiMessages } from './chat/utils.js';
 import { useGlobalStore } from './context/global/store.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
-import {
-  useChatStore,
-  type ChatViewMessage,
-  type CustomField,
-} from './index.js';
+import type { CustomField } from './types.js';
 import { getMessageTextContent, isPresent } from './utils.js';
 
 export interface CreateTicketViewProps {

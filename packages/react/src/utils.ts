@@ -1,10 +1,10 @@
+import type { ChatCompletionMessageParam } from '@markprompt/core/chat';
 import Emittery from 'emittery';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
 
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import type { MarkpromptOptions, View, ViewOptions } from './types.js';
-import type { ChatCompletionMessageParam } from '@markprompt/core/chat';
 
 export function isPresent<T>(t: T | undefined | null): t is T {
   return t !== undefined && t !== null;

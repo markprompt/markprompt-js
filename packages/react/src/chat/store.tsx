@@ -9,6 +9,7 @@ import {
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
 import { createContext, useContext, type JSX } from 'react';
+// eslint-disable-next-line import-x/no-deprecated
 import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -744,6 +745,7 @@ export const ChatContext = createContext<ChatStore | null>(null);
 export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
   const store = useContext(ChatContext);
   if (!store) throw new Error('Missing ChatContext.Provider in the tree');
+  // eslint-disable-next-line import-x/no-deprecated
   return useStore(store, selector);
 }
 

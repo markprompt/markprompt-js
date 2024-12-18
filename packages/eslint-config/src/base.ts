@@ -23,6 +23,18 @@ export const base = <T extends string>(
     },
   },
   {
+    // only enable @eslint/js rules that Biome doesn't cover
+    rules: {
+      'no-constant-binary-expression': 'error',
+      'no-delete-var': 'error',
+      'no-invalid-regexp': 'error',
+      'no-octal': 'error',
+      'no-unexpected-multiline': 'error',
+      'no-useless-backreference': 'error',
+    },
+  },
+
+  {
     plugins: {
       '@typescript-eslint': tseslint.plugin as ESLint.Plugin,
     },
@@ -37,26 +49,6 @@ export const base = <T extends string>(
           : true,
         warnOnUnsupportedTypeScriptVersion: false,
       },
-    },
-  },
-  {
-    settings: {
-      'import-x/resolver-next': [
-        createTypeScriptImportResolver({
-          alwaysTryTypes: true,
-        }),
-      ],
-    },
-  },
-  {
-    // only enable @eslint/js rules that Biome doesn't cover
-    rules: {
-      'no-constant-binary-expression': 'error',
-      'no-delete-var': 'error',
-      'no-invalid-regexp': 'error',
-      'no-octal': 'error',
-      'no-unexpected-multiline': 'error',
-      'no-useless-backreference': 'error',
     },
   },
   {
@@ -115,6 +107,65 @@ export const base = <T extends string>(
       string,
       ESLint.Plugin
     >,
+    settings: {
+      'import-x/extensions': [
+        '.js',
+        '.jsx',
+        '.cjs',
+        '.mjs',
+        '.ts',
+        '.tsx',
+        '.cts',
+        '.mts',
+      ],
+      'import-x/external-module-folders': [
+        'node_modules',
+        'node_modules/@types',
+      ],
+      'import-x/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx', '.cts', '.mts'],
+      },
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+        }),
+      ],
+    },
+  },
+  {
+    // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+    rules: {
+      'import-x/no-named-as-default': 'error',
+      'import-x/no-cycle': 'error',
+      'import-x/no-unused-modules': 'error',
+      'import-x/no-deprecated': 'error',
+      'import-x/order': [
+        'error',
+        {
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index'],
+            'object',
+          ],
+
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+            },
+          ],
+
+          'newlines-between': 'always',
+        },
+      ],
+    },
   },
 
   // importX.flatConfigs.recommended as Linter.Config,
@@ -127,32 +178,6 @@ export const base = <T extends string>(
   //     '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
   //     // https://github.com/import-js/eslint-plugin-import/issues/2340
   //     'import-x/namespace': 'off',
-  //     'import-x/order': [
-  //       'error',
-  //       {
-  //         alphabetize: {
-  //           order: 'asc',
-  //           caseInsensitive: true,
-  //         },
-
-  //         groups: [
-  //           'builtin',
-  //           'external',
-  //           'internal',
-  //           ['parent', 'sibling', 'index'],
-  //           'object',
-  //         ],
-
-  //         pathGroups: [
-  //           {
-  //             pattern: '@/**',
-  //             group: 'internal',
-  //           },
-  //         ],
-
-  //         'newlines-between': 'always',
-  //       },
-  //     ],
   //   },
   // },
 ];

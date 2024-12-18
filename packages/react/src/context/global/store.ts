@@ -5,6 +5,7 @@ import {
 import { isAbortError } from '@markprompt/core/utils';
 import { createContext, useContext } from 'react';
 import { createStore, type StoreApi } from 'zustand';
+// eslint-disable-next-line import-x/no-deprecated
 import { useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -180,5 +181,6 @@ export function useGlobalStore<T>(selector: (state: State) => T): T {
       'Missing GlobalStoreProvider. Make sure to wrap your component tree with <GlobalStoreProvider />.',
     );
   }
+  // eslint-disable-next-line import-x/no-deprecated
   return useStore(store, selector);
 }
