@@ -7,8 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
-  type ComponentPropsWithRef,
-  type ComponentPropsWithoutRef,
+  type ComponentProps,
   type ComponentType,
   type ElementType,
   type FormEventHandler,
@@ -72,7 +71,7 @@ function DialogRootWithAbort(props: Dialog.DialogProps): JSX.Element {
   );
 }
 
-type DialogTriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
+type DialogTriggerProps = ComponentProps<typeof Dialog.Trigger>;
 /**
  * A button to open the Markprompt dialog.
  */
@@ -83,7 +82,7 @@ const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
 );
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
-type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
+type PortalProps = ComponentProps<typeof Dialog.Portal>;
 /**
  * The Markprompt dialog portal.
  */
@@ -92,7 +91,7 @@ function Portal(props: PortalProps): JSX.Element {
 }
 Portal.displayName = 'Markprompt.Portal';
 
-type OverlayProps = ComponentPropsWithRef<typeof Dialog.Overlay>;
+type OverlayProps = ComponentProps<typeof Dialog.Overlay>;
 /**
  * The Markprompt dialog overlay.
  */
@@ -101,7 +100,7 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
-type ContentProps = ComponentPropsWithoutRef<typeof Dialog.Content>;
+type ContentProps = ComponentProps<typeof Dialog.Content>;
 
 /**
  * The Markprompt dialog content.
@@ -124,7 +123,7 @@ export interface BrandingProps {
   branding?: { show?: boolean; type?: 'plain' | 'text' };
 }
 
-type PlainContentProps = ComponentPropsWithRef<'div'>;
+type PlainContentProps = ComponentProps<'div'>;
 /**
  * The Markprompt plain content.
  */
@@ -139,7 +138,7 @@ const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
 );
 PlainContent.displayName = 'Markprompt.PlainContent';
 
-type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
+type CloseProps = ComponentProps<typeof Dialog.Close>;
 /**
  * A button to close the Markprompt dialog and abort an ongoing request.
  */
@@ -150,7 +149,7 @@ const Close = forwardRef<HTMLButtonElement, CloseProps>(
 );
 Close.displayName = 'Markprompt.Close';
 
-type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
+type TitleProps = ComponentProps<typeof Dialog.Title> & {
   hide?: boolean;
 };
 const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
@@ -163,7 +162,7 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
 });
 Title.displayName = 'Markprompt.Title';
 
-type DescriptionProps = ComponentPropsWithRef<typeof Dialog.Description> & {
+type DescriptionProps = ComponentProps<typeof Dialog.Description> & {
   hide?: boolean;
 };
 /**
@@ -181,7 +180,7 @@ const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
 );
 Description.displayName = 'Markprompt.Description';
 
-type FormProps = ComponentPropsWithRef<'form'>;
+type FormProps = ComponentProps<'form'>;
 /**
  * A form which, when submitted, submits the current prompt.
  */
@@ -214,7 +213,7 @@ interface PromptInnerProps {
   submitOnEnter?: boolean;
 }
 
-type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
+type PromptProps = ComponentProps<'input'> & PromptInnerProps;
 
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -367,10 +366,9 @@ function CopyContentButton(props: CopyContentButtonProps): JSX.Element {
 }
 CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
-type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
-  React.HTMLAttributes<HTMLPreElement> & {
-    state?: ChatLoadingState;
-  };
+type HighlightedCodeProps = ComponentProps<'pre'> & {
+  state?: ChatLoadingState;
+};
 
 function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   const { children, className, state, ...rest } = props;
@@ -394,10 +392,7 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   );
 }
 
-type AnswerProps = Omit<
-  ComponentPropsWithoutRef<typeof Markdown>,
-  'children'
-> & {
+type AnswerProps = Omit<ComponentProps<typeof Markdown>, 'children'> & {
   answer: string;
   state?: ChatLoadingState;
   copyButtonClassName?: string;
@@ -495,8 +490,7 @@ interface AutoScrollerInnerProps {
   discreteScrollTrigger?: number;
 }
 
-type AutoScrollerProps = ComponentPropsWithoutRef<'div'> &
-  AutoScrollerInnerProps;
+type AutoScrollerProps = ComponentProps<'div'> & AutoScrollerInnerProps;
 
 /**
  * A component that automatically scrolls to the bottom.

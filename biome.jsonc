@@ -118,7 +118,7 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noUnusedVariables": "off",
+            "noUndeclaredVariables": "off",
             "noUnusedImports": "off"
           }
         }

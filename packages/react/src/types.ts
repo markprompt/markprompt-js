@@ -760,7 +760,7 @@ export interface MarkpromptOptions {
    * Trigger component, such as a search button or a floating chat bubble.
    * @default undefined
    **/
-  children?: React.ReactNode;
+  children?: ReactNode;
   /**
    * The way to display the chat/search content.
    * @default "sheet"
