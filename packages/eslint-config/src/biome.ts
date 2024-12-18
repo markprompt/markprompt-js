@@ -4,6 +4,7 @@ export const biome: Linter.Config[] = [
   // these rules have been superseded by Biome
   {
     name: 'biome',
+    files: ['**/*.{js,ts,jsx,tsx,mjs,mts,cjs,cts}'],
     rules: {
       // eslint builtin rules
       'constructor-super': 'off',
