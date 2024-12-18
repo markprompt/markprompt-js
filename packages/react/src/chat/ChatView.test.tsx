@@ -71,7 +71,7 @@ const ChatViewWithProvider = ({
 };
 
 const server = setupServer(
-  http.post(`${DEFAULT_OPTIONS.apiUrl!}/chat`, async () => {
+  http.post(`${DEFAULT_OPTIONS.apiUrl}/chat`, async () => {
     if (status >= 400) {
       return HttpResponse.json(
         { error: 'Internal server error' },
@@ -113,7 +113,7 @@ const server = setupServer(
       },
     });
   }),
-  http.post(DEFAULT_OPTIONS.apiUrl!, () => {
+  http.post(DEFAULT_OPTIONS.apiUrl, () => {
     return HttpResponse.json({ status: 'ok' }, { status: 200 });
   }),
 );
@@ -156,7 +156,7 @@ describe('ChatView', () => {
   it('submits a chat request', async () => {
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -169,7 +169,7 @@ describe('ChatView', () => {
   });
 
   it('allows selecting an example prompt', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     response = [{ content: 'answer' }];
 
@@ -199,7 +199,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -230,7 +230,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -262,7 +262,7 @@ describe('ChatView', () => {
       return Promise.resolve('test function result');
     }
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     response = [
       { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
@@ -320,7 +320,7 @@ describe('ChatView', () => {
       return Promise.resolve('test function result');
     }
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     response = [
       { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
@@ -385,7 +385,7 @@ describe('ChatView', () => {
       return Promise.resolve('test function result');
     }
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     response = [
       { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
@@ -434,7 +434,7 @@ describe('ChatView', () => {
       throw new Error('tool call failed');
     }
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     response = [
       { tool_call: { name: 'do_a_thing', parameters: '{}' }, content: null },
@@ -510,7 +510,7 @@ describe('ChatView', () => {
     ];
     markpromptData = { references };
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -532,7 +532,7 @@ describe('ChatView', () => {
     ];
     markpromptData = { references };
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <ChatViewWithProvider
@@ -559,7 +559,7 @@ describe('ChatView', () => {
     ];
     markpromptData = { references };
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <ChatViewWithProvider
@@ -587,7 +587,7 @@ describe('ChatView', () => {
     ];
     wait = true;
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     const { rerender } = render(
       <ChatViewWithProvider
@@ -625,7 +625,7 @@ describe('ChatView', () => {
       ];
       wait = true;
 
-      const user = await userEvent.setup();
+      const user = userEvent.setup();
 
       render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -665,7 +665,7 @@ describe('ChatView', () => {
   it('aborts a pending chat request when an error is returned from the API', async () => {
     status = 500;
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -687,7 +687,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -713,7 +713,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 
@@ -742,7 +742,7 @@ describe('ChatView', () => {
 
     render(<ChatViewWithProvider projectKey={projectKey} />);
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'test');
     await user.keyboard('{Enter}');
@@ -753,11 +753,11 @@ describe('ChatView', () => {
 
     expect(localStorage.getItem('markprompt')).not.toBeNull();
 
-    expect(
-      JSON.parse(localStorage.getItem('markprompt')!).state.messagesByThreadId[
-        threadId
-      ].messages[1].error,
-    ).toEqual({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const error: unknown = JSON.parse(localStorage.getItem('markprompt')!).state
+      .messagesByThreadId[threadId].messages[1].error;
+
+    expect(error).toEqual({
       type: 'error',
       name: 'Error',
       message: 'Malformed response from Markprompt API',
@@ -771,7 +771,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <ChatViewWithProvider
@@ -914,7 +914,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <ChatViewWithProvider
@@ -942,7 +942,7 @@ describe('ChatView', () => {
     markpromptData = { threadId, messageId };
     response = [{ content: 'answer' }];
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <ChatViewWithProvider
@@ -979,7 +979,7 @@ describe('ChatView', () => {
     ];
     wait = true;
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
 

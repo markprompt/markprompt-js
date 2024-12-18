@@ -13,10 +13,10 @@ describe('Markprompt', () => {
 
   // Before re-enabling this test, we should review the keyboard shortcuts.
   it.skip('opens the dialog when a hotkey is pressed while the non-floating trigger is rendered', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     render(<Markprompt projectKey="test-key" trigger={{ floating: false }} />);
     await user.keyboard('{Meta>}{Enter}{/Meta}');
-    await expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders no dialog when display = plain', () => {
@@ -42,7 +42,7 @@ describe('Markprompt', () => {
   });
 
   it('renders search view when search is enabled', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <Markprompt
@@ -69,14 +69,14 @@ describe('Markprompt', () => {
   });
 
   it('renders chat view when chat is enabled', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     render(<Markprompt projectKey="test-key" chat={{ enabled: true }} />);
     await user.click(screen.getByText('Ask AI'));
     expect(screen.getByText('Chats')).toBeInTheDocument();
   });
 
   it('renders tabs when multiple views are enabled', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     render(
       <Markprompt
@@ -89,19 +89,19 @@ describe('Markprompt', () => {
     await user.click(screen.getByText('Ask AI'));
 
     // tabs are rendered
-    await expect(screen.getByText('searchtab')).toBeInTheDocument();
-    await expect(screen.getByText('chattab')).toBeInTheDocument();
+    expect(screen.getByText('searchtab')).toBeInTheDocument();
+    expect(screen.getByText('chattab')).toBeInTheDocument();
 
     // wait for lazy loaded content
     await screen.findByRole('searchbox');
 
     // tabs switching
     await user.click(screen.getByText('chattab'));
-    await expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders the title and description visually hidden', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     const { rerender } = render(
       <Markprompt
@@ -139,7 +139,7 @@ describe('Markprompt', () => {
   });
 
   it('calls back on open', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     const fn = vi.fn();
     render(<Markprompt projectKey="test-key" onDidRequestOpenChange={fn} />);
     await user.click(screen.getByText('Ask AI'));
@@ -149,7 +149,7 @@ describe('Markprompt', () => {
   it('opens programmatically', async () => {
     const fn = vi.fn();
     render(<Markprompt projectKey="test-key" onDidRequestOpenChange={fn} />);
-    act(() => openMarkprompt());
+    await act(() => openMarkprompt());
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
@@ -161,12 +161,12 @@ describe('Markprompt', () => {
 
     render(<Markprompt projectKey="test-key" onDidRequestOpenChange={fn} />);
 
-    act(() => openMarkprompt());
+    await act(() => openMarkprompt());
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    act(() => closeMarkprompt());
+    await act(() => closeMarkprompt());
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });

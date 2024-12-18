@@ -48,7 +48,7 @@ describe('submitChat', () => {
   let status = 200;
 
   const server = setupServer(
-    http.post(`${DEFAULT_OPTIONS.apiUrl!}/chat`, async ({ request }) => {
+    http.post(`${DEFAULT_OPTIONS.apiUrl}/chat`, async ({ request }) => {
       req = request;
       requestBody = (await request.json()) as SubmitChatOptions;
 
@@ -75,7 +75,7 @@ describe('submitChat', () => {
         start(controller) {
           if (Array.isArray(response)) {
             let i = 0;
-            for (const chunk of response) {
+            for (const chunk of response as string[]) {
               controller.enqueue(
                 encoder.encode(
                   formatEvent({
@@ -356,7 +356,7 @@ describe('submitChat', () => {
       'testKey',
       { stream: false },
     )) {
-      await expect(json).toStrictEqual({
+      expect(json).toStrictEqual({
         content: 'According to my calculator 1 + 2 = 3',
         role: 'assistant',
         messageId,

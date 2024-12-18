@@ -111,7 +111,7 @@ export async function* submitChat(
   checkAbortSignal(options.signal);
 
   if (res.headers.get('Content-Type')?.includes('application/json')) {
-    const json = await res.json();
+    const json: unknown = await res.json();
 
     if (
       isChatCompletion(json) &&
@@ -150,8 +150,13 @@ export async function* submitChat(
     const text = await res.text();
 
     try {
-      const json = JSON.parse(text);
-      if (json.error) {
+      const json: unknown = JSON.parse(text);
+      if (
+        json &&
+        typeof json === 'object' &&
+        'error' in json &&
+        typeof json.error === 'string'
+      ) {
         throw new Error(json.error);
       }
     } catch {
@@ -182,7 +187,7 @@ export async function* submitChat(
       continue;
     }
 
-    const json = JSON.parse(event.data);
+    const json: unknown = JSON.parse(event.data);
 
     if (!isChatCompletionChunk(json)) {
       throw new Error('Malformed response from Markprompt API', {

@@ -1,20 +1,55 @@
-import type { Linter } from 'eslint';
-import turbo from 'eslint-config-turbo/flat';
+import type { ESLint, Linter } from 'eslint';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
-import { parser } from 'typescript-eslint';
+import tseslint from 'typescript-eslint';
 
-export const base = (
-  rootDir: string,
+export const base = <T extends string>(
+  rootDir: T,
   allowDefaultProject?: string[],
 ): Linter.Config[] => [
   {
     ignores: ['.turbo/', 'dist/'],
   },
   {
-    // only enable rules that Biome doesn't cover
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  {
+    plugins: {
+      '@typescript-eslint': tseslint.plugin as ESLint.Plugin,
+    },
+    languageOptions: {
+      parser: tseslint.parser as Linter.Parser,
+      parserOptions: {
+        tsconfigRootDir: rootDir,
+        projectService: allowDefaultProject
+          ? {
+              allowDefaultProject,
+            }
+          : true,
+        warnOnUnsupportedTypeScriptVersion: false,
+      },
+    },
+  },
+  {
+    settings: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+        }),
+      ],
+    },
+  },
+  {
+    // only enable @eslint/js rules that Biome doesn't cover
     rules: {
       'no-constant-binary-expression': 'error',
       'no-delete-var': 'error',
@@ -25,6 +60,7 @@ export const base = (
     },
   },
   {
+    // only enable @typescript-eslint rules that Biome doesn't cover
     rules: {
       '@typescript-eslint/prefer-string-starts-ends-with': 'error',
       '@typescript-eslint/await-thenable': 'error',
@@ -42,7 +78,10 @@ export const base = (
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-for-in-array': 'error',
       '@typescript-eslint/no-implied-eval': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: false },
+      ],
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
       '@typescript-eslint/no-redundant-type-constituents': 'error',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
@@ -71,72 +110,49 @@ export const base = (
 
   promise.configs['flat/recommended'],
 
-  importX.flatConfigs.recommended as Linter.Config,
-  importX.flatConfigs.typescript,
-  ...turbo,
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
-    languageOptions: {
-      parser: parser as Linter.Parser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-        tsconfigRootDir: rootDir,
-        projectService: allowDefaultProject
-          ? {
-              allowDefaultProject,
-            }
-          : true,
-        warnOnUnsupportedTypeScriptVersion: false,
-      },
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-    settings: {
-      'import-x/resolver-next': [
-        createTypeScriptImportResolver({
-          alwaysTryTypes: true,
-        }),
-      ],
-    },
+    plugins: importX.flatConfigs.recommended.plugins as Record<
+      string,
+      ESLint.Plugin
+    >,
   },
-  {
-    rules: {
-      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-      '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
-      // https://github.com/import-js/eslint-plugin-import/issues/2340
-      'import-x/namespace': 'off',
-      'import-x/order': [
-        'error',
-        {
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
 
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'object',
-          ],
+  // importX.flatConfigs.recommended as Linter.Config,
+  // importX.flatConfigs.typescript,
+  // ...turbo,
 
-          pathGroups: [
-            {
-              pattern: '@/**',
-              group: 'internal',
-            },
-          ],
+  // {
+  //   rules: {
+  //     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+  //     '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
+  //     // https://github.com/import-js/eslint-plugin-import/issues/2340
+  //     'import-x/namespace': 'off',
+  //     'import-x/order': [
+  //       'error',
+  //       {
+  //         alphabetize: {
+  //           order: 'asc',
+  //           caseInsensitive: true,
+  //         },
 
-          'newlines-between': 'always',
-        },
-      ],
-    },
-  },
+  //         groups: [
+  //           'builtin',
+  //           'external',
+  //           'internal',
+  //           ['parent', 'sibling', 'index'],
+  //           'object',
+  //         ],
+
+  //         pathGroups: [
+  //           {
+  //             pattern: '@/**',
+  //             group: 'internal',
+  //           },
+  //         ],
+
+  //         'newlines-between': 'always',
+  //       },
+  //     ],
+  //   },
+  // },
 ];

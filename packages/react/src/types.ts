@@ -510,7 +510,7 @@ export interface TriggerOptions {
    */
   floating?: boolean;
   /** Do you use a custom element as the dialog trigger? */
-  customElement?: boolean | ReactNode;
+  customElement?: ReactNode;
   /**
    * Custom image icon source for the open button
    **/

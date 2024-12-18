@@ -25,6 +25,7 @@
     "prepack": "node scripts/build.js"
   },
   "dependencies": {
+    "@markprompt/core": "workspace:*",
     "@markprompt/react": "workspace:*",
     "lodash-es": "^4.17.21"
   },

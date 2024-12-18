@@ -46,4 +46,10 @@ export const react = [
       },
     },
   },
+  {
+    files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
+    rules: {
+      'jsx-a11y/no-autofocus': 'off',
+    },
+  },
 ] satisfies Linter.Config[];

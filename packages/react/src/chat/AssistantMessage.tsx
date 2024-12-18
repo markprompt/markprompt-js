@@ -54,8 +54,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
     feedbackOptions,
   });
 
-  const confirmToolCalls = (): void => {
-    submitToolCalls(message);
+  const confirmToolCalls = () => {
+    void submitToolCalls(message);
   };
 
   const ToolCallConfirmation = useMemo(
@@ -127,8 +127,8 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
               variant="icons"
               data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
-              submitFeedback={(feedback, messageId) => {
-                submitFeedback(feedback, messageId);
+              submitFeedback={async (feedback, messageId) => {
+                await submitFeedback(feedback, messageId);
                 feedbackOptions.onFeedbackSubmit?.(
                   feedback,
                   messages,

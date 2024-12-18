@@ -9,7 +9,7 @@ import {
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
 import { createContext, useContext, type JSX } from 'react';
-import { createStore, useStore } from 'zustand';
+import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
@@ -252,7 +252,7 @@ export const createChatStore = ({
   storeKey,
   apiUrl,
   headers,
-}: CreateChatOptions) => {
+}: CreateChatOptions): StoreApi<ChatStoreState> => {
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.',
@@ -548,7 +548,7 @@ export const createChatStore = ({
                 return tool?.requireConfirmation === false;
               })
             ) {
-              get().submitToolCalls(responseMessage);
+              await get().submitToolCalls(responseMessage);
             }
           },
           async submitToolCalls(message: ChatViewMessage) {
@@ -665,7 +665,7 @@ export const createChatStore = ({
                       ['message', value.message],
                       ['cause', value.cause],
                     ].filter(([, v]) => v !== undefined),
-                  );
+                  ) as { [key: string]: string };
                 }
                 return value;
               },

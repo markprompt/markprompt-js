@@ -92,7 +92,7 @@ export default function IndexPage(): JSX.Element {
           tool.run?.(toolCall.function?.arguments);
           setStreamedMessage(
             `Calling: ${tool.function.name}\n\nArguments:\n\n${
-              toolCall.function?.arguments || {}
+              toolCall.function?.arguments || JSON.stringify({})
             }`,
           );
         }
@@ -108,7 +108,12 @@ export default function IndexPage(): JSX.Element {
         <meta charSet="utf-8" />
       </Head>
       <div className="Container">
-        <form className="InputForm" onSubmit={submitForm}>
+        <form
+          className="InputForm"
+          onSubmit={(event) => {
+            void submitForm(event);
+          }}
+        >
           <label className="label" htmlFor="input">
             Input
           </label>

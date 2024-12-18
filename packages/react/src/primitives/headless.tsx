@@ -2,6 +2,7 @@ import type { FileSectionReference } from '@markprompt/core/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
   forwardRef,
+  isValidElement,
   memo,
   useCallback,
   useEffect,
@@ -31,7 +32,10 @@ import type {
   SearchResultComponentProps,
 } from '../types.js';
 
-type RootProps = Dialog.DialogProps & { display?: MarkpromptDisplay };
+type RootProps = Omit<Dialog.DialogProps, 'onOpenChange'> & {
+  display?: MarkpromptDisplay;
+  onOpenChange?: (this: void, open: boolean) => void;
+};
 
 /**
  * The Markprompt context provider and dialog root.
@@ -188,7 +192,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   return <form {...props} ref={ref} />;
 });
 
-interface PromptInnerProps {
+interface PromptBaseProps {
   /** The label for the input. */
   label?: ReactNode;
   /** The class name of the label element. */
@@ -213,7 +217,7 @@ interface PromptInnerProps {
   submitOnEnter?: boolean;
 }
 
-type PromptProps = ComponentProps<'input'> & PromptInnerProps;
+type PromptProps = ComponentProps<'textarea'> & PromptBaseProps;
 
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -232,7 +236,6 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       sendButtonClassName,
       placeholder,
       spellCheck = false,
-      type = 'search',
       showSubmitButton = true,
       isLoading,
       Icon,
@@ -243,14 +246,10 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       onSubmit,
       onKeyDown,
       ...rest
-    } = props as any;
+    } = props;
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLTextAreaElement>): void => {
-        if (type === 'search') {
-          onKeyDown?.(event);
-          return;
-        }
         if (event.key === 'Enter' && !event.shiftKey) {
           if (submitOnEnter !== false) {
             event.preventDefault();
@@ -261,10 +260,8 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           }
         }
       },
-      [onKeyDown, onSubmit, submitOnEnter, type],
+      [onSubmit, submitOnEnter],
     );
-
-    const Comp = type === 'search' ? 'input' : TextareaAutoSize;
 
     return (
       <>
@@ -274,24 +271,122 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           </label>
         )}
         <div className={textAreaContainerClassName}>
-          <Comp
+          <TextareaAutoSize
             {...rest}
             id={name}
             name={name}
-            type={type}
             minRows={minRows}
             placeholder={placeholder}
-            ref={ref as any}
+            ref={ref}
             autoCapitalize={autoCapitalize}
             autoComplete={autoComplete}
             autoCorrect={autoCorrect}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={autoFocus}
+            spellCheck={spellCheck}
+            className={className}
+            draggable={false}
+            style={{ resize: 'none', height: '100%' as unknown as number }}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        {showSubmitButton && (
+          <button
+            className={sendButtonClassName}
+            type="submit"
+            data-variant="primary"
+            disabled={
+              isLoading ||
+              ((rest.value as string)?.trim()?.length === 0 && !isLoading)
+            }
+          >
+            {buttonLabel}
+            {Icon}
+          </button>
+        )}
+      </>
+    );
+  },
+);
+Prompt.displayName = 'Markprompt.Prompt';
+
+interface SearchPromptBaseProps {
+  /** The label for the input. */
+  label?: ReactNode;
+  /** The class name of the label element. */
+  labelClassName?: string;
+  /** The class name of the input container. */
+  containerClassName?: string;
+  /** The class name of the send button element. */
+  sendButtonClassName?: string;
+  /** The label for the submit button. */
+  buttonLabel?: string;
+  /** Show an icon next to the send button. */
+  showSubmitButton?: boolean;
+  /** If the answer is loading. */
+  isLoading?: boolean;
+  /** Icon for the button. */
+  Icon?: ReactNode;
+  /**
+   * Prompt type
+   * @defaults search
+   */
+  type?: 'search' | 'input';
+}
+
+type SearchPromptProps = ComponentProps<'input'> & SearchPromptBaseProps;
+
+/**
+ * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
+ */
+const SearchPrompt = forwardRef<HTMLInputElement, SearchPromptProps>(
+  function Prompt(props, ref) {
+    const {
+      autoCapitalize = 'none',
+      autoComplete = 'off',
+      autoCorrect = 'off',
+      autoFocus = true,
+      label,
+      buttonLabel = 'Send',
+      labelClassName,
+      sendButtonClassName,
+      containerClassName,
+      placeholder,
+      spellCheck = false,
+      type = 'search',
+      showSubmitButton = true,
+      isLoading,
+      Icon,
+      name,
+      className,
+      onKeyDown,
+      ...rest
+    } = props;
+
+    return (
+      <>
+        {label && (
+          <label htmlFor={name} className={labelClassName}>
+            {label}
+          </label>
+        )}
+        <div className={containerClassName}>
+          <input
+            {...rest}
+            id={name}
+            name={name}
+            type="search"
+            placeholder={placeholder}
+            ref={ref}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            autoCorrect={autoCorrect}
+            // biome-ignore lint/a11y/noAutofocus: we sometimes want to autofocus the search input
             autoFocus={autoFocus}
             spellCheck={spellCheck}
             className={className}
             draggable={false}
             style={{ resize: 'none', height: '100%' }}
-            onKeyDown={handleKeyDown}
+            onKeyDown={onKeyDown}
           />
         </div>
         {showSubmitButton && (
@@ -326,11 +421,18 @@ function CopyContentButton(props: CopyContentButtonProps): JSX.Element {
   const [didJustCopy, setDidJustCopy] = useState(false);
 
   const handleClick = (): void => {
-    navigator.clipboard.writeText(content);
-    setDidJustCopy(true);
-    setTimeout(() => {
-      setDidJustCopy(false);
-    }, 2000);
+    navigator.clipboard
+      .writeText(content)
+      .then(() => {
+        setDidJustCopy(true);
+        const id = setTimeout(() => {
+          setDidJustCopy(false);
+        }, 2000);
+        return id;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -370,6 +472,14 @@ type HighlightedCodeProps = ComponentProps<'pre'> & {
   state?: ChatLoadingState;
 };
 
+declare global {
+  interface hljs {
+    highlightAll: () => void;
+  }
+
+  var hljs: hljs | undefined;
+}
+
 function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   const { children, className, state, ...rest } = props;
 
@@ -380,8 +490,12 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
       // we can syntax highlight. This trick allows us to provide
       // syntax highlighting without imposing a large extra
       // package as part of the markprompt-js bundle.
-
-      ((globalThis as any).hljs as any)?.highlightAll();
+      if (
+        globalThis.hljs &&
+        typeof globalThis.hljs.highlightAll === 'function'
+      ) {
+        globalThis.hljs.highlightAll();
+      }
     }
   }, [children, state]);
 
@@ -418,9 +532,24 @@ function Answer(props: AnswerProps): JSX.Element {
       {...rest}
       remarkPlugins={remarkPlugins}
       components={{
-        a: (props) => <LinkComponent {...props} />,
-        pre: (props) => {
+        a: (props: ComponentProps<'a'>) => <LinkComponent {...props} />,
+        pre: (props: ComponentProps<'pre'>) => {
           const { children, className, ...rest } = props;
+
+          let content = '';
+
+          if (
+            children &&
+            typeof children === 'object' &&
+            'props' in children &&
+            typeof children.props === 'object' &&
+            children.props !== null &&
+            'children' in children.props &&
+            isValidElement(children.props.children) &&
+            typeof children.props.children === 'string'
+          ) {
+            content = children.props.children;
+          }
 
           return (
             <div
@@ -438,13 +567,7 @@ function Answer(props: AnswerProps): JSX.Element {
               >
                 <CopyContentButton
                   className={copyButtonClassName}
-                  content={
-                    children &&
-                    typeof children === 'object' &&
-                    'props' in children
-                      ? children.props.children
-                      : ''
-                  }
+                  content={content}
                 />
               </div>
               <HighlightedCode {...rest} className={className} state={state}>
@@ -761,6 +884,7 @@ export {
   Prompt,
   ForwardedReferences as References,
   Root,
+  SearchPrompt,
   SearchResult,
   SearchResults,
   Title,
@@ -777,6 +901,7 @@ export {
   type PromptProps,
   type ReferencesProps,
   type RootProps,
+  type SearchPromptProps,
   type SearchResultProps,
   type SearchResultsProps,
   type TitleProps,

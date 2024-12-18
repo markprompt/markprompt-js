@@ -19,7 +19,7 @@ import * as Markprompt from './headless.js';
 let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
-  http.get(DEFAULT_OPTIONS.apiUrl!, () => {
+  http.get(DEFAULT_OPTIONS.apiUrl, () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -209,7 +209,7 @@ test('Prompt changes trigger user-defined callbacks', async () => {
 
   render(
     <Markprompt.Root>
-      <Markprompt.Prompt type="text" onChange={cb} />
+      <Markprompt.Prompt onChange={cb} />
     </Markprompt.Root>,
   );
 
@@ -225,7 +225,7 @@ test('Prompt changes updates prompt state', async () => {
 
   render(
     <Markprompt.Root>
-      <Markprompt.Prompt type="text" />
+      <Markprompt.SearchPrompt />
     </Markprompt.Root>,
   );
 
@@ -236,6 +236,7 @@ test('Prompt changes updates prompt state', async () => {
 });
 
 test('References renders the passed ReferenceComponent', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   const ReferenceComponent = vi.fn(({ reference }) => reference.file.path);
   render(
     <Markprompt.References

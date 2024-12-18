@@ -27,6 +27,7 @@ import {
   type ChatViewMessage,
   type CustomField,
 } from './index.js';
+import { getMessageTextContent, isPresent } from './utils.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
@@ -77,40 +78,38 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   ): Promise<void> => {
     event.preventDefault();
 
-    if (
-      !apiUrl ||
-      !projectKey ||
-      !provider ||
-      !event.currentTarget.email.value ||
-      !event.currentTarget.userName.value ||
-      !event.currentTarget.summary.value
-    ) {
+    if (!apiUrl || !projectKey || !provider) {
       return;
     }
 
-    setResult(undefined);
-    setSubmittingCase(true);
-
     try {
       const data = new FormData(event.currentTarget);
-      const files = data.get('files');
-      const requestBody =
-        files && (files as any).size > 0
-          ? {
-              method: 'POST',
-              // don't pass a Content-Type header here, the browser will
-              // generate a correct header which includes the boundary.
-              body: data,
-              headers,
-            }
-          : {
-              method: 'POST',
-              body: JSON.stringify(Object.fromEntries(data.entries())),
-              headers: {
-                ...headers,
-                'Content-Type': 'application/json',
-              },
-            };
+
+      if (!data.get('email') || !data.get('userName') || !data.get('summary')) {
+        return;
+      }
+
+      setResult(undefined);
+      setSubmittingCase(true);
+
+      const files = data.getAll('files') as File[];
+
+      const requestBody = files?.some((f) => f.size > 0)
+        ? {
+            method: 'POST',
+            // don't pass a Content-Type header here, the browser will
+            // generate a correct header which includes the boundary.
+            body: data,
+            headers,
+          }
+        : {
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(data.entries())),
+            headers: {
+              ...headers,
+              'Content-Type': 'application/json',
+            },
+          };
       // copy a field for legacy reasons
       const result = await fetch(
         `${apiUrl}/integrations/create-ticket?projectKey=${projectKey}`,
@@ -437,8 +436,11 @@ function getFullSummaryData(
 ): { subject: string; body: string } {
   const transcript = `Full transcript:\n\n${toValidApiMessages(messages)
     .map((m) => {
-      return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+      const content = getMessageTextContent(m);
+      if (!content) return;
+      return `${m.role === 'user' ? 'Me' : 'AI'}: ${content}`;
     })
+    .filter(isPresent)
     .join('\n\n')}`;
 
   let subject = '';
@@ -446,9 +448,12 @@ function getFullSummaryData(
 
   if (summary?.content) {
     try {
-      const data = JSON.parse(summary.content);
+      const data = JSON.parse(summary.content) as {
+        subject: string;
+        fullSummary?: string;
+      };
       subject = data.subject;
-      body = `${data.fullSummary || ''}\n\n---\n\n${transcript}`;
+      body = `${data.fullSummary ?? ''}\n\n---\n\n${transcript}`;
     } catch {
       // Do nothing
     }

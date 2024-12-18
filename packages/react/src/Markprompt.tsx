@@ -184,8 +184,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     };
   }, [display, onDidRequestOpenChange]);
 
-  const onTriggerClicked = useCallback(() => {
-    openMarkprompt(menu ? 'menu' : 'chat');
+  const onTriggerClicked = useCallback(async () => {
+    await openMarkprompt(menu ? 'menu' : 'chat');
   }, [menu]);
 
   return (

@@ -126,6 +126,20 @@
           }
         }
       }
+    },
+    {
+      "include": [
+        "examples/with-docusaurus*/sidebars.js",
+        "examples/with-docusaurus*/babel.config.js",
+        "examples/with-docusaurus*/docusaurus.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noCommonJs": "off"
+          }
+        }
+      }
     }
   ]
 }

@@ -12,6 +12,7 @@ import { getInitialView } from './utils.js';
 import type { ChatViewMessage } from '../../chat/store.js';
 import { toValidApiMessages } from '../../chat/utils.js';
 import type { MarkpromptOptions, View } from '../../types.js';
+import { getMessageTextContent, isPresent } from '../../utils.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };
 
@@ -26,7 +27,7 @@ interface State {
     createTicketSummary: (
       threadId: string,
       messages: ChatViewMessage[],
-    ) => void;
+    ) => Promise<void>;
   };
 }
 
@@ -107,8 +108,11 @@ Output:
 
             const conversation = toValidApiMessages(messages)
               .map((m) => {
-                return `${m.role === 'user' ? 'User' : 'Assistant'}:\n\n${m.content}`;
+                const content = getMessageTextContent(m);
+                if (!content) return;
+                return `${m.role === 'user' ? 'User' : 'AI'}: ${content}`;
               })
+              .filter(isPresent)
               .join('\n\n==============================\n\n');
 
             const apiMessages = [
