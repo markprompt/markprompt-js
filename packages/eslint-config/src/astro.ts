@@ -10,7 +10,6 @@ export const astro: Linter.Config[] = [
       'import-x/extensions': ['.astro'],
       'import-x/parsers': {
         'astro-eslint-parser': ['.astro'],
-        typescript: true,
       },
     },
     rules: {
