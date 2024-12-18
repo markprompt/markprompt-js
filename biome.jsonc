@@ -64,6 +64,7 @@
         "noDefaultExport": "warn",
         "noNonNullAssertion": "warn",
         "useCollapsedElseIf": "error",
+        "useForOf": "error",
         "useThrowOnlyError": "error"
       },
       "suspicious": {
@@ -79,9 +80,11 @@
         "useNumberToFixedDigitsArgument": "error"
       },
       "nursery": {
+        "noCommonJs": "error",
         "noDuplicateElseIf": "error",
         "noIrregularWhitespace": "error",
-        "noUselessEscapeInRegex": "error"
+        "noUselessEscapeInRegex": "error",
+        "useAdjacentOverloadSignatures": "error"
       }
     }
   },
