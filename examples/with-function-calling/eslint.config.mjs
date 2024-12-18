@@ -4,5 +4,4 @@ export default [
   ...configs.base(import.meta.dirname),
   ...configs.react,
   ...configs.next,
-  ...configs.biome,
 ];
