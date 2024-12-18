@@ -429,13 +429,10 @@ function SearchResultsContainer(
   return (
     <div className="MarkpromptSearchResultsContainer">
       {isAskVisible && (
-        // todo: should this use a different (interactive) element?
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
+          role="button"
+          tabIndex={0}
           className="MarkpromptSearchResult"
-          aria-selected={
-            !activeSearchResult?.id || activeSearchResult.id === 'ask'
-          }
           id="ask"
           style={{ cursor: 'pointer' }}
           onMouseMove={() => {

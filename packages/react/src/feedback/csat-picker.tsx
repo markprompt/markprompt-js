@@ -165,6 +165,7 @@ export function CSATPicker(props: CSATPickerProps): JSX.Element {
           ? getHeading(tempValue) || feedbackOptions.headingCSAT
           : feedbackOptions.headingCSAT}
       </p>
+      {/* biome-ignore lint/nursery/noStaticElementInteractions: only used for a highlight style */}
       <div
         onMouseEnter={() => {
           setIsHovering(true);
