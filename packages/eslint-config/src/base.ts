@@ -4,6 +4,7 @@ import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import turbo from 'eslint-plugin-turbo';
 
 export const base = <T extends string>(
   rootDir: T,
@@ -12,6 +13,8 @@ export const base = <T extends string>(
   {
     ignores: ['.turbo/', 'dist/'],
   },
+
+  // eslint/js config and rules
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -34,6 +37,7 @@ export const base = <T extends string>(
     },
   },
 
+  // typescript-eslint config and rules
   {
     plugins: {
       '@typescript-eslint': tseslint.plugin as ESLint.Plugin,
@@ -100,6 +104,7 @@ export const base = <T extends string>(
     },
   },
 
+  // promise config and rules
   promise.configs['flat/recommended'],
 
   {
@@ -168,16 +173,12 @@ export const base = <T extends string>(
     },
   },
 
-  // importX.flatConfigs.recommended as Linter.Config,
-  // importX.flatConfigs.typescript,
-  // ...turbo,
-
-  // {
-  //   rules: {
-  //     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-  //     '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
-  //     // https://github.com/import-js/eslint-plugin-import/issues/2340
-  //     'import-x/namespace': 'off',
-  //   },
-  // },
+  {
+    plugins: {
+      turbo: turbo,
+    },
+    rules: {
+      'turbo/no-undeclared-env-vars': 'error',
+    },
+  },
 ];
