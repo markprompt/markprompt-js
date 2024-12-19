@@ -2,7 +2,7 @@ import {
   submitChat,
   type ChatCompletionMessageParam,
 } from '@markprompt/core/chat';
-import { isAbortError } from '@markprompt/core/utils';
+import { isAbortError, getMessageTextContent } from '@markprompt/core/utils';
 import { createContext, useContext } from 'react';
 import { createStore, type StoreApi } from 'zustand';
 // eslint-disable-next-line import-x/no-deprecated
@@ -13,7 +13,7 @@ import { getInitialView } from './utils.js';
 import type { ChatViewMessage } from '../../chat/store.js';
 import { toValidApiMessages } from '../../chat/utils.js';
 import type { MarkpromptOptions, View } from '../../types.js';
-import { getMessageTextContent, isPresent } from '../../utils.js';
+import { isPresent } from '../../utils.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };
 

@@ -24,7 +24,8 @@ import { toValidApiMessages } from './chat/utils.js';
 import { useGlobalStore } from './context/global/store.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import type { CustomField } from './types.js';
-import { getMessageTextContent, isPresent } from './utils.js';
+import { getMessageTextContent } from '@markprompt/core/utils';
+import { isPresent } from './utils.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;

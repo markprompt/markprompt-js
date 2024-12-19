@@ -1,4 +1,3 @@
-import type { ChatCompletionMessageParam } from '@markprompt/core/chat';
 import Emittery from 'emittery';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toString } from 'mdast-util-to-string';
@@ -152,22 +151,4 @@ export function openMarkprompt(
  */
 export function closeMarkprompt(): Promise<void> {
   return emitter.emit('close');
-}
-
-export function getMessageTextContent(m: ChatCompletionMessageParam) {
-  if (!m.content) {
-    return;
-  }
-
-  if (typeof m.content === 'string') {
-    return m.content;
-  }
-
-  return m.content.reduce((acc, x) => {
-    if (x.type === 'text') {
-      return `${acc} ${x.text}`;
-    }
-
-    return acc;
-  }, '');
 }

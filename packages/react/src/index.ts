@@ -79,7 +79,6 @@ export {
   emitter,
   openMarkprompt,
   closeMarkprompt,
-  getMessageTextContent,
 } from './utils.js';
 
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';

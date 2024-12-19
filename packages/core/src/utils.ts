@@ -1,3 +1,4 @@
+import type { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import type { FileSectionReference } from './types.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
@@ -51,4 +52,22 @@ export function isFileSectionReferences(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     typeof data.at(0)?.file?.source?.type === 'string'
   );
+}
+
+export function getMessageTextContent(m: ChatCompletionMessageParam) {
+  if (!m.content) {
+    return;
+  }
+
+  if (typeof m.content === 'string') {
+    return m.content;
+  }
+
+  return m.content.reduce((acc, x) => {
+    if (x.type === 'text') {
+      return `${acc} ${x.text}`;
+    }
+
+    return acc;
+  }, '');
 }
