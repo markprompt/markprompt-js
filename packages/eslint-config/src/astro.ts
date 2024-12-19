@@ -18,6 +18,8 @@ export const astro: Linter.Config[] = [
       },
     },
     rules: {
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'import-x/default': 'off',
     },
   },
