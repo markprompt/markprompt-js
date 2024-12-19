@@ -229,14 +229,13 @@ test('Prompt changes updates prompt state', async () => {
     </Markprompt.Root>,
   );
 
-  const input = await screen.findByRole('textbox');
+  const input = await screen.findByRole('searchbox');
 
   await user.type(input, 'test');
   expect(input).toHaveValue('test');
 });
 
 test('References renders the passed ReferenceComponent', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   const ReferenceComponent = vi.fn(({ reference }) => reference.file.path);
   render(
     <Markprompt.References
