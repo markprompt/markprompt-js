@@ -28,10 +28,10 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "dev": "tsc --build tsconfig.build.json --watch",
+    "dev": "tsc --build tsconfig.json --watch",
     "lint:js": "eslint .",
     "lint:ts": "tsc --build --noEmit",
-    "prepack": "tsc --build tsconfig.build.json"
+    "prepack": "tsc --build tsconfig.json"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",
