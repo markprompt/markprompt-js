@@ -84,7 +84,6 @@
         "noDuplicateElseIf": "error",
         "noIrregularWhitespace": "error",
         "noStaticElementInteractions": "error",
-        "noUselessEscapeInRegex": "error",
         "useAdjacentOverloadSignatures": "error",
         "useAriaPropsSupportedByRole": "error",
         "useValidAutocomplete": "error"
