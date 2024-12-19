@@ -75,7 +75,7 @@ test('Returns children when display is plain', () => {
     <Markprompt.Root display="plain">
       <Markprompt.Form>
         Search
-        <Markprompt.Prompt />
+        <Markprompt.SearchPrompt />
       </Markprompt.Form>
       <Markprompt.AutoScroller>
         Caret
