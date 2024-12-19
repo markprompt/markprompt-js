@@ -1,7 +1,11 @@
 import { configs } from '@markprompt/eslint-config';
 
 export default [
-  ...configs.base(import.meta.dirname),
+  ...configs.base(import.meta.dirname, [
+    'eslint.config.js',
+    'vitest.config.ts',
+    'vitest.setup.ts',
+  ]),
   {
     rules: {
       '@typescript-eslint/consistent-indexed-object-style': [

@@ -31,7 +31,7 @@
     "dev": "tsc --build tsconfig.json --watch",
     "lint:js": "eslint .",
     "lint:ts": "tsc --build --noEmit",
-    "prepack": "tsc --build tsconfig.json"
+    "prepack": "tsc --build tsconfig.build.json"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",

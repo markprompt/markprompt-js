@@ -28,12 +28,5 @@
     "lib": ["dom", "dom.iterable", "es2023"]
   },
   "include": ["src/"],
-  "exclude": [
-    ".turbo/",
-    "**/node_modules",
-    "dist/",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/test-utils.ts"
-  ]
+  "exclude": [".turbo/", "**/node_modules", "dist/"]
 }
