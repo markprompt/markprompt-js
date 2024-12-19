@@ -48,14 +48,14 @@ export function CreateTicketButton({
     }
 
     if (!messages || messages.length === 0 || !threadId) {
-      openMarkprompt('ticket');
+      await openMarkprompt('ticket');
       return;
     }
 
     setIsCreatingTicketSummary(true);
     await createTicketSummary?.(threadId, messages);
     setIsCreatingTicketSummary(false);
-    openMarkprompt('ticket', {
+    await openMarkprompt('ticket', {
       ticketDeflectionFormOptions: {
         defaultView: 'ticket',
         showBackLink: false,

@@ -8,7 +8,9 @@ import {
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
+import { ChatProvider } from './chat/provider.js';
 import { useChatStore } from './chat/store.js';
+import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { GlobalStoreProvider } from './context/global/provider.js';
 import { useGlobalStore, type GlobalOptions } from './context/global/store.js';
 import {
@@ -16,12 +18,7 @@ import {
   CustomCaseFormRenderer,
 } from './CreateTicketView.js';
 import { ChevronLeftIcon, LoadingIcon } from './icons.js';
-import {
-  ChatProvider,
-  DEFAULT_MARKPROMPT_OPTIONS,
-  type MarkpromptOptions,
-  type TicketDeflectionFormView,
-} from './index.js';
+import type { MarkpromptOptions, TicketDeflectionFormView } from './types.js';
 import { NavigationMenu } from './ui/navigation-menu.js';
 import { RichText } from './ui/rich-text.js';
 import { useDefaults } from './useDefaults.js';

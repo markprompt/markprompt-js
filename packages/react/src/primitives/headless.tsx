@@ -2,13 +2,13 @@ import type { FileSectionReference } from '@markprompt/core/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
   forwardRef,
+  isValidElement,
   memo,
   useCallback,
   useEffect,
   useRef,
   useState,
-  type ComponentPropsWithRef,
-  type ComponentPropsWithoutRef,
+  type ComponentProps,
   type ComponentType,
   type ElementType,
   type FormEventHandler,
@@ -32,7 +32,10 @@ import type {
   SearchResultComponentProps,
 } from '../types.js';
 
-type RootProps = Dialog.DialogProps & { display?: MarkpromptDisplay };
+type RootProps = Omit<Dialog.DialogProps, 'onOpenChange'> & {
+  display?: MarkpromptDisplay;
+  onOpenChange?: (this: void, open: boolean) => void;
+};
 
 /**
  * The Markprompt context provider and dialog root.
@@ -72,7 +75,7 @@ function DialogRootWithAbort(props: Dialog.DialogProps): JSX.Element {
   );
 }
 
-type DialogTriggerProps = ComponentPropsWithRef<typeof Dialog.Trigger>;
+type DialogTriggerProps = ComponentProps<typeof Dialog.Trigger>;
 /**
  * A button to open the Markprompt dialog.
  */
@@ -83,7 +86,7 @@ const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(
 );
 DialogTrigger.displayName = 'Markprompt.DialogTrigger';
 
-type PortalProps = ComponentPropsWithoutRef<typeof Dialog.Portal>;
+type PortalProps = ComponentProps<typeof Dialog.Portal>;
 /**
  * The Markprompt dialog portal.
  */
@@ -92,7 +95,7 @@ function Portal(props: PortalProps): JSX.Element {
 }
 Portal.displayName = 'Markprompt.Portal';
 
-type OverlayProps = ComponentPropsWithRef<typeof Dialog.Overlay>;
+type OverlayProps = ComponentProps<typeof Dialog.Overlay>;
 /**
  * The Markprompt dialog overlay.
  */
@@ -101,7 +104,7 @@ const Overlay = forwardRef<HTMLDivElement, OverlayProps>((props, ref) => {
 });
 Overlay.displayName = 'Markprompt.Overlay';
 
-type ContentProps = ComponentPropsWithoutRef<typeof Dialog.Content>;
+type ContentProps = ComponentProps<typeof Dialog.Content>;
 
 /**
  * The Markprompt dialog content.
@@ -124,7 +127,7 @@ export interface BrandingProps {
   branding?: { show?: boolean; type?: 'plain' | 'text' };
 }
 
-type PlainContentProps = ComponentPropsWithRef<'div'>;
+type PlainContentProps = ComponentProps<'div'>;
 /**
  * The Markprompt plain content.
  */
@@ -139,7 +142,7 @@ const PlainContent = forwardRef<HTMLDivElement, PlainContentProps>(
 );
 PlainContent.displayName = 'Markprompt.PlainContent';
 
-type CloseProps = ComponentPropsWithRef<typeof Dialog.Close>;
+type CloseProps = ComponentProps<typeof Dialog.Close>;
 /**
  * A button to close the Markprompt dialog and abort an ongoing request.
  */
@@ -150,7 +153,7 @@ const Close = forwardRef<HTMLButtonElement, CloseProps>(
 );
 Close.displayName = 'Markprompt.Close';
 
-type TitleProps = ComponentPropsWithRef<typeof Dialog.Title> & {
+type TitleProps = ComponentProps<typeof Dialog.Title> & {
   hide?: boolean;
 };
 const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
@@ -163,7 +166,7 @@ const Title = forwardRef<HTMLHeadingElement, TitleProps>((props, ref) => {
 });
 Title.displayName = 'Markprompt.Title';
 
-type DescriptionProps = ComponentPropsWithRef<typeof Dialog.Description> & {
+type DescriptionProps = ComponentProps<typeof Dialog.Description> & {
   hide?: boolean;
 };
 /**
@@ -181,7 +184,7 @@ const Description = forwardRef<HTMLParagraphElement, DescriptionProps>(
 );
 Description.displayName = 'Markprompt.Description';
 
-type FormProps = ComponentPropsWithRef<'form'>;
+type FormProps = ComponentProps<'form'>;
 /**
  * A form which, when submitted, submits the current prompt.
  */
@@ -189,7 +192,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(function Form(props, ref) {
   return <form {...props} ref={ref} />;
 });
 
-interface PromptInnerProps {
+interface PromptBaseProps {
   /** The label for the input. */
   label?: ReactNode;
   /** The class name of the label element. */
@@ -214,7 +217,7 @@ interface PromptInnerProps {
   submitOnEnter?: boolean;
 }
 
-type PromptProps = ComponentPropsWithRef<'input'> & PromptInnerProps;
+type PromptProps = ComponentProps<'textarea'> & PromptBaseProps;
 
 /**
  * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
@@ -233,7 +236,6 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       sendButtonClassName,
       placeholder,
       spellCheck = false,
-      type = 'search',
       showSubmitButton = true,
       isLoading,
       Icon,
@@ -244,14 +246,10 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
       onSubmit,
       onKeyDown,
       ...rest
-    } = props as any;
+    } = props;
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLTextAreaElement>): void => {
-        if (type === 'search') {
-          onKeyDown?.(event);
-          return;
-        }
         if (event.key === 'Enter' && !event.shiftKey) {
           if (submitOnEnter !== false) {
             event.preventDefault();
@@ -262,10 +260,8 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           }
         }
       },
-      [onKeyDown, onSubmit, submitOnEnter, type],
+      [onSubmit, submitOnEnter],
     );
-
-    const Comp = type === 'search' ? 'input' : TextareaAutoSize;
 
     return (
       <>
@@ -275,24 +271,122 @@ const Prompt = forwardRef<HTMLTextAreaElement, PromptProps>(
           </label>
         )}
         <div className={textAreaContainerClassName}>
-          <Comp
+          <TextareaAutoSize
             {...rest}
             id={name}
             name={name}
-            type={type}
             minRows={minRows}
             placeholder={placeholder}
-            ref={ref as any}
+            ref={ref}
             autoCapitalize={autoCapitalize}
             autoComplete={autoComplete}
             autoCorrect={autoCorrect}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={autoFocus}
+            spellCheck={spellCheck}
+            className={className}
+            draggable={false}
+            style={{ resize: 'none', height: '100%' as unknown as number }}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        {showSubmitButton && (
+          <button
+            className={sendButtonClassName}
+            type="submit"
+            data-variant="primary"
+            disabled={
+              isLoading ||
+              ((rest.value as string)?.trim()?.length === 0 && !isLoading)
+            }
+          >
+            {buttonLabel}
+            {Icon}
+          </button>
+        )}
+      </>
+    );
+  },
+);
+Prompt.displayName = 'Markprompt.Prompt';
+
+interface SearchPromptBaseProps {
+  /** The label for the input. */
+  label?: ReactNode;
+  /** The class name of the label element. */
+  labelClassName?: string;
+  /** The class name of the input container. */
+  containerClassName?: string;
+  /** The class name of the send button element. */
+  sendButtonClassName?: string;
+  /** The label for the submit button. */
+  buttonLabel?: string;
+  /** Show an icon next to the send button. */
+  showSubmitButton?: boolean;
+  /** If the answer is loading. */
+  isLoading?: boolean;
+  /** Icon for the button. */
+  Icon?: ReactNode;
+  /**
+   * Prompt type
+   * @defaults search
+   */
+  type?: 'search' | 'input';
+}
+
+type SearchPromptProps = ComponentProps<'input'> & SearchPromptBaseProps;
+
+/**
+ * The Markprompt input prompt. User input will update the prompt in the Markprompt context.
+ */
+const SearchPrompt = forwardRef<HTMLInputElement, SearchPromptProps>(
+  function Prompt(props, ref) {
+    const {
+      autoCapitalize = 'none',
+      autoComplete = 'off',
+      autoCorrect = 'off',
+      autoFocus = true,
+      label,
+      buttonLabel = 'Send',
+      labelClassName,
+      sendButtonClassName,
+      containerClassName,
+      placeholder,
+      spellCheck = false,
+      type = 'search',
+      showSubmitButton = true,
+      isLoading,
+      Icon,
+      name,
+      className,
+      onKeyDown,
+      ...rest
+    } = props;
+
+    return (
+      <>
+        {label && (
+          <label htmlFor={name} className={labelClassName}>
+            {label}
+          </label>
+        )}
+        <div className={containerClassName}>
+          <input
+            {...rest}
+            id={name}
+            name={name}
+            type="search"
+            placeholder={placeholder}
+            ref={ref}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            autoCorrect={autoCorrect}
+            // biome-ignore lint/a11y/noAutofocus: we sometimes want to autofocus the search input
             autoFocus={autoFocus}
             spellCheck={spellCheck}
             className={className}
             draggable={false}
             style={{ resize: 'none', height: '100%' }}
-            onKeyDown={handleKeyDown}
+            onKeyDown={onKeyDown}
           />
         </div>
         {showSubmitButton && (
@@ -327,11 +421,18 @@ function CopyContentButton(props: CopyContentButtonProps): JSX.Element {
   const [didJustCopy, setDidJustCopy] = useState(false);
 
   const handleClick = (): void => {
-    navigator.clipboard.writeText(content);
-    setDidJustCopy(true);
-    setTimeout(() => {
-      setDidJustCopy(false);
-    }, 2000);
+    navigator.clipboard
+      .writeText(content)
+      .then(() => {
+        setDidJustCopy(true);
+        const id = setTimeout(() => {
+          setDidJustCopy(false);
+        }, 2000);
+        return id;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -367,10 +468,17 @@ function CopyContentButton(props: CopyContentButtonProps): JSX.Element {
 }
 CopyContentButton.displayName = 'Markprompt.CopyContentButton';
 
-type HighlightedCodeProps = React.ClassAttributes<HTMLPreElement> &
-  React.HTMLAttributes<HTMLPreElement> & {
-    state?: ChatLoadingState;
-  };
+type HighlightedCodeProps = ComponentProps<'pre'> & {
+  state?: ChatLoadingState;
+};
+
+declare global {
+  interface hljs {
+    highlightAll: () => void;
+  }
+
+  var hljs: hljs | undefined;
+}
 
 function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   const { children, className, state, ...rest } = props;
@@ -382,8 +490,12 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
       // we can syntax highlight. This trick allows us to provide
       // syntax highlighting without imposing a large extra
       // package as part of the markprompt-js bundle.
-
-      ((globalThis as any).hljs as any)?.highlightAll();
+      if (
+        globalThis.hljs &&
+        typeof globalThis.hljs.highlightAll === 'function'
+      ) {
+        globalThis.hljs.highlightAll();
+      }
     }
   }, [children, state]);
 
@@ -394,10 +506,7 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
   );
 }
 
-type AnswerProps = Omit<
-  ComponentPropsWithoutRef<typeof Markdown>,
-  'children'
-> & {
+type AnswerProps = Omit<ComponentProps<typeof Markdown>, 'children'> & {
   answer: string;
   state?: ChatLoadingState;
   copyButtonClassName?: string;
@@ -423,9 +532,24 @@ function Answer(props: AnswerProps): JSX.Element {
       {...rest}
       remarkPlugins={remarkPlugins}
       components={{
-        a: (props) => <LinkComponent {...props} />,
-        pre: (props) => {
+        a: (props: ComponentProps<'a'>) => <LinkComponent {...props} />,
+        pre: (props: ComponentProps<'pre'>) => {
           const { children, className, ...rest } = props;
+
+          let content = '';
+
+          if (
+            children &&
+            typeof children === 'object' &&
+            'props' in children &&
+            typeof children.props === 'object' &&
+            children.props !== null &&
+            'children' in children.props &&
+            isValidElement(children.props.children) &&
+            typeof children.props.children === 'string'
+          ) {
+            content = children.props.children;
+          }
 
           return (
             <div
@@ -443,13 +567,7 @@ function Answer(props: AnswerProps): JSX.Element {
               >
                 <CopyContentButton
                   className={copyButtonClassName}
-                  content={
-                    children &&
-                    typeof children === 'object' &&
-                    'props' in children
-                      ? children.props.children
-                      : ''
-                  }
+                  content={content}
                 />
               </div>
               <HighlightedCode {...rest} className={className} state={state}>
@@ -495,8 +613,7 @@ interface AutoScrollerInnerProps {
   discreteScrollTrigger?: number;
 }
 
-type AutoScrollerProps = ComponentPropsWithoutRef<'div'> &
-  AutoScrollerInnerProps;
+type AutoScrollerProps = ComponentProps<'div'> & AutoScrollerInnerProps;
 
 /**
  * A component that automatically scrolls to the bottom.
@@ -767,6 +884,7 @@ export {
   Prompt,
   ForwardedReferences as References,
   Root,
+  SearchPrompt,
   SearchResult,
   SearchResults,
   Title,
@@ -783,6 +901,7 @@ export {
   type PromptProps,
   type ReferencesProps,
   type RootProps,
+  type SearchPromptProps,
   type SearchResultProps,
   type SearchResultsProps,
   type TitleProps,

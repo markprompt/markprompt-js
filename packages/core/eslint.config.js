@@ -16,5 +16,4 @@ export default [
     },
   },
   ...configs.vitest,
-  ...configs.biome,
 ];

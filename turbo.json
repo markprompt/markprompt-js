@@ -20,7 +20,6 @@
       "dependsOn": ["^build", "@markprompt/eslint-config#build"]
     },
     "//#lint:md": {},
-    "//#lint:ts": {},
     "lint:ts": {
       "dependsOn": ["^build"]
     },

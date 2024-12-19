@@ -46,8 +46,16 @@
         "useDateNow": "error"
       },
       "correctness": {
+        "noUndeclaredVariables": {
+          "level": "error"
+          // enable when biome@2.0.0 is released
+          // "options": {
+          //   "checkTypes": true
+          // }
+        },
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
+        "noUnusedPrivateClassMembers": "error",
         "noUnusedVariables": "error",
         "useArrayLiterals": "error",
         "useHookAtTopLevel": "error"
@@ -56,6 +64,7 @@
         "noDefaultExport": "warn",
         "noNonNullAssertion": "warn",
         "useCollapsedElseIf": "error",
+        "useForOf": "error",
         "useThrowOnlyError": "error"
       },
       "suspicious": {
@@ -69,6 +78,15 @@
         "useAwait": "error",
         "useErrorMessage": "error",
         "useNumberToFixedDigitsArgument": "error"
+      },
+      "nursery": {
+        "noCommonJs": "error",
+        "noDuplicateElseIf": "error",
+        "noIrregularWhitespace": "error",
+        "noStaticElementInteractions": "error",
+        "useAdjacentOverloadSignatures": "error",
+        "useAriaPropsSupportedByRole": "error",
+        "useValidAutocomplete": "error"
       }
     }
   },
@@ -95,6 +113,32 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      // .d.ts files import types inside their declare, which isn't parsed correctly by Biome, yet.
+      "include": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUndeclaredVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": [
+        "examples/with-docusaurus*/sidebars.js",
+        "examples/with-docusaurus*/babel.config.js",
+        "examples/with-docusaurus*/docusaurus.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noCommonJs": "off"
           }
         }
       }

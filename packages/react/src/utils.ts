@@ -22,7 +22,16 @@ export function isIterable(obj: unknown): boolean {
     return false;
   }
 
-  return typeof (obj as any)[Symbol.iterator] === 'function';
+  // Type guard to check if obj is an object first
+  if (typeof obj !== 'object') {
+    return false;
+  }
+
+  // Now we can safely check for Symbol.iterator
+  return (
+    typeof (obj as { [Symbol.iterator]?: unknown })[Symbol.iterator] ===
+    'function'
+  );
 }
 
 /**
@@ -129,14 +138,17 @@ export const emitter = new Emittery<{
  * Open Markprompt programmatically. Useful for building a custom trigger
  * or opening the Markprompt dialog in response to other user actions.
  */
-export function openMarkprompt(view?: View, options?: ViewOptions): void {
-  emitter.emit('open', { view, options });
+export function openMarkprompt(
+  view?: View,
+  options?: ViewOptions,
+): Promise<void> {
+  return emitter.emit('open', { view, options });
 }
 
 /**
  * Close Markprompt programmatically. Useful for building a custom trigger
  * or closing the Markprompt dialog in response to other user actions.
  */
-export function closeMarkprompt(): void {
-  emitter.emit('close');
+export function closeMarkprompt(): Promise<void> {
+  return emitter.emit('close');
 }

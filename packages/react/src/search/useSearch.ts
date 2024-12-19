@@ -33,7 +33,7 @@ export interface UseSearchResult {
   state: SearchLoadingState;
   abort: () => void;
   setSearchQuery: (searchQuery: string) => void;
-  submitSearchQuery: (searchQuery: string) => void;
+  submitSearchQuery: (searchQuery: string) => Promise<void>;
 }
 
 export function useSearch({
@@ -78,9 +78,7 @@ export function useSearch({
               ...searchOptions,
               signal: controller.signal,
             }) as Promise<AlgoliaDocSearchResultsResponse>
-          ).then((result) => result?.hits || []) as Promise<
-            AlgoliaDocSearchHit[]
-          >;
+          ).then((result) => result?.hits || []);
         } else {
           promise = (
             submitSearchQueryToMarkprompt(searchQuery, projectKey, {

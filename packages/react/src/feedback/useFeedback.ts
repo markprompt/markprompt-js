@@ -23,11 +23,14 @@ export interface UseFeedbackResult {
   /** Abort any pending feedback submission */
   abort: () => void;
   /** Submit feedback for the current message */
-  submitFeedback: (feedback: PromptFeedback, messageId?: string) => void;
+  submitFeedback: (
+    feedback: PromptFeedback,
+    messageId?: string,
+  ) => Promise<void>;
   /** Submit CSAT for a thread */
-  submitThreadCSAT: (threadId: string, csat: CSAT) => void;
+  submitThreadCSAT: (threadId: string, csat: CSAT) => Promise<void>;
   /** Submit CSAT reason for a thread */
-  submitThreadCSATReason: (threadId: string, reason: string) => void;
+  submitThreadCSATReason: (threadId: string, reason: string) => Promise<void>;
 }
 
 export function useFeedback({

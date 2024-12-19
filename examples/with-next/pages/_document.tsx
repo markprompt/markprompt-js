@@ -1,7 +1,8 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 import Script from 'next/script';
+import type { JSX } from 'react';
 
-export default function Document(): React.JSX.Element {
+export default function Document(): JSX.Element {
   return (
     <Html>
       <Head>

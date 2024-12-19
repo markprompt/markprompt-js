@@ -101,7 +101,7 @@ export async function submitSearchQuery(
         ...DEFAULT_OPTIONS,
         ...DEFAULT_SUBMIT_SEARCH_QUERY_OPTIONS,
       },
-    );
+    ) as SubmitSearchQueryOptions & BaseOptions;
 
     const params = new URLSearchParams({
       query,
@@ -128,7 +128,7 @@ export async function submitSearchQuery(
       );
     }
 
-    return res.json();
+    return (await res.json()) as SearchResultsResponse;
   } catch (error) {
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
@@ -181,7 +181,7 @@ export async function submitAlgoliaDocsearchQuery(
       );
     }
 
-    return res.json();
+    return (await res.json()) as AlgoliaDocSearchResultsResponse;
   } catch (error) {
     if (isAbortError(error)) {
       // do nothing on AbortError's, this is expected
