@@ -6,8 +6,6 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint:js": "eslint .",
-    "lint:ts": "tsc -b tsconfig.json",
     "start": "next start"
   },
   "dependencies": {
