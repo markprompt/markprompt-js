@@ -753,7 +753,6 @@ describe('ChatView', () => {
 
     expect(localStorage.getItem('markprompt')).not.toBeNull();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const error: unknown = JSON.parse(localStorage.getItem('markprompt')!).state
       .messagesByThreadId[threadId].messages[1].error;
 

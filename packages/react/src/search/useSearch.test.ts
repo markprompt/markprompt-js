@@ -68,11 +68,8 @@ describe('useSearch', () => {
       state: 'indeterminate',
       searchResults: [],
       searchQuery: '',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       setSearchQuery: expect.any(Function),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       submitSearchQuery: expect.any(Function),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       abort: expect.any(Function),
     } satisfies UseSearchResult);
   });

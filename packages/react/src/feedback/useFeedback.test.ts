@@ -41,13 +41,9 @@ describe('useFeedback', () => {
     );
 
     expect(result.current).toStrictEqual({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       submitFeedback: expect.any(Function),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       submitThreadCSAT: expect.any(Function),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       submitThreadCSATReason: expect.any(Function),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       abort: expect.any(Function),
     });
   });
@@ -108,7 +104,6 @@ describe('useFeedback', () => {
     status = 500;
 
     expect(
-      // eslint-disable-next-line @typescript-eslint/return-await
       async () => await submitFeedback({ vote: '1' }, TEST_PROMPT_ID),
     ).not.toThrow();
   });

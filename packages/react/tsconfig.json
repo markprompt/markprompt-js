@@ -15,8 +15,8 @@
     // transpilation
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "outDir": "dist/",
-    "rootDir": "src/",
+    "baseUrl": ".",
+    "noEmit": true,
 
     "sourceMap": true,
     "declaration": true,
@@ -27,6 +27,6 @@
     // runtime
     "lib": ["dom", "dom.iterable", "es2023"]
   },
-  "include": ["src/"],
-  "exclude": [".turbo/", "**/node_modules", "dist/", "src/**/*.test.ts"]
+  "include": ["./"],
+  "exclude": [".turbo/", "**/node_modules", "dist/"]
 }
