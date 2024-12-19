@@ -53,7 +53,7 @@ export const COMPLETIONS_MODELS = [
 
 export type CompletionsModel = ArrayToUnion<typeof COMPLETIONS_MODELS>;
 
-export const EMBEDDINGS_MODEL = 'text-embedding-ada-002' as const;
+export const EMBEDDINGS_MODEL = 'text-embedding-ada-002';
 
 export type EmbeddingsModel = typeof EMBEDDINGS_MODEL;
 

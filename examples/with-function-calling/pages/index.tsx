@@ -6,7 +6,7 @@ import {
 import Head from 'next/head';
 import type { OpenAI } from 'openai';
 import { useCallback, useState } from 'react';
-import type { JSX } from 'react';
+import type { FormEvent, JSX } from 'react';
 
 interface ChatCompletionExecution {
   run?: (args: unknown) => void;
@@ -44,7 +44,7 @@ export default function IndexPage(): JSX.Element {
   const [streamedMessage, setStreamedMessage] = useState('');
 
   const submitForm = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       setStreamedMessage('Fetching response...');
@@ -92,7 +92,7 @@ export default function IndexPage(): JSX.Element {
           tool.run?.(toolCall.function?.arguments);
           setStreamedMessage(
             `Calling: ${tool.function.name}\n\nArguments:\n\n${
-              toolCall.function?.arguments || {}
+              toolCall.function?.arguments || JSON.stringify({})
             }`,
           );
         }
@@ -108,7 +108,12 @@ export default function IndexPage(): JSX.Element {
         <meta charSet="utf-8" />
       </Head>
       <div className="Container">
-        <form className="InputForm" onSubmit={submitForm}>
+        <form
+          className="InputForm"
+          onSubmit={(event) => {
+            void submitForm(event);
+          }}
+        >
           <label className="label" htmlFor="input">
             Input
           </label>

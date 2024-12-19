@@ -48,7 +48,7 @@ export async function submitFeedback(
   const resolvedOptions = defaults(cloneableOpts, {
     ...DEFAULT_OPTIONS,
     ...DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  });
+  }) as SubmitFeedbackOptions & BaseOptions;
 
   try {
     const response = await fetch(
@@ -69,8 +69,21 @@ export async function submitFeedback(
     );
 
     if (!response.ok) {
-      const error = (await response.json())?.error;
-      throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
+      const json: unknown = await response.json();
+      if (
+        json &&
+        typeof json === 'object' &&
+        'error' in json &&
+        typeof json.error === 'string'
+      ) {
+        throw new Error(`Failed to submit feedback: ${json.error}`, {
+          cause: json,
+        });
+      }
+
+      throw new Error(`Failed to submit feedback: 'Unknown error'`, {
+        cause: json,
+      });
     }
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
@@ -111,7 +124,7 @@ export async function submitCSAT(
   const resolvedOptions = defaults(cloneableOpts, {
     ...DEFAULT_OPTIONS,
     ...DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  });
+  }) as SubmitFeedbackOptions & BaseOptions;
 
   try {
     const response = await fetch(
@@ -129,8 +142,21 @@ export async function submitCSAT(
     );
 
     if (!response.ok) {
-      const error = (await response.json())?.error;
-      throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
+      const json: unknown = await response.json();
+      if (
+        json &&
+        typeof json === 'object' &&
+        'error' in json &&
+        typeof json.error === 'string'
+      ) {
+        throw new Error(`Failed to submit feedback: ${json.error}`, {
+          cause: json,
+        });
+      }
+
+      throw new Error(`Failed to submit feedback: 'Unknown error'`, {
+        cause: json,
+      });
     }
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
@@ -169,7 +195,7 @@ export async function submitCSATReason(
   const resolvedOptions = defaults(cloneableOpts, {
     ...DEFAULT_OPTIONS,
     ...DEFAULT_SUBMIT_FEEDBACK_OPTIONS,
-  });
+  }) as SubmitFeedbackOptions & BaseOptions;
 
   try {
     const response = await fetch(
@@ -187,8 +213,21 @@ export async function submitCSATReason(
     );
 
     if (!response.ok) {
-      const error = (await response.json())?.error;
-      throw new Error(`Failed to submit feedback: ${error || 'Unknown error'}`);
+      const json: unknown = await response.json();
+      if (
+        json &&
+        typeof json === 'object' &&
+        'error' in json &&
+        typeof json.error === 'string'
+      ) {
+        throw new Error(`Failed to submit feedback: ${json.error}`, {
+          cause: json,
+        });
+      }
+
+      throw new Error(`Failed to submit feedback: 'Unknown error'`, {
+        cause: json,
+      });
     }
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {

@@ -13,12 +13,13 @@ import {
 } from 'react';
 
 import { ChatView } from './chat/ChatView.js';
+import { ChatProvider } from './chat/provider.js';
+import { useChatStore } from './chat/store.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 import { GlobalStoreProvider } from './context/global/provider.js';
 import { useGlobalStore } from './context/global/store.js';
 import { CreateTicketView } from './CreateTicketView.js';
 import { CloseIcon, SparklesIcon } from './icons.js';
-import { ChatProvider, useChatStore } from './index.js';
 import { Menu } from './Menu.js';
 import * as BaseMarkprompt from './primitives/headless.js';
 import { TicketDeflectionForm } from './TicketDeflectionForm.js';
@@ -184,8 +185,8 @@ function Markprompt(props: MarkpromptProps): JSX.Element {
     };
   }, [display, onDidRequestOpenChange]);
 
-  const onTriggerClicked = useCallback(() => {
-    openMarkprompt(menu ? 'menu' : 'chat');
+  const onTriggerClicked = useCallback(async () => {
+    await openMarkprompt(menu ? 'menu' : 'chat');
   }, [menu]);
 
   return (

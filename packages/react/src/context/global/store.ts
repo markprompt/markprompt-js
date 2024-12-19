@@ -2,9 +2,10 @@ import {
   submitChat,
   type ChatCompletionMessageParam,
 } from '@markprompt/core/chat';
-import { isAbortError } from '@markprompt/core/utils';
+import { isAbortError, getMessageTextContent } from '@markprompt/core/utils';
 import { createContext, useContext } from 'react';
 import { createStore, type StoreApi } from 'zustand';
+// eslint-disable-next-line import-x/no-deprecated
 import { useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -12,6 +13,7 @@ import { getInitialView } from './utils.js';
 import type { ChatViewMessage } from '../../chat/store.js';
 import { toValidApiMessages } from '../../chat/utils.js';
 import type { MarkpromptOptions, View } from '../../types.js';
+import { isPresent } from '../../utils.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };
 
@@ -26,7 +28,7 @@ interface State {
     createTicketSummary: (
       threadId: string,
       messages: ChatViewMessage[],
-    ) => void;
+    ) => Promise<void>;
   };
 }
 
@@ -107,8 +109,11 @@ Output:
 
             const conversation = toValidApiMessages(messages)
               .map((m) => {
-                return `${m.role === 'user' ? 'User' : 'Assistant'}:\n\n${m.content}`;
+                const content = getMessageTextContent(m);
+                if (!content) return;
+                return `${m.role === 'user' ? 'User' : 'AI'}: ${content}`;
               })
+              .filter(isPresent)
               .join('\n\n==============================\n\n');
 
             const apiMessages = [
@@ -176,5 +181,6 @@ export function useGlobalStore<T>(selector: (state: State) => T): T {
       'Missing GlobalStoreProvider. Make sure to wrap your component tree with <GlobalStoreProvider />.',
     );
   }
+  // eslint-disable-next-line import-x/no-deprecated
   return useStore(store, selector);
 }

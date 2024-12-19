@@ -19,7 +19,7 @@ import * as Markprompt from './headless.js';
 let searchResults: SearchResult[] = [];
 let status = 200;
 const server = setupServer(
-  http.get(DEFAULT_OPTIONS.apiUrl!, () => {
+  http.get(DEFAULT_OPTIONS.apiUrl, () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -75,7 +75,7 @@ test('Returns children when display is plain', () => {
     <Markprompt.Root display="plain">
       <Markprompt.Form>
         Search
-        <Markprompt.Prompt />
+        <Markprompt.SearchPrompt />
       </Markprompt.Form>
       <Markprompt.AutoScroller>
         Caret
@@ -209,7 +209,7 @@ test('Prompt changes trigger user-defined callbacks', async () => {
 
   render(
     <Markprompt.Root>
-      <Markprompt.Prompt type="text" onChange={cb} />
+      <Markprompt.Prompt onChange={cb} />
     </Markprompt.Root>,
   );
 
@@ -225,11 +225,11 @@ test('Prompt changes updates prompt state', async () => {
 
   render(
     <Markprompt.Root>
-      <Markprompt.Prompt type="text" />
+      <Markprompt.SearchPrompt />
     </Markprompt.Root>,
   );
 
-  const input = await screen.findByRole('textbox');
+  const input = await screen.findByRole('searchbox');
 
   await user.type(input, 'test');
   expect(input).toHaveValue('test');

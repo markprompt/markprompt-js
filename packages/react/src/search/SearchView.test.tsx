@@ -25,7 +25,7 @@ let results: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let debug: unknown;
 
 const server = setupServer(
-  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, () => {
+  http.get(`${DEFAULT_OPTIONS.apiUrl}/search`, () => {
     if (status >= 400) {
       return HttpResponse.json(
         { error: 'Server error', debug },
@@ -77,7 +77,7 @@ describe('SearchView', () => {
 
   it('displays search queries', async () => {
     const query = 'test query';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [
       {
@@ -155,7 +155,7 @@ describe('SearchView', () => {
 
   it('display an empty state when there are no search results', async () => {
     const query = 'testquery';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [];
 
@@ -173,7 +173,7 @@ describe('SearchView', () => {
     'allows users to select search queries',
     async () => {
       const query = 'test';
-      const user = await userEvent.setup();
+      const user = userEvent.setup();
 
       results = [
         {
@@ -215,23 +215,25 @@ describe('SearchView', () => {
       });
 
       // first item selected by default
-      await expect(
-        screen.getByRole('option', { selected: true }),
-      ).toHaveAttribute('id', 'markprompt-result-0');
+      expect(screen.getByRole('option', { selected: true })).toHaveAttribute(
+        'id',
+        'markprompt-result-0',
+      );
 
       // select item on arrow down
       await user.keyboard('{ArrowDown}');
 
-      await expect(
-        screen.getByRole('option', { selected: true }),
-      ).toHaveAttribute('id', 'markprompt-result-1');
+      expect(screen.getByRole('option', { selected: true })).toHaveAttribute(
+        'id',
+        'markprompt-result-1',
+      );
 
       // select item on mousemove
       // From Michael: This test currently fails - it doesn't trigger
       // the mouse move event.
       // await userEvent.hover(screen.getByRole('link', { name: 'result 2' }));
 
-      // await expect(
+      //  expect(
       //   screen.getByRole('option', { selected: true }),
       // ).toHaveAttribute('id', 'markprompt-result-2');
 
@@ -239,25 +241,27 @@ describe('SearchView', () => {
       await user.keyboard('{ArrowUp}');
       await user.keyboard('{ArrowDown}');
 
-      await expect(
-        screen.getByRole('option', { selected: true }),
-      ).toHaveAttribute('id', 'markprompt-result-1');
+      expect(screen.getByRole('option', { selected: true })).toHaveAttribute(
+        'id',
+        'markprompt-result-1',
+      );
 
       // don't go past the last result
       await user.keyboard('{ArrowDown}');
       await user.keyboard('{ArrowDown}');
       await user.keyboard('{ArrowDown}');
 
-      await expect(
-        screen.getByRole('option', { selected: true }),
-      ).toHaveAttribute('id', 'markprompt-result-2');
+      expect(screen.getByRole('option', { selected: true })).toHaveAttribute(
+        'id',
+        'markprompt-result-2',
+      );
     },
     { retry: 3 },
   );
 
   it('reselects the first search result when the search query changes', async () => {
     const query = 'test query';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [
       {
@@ -292,7 +296,7 @@ describe('SearchView', () => {
 
   it.skip('allows users to open search results', async () => {
     const query = 'test query';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [
       {
@@ -314,12 +318,12 @@ describe('SearchView', () => {
 
     await user.keyboard('{Enter}');
 
-    await expect(window.location.href).toContain('#file');
+    expect(window.location.href).toContain('#file');
   });
 
   it('highlights matches', async () => {
     const query = 'test';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [
       {
@@ -348,7 +352,7 @@ describe('SearchView', () => {
   });
 
   it('can use algolia as a search provider', async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     const query = 'react';
 
     results = [
@@ -406,7 +410,7 @@ describe('SearchView', () => {
 
   it('logs debug information', async () => {
     const query = 'test query';
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
 
     results = [
       {

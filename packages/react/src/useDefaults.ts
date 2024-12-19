@@ -20,6 +20,15 @@ type DeepMerge<T, U> = T extends { [key: string]: unknown }
       : T
     : U;
 
+// biome-ignore lint/complexity/noBannedTypes: we need it to match the parameter type of isValidElement
+function isObjectOrNullish(value: unknown): value is {} | null | undefined {
+  return (
+    value === null ||
+    value === undefined ||
+    (typeof value === 'object' && !Array.isArray(value))
+  );
+}
+
 // defaults only merges the first level of properties, we need to make sure that
 // deeper nested properties are merged as well.
 export function useDefaults<
@@ -32,12 +41,12 @@ export function useDefaults<
       defaults(
         cloneDeepWith(options, (value) => {
           // don't clone React elements with lodash, they won't render properly after
-          if (isValidElement(value)) {
+          if (isObjectOrNullish(value) && isValidElement(value)) {
             return cloneElement(value);
           }
         }),
         defaultOptions,
-      ),
+      ) as U extends undefined ? T : DeepMerge<U, T>,
     [defaultOptions, options],
   );
 }

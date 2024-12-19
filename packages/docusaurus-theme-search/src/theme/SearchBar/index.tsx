@@ -9,8 +9,20 @@ import {
 import { useEffect, useState } from 'react';
 import type { JSX } from 'react';
 
+declare global {
+  interface Window {
+    markpromptConfigExtras?: {
+      references?: MarkpromptProps['references'];
+      search?: MarkpromptProps['search'];
+    };
+  }
+}
+
 export default function SearchBar(): JSX.Element {
-  const [markpromptExtras, setMarkpromptExtras] = useState<any>({});
+  const [markpromptExtras, setMarkpromptExtras] = useState<{
+    references?: MarkpromptProps['references'];
+    search?: MarkpromptProps['search'];
+  }>({});
   const { siteConfig } = useDocusaurusContext();
 
   useEffect(() => {
@@ -18,7 +30,7 @@ export default function SearchBar(): JSX.Element {
       return;
     }
 
-    setMarkpromptExtras((window as any).markpromptConfigExtras || {});
+    setMarkpromptExtras(window.markpromptConfigExtras || {});
   }, []);
 
   const markpromptConfigProps = siteConfig.themeConfig
@@ -38,6 +50,7 @@ export default function SearchBar(): JSX.Element {
   if (markpromptProps.trigger?.floating) {
     return <Markprompt {...markpromptProps} />;
   }
+
   return (
     <>
       <div id="markprompt" />
@@ -47,9 +60,9 @@ export default function SearchBar(): JSX.Element {
           role="button"
           className="search-icon"
           onClick={() => openMarkprompt()}
-          onKeyDown={(event) => {
+          onKeyDown={async (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
-              openMarkprompt();
+              await openMarkprompt();
             }
           }}
           tabIndex={0}
