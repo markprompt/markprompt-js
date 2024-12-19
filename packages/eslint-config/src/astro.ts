@@ -12,6 +12,11 @@ export const astro: Linter.Config[] = [
         'astro-eslint-parser': ['.astro'],
       },
     },
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+      },
+    },
     rules: {
       'import-x/default': 'off',
     },
