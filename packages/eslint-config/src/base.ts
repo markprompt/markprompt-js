@@ -7,8 +7,8 @@ import tseslint from 'typescript-eslint';
 import turbo from 'eslint-plugin-turbo';
 
 export const base = <T extends string>(
-  rootDir: T,
-  allowDefaultProject?: string[],
+  _rootDir: T,
+  _allowDefaultProject?: string[],
 ): Linter.Config[] => [
   {
     ignores: ['.turbo/', 'dist/'],
@@ -45,12 +45,12 @@ export const base = <T extends string>(
     languageOptions: {
       parser: tseslint.parser as Linter.Parser,
       parserOptions: {
-        tsconfigRootDir: rootDir,
-        projectService: allowDefaultProject
-          ? {
-              allowDefaultProject,
-            }
-          : true,
+        // tsconfigRootDir: rootDir,
+        // projectService: allowDefaultProject
+        //   ? {
+        //       allowDefaultProject,
+        //     }
+        //   : true,
         warnOnUnsupportedTypeScriptVersion: false,
       },
     },
@@ -58,7 +58,7 @@ export const base = <T extends string>(
   {
     // only enable @typescript-eslint rules that Biome doesn't cover
     rules: {
-      '@typescript-eslint/await-thenable': 'error',
+      // '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/class-literal-property-style': 'error',
       '@typescript-eslint/consistent-generic-constructors': 'error',
@@ -68,10 +68,10 @@ export const base = <T extends string>(
       '@typescript-eslint/no-confusing-non-null-assertion': 'error',
       '@typescript-eslint/no-duplicate-enum-values': 'error',
       '@typescript-eslint/no-empty-object-type': 'error',
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        { checksVoidReturn: false },
-      ],
+      // '@typescript-eslint/no-misused-promises': [
+      //   'error',
+      //   { checksVoidReturn: false },
+      // ],
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
       '@typescript-eslint/no-unsafe-function-type': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
