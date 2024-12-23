@@ -93,6 +93,9 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
     try {
       const data = new FormData(event.currentTarget);
+      if (threadId) {
+        data.set('threadId', threadId);
+      }
       const files = data.get('files');
       const requestBody =
         files && (files as any).size > 0
