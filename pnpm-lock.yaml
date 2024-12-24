@@ -335,9 +335,6 @@ importers:
         specifier: ^19
         version: 19.0.0(react@19.0.0)
     devDependencies:
-      '@next/eslint-plugin-next':
-        specifier: ^14.2.15
-        version: 14.2.18
       '@types/react':
         specifier: ^19
         version: 19.0.1
@@ -394,9 +391,6 @@ importers:
         specifier: ^19
         version: 19.0.0(react@19.0.0)
     devDependencies:
-      '@next/eslint-plugin-next':
-        specifier: ^14.2.15
-        version: 14.2.18
       '@types/react':
         specifier: ^19
         version: 19.0.1
