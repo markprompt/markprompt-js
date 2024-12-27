@@ -39,6 +39,7 @@ and some example implementations:
 - [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite. based on `@markprompt/react`, Vite and CSS Modules.
 - [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js.
 - [`with-function-calling`](examples/with-function-calling#readme) — a web application based on `@markprompt/react` and Next.js showcasing the use for [OpenAI function calling](https://platform.openai.com/docs/guides/function-calling).
+- [`with-automatic-ticket-creation`](examples/with-automatic-ticket-creation#readme) — a web application based on `@markprompt/web` and Vite showcasing automatic ticket creation.
 
 ## Running examples
 
