@@ -94,20 +94,20 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
       const requestBody = files?.some((f) => f.size > 0)
         ? {
-          method: 'POST',
-          // don't pass a Content-Type header here, the browser will
-          // generate a correct header which includes the boundary.
-          body: data,
-          headers,
-        }
+            method: 'POST',
+            // don't pass a Content-Type header here, the browser will
+            // generate a correct header which includes the boundary.
+            body: data,
+            headers,
+          }
         : {
-          method: 'POST',
-          body: JSON.stringify(Object.fromEntries(data.entries())),
-          headers: {
-            ...headers,
-            'Content-Type': 'application/json',
-          },
-        };
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(data.entries())),
+            headers: {
+              ...headers,
+              'Content-Type': 'application/json',
+            },
+          };
 
       // copy a field for legacy reasons
       const result = await fetch(
@@ -236,8 +236,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
               placeholder={
                 summary?.state &&
-                  summary.state !== 'done' &&
-                  summary?.state !== 'cancelled'
+                summary.state !== 'done' &&
+                summary?.state !== 'cancelled'
                   ? createTicketOptions?.form?.summaryLoading
                   : createTicketOptions?.form?.summaryPlaceholder
               }
@@ -247,8 +247,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               style={{
                 color:
                   summary?.state &&
-                    summary.state !== 'done' &&
-                    summary?.state !== 'cancelled'
+                  summary.state !== 'done' &&
+                  summary?.state !== 'cancelled'
                     ? 'var(--markprompt-mutedForeground)'
                     : 'var(--markprompt-foreground)',
               }}
