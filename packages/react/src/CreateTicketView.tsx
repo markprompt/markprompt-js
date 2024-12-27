@@ -5,6 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { getMessageTextContent } from '@markprompt/core/utils';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
@@ -24,7 +25,6 @@ import { toValidApiMessages } from './chat/utils.js';
 import { useGlobalStore } from './context/global/store.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
 import type { CustomField } from './types.js';
-import { getMessageTextContent } from '@markprompt/core/utils';
 import { isPresent } from './utils.js';
 
 export interface CreateTicketViewProps {
@@ -94,20 +94,21 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
 
       const requestBody = files?.some((f) => f.size > 0)
         ? {
-            method: 'POST',
-            // don't pass a Content-Type header here, the browser will
-            // generate a correct header which includes the boundary.
-            body: data,
-            headers,
-          }
+          method: 'POST',
+          // don't pass a Content-Type header here, the browser will
+          // generate a correct header which includes the boundary.
+          body: data,
+          headers,
+        }
         : {
-            method: 'POST',
-            body: JSON.stringify(Object.fromEntries(data.entries())),
-            headers: {
-              ...headers,
-              'Content-Type': 'application/json',
-            },
-          };
+          method: 'POST',
+          body: JSON.stringify(Object.fromEntries(data.entries())),
+          headers: {
+            ...headers,
+            'Content-Type': 'application/json',
+          },
+        };
+
       // copy a field for legacy reasons
       const result = await fetch(
         `${apiUrl}/integrations/create-ticket?projectKey=${projectKey}`,
@@ -235,8 +236,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               }}
               placeholder={
                 summary?.state &&
-                summary.state !== 'done' &&
-                summary?.state !== 'cancelled'
+                  summary.state !== 'done' &&
+                  summary?.state !== 'cancelled'
                   ? createTicketOptions?.form?.summaryLoading
                   : createTicketOptions?.form?.summaryPlaceholder
               }
@@ -246,8 +247,8 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
               style={{
                 color:
                   summary?.state &&
-                  summary.state !== 'done' &&
-                  summary?.state !== 'cancelled'
+                    summary.state !== 'done' &&
+                    summary?.state !== 'cancelled'
                     ? 'var(--markprompt-mutedForeground)'
                     : 'var(--markprompt-foreground)',
               }}

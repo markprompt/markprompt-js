@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.60.1
+
+### Patch Changes
+
+- [#478](https://github.com/markprompt/markprompt-js/pull/478) [`420ba34`](https://github.com/markprompt/markprompt-js/commit/420ba3433388d426e45fac40ac9a65b3b173761a) Thanks [@elliotdauber](https://github.com/elliotdauber)! - send threadId when creating a case
+
 ## 0.60.0
 
 ### Minor Changes
