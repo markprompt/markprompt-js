@@ -55,7 +55,7 @@ export function SearchBoxTrigger(props: SearchBoxTriggerProps): JSX.Element {
         </span>
         <kbd>
           <kbd>
-            {navigator.platform.indexOf('Mac') === 0 ||
+            {navigator.platform.startsWith('Mac') ||
             navigator.platform === 'iPhone' ? (
               <AccessibleIcon label="Command">
                 <CommandIcon className="MarkpromptKeyboardKey" />

@@ -100,8 +100,8 @@ export function SearchView(props: SearchViewProps): JSX.Element {
     DEFAULT_MARKPROMPT_OPTIONS.search,
   );
 
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const {
     abort,
@@ -153,7 +153,7 @@ export function SearchView(props: SearchViewProps): JSX.Element {
   // biome-ignore lint/correctness/useExhaustiveDependencies: we want to run the effect when activeView changes
   useEffect(() => {
     // Bring form input in focus when activeView changes.
-    textAreaRef.current?.focus();
+    searchInputRef.current?.focus();
   }, [activeView]);
 
   useEffect(() => {
@@ -264,9 +264,9 @@ export function SearchView(props: SearchViewProps): JSX.Element {
   );
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
+    async (event) => {
       setSearchQuery(event.target.value);
-      submitSearchQuery(event.target.value);
+      await submitSearchQuery(event.target.value);
     },
     [setSearchQuery, submitSearchQuery],
   );
@@ -287,13 +287,13 @@ export function SearchView(props: SearchViewProps): JSX.Element {
         onSubmit={handleSubmit}
       >
         <div className="MarkpromptPromptWrapper">
-          <BaseMarkprompt.Prompt
-            ref={textAreaRef}
+          <BaseMarkprompt.SearchPrompt
+            ref={searchInputRef}
             className="MarkpromptPrompt"
             name={searchInputName}
             placeholder={searchOptions?.placeholder}
             labelClassName="MarkpromptPromptLabel"
-            textAreaContainerClassName="MarkpromptTextAreaContainer"
+            containerClassName="MarkpromptTextAreaContainer"
             value={searchQuery}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
@@ -429,13 +429,10 @@ function SearchResultsContainer(
   return (
     <div className="MarkpromptSearchResultsContainer">
       {isAskVisible && (
-        // todo: should this use a different (interactive) element?
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
+          role="button"
+          tabIndex={0}
           className="MarkpromptSearchResult"
-          aria-selected={
-            !activeSearchResult?.id || activeSearchResult.id === 'ask'
-          }
           id="ask"
           style={{ cursor: 'pointer' }}
           onMouseMove={() => {

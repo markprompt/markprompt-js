@@ -21,5 +21,4 @@ export default [
   },
   ...configs.react,
   ...configs.vitest,
-  ...configs.biome,
 ];

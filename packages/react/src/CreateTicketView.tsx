@@ -5,6 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
+import { getMessageTextContent } from '@markprompt/core/utils';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { clsx } from 'clsx';
 import { useSelect } from 'downshift';
@@ -19,14 +20,12 @@ import {
   type JSX,
 } from 'react';
 
+import { useChatStore, type ChatViewMessage } from './chat/store.js';
 import { toValidApiMessages } from './chat/utils.js';
 import { useGlobalStore } from './context/global/store.js';
 import { ChevronDownIcon, ChevronLeftIcon, LoadingIcon } from './icons.js';
-import {
-  useChatStore,
-  type ChatViewMessage,
-  type CustomField,
-} from './index.js';
+import type { CustomField } from './types.js';
+import { isPresent } from './utils.js';
 
 export interface CreateTicketViewProps {
   handleGoBack: () => void;
@@ -77,43 +76,39 @@ export function CreateTicketView(props: CreateTicketViewProps): JSX.Element {
   ): Promise<void> => {
     event.preventDefault();
 
-    if (
-      !apiUrl ||
-      !projectKey ||
-      !provider ||
-      !event.currentTarget.email.value ||
-      !event.currentTarget.userName.value ||
-      !event.currentTarget.summary.value
-    ) {
+    if (!apiUrl || !projectKey || !provider) {
       return;
     }
 
-    setResult(undefined);
-    setSubmittingCase(true);
-
     try {
       const data = new FormData(event.currentTarget);
-      if (threadId) {
-        data.set('threadId', threadId);
+
+      if (!data.get('email') || !data.get('userName') || !data.get('summary')) {
+        return;
       }
-      const files = data.get('files');
-      const requestBody =
-        files && (files as any).size > 0
-          ? {
-              method: 'POST',
-              // don't pass a Content-Type header here, the browser will
-              // generate a correct header which includes the boundary.
-              body: data,
-              headers,
-            }
-          : {
-              method: 'POST',
-              body: JSON.stringify(Object.fromEntries(data.entries())),
-              headers: {
-                ...headers,
-                'Content-Type': 'application/json',
-              },
-            };
+
+      setResult(undefined);
+      setSubmittingCase(true);
+
+      const files = data.getAll('files') as File[];
+
+      const requestBody = files?.some((f) => f.size > 0)
+        ? {
+            method: 'POST',
+            // don't pass a Content-Type header here, the browser will
+            // generate a correct header which includes the boundary.
+            body: data,
+            headers,
+          }
+        : {
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(data.entries())),
+            headers: {
+              ...headers,
+              'Content-Type': 'application/json',
+            },
+          };
+
       // copy a field for legacy reasons
       const result = await fetch(
         `${apiUrl}/integrations/create-ticket?projectKey=${projectKey}`,
@@ -440,8 +435,11 @@ function getFullSummaryData(
 ): { subject: string; body: string } {
   const transcript = `Full transcript:\n\n${toValidApiMessages(messages)
     .map((m) => {
-      return `${m.role === 'user' ? 'Me' : 'AI'}: ${m.content}`;
+      const content = getMessageTextContent(m);
+      if (!content) return;
+      return `${m.role === 'user' ? 'Me' : 'AI'}: ${content}`;
     })
+    .filter(isPresent)
     .join('\n\n')}`;
 
   let subject = '';
@@ -449,9 +447,12 @@ function getFullSummaryData(
 
   if (summary?.content) {
     try {
-      const data = JSON.parse(summary.content);
+      const data = JSON.parse(summary.content) as {
+        subject: string;
+        fullSummary?: string;
+      };
       subject = data.subject;
-      body = `${data.fullSummary || ''}\n\n---\n\n${transcript}`;
+      body = `${data.fullSummary ?? ''}\n\n---\n\n${transcript}`;
     } catch {
       // Do nothing
     }

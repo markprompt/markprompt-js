@@ -13,5 +13,4 @@ export default [
       ],
     },
   },
-  ...configs.biome,
 ];

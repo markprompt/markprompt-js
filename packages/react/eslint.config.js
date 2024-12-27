@@ -5,9 +5,6 @@ export default [
     'eslint.config.js',
     'vitest.config.ts',
     'vitest.setup.ts',
-    'src/*.test.ts',
-    'src/*/*.test.ts',
-    '__mocks__/*.ts',
   ]),
   {
     rules: {
@@ -19,5 +16,4 @@ export default [
   },
   ...configs.react,
   ...configs.vitest,
-  ...configs.biome,
 ];

@@ -23,7 +23,7 @@ let searchResults: SearchResult[] | AlgoliaDocSearchHit[] = [];
 let status = 200;
 
 const server = setupServer(
-  http.get(`${DEFAULT_OPTIONS.apiUrl!}/search`, () => {
+  http.get(`${DEFAULT_OPTIONS.apiUrl}/search`, () => {
     return HttpResponse.json(
       { data: searchResults },
       {
@@ -117,20 +117,19 @@ describe('useSearch', () => {
     );
 
     await result.current.submitSearchQuery('react');
-
     await waitFor(() => expect(result.current.searchResults.length).toBe(3));
 
     expect(result.current.searchResults[0]?.href).toBe(
-      (searchResults as SearchResult[])[0]?.file.path,
+      searchResults[0]?.file.path,
     );
     expect(result.current.searchResults[0]?.title).toBe(
-      (searchResults as SearchResult[])[0]?.file.title,
+      searchResults[0]?.file.title,
     );
     expect(result.current.searchResults[1]?.title).toBe(
-      (searchResults as SearchResult[])[1]?.meta?.leadHeading?.value,
+      searchResults[1]?.meta?.leadHeading?.value,
     );
     expect(result.current.searchResults[2]?.title).toBe(
-      (searchResults as SearchResult[])[2]?.snippet,
+      searchResults[2]?.snippet,
     );
   });
 

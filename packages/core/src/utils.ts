@@ -1,3 +1,4 @@
+import type { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import type { FileSectionReference } from './types.js';
 
 export type RequiredKeys<T, K extends keyof T> = Required<Pick<T, K>> &
@@ -16,12 +17,22 @@ export const isKeyOf = <T extends object>(
 
 export const getErrorMessage = async (res: Response): Promise<string> => {
   const text = await res.text();
+
   try {
-    const json = JSON.parse(text);
-    return json?.error ?? text;
+    const json: unknown = JSON.parse(text);
+    if (
+      json &&
+      typeof json === 'object' &&
+      'error' in json &&
+      typeof json.error === 'string'
+    ) {
+      return json?.error ?? text;
+    }
   } catch {
     return text;
   }
+
+  return text;
 };
 
 export function isAbortError(err: unknown): err is DOMException {
@@ -36,7 +47,27 @@ export function isFileSectionReferences(
 ): data is FileSectionReference[] {
   return (
     Array.isArray(data) &&
-    Boolean(data[0]?.file?.path) &&
-    Boolean(data[0]?.file?.source?.type)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof data.at(0)?.file?.path === 'string' &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof data.at(0)?.file?.source?.type === 'string'
   );
+}
+
+export function getMessageTextContent(m: ChatCompletionMessageParam) {
+  if (!m.content) {
+    return;
+  }
+
+  if (typeof m.content === 'string') {
+    return m.content;
+  }
+
+  return m.content.reduce((acc, x) => {
+    if (x.type === 'text') {
+      return `${acc} ${x.text}`;
+    }
+
+    return acc;
+  }, '');
 }

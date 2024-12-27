@@ -28,7 +28,7 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "dev": "tsc --build tsconfig.build.json --watch",
+    "dev": "tsc --build tsconfig.json --watch",
     "lint:js": "eslint .",
     "lint:ts": "tsc --build --noEmit",
     "prepack": "tsc --build tsconfig.build.json"
@@ -59,9 +59,9 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.0.0",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^15.0.2",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^19.0.1",

@@ -59,14 +59,16 @@ export function checkAbortSignal(signal?: AbortSignal): void {
       throw signal.reason;
     }
 
-    throw new Error(signal.reason);
+    throw new Error(
+      typeof signal.reason === 'string' ? signal.reason : 'Aborted',
+    );
   }
 }
 
 export const parseEncodedJSONHeader = (
   response: Response,
   name: string,
-): unknown | undefined => {
+): unknown => {
   try {
     const headerValue = response.headers.get(name);
     if (headerValue) {

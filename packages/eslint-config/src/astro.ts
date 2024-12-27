@@ -3,7 +3,7 @@ import { configs } from 'eslint-plugin-astro';
 
 export const astro: Linter.Config[] = [
   ...configs['flat/recommended'],
-  ...configs['jsx-a11y-recommended'],
+  ...configs['flat/jsx-a11y-recommended'],
   {
     files: ['**/*.astro'],
     settings: {
@@ -12,7 +12,14 @@ export const astro: Linter.Config[] = [
         'astro-eslint-parser': ['.astro'],
       },
     },
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+      },
+    },
     rules: {
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'import-x/default': 'off',
     },
   },

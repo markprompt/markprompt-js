@@ -1,5 +1,10 @@
 import { renderHook } from '@testing-library/react';
-import { cloneElement } from 'react';
+import {
+  cloneElement,
+  type Attributes,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useDefaults } from './useDefaults.js';
@@ -8,9 +13,15 @@ vi.mock('react', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react')>();
   return {
     ...mod,
-    cloneElement: vi.fn((element, props, ...children) => {
-      return mod.cloneElement(element, props, ...children);
-    }),
+    cloneElement: vi.fn(
+      (
+        element: ReactElement,
+        props: (Partial<unknown> & Attributes) | undefined,
+        ...children: ReactNode[]
+      ) => {
+        return mod.cloneElement(element, props, ...children);
+      },
+    ),
   };
 });
 

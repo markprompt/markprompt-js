@@ -7,13 +7,13 @@ import { SearchIcon } from '../components/icons';
 
 export default function IndexPage(): JSX.Element {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
+    const handleKeyDown = async (event: KeyboardEvent): Promise<void> => {
       if (
         (event.key === 'k' && event.ctrlKey) ||
         (event.key === 'k' && event.metaKey)
       ) {
         event.preventDefault();
-        openMarkprompt();
+        await openMarkprompt();
       }
     };
 

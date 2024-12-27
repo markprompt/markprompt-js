@@ -510,7 +510,7 @@ export interface TriggerOptions {
    */
   floating?: boolean;
   /** Do you use a custom element as the dialog trigger? */
-  customElement?: boolean | ReactNode;
+  customElement?: ReactNode;
   /**
    * Custom image icon source for the open button
    **/
@@ -760,7 +760,7 @@ export interface MarkpromptOptions {
    * Trigger component, such as a search button or a floating chat bubble.
    * @default undefined
    **/
-  children?: React.ReactNode;
+  children?: ReactNode;
   /**
    * The way to display the chat/search content.
    * @default "sheet"

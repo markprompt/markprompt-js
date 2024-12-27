@@ -52,21 +52,9 @@ function MenuEntry(
         data-theme={props.theme}
         href={props.href}
         target={props.target}
-        onClick={() => {
-          switch (props.action) {
-            case 'chat': {
-              openMarkprompt('chat');
-              break;
-            }
-            case 'ticket': {
-              openMarkprompt('ticket');
-              break;
-            }
-            case 'search': {
-              openMarkprompt('search');
-              break;
-            }
-          }
+        onClick={async () => {
+          if (!props.action) return;
+          await openMarkprompt(props.action);
         }}
       >
         {props.iconId && (

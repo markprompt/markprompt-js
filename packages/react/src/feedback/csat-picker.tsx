@@ -1,3 +1,5 @@
+/** eslint-disable @typescript-eslint/no-misused-promises */
+/** eslint-disable @typescript-eslint/no-misused-promises */
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
 import type { CSAT } from '@markprompt/core/feedback';
 import {
@@ -43,7 +45,7 @@ export function CSATReasonTextArea({
   heading,
   thankYou,
 }: {
-  onSubmit: (reason: string) => void;
+  onSubmit: (reason: string) => Promise<void>;
   heading: string | undefined;
   thankYou: string | undefined;
 }): JSX.Element {
@@ -107,8 +109,6 @@ export function CSATReasonTextArea({
           ref={textAreaRef}
           className="MarkpromptPrompt"
           name="markprompt-csat-reason"
-          type="text"
-          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
           labelClassName="MarkpromptPromptLabel"
           textAreaContainerClassName="MarkpromptTextAreaContainer"
@@ -143,10 +143,10 @@ export function CSATPicker(props: CSATPickerProps): JSX.Element {
   });
 
   const submitCSAT = useCallback(
-    (value: CSAT) => {
+    async (value: CSAT) => {
       setTempValue(value);
       setPermanentValue(value);
-      submitThreadCSAT(threadId, value);
+      await submitThreadCSAT(threadId, value);
     },
     [submitThreadCSAT, threadId],
   );
@@ -165,6 +165,7 @@ export function CSATPicker(props: CSATPickerProps): JSX.Element {
           ? getHeading(tempValue) || feedbackOptions.headingCSAT
           : feedbackOptions.headingCSAT}
       </p>
+      {/* biome-ignore lint/nursery/noStaticElementInteractions: only used for a highlight style */}
       <div
         onMouseEnter={() => {
           setIsHovering(true);
@@ -183,7 +184,7 @@ export function CSATPicker(props: CSATPickerProps): JSX.Element {
                 setTempValue((i + 1) as CSAT);
               }}
               onClick={() => {
-                submitCSAT((i + 1) as CSAT);
+                void submitCSAT((i + 1) as CSAT);
               }}
               key={`star-${_}`}
               className="MarkpromptMessageCSATStar"

@@ -43,9 +43,9 @@ export function Feedback(props: FeedbackProps): JSX.Element {
 
   const [feedback, setFeedback] = useState<PromptFeedback>();
 
-  function handleFeedback(feedback: PromptFeedback): void {
-    submitFeedback(feedback, messageId);
+  async function handleFeedback(feedback: PromptFeedback): Promise<void> {
     setFeedback(feedback);
+    await submitFeedback(feedback, messageId);
   }
 
   useEffect(() => {

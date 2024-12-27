@@ -123,8 +123,6 @@ export function ChatViewForm(props: ChatViewFormProps): JSX.Element {
           ref={textAreaRef}
           className="MarkpromptPrompt"
           name="markprompt-prompt"
-          type="text"
-          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
           placeholder={chatOptions?.placeholder}
           labelClassName="MarkpromptPromptLabel"
