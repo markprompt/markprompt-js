@@ -2,9 +2,9 @@ import type { ESLint, Linter } from 'eslint';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import importX from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
+import turbo from 'eslint-plugin-turbo';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import turbo from 'eslint-plugin-turbo';
 
 export const base = <T extends string>(
   _rootDir: T,
