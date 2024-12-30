@@ -70,15 +70,12 @@ export const base = <T extends string>(
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/no-confusing-non-null-assertion': 'error',
       '@typescript-eslint/no-duplicate-enum-values': 'error',
-      '@typescript-eslint/no-empty-object-type': 'error',
       // '@typescript-eslint/no-misused-promises': [
       //   'error',
       //   { checksVoidReturn: false },
       // ],
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
-      '@typescript-eslint/no-unsafe-function-type': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
-      '@typescript-eslint/no-wrapper-object-types': 'error',
       '@typescript-eslint/triple-slash-reference': 'error',
     },
   },
@@ -91,10 +88,9 @@ export const base = <T extends string>(
 
   {
     files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
-    plugins: importX.flatConfigs.recommended.plugins as Record<
-      string,
-      ESLint.Plugin
-    >,
+    plugins: importX.flatConfigs.recommended.plugins as {
+      [plugin: string]: ESLint.Plugin;
+    },
     settings: {
       'import-x/extensions': [
         '.js',
