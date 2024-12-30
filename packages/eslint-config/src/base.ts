@@ -40,7 +40,7 @@ export const base = <T extends string>(
 
   // typescript-eslint config and rules
   {
-    files: ['**/*.{ts,tsx,cts,mts}'],
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
     plugins: {
       '@typescript-eslint': tseslint.plugin as ESLint.Plugin,
     },
