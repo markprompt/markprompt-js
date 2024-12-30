@@ -7,7 +7,7 @@ export const react: Linter.Config[] = [
   {
     files: ['**/*.{js,ts,jsx,tsx}'],
     name: 'react',
-    plugins: pluginReact.configs.flat.recommended.plugins,
+    plugins: { react: pluginReact as ESLint.Plugin },
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
