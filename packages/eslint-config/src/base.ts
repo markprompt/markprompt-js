@@ -27,6 +27,7 @@ export const base = <T extends string>(
   },
   {
     // only enable @eslint/js rules that Biome doesn't cover
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
     rules: {
       'no-constant-binary-expression': 'error',
       'no-delete-var': 'error',
@@ -39,6 +40,7 @@ export const base = <T extends string>(
 
   // typescript-eslint config and rules
   {
+    files: ['**/*.{ts,tsx,cts,mts}'],
     plugins: {
       '@typescript-eslint': tseslint.plugin as ESLint.Plugin,
     },
@@ -56,6 +58,7 @@ export const base = <T extends string>(
     },
   },
   {
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
     // only enable @typescript-eslint rules that Biome doesn't cover
     rules: {
       // '@typescript-eslint/await-thenable': 'error',
@@ -81,9 +84,13 @@ export const base = <T extends string>(
   },
 
   // promise config and rules
-  promise.configs['flat/recommended'],
+  {
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
+    ...promise.configs['flat/recommended'],
+  },
 
   {
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
     plugins: importX.flatConfigs.recommended.plugins as Record<
       string,
       ESLint.Plugin
@@ -114,6 +121,7 @@ export const base = <T extends string>(
     },
   },
   {
+    files: ['**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts}'],
     // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
     rules: {
       'import-x/no-named-as-default': 'error',

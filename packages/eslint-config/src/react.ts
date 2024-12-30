@@ -5,6 +5,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export const react: Linter.Config[] = [
   {
+    files: ['**/*.{jsx,tsx}'],
     name: 'react',
     plugins: pluginReact.configs.flat.recommended.plugins,
     languageOptions: {
@@ -30,6 +31,7 @@ export const react: Linter.Config[] = [
     },
   },
   {
+    files: ['**/*.{jsx,tsx}'],
     rules: {
       'react/display-name': 'error',
       'react/jsx-no-target-blank': 'error',
@@ -53,6 +55,7 @@ export const react: Linter.Config[] = [
   },
 
   {
+    files: ['**/*.{jsx,tsx}'],
     plugins: {
       'react-refresh': reactRefresh,
     },
@@ -66,6 +69,7 @@ export const react: Linter.Config[] = [
   },
 
   {
+    files: ['**/*.{jsx,tsx}'],
     plugins: {
       'jsx-a11y': jsxA11y as ESLint.Plugin,
     },
