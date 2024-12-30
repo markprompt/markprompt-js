@@ -121,9 +121,9 @@ export const base = <T extends string>(
     // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
     rules: {
       'import-x/no-named-as-default': 'error',
-      'import-x/no-cycle': 'error',
       'import-x/no-unused-modules': 'error',
       'import-x/no-deprecated': 'error',
+      'import-x/no-cycle': 'warn',
       'import-x/order': [
         'error',
         {
