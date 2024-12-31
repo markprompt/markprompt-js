@@ -5,7 +5,7 @@ import {
   type ChatCompletionToolMessageParam,
 } from '@markprompt/core/chat';
 
-import type { ChatViewMessage } from './store.js';
+import type { ChatViewMessage } from '../types.js';
 import { isPresent } from '../utils.js';
 
 export function toValidApiMessages(

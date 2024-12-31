@@ -2,7 +2,7 @@ import { useMemo, type JSX } from 'react';
 
 import { selectProjectThreads, useChatStore } from './store.js';
 import { PlusIcon } from '../icons.js';
-import type { MarkpromptOptions } from '../index.js';
+import type { MarkpromptDisplay } from '../types.js';
 import { markdownToString } from '../utils.js';
 
 export interface ThreadSidebarProps {
@@ -10,7 +10,7 @@ export interface ThreadSidebarProps {
    * The way to display the chat/search content.
    * @default "dialog"
    **/
-  display?: MarkpromptOptions['display'];
+  display?: MarkpromptDisplay;
 }
 
 export function ThreadSidebar(props: ThreadSidebarProps): JSX.Element {

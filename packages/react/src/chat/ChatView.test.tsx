@@ -17,14 +17,14 @@ import {
 
 import { ChatView } from './ChatView.js';
 import { ChatProvider } from './provider.js';
-import {
-  createChatStore,
-  useChatStore,
-  type ChatViewMessage,
-  type ConfirmationProps,
-} from './store.js';
+import { createChatStore, useChatStore } from './store.js';
 import { getChunk, formatEvent } from '../test-utils.js';
-import type { MarkpromptOptions, View } from '../types.js';
+import type {
+  ChatViewMessage,
+  ConfirmationProps,
+  MarkpromptOptions,
+  View,
+} from '../types.js';
 
 const encoder = new TextEncoder();
 let markpromptData: {

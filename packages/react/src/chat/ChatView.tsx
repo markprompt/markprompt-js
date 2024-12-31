@@ -4,7 +4,7 @@ import type { ComponentType, JSX } from 'react';
 
 import { ChatViewForm } from './ChatViewForm.js';
 import { Messages } from './Messages.js';
-import { useChatStore, type UserConfigurableOptions } from './store.js';
+import { useChatStore } from './store.js';
 import { ThreadSidebar } from './ThreadSidebar.js';
 import { DEFAULT_MARKPROMPT_OPTIONS } from '../constants.js';
 import { ChevronLeftIcon } from '../icons.js';
@@ -14,6 +14,7 @@ import type {
   IntegrationsOptions,
   MarkpromptOptions,
   ReferencesOptions,
+  UserConfigurableOptions,
   View,
 } from '../types.js';
 import { RichText } from '../ui/rich-text.js';

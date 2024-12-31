@@ -13,8 +13,8 @@ import {
 
 import { useFeedback } from './useFeedback.js';
 import { StarIcon } from '../icons.js';
-import type { MarkpromptOptions } from '../index.js';
 import * as BaseMarkprompt from '../primitives/headless.js';
+import type { MarkpromptOptions } from '../types.js';
 
 interface CSATPickerProps extends ComponentPropsWithoutRef<'aside'> {
   apiUrl?: string;

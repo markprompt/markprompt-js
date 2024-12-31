@@ -1,12 +1,11 @@
 import type { JSX } from 'react';
 
-import type { ChatViewMessage } from './store.js';
 import { UserIcon } from '../icons.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { ChatLoadingState, MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
   children: string;
-  state: ChatViewMessage['state'];
+  state: ChatLoadingState;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   referencesOptions?: MarkpromptOptions['references'];
 }

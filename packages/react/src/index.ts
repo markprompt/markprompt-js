@@ -56,12 +56,7 @@ export { ChatView, type ChatViewProps } from './chat/ChatView.js';
 export {
   createChatStore,
   useChatStore,
-  type ChatLoadingState,
-  type ChatViewMessage,
-  type ChatViewTool,
-  type ConfirmationProps,
   type CreateChatOptions,
-  type ToolCall,
 } from './chat/store.js';
 export {
   ChatProvider,

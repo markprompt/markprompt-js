@@ -23,8 +23,8 @@ import remarkGfm from 'remark-gfm';
 
 import { ConditionalVisuallyHidden } from './ConditionalWrap.js';
 import { CheckIcon, ClipboardIcon } from '../icons.js';
-import type { ChatLoadingState } from '../index.js';
 import type {
+  ChatLoadingState,
   MarkpromptDisplay,
   MarkpromptOptions,
   PolymorphicComponentPropWithRef,
@@ -527,6 +527,7 @@ function Answer(props: AnswerProps): JSX.Element {
   } = props;
 
   const LinkComponent = linkAs ?? 'a';
+
   return (
     <Markdown
       {...rest}

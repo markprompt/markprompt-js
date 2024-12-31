@@ -2,13 +2,13 @@ import type { ChatCompletionMessageToolCall } from '@markprompt/core/chat';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { useCallback, useMemo, type JSX } from 'react';
 
-import type { ChatViewTool, ToolCall } from './store.js';
 import {
   CheckCircleIcon,
   CircleDashedIcon,
   CrossCircleIcon,
   LoaderIcon,
 } from '../icons.js';
+import type { ChatViewTool, ToolCall } from '../types.js';
 
 interface DefaultToolCallsConfirmationProps {
   toolCalls: ChatCompletionMessageToolCall[];

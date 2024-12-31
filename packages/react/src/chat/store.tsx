@@ -2,20 +2,21 @@ import {
   isToolCall,
   submitChat,
   type ChatCompletionChunk,
-  type ChatCompletionMessageToolCall,
-  type ChatCompletionTool,
-  type SubmitChatOptions,
-  type SubmitChatYield,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
-import { createContext, useContext, type JSX } from 'react';
+import { createContext, useContext } from 'react';
 // eslint-disable-next-line import-x/no-deprecated
 import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { toValidApiMessages } from './utils.js';
-import type { MarkpromptOptions } from '../types.js';
+import type {
+  ChatViewMessage,
+  MarkpromptOptions,
+  ToolCall,
+  UserConfigurableOptions,
+} from '../types.js';
 import {
   hasPresentKey,
   hasValueAtKey,
@@ -23,97 +24,6 @@ import {
   isPresent,
   isStoredError,
 } from '../utils.js';
-
-export type ChatLoadingState =
-  | 'indeterminate'
-  | 'preload'
-  | 'streaming-answer'
-  | 'done'
-  | 'cancelled';
-
-export interface ToolCall {
-  status: 'loading' | 'done' | 'error';
-  error?: string;
-  result?: string;
-}
-
-export interface ChatViewMessage extends Omit<SubmitChatYield, 'threadId'> {
-  /**
-   * Message id.
-   */
-  id: ReturnType<typeof crypto.randomUUID>;
-  /**
-   * The loading state.
-   */
-  state: ChatLoadingState;
-  /**
-   * Message name.
-   */
-  name?: string;
-  /**
-   * Error associated to the message.
-   */
-  error?: Error;
-}
-
-export interface ConfirmationProps {
-  /**
-   * Tool calls as returned by the model
-   */
-  toolCalls: ChatCompletionMessageToolCall[];
-  /**
-   * Status and results of tool calls
-   */
-  toolCallsStatus: { [key: string]: ToolCall };
-  /**
-   * Tools as provided by the user
-   */
-  tools?: ChatViewTool[];
-  confirmToolCalls: () => void;
-}
-
-export interface ChatViewTool {
-  /**
-   * OpenAI tool definition.
-   */
-  tool: ChatCompletionTool;
-  /**
-   * The actual function to call. Called with a JSON string as returned from
-   * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
-   * arguments. Must return a string to feed the result back into OpenAI.
-   **/
-  call: (args: string, context?: { threadId: string }) => Promise<string>;
-  /**
-   * Whether user needs to confirm a call to this function or function calls
-   * will be executed right away.
-   * @default true
-   */
-  requireConfirmation?: boolean;
-  /**
-   * If true, show a message when the tool is automatically triggered.
-   * @default true
-   */
-  showDefaultAutoTriggerMessage?: boolean;
-}
-
-export interface ToolsOptions {
-  /**
-   * A list of tool definitions.
-   */
-  tools?: ChatViewTool[];
-  /**
-   * An optional user-provided confirmation message component that takes the
-   * tool calls provided by OpenAI and a confirm function that should be called
-   * when the user confirms the tool calls.
-   */
-  ToolCallsConfirmation?: (props: ConfirmationProps) => JSX.Element;
-}
-
-export type UserConfigurableOptions = Omit<
-  SubmitChatOptions,
-  'signal' | 'tools'
-> &
-  ToolsOptions;
 
 export type SubmitChatMessage =
   | { content: string; role: 'user'; name?: string }

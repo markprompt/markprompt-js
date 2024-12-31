@@ -1,11 +1,11 @@
 import type { ComponentType, JSX } from 'react';
 
 import { Answer } from './Answer.js';
-import type { ChatViewMessage } from './store.js';
+import type { ChatLoadingState } from '../types.js';
 
 interface MessageAnswerProps {
   children: string;
-  state: ChatViewMessage['state'];
+  state: ChatLoadingState;
   linkAs?: string | ComponentType<any>;
 }
 

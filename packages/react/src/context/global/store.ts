@@ -10,9 +10,8 @@ import { useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 import { getInitialView } from './utils.js';
-import type { ChatViewMessage } from '../../chat/store.js';
 import { toValidApiMessages } from '../../chat/utils.js';
-import type { MarkpromptOptions, View } from '../../types.js';
+import type { ChatViewMessage, MarkpromptOptions, View } from '../../types.js';
 import { isPresent } from '../../utils.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };

@@ -1,10 +1,12 @@
-import type { JSX } from 'react';
+import type { ComponentType, JSX } from 'react';
 
 import { AssistantMessage } from './AssistantMessage.js';
-import type { MessagesProps } from './Messages.js';
+import type * as BaseMarkprompt from '../primitives/headless.js';
 import type { MarkpromptOptions } from '../types.js';
 
-export function DefaultMessage(props: MessagesProps): JSX.Element {
+export function DefaultMessage(
+  props: Omit<DefaultViewProps, 'onDidSelectPrompt'>,
+): JSX.Element {
   const { chatOptions, feedbackOptions, projectKey, linkAs } = props;
 
   if (!chatOptions.defaultView?.message) {
@@ -69,9 +71,18 @@ export function DefaultPrompts({
   );
 }
 
-export function DefaultView(
-  props: MessagesProps & { onDidSelectPrompt: (prompt: string) => void },
-): JSX.Element {
+export type DefaultViewProps = {
+  apiUrl?: string;
+  chatOptions: NonNullable<MarkpromptOptions['chat']>;
+  feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
+  integrations: MarkpromptOptions['integrations'];
+  projectKey: string;
+  referencesOptions: NonNullable<MarkpromptOptions['references']>;
+  linkAs?: string | ComponentType<any>;
+  onDidSelectPrompt: (prompt: string) => void;
+} & BaseMarkprompt.BrandingProps;
+
+export function DefaultView(props: DefaultViewProps): JSX.Element {
   const { onDidSelectPrompt, ...rest } = props;
   const chatOptions = rest.chatOptions;
 

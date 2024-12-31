@@ -8,7 +8,7 @@ import {
 } from 'react';
 
 import { FileTextIcon, HashIcon } from '../icons.js';
-import type { SearchResultProps as BaseSearchResultProps } from '../index.js';
+import type { SearchResultProps as BaseSearchResultProps } from '../primitives/headless.js';
 
 interface HighlightMatchesProps {
   value?: string;

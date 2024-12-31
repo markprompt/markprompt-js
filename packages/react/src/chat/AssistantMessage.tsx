@@ -4,11 +4,11 @@ import { useMemo, type ComponentType, type JSX } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
 import { MessageAnswer } from './MessageAnswer.js';
-import { useChatStore, type ChatViewMessage } from './store.js';
+import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
-import type { MarkpromptOptions } from '../types.js';
+import type { ChatViewMessage, MarkpromptOptions } from '../types.js';
 
 export interface AssistantMessageProps {
   apiUrl?: string;
@@ -16,7 +16,6 @@ export interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
-
   linkAs?: string | ComponentType<any>;
   messageOnly?: boolean;
   showFeedbackAlways?: boolean;

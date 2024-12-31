@@ -1,18 +1,18 @@
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import type { ElementType, JSX } from 'react';
+import type { ElementType, JSX, ReactNode } from 'react';
 
 import { ChatIcon } from './icons.js';
-import type { MarkpromptProps } from './Markprompt.js';
 import { SearchBoxTrigger } from './search/SearchBoxTrigger.js';
+import type { MarkpromptDisplay, TriggerOptions } from './types.js';
 
-type TriggerProps = Pick<
-  MarkpromptProps,
-  'display' | 'trigger' | 'children'
-> & {
+interface TriggerProps {
+  display: MarkpromptDisplay;
+  trigger: TriggerOptions;
+  children: ReactNode;
   hasMenu?: boolean;
   onClick?: () => void;
   Component: ElementType;
-};
+}
 
 export function Trigger(props: TriggerProps): JSX.Element {
   const { display, trigger, hasMenu, Component, onClick, children } = props;
