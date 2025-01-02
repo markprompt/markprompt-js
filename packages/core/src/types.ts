@@ -9,6 +9,7 @@ export type SourceType =
   | 'salesforce';
 
 export interface Source {
+  id?: string;
   type: SourceType;
   data?: {
     url?: string;
