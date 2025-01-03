@@ -41,6 +41,10 @@ export interface FileSectionReferenceSectionData {
 
 export interface FileReferenceFileData {
   /**
+   * File id.
+   */
+  id?: number;
+  /**
    * File title.
    */
   title?: string;
