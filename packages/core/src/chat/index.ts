@@ -292,56 +292,63 @@ export async function* submitChat(
 
   let chatPromise: ReturnType<typeof wrappedChatGenerator.next> | undefined;
   let eventsPromise: ReturnType<typeof wrappedEventsGenerator.next> | undefined;
+  let eventsDone = false;
 
   while (true) {
     checkAbortSignal(options.signal);
 
     // get the next yielded value if we don't already have one for each generator
-    // todo: should we not do this if the generator has already ended?
     chatPromise = chatPromise ?? wrappedChatGenerator.next();
-    eventsPromise = eventsPromise ?? wrappedEventsGenerator.next();
+    // if the events are done streaming, don't get a new events promise
+    eventsPromise =
+      eventsPromise ?? (eventsDone ? undefined : wrappedEventsGenerator.next());
 
     // get the next event from either the chat or events generator
-    const result = await Promise.race([chatPromise, eventsPromise]);
+    const result = await Promise.race([
+      chatPromise,
+      ...(eventsPromise ? [eventsPromise] : []),
+    ]);
 
-    const isChatObject = result.type === 'chat';
     const isEventObject = result.type === 'events';
 
-    // don't end if the event stream is done
-    if (isEventObject && result.done) continue;
-    // but end if the chat stream is done
-    if (isChatObject && result.done) break;
-
-    // for whichever generator finished first (actually got consumed),
-    // remove its promise so that we can get its next value in the next iteration
-    if (isEventObject) {
-      eventsPromise = undefined;
-    }
-    if (isChatObject) {
-      chatPromise = undefined;
-    }
-
-    // now we can handle the values based on which generator they came from
     if (isEventObject && result.value) {
       events.push(result.value.event);
       yield structuredClone({ events });
     }
 
-    if (isChatObject && result.value) {
-      const value = result.value;
+    if (isEventObject) {
+      eventsPromise = undefined;
+
+      if (result.value) {
+        events.push(result.value.event);
+        yield structuredClone({ events });
+      }
+
+      // don't end if the event stream is done
+      if (result.done) {
+        eventsDone = true;
+      }
+
+      continue;
+    }
+
+    // if its not an event object, it's a chat object
+
+    const chatValue = result.value;
+    if (chatValue) {
       // if it's metadata, yield it and also save it
-      if (isMarkpromptMetadata(value)) {
-        metadata = value;
+      if (isMarkpromptMetadata(chatValue)) {
+        metadata = chatValue;
         yield metadata;
         continue;
       }
 
-      if (result.done && isChatCompletionMessage(value) && metadata) {
-        return { ...value, ...metadata };
+      if (result.done && isChatCompletionMessage(chatValue) && metadata) {
+        return { ...chatValue, ...metadata };
       }
 
       // its not metadata and not a full message, so just yield it
-      yield value;
+      yield chatValue;
     }
   }
 }
