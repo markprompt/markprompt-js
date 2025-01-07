@@ -309,14 +309,7 @@ export async function* submitChat(
       ...(eventsPromise ? [eventsPromise] : []),
     ]);
 
-    const isEventObject = result.type === 'events';
-
-    if (isEventObject && result.value) {
-      events.push(result.value.event);
-      yield structuredClone({ events });
-    }
-
-    if (isEventObject) {
+    if (result.type === 'events') {
       eventsPromise = undefined;
 
       if (result.value) {
@@ -332,8 +325,8 @@ export async function* submitChat(
       continue;
     }
 
-    // if its not an event object, it's a chat object
-
+    // if it's not an event object, it's a chat object
+    chatPromise = undefined;
     const chatValue = result.value;
     if (chatValue) {
       // if it's metadata, yield it and also save it
@@ -347,8 +340,11 @@ export async function* submitChat(
         return { ...chatValue, ...metadata };
       }
 
+      console.log('yield chatValue');
       // its not metadata and not a full message, so just yield it
       yield chatValue;
+    } else if (result.done) {
+      return;
     }
   }
 }
