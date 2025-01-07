@@ -340,7 +340,6 @@ export async function* submitChat(
         return { ...chatValue, ...metadata };
       }
 
-      console.log('yield chatValue');
       // its not metadata and not a full message, so just yield it
       yield chatValue;
     } else if (result.done) {
