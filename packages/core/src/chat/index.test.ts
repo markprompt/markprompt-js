@@ -194,6 +194,8 @@ describe('submitChat', () => {
 
     const { ...rest } = { ...DEFAULT_SUBMIT_CHAT_OPTIONS, ...DEFAULT_OPTIONS };
 
+    // messageId is not in SubmitChatOptions but it is in the request body.
+    // we need to remove it for the strict equality check to pass.
     const { messageId, ...body } = requestBody as any;
 
     expect(body).toStrictEqual({
