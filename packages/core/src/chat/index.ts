@@ -127,8 +127,6 @@ export async function* submitChat(
       if (!event) continue;
       if (event.data === '[DONE]') continue;
 
-      // todo: deal with this better
-      // need a standard format and try/catch
       let eventJson: any;
       try {
         eventJson = JSON.parse(event.data);
