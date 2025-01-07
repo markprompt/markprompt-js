@@ -107,7 +107,20 @@ describe('submitChat', () => {
       });
     }),
     http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
-      stream = new ReadableStream();
+      stream = new ReadableStream({
+        async start(controller) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          controller.enqueue(
+            encoder.encode(
+              formatEvent({
+                data: { message: 'test' },
+              }),
+            ),
+          );
+
+          controller?.close();
+        },
+      });
       await delay('real');
 
       return new Response(stream, {
