@@ -129,7 +129,7 @@ const server = setupServer(
     await delay('real');
 
     return new Response(stream, {
-      status: status,
+      status: 200,
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
