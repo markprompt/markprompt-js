@@ -122,8 +122,8 @@ const server = setupServer(
     }
 
     stream = new ReadableStream({
-      start(controller) {
-        controller?.close();
+      async start(controller) {
+        await controller?.close();
       },
     });
     await delay('real');

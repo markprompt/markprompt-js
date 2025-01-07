@@ -102,7 +102,6 @@ export async function* submitChat(
     );
 
     if (!eventsRes.ok || !eventsRes.body) {
-      // todo remove
       console.error('Failed to fetch events', eventsRes);
       return;
     }
