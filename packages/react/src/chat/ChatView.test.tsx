@@ -113,6 +113,22 @@ const server = setupServer(
       },
     });
   }),
+  http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
+    const eventStream = new ReadableStream({
+      start(controller) {
+        controller?.close();
+      },
+    });
+    await delay('real');
+
+    return new Response(eventStream, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+      },
+    });
+  }),
   http.post(DEFAULT_OPTIONS.apiUrl, () => {
     return HttpResponse.json({ status: 'ok' }, { status: 200 });
   }),

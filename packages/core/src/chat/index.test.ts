@@ -106,6 +106,22 @@ describe('submitChat', () => {
         },
       });
     }),
+    http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
+      const eventStream = new ReadableStream({
+        start(controller) {
+          controller?.close();
+        },
+      });
+      await delay('real');
+
+      return new Response(eventStream, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+        },
+      });
+    }),
   );
 
   beforeAll(() => {
@@ -178,7 +194,11 @@ describe('submitChat', () => {
 
     const { ...rest } = { ...DEFAULT_SUBMIT_CHAT_OPTIONS, ...DEFAULT_OPTIONS };
 
-    expect(requestBody).toStrictEqual({
+    // messageId is not in SubmitChatOptions but it is in the request body.
+    // we need to remove it for the strict equality check to pass.
+    const { messageId, ...body } = requestBody as any;
+
+    expect(body).toStrictEqual({
       messages: [{ content: 'How much is 1+2?', role: 'user' }],
       projectKey: 'testKey',
       ...rest,
