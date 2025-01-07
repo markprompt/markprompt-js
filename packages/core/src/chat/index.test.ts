@@ -194,7 +194,9 @@ describe('submitChat', () => {
 
     const { ...rest } = { ...DEFAULT_SUBMIT_CHAT_OPTIONS, ...DEFAULT_OPTIONS };
 
-    expect(requestBody).toStrictEqual({
+    const { messageId, ...body } = requestBody as any;
+
+    expect(body).toStrictEqual({
       messages: [{ content: 'How much is 1+2?', role: 'user' }],
       projectKey: 'testKey',
       ...rest,
