@@ -89,17 +89,23 @@ export async function* submitChat(
   const messageId = crypto.randomUUID();
 
   const readEvents = async function* () {
-    const eventsRes = await fetch(
-      `${resolvedOptions.apiUrl}/chat/events?messageId=${messageId}&projectKey=${projectKey}`,
-      {
-        method: 'GET',
-        headers: new Headers({
-          'X-Markprompt-API-Version': '2024-05-21',
-          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
-        }),
-        signal,
-      },
-    );
+    let eventsRes: Response;
+    try {
+      eventsRes = await fetch(
+        `${resolvedOptions.apiUrl}/chat/events?messageId=${messageId}&projectKey=${projectKey}`,
+        {
+          method: 'GET',
+          headers: new Headers({
+            'X-Markprompt-API-Version': '2024-05-21',
+            ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
+          }),
+          signal,
+        },
+      );
+    } catch (error) {
+      console.error('Caught error fetching events', error);
+      return;
+    }
 
     if (!eventsRes.ok || !eventsRes.body) {
       console.error('Failed to fetch events', eventsRes);

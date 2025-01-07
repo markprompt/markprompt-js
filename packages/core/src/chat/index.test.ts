@@ -113,7 +113,7 @@ describe('submitChat', () => {
           controller.enqueue(
             encoder.encode(
               formatEvent({
-                data: { message: 'test' },
+                data: JSON.stringify({ message: 'test' }),
               }),
             ),
           );
