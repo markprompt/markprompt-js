@@ -114,11 +114,7 @@ const server = setupServer(
     });
   }),
   http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
-    stream = new ReadableStream({
-      async start(controller) {
-        await controller?.close();
-      },
-    });
+    stream = new ReadableStream();
     await delay('real');
 
     return new Response(stream, {
