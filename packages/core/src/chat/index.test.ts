@@ -107,22 +107,11 @@ describe('submitChat', () => {
       });
     }),
     http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
-      if (status >= 400) {
-        return HttpResponse.json(
-          { error: 'Internal server error' },
-          { status: status },
-        );
-      }
-
-      stream = new ReadableStream({
-        start(controller) {
-          controller?.close();
-        },
-      });
+      stream = new ReadableStream();
       await delay('real');
 
       return new Response(stream, {
-        status: status,
+        status: 200,
         headers: {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
