@@ -89,9 +89,8 @@ export async function* submitChat(
   const messageId = crypto.randomUUID();
 
   const readEvents = async function* () {
-    console.log('in readEvents', messageId);
     const eventsRes = await fetch(
-      `${resolvedOptions.apiUrl}/events?messageId=${messageId}&projectKey=${projectKey}`,
+      `${resolvedOptions.apiUrl}/chat/events?messageId=${messageId}&projectKey=${projectKey}`,
       {
         method: 'GET',
         headers: new Headers({
@@ -313,7 +312,6 @@ export async function* submitChat(
 
     // now we can handle the values based on which generator they came from
     if (isEventObject && result.value) {
-      console.log('isEventObject and result.value', result.value.event);
       events.push(result.value.event);
       yield structuredClone({ events });
     }
