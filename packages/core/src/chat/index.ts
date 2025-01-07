@@ -78,6 +78,10 @@ export async function* submitChat(
     },
     {
       ...DEFAULT_OPTIONS,
+      // If assistantId is provided, do not set default values,
+      // as it will then override the assistant-provided values
+      // in case that allowClientSideOverrides is set for the
+      // assistant.
       ...(validOptions.assistantId ? {} : DEFAULT_SUBMIT_CHAT_OPTIONS),
     },
   ) as BaseOptions & SubmitChatOptions;
@@ -111,17 +115,13 @@ export async function* submitChat(
 
     while (true) {
       const { value: event, done } = await eventsStream.read();
-      if (done) break;
+      if (done) return;
       if (!event) continue;
       if (event.data === '[DONE]') continue;
-
-      console.log('EVENT RECEIVED', event.data);
 
       // todo: deal with this better
       // need a standard format and try/catch
       const eventJson = JSON.parse(event.data);
-
-      // const eventJson = JSON.parse(event.data);
       yield {
         event: eventJson.message,
       };
@@ -150,7 +150,6 @@ export async function* submitChat(
       signal,
     });
     const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
-    console.log('DATA!!!', data);
 
     checkAbortSignal(options.signal);
 
@@ -184,7 +183,6 @@ export async function* submitChat(
       });
     }
 
-    console.log('isMarkpromptMetadata(data)', isMarkpromptMetadata(data));
     if (isMarkpromptMetadata(data)) {
       yield data;
     }
@@ -236,6 +234,11 @@ export async function* submitChat(
       }
 
       mergeWith(completion, json.choices?.[0]?.delta, concatStrings);
+      /**
+       * If we do not yield a structuredClone here, the completion object will
+       * become read-only/frozen and TypeErrors will be thrown when trying to
+       * merge the next chunk into it.
+       */
       yield structuredClone(completion);
     }
   };
