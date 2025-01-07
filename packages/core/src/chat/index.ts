@@ -107,6 +107,8 @@ export async function* submitChat(
       return;
     }
 
+    checkAbortSignal(options.signal);
+
     if (!eventsRes.ok || !eventsRes.body) {
       console.error('Failed to fetch events', eventsRes);
       return;
@@ -118,6 +120,8 @@ export async function* submitChat(
       .getReader();
 
     while (true) {
+      checkAbortSignal(options.signal);
+
       const { value: event, done } = await eventsStream.read();
       if (done) return;
       if (!event) continue;
@@ -225,6 +229,8 @@ export async function* submitChat(
       .getReader();
 
     while (true) {
+      checkAbortSignal(options.signal);
+
       const { value: event, done } = await stream.read();
       if (done) return;
       if (!event) continue;
