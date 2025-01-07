@@ -9,6 +9,7 @@ export type SourceType =
   | 'salesforce';
 
 export interface Source {
+  id?: string;
   type: SourceType;
   data?: {
     url?: string;
@@ -39,6 +40,10 @@ export interface FileSectionReferenceSectionData {
 }
 
 export interface FileReferenceFileData {
+  /**
+   * File id.
+   */
+  id?: number;
   /**
    * File title.
    */
