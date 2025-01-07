@@ -129,10 +129,19 @@ export async function* submitChat(
 
       // todo: deal with this better
       // need a standard format and try/catch
-      const eventJson = JSON.parse(event.data);
-      yield {
-        event: eventJson.message,
-      };
+      let eventJson: any;
+      try {
+        eventJson = JSON.parse(event.data);
+      } catch (error) {
+        console.error('Error parsing event', error);
+        continue;
+      }
+
+      if (typeof eventJson.message === 'string') {
+        yield {
+          event: eventJson.message,
+        };
+      }
     }
   };
 
