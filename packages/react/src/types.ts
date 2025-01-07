@@ -179,6 +179,10 @@ export interface ChatViewMessage extends Omit<SubmitChatYield, 'threadId'> {
    * Error associated to the message.
    */
   error?: Error;
+  /**
+   * Chat events associated to the message.
+   */
+  events?: string[];
 }
 
 export interface FeedbackOptions {

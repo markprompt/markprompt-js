@@ -78,138 +78,259 @@ export async function* submitChat(
     },
     {
       ...DEFAULT_OPTIONS,
-      // If assistantId is provided, do not set default values,
-      // as it will then override the assistant-provided values
-      // in case that allowClientSideOverrides is set for the
-      // assistant.
       ...(validOptions.assistantId ? {} : DEFAULT_SUBMIT_CHAT_OPTIONS),
     },
   ) as BaseOptions & SubmitChatOptions;
 
-  const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
-    method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      'X-Markprompt-API-Version': '2024-05-21',
-      ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
-    }),
-    body: JSON.stringify({
-      projectKey,
-      messages,
-      debug,
-      ...resolvedOptions,
-      policies: policiesOptions,
-      messageTags: messageTagOptions,
-      retrieval: retrievalOptions,
-      additionalMetadata,
-    }),
-    signal,
-  });
+  const messageId = crypto.randomUUID();
 
-  const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
+  const readEvents = async function* () {
+    console.log('in readEvents', messageId);
+    const eventsRes = await fetch(
+      `${resolvedOptions.apiUrl}/events?messageId=${messageId}&projectKey=${projectKey}`,
+      {
+        method: 'GET',
+        headers: new Headers({
+          'X-Markprompt-API-Version': '2024-05-21',
+          ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
+        }),
+        signal,
+      },
+    );
 
-  checkAbortSignal(options.signal);
-
-  if (res.headers.get('Content-Type')?.includes('application/json')) {
-    const json: unknown = await res.json();
-
-    if (
-      isChatCompletion(json) &&
-      isMarkpromptMetadata(data) &&
-      json.choices?.[0]
-    ) {
-      return { ...json.choices[0].message, ...data };
-    }
-    if (isMarkpromptMetadata(data)) {
-      yield data;
-    }
-
-    if (isNoStreamingData(json)) {
-      yield {
-        content: json.text,
-        references: json.references,
-        steps: json.steps,
-        role: 'assistant',
-      };
-
+    if (!eventsRes.ok || !eventsRes.body) {
+      // todo remove
+      console.error('Failed to fetch events', eventsRes);
       return;
     }
 
-    throw new Error('Malformed response from Markprompt API', {
-      cause: json,
+    const eventsStream = eventsRes.body
+      .pipeThrough(new TextDecoderStream())
+      .pipeThrough(new EventSourceParserStream())
+      .getReader();
+
+    while (true) {
+      const { value: event, done } = await eventsStream.read();
+      if (done) break;
+      if (!event) continue;
+      if (event.data === '[DONE]') continue;
+
+      console.log('EVENT RECEIVED', event.data);
+
+      // todo: deal with this better
+      // need a standard format and try/catch
+      const eventJson = JSON.parse(event.data);
+
+      // const eventJson = JSON.parse(event.data);
+      yield {
+        event: eventJson.message,
+      };
+    }
+  };
+
+  const readChat = async function* () {
+    const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'X-Markprompt-API-Version': '2024-05-21',
+        ...(resolvedOptions.headers ? resolvedOptions.headers : {}),
+      }),
+      body: JSON.stringify({
+        projectKey,
+        messages,
+        debug,
+        ...resolvedOptions,
+        policies: policiesOptions,
+        messageTags: messageTagOptions,
+        retrieval: retrievalOptions,
+        additionalMetadata,
+        messageId,
+      }),
+      signal,
     });
-  }
+    const data = parseEncodedJSONHeader(res, 'x-markprompt-data');
+    console.log('DATA!!!', data);
 
-  if (isMarkpromptMetadata(data)) {
-    yield data;
-  }
-
-  if (!res.ok || !res.body) {
     checkAbortSignal(options.signal);
 
-    const text = await res.text();
+    if (res.headers.get('Content-Type')?.includes('application/json')) {
+      const json: unknown = await res.json();
 
-    try {
-      const json: unknown = JSON.parse(text);
       if (
-        json &&
-        typeof json === 'object' &&
-        'error' in json &&
-        typeof json.error === 'string'
+        isChatCompletion(json) &&
+        isMarkpromptMetadata(data) &&
+        json.choices?.[0]
       ) {
-        throw new Error(json.error);
+        return { ...json.choices[0].message, ...data };
       }
-    } catch {
-      // ignore
-    }
+      if (isMarkpromptMetadata(data)) {
+        yield data;
+      }
 
-    throw new Error(text, {
-      cause: { status: res.status, statusText: res.statusText },
-    });
-  }
+      if (isNoStreamingData(json)) {
+        yield {
+          content: json.text,
+          references: json.references,
+          steps: json.steps,
+          role: 'assistant',
+        };
 
-  checkAbortSignal(options.signal);
+        return;
+      }
 
-  const completion = {};
-
-  const stream = res.body
-    .pipeThrough(new TextDecoderStream())
-    .pipeThrough(new EventSourceParserStream())
-    .getReader();
-
-  while (true) {
-    const { value: event, done } = await stream.read();
-
-    if (done) break;
-    if (!event) continue;
-
-    if (event.data === '[DONE]') {
-      continue;
-    }
-
-    const json: unknown = JSON.parse(event.data);
-
-    if (!isChatCompletionChunk(json)) {
       throw new Error('Malformed response from Markprompt API', {
         cause: json,
       });
     }
 
-    mergeWith(completion, json.choices?.[0]?.delta, concatStrings);
+    console.log('isMarkpromptMetadata(data)', isMarkpromptMetadata(data));
+    if (isMarkpromptMetadata(data)) {
+      yield data;
+    }
+
+    if (!res.ok || !res.body) {
+      checkAbortSignal(options.signal);
+
+      const text = await res.text();
+
+      try {
+        const json: unknown = JSON.parse(text);
+        if (
+          json &&
+          typeof json === 'object' &&
+          'error' in json &&
+          typeof json.error === 'string'
+        ) {
+          throw new Error(json.error);
+        }
+      } catch {
+        // ignore
+      }
+
+      throw new Error(text, {
+        cause: { status: res.status, statusText: res.statusText },
+      });
+    }
 
     checkAbortSignal(options.signal);
-    /**
-     * If we do not yield a structuredClone here, the completion object will
-     * become read-only/frozen and TypeErrors will be thrown when trying to
-     * merge the next chunk into it.
-     */
-    yield structuredClone(completion);
-  }
 
-  checkAbortSignal(options.signal);
+    const completion = {};
 
-  if (isChatCompletionMessage(completion) && isMarkpromptMetadata(data)) {
-    return { ...completion, ...data };
+    const stream = res.body
+      .pipeThrough(new TextDecoderStream())
+      .pipeThrough(new EventSourceParserStream())
+      .getReader();
+
+    while (true) {
+      const { value: event, done } = await stream.read();
+      if (done) return;
+      if (!event) continue;
+      if (event.data === '[DONE]') continue;
+
+      const json: unknown = JSON.parse(event.data);
+      if (!isChatCompletionChunk(json)) {
+        throw new Error('Malformed response from Markprompt API', {
+          cause: json,
+        });
+      }
+
+      mergeWith(completion, json.choices?.[0]?.delta, concatStrings);
+      yield structuredClone(completion);
+    }
+  };
+
+  /*
+  Quite a bit is happening here.
+  We have two generators that need to run in parallel: the chat and the events.
+  In order to run these both at the same time, we use Promise.race
+  We wrap the generators with a type ('events' | 'chat') so that we can distingish between them in Promise.race
+  
+  However, we "lose" the value of whichever generator finishes second in Promise.race
+  So, we keep the promise of that each generator.next() returns, and only re-run it
+  if it is the one that finished first (i.e. if it is the value that actually got consumed)
+  For the other generator, we keep the value around and pass it to the next Promise.race
+
+  Once we get a value from Promise.race, we can distinguish between events and chat using the 'type' field
+  and do whatever we need to do with them. 
+  **/
+
+  // create both generators
+  const eventsGenerator = readEvents();
+  const chatGenerator = readChat();
+
+  // wrap them so that we can distingish between them in Promise.race
+  const wrappedEventsGenerator = {
+    next: async () => {
+      const { value, done } = await eventsGenerator.next();
+      return { type: 'events' as const, value, done };
+    },
+  };
+
+  const wrappedChatGenerator = {
+    next: async () => {
+      const { value, done } = await chatGenerator.next();
+      return { type: 'chat' as const, value, done };
+    },
+  };
+
+  let metadata: ChatCompletionMetadata | undefined;
+  const events: string[] = [];
+
+  let chatPromise: ReturnType<typeof wrappedChatGenerator.next> | undefined;
+  let eventsPromise: ReturnType<typeof wrappedEventsGenerator.next> | undefined;
+
+  while (true) {
+    checkAbortSignal(options.signal);
+
+    // get the next yielded value if we don't already have one for each generator
+    // todo: should we not do this if the generator has already ended?
+    chatPromise = chatPromise ?? wrappedChatGenerator.next();
+    eventsPromise = eventsPromise ?? wrappedEventsGenerator.next();
+
+    // get the next event from either the chat or events generator
+    const result = await Promise.race([chatPromise, eventsPromise]);
+
+    const isChatObject = result.type === 'chat';
+    const isEventObject = result.type === 'events';
+
+    // don't end if the event stream is done
+    if (isEventObject && result.done) continue;
+    // but end if the chat stream is done
+    if (isChatObject && result.done) break;
+
+    // for whichever generator finished first (actually got consumed),
+    // remove its promise so that we can get its next value in the next iteration
+    if (isEventObject) {
+      eventsPromise = undefined;
+    }
+    if (isChatObject) {
+      chatPromise = undefined;
+    }
+
+    // now we can handle the values based on which generator they came from
+    if (isEventObject && result.value) {
+      console.log('isEventObject and result.value', result.value.event);
+      events.push(result.value.event);
+      yield structuredClone({ events });
+    }
+
+    if (isChatObject && result.value) {
+      const value = result.value;
+      // if it's metadata, yield it and also save it
+      if (isMarkpromptMetadata(value)) {
+        metadata = value;
+        yield metadata;
+        continue;
+      }
+
+      if (result.done && isChatCompletionMessage(value) && metadata) {
+        return { ...value, ...metadata };
+      }
+
+      // its not metadata and not a full message, so just yield it
+      yield value;
+    }
   }
 }
 

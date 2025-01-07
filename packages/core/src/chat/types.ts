@@ -90,6 +90,7 @@ export interface ChatCompletionMetadata {
    * @deprecated Use `messageId` instead.
    */
   promptId?: string;
+  events?: string[];
 }
 
 export interface NoStreamingData {
