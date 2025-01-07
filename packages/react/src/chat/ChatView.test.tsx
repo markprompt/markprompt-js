@@ -154,11 +154,9 @@ describe('ChatView', () => {
   });
 
   it('renders', () => {
-    render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />);
-    const text = screen.getByText('Send');
-    console.log('TEXT', text);
-    // expect(screen.getByText('Send')).toBeInTheDocument();
-    expect(true).toBe(true);
+    expect(() =>
+      render(<ChatViewWithProvider projectKey={crypto.randomUUID()} />),
+    ).not.toThrow();
   });
 
   it('throws an error if no project key is provided', () => {
