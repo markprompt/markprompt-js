@@ -114,13 +114,6 @@ const server = setupServer(
     });
   }),
   http.get(`${DEFAULT_OPTIONS.apiUrl}/chat/events`, async () => {
-    if (status >= 400) {
-      return HttpResponse.json(
-        { error: 'Internal server error' },
-        { status: status },
-      );
-    }
-
     stream = new ReadableStream({
       async start(controller) {
         await controller?.close();
