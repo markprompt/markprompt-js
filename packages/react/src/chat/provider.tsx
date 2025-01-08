@@ -26,6 +26,19 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
 
   const store = useRef<ChatStore>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: false positive
+  useEffect(() => {
+    store.current = createChatStore({
+      apiUrl,
+      headers,
+      projectKey,
+      chatOptions,
+      debug,
+      persistChatHistory: chatOptions?.history,
+      storeKey,
+    });
+  }, [storeKey]);
+
   if (!store.current) {
     store.current = createChatStore({
       apiUrl,
