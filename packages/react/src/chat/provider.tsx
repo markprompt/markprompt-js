@@ -32,7 +32,7 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
     store: null,
   });
 
-  if (store.current?.storeKey !== storeKey) {
+  if (!store.current?.store || store.current?.storeKey !== storeKey) {
     store.current = {
       storeKey,
       store: createChatStore({
