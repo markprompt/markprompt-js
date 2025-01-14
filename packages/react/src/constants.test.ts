@@ -14,8 +14,8 @@ const heading = 'Heading 1';
 const headingSlug = 'heading-1';
 const headingId = 'generated-id';
 const noTitleFileName = 'no-title';
-const githubSource: Source = { type: 'github' };
-const websiteSource: Source = { type: 'website' };
+const githubSource: Source = { id: '0', type: 'github' };
+const websiteSource: Source = { id: '0', type: 'website' };
 const shortContent = 'Some content';
 
 const loremIpsum =
