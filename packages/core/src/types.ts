@@ -3,7 +3,6 @@ export type SourceType =
   | 'motif'
   | 'website'
   | 'file-upload'
-  | 'markprompt'
   | 'api-upload'
   | 'nango'
   | 'salesforce';
