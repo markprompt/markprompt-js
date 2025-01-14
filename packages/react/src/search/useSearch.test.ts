@@ -82,6 +82,7 @@ describe('useSearch', () => {
           title: 'Home page',
           path: '/',
           source: {
+            id: '0',
             type: 'file-upload',
           },
         },
@@ -91,6 +92,7 @@ describe('useSearch', () => {
         file: {
           path: '/page1',
           source: {
+            id: '0',
             type: 'file-upload',
           },
         },
@@ -104,6 +106,7 @@ describe('useSearch', () => {
         file: {
           path: '/page2',
           source: {
+            id: '0',
             type: 'file-upload',
           },
         },

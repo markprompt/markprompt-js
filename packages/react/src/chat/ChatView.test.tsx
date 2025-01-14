@@ -520,7 +520,10 @@ describe('ChatView', () => {
     response = [{ content: 'answer' }];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' as const } },
+        file: {
+          path: '/page1',
+          source: { id: '0', type: 'file-upload' as const },
+        },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
@@ -542,7 +545,10 @@ describe('ChatView', () => {
     response = [{ content: 'answer' }];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' as const } },
+        file: {
+          path: '/page1',
+          source: { id: '0', type: 'file-upload' as const },
+        },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
@@ -569,7 +575,10 @@ describe('ChatView', () => {
     response = [{ content: 'answer' }];
     const references = [
       {
-        file: { path: '/page1', source: { type: 'file-upload' as const } },
+        file: {
+          path: '/page1',
+          source: { id: '0', type: 'file-upload' as const },
+        },
         meta: { leadHeading: { value: 'Page 1' } },
       },
     ];
