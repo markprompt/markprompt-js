@@ -240,7 +240,9 @@ test('References renders the passed ReferenceComponent', () => {
   render(
     <Markprompt.References
       references={[
-        { file: { path: '/path/to/file', source: { type: 'github' } } },
+        {
+          file: { path: '/path/to/file', source: { id: '0', type: 'github' } },
+        },
       ]}
       ReferenceComponent={ReferenceComponent}
     />,

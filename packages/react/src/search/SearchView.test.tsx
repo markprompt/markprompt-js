@@ -81,14 +81,17 @@ describe('SearchView', () => {
 
     results = [
       {
-        file: { path: 'path/to/file', source: { type: 'github' } },
+        file: {
+          path: 'path/to/file',
+          source: { id: '0', type: 'github' },
+        },
         matchType: 'title',
       },
       {
         file: {
           path: 'path/to/file',
           title: 'result 1',
-          source: { type: 'github' },
+          source: { id: '0', type: 'github' },
         },
         matchType: 'title',
       },
@@ -96,7 +99,7 @@ describe('SearchView', () => {
         file: {
           path: 'path/to/file',
           title: 'result 2',
-          source: { type: 'github' },
+          source: { id: '0', type: 'github' },
         },
         matchType: 'title',
         meta: {
@@ -108,7 +111,7 @@ describe('SearchView', () => {
       {
         file: {
           path: 'path/to/file',
-          source: { type: 'github' },
+          source: { id: '0', type: 'github' },
         },
         matchType: 'leadHeading',
         meta: {
@@ -121,7 +124,7 @@ describe('SearchView', () => {
       {
         file: {
           path: 'path/to/file',
-          source: { type: 'github' },
+          source: { id: '0', type: 'github' },
         },
         meta: {
           leadHeading: {
@@ -177,14 +180,17 @@ describe('SearchView', () => {
 
       results = [
         {
-          file: { path: 'path/to/file', source: { type: 'github' } },
+          file: {
+            path: 'path/to/file',
+            source: { id: '0', type: 'github' },
+          },
           matchType: 'title',
         },
         {
           file: {
             path: 'path/to/file',
             title: 'result 1',
-            source: { type: 'github' },
+            source: { id: '0', type: 'github' },
           },
           matchType: 'title',
         },
@@ -192,7 +198,7 @@ describe('SearchView', () => {
           file: {
             path: 'path/to/file',
             title: 'result 2',
-            source: { type: 'github' },
+            source: { id: '0', type: 'github' },
           },
           matchType: 'title',
           meta: {
@@ -265,7 +271,10 @@ describe('SearchView', () => {
 
     results = [
       {
-        file: { path: 'path/to/file', source: { type: 'github' } },
+        file: {
+          path: 'path/to/file',
+          source: { id: '0', type: 'github' },
+        },
         matchType: 'title',
       },
     ];
@@ -300,7 +309,10 @@ describe('SearchView', () => {
 
     results = [
       {
-        file: { path: '#file', source: { type: 'github' } },
+        file: {
+          path: '#file',
+          source: { id: '0', type: 'github' },
+        },
         matchType: 'title',
       },
     ];
@@ -330,7 +342,7 @@ describe('SearchView', () => {
         file: {
           path: 'path/to/file',
           title: 'test',
-          source: { type: 'github' },
+          source: { id: '0', type: 'github' },
         },
         matchType: 'title',
       },
@@ -414,7 +426,10 @@ describe('SearchView', () => {
 
     results = [
       {
-        file: { path: 'path/to/file', source: { type: 'github' } },
+        file: {
+          path: 'path/to/file',
+          source: { id: '0', type: 'github' },
+        },
         matchType: 'title',
       },
     ];
