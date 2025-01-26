@@ -24,39 +24,46 @@ const loremIpsum =
 const loremIpsumKwicSnippet =
   'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,';
 
-const results: SearchResult[] = [
+const results: (SearchResult & { sectionId: number })[] = [
   {
     matchType: 'leadHeading',
     file: { path: filePath, source: githubSource },
     meta: { leadHeading: { value: heading, slug: headingSlug } },
+    sectionId: 0,
   },
   {
     matchType: 'title',
     file: { path: `${basePath}/index.md`, title: 'Home', source: githubSource },
+    sectionId: 0,
   },
   {
     matchType: 'title',
     file: { path: `${basePath}/${noTitleFileName}.md`, source: githubSource },
+    sectionId: 0,
   },
   {
     matchType: 'title',
     file: { path: `${basePath}/${noTitleFileName}`, source: githubSource },
+    sectionId: 0,
   },
   {
     matchType: 'content',
     snippet: loremIpsum,
     file: { path: `${urlPath}/${noTitleFileName}`, source: websiteSource },
+    sectionId: 0,
   },
   {
     matchType: 'content',
     snippet: `## ${heading}\n\n${shortContent}`,
     file: { path: `${urlPath}/${noTitleFileName}`, source: websiteSource },
     meta: { leadHeading: { value: heading, slug: headingSlug } },
+    sectionId: 0,
   },
   {
     matchType: 'leadHeading',
     file: { path: urlPath, source: websiteSource },
     meta: { leadHeading: { value: heading, slug: headingSlug, id: headingId } },
+    sectionId: 0,
   },
 ];
 

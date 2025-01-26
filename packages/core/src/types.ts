@@ -22,6 +22,7 @@ export interface FileSectionReference extends FileSectionReferenceSectionData {
    * Referenced file.
    */
   file: FileReferenceFileData;
+  sectionId: number;
 }
 
 export interface FileSectionReferenceSectionData {

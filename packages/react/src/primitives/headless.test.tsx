@@ -242,6 +242,7 @@ test('References renders the passed ReferenceComponent', () => {
       references={[
         {
           file: { path: '/path/to/file', source: { id: '0', type: 'github' } },
+          sectionId: 0,
         },
       ]}
       ReferenceComponent={ReferenceComponent}
