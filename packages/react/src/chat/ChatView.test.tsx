@@ -525,6 +525,7 @@ describe('ChatView', () => {
           source: { id: '0', type: 'file-upload' as const },
         },
         meta: { leadHeading: { value: 'Page 1' } },
+        sectionId: 0,
       },
     ];
     markpromptData = { references };
@@ -550,6 +551,7 @@ describe('ChatView', () => {
           source: { id: '0', type: 'file-upload' as const },
         },
         meta: { leadHeading: { value: 'Page 1' } },
+        sectionId: 0,
       },
     ];
     markpromptData = { references };
@@ -580,6 +582,7 @@ describe('ChatView', () => {
           source: { id: '0', type: 'file-upload' as const },
         },
         meta: { leadHeading: { value: 'Page 1' } },
+        sectionId: 0,
       },
     ];
     markpromptData = { references };
