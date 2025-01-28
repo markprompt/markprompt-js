@@ -54,7 +54,11 @@ export function isFileSectionReferences(
 }
 
 export function getMessageTextContent(m: {
-  content?: null | string | ChatCompletionContentPart[];
+  content?:
+    | null
+    | string
+    | ChatCompletionContentPart[]
+    | readonly ChatCompletionContentPart[];
 }) {
   if (!m.content) {
     return;
@@ -64,11 +68,8 @@ export function getMessageTextContent(m: {
     return m.content;
   }
 
-  return m.content.reduce((acc, x) => {
-    if (x.type === 'text') {
-      return `${acc} ${x.text}`;
-    }
-
-    return acc;
-  }, '');
+  return m.content
+    .map((part) => (part.type === 'text' ? part.text : ''))
+    .join(' ')
+    .trim();
 }
