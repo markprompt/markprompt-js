@@ -1,4 +1,4 @@
-import type { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import type { ChatCompletionContentPart } from 'openai/resources/index.mjs';
 
 import type { FileSectionReference } from './types.js';
 
@@ -53,7 +53,9 @@ export function isFileSectionReferences(
   );
 }
 
-export function getMessageTextContent(m: ChatCompletionMessageParam) {
+export function getMessageTextContent(m: {
+  content?: null | string | ChatCompletionContentPart[];
+}) {
   if (!m.content) {
     return;
   }
