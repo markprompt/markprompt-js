@@ -430,7 +430,7 @@ function CustomFieldSelect(props: CustomFieldSelectProps): JSX.Element {
 }
 
 function getFullSummaryData(
-  summary: ChatViewMessage | undefined,
+  summary: Partial<ChatViewMessage> | undefined,
   messages: ChatViewMessage[],
 ): { subject: string; body: string } {
   const transcript = `Full transcript:\n\n${toValidApiMessages(messages)
@@ -445,12 +445,12 @@ function getFullSummaryData(
   let subject = '';
   let body = transcript;
 
-  if (summary?.content) {
+  if (typeof summary?.content === 'string') {
     try {
-      const data = JSON.parse(summary.content) as {
+      const data: {
         subject: string;
         fullSummary?: string;
-      };
+      } = JSON.parse(summary.content);
       subject = data.subject;
       body = `${data.fullSummary ?? ''}\n\n---\n\n${transcript}`;
     } catch {

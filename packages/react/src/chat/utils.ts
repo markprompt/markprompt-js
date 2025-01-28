@@ -13,9 +13,10 @@ export function toValidApiMessages(
 ): ChatCompletionMessageParam[] {
   return (
     messages
-      .map(({ content, role, tool_calls, tool_call_id, name }, i) => {
-        switch (role) {
+      .map((message, i) => {
+        switch (message.role) {
           case 'assistant': {
+            const { content, role, tool_calls } = message;
             const msg: ChatCompletionAssistantMessageParam = {
               content: content ?? '',
               role,
@@ -35,6 +36,7 @@ export function toValidApiMessages(
             return msg;
           }
           case 'tool': {
+            const { content, role, tool_call_id } = message;
             if (!tool_call_id) throw new Error('tool_call_id is required');
             return {
               content: content ?? '',
@@ -43,6 +45,7 @@ export function toValidApiMessages(
             } satisfies ChatCompletionToolMessageParam;
           }
           case 'user': {
+            const { content, role, name } = message;
             return {
               content: content ?? '',
               role,

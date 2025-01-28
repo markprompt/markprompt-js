@@ -1,6 +1,6 @@
 import {
   submitChat,
-  type ChatCompletionMessageParam,
+  type ChatCompletionUserMessageParam,
 } from '@markprompt/core/chat';
 import { isAbortError, getMessageTextContent } from '@markprompt/core/utils';
 import { createContext, useContext } from 'react';
@@ -11,7 +11,12 @@ import { immer } from 'zustand/middleware/immer';
 
 import { getInitialView } from './utils.js';
 import { toValidApiMessages } from '../../chat/utils.js';
-import type { ChatViewMessage, MarkpromptOptions, View } from '../../types.js';
+import type {
+  ChatViewAssistantMessage,
+  ChatViewMessage,
+  MarkpromptOptions,
+  View,
+} from '../../types.js';
 import { isPresent } from '../../utils.js';
 
 export type GlobalOptions = MarkpromptOptions & { projectKey: string };
@@ -22,7 +27,7 @@ interface State {
   setActiveView: (view: View) => void;
   tickets?: {
     summaryByThreadId: {
-      [threadId: string]: ChatViewMessage;
+      [threadId: string]: Partial<ChatViewAssistantMessage>;
     };
     createTicketSummary: (
       threadId: string,
@@ -120,7 +125,7 @@ Output:
                 role: 'user',
                 content: `Full transcript:\n\n${conversation}\n\nSummary info:`,
               } as const,
-            ] as ChatCompletionMessageParam[];
+            ] as ChatCompletionUserMessageParam[];
 
             set((state) => {
               if (!state.tickets) return;
@@ -139,7 +144,7 @@ Output:
                     ...state.tickets?.summaryByThreadId[threadId],
                     state: 'streaming-answer',
                     ...chunk,
-                  };
+                  } as Partial<ChatViewAssistantMessage>;
                 });
               }
             } catch (error) {

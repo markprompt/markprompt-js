@@ -1,19 +1,21 @@
 import type { JSX } from 'react';
 
 import { UserIcon } from '../icons.js';
-import type { ChatLoadingState, MarkpromptOptions } from '../types.js';
+import type { ChatViewUserMessage, MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
-  children: string;
-  state: ChatLoadingState;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   referencesOptions?: MarkpromptOptions['references'];
+  message?: ChatViewUserMessage;
 }
 
 export function MessagePrompt(props: MessagePromptProps): JSX.Element {
-  const { children, chatOptions, state } = props;
+  const { message, chatOptions } = props;
   return (
-    <div className="MarkpromptMessagePrompt" data-loading-state={state}>
+    <div
+      className="MarkpromptMessagePrompt"
+      data-loading-state={message?.state}
+    >
       {chatOptions.avatars?.visible && (
         <div className="MarkpromptMessageAvatarContainer">
           {!chatOptions.avatars?.user ? (
@@ -38,7 +40,38 @@ export function MessagePrompt(props: MessagePromptProps): JSX.Element {
       )}
       {/* Use a div instead of an H3, as often websites will have CSS rules
           that override the styles of such components. */}
-      <div className="MarkpromptMessagePromptText">{children}</div>
+      {Array.isArray(message?.content) ? (
+        message.content.map((part) => {
+          if (part.type === 'text') {
+            return (
+              <div
+                key={JSON.stringify(part)}
+                className="MarkpromptMessagePromptText"
+              >
+                {part.text}
+              </div>
+            );
+          }
+
+          if (part.type === 'image_url') {
+            return (
+              <div
+                key={JSON.stringify(part)}
+                className="MarkpromptMessagePromptImage"
+              >
+                <img src={part.image_url.url} alt="user uploaded" />
+              </div>
+            );
+          }
+
+          // todo: add support for type = 'input_audio'
+          return null;
+        })
+      ) : (
+        <div className="MarkpromptMessagePromptText">
+          {message?.content ?? ''}
+        </div>
+      )}
     </div>
   );
 }
