@@ -1,3 +1,4 @@
+import { getMessageTextContent } from '@markprompt/core/utils';
 import { useMemo, type JSX } from 'react';
 
 import { selectProjectThreads, useChatStore } from './store.js';
@@ -47,9 +48,11 @@ export function ThreadSidebar(props: ThreadSidebarProps): JSX.Element {
           >
             <button onClick={() => selectThread(threadId)} type="button">
               <p>
-                <strong>{messages[0]?.content ?? 'Unknown thread'}</strong>
+                <strong>
+                  {getMessageTextContent(messages[0]) ?? 'Unknown thread'}
+                </strong>
               </p>
-              {messages[1]?.content && (
+              {typeof messages[1]?.content === 'string' && (
                 <p>{markdownToString(messages[1]?.content, 70)}</p>
               )}
             </button>

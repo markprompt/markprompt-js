@@ -18,6 +18,8 @@ export function DefaultMessage(
       <AssistantMessage
         message={{
           id: '*-*-*-*-*',
+          name: undefined,
+          role: 'assistant',
           state: 'done',
           content: chatOptions.defaultView.message,
         }}

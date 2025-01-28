@@ -1,8 +1,9 @@
 import type {
+  ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
+  ChatCompletionMetadata,
   ChatCompletionTool,
   SubmitChatOptions,
-  SubmitChatYield,
 } from '@markprompt/core/chat';
 import type {
   SubmitFeedbackOptions,
@@ -162,28 +163,29 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
-export interface ChatViewMessage extends Omit<SubmitChatYield, 'threadId'> {
-  /**
-   * Message id.
-   */
-  id: ReturnType<typeof crypto.randomUUID>;
-  /**
-   * The loading state.
-   */
-  state: ChatLoadingState;
-  /**
-   * Message name.
-   */
-  name?: string;
-  /**
-   * Error associated to the message.
-   */
-  error?: Error;
-  /**
-   * Chat events associated to the message.
-   */
-  events?: string[];
-}
+export type ChatViewMessage = ChatCompletionMessageParam &
+  (Omit<ChatCompletionMetadata, 'threadId'> & {
+    /**
+     * Message id.
+     */
+    id: ReturnType<typeof crypto.randomUUID>;
+    /**
+     * The loading state.
+     */
+    state: ChatLoadingState;
+    /**
+     * Message name.
+     */
+    name?: string;
+    /**
+     * Error associated to the message.
+     */
+    error?: Error;
+    /**
+     * Chat events associated to the message.
+     */
+    events?: string[];
+  });
 
 export interface FeedbackOptions {
   /**

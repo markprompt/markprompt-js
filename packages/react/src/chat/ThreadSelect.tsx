@@ -1,3 +1,4 @@
+import { getMessageTextContent } from '@markprompt/core/utils';
 import type { JSX } from 'react';
 
 import { selectProjectThreads, useChatStore } from './store.js';
@@ -27,7 +28,7 @@ export function ThreadSelect({
       items={[
         ...threads.map(([threadId, { messages }]) => ({
           value: threadId,
-          label: messages[0]?.content ?? '',
+          label: getMessageTextContent(messages[0]) ?? '',
         })),
         {
           value: 'new',

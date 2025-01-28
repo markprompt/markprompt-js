@@ -1,7 +1,8 @@
 import {
   isToolCall,
   submitChat,
-  type ChatCompletionChunk,
+  type ChatCompletionContentPart,
+  type ChatCompletionMessageToolCall,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
 import { createContext, useContext } from 'react';
@@ -26,10 +27,14 @@ import {
 } from '../utils.js';
 
 export type SubmitChatMessage =
-  | { content: string; role: 'user'; name?: string }
+  | {
+      content: string | ChatCompletionContentPart[];
+      role: 'user';
+      name?: string;
+    }
   | {
       role: 'assistant';
-      tool_calls: ChatCompletionChunk.Choice.Delta.ToolCall[];
+      tool_calls: ChatCompletionMessageToolCall[];
     }
   | { content: string; role: 'tool'; name: string; tool_call_id?: string };
 
@@ -79,10 +84,6 @@ export interface ChatStoreState {
    * Set a message by id.
    **/
   setMessageById(id: string, next: Partial<ChatViewMessage>): void;
-  /**
-   * Set a message by index.
-   **/
-  setMessageByIndex: (index: number, next: Partial<ChatViewMessage>) => void;
   /**
    * Set a tool call by id.
    **/
@@ -247,27 +248,6 @@ export const createChatStore = ({
               };
             });
           },
-          setMessageByIndex: (
-            index: number,
-            next: Partial<ChatViewMessage>,
-          ) => {
-            set((state) => {
-              let currentMessage = state.messages[index] ?? {};
-
-              // update the current message
-              currentMessage = { ...currentMessage, ...next };
-              state.messages[index] = currentMessage;
-
-              const threadId = state.threadId;
-              if (!threadId) return;
-
-              // save the message to local storage
-              state.messagesByThreadId[threadId] = {
-                lastUpdated: new Date().toISOString(),
-                messages: state.messages,
-              };
-            });
-          },
           setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
             set((state) => {
               let index = state.messages.findIndex((m) => m.id === id);
@@ -277,7 +257,7 @@ export const createChatStore = ({
               currentMessage = {
                 ...currentMessage,
                 ...next,
-              };
+              } as ChatViewMessage;
               state.messages[index] = currentMessage;
 
               const threadId = state.threadId;
@@ -306,12 +286,15 @@ export const createChatStore = ({
 
             set((state) => {
               state.messages.push(
-                ...messages.map((message, i) => ({
-                  ...message,
-                  id: messageIds[i],
-                  references: [],
-                  state: 'indeterminate' as const,
-                })),
+                ...messages.map(
+                  (message, i) =>
+                    ({
+                      ...message,
+                      id: messageIds[i],
+                      references: [],
+                      state: 'indeterminate' as const,
+                    }) as ChatViewMessage,
+                ),
                 // also create a placeholder message for the assistants response
                 {
                   id: responseId,
@@ -395,7 +378,7 @@ export const createChatStore = ({
                 get().setMessageById(responseId, {
                   state: 'streaming-answer',
                   ...chunk,
-                });
+                } as ChatViewMessage);
               }
             } catch (error) {
               console.error(error);
@@ -447,7 +430,13 @@ export const createChatStore = ({
               (m) => m.id === responseId,
             );
 
-            if (!responseMessage?.tool_calls) return;
+            if (
+              !(
+                responseMessage?.role === 'assistant' &&
+                responseMessage?.tool_calls
+              )
+            )
+              return;
 
             const tools = get().options?.tools;
             if (!tools) return;
@@ -463,7 +452,7 @@ export const createChatStore = ({
             }
           },
           async submitToolCalls(message: ChatViewMessage) {
-            if (!message.tool_calls) return;
+            if (!(message.role === 'assistant' && message.tool_calls)) return;
 
             const tools = get().options?.tools;
             if (!tools) return;
@@ -477,24 +466,28 @@ export const createChatStore = ({
                 if (!tool) throw new Error('Tool not found');
 
                 try {
-                  get().setToolCallById(tool_call.id!, {
+                  get().setToolCallById(tool_call.id, {
                     status: 'loading',
                   });
 
-                  const threadId = get().threadId!;
+                  const threadId = get().threadId;
+
+                  // should never happen, just appeasing the TS gods.
+                  if (!threadId) throw new Error('No Thread ID');
+
                   const result = await tool.call(
                     tool_call.function?.arguments || '{}',
                     { threadId },
                   );
 
-                  get().setToolCallById(tool_call.id!, {
+                  get().setToolCallById(tool_call.id, {
                     result,
                     status: 'done',
                   });
 
                   return { result, tool_call, tool };
                 } catch (error) {
-                  get().setToolCallById(tool_call.id!, {
+                  get().setToolCallById(tool_call.id, {
                     status: 'error',
                     error:
                       error instanceof Error ? error.message : String(error),
@@ -510,7 +503,7 @@ export const createChatStore = ({
                 .map((x) => ({
                   role: 'tool',
                   name: x.value?.tool.tool.function.name,
-                  tool_call_id: x.value.tool_call.id!,
+                  tool_call_id: x.value.tool_call.id,
                   content: x.value?.result,
                 })),
             );

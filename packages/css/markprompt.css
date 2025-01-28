@@ -810,6 +810,10 @@
   margin-top: 1px;
 }
 
+.MarkpromptMessagePromptImage img {
+  object-fit: contain;
+}
+
 .MarkpromptMessageAvatarContainer {
   border: 1px solid var(--markprompt-border);
   background-color: var(--markprompt-background);
@@ -1489,27 +1493,6 @@
 .MarkpromptAnswer tfoot td:last-child {
   padding-right: 0;
 }
-
-/* .MarkpromptCaret {
-  display: none;
-  height: 1em;
-  width: 0.8ch;
-  margin-top: 1.1428571em;
-  margin-left: 0.2rem;
-  transform: translate(2px, 2px);
-  border-radius: 1px;
-  background-color: var(--markprompt-primary);
-  box-shadow: 0 0 3px 0 var(--markprompt-primary);
-  animation-name: markprompt-fade-out;
-  animation-duration: 1000ms;
-  animation-fill-mode: both;
-  animation-iteration-count: 9999;
-  transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
-}
-
-[data-loading-state='preload'] .MarkpromptCaret {
-  display: inline-block;
-} */
 
 .MarkpromptPromptFeedback:not([data-show-feedback-always="true"]) {
   transition-timing-function: cubic-bezier(0.4, 0.36, 0, 1);

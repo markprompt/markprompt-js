@@ -2,21 +2,7 @@ import { clsx } from 'clsx';
 import type { ComponentType, JSX } from 'react';
 
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { ChatLoadingState } from '../types.js';
-
-interface CaretProps {
-  answer: string;
-}
-
-export function Caret(props: CaretProps): JSX.Element | null {
-  const { answer } = props;
-
-  if (answer) {
-    return null;
-  }
-
-  return <span className="MarkpromptCaret" />;
-}
+import type { ChatViewMessage } from '../types.js';
 
 interface AnswerProps {
   /**
@@ -24,37 +10,49 @@ interface AnswerProps {
    */
   className?: string;
   /**
-   * The answer to display, in Markdown format.
+   * The message to display, in Markdown format.
    */
-  answer: string;
-  /**
-   * The loading state of the message.
-   */
-  state: ChatLoadingState;
+  message: ChatViewMessage;
   /**
    * Component to use in place of <a>.
    * @default "a"
    */
-  linkAs?: string | ComponentType<any>;
+  linkAs?: string | ComponentType<unknown>;
 }
 
 export function Answer(props: AnswerProps): JSX.Element {
-  const { answer, className, state, linkAs } = props;
+  const { message, className, linkAs } = props;
 
   return (
     <div
       className={clsx('MarkpromptAnswer', className)}
-      aria-describedby="markprompt-progressbar"
-      aria-busy={state === 'preload' || state === 'streaming-answer'}
+      aria-busy={
+        message.state === 'preload' || message.state === 'streaming-answer'
+      }
       aria-live="polite"
     >
-      <Caret answer={answer} />
-      <BaseMarkprompt.Answer
-        answer={answer}
-        state={state}
-        copyButtonClassName="MarkpromptGhostThumbButton"
-        linkAs={linkAs}
-      />
+      {Array.isArray(message.content) ? (
+        message.content.map((part, index) => (
+          <BaseMarkprompt.Answer
+            key={`${message.id}-${part.type}-${index}`}
+            content={
+              part.type === 'text'
+                ? part.text
+                : `![user uploaded image](${part.image_url.url})`
+            }
+            state={message.state}
+            copyButtonClassName="MarkpromptGhostThumbButton"
+            linkAs={linkAs}
+          />
+        ))
+      ) : (
+        <BaseMarkprompt.Answer
+          content={message.content ?? ''}
+          state={message.state}
+          copyButtonClassName="MarkpromptGhostThumbButton"
+          linkAs={linkAs}
+        />
+      )}
     </div>
   );
 }

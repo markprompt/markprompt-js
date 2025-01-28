@@ -175,12 +175,10 @@ export function Messages(props: MessagesProps): JSX.Element {
             >
               {message.role === 'user' && (
                 <MessagePrompt
-                  state={message.state}
+                  message={message}
                   chatOptions={chatOptions}
                   referencesOptions={referencesOptions}
-                >
-                  {message.content ?? ''}
-                </MessagePrompt>
+                />
               )}
 
               {message.role === 'assistant' && (

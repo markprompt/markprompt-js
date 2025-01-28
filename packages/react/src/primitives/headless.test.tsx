@@ -57,7 +57,7 @@ test('Initial state', async () => {
           </Markprompt.Form>
           <Markprompt.AutoScroller>
             Caret
-            <Markprompt.Answer answer="" />
+            <Markprompt.Answer content="" />
           </Markprompt.AutoScroller>
           <Markprompt.References references={[]} />
         </Markprompt.Content>
@@ -79,7 +79,7 @@ test('Returns children when display is plain', () => {
       </Markprompt.Form>
       <Markprompt.AutoScroller>
         Caret
-        <Markprompt.Answer answer="" />
+        <Markprompt.Answer content="" />
       </Markprompt.AutoScroller>
       <Markprompt.References references={[]} />
     </Markprompt.Root>,
@@ -104,7 +104,7 @@ test('Trigger opens the dialog', async () => {
           </Markprompt.Form>
           <Markprompt.AutoScroller>
             Caret
-            <Markprompt.Answer answer="" />
+            <Markprompt.Answer content="" />
           </Markprompt.AutoScroller>
           <Markprompt.References references={[]} />
         </Markprompt.Content>
@@ -255,7 +255,7 @@ test('Answer renders a button to copy code to clipboard', async () => {
   const user = userEvent.setup();
   render(
     <Markprompt.Answer
-      answer={`
+      content={`
 \`\`\`js
 console.log('Hello world!');
 

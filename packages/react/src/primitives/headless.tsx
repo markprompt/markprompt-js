@@ -507,10 +507,10 @@ function HighlightedCode(props: HighlightedCodeProps): JSX.Element {
 }
 
 type AnswerProps = Omit<ComponentProps<typeof Markdown>, 'children'> & {
-  answer: string;
+  content: string;
   state?: ChatLoadingState;
   copyButtonClassName?: string;
-  linkAs?: string | ComponentType<any>;
+  linkAs?: string | ComponentType<unknown>;
 };
 
 /**
@@ -518,7 +518,7 @@ type AnswerProps = Omit<ComponentProps<typeof Markdown>, 'children'> & {
  */
 function Answer(props: AnswerProps): JSX.Element {
   const {
-    answer,
+    content,
     state,
     copyButtonClassName,
     remarkPlugins = [remarkGfm],
@@ -579,7 +579,7 @@ function Answer(props: AnswerProps): JSX.Element {
         },
       }}
     >
-      {answer ?? ''}
+      {content ?? ''}
     </Markdown>
   );
 }

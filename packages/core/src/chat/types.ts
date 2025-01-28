@@ -12,6 +12,7 @@ export type {
   ChatCompletion,
   ChatCompletionAssistantMessageParam,
   ChatCompletionChunk,
+  ChatCompletionContentPart,
   ChatCompletionFunctionMessageParam,
   ChatCompletionMessage,
   ChatCompletionMessageParam,

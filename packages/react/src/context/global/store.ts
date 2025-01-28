@@ -22,7 +22,7 @@ interface State {
   setActiveView: (view: View) => void;
   tickets?: {
     summaryByThreadId: {
-      [threadId: string]: ChatViewMessage;
+      [threadId: string]: Partial<ChatViewMessage>;
     };
     createTicketSummary: (
       threadId: string,
@@ -139,7 +139,7 @@ Output:
                     ...state.tickets?.summaryByThreadId[threadId],
                     state: 'streaming-answer',
                     ...chunk,
-                  };
+                  } as Partial<ChatViewMessage>;
                 });
               }
             } catch (error) {

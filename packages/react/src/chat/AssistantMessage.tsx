@@ -1,5 +1,6 @@
 import { isToolCalls } from '@markprompt/core/chat';
 import { DEFAULT_OPTIONS } from '@markprompt/core/constants';
+import { getMessageTextContent } from '@markprompt/core/utils';
 import { useMemo, type ComponentType, type JSX } from 'react';
 
 import { DefaultToolCallsConfirmation } from './DefaultToolCallsConfirmation.js';
@@ -16,7 +17,7 @@ export interface AssistantMessageProps {
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
   message: ChatViewMessage;
   projectKey: string;
-  linkAs?: string | ComponentType<any>;
+  linkAs?: string | ComponentType<unknown>;
   messageOnly?: boolean;
   showFeedbackAlways?: boolean;
 }
@@ -32,10 +33,10 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
     showFeedbackAlways,
   } = props;
 
-  const toolCalls = useMemo(
-    () => (isToolCalls(message.tool_calls) ? message.tool_calls : undefined),
-    [message.tool_calls],
-  );
+  const toolCalls = useMemo(() => {
+    if (message.role !== 'assistant') return;
+    return isToolCalls(message.tool_calls) ? message.tool_calls : undefined;
+  }, [message]);
 
   const messages = useChatStore((state) => state.messages);
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
@@ -102,9 +103,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
         </div>
       )}
       <div style={{ width: '100%', overflow: 'hidden' }}>
-        <MessageAnswer state={message.state} linkAs={props.linkAs}>
-          {message.content ?? ''}
-        </MessageAnswer>
+        <MessageAnswer message={message} linkAs={props.linkAs} />
         {/*
         If this message has any tool calls, and those tool calls require a
         confirmation, and that confirmation has not already been given, show
@@ -122,7 +121,7 @@ export function AssistantMessage(props: AssistantMessageProps): JSX.Element {
           (chatOptions.showCopy || feedbackOptions?.enabled) &&
           message.state === 'done' && (
             <Feedback
-              message={message.content ?? ''}
+              message={getMessageTextContent(message)}
               variant="icons"
               data-show-feedback-always={showFeedbackAlways}
               className="MarkpromptPromptFeedback"
