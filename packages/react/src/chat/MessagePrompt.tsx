@@ -1,12 +1,12 @@
 import type { JSX } from 'react';
 
 import { UserIcon } from '../icons.js';
-import type { ChatViewMessage, MarkpromptOptions } from '../types.js';
+import type { ChatViewUserMessage, MarkpromptOptions } from '../types.js';
 
 interface MessagePromptProps {
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   referencesOptions?: MarkpromptOptions['references'];
-  message?: ChatViewMessage;
+  message?: ChatViewUserMessage;
 }
 
 export function MessagePrompt(props: MessagePromptProps): JSX.Element {
