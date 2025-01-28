@@ -1,9 +1,12 @@
 import type {
-  ChatCompletionMessageParam,
+  ChatCompletionAssistantMessageParam,
   ChatCompletionMessageToolCall,
-  ChatCompletionMetadata,
+  ChatCompletionSystemMessageParam,
   ChatCompletionTool,
+  ChatCompletionToolMessageParam,
+  ChatCompletionUserMessageParam,
   SubmitChatOptions,
+  ChatCompletionMetadata,
 } from '@markprompt/core/chat';
 import type {
   SubmitFeedbackOptions,
@@ -163,29 +166,44 @@ export type ChatLoadingState =
   | 'done'
   | 'cancelled';
 
-export type ChatViewMessage = ChatCompletionMessageParam &
-  (Omit<ChatCompletionMetadata, 'threadId'> & {
-    /**
-     * Message id.
-     */
-    id: ReturnType<typeof crypto.randomUUID>;
-    /**
-     * The loading state.
-     */
-    state: ChatLoadingState;
-    /**
-     * Message name.
-     */
-    name?: string;
-    /**
-     * Error associated to the message.
-     */
-    error?: Error;
-    /**
-     * Chat events associated to the message.
-     */
-    events?: string[];
-  });
+export interface ChatViewMessageInternalProperties
+  extends Omit<ChatCompletionMetadata, 'threadId'> {
+  /**
+   * Message id.
+   */
+  id: ReturnType<typeof crypto.randomUUID>;
+  /**
+   * The loading state.
+   */
+  state: ChatLoadingState;
+  /**
+   * Message name.
+   */
+  name?: string;
+  /**
+   * Error associated to the message.
+   */
+  error?: Error;
+  /**
+   * Chat events associated to the message.
+   */
+  events?: string[];
+}
+
+export type ChatViewAssistantMessage = ChatCompletionAssistantMessageParam &
+  ChatViewMessageInternalProperties;
+export type ChatViewSystemMessage = ChatCompletionSystemMessageParam &
+  ChatViewMessageInternalProperties;
+export type ChatViewToolMessage = ChatCompletionToolMessageParam &
+  ChatViewMessageInternalProperties;
+export type ChatViewUserMessage = ChatCompletionUserMessageParam &
+  ChatViewMessageInternalProperties;
+
+export type ChatViewMessage =
+  | ChatViewAssistantMessage
+  | ChatViewSystemMessage
+  | ChatViewToolMessage
+  | ChatViewUserMessage;
 
 export interface FeedbackOptions {
   /**

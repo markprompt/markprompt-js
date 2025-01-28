@@ -1,7 +1,7 @@
 import type { ComponentType, JSX } from 'react';
 
 import { Answer } from './Answer.js';
-import type { ChatViewMessage } from '../types.js';
+import type { ChatViewAssistantMessage } from '../types.js';
 
 function LoadingDots(): JSX.Element {
   return (
@@ -14,7 +14,7 @@ function LoadingDots(): JSX.Element {
 }
 
 interface MessageAnswerProps {
-  message: ChatViewMessage;
+  message: ChatViewAssistantMessage;
   linkAs?: string | ComponentType<unknown>;
 }
 

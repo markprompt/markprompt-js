@@ -9,13 +9,13 @@ import { useChatStore } from './store.js';
 import { Feedback } from '../feedback/Feedback.js';
 import { useFeedback } from '../feedback/useFeedback.js';
 import { SparklesIcon } from '../icons.js';
-import type { ChatViewMessage, MarkpromptOptions } from '../types.js';
+import type { ChatViewAssistantMessage, MarkpromptOptions } from '../types.js';
 
 export interface AssistantMessageProps {
   apiUrl?: string;
   chatOptions: NonNullable<MarkpromptOptions['chat']>;
   feedbackOptions: NonNullable<MarkpromptOptions['feedback']>;
-  message: ChatViewMessage;
+  message: ChatViewAssistantMessage;
   projectKey: string;
   linkAs?: string | ComponentType<unknown>;
   messageOnly?: boolean;

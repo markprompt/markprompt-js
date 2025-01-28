@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import type { ComponentType, JSX } from 'react';
 
 import * as BaseMarkprompt from '../primitives/headless.js';
-import type { ChatViewMessage } from '../types.js';
+import type { ChatViewAssistantMessage } from '../types.js';
 
 interface AnswerProps {
   /**
@@ -12,7 +12,7 @@ interface AnswerProps {
   /**
    * The message to display, in Markdown format.
    */
-  message: ChatViewMessage;
+  message: ChatViewAssistantMessage;
   /**
    * Component to use in place of <a>.
    * @default "a"
@@ -35,11 +35,7 @@ export function Answer(props: AnswerProps): JSX.Element {
         message.content.map((part, index) => (
           <BaseMarkprompt.Answer
             key={`${message.id}-${part.type}-${index}`}
-            content={
-              part.type === 'text'
-                ? part.text
-                : `![user uploaded image](${part.image_url.url})`
-            }
+            content={part.type === 'text' ? part.text : part.refusal}
             state={message.state}
             copyButtonClassName="MarkpromptGhostThumbButton"
             linkAs={linkAs}

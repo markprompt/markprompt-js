@@ -14,6 +14,7 @@ import { immer } from 'zustand/middleware/immer';
 import { toValidApiMessages } from './utils.js';
 import type {
   ChatViewMessage,
+  ChatViewUserMessage,
   MarkpromptOptions,
   ToolCall,
   UserConfigurableOptions,
@@ -531,7 +532,9 @@ export const createChatStore = ({
             );
             if (lastUserMessageIndex < 0) return;
 
-            const lastUserMessage = messages[lastUserMessageIndex];
+            const lastUserMessage = messages[
+              lastUserMessageIndex
+            ] as ChatViewUserMessage;
             if (!lastUserMessage.content) return;
 
             get().setMessages(messages.slice(0, lastUserMessageIndex));

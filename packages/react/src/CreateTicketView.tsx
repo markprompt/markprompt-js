@@ -445,7 +445,7 @@ function getFullSummaryData(
   let subject = '';
   let body = transcript;
 
-  if (summary?.role === 'assistant' && summary?.content) {
+  if (typeof summary?.content === 'string') {
     try {
       const data: {
         subject: string;
