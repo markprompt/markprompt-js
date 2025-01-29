@@ -2,7 +2,7 @@ import type {
   ChatCompletionMessageToolCall,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
-} from 'openai/resources/chat/index.js';
+} from 'openai/resources/chat/index.mjs';
 
 import type { FileSectionReference } from '../types.js';
 import type { ArrayToUnion } from '../utils.js';
@@ -23,7 +23,7 @@ export type {
   ChatCompletionToolChoiceOption,
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
-} from 'openai/resources/chat/index.js';
+} from 'openai/resources/chat/index.mjs';
 
 export const CHAT_COMPLETIONS_MODELS = [
   'claude-3-5-sonnet-20240620',
