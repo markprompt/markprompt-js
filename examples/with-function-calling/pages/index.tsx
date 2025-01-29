@@ -4,7 +4,7 @@ import {
   submitChat,
 } from '@markprompt/core/chat';
 import Head from 'next/head';
-import type { OpenAI } from 'openai';
+import type { ChatCompletionTool } from 'openai/resources/index.mjs';
 import { useCallback, useState } from 'react';
 import type { FormEvent, JSX } from 'react';
 
@@ -12,7 +12,7 @@ interface ChatCompletionExecution {
   run?: (args: unknown) => void;
 }
 
-const tools: (OpenAI.ChatCompletionTool & ChatCompletionExecution)[] = [
+const tools: (ChatCompletionTool & ChatCompletionExecution)[] = [
   {
     type: 'function',
     function: {

@@ -8,7 +8,7 @@ import {
   type DefaultBodyType,
 } from 'msw';
 import { setupServer } from 'msw/node';
-import type { OpenAI } from 'openai';
+import type { ChatCompletion } from 'openai/resources/index.mjs';
 import {
   afterAll,
   afterEach,
@@ -354,11 +354,12 @@ describe('submitChat', () => {
           message: {
             content: 'According to my calculator 1 + 2 = 3',
             role: 'assistant',
+            refusal: null,
           },
           logprobs: null,
         },
       ],
-    } satisfies OpenAI.ChatCompletion;
+    } satisfies ChatCompletion;
 
     const threadId = 'test-id';
     const messageId = 'test-id';
