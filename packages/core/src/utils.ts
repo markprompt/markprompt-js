@@ -1,7 +1,4 @@
-import type {
-  ChatCompletionContentPart,
-  ChatCompletionContentPartRefusal,
-} from 'openai/resources/index.mjs';
+import type { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
 
 import type { FileSectionReference } from './types.js';
 
@@ -57,11 +54,7 @@ export function isFileSectionReferences(
 }
 
 export function getMessageTextContent(m?: {
-  content?:
-    | null
-    | string
-    | (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[]
-    | readonly (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[];
+  content?: null | string | ChatCompletionMessageParam['content'];
 }) {
   if (!m?.content) {
     return;
