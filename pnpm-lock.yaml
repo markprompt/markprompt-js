@@ -326,8 +326,8 @@ importers:
         specifier: 15.1.0
         version: 15.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       openai:
-        specifier: ^4.46.0
-        version: 4.73.1(zod@3.23.8)
+        specifier: ^4.80.1
+        version: 4.80.1(ws@8.18.0)(zod@3.23.8)
       react:
         specifier: ^19
         version: 19.0.0
@@ -448,8 +448,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       openai:
-        specifier: ^4.46.0
-        version: 4.73.1(zod@3.23.8)
+        specifier: ^4.80.1
+        version: 4.80.1(ws@8.18.0)(zod@3.23.8)
       type-fest:
         specifier: ^4.15.0
         version: 4.28.1
@@ -6557,12 +6557,15 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
-  openai@4.73.1:
-    resolution: {integrity: sha512-nWImDJBcUsqrhy7yJScXB4+iqjzbUEgzfA3un/6UnHFdwWhjX24oztj69Ped/njABfOdLcO/F7CeWTI5dt8Xmg==}
+  openai@4.80.1:
+    resolution: {integrity: sha512-+6+bbXFwbIE88foZsBEt36bPkgZPdyFN82clAXG61gnHb2gXdZApDyRrcAHqEtpYICywpqaNo57kOm9dtnb7Cw==}
     hasBin: true
     peerDependencies:
+      ws: ^8.18.0
       zod: ^3.23.8
     peerDependenciesMeta:
+      ws:
+        optional: true
       zod:
         optional: true
 
@@ -16375,7 +16378,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.73.1(zod@3.23.8):
+  openai@4.80.1(ws@8.18.0)(zod@3.23.8):
     dependencies:
       '@types/node': 18.19.66
       '@types/node-fetch': 2.6.12
@@ -16385,6 +16388,7 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0
     optionalDependencies:
+      ws: 8.18.0
       zod: 3.23.8
     transitivePeerDependencies:
       - encoding
