@@ -1,5 +1,24 @@
 # @markprompt/react
 
+## 0.61.0
+
+### Minor Changes
+
+- [#488](https://github.com/markprompt/markprompt-js/pull/488) [`447ace2`](https://github.com/markprompt/markprompt-js/commit/447ace21487c2429dc3977aa7fa393d757211856) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for rendering messages with content parts
+
+- [`3454b5a`](https://github.com/markprompt/markprompt-js/commit/3454b5a86397430683b1b1ec8f2c57c46c0d2d1f) Thanks [@nickrttn](https://github.com/nickrttn)! - Add threads history size setting
+
+- [`fa15d47`](https://github.com/markprompt/markprompt-js/commit/fa15d47759ae6f96357f1cb5d3fac9bac8fd1648) Thanks [@nickrttn](https://github.com/nickrttn)! - Remove circular dependencies
+
+- [#477](https://github.com/markprompt/markprompt-js/pull/477) [`279674a`](https://github.com/markprompt/markprompt-js/commit/279674a0a2fa26a9e5ca6159d7732151d91bb203) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix linting issues
+
+- [`6bff1b2`](https://github.com/markprompt/markprompt-js/commit/6bff1b2d0563f908913b3b04ed04974e5f170ddd) Thanks [@nickrttn](https://github.com/nickrttn)! - Update Radix UI dependencies
+
+### Patch Changes
+
+- Updated dependencies [[`279674a`](https://github.com/markprompt/markprompt-js/commit/279674a0a2fa26a9e5ca6159d7732151d91bb203), [`447ace2`](https://github.com/markprompt/markprompt-js/commit/447ace21487c2429dc3977aa7fa393d757211856)]:
+  - @markprompt/core@0.42.0
+
 ## 0.60.1
 
 ### Patch Changes

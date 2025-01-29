@@ -1,5 +1,11 @@
 # @markprompt/css
 
+## 0.34.0
+
+### Minor Changes
+
+- [#488](https://github.com/markprompt/markprompt-js/pull/488) [`447ace2`](https://github.com/markprompt/markprompt-js/commit/447ace21487c2429dc3977aa7fa393d757211856) Thanks [@nickrttn](https://github.com/nickrttn)! - Add support for rendering messages with content parts
+
 ## 0.33.0
 
 ### Minor Changes
