@@ -8,7 +8,7 @@ import {
   type DefaultBodyType,
 } from 'msw';
 import { setupServer } from 'msw/node';
-import type { ChatCompletion } from 'openai/resources/index.mjs';
+import type { ChatCompletion } from 'openai/resources/chat/completions';
 import {
   afterAll,
   afterEach,

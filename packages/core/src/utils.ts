@@ -1,4 +1,4 @@
-import type { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
 import type { FileSectionReference } from './types.js';
 
