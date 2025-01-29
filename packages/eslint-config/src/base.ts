@@ -123,7 +123,7 @@ export const base = <T extends string>(
       'import-x/no-named-as-default': 'error',
       'import-x/no-unused-modules': 'error',
       'import-x/no-deprecated': 'error',
-      'import-x/no-cycle': 'warn',
+      'import-x/no-cycle': 'error',
       'import-x/order': [
         'error',
         {
