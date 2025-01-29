@@ -383,6 +383,7 @@ describe('submitChat', () => {
         messageId,
         threadId,
         references,
+        refusal: null,
       });
     }
   });
