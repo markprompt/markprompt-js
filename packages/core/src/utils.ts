@@ -56,14 +56,14 @@ export function isFileSectionReferences(
   );
 }
 
-export function getMessageTextContent(m: {
+export function getMessageTextContent(m?: {
   content?:
     | null
     | string
     | (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[]
     | readonly (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[];
 }) {
-  if (!m.content) {
+  if (!m?.content) {
     return;
   }
 
