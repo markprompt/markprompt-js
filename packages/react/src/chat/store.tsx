@@ -138,6 +138,11 @@ export interface ChatStoreState {
    * Trigger a regeneration of the last answer.
    **/
   regenerateLastAnswer: () => void;
+  /**
+   * Caps the messages by thread. Call after updates to messagesByThreadId.
+   * @private do not use this method directly.
+   **/
+  capMessagesByThreadId: () => void;
 }
 
 export interface CreateChatOptions {
@@ -146,6 +151,11 @@ export interface CreateChatOptions {
   apiUrl?: string;
   headers?: { [key: string]: string };
   persistChatHistory?: boolean;
+  /**
+   * maximum number of threads to keep, based on when threads were last updated.
+   * @example 100
+   */
+  maxHistorySize?: number;
   chatOptions?: MarkpromptOptions['chat'];
   storeKey?: string;
 }
@@ -161,6 +171,7 @@ export const createChatStore = ({
   chatOptions,
   debug,
   persistChatHistory,
+  maxHistorySize,
   projectKey,
   storeKey,
   apiUrl,
@@ -169,6 +180,15 @@ export const createChatStore = ({
   if (!projectKey) {
     throw new Error(
       'Markprompt: a project key is required. Make sure to pass your Markprompt project key to createChatStore.',
+    );
+  }
+
+  if (
+    maxHistorySize &&
+    (!Number.isSafeInteger(maxHistorySize) || maxHistorySize < 0)
+  ) {
+    throw new Error(
+      'Markprompt: chatOptions.maxHistorySize must be a positive integer',
     );
   }
 
@@ -187,6 +207,34 @@ export const createChatStore = ({
           messagesByThreadId: {},
           toolCallsByToolCallId: {},
           didAcceptDisclaimerByProjectKey: {},
+          capMessagesByThreadId: () => {
+            set((state) => {
+              if (!maxHistorySize || maxHistorySize <= 0) return state;
+
+              const threadIdsToRemove = Object.entries(state.messagesByThreadId)
+                .sort(
+                  (
+                    [_, { lastUpdated: lastUpdatedA }],
+                    [__, { lastUpdated: lastUpdatedB }],
+                  ) =>
+                    new Date(lastUpdatedB).getTime() -
+                    new Date(lastUpdatedA).getTime(),
+                )
+                .slice(maxHistorySize)
+                .map(([id]) => id);
+
+              for (const id of threadIdsToRemove) {
+                delete state.messagesByThreadId[id];
+              }
+
+              const threadIds = Object.keys(state.messagesByThreadId);
+
+              state.threadIdsByProjectKey[projectKey] =
+                state.threadIdsByProjectKey[projectKey].filter((t) =>
+                  threadIds.includes(t),
+                );
+            });
+          },
           setThreadId: (threadId: string) => {
             set((state) => {
               // Set the thread id for this session
@@ -211,6 +259,7 @@ export const createChatStore = ({
                 lastUpdated: new Date().toISOString(),
                 messages: state.messages,
               };
+              state.capMessagesByThreadId();
             });
           },
           selectThread: (threadId?: string) => {
@@ -247,6 +296,7 @@ export const createChatStore = ({
                 lastUpdated: new Date().toISOString(),
                 messages,
               };
+              state.capMessagesByThreadId();
             });
           },
           setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
@@ -397,6 +447,9 @@ export const createChatStore = ({
                   error instanceof Error ? error : new Error(String(error)),
               });
             }
+
+            // make sure we cap the amount of threads stored to maxHistorySize
+            get().capMessagesByThreadId();
 
             if (get().abort === abort) {
               set((state) => {
@@ -600,6 +653,11 @@ export const createChatStore = ({
               state.setDidAcceptDisclaimer(true);
             }
 
+            if (maxHistorySize && maxHistorySize > 0) {
+              // make sure we evict old messages from the cache
+              state.capMessagesByThreadId();
+            }
+
             const { threadIdsByProjectKey, messagesByThreadId } = state;
 
             const threadIds = threadIdsByProjectKey?.[projectKey] ?? [];
@@ -657,10 +715,7 @@ export function useChatStore<T>(selector: (state: ChatStoreState) => T): T {
 
 export const selectProjectThreads = (
   state: ChatStoreState,
-): [
-  threadId: string,
-  { lastUpdated: string; messages: ChatViewMessage[] },
-][] => {
+): [threadId: string, ThreadData][] => {
   const projectKey = state.projectKey;
 
   const threadIds = state.threadIdsByProjectKey[projectKey];

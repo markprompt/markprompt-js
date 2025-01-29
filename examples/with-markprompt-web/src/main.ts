@@ -42,6 +42,7 @@ if (el && el instanceof HTMLElement) {
         cta: 'I agree',
       },
       enabled: true,
+      maxHistorySize: 5,
       placeholder: 'Ask a question...',
       title: 'Help',
       defaultView: {

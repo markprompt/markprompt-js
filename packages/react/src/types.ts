@@ -408,6 +408,12 @@ export interface ChatOptions {
    */
   history?: boolean;
   /**
+   * How many threads to keep in chat history.
+   * @default undefined
+   * @example 100
+   */
+  maxHistorySize?: number;
+  /**
    * Default (empty) view
    */
   defaultView?: DefaultViewProps;

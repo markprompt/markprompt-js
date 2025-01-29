@@ -42,6 +42,7 @@ export function ChatProvider(props: ChatProviderProps): JSX.Element {
         chatOptions,
         debug,
         persistChatHistory: chatOptions?.history,
+        maxHistorySize: chatOptions?.maxHistorySize,
         storeKey,
       }),
     };
