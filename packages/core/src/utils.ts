@@ -1,4 +1,7 @@
-import type { ChatCompletionContentPart } from 'openai/resources/index.mjs';
+import type {
+  ChatCompletionContentPart,
+  ChatCompletionContentPartRefusal,
+} from 'openai/resources/index.mjs';
 
 import type { FileSectionReference } from './types.js';
 
@@ -57,8 +60,8 @@ export function getMessageTextContent(m: {
   content?:
     | null
     | string
-    | ChatCompletionContentPart[]
-    | readonly ChatCompletionContentPart[];
+    | (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[]
+    | readonly (ChatCompletionContentPart | ChatCompletionContentPartRefusal)[];
 }) {
   if (!m.content) {
     return;
