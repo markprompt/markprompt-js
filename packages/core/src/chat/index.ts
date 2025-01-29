@@ -3,8 +3,8 @@ import { EventSourceParserStream } from 'eventsource-parser/stream';
 import mergeWith from 'lodash-es/mergeWith.js';
 
 import type {
-  Chat,
   SubmitChatOptions,
+  ChatCompletionChunk,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
   ChatCompletionMetadata,
@@ -25,8 +25,8 @@ import type { BaseOptions } from '../types.js';
 export * from './types.js';
 export * from './utils.js';
 
-export type SubmitChatYield =
-  Chat.Completions.ChatCompletionChunk.Choice.Delta & ChatCompletionMetadata;
+export type SubmitChatYield = ChatCompletionChunk.Choice.Delta &
+  ChatCompletionMetadata;
 
 export type SubmitChatReturn = ChatCompletionMessage & ChatCompletionMetadata;
 
@@ -265,14 +265,14 @@ export async function* submitChat(
   We have two generators that need to run in parallel: the chat and the events.
   In order to run these both at the same time, we use Promise.race
   We wrap the generators with a type ('events' | 'chat') so that we can distingish between them in Promise.race
-  
+
   However, we "lose" the value of whichever generator finishes second in Promise.race
   So, we keep the promise of that each generator.next() returns, and only re-run it
   if it is the one that finished first (i.e. if it is the value that actually got consumed)
   For the other generator, we keep the value around and pass it to the next Promise.race
 
   Once we get a value from Promise.race, we can distinguish between events and chat using the 'type' field
-  and do whatever we need to do with them. 
+  and do whatever we need to do with them.
   **/
 
   // create both generators
