@@ -1,5 +1,17 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.32.0
+
+### Minor Changes
+
+- [#477](https://github.com/markprompt/markprompt-js/pull/477) [`279674a`](https://github.com/markprompt/markprompt-js/commit/279674a0a2fa26a9e5ca6159d7732151d91bb203) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix linting issues
+
+### Patch Changes
+
+- Updated dependencies [[`447ace2`](https://github.com/markprompt/markprompt-js/commit/447ace21487c2429dc3977aa7fa393d757211856), [`3454b5a`](https://github.com/markprompt/markprompt-js/commit/3454b5a86397430683b1b1ec8f2c57c46c0d2d1f), [`fa15d47`](https://github.com/markprompt/markprompt-js/commit/fa15d47759ae6f96357f1cb5d3fac9bac8fd1648), [`279674a`](https://github.com/markprompt/markprompt-js/commit/279674a0a2fa26a9e5ca6159d7732151d91bb203), [`6bff1b2`](https://github.com/markprompt/markprompt-js/commit/6bff1b2d0563f908913b3b04ed04974e5f170ddd)]:
+  - @markprompt/react@0.61.0
+  - @markprompt/css@0.34.0
+
 ## 0.31.1
 
 ### Patch Changes

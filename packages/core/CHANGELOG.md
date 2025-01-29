@@ -1,5 +1,13 @@
 # @markprompt/core
 
+## 0.42.0
+
+### Minor Changes
+
+- [#477](https://github.com/markprompt/markprompt-js/pull/477) [`279674a`](https://github.com/markprompt/markprompt-js/commit/279674a0a2fa26a9e5ca6159d7732151d91bb203) Thanks [@nickrttn](https://github.com/nickrttn)! - Fix linting issues
+
+- [#488](https://github.com/markprompt/markprompt-js/pull/488) [`447ace2`](https://github.com/markprompt/markprompt-js/commit/447ace21487c2429dc3977aa7fa393d757211856) Thanks [@nickrttn](https://github.com/nickrttn)! - Update the ChatViewMessage type
+
 ## 0.41.0
 
 ### Minor Changes
