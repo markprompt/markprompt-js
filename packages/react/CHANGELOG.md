@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.62.0
+
+### Minor Changes
+
+- [`7545419`](https://github.com/markprompt/markprompt-js/commit/7545419764a61dbe4b33b27c908d30bbdb8c9cac) Thanks [@nickrttn](https://github.com/nickrttn)! - Update Radix deps
+
 ## 0.61.2
 
 ### Patch Changes

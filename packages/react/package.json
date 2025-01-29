@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/react",
-  "version": "0.61.2",
+  "version": "0.62.0",
   "description": "A headless React component for adding GPT-4 powered search using the Markprompt API.",
   "repository": {
     "type": "git",
@@ -25,9 +25,7 @@
     }
   },
   "main": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "dev": "tsc --build tsconfig.json --watch",
