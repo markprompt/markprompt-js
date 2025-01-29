@@ -1,6 +1,6 @@
 {
   "name": "@markprompt/docusaurus-theme-search",
-  "version": "0.32.2",
+  "version": "0.32.3",
   "description": "A Markprompt search theme for Docusaurus",
   "repository": {
     "type": "git",
