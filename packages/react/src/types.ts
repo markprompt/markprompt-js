@@ -7,6 +7,7 @@ import type {
   ChatCompletionUserMessageParam,
   SubmitChatOptions,
   ChatCompletionMetadata,
+  ChatEvent,
 } from '@markprompt/core/chat';
 import type {
   SubmitFeedbackOptions,
@@ -187,7 +188,7 @@ export interface ChatViewMessageInternalProperties
   /**
    * Chat events associated to the message.
    */
-  events?: string[];
+  events?: ChatEvent[];
 }
 
 export type ChatViewAssistantMessage = ChatCompletionAssistantMessageParam &
