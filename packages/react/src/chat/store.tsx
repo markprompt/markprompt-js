@@ -235,7 +235,11 @@ export const createChatStore = ({
                 );
 
               // Additional precaution
-              purgeStorageIfNeeded(state, projectKey);
+              purgeStorageIfNeeded(
+                state,
+                projectKey,
+                persistChatHistory ? 'localStorage' : 'sessionStorage',
+              );
             });
           },
           setThreadId: (threadId: string) => {
@@ -324,7 +328,11 @@ export const createChatStore = ({
                 messages: state.messages,
               };
 
-              purgeStorageIfNeeded(state, projectKey);
+              purgeStorageIfNeeded(
+                state,
+                projectKey,
+                persistChatHistory ? 'localStorage' : 'sessionStorage',
+              );
             });
           },
           setToolCallById(toolCallId, next) {
@@ -743,9 +751,15 @@ export const selectProjectThreads = (
 // Chrome has a 5MB storage limit
 const MAX_STORAGE_BYTES = 4_000_000;
 
-function purgeStorageIfNeeded(state: ChatStoreState, projectKey: string) {
+function purgeStorageIfNeeded(
+  state: ChatStoreState,
+  projectKey: string,
+  storageType: 'localStorage' | 'sessionStorage',
+) {
   try {
-    const storageSize = new Blob(Object.values(localStorage)).size;
+    const storage =
+      storageType === 'localStorage' ? localStorage : sessionStorage;
+    const storageSize = new Blob(Object.values(storage)).size;
 
     if (storageSize < MAX_STORAGE_BYTES) {
       return;
@@ -758,7 +772,7 @@ function purgeStorageIfNeeded(state: ChatStoreState, projectKey: string) {
         new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime(),
     );
 
-    while (new Blob(Object.values(localStorage)).size > MAX_STORAGE_BYTES) {
+    while (new Blob(Object.values(storage)).size > MAX_STORAGE_BYTES) {
       if (sortedThreads.length === 0) break;
 
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
