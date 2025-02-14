@@ -233,6 +233,9 @@ export const createChatStore = ({
                 state.threadIdsByProjectKey[projectKey].filter((t) =>
                   threadIds.includes(t),
                 );
+
+              // Additional precaution
+              purgeStorageIfNeeded(state, projectKey);
             });
           },
           setThreadId: (threadId: string) => {
@@ -296,6 +299,7 @@ export const createChatStore = ({
                 lastUpdated: new Date().toISOString(),
                 messages,
               };
+
               state.capMessagesByThreadId();
             });
           },
@@ -319,6 +323,8 @@ export const createChatStore = ({
                 lastUpdated: new Date().toISOString(),
                 messages: state.messages,
               };
+
+              purgeStorageIfNeeded(state, projectKey);
             });
           },
           setToolCallById(toolCallId, next) {
@@ -733,3 +739,37 @@ export const selectProjectThreads = (
 
   return messagesByThreadId;
 };
+
+// Chrome has a 5MB storage limit
+const MAX_STORAGE_BYTES = 4_000_000;
+
+function purgeStorageIfNeeded(state: ChatStoreState, projectKey: string) {
+  try {
+    const storageSize = new Blob(Object.values(localStorage)).size;
+
+    if (storageSize < MAX_STORAGE_BYTES) {
+      return;
+    }
+
+    console.warn('Storage limit exceeded, purging old threads...');
+
+    const sortedThreads = Object.entries(state.messagesByThreadId).sort(
+      ([, a], [, b]) =>
+        new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime(),
+    );
+
+    while (new Blob(Object.values(localStorage)).size > MAX_STORAGE_BYTES) {
+      if (sortedThreads.length === 0) break;
+
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      const [oldestThreadId] = sortedThreads.shift()!;
+      delete state.messagesByThreadId[oldestThreadId];
+
+      state.threadIdsByProjectKey[projectKey] = state.threadIdsByProjectKey[
+        projectKey
+      ].filter((t) => t !== oldestThreadId);
+    }
+  } catch (e) {
+    console.error('Error purging storage:', e);
+  }
+}
