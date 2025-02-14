@@ -85,7 +85,7 @@ export interface SystemAction {
 export interface ChatEvent {
   message: string;
   capabilityId?: string;
-  isDetail?: boolean;
+  level?: 'info' | 'detail' | 'data';
 }
 
 export interface ChatCompletionMetadata {
