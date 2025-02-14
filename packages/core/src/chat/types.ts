@@ -82,6 +82,12 @@ export interface SystemAction {
   type: 'function';
 }
 
+export interface ChatEvent {
+  message: string;
+  capabilityId?: string;
+  isDetail?: boolean;
+}
+
 export interface ChatCompletionMetadata {
   threadId?: string;
   messageId?: string;
@@ -91,7 +97,7 @@ export interface ChatCompletionMetadata {
    * @deprecated Use `messageId` instead.
    */
   promptId?: string;
-  events?: string[];
+  events?: ChatEvent[];
 }
 
 export interface NoStreamingData {

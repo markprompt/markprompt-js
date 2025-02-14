@@ -137,7 +137,7 @@ export async function* submitChat(
 
       if (typeof eventJson.message === 'string') {
         yield {
-          event: eventJson.message,
+          event: eventJson,
         };
       }
     }
@@ -295,7 +295,11 @@ export async function* submitChat(
   };
 
   let metadata: ChatCompletionMetadata | undefined;
-  const events: string[] = [];
+  const events: {
+    message: string;
+    capabilityId?: string;
+    isDetail?: boolean;
+  }[] = [];
 
   let chatPromise: ReturnType<typeof wrappedChatGenerator.next> | undefined;
   let eventsPromise: ReturnType<typeof wrappedEventsGenerator.next> | undefined;
