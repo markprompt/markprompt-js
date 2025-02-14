@@ -11,7 +11,7 @@ import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { toValidApiMessages } from './utils.js';
+import { deepMerge, toValidApiMessages } from './utils.js';
 import type {
   ChatViewMessage,
   ChatViewUserMessage,
@@ -410,6 +410,13 @@ export const createChatStore = ({
               });
             }
 
+            // In case submitChat() passes specific additional metadata,
+            // merge the general provided values with the specific ones.
+            const allAdditionalMetadata = deepMerge(
+              get().options?.additionalMetadata ?? {},
+              additionalMetadata || {},
+            );
+
             const options = {
               apiUrl: get().apiUrl,
               headers: get().headers,
@@ -418,7 +425,7 @@ export const createChatStore = ({
               debug,
               ...get().options,
               tools: get().options?.tools?.map((x) => x.tool),
-              additionalMetadata,
+              additionalMetadata: allAdditionalMetadata,
             };
 
             // do the chat completion request
