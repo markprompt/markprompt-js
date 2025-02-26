@@ -89,6 +89,15 @@ export interface SearchResultComponentProps {
    * Search result item subtitle.
    */
   subtitle?: string;
+  /**
+   * Source of the search result item.
+   */
+  source?: {
+    /**
+     * Source id.
+     */
+    id?: string;
+  };
 }
 
 export interface DefaultViewProps {

@@ -156,6 +156,12 @@ function searchResultsToSearchComponentProps(
       subtitle: (
         options?.getSubtitle || DEFAULT_MARKPROMPT_OPTIONS.search?.getSubtitle
       )?.(result, query),
+      source:
+        'file' in result
+          ? {
+              id: result.file.source.id,
+            }
+          : undefined,
     };
   });
 }
