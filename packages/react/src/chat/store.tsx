@@ -37,6 +37,11 @@ export type SubmitChatMessage =
       role: 'assistant';
       tool_calls: ChatCompletionMessageToolCall[];
     }
+  | {
+      // todo: this one is just for live chat. maybe there is a cleaner way
+      role: 'assistant' | 'user';
+      content: string | ChatCompletionContentPart[];
+    }
   | { content: string; role: 'tool'; name: string; tool_call_id?: string };
 
 export interface ThreadData {
@@ -143,6 +148,21 @@ export interface ChatStoreState {
    * @private do not use this method directly.
    **/
   capMessagesByThreadId: () => void;
+  /**
+   * EventSource for live chat functionality
+   * @private
+   */
+  liveChatEventSource?: EventSource;
+  /**
+   * Sets up a connection to the live chat API
+   * @private
+   */
+  setupLiveChat: () => void;
+  /**
+   * Closes the live chat connection
+   * @private
+   */
+  closeLiveChat: () => void;
 }
 
 export interface CreateChatOptions {
@@ -290,6 +310,11 @@ export const createChatStore = ({
               state.messages =
                 state.messagesByThreadId[threadId]?.messages ?? [];
             });
+
+            // If live chat is enabled, make sure the connection is active
+            if (get().options?.liveChatOptions) {
+              get().setupLiveChat();
+            }
           },
           setMessages: (messages: ChatViewMessage[]) => {
             set((state) => {
@@ -344,6 +369,44 @@ export const createChatStore = ({
             });
           },
           submitChat: async (messages, additionalMetadata) => {
+            const liveChatOptions = get().options?.liveChatOptions;
+            if (liveChatOptions) {
+              const latestMessage = messages[messages.length - 1];
+              if (!latestMessage || !('content' in latestMessage)) return;
+
+              set((state) => {
+                state.messages.push({
+                  id: self.crypto.randomUUID(),
+                  role: liveChatOptions.role,
+                  content: latestMessage.content,
+                  state: 'done' as const,
+                } as ChatViewMessage);
+              });
+
+              console.log('submitChat live chat', latestMessage.content);
+
+              const baseUrl = get().apiUrl || 'https://api.markprompt.com';
+              const url = `${baseUrl}/chat/live`;
+              console.log('submitChat live chat url', url);
+
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  projectKey: get().projectKey,
+                  threadId: get().threadId,
+                  content: latestMessage.content,
+                  // todo: this is a little hacky because we override the role provided
+                  role: liveChatOptions.role,
+                }),
+              });
+
+              console.log('submitChat live chat response', response);
+              return;
+            }
+
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
             );
@@ -585,9 +648,21 @@ export const createChatStore = ({
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
+            const prevLiveChat = get().options?.liveChatOptions;
+
             set((state) => {
               state.options = options;
             });
+
+            // Handle live chat setup/teardown when the option changes
+            const newLiveChat = options.liveChatOptions;
+            if (newLiveChat && !prevLiveChat) {
+              // Live chat was enabled
+              get().setupLiveChat();
+            } else if (!newLiveChat && prevLiveChat) {
+              // Live chat was disabled
+              get().closeLiveChat();
+            }
           },
           setDidAcceptDisclaimer: (accept: boolean) => {
             set((state) => {
@@ -618,6 +693,106 @@ export const createChatStore = ({
                 content: lastUserMessage.content,
               },
             ]);
+          },
+          liveChatEventSource: undefined,
+          setupLiveChat: () => {
+            // Close any existing connection first
+            get().closeLiveChat();
+            const liveChatOptions = get().options?.liveChatOptions;
+
+            if (liveChatOptions) {
+              // Setup the new connection
+              const subscribeToRole =
+                liveChatOptions.role === 'assistant' ? 'user' : 'assistant';
+              const baseUrl = get().apiUrl || 'https://api.markprompt.com';
+              const url = `${baseUrl}/chat/live?threadId=${get().threadId}&subscribeToRole=${subscribeToRole}&projectKey=${get().projectKey}`;
+              try {
+                const eventSource = new EventSource(url);
+                console.log('SETTING UP LIVE CHAT', url);
+
+                eventSource.onmessage = (event) => {
+                  try {
+                    const data = JSON.parse(event.data);
+                    console.log('live chat data', data);
+
+                    if (data.eventType === 'initial_messages') {
+                      set((state) => {
+                        state.messages = data.data.map((message: any) => {
+                          const messageId = self.crypto.randomUUID();
+                          return {
+                            id: messageId,
+                            role: message.role,
+                            content: message.content,
+                            state: 'done' as const,
+                            references: message.references || [],
+                          } satisfies ChatViewMessage;
+                        });
+
+                        if (state.threadId) {
+                          state.messagesByThreadId[state.threadId] = {
+                            lastUpdated: new Date().toISOString(),
+                            messages: state.messages,
+                          };
+                        }
+
+                        return state;
+                      });
+                    } else if (data.eventType === 'live_chat_message') {
+                      const newMessageData = data.data;
+                      // Create a new message
+                      const messageId = self.crypto.randomUUID();
+                      const newMessage = {
+                        id: messageId,
+                        role: newMessageData.role,
+                        content: newMessageData.content,
+                        state: 'done' as const,
+                        references: newMessageData.references || [],
+                      } satisfies ChatViewMessage;
+
+                      // Update the store
+                      set((state) => {
+                        state.messages.push(newMessage);
+
+                        if (state.threadId) {
+                          state.messagesByThreadId[state.threadId] = {
+                            lastUpdated: new Date().toISOString(),
+                            messages: state.messages,
+                          };
+                        }
+
+                        return state;
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error parsing live chat message:', error);
+                  }
+                };
+
+                eventSource.onerror = (error) => {
+                  console.error('Live chat connection error:', error);
+                  // Try to reconnect after a delay
+                  setTimeout(() => get().setupLiveChat(), 5000);
+                };
+
+                // Store the event source
+                set((state) => {
+                  state.liveChatEventSource = eventSource;
+                  return state;
+                });
+              } catch (error) {
+                console.error('Failed to set up live chat:', error);
+              }
+            }
+          },
+          closeLiveChat: () => {
+            const eventSource = get().liveChatEventSource;
+            if (eventSource) {
+              eventSource.close();
+              set((state) => {
+                state.liveChatEventSource = undefined;
+                return state;
+              });
+            }
           },
         }),
         {
@@ -716,6 +891,13 @@ export const createChatStore = ({
                     : x.state,
               })),
             );
+
+            // Setup live chat if enabled in options
+            if (chatOptions?.liveChatOptions) {
+              setTimeout(() => {
+                state.setupLiveChat();
+              }, 0);
+            }
           },
         },
       ),
