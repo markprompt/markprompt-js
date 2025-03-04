@@ -393,6 +393,7 @@ export const createChatStore = ({
                   role: liveChatOptions.role,
                   content: latestMessage.content,
                   metadata: {
+                    live: true,
                     email: liveChatOptions.sendAsEmail ?? false,
                   },
                   state: 'done' as const,
