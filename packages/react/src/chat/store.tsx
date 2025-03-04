@@ -413,6 +413,7 @@ export const createChatStore = ({
                   content: latestMessage.content,
                   // todo: this is a little hacky because we override the role provided
                   role: liveChatOptions.role,
+                  sendAsEmail: liveChatOptions.sendAsEmail,
                 }),
               });
 

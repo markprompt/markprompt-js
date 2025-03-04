@@ -348,5 +348,6 @@ export interface SubmitChatOptions {
    **/
   liveChatOptions?: {
     role: 'assistant' | 'user';
+    sendAsEmail?: boolean;
   };
 }
