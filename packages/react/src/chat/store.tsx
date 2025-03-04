@@ -369,6 +369,7 @@ export const createChatStore = ({
             });
           },
           submitChat: async (messages, additionalMetadata) => {
+            console.log('submitChat messages', messages);
             const liveChatOptions = get().options?.liveChatOptions;
             if (liveChatOptions) {
               const latestMessage = messages[messages.length - 1];
@@ -406,6 +407,8 @@ export const createChatStore = ({
               console.log('submitChat live chat response', response);
               return;
             }
+
+            console.log('doing normal submit chat');
 
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
@@ -464,8 +467,12 @@ export const createChatStore = ({
               state.abort = abort;
             });
 
+            console.log('submitChat messages', get().messages);
+
             // Get ready to do the request
             const apiMessages = toValidApiMessages(get().messages);
+
+            console.log('submitChat apiMessages', apiMessages);
 
             for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {
@@ -618,6 +625,12 @@ export const createChatStore = ({
                     { threadId },
                   );
 
+                  if (!result) {
+                    return;
+                  }
+
+                  console.log('submitToolCalls result', result);
+
                   get().setToolCallById(tool_call.id, {
                     result,
                     status: 'done',
@@ -634,17 +647,24 @@ export const createChatStore = ({
               }),
             );
 
-            get().submitChat(
-              toolCallResults
-                .filter(hasValueAtKey('status', 'fulfilled' as const))
-                .filter(hasPresentKey('value'))
-                .map((x) => ({
-                  role: 'tool',
-                  name: x.value?.tool.tool.function.name,
-                  tool_call_id: x.value.tool_call.id,
-                  content: x.value?.result,
-                })),
-            );
+            console.log('submitToolCalls toolCallResults', toolCallResults);
+
+            const mappedToolCalls = toolCallResults
+              .filter(isPresent)
+              .filter(hasValueAtKey('status', 'fulfilled' as const))
+              .filter(hasPresentKey('value'))
+              .map((x) => ({
+                role: 'tool' as const,
+                name: x.value?.tool.tool.function.name,
+                tool_call_id: x.value.tool_call.id,
+                content: x.value?.result,
+              }));
+
+            console.log('submitToolCalls mappedToolCalls', mappedToolCalls);
+
+            if (mappedToolCalls.length > 0) {
+              get().submitChat(mappedToolCalls);
+            }
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
@@ -717,16 +737,18 @@ export const createChatStore = ({
 
                     if (data.eventType === 'initial_messages') {
                       set((state) => {
-                        state.messages = data.data.map((message: any) => {
-                          const messageId = self.crypto.randomUUID();
-                          return {
-                            id: messageId,
-                            role: message.role,
-                            content: message.content,
-                            state: 'done' as const,
-                            references: message.references || [],
-                          } satisfies ChatViewMessage;
-                        });
+                        state.messages = data.data
+                          .map((message: any) => {
+                            const messageId = self.crypto.randomUUID();
+                            return {
+                              id: messageId,
+                              role: message.role,
+                              content: message.content,
+                              state: 'done' as const,
+                              references: message.references || [],
+                            } satisfies ChatViewMessage;
+                          })
+                          .filter((m: ChatViewMessage) => m.content);
 
                         if (state.threadId) {
                           state.messagesByThreadId[state.threadId] = {

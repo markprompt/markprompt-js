@@ -845,7 +845,10 @@ export interface ChatViewTool {
    * OpenAI. Should validate the JSON for correctness as OpenAI can hallucinate
    * arguments. Must return a string to feed the result back into OpenAI.
    **/
-  call: (args: string, context?: { threadId: string }) => Promise<string>;
+  call: (
+    args: string,
+    context?: { threadId: string },
+  ) => Promise<string | undefined>;
   /**
    * Whether user needs to confirm a call to this function or function calls
    * will be executed right away.
