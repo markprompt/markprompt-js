@@ -144,6 +144,18 @@ export interface ChatStoreState {
    **/
   regenerateLastAnswer: () => void;
   /**
+   * Set the live chat connection callback.
+   * @private
+   */
+  setLiveChatConnectionCallback: (
+    callback?: (state: 'connected' | 'disconnected') => void,
+  ) => void;
+  /**
+   * Callback for live chat connection state
+   * @private
+   */
+  liveChatConnectionCallback?: (state: 'connected' | 'disconnected') => void;
+  /**
    * Caps the messages by thread. Call after updates to messagesByThreadId.
    * @private do not use this method directly.
    **/
@@ -736,6 +748,8 @@ export const createChatStore = ({
                     console.log('live chat data', data);
 
                     if (data.eventType === 'initial_messages') {
+                      // todo: make this more robust/formalized
+                      get().liveChatConnectionCallback?.('connected');
                       set((state) => {
                         state.messages = data.data
                           .map((message: any) => {
@@ -805,6 +819,14 @@ export const createChatStore = ({
                 console.error('Failed to set up live chat:', error);
               }
             }
+          },
+          setLiveChatConnectionCallback: (
+            callback?: (state: 'connected' | 'disconnected') => void,
+          ) => {
+            set((state) => {
+              state.liveChatConnectionCallback = callback;
+              return state;
+            });
           },
           closeLiveChat: () => {
             const eventSource = get().liveChatEventSource;
