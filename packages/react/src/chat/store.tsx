@@ -392,6 +392,9 @@ export const createChatStore = ({
                   id: self.crypto.randomUUID(),
                   role: liveChatOptions.role,
                   content: latestMessage.content,
+                  metadata: {
+                    email: liveChatOptions.sendAsEmail ?? false,
+                  },
                   state: 'done' as const,
                 } as ChatViewMessage);
               });
@@ -761,6 +764,7 @@ export const createChatStore = ({
                               content: message.content,
                               state: 'done' as const,
                               references: message.references || [],
+                              metadata: message.metadata || {},
                             } satisfies ChatViewMessage;
                           })
                           .filter((m: ChatViewMessage) => m.content);
@@ -784,6 +788,7 @@ export const createChatStore = ({
                         content: newMessageData.content,
                         state: 'done' as const,
                         references: newMessageData.references || [],
+                        metadata: newMessageData.metadata || {},
                       } satisfies ChatViewMessage;
 
                       // Update the store

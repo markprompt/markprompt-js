@@ -198,6 +198,12 @@ export interface ChatViewMessageInternalProperties
    * Chat events associated to the message.
    */
   events?: ChatEvent[];
+  /**
+   * Metadata associated to the message.
+   */
+  metadata?: {
+    [key: string]: unknown;
+  };
 }
 
 export type ChatViewAssistantMessage = ChatCompletionAssistantMessageParam &
