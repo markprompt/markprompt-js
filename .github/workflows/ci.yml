@@ -12,13 +12,15 @@ concurrency:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - run: corepack enable
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: useblacksmith/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
@@ -30,13 +32,15 @@ jobs:
             ${{ secrets.MARKPROMPT_PROJECT_KEY }}
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - run: corepack enable
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: useblacksmith/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
@@ -48,13 +52,15 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   bundle-size:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - run: corepack enable
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: useblacksmith/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
