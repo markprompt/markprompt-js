@@ -1,5 +1,11 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.32.4
+
+### Patch Changes
+
+- [#496](https://github.com/markprompt/markprompt-js/pull/496) [`107baa0`](https://github.com/markprompt/markprompt-js/commit/107baa02a411721edfb49e13101fc1254876a845) Thanks [@michaelfester](https://github.com/michaelfester)! - Docusaurus input accessibility improvements
+
 ## 0.32.3
 
 ### Patch Changes
