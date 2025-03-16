@@ -55,26 +55,18 @@ export default function SearchBar(): JSX.Element {
     <>
       <div id="markprompt" />
       <div className="navbar__search" key="search-box">
-        <span
-          aria-label="expand searchbar"
-          role="button"
-          className="search-icon"
-          onClick={() => openMarkprompt()}
-          onKeyDown={async (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              await openMarkprompt();
-            }
-          }}
-          tabIndex={0}
-        />
-        <input
+        <button
           id="search_input_react"
-          type="search"
-          placeholder={markpromptProps.trigger?.placeholder || 'Search or ask'}
+          type="button"
           aria-label={markpromptProps.trigger?.label || 'Search or ask'}
           className="navbar__search-input search-bar"
           onClick={() => openMarkprompt()}
-        />
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {markpromptProps.trigger?.placeholder || 'Search or ask'}
+        </button>
         <Markprompt
           {...markpromptProps}
           trigger={{
