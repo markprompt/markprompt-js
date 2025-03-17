@@ -37,6 +37,11 @@ export type SubmitChatMessage =
       role: 'assistant';
       tool_calls: ChatCompletionMessageToolCall[];
     }
+  | {
+      // todo: this one is just for live chat. maybe there is a cleaner way
+      role: 'assistant' | 'user';
+      content: string | ChatCompletionContentPart[];
+    }
   | { content: string; role: 'tool'; name: string; tool_call_id?: string };
 
 export interface ThreadData {
@@ -139,10 +144,37 @@ export interface ChatStoreState {
    **/
   regenerateLastAnswer: () => void;
   /**
+   * Set the live chat connection callback.
+   * @private
+   */
+  setLiveChatConnectionCallback: (
+    callback?: (state: 'connected' | 'disconnected') => void,
+  ) => void;
+  /**
+   * Callback for live chat connection state
+   * @private
+   */
+  liveChatConnectionCallback?: (state: 'connected' | 'disconnected') => void;
+  /**
    * Caps the messages by thread. Call after updates to messagesByThreadId.
    * @private do not use this method directly.
    **/
   capMessagesByThreadId: () => void;
+  /**
+   * EventSource for live chat functionality
+   * @private
+   */
+  liveChatEventSource?: EventSource;
+  /**
+   * Sets up a connection to the live chat API
+   * @private
+   */
+  setupLiveChat: () => void;
+  /**
+   * Closes the live chat connection
+   * @private
+   */
+  closeLiveChat: () => void;
 }
 
 export interface CreateChatOptions {
@@ -290,6 +322,11 @@ export const createChatStore = ({
               state.messages =
                 state.messagesByThreadId[threadId]?.messages ?? [];
             });
+
+            // If live chat is enabled, make sure the connection is active
+            if (get().options?.liveChatOptions) {
+              get().setupLiveChat();
+            }
           },
           setMessages: (messages: ChatViewMessage[]) => {
             set((state) => {
@@ -344,6 +381,52 @@ export const createChatStore = ({
             });
           },
           submitChat: async (messages, additionalMetadata) => {
+            console.log('submitChat messages', messages);
+            const liveChatOptions = get().options?.liveChatOptions;
+            if (liveChatOptions) {
+              const latestMessage = messages[messages.length - 1];
+              if (!latestMessage || !('content' in latestMessage)) return;
+
+              set((state) => {
+                state.messages.push({
+                  id: self.crypto.randomUUID(),
+                  role: liveChatOptions.role,
+                  content: latestMessage.content,
+                  metadata: {
+                    live: true,
+                    email: liveChatOptions.sendAsEmail ?? false,
+                  },
+                  state: 'done' as const,
+                } as ChatViewMessage);
+              });
+
+              console.log('submitChat live chat', latestMessage.content);
+
+              const baseUrl = get().apiUrl || 'https://api.markprompt.com';
+              const url = `${baseUrl}/chat/live`;
+              console.log('submitChat live chat url', url);
+
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  projectKey: get().projectKey,
+                  threadId: get().threadId,
+                  content: latestMessage.content,
+                  // todo: this is a little hacky because we override the role provided
+                  role: liveChatOptions.role,
+                  sendAsEmail: liveChatOptions.sendAsEmail,
+                }),
+              });
+
+              console.log('submitChat live chat response', response);
+              return;
+            }
+
+            console.log('doing normal submit chat');
+
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
             );
@@ -401,8 +484,12 @@ export const createChatStore = ({
               state.abort = abort;
             });
 
+            console.log('submitChat messages', get().messages);
+
             // Get ready to do the request
             const apiMessages = toValidApiMessages(get().messages);
+
+            console.log('submitChat apiMessages', apiMessages);
 
             for (const id of [...messageIds, responseId]) {
               get().setMessageById(id, {
@@ -555,6 +642,12 @@ export const createChatStore = ({
                     { threadId },
                   );
 
+                  if (!result) {
+                    return;
+                  }
+
+                  console.log('submitToolCalls result', result);
+
                   get().setToolCallById(tool_call.id, {
                     result,
                     status: 'done',
@@ -571,23 +664,42 @@ export const createChatStore = ({
               }),
             );
 
-            get().submitChat(
-              toolCallResults
-                .filter(hasValueAtKey('status', 'fulfilled' as const))
-                .filter(hasPresentKey('value'))
-                .map((x) => ({
-                  role: 'tool',
-                  name: x.value?.tool.tool.function.name,
-                  tool_call_id: x.value.tool_call.id,
-                  content: x.value?.result,
-                })),
-            );
+            console.log('submitToolCalls toolCallResults', toolCallResults);
+
+            const mappedToolCalls = toolCallResults
+              .filter(isPresent)
+              .filter(hasValueAtKey('status', 'fulfilled' as const))
+              .filter(hasPresentKey('value'))
+              .map((x) => ({
+                role: 'tool' as const,
+                name: x.value?.tool.tool.function.name,
+                tool_call_id: x.value.tool_call.id,
+                content: x.value?.result,
+              }));
+
+            console.log('submitToolCalls mappedToolCalls', mappedToolCalls);
+
+            if (mappedToolCalls.length > 0) {
+              get().submitChat(mappedToolCalls);
+            }
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
+            const prevLiveChat = get().options?.liveChatOptions;
+
             set((state) => {
               state.options = options;
             });
+
+            // Handle live chat setup/teardown when the option changes
+            const newLiveChat = options.liveChatOptions;
+            if (newLiveChat && !prevLiveChat) {
+              // Live chat was enabled
+              get().setupLiveChat();
+            } else if (!newLiveChat && prevLiveChat) {
+              // Live chat was disabled
+              get().closeLiveChat();
+            }
           },
           setDidAcceptDisclaimer: (accept: boolean) => {
             set((state) => {
@@ -618,6 +730,120 @@ export const createChatStore = ({
                 content: lastUserMessage.content,
               },
             ]);
+          },
+          liveChatEventSource: undefined,
+          setupLiveChat: () => {
+            // Close any existing connection first
+            get().closeLiveChat();
+            const liveChatOptions = get().options?.liveChatOptions;
+
+            if (liveChatOptions) {
+              // Setup the new connection
+              const subscribeToRole =
+                liveChatOptions.role === 'assistant' ? 'user' : 'assistant';
+              const baseUrl = get().apiUrl || 'https://api.markprompt.com';
+              const url = `${baseUrl}/chat/live?threadId=${get().threadId}&subscribeToRole=${subscribeToRole}&projectKey=${get().projectKey}`;
+              try {
+                const eventSource = new EventSource(url);
+                console.log('SETTING UP LIVE CHAT', url);
+
+                eventSource.onmessage = (event) => {
+                  try {
+                    const data = JSON.parse(event.data);
+                    console.log('live chat data', data);
+
+                    if (data.eventType === 'initial_messages') {
+                      // todo: make this more robust/formalized
+                      get().liveChatConnectionCallback?.('connected');
+                      set((state) => {
+                        state.messages = data.data
+                          .map((message: any) => {
+                            const messageId = self.crypto.randomUUID();
+                            return {
+                              id: messageId,
+                              role: message.role,
+                              content: message.content,
+                              state: 'done' as const,
+                              references: message.references || [],
+                              metadata: message.metadata || {},
+                            } satisfies ChatViewMessage;
+                          })
+                          .filter((m: ChatViewMessage) => m.content);
+
+                        if (state.threadId) {
+                          state.messagesByThreadId[state.threadId] = {
+                            lastUpdated: new Date().toISOString(),
+                            messages: state.messages,
+                          };
+                        }
+
+                        return state;
+                      });
+                    } else if (data.eventType === 'live_chat_message') {
+                      const newMessageData = data.data;
+                      // Create a new message
+                      const messageId = self.crypto.randomUUID();
+                      const newMessage = {
+                        id: messageId,
+                        role: newMessageData.role,
+                        content: newMessageData.content,
+                        state: 'done' as const,
+                        references: newMessageData.references || [],
+                        metadata: newMessageData.metadata || {},
+                      } satisfies ChatViewMessage;
+
+                      // Update the store
+                      set((state) => {
+                        state.messages.push(newMessage);
+
+                        if (state.threadId) {
+                          state.messagesByThreadId[state.threadId] = {
+                            lastUpdated: new Date().toISOString(),
+                            messages: state.messages,
+                          };
+                        }
+
+                        return state;
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error parsing live chat message:', error);
+                  }
+                };
+
+                eventSource.onerror = (error) => {
+                  console.error('Live chat connection error:', error);
+                  // Try to reconnect after a delay
+                  setTimeout(() => get().setupLiveChat(), 5000);
+                };
+
+                // Store the event source
+                set((state) => {
+                  state.liveChatEventSource = eventSource;
+                  return state;
+                });
+              } catch (error) {
+                console.error('Failed to set up live chat:', error);
+              }
+            }
+          },
+          setLiveChatConnectionCallback: (
+            callback?: (state: 'connected' | 'disconnected') => void,
+          ) => {
+            set((state) => {
+              state.liveChatConnectionCallback = callback;
+              return state;
+            });
+          },
+          closeLiveChat: () => {
+            const eventSource = get().liveChatEventSource;
+            if (eventSource) {
+              eventSource.close();
+              set((state) => {
+                state.liveChatEventSource = undefined;
+                return state;
+              });
+            }
           },
         }),
         {
@@ -716,6 +942,13 @@ export const createChatStore = ({
                     : x.state,
               })),
             );
+
+            // Setup live chat if enabled in options
+            if (chatOptions?.liveChatOptions) {
+              setTimeout(() => {
+                state.setupLiveChat();
+              }, 0);
+            }
           },
         },
       ),
