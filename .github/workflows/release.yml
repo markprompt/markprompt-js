@@ -28,4 +28,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           version: pnpm run version
-          publish: pnpm run publish
+          publish: pnpm run publish --provenance=false
