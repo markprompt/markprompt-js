@@ -119,13 +119,6 @@ export interface PoliciesOptions {
    **/
   enabled?: boolean;
   /**
-   * If true, use all policies added in the project.
-   * Otherwise, only use the ones explicitly specified
-   * in the `ids` list.
-   * @default true
-   **/
-  useAll?: boolean;
-  /**
    * Only use specific policies for retrieval.
    * @default []
    **/
@@ -158,13 +151,6 @@ export interface RetrievalOptions {
    * @default true
    **/
   enabled?: boolean;
-  /**
-   * If true, use all sources connected in the project.
-   * Otherwise, only use the ones explicitly specified
-   * in the `ids` list.
-   * @default true
-   **/
-  useAll?: boolean;
   /**
    * Only use specific sources for retrieval.
    * @default []
