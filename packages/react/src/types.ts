@@ -977,3 +977,12 @@ export interface MarkpromptOptions {
    **/
   debug?: boolean;
 }
+
+export interface RealtimeChatMessage {
+  id: string;
+  content: string;
+  user: {
+    name: string;
+  };
+  createdAt: string;
+}
