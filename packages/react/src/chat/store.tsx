@@ -21,6 +21,7 @@ import type {
   ToolCall,
   UserConfigurableOptions,
 } from '../types.js';
+import type { RealtimeChatMessage } from '../types.js';
 import {
   hasPresentKey,
   hasValueAtKey,
