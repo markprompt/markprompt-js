@@ -658,6 +658,7 @@ export const createChatStore = ({
           setOptions: (options) => {
             console.log('setting options', options);
             const prevLiveChat = get().options?.liveChatOptions;
+            console.log('prevLiveChat', prevLiveChat);
 
             set((state) => {
               state.options = options;
@@ -665,7 +666,9 @@ export const createChatStore = ({
 
             // Handle live chat setup/teardown when the option changes
             const newLiveChat = options.liveChatOptions;
-            if (newLiveChat && !prevLiveChat) {
+            console.log('newLiveChat', newLiveChat);
+            // todo: rehydrating makes it so we don't know the first time the option is set
+            if (newLiveChat) {
               // Live chat was enabled
               get().setupLiveChat();
             } else if (!newLiveChat && prevLiveChat) {
@@ -703,19 +706,52 @@ export const createChatStore = ({
               },
             ]);
           },
-          setupLiveChat: () => {
+          setupLiveChat: async () => {
+            console.log('setting up live chat');
             // Close any existing connection first
             get().closeLiveChat();
             const liveChatOptions = get().options?.liveChatOptions;
-            // const threadId = get().threadId;
 
             if (liveChatOptions) {
+              // todo: what to do here? is this right?
+              const conversationId = get().threadId ?? self.crypto.randomUUID();
+              get().selectThread(conversationId);
+
+              // todo: catch and handle errors
+              const liveChatStartResponse = await fetch(
+                `${get().apiUrl}/live-chat/sessions?projectKey=${get().projectKey}`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    conversationId,
+                  }),
+                },
+              )
+                .then((res) => res.json())
+                .then(
+                  (res) =>
+                    res as {
+                      channelName: string;
+                      key: string;
+                      connectionInfo: {
+                        url: string;
+                        anonKey: string;
+                      };
+                    },
+                );
+
+              console.log('liveChatStartResponse', liveChatStartResponse);
+
               try {
-                // TODO: URL and KEY will come from the API
-                const supabase = createSupabaseClient('URL', 'KEY');
-                // TODO: roomName will come from the API
-                const roomName = 'myroom';
-                const username = liveChatOptions?.name || 'User';
+                const supabase = createSupabaseClient(
+                  liveChatStartResponse.connectionInfo.url,
+                  liveChatStartResponse.connectionInfo.anonKey,
+                );
+                const roomName = liveChatStartResponse.channelName;
+                const username = liveChatOptions.name;
 
                 // Create a new channel
                 const channel = supabase.channel(roomName);
