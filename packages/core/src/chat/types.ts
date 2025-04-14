@@ -328,4 +328,11 @@ export interface SubmitChatOptions {
    */
   stream?: boolean;
   additionalMetadata?: { [key: string]: unknown };
+  /**
+   * Live chat options.
+   **/
+  liveChatOptions?: {
+    name: string;
+    email: string;
+  };
 }

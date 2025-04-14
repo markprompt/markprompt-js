@@ -11,11 +11,13 @@ import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import { createSupabaseClient } from './supabase.js';
 import { deepMerge, toValidApiMessages } from './utils.js';
 import type {
   ChatViewMessage,
   ChatViewUserMessage,
   MarkpromptOptions,
+  RealtimeChatMessage,
   ToolCall,
   UserConfigurableOptions,
 } from '../types.js';
@@ -26,6 +28,8 @@ import {
   isPresent,
   isStoredError,
 } from '../utils.js';
+
+const EVENT_MESSAGE_TYPE = 'message';
 
 export type SubmitChatMessage =
   | {
@@ -143,6 +147,42 @@ export interface ChatStoreState {
    * @private do not use this method directly.
    **/
   capMessagesByThreadId: () => void;
+  /**
+   * Set the live chat connection callback.
+   * @private
+   */
+  setLiveChatConnectionCallback: (
+    callback?: (state: 'connected' | 'disconnected') => void,
+  ) => void;
+  /**
+   * Callback for live chat connection state
+   * @private
+   */
+  liveChatConnectionCallback?: (state: 'connected' | 'disconnected') => void;
+  /**
+   * Sets up a connection to the live chat API
+   * @private
+   */
+  setupLiveChat: () => void;
+  /**
+   * Closes the live chat connection
+   * @private
+   */
+  closeLiveChat: () => void;
+  /**
+   * The realtime chat connection
+   * @private
+   */
+  realtimeChat?: {
+    sendMessage: (content: string) => Promise<void>;
+    isConnected: boolean;
+    cleanup: () => void;
+  };
+  /**
+   * Interval for checking connection status
+   * @private
+   */
+  liveChatConnectionInterval?: ReturnType<typeof setInterval>;
 }
 
 export interface CreateChatOptions {
@@ -243,6 +283,7 @@ export const createChatStore = ({
             });
           },
           setThreadId: (threadId: string) => {
+            console.log('setting threadId', threadId);
             set((state) => {
               // Set the thread id for this session
               state.threadIdsByProjectKey[projectKey] ??= [];
@@ -270,6 +311,7 @@ export const createChatStore = ({
             });
           },
           selectThread: (threadId?: string) => {
+            console.log('selectThread');
             if (threadId && threadId === get().threadId) {
               return;
             }
@@ -290,8 +332,14 @@ export const createChatStore = ({
               state.messages =
                 state.messagesByThreadId[threadId]?.messages ?? [];
             });
+
+            // If live chat is enabled, make sure the connection is active
+            if (get().options?.liveChatOptions) {
+              get().setupLiveChat();
+            }
           },
           setMessages: (messages: ChatViewMessage[]) => {
+            console.log('setMessages', messages);
             set((state) => {
               state.messages = messages;
 
@@ -308,6 +356,7 @@ export const createChatStore = ({
             });
           },
           setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
+            console.log('setMessageById', id, next);
             set((state) => {
               let index = state.messages.findIndex((m) => m.id === id);
               index = index === -1 ? state.messages.length : index;
@@ -344,9 +393,31 @@ export const createChatStore = ({
             });
           },
           submitChat: async (messages, additionalMetadata) => {
+            console.log('submitChat', messages);
+
+            const realtimeChat = get().realtimeChat;
+
+            // If we have a live chat connection and this is a user message, send it through the realtime chat
+            // and return early - don't process through regular chat flow
+            if (realtimeChat && messages.some((m) => m.role === 'user')) {
+              const userMessage = messages.find((m) => m.role === 'user');
+              if (userMessage && typeof userMessage.content === 'string') {
+                // Use the realtime chat to send the message
+                realtimeChat.sendMessage(userMessage.content).catch((error) => {
+                  console.error(
+                    'Failed to send message via realtime chat:',
+                    error,
+                  );
+                });
+
+                return;
+              }
+            }
+
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
             );
+            console.log('messageIds', messageIds);
             const responseId = self.crypto.randomUUID();
 
             set((state) => {
@@ -363,8 +434,8 @@ export const createChatStore = ({
                 // also create a placeholder message for the assistants response
                 {
                   id: responseId,
-                  role: 'assistant',
-                  state: 'indeterminate',
+                  role: 'assistant' as const,
+                  state: 'indeterminate' as const,
                 },
               );
             });
@@ -405,6 +476,7 @@ export const createChatStore = ({
             const apiMessages = toValidApiMessages(get().messages);
 
             for (const id of [...messageIds, responseId]) {
+              console.log('preloading', id);
               get().setMessageById(id, {
                 state: 'preload',
               });
@@ -585,9 +657,25 @@ export const createChatStore = ({
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
+            console.log('setting options', options);
+            const prevLiveChat = get().options?.liveChatOptions;
+            console.log('prevLiveChat', prevLiveChat);
+
             set((state) => {
               state.options = options;
             });
+
+            // Handle live chat setup/teardown when the option changes
+            const newLiveChat = options.liveChatOptions;
+            console.log('newLiveChat', newLiveChat);
+            // todo: rehydrating makes it so we don't know the first time the option is set
+            if (newLiveChat) {
+              // Live chat was enabled
+              get().setupLiveChat();
+            } else if (!newLiveChat && prevLiveChat) {
+              // Live chat was disabled
+              get().closeLiveChat();
+            }
           },
           setDidAcceptDisclaimer: (accept: boolean) => {
             set((state) => {
@@ -618,6 +706,209 @@ export const createChatStore = ({
                 content: lastUserMessage.content,
               },
             ]);
+          },
+          setupLiveChat: async () => {
+            console.log('setting up live chat');
+            // Close any existing connection first
+            get().closeLiveChat();
+            const liveChatOptions = get().options?.liveChatOptions;
+
+            if (liveChatOptions) {
+              // todo: what to do here? is this right?
+              const conversationId = get().threadId ?? self.crypto.randomUUID();
+              get().selectThread(conversationId);
+
+              // todo: catch and handle errors
+              const liveChatStartResponse = await fetch(
+                `${get().apiUrl}/live-chat/sessions?projectKey=${get().projectKey}`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    conversationId,
+                  }),
+                },
+              )
+                .then((res) => res.json())
+                .then(
+                  (res) =>
+                    res as {
+                      channelName: string;
+                      key: string;
+                      connectionInfo: {
+                        url: string;
+                        anonKey: string;
+                      };
+                    },
+                );
+
+              console.log('liveChatStartResponse', liveChatStartResponse);
+
+              try {
+                const supabase = createSupabaseClient(
+                  liveChatStartResponse.connectionInfo.url,
+                  liveChatStartResponse.connectionInfo.anonKey,
+                );
+                const roomName = liveChatStartResponse.channelName;
+                const username = liveChatOptions.name;
+
+                // Create a new channel
+                const channel = supabase.channel(roomName);
+                let isConnected = false;
+
+                // Set up event listeners
+                channel
+                  .on('broadcast', { event: EVENT_MESSAGE_TYPE }, (payload) => {
+                    const message = payload.payload as RealtimeChatMessage;
+
+                    // Skip if this is a message from the current user - we've already added it locally
+                    // todo: deal with users with the same name. should probably use an ID
+                    if (message.user.name === username) {
+                      return;
+                    }
+
+                    // Only create messages for other participants (assistants)
+                    const newMessage = {
+                      id: message.id as `${string}-${string}-${string}-${string}-${string}`,
+                      role: 'assistant',
+                      content: message.content,
+                      state: 'done' as const,
+                      references: [],
+                    } satisfies ChatViewMessage;
+
+                    // Update the store
+                    set((state) => {
+                      state.messages.push(newMessage);
+
+                      if (state.threadId) {
+                        state.messagesByThreadId[state.threadId] = {
+                          lastUpdated: new Date().toISOString(),
+                          messages: state.messages,
+                        };
+                      }
+                    });
+                  })
+                  .subscribe(async (status) => {
+                    if (status === 'SUBSCRIBED') {
+                      isConnected = true;
+                      get().liveChatConnectionCallback?.('connected');
+                    }
+                    await Promise.resolve();
+                  });
+
+                // Create the realtime chat interface
+                const realtimeChat = {
+                  sendMessage: async (content: string) => {
+                    if (!channel || !isConnected) return;
+
+                    const message: RealtimeChatMessage = {
+                      id: self.crypto.randomUUID(),
+                      content,
+                      user: {
+                        name: username,
+                        email: liveChatOptions.email,
+                        type: 'customer',
+                      },
+                      createdAt: new Date().toISOString(),
+                    };
+
+                    // Create a new message for the current user
+                    const newMessage = {
+                      id: message.id as `${string}-${string}-${string}-${string}-${string}`,
+                      role: 'user',
+                      content: message.content,
+                      state: 'done' as const,
+                      references: [],
+                    } satisfies ChatViewMessage;
+
+                    // Update the store with the user's message
+                    set((state) => {
+                      state.messages.push(newMessage);
+
+                      if (state.threadId) {
+                        state.messagesByThreadId[state.threadId] = {
+                          lastUpdated: new Date().toISOString(),
+                          messages: state.messages,
+                        };
+                      }
+
+                      return state;
+                    });
+
+                    await channel.send({
+                      type: 'broadcast',
+                      event: EVENT_MESSAGE_TYPE,
+                      payload: message,
+                    });
+                  },
+                  isConnected: false,
+                  cleanup: () => {
+                    supabase.removeChannel(channel);
+                  },
+                };
+
+                // Update isConnected getter
+                Object.defineProperty(realtimeChat, 'isConnected', {
+                  get: () => isConnected,
+                });
+
+                // Store the realtime chat connection
+                set((state) => {
+                  state.realtimeChat = realtimeChat;
+                  return state;
+                });
+
+                // Set up an interval to monitor connection status
+                const checkConnectionInterval = setInterval(() => {
+                  const chat = get().realtimeChat;
+                  if (chat?.isConnected) {
+                    get().liveChatConnectionCallback?.('connected');
+                  } else {
+                    get().liveChatConnectionCallback?.('disconnected');
+                  }
+                }, 3000);
+
+                // Store the interval for cleanup
+                set((state) => {
+                  state.liveChatConnectionInterval = checkConnectionInterval;
+                  return state;
+                });
+              } catch (error) {
+                console.error('Failed to set up live chat:', error);
+              }
+            }
+          },
+          setLiveChatConnectionCallback: (
+            callback?: (state: 'connected' | 'disconnected') => void,
+          ) => {
+            set((state) => {
+              state.liveChatConnectionCallback = callback;
+              return state;
+            });
+          },
+          closeLiveChat: () => {
+            console.log('closing liveChat');
+            const interval = get().liveChatConnectionInterval;
+            if (interval) {
+              clearInterval(interval);
+              set((state) => {
+                state.liveChatConnectionInterval = undefined;
+                return state;
+              });
+            }
+
+            // Clean up the realtime chat connection
+            const realtimeChat = get().realtimeChat;
+            if (realtimeChat) {
+              console.log('cleaning up realtimeChat');
+              realtimeChat.cleanup();
+              set((state) => {
+                state.realtimeChat = undefined;
+                return state;
+              });
+            }
           },
         }),
         {
@@ -664,6 +955,7 @@ export const createChatStore = ({
           },
           // Restore the last thread for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
+            console.log('onRehydrateStorage', state);
             if (!state || typeof state !== 'object') return;
 
             if (
@@ -716,6 +1008,13 @@ export const createChatStore = ({
                     : x.state,
               })),
             );
+
+            // Setup live chat if enabled in options
+            if (chatOptions?.liveChatOptions) {
+              setTimeout(() => {
+                state.setupLiveChat();
+              }, 0);
+            }
           },
         },
       ),
