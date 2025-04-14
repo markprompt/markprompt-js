@@ -333,5 +333,6 @@ export interface SubmitChatOptions {
    **/
   liveChatOptions?: {
     name: string;
+    email: string;
   };
 }
