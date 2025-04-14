@@ -764,6 +764,7 @@ export const createChatStore = ({
                     const message = payload.payload as RealtimeChatMessage;
 
                     // Skip if this is a message from the current user - we've already added it locally
+                    // todo: deal with users with the same name. should probably use an ID
                     if (message.user.name === username) {
                       return;
                     }
@@ -807,6 +808,8 @@ export const createChatStore = ({
                       content,
                       user: {
                         name: username,
+                        email: liveChatOptions.email,
+                        type: 'customer',
                       },
                       createdAt: new Date().toISOString(),
                     };
