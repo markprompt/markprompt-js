@@ -5,7 +5,6 @@ import {
   type ChatCompletionMessageToolCall,
 } from '@markprompt/core/chat';
 import { isAbortError } from '@markprompt/core/utils';
-import type { RealtimeChannel } from '@supabase/supabase-js';
 import { createContext, useContext } from 'react';
 // eslint-disable-next-line import-x/no-deprecated
 import { createStore, useStore, type StoreApi } from 'zustand';
@@ -175,7 +174,6 @@ export interface ChatStoreState {
    * @private
    */
   realtimeChat?: {
-    channel: RealtimeChannel;
     sendMessage: (content: string) => Promise<void>;
     isConnected: boolean;
     cleanup: () => void;
@@ -714,7 +712,7 @@ export const createChatStore = ({
             get().closeLiveChat();
             const liveChatOptions = get().options?.liveChatOptions;
 
-            if (liveChatOptions && !get().liveChatChannel) {
+            if (liveChatOptions) {
               // todo: what to do here? is this right?
               const conversationId = get().threadId ?? self.crypto.randomUUID();
               get().selectThread(conversationId);
@@ -801,7 +799,6 @@ export const createChatStore = ({
 
                 // Create the realtime chat interface
                 const realtimeChat = {
-                  channel,
                   sendMessage: async (content: string) => {
                     if (!channel || !isConnected) return;
 
