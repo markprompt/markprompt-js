@@ -6,8 +6,18 @@ import { ChatProvider, useChatStore } from '@markprompt/react';
 
 const Chat = () => {
   const [input, setInput] = React.useState('');
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const submitChat = useChatStore((state) => state.submitChat);
   const chatMessages = useChatStore((state) => state.messages);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Scroll to bottom when messages change
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +37,7 @@ const Chat = () => {
             {(message.content as string) ?? ''}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <form className="chat-input-form" onSubmit={handleSubmit}>
         <input
