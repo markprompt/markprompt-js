@@ -15,6 +15,9 @@
 body {
   margin: 0;
 }
+body * {
+  scrollbar-width: thin;
+}
 
 button {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -58,9 +61,10 @@ body,
 }
 
 .message {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 8px;
   max-width: 80%;
+  font-size: 14px;
 }
 
 .user-message {
