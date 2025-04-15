@@ -210,7 +210,7 @@ const App: FC = () => {
         context: { projectId, projectName },
       }}
     >
-      <Chat onDidSelectProject={setProjectId} projectId={projectId} />
+      <Chat onDidSelectProject={setProjectId} />
     </ChatProvider>
   );
 };
