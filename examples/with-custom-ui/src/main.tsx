@@ -18,67 +18,25 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      <div
-        className="messages-container"
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-        }}
-      >
+      <div className="messages-container">
         {chatMessages.map((message) => (
           <div
             key={message.messageId}
-            className={`message ${message.role}`}
-            style={{
-              padding: '10px 16px',
-              borderRadius: '8px',
-              maxWidth: '80%',
-              alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-              backgroundColor: message.role === 'user' ? '#0084ff' : '#f0f0f0',
-              color: message.role === 'user' ? 'white' : 'black',
-            }}
+            className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
           >
             {(message.content as string) ?? ''}
           </div>
         ))}
       </div>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          borderTop: '1px solid #eee',
-          padding: '12px',
-          display: 'flex',
-        }}
-      >
+      <form className="chat-input-form" onSubmit={handleSubmit}>
         <input
+          className="chat-input"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your message here..."
-          style={{
-            flex: 1,
-            padding: '10px',
-            border: '1px solid #eee',
-            borderRadius: '4px',
-            marginRight: '8px',
-          }}
         />
-        <button
-          type="submit"
-          style={{
-            padding: '10px 16px',
-            backgroundColor: '#000',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'semibold',
-          }}
-        >
+        <button className="chat-submit-button" type="submit">
           Send
         </button>
       </form>
