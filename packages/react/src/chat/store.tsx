@@ -338,7 +338,6 @@ export const createChatStore = ({
             }
           },
           setMessages: (messages: ChatViewMessage[]) => {
-            console.log('setMessages', messages);
             set((state) => {
               state.messages = messages;
 
@@ -355,7 +354,6 @@ export const createChatStore = ({
             });
           },
           setMessageById: (id: string, next: Partial<ChatViewMessage>) => {
-            console.log('setMessageById', id, next);
             set((state) => {
               let index = state.messages.findIndex((m) => m.id === id);
               index = index === -1 ? state.messages.length : index;
