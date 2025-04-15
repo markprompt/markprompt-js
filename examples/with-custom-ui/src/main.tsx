@@ -9,10 +9,11 @@ const Chat = () => {
   const [input, setInput] = React.useState('');
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const submitChat = useChatStore((state) => state.submitChat);
-  const chatMessages = useChatStore((state) => state.messages);
+  const messages = useChatStore((state) => state.messages);
   const selectThread = useChatStore((state) => state.selectThread);
   const setMessages = useChatStore((state) => state.setMessages);
 
+  console.log('messages', JSON.stringify(messages, null, 2));
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -20,7 +21,7 @@ const Chat = () => {
   // Scroll to bottom when messages change
   React.useEffect(() => {
     scrollToBottom();
-  }, [chatMessages]);
+  }, [messages]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,12 +38,14 @@ const Chat = () => {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <button className="clear-button" onClick={handleClear}>Clear</button>
+        <button className="clear-button" onClick={handleClear}>
+          Clear
+        </button>
       </div>
       <div className="messages-container">
-        {chatMessages.map((message) => (
+        {messages.map((message) => (
           <div
-            key={message.messageId}
+            key={message.id}
             className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
           >
             <ReactMarkdown className="markdown-content">
