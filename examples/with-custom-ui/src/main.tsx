@@ -12,6 +12,7 @@ const Chat = () => {
   const messages = useChatStore((state) => state.messages);
   const selectThread = useChatStore((state) => state.selectThread);
   const setMessages = useChatStore((state) => state.setMessages);
+  const submitToolCalls = useChatStore((state) => state.submitToolCalls);
 
   console.log('messages', JSON.stringify(messages, null, 2));
   const scrollToBottom = () => {
@@ -35,6 +36,18 @@ const Chat = () => {
     setMessages([]);
   };
 
+  const handleConfirmToolCall = (message: any) => {
+    if (message.tool_calls && message.tool_calls.length > 0) {
+      submitToolCalls(message);
+    }
+  };
+
+  const handleCancelToolCall = (message: any) => {
+    // Remove or hide the tool call message
+    const updatedMessages = messages.filter((m) => m.id !== message.id);
+    setMessages(updatedMessages);
+  };
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -43,16 +56,59 @@ const Chat = () => {
         </button>
       </div>
       <div className="messages-container">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
-          >
-            <ReactMarkdown className="markdown-content">
-              {(message.content as string) ?? ''}
-            </ReactMarkdown>
-          </div>
-        ))}
+        {messages.map((message) => {
+          const hasToolCalls =
+            message.tool_calls && message.tool_calls.length > 0;
+
+          return (
+            <div
+              key={message.id}
+              className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+            >
+              {hasToolCalls ? (
+                <div className="tool-confirmation">
+                  <div className="tool-header">Confirm Action</div>
+                  <div className="tool-description">
+                    {message.tool_calls.map((toolCall: any, index: number) => (
+                      <div key={index} className="tool-call">
+                        <div className="tool-name">
+                          {toolCall.function.name}
+                        </div>
+                        <div className="tool-args">
+                          <pre>
+                            {/* {JSON.stringify(
+                              JSON.parse(toolCall.function.arguments),
+                              null,
+                              2,
+                            )} */}
+                          </pre>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="tool-actions">
+                    <button
+                      className="tool-confirm"
+                      onClick={() => handleConfirmToolCall(message)}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="tool-cancel"
+                      onClick={() => handleCancelToolCall(message)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <ReactMarkdown className="markdown-content">
+                  {(message.content as string) ?? ''}
+                </ReactMarkdown>
+              )}
+            </div>
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
       <form className="chat-input-form" onSubmit={handleSubmit}>
