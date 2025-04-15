@@ -229,10 +229,9 @@ export const createChatStore = ({
 
               const threadIds = Object.keys(state.messagesByThreadId);
 
-              state.threadIdsByProjectKey[projectKey] =
-                state.threadIdsByProjectKey[projectKey].filter((t) =>
-                  threadIds.includes(t),
-                );
+              state.threadIdsByProjectKey[projectKey] = (
+                state.threadIdsByProjectKey[projectKey] || []
+              ).filter((t) => threadIds.includes(t));
 
               // Additional precaution
               purgeStorageIfNeeded(

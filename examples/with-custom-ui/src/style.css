@@ -90,6 +90,11 @@ body,
   font-size: 14px;
 }
 
+/* Make tool call messages wider */
+.message.assistant-message:has(.tool-confirmation) {
+  max-width: 100%;
+}
+
 .user-message {
   background-color: #000;
   color: white;
@@ -165,7 +170,7 @@ body,
 
 .markdown-content pre {
   background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 0.5rem;
   overflow-x: auto;
   margin: 0.75rem 0;
@@ -176,7 +181,7 @@ body,
   font-size: 12px;
   background-color: rgba(0, 0, 0, 0.05);
   padding: 0.2rem 0.4rem;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .markdown-content pre code {
@@ -224,22 +229,52 @@ body,
 
 /* Tool Confirmation UI */
 .tool-confirmation {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 12px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  width: 100%;
+  min-width: 240px;
+}
+
+.tool-heading {
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #333;
   font-size: 14px;
 }
 
-.tool-header {
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #333;
-  font-size: 15px;
+.tool-description {
+  margin-bottom: 0;
+  width: 100%;
 }
 
-.tool-description {
-  margin-bottom: 16px;
+.tool-description > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tool-description select {
+  width: 100%;
+  margin-bottom: 2px;
+  padding: 8px;
+  padding-right: 30px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: white;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px top 50%;
+  background-size: 8px auto;
+}
+
+.tool-description select:focus {
+  outline: none;
+  border-color: #aaa;
 }
 
 .tool-call {
@@ -283,11 +318,13 @@ body,
 
 .tool-confirm, .tool-cancel {
   border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  font-size: 12px;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
 }
 
 .tool-confirm {
@@ -304,6 +341,61 @@ body,
   background-color: #333;
 }
 
+.tool-confirm:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
 .tool-cancel:hover {
   background-color: #e0e0e0;
+}
+
+/* Loading indicator */
+.message.loading {
+  animation: pulse 1.5s infinite;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 16px;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.loading-dots .dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out both;
+}
+
+.loading-dots .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loading-text {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1.0);
+    opacity: 1;
+  }
 }

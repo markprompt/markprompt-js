@@ -1,30 +1,96 @@
 import '@markprompt/css';
 import './style.css';
-import React from 'react';
+import React, {
+  type FC,
+  type FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChatProvider, useChatStore } from '@markprompt/react';
 import ReactMarkdown from 'react-markdown';
 
-const Chat = () => {
-  const [input, setInput] = React.useState('');
-  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+const sampleProjects = [
+  {
+    id: 'eagle-mint-river',
+    name: 'Blog',
+  },
+  {
+    id: 'orbit-silver-branch',
+    name: 'Marketing Site',
+  },
+  {
+    id: 'crimson-leaf-harbor',
+    name: 'Web App',
+  },
+];
+
+const ProjectSelector = ({
+  active,
+  onDidSelectProject,
+}: {
+  active: boolean;
+  onDidSelectProject: (id: string) => void;
+}) => {
+  const [selectedProject, setSelectedProject] = useState<string | undefined>(
+    undefined,
+  );
+  return (
+    <div>
+      <h3 className="tool-heading">Please select your project</h3>
+      <select
+        disabled={!active}
+        onChange={(e) => setSelectedProject(e.target.value)}
+      >
+        <option>Select a project</option>
+        {sampleProjects.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.name}
+          </option>
+        ))}
+      </select>
+      <button
+        type="button"
+        className="tool-confirm"
+        onClick={() => selectedProject && onDidSelectProject(selectedProject)}
+        disabled={!selectedProject || !active}
+      >
+        Select
+      </button>
+    </div>
+  );
+};
+
+const Chat = ({
+  onDidSelectProject,
+}: {
+  onDidSelectProject: (id: string) => void;
+}) => {
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const submitChat = useChatStore((state) => state.submitChat);
   const messages = useChatStore((state) => state.messages);
   const selectThread = useChatStore((state) => state.selectThread);
   const setMessages = useChatStore((state) => state.setMessages);
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
 
-  console.log('messages', JSON.stringify(messages, null, 2));
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Scroll to bottom when messages change
-  React.useEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    console.log('messages', JSON.stringify(messages, null, 2));
+  }, [messages.map((m) => m.state).join(':')]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
     submitChat([{ role: 'user', content: input }]);
@@ -36,69 +102,60 @@ const Chat = () => {
     setMessages([]);
   };
 
-  const handleConfirmToolCall = (message: any) => {
-    if (message.tool_calls && message.tool_calls.length > 0) {
+  const handleSelectProject = useCallback(
+    (message: any, id: string) => {
+      onDidSelectProject(id);
       submitToolCalls(message);
-    }
-  };
-
-  const handleCancelToolCall = (message: any) => {
-    // Remove or hide the tool call message
-    const updatedMessages = messages.filter((m) => m.id !== message.id);
-    setMessages(updatedMessages);
-  };
+    },
+    [submitToolCalls, onDidSelectProject],
+  );
 
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <button className="clear-button" onClick={handleClear}>
+        <button type="button" className="clear-button" onClick={handleClear}>
           Clear
         </button>
       </div>
       <div className="messages-container">
-        {messages.map((message) => {
+        {messages.map((message, i) => {
+          const isLoading =
+            message.role === 'assistant' &&
+            (message.state === 'indeterminate' || message.state === 'preload');
+
           const hasToolCalls =
-            message.tool_calls && message.tool_calls.length > 0;
+            message.role === 'assistant' &&
+            message.tool_calls &&
+            message.tool_calls.length > 0;
+
+          if (message.role === 'tool') {
+            // Do not show tool confirmation
+            return null;
+          }
 
           return (
             <div
               key={message.id}
-              className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+              className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'} ${isLoading ? 'loading' : ''}`}
             >
               {hasToolCalls ? (
                 <div className="tool-confirmation">
-                  <div className="tool-header">Confirm Action</div>
                   <div className="tool-description">
-                    {message.tool_calls.map((toolCall: any, index: number) => (
-                      <div key={index} className="tool-call">
-                        <div className="tool-name">
-                          {toolCall.function.name}
-                        </div>
-                        <div className="tool-args">
-                          <pre>
-                            {/* {JSON.stringify(
-                              JSON.parse(toolCall.function.arguments),
-                              null,
-                              2,
-                            )} */}
-                          </pre>
-                        </div>
-                      </div>
-                    ))}
+                    <ProjectSelector
+                      // Disable if there are subsequent messages
+                      active={!messages[i + 1]}
+                      onDidSelectProject={(projectId) =>
+                        handleSelectProject(message, projectId)
+                      }
+                    />
                   </div>
-                  <div className="tool-actions">
-                    <button
-                      className="tool-confirm"
-                      onClick={() => handleConfirmToolCall(message)}
-                    >
-                      Confirm
-                    </button>
-                    <button
-                      className="tool-cancel"
-                      onClick={() => handleCancelToolCall(message)}
-                    >
-                      Cancel
-                    </button>
+                </div>
+              ) : isLoading ? (
+                <div className="loading-indicator">
+                  <div className="loading-dots">
+                    <span className="dot" />
+                    <span className="dot" />
+                    <span className="dot" />
                   </div>
                 </div>
               ) : (
@@ -127,18 +184,33 @@ const Chat = () => {
   );
 };
 
-const App: React.FC = () => {
+const App: FC = () => {
+  const [projectId, setProjectId] = useState<string | undefined>(undefined);
+  const projectName = sampleProjects.find((p) => p.id === projectId)?.name;
+
   return (
     <ChatProvider
       apiUrl={import.meta.env.VITE_MARKPROMPT_API_URL}
       projectKey={import.meta.env.VITE_PROJECT_API_KEY}
       chatOptions={{
-        history: false,
-        maxHistorySize: 10,
         assistantId: import.meta.env.VITE_ASSISTANT_ID,
+        toolChoice: 'auto',
+        // If projectId is set, we don't allow to trigger the tool call
+        tools: projectId
+          ? []
+          : [
+              {
+                tool: {
+                  type: 'function',
+                  function: { name: 'askForProjectId' },
+                },
+                call: () => Promise.resolve('The project id was provided.'),
+              },
+            ],
+        context: { projectId, projectName },
       }}
     >
-      <Chat />
+      <Chat onDidSelectProject={setProjectId} projectId={projectId} />
     </ChatProvider>
   );
 };
