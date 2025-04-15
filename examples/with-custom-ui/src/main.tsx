@@ -3,12 +3,15 @@ import './style.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChatProvider, useChatStore } from '@markprompt/react';
+import ReactMarkdown from 'react-markdown';
 
 const Chat = () => {
   const [input, setInput] = React.useState('');
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const submitChat = useChatStore((state) => state.submitChat);
   const chatMessages = useChatStore((state) => state.messages);
+  const selectThread = useChatStore((state) => state.selectThread);
+  const setMessages = useChatStore((state) => state.setMessages);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,15 +29,25 @@ const Chat = () => {
     setInput('');
   };
 
+  const handleClear = () => {
+    selectThread(undefined);
+    setMessages([]);
+  };
+
   return (
     <div className="chat-container">
+      <div className="chat-header">
+        <button className="clear-button" onClick={handleClear}>Clear</button>
+      </div>
       <div className="messages-container">
         {chatMessages.map((message) => (
           <div
             key={message.messageId}
             className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
           >
-            {(message.content as string) ?? ''}
+            <ReactMarkdown className="markdown-content">
+              {(message.content as string) ?? ''}
+            </ReactMarkdown>
           </div>
         ))}
         <div ref={messagesEndRef} />

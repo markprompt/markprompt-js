@@ -51,6 +51,29 @@ body,
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.chat-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.clear-button {
+  background-color: transparent;
+  color: #888;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-button:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
 .messages-container {
   flex: 1;
   overflow-y: auto;
@@ -98,14 +121,14 @@ body,
 
 .chat-input {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid #eee;
   border-radius: 6px;
   font-size: 13px;
 }
 
 .chat-submit-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   background-color: #000;
   color: white;
@@ -124,4 +147,77 @@ body,
 .chat-submit-button:disabled {
   background-color: #999;
   cursor: not-allowed;
+}
+
+/* Markdown styling */
+.markdown-content {
+  margin: 0;
+}
+
+.markdown-content p {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.markdown-content p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-content pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 0.5rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.markdown-content code {
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-content blockquote {
+  border-left: 3px solid #ddd;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+  color: #666;
+}
+
+/* Override Markdown styles for user messages */
+.user-message .markdown-content p,
+.user-message .markdown-content li,
+.user-message .markdown-content blockquote {
+  color: white;
+}
+
+.user-message .markdown-content a {
+  color: #cef;
+}
+
+.user-message .markdown-content code,
+.user-message .markdown-content pre {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-message .markdown-content blockquote {
+  border-left-color: rgba(255, 255, 255, 0.4);
 }
