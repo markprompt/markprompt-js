@@ -113,9 +113,15 @@ body,
 }
 
 @keyframes pulse {
-  0% { opacity: 0.7; }
-  50% { opacity: 1; }
-  100% { opacity: 0.7; }
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
 }
 
 .chat-input-form {
@@ -177,7 +183,7 @@ body,
 }
 
 .markdown-content code {
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
   font-size: 12px;
   background-color: rgba(0, 0, 0, 0.05);
   padding: 0.2rem 0.4rem;
@@ -189,7 +195,8 @@ body,
   padding: 0;
 }
 
-.markdown-content ul, .markdown-content ol {
+.markdown-content ul,
+.markdown-content ol {
   margin-top: 0;
   margin-bottom: 0.75rem;
   padding-left: 1.5rem;
@@ -305,7 +312,7 @@ body,
 
 .tool-args pre {
   margin: 0;
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
   font-size: 12px;
   color: #333;
 }
@@ -316,7 +323,8 @@ body,
   justify-content: flex-end;
 }
 
-.tool-confirm, .tool-cancel {
+.tool-confirm,
+.tool-cancel {
   border: none;
   border-radius: 6px;
   padding: 8px 12px;
@@ -390,7 +398,9 @@ body,
 }
 
 @keyframes bounce {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0.6);
     opacity: 0.3;
   }
