@@ -484,8 +484,15 @@ export const createChatStore = ({
             // In case submitChat() passes specific additional metadata,
             // merge the general provided values with the specific ones.
             const allAdditionalMetadata = deepMerge(
-              get().options?.additionalMetadata ?? {},
-              additionalMetadata || {},
+              deepMerge(
+                get().options?.additionalMetadata ?? {},
+                additionalMetadata || {},
+              ),
+              {
+                internal: {
+                  storeAsConversation: get().options?.useConversations ?? false,
+                },
+              },
             );
 
             const options = {

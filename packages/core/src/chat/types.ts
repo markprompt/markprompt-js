@@ -335,4 +335,9 @@ export interface SubmitChatOptions {
     name: string;
     email: string;
   };
+  /**
+   * Whether or not to use conversations.
+   * @default false
+   **/
+  useConversations?: boolean;
 }
