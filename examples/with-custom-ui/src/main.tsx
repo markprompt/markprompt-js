@@ -5,9 +5,85 @@ import ReactDOM from 'react-dom/client';
 import { ChatProvider, useChatStore } from '@markprompt/react';
 
 const Chat = () => {
+  const [input, setInput] = React.useState('');
   const submitChat = useChatStore((state) => state.submitChat);
+  const chatMessages = useChatStore((state) => state.messages);
 
-  return <div>Hello</div>;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    submitChat([{ role: 'user', content: input }]);
+    setInput('');
+  };
+
+  return (
+    <div className="chat-container">
+      <div
+        className="messages-container"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+        }}
+      >
+        {chatMessages.map((message) => (
+          <div
+            key={message.messageId}
+            className={`message ${message.role}`}
+            style={{
+              padding: '10px 16px',
+              borderRadius: '8px',
+              maxWidth: '80%',
+              alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+              backgroundColor: message.role === 'user' ? '#0084ff' : '#f0f0f0',
+              color: message.role === 'user' ? 'white' : 'black',
+            }}
+          >
+            {(message.content as string) ?? ''}
+          </div>
+        ))}
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          borderTop: '1px solid #eee',
+          padding: '12px',
+          display: 'flex',
+        }}
+      >
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your message here..."
+          style={{
+            flex: 1,
+            padding: '10px',
+            border: '1px solid #eee',
+            borderRadius: '4px',
+            marginRight: '8px',
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            padding: '10px 16px',
+            backgroundColor: '#000',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontWeight: 'semibold',
+          }}
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  );
 };
 
 const App: React.FC = () => {
