@@ -123,27 +123,28 @@ body,
   flex: 1;
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
 .chat-submit-button {
   padding: 0.75rem 1.5rem;
   margin-left: 0.5rem;
-  background-color: #2563eb;
+  background-color: #000;
   color: white;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .chat-submit-button:hover {
-  background-color: #1d4ed8;
+  background-color: #333;
 }
 
 .chat-submit-button:disabled {
-  background-color: #93c5fd;
+  background-color: #999;
   cursor: not-allowed;
 }

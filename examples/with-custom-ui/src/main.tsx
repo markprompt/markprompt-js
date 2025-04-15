@@ -56,28 +56,10 @@ const App: React.FC = () => {
       }}
     >
       <Chat />
-      {/* <ChatViewWithUpdateState
-        page={page}
-        assistantId={assistantId}
-        assistantVersionId={assistantVersionId}
-        placeholder={placeholder}
-        autoGenerate={autoGenerate}
-        caseContextPrompt={caseContextPrompt}
-        hiddenFirstUserMessage={hiddenFirstUserMessage}
-        cta={cta}
-        noAvatars={noAvatars}
-        showLastMessageOnly={showLastMessageOnly}
-        showActions={showActions}
-        hideFirstMessage={hideFirstMessage}
-        clearShoulKeepFirstUserMessage={clearShoulKeepFirstUserMessage}
-        loadingMessage={loadingMessage}
-        shouldShowInsertDraftButton={shouldShowInsertDraftButton}
-      /> */}
     </ChatProvider>
   );
 };
 
-// Render the app
 document.addEventListener('DOMContentLoaded', () => {
   const appContainer = document.getElementById('app');
   if (appContainer) {
