@@ -17,6 +17,7 @@ import type {
   ChatViewMessage,
   ChatViewUserMessage,
   MarkpromptOptions,
+  RealtimeChatCustomer,
   RealtimeChatMessage,
   ToolCall,
   UserConfigurableOptions,
@@ -769,6 +770,12 @@ export const createChatStore = ({
                 const channel = supabase.channel(roomName);
                 let isConnected = false;
 
+                const fullUser = {
+                  name: user.name,
+                  email: user.email,
+                  type: 'customer',
+                } satisfies RealtimeChatCustomer;
+
                 // Set up event listeners
                 channel
                   .on('broadcast', { event: EVENT_MESSAGE_TYPE }, (payload) => {
@@ -802,11 +809,14 @@ export const createChatStore = ({
                     });
                   })
                   .subscribe(async (status) => {
+                    console.log('SUBSCRIBE STATUS', status);
                     if (status === 'SUBSCRIBED') {
                       isConnected = true;
                       get().liveChatConnectionCallback?.('connected');
+                      await channel.track(fullUser);
+                    } else {
+                      await channel.untrack(fullUser);
                     }
-                    await Promise.resolve();
                   });
 
                 // Create the realtime chat interface
@@ -817,11 +827,7 @@ export const createChatStore = ({
                     const message: RealtimeChatMessage = {
                       id: self.crypto.randomUUID(),
                       content,
-                      user: {
-                        name: user.name,
-                        email: user.email,
-                        type: 'customer',
-                      },
+                      user: fullUser,
                       createdAt: new Date().toISOString(),
                     };
 
