@@ -62,6 +62,10 @@ export interface ChatStoreState {
    */
   headers?: { [key: string]: string };
   /**
+   * Set headers.
+   */
+  setHeaders: (headers: { [key: string]: string }) => void;
+  /**
    * Abort handler.
    **/
   abort?: () => void;
@@ -917,6 +921,12 @@ export const createChatStore = ({
                 return state;
               });
             }
+          },
+          setHeaders: (headers) => {
+            set((state) => {
+              state.headers = headers;
+              return state;
+            });
           },
         }),
         {
