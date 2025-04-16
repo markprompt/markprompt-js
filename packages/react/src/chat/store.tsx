@@ -333,7 +333,7 @@ export const createChatStore = ({
             });
 
             // If live chat is enabled, make sure the connection is active
-            if (get().options?.liveChatOptions) {
+            if (get().options?.liveChatOptions?.enabled) {
               get().setupLiveChat();
             }
           },
@@ -479,6 +479,8 @@ export const createChatStore = ({
               });
             }
 
+            const user = get().options?.user;
+
             // In case submitChat() passes specific additional metadata,
             // merge the general provided values with the specific ones.
             const allAdditionalMetadata = deepMerge(
@@ -489,6 +491,7 @@ export const createChatStore = ({
               {
                 internal: {
                   storeAsConversation: get().options?.useConversations ?? false,
+                  ...(user ? { user } : {}),
                 },
               },
             );
@@ -673,10 +676,10 @@ export const createChatStore = ({
             const newLiveChat = options.liveChatOptions;
             console.log('newLiveChat', newLiveChat);
             // todo: rehydrating makes it so we don't know the first time the option is set
-            if (newLiveChat) {
+            if (newLiveChat?.enabled) {
               // Live chat was enabled
               get().setupLiveChat();
-            } else if (!newLiveChat && prevLiveChat) {
+            } else if (!newLiveChat?.enabled && prevLiveChat?.enabled) {
               // Live chat was disabled
               get().closeLiveChat();
             }
@@ -716,8 +719,9 @@ export const createChatStore = ({
             // Close any existing connection first
             get().closeLiveChat();
             const liveChatOptions = get().options?.liveChatOptions;
+            const user = get().options?.user;
 
-            if (liveChatOptions) {
+            if (liveChatOptions?.enabled && user) {
               // todo: what to do here? is this right?
               const conversationId = get().threadId ?? self.crypto.randomUUID();
               get().selectThread(conversationId);
@@ -756,7 +760,6 @@ export const createChatStore = ({
                   liveChatStartResponse.connectionInfo.anonKey,
                 );
                 const roomName = liveChatStartResponse.channelName;
-                const username = liveChatOptions.name;
 
                 // Create a new channel
                 const channel = supabase.channel(roomName);
@@ -769,7 +772,7 @@ export const createChatStore = ({
 
                     // Skip if this is a message from the current user - we've already added it locally
                     // todo: deal with users with the same name. should probably use an ID
-                    if (message.user.name === username) {
+                    if (message.user.name === user.name) {
                       return;
                     }
 
@@ -811,8 +814,8 @@ export const createChatStore = ({
                       id: self.crypto.randomUUID(),
                       content,
                       user: {
-                        name: username,
-                        email: liveChatOptions.email,
+                        name: user.name,
+                        email: user.email,
                         type: 'customer',
                       },
                       createdAt: new Date().toISOString(),
@@ -1014,7 +1017,7 @@ export const createChatStore = ({
             );
 
             // Setup live chat if enabled in options
-            if (chatOptions?.liveChatOptions) {
+            if (chatOptions?.liveChatOptions?.enabled) {
               setTimeout(() => {
                 state.setupLiveChat();
               }, 0);

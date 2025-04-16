@@ -332,12 +332,15 @@ export interface SubmitChatOptions {
    * Live chat options.
    **/
   liveChatOptions?: {
-    name: string;
-    email: string;
+    enabled: boolean;
   };
   /**
    * Whether or not to use conversations.
    * @default false
    **/
   useConversations?: boolean;
+  user?: {
+    name: string;
+    email: string;
+  };
 }
