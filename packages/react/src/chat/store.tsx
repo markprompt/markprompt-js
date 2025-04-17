@@ -485,6 +485,8 @@ export const createChatStore = ({
             }
 
             const user = get().options?.user;
+            const storeAsConversation =
+              get().options?.useConversations ?? false;
 
             // In case submitChat() passes specific additional metadata,
             // merge the general provided values with the specific ones.
@@ -495,7 +497,9 @@ export const createChatStore = ({
               ),
               {
                 internal: {
-                  storeAsConversation: get().options?.useConversations ?? false,
+                  ...(storeAsConversation
+                    ? { storeAsConversation, assignToAi: true }
+                    : {}),
                   ...(user ? { user } : {}),
                 },
               },
@@ -807,6 +811,23 @@ export const createChatStore = ({
                         };
                       }
                     });
+                  })
+                  .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
+                    console.log('assign-to-ai', payload);
+                    const conversationId = payload.payload.conversationId;
+                    console.log('conversationId', conversationId);
+                    console.log('get().threadId', get().threadId);
+                    if (conversationId === get().threadId) {
+                      console.log('assigning to ai');
+                      get().closeLiveChat();
+                      const lastMessage = get().messages.at(-1);
+                      if (lastMessage?.role === 'user') {
+                        set((state) => {
+                          state.messages = state.messages.slice(0, -1);
+                        });
+                        get().submitChat([lastMessage]);
+                      }
+                    }
                   })
                   .subscribe(async (status) => {
                     console.log('SUBSCRIBE STATUS', status);
