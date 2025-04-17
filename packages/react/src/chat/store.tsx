@@ -826,7 +826,11 @@ export const createChatStore = ({
                         set((state) => {
                           state.messages = state.messages.slice(0, -1);
                         });
-                        get().submitChat([lastMessage]);
+                        get().submitChat([lastMessage], {
+                          internal: {
+                            dontStoreUserMessage: true,
+                          },
+                        });
                       }
                     }
                   })
