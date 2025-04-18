@@ -328,4 +328,12 @@ export interface SubmitChatOptions {
    */
   stream?: boolean;
   additionalMetadata?: { [key: string]: unknown };
+  /**
+   * Enable live chat.
+   * @default false
+   **/
+  liveChatOptions?: {
+    role: 'assistant' | 'user';
+    sendAsEmail?: boolean;
+  };
 }
