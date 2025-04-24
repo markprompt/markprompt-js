@@ -328,4 +328,19 @@ export interface SubmitChatOptions {
    */
   stream?: boolean;
   additionalMetadata?: { [key: string]: unknown };
+  /**
+   * Live chat options.
+   **/
+  liveChatOptions?: {
+    enabled: boolean;
+  };
+  /**
+   * Whether or not to use conversations.
+   * @default false
+   **/
+  useConversations?: boolean;
+  user?: {
+    name: string;
+    email: string;
+  };
 }
