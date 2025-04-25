@@ -1,5 +1,14 @@
 # @markprompt/react
 
+## 0.62.1
+
+### Patch Changes
+
+- [`8010913`](https://github.com/markprompt/markprompt-js/commit/801091383d08003927688e174b000f6e6ece2ebd) Thanks [@elliotdauber](https://github.com/elliotdauber)! - fix role issue
+
+- Updated dependencies [[`8010913`](https://github.com/markprompt/markprompt-js/commit/801091383d08003927688e174b000f6e6ece2ebd)]:
+  - @markprompt/core@0.43.2
+
 ## 0.62.0
 
 ### Minor Changes
