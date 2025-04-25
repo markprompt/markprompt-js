@@ -360,8 +360,20 @@ export async function* submitChat(
 }
 
 function concatStrings(dest: unknown, src: unknown): unknown {
+  if (dest === 'assistant' && src === 'assistant') {
+    return 'assistant';
+  }
+
   if (typeof dest === 'string' && typeof src === 'string') {
     return dest + src;
+  }
+
+  if (typeof dest === 'string' && !src) {
+    return dest;
+  }
+
+  if (typeof src === 'string' && !dest) {
+    return src;
   }
 
   return undefined;
