@@ -287,7 +287,6 @@ export const createChatStore = ({
             });
           },
           setThreadId: (threadId: string) => {
-            console.log('setting threadId', threadId);
             set((state) => {
               // Set the thread id for this session
               state.threadIdsByProjectKey[projectKey] ??= [];
@@ -315,7 +314,6 @@ export const createChatStore = ({
             });
           },
           selectThread: (threadId?: string) => {
-            console.log('selectThread');
             if (threadId && threadId === get().threadId) {
               return;
             }
@@ -395,8 +393,6 @@ export const createChatStore = ({
             });
           },
           submitChat: async (messages, additionalMetadata) => {
-            console.log('submitChat', messages);
-
             const realtimeChat = get().realtimeChat;
 
             // If we have a live chat connection and this is a user message, send it through the realtime chat
@@ -419,7 +415,6 @@ export const createChatStore = ({
             const messageIds = Array.from({ length: messages.length }, () =>
               self.crypto.randomUUID(),
             );
-            console.log('messageIds', messageIds);
             const responseId = self.crypto.randomUUID();
 
             set((state) => {
@@ -478,7 +473,6 @@ export const createChatStore = ({
             const apiMessages = toValidApiMessages(get().messages);
 
             for (const id of [...messageIds, responseId]) {
-              console.log('preloading', id);
               get().setMessageById(id, {
                 state: 'preload',
               });
@@ -673,9 +667,7 @@ export const createChatStore = ({
           },
           options: chatOptions ?? {},
           setOptions: (options) => {
-            console.log('setting options', options);
             const prevLiveChat = get().options?.liveChatOptions;
-            console.log('prevLiveChat', prevLiveChat);
 
             set((state) => {
               state.options = options;
@@ -683,7 +675,6 @@ export const createChatStore = ({
 
             // Handle live chat setup/teardown when the option changes
             const newLiveChat = options.liveChatOptions;
-            console.log('newLiveChat', newLiveChat);
             // todo: rehydrating makes it so we don't know the first time the option is set
             if (newLiveChat?.enabled) {
               // Live chat was enabled
@@ -724,7 +715,6 @@ export const createChatStore = ({
             ]);
           },
           setupLiveChat: async () => {
-            console.log('setting up live chat');
             // Close any existing connection first
             get().closeLiveChat();
             const liveChatOptions = get().options?.liveChatOptions;
@@ -760,8 +750,6 @@ export const createChatStore = ({
                       };
                     },
                 );
-
-              console.log('liveChatStartResponse', liveChatStartResponse);
 
               try {
                 const supabase = createSupabaseClient(
@@ -813,12 +801,8 @@ export const createChatStore = ({
                     });
                   })
                   .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
-                    console.log('assign-to-ai', payload);
                     const conversationId = payload.payload.conversationId;
-                    console.log('conversationId', conversationId);
-                    console.log('get().threadId', get().threadId);
                     if (conversationId === get().threadId) {
-                      console.log('assigning to ai');
                       get().closeLiveChat();
                       const lastMessage = get().messages.at(-1);
                       if (lastMessage?.role === 'user') {
@@ -834,7 +818,6 @@ export const createChatStore = ({
                     }
                   })
                   .subscribe(async (status) => {
-                    console.log('SUBSCRIBE STATUS', status);
                     if (status === 'SUBSCRIBED') {
                       isConnected = true;
                       get().liveChatConnectionCallback?.('connected');
@@ -931,7 +914,6 @@ export const createChatStore = ({
             });
           },
           closeLiveChat: () => {
-            console.log('closing liveChat');
             const interval = get().liveChatConnectionInterval;
             if (interval) {
               clearInterval(interval);
@@ -944,7 +926,6 @@ export const createChatStore = ({
             // Clean up the realtime chat connection
             const realtimeChat = get().realtimeChat;
             if (realtimeChat) {
-              console.log('cleaning up realtimeChat');
               realtimeChat.cleanup();
               set((state) => {
                 state.realtimeChat = undefined;
@@ -1003,7 +984,6 @@ export const createChatStore = ({
           },
           // Restore the last thread for this project if it's < 4 hours old
           onRehydrateStorage: () => (state) => {
-            console.log('onRehydrateStorage', state);
             if (!state || typeof state !== 'object') return;
 
             if (
