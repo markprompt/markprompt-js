@@ -13,13 +13,14 @@ import { immer } from 'zustand/middleware/immer';
 
 import * as AES from './aes.js';
 import { createSupabaseClient } from './supabase.js';
-import { deepMerge, toValidApiMessages } from './utils.js';
+import { deepMerge, toValidApiMessages, RealtimeChatEvent } from './utils.js';
 import type {
   ChatViewMessage,
   ChatViewUserMessage,
   MarkpromptOptions,
   RealtimeChatCustomer,
   RealtimeChatMessage,
+  RealtimeChatMessageAck,
   ToolCall,
   UserConfigurableOptions,
 } from '../types.js';
@@ -30,8 +31,6 @@ import {
   isPresent,
   isStoredError,
 } from '../utils.js';
-
-const EVENT_MESSAGE_TYPE = 'message';
 
 export type SubmitChatMessage =
   | {
@@ -777,7 +776,7 @@ export const createChatStore = ({
                 channel
                   .on(
                     'broadcast',
-                    { event: EVENT_MESSAGE_TYPE },
+                    { event: RealtimeChatEvent.MESSAGE },
                     async (payload) => {
                       const message = payload.payload as RealtimeChatMessage;
 
@@ -817,25 +816,40 @@ export const createChatStore = ({
                           };
                         }
                       });
+
+                      const messageAck: RealtimeChatMessageAck = {
+                        id: crypto.randomUUID(),
+                        messageId: newMessage.id,
+                      };
+
+                      await channel.send({
+                        type: 'broadcast',
+                        event: RealtimeChatEvent.MESSAGE_ACK,
+                        payload: messageAck,
+                      });
                     },
                   )
-                  .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
-                    const conversationId = payload.payload.conversationId;
-                    if (conversationId === get().threadId) {
-                      get().closeLiveChat();
-                      const lastMessage = get().messages.at(-1);
-                      if (lastMessage?.role === 'user') {
-                        set((state) => {
-                          state.messages = state.messages.slice(0, -1);
-                        });
-                        get().submitChat([lastMessage], {
-                          internal: {
-                            dontStoreUserMessage: true,
-                          },
-                        });
+                  .on(
+                    'broadcast',
+                    { event: RealtimeChatEvent.ASSIGN_TO_AI },
+                    (payload) => {
+                      const conversationId = payload.payload.conversationId;
+                      if (conversationId === get().threadId) {
+                        get().closeLiveChat();
+                        const lastMessage = get().messages.at(-1);
+                        if (lastMessage?.role === 'user') {
+                          set((state) => {
+                            state.messages = state.messages.slice(0, -1);
+                          });
+                          get().submitChat([lastMessage], {
+                            internal: {
+                              dontStoreUserMessage: true,
+                            },
+                          });
+                        }
                       }
-                    }
-                  })
+                    },
+                  )
                   .subscribe(async (status) => {
                     if (status === 'SUBSCRIBED') {
                       isConnected = true;
@@ -896,7 +910,7 @@ export const createChatStore = ({
 
                     await channel.send({
                       type: 'broadcast',
-                      event: EVENT_MESSAGE_TYPE,
+                      event: RealtimeChatEvent.MESSAGE,
                       payload: realtimeMessage,
                     });
                   },

@@ -996,3 +996,8 @@ export interface RealtimeChatMessage {
   user: RealtimeChatCustomer | RealtimeChatUser;
   createdAt: string;
 }
+
+export interface RealtimeChatMessageAck {
+  id: string;
+  messageId: string;
+}
