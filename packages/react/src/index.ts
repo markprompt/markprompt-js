@@ -79,3 +79,5 @@ export {
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
 export * from './types.js';
+
+export { RealtimeChatEvent } from './chat/utils.js';

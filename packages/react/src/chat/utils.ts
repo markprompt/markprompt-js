@@ -83,3 +83,9 @@ export const deepMerge = (target: any | null, source: any | null) => {
   }
   return result;
 };
+
+export const RealtimeChatEvent = {
+  MESSAGE: 'message',
+  MESSAGE_ACK: 'message-ack',
+  ASSIGN_TO_AI: 'assign-to-ai',
+} as const;
