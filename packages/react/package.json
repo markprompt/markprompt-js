@@ -22,6 +22,10 @@
     "./Trigger": {
       "types": "./dist/Trigger.d.ts",
       "import": "./dist/Trigger.js"
+    },
+    "./aes": {
+      "types": "./dist/chat/aes.d.ts",
+      "import": "./dist/chat/aes.js"
     }
   },
   "main": "./dist/index.js",
