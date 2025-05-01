@@ -76,6 +76,8 @@ export {
   closeMarkprompt,
 } from './utils.js';
 
+export * as AES from './chat/aes.js';
+
 export { DEFAULT_MARKPROMPT_OPTIONS } from './constants.js';
 
 export * from './types.js';

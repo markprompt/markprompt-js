@@ -11,6 +11,7 @@ import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import * as AES from './aes.js';
 import { createSupabaseClient } from './supabase.js';
 import { deepMerge, toValidApiMessages } from './utils.js';
 import type {
@@ -768,38 +769,56 @@ export const createChatStore = ({
                   type: 'customer',
                 } satisfies RealtimeChatCustomer;
 
+                const cryptoKey = await AES.importKeyFromBase64(
+                  liveChatStartResponse.key,
+                );
+
                 // Set up event listeners
                 channel
-                  .on('broadcast', { event: EVENT_MESSAGE_TYPE }, (payload) => {
-                    const message = payload.payload as RealtimeChatMessage;
+                  .on(
+                    'broadcast',
+                    { event: EVENT_MESSAGE_TYPE },
+                    async (payload) => {
+                      const message = payload.payload as RealtimeChatMessage;
 
-                    // Skip if this is a message from the current user - we've already added it locally
-                    // todo: deal with users with the same name. should probably use an ID
-                    if (message.user.name === user.name) {
-                      return;
-                    }
-
-                    // Only create messages for other participants (assistants)
-                    const newMessage = {
-                      id: message.id as `${string}-${string}-${string}-${string}-${string}`,
-                      role: 'assistant',
-                      content: message.content,
-                      state: 'done' as const,
-                      references: [],
-                    } satisfies ChatViewMessage;
-
-                    // Update the store
-                    set((state) => {
-                      state.messages.push(newMessage);
-
-                      if (state.threadId) {
-                        state.messagesByThreadId[state.threadId] = {
-                          lastUpdated: new Date().toISOString(),
-                          messages: state.messages,
-                        };
+                      // Skip if this is a message from the current user - we've already added it locally
+                      // todo: deal with users with the same name. should probably use an ID
+                      if (message.user.name === user.name) {
+                        return;
                       }
-                    });
-                  })
+
+                      const { iv, ciphertext } = AES.unpackEncrypted(
+                        message.content,
+                      );
+
+                      const decryptedMessage = await AES.decrypt(
+                        ciphertext,
+                        cryptoKey,
+                        iv,
+                      );
+
+                      // Only create messages for other participants (assistants)
+                      const newMessage = {
+                        id: message.id as `${string}-${string}-${string}-${string}-${string}`,
+                        role: 'assistant',
+                        content: decryptedMessage,
+                        state: 'done' as const,
+                        references: [],
+                      } satisfies ChatViewMessage;
+
+                      // Update the store
+                      set((state) => {
+                        state.messages.push(newMessage);
+
+                        if (state.threadId) {
+                          state.messagesByThreadId[state.threadId] = {
+                            lastUpdated: new Date().toISOString(),
+                            messages: state.messages,
+                          };
+                        }
+                      });
+                    },
+                  )
                   .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
                     const conversationId = payload.payload.conversationId;
                     if (conversationId === get().threadId) {
@@ -832,21 +851,16 @@ export const createChatStore = ({
                   sendMessage: async (content: string) => {
                     if (!channel || !isConnected) return;
 
-                    const message: RealtimeChatMessage = {
-                      id: self.crypto.randomUUID(),
-                      content,
-                      user: fullUser,
-                      createdAt: new Date().toISOString(),
-                    };
+                    const messageId = self.crypto.randomUUID();
 
                     // Create a new message for the current user
-                    const newMessage = {
-                      id: message.id as `${string}-${string}-${string}-${string}-${string}`,
+                    const newMessage: ChatViewMessage = {
+                      id: messageId,
                       role: 'user',
-                      content: message.content,
+                      content,
                       state: 'done' as const,
                       references: [],
-                    } satisfies ChatViewMessage;
+                    };
 
                     // Update the store with the user's message
                     set((state) => {
@@ -862,10 +876,28 @@ export const createChatStore = ({
                       return state;
                     });
 
+                    const cryptoKey = await AES.importKeyFromBase64(
+                      liveChatStartResponse.key,
+                    );
+
+                    const { ciphertext, iv } = await AES.encrypt(
+                      content,
+                      cryptoKey,
+                    );
+
+                    const encryptedMessage = AES.packEncrypted(ciphertext, iv);
+
+                    const realtimeMessage: RealtimeChatMessage = {
+                      id: messageId,
+                      content: encryptedMessage,
+                      user: fullUser,
+                      createdAt: new Date().toISOString(),
+                    };
+
                     await channel.send({
                       type: 'broadcast',
                       event: EVENT_MESSAGE_TYPE,
-                      payload: message,
+                      payload: realtimeMessage,
                     });
                   },
                   isConnected: false,
