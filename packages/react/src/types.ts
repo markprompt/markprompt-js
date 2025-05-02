@@ -978,11 +978,15 @@ export interface MarkpromptOptions {
   debug?: boolean;
 }
 
-export interface RealtimeChatCustomer {
-  name: string;
-  email: string;
-  type: 'customer';
-}
+export type RealtimeChatCustomer = { type: 'customer' } & (
+  | {
+      name: string;
+      email: string;
+    }
+  | {
+      encrypted: string;
+    }
+);
 
 export interface RealtimeChatUser {
   id: string;
