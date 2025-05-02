@@ -339,8 +339,12 @@ export interface SubmitChatOptions {
    * @default false
    **/
   useConversations?: boolean;
-  user?: {
-    name: string;
-    email: string;
-  };
+  user?:
+    | {
+        name: string;
+        email: string;
+      }
+    | {
+        encrypted: string;
+      };
 }

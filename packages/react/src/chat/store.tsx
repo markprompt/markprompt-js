@@ -18,7 +18,6 @@ import type {
   ChatViewMessage,
   ChatViewUserMessage,
   MarkpromptOptions,
-  RealtimeChatCustomer,
   RealtimeChatMessage,
   ToolCall,
   UserConfigurableOptions,
@@ -763,11 +762,17 @@ export const createChatStore = ({
                 const channel = supabase.channel(roomName);
                 let isConnected = false;
 
-                const fullUser = {
-                  name: user.name,
-                  email: user.email,
-                  type: 'customer',
-                } satisfies RealtimeChatCustomer;
+                const fullUser =
+                  'name' in user
+                    ? {
+                        name: user.name,
+                        email: user.email,
+                        type: 'customer' as const,
+                      }
+                    : {
+                        encrypted: user.encrypted,
+                        type: 'customer' as const,
+                      };
 
                 const cryptoKey = await AES.importKeyFromBase64(
                   liveChatStartResponse.key,
@@ -783,7 +788,14 @@ export const createChatStore = ({
 
                       // Skip if this is a message from the current user - we've already added it locally
                       // todo: deal with users with the same name. should probably use an ID
-                      if (message.user.name === user.name) {
+                      if (
+                        ('name' in message.user &&
+                          'name' in user &&
+                          message.user.name === user.name) ||
+                        ('encrypted' in message.user &&
+                          'encrypted' in user &&
+                          message.user.encrypted === user.encrypted)
+                      ) {
                         return;
                       }
 
