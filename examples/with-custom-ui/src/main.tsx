@@ -82,11 +82,6 @@ const Chat = ({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    console.log('messages', JSON.stringify(messages, null, 2));
-  }, [messages.map((m) => m.state).join(':')]);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 

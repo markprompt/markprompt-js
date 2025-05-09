@@ -257,9 +257,9 @@ test('Answer renders a button to copy code to clipboard', async () => {
     <Markprompt.Answer
       content={`
 \`\`\`js
-console.log('Hello world!');
+console.info('Hello world!');
 
-console.log('Hello world!');
+console.info('Hello world!');
 \`\`\`
 `}
     />,
