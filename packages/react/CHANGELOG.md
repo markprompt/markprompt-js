@@ -1,5 +1,16 @@
 # @markprompt/react
 
+## 0.63.1
+
+### Patch Changes
+
+- [#505](https://github.com/markprompt/markprompt-js/pull/505) [`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112) Thanks [@michaelfester](https://github.com/michaelfester)! - Pass last assistant message id
+
+- [#505](https://github.com/markprompt/markprompt-js/pull/505) [`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112) Thanks [@michaelfester](https://github.com/michaelfester)! - Fix types
+
+- Updated dependencies [[`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112), [`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112)]:
+  - @markprompt/core@0.44.1
+
 ## 0.63.0
 
 ### Minor Changes

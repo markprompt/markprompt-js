@@ -1,5 +1,12 @@
 # @markprompt/docusaurus-theme-search
 
+## 0.32.7
+
+### Patch Changes
+
+- Updated dependencies [[`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112), [`4fe68c8`](https://github.com/markprompt/markprompt-js/commit/4fe68c87bfa6f18791e7b11429ffd26449a41112)]:
+  - @markprompt/react@0.63.1
+
 ## 0.32.6
 
 ### Patch Changes
