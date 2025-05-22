@@ -144,6 +144,9 @@ export async function* submitChat(
   };
 
   const readChat = async function* () {
+    const placeholderAssistantMessage = messages?.slice(-1)[0];
+    const placeholderMessageId = placeholderAssistantMessage?.id;
+
     const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
       method: 'POST',
       headers: new Headers({
@@ -160,7 +163,7 @@ export async function* submitChat(
         messageTags: messageTagOptions,
         retrieval: retrievalOptions,
         additionalMetadata,
-        // messageId,
+        messageId: placeholderMessageId,
       }),
       signal,
     });

@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChatProvider, useChatStore } from '@markprompt/react';
+import { ChatProvider, useChatStore, useFeedback } from '@markprompt/react';
 import ReactMarkdown from 'react-markdown';
 
 const sampleProjects = [
@@ -75,6 +75,10 @@ const Chat = ({
   const selectThread = useChatStore((state) => state.selectThread);
   const setMessages = useChatStore((state) => state.setMessages);
   const submitToolCalls = useChatStore((state) => state.submitToolCalls);
+  const { submitFeedback } = useFeedback({
+    apiUrl: import.meta.env.VITE_MARKPROMPT_API_URL,
+    projectKey: import.meta.env.VITE_PROJECT_API_KEY,
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -154,9 +158,23 @@ const Chat = ({
                   </div>
                 </div>
               ) : (
-                <ReactMarkdown className="markdown-content">
-                  {(message.content as string) ?? ''}
-                </ReactMarkdown>
+                <div>
+                  <ReactMarkdown className="markdown-content">
+                    {(message.content as string) ?? ''}
+                  </ReactMarkdown>
+                  {message.role === 'assistant' && (
+                    <button
+                      type="button"
+                      style={{ border: 'none' }}
+                      onClick={() => {
+                        console.log('messageId', message.id);
+                        submitFeedback({ vote: '1' }, message.id);
+                      }}
+                    >
+                      👍
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           );
