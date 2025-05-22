@@ -189,7 +189,7 @@ const App: FC = () => {
       projectKey={import.meta.env.VITE_PROJECT_API_KEY}
       chatOptions={{
         assistantId: import.meta.env.VITE_ASSISTANT_ID,
-        toolChoice: 'auto',
+        ...(projectId ? { toolChoice: 'auto' } : {}),
         // If projectId is set, we don't allow to trigger the tool call
         tools: projectId
           ? []
