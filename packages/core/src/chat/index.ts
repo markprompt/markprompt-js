@@ -6,8 +6,8 @@ import type {
   SubmitChatOptions,
   ChatCompletionChunk,
   ChatCompletionMessage,
-  ChatCompletionMessageParam,
   ChatCompletionMetadata,
+  ChatCompletionMessageParamWithId,
 } from './types.js';
 import {
   checkAbortSignal,
@@ -42,7 +42,7 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
 } as const satisfies SubmitChatOptions;
 
 export async function* submitChat(
-  messages: ChatCompletionMessageParam[],
+  messages: ChatCompletionMessageParamWithId[],
   projectKey: string,
   options: SubmitChatOptions & BaseOptions = {},
 ): AsyncGenerator<SubmitChatYield, SubmitChatReturn | undefined> {

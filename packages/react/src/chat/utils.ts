@@ -1,16 +1,10 @@
 import {
   isToolCalls,
-  type ChatCompletionMessageParam,
+  type ChatCompletionMessageParamWithId,
 } from '@markprompt/core/chat';
 
 import type { ChatViewMessage } from '../types.js';
 import { isPresent } from '../utils.js';
-
-type messageId = `${string}-${string}-${string}-${string}-${string}`;
-
-type ChatCompletionMessageParamWithId = ChatCompletionMessageParam & {
-  id?: messageId;
-};
 
 export function toValidApiMessages(
   messages: (ChatViewMessage & { tool_call_id?: string })[],
