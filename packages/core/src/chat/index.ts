@@ -160,7 +160,7 @@ export async function* submitChat(
         messageTags: messageTagOptions,
         retrieval: retrievalOptions,
         additionalMetadata,
-        messageId,
+        // messageId,
       }),
       signal,
     });
