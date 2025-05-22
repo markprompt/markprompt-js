@@ -1,4 +1,5 @@
 import type {
+  ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
   ChatCompletionTool,
   ChatCompletionToolChoiceOption,
@@ -23,6 +24,10 @@ export type {
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
 } from 'openai/resources/chat/completions';
+
+export type ChatCompletionMessageParamWithId = ChatCompletionMessageParam & {
+  id?: `${string}-${string}-${string}-${string}-${string}`;
+};
 
 export const CHAT_COMPLETIONS_MODELS = [
   'claude-3-5-sonnet-20240620',

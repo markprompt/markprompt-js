@@ -6,8 +6,8 @@ import type {
   SubmitChatOptions,
   ChatCompletionChunk,
   ChatCompletionMessage,
-  ChatCompletionMessageParam,
   ChatCompletionMetadata,
+  ChatCompletionMessageParamWithId,
 } from './types.js';
 import {
   checkAbortSignal,
@@ -42,7 +42,7 @@ export const DEFAULT_SUBMIT_CHAT_OPTIONS = {
 } as const satisfies SubmitChatOptions;
 
 export async function* submitChat(
-  messages: ChatCompletionMessageParam[],
+  messages: ChatCompletionMessageParamWithId[],
   projectKey: string,
   options: SubmitChatOptions & BaseOptions = {},
 ): AsyncGenerator<SubmitChatYield, SubmitChatReturn | undefined> {
@@ -144,6 +144,9 @@ export async function* submitChat(
   };
 
   const readChat = async function* () {
+    const placeholderAssistantMessage = messages?.slice(-1)[0];
+    const placeholderMessageId = placeholderAssistantMessage?.id;
+
     const res = await fetch(`${resolvedOptions.apiUrl}/chat`, {
       method: 'POST',
       headers: new Headers({
@@ -160,7 +163,7 @@ export async function* submitChat(
         messageTags: messageTagOptions,
         retrieval: retrievalOptions,
         additionalMetadata,
-        // messageId,
+        messageId: placeholderMessageId,
       }),
       signal,
     });

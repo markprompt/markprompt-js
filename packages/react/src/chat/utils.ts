@@ -1,8 +1,6 @@
 import {
   isToolCalls,
-  type ChatCompletionAssistantMessageParam,
-  type ChatCompletionMessageParam,
-  type ChatCompletionToolMessageParam,
+  type ChatCompletionMessageParamWithId,
 } from '@markprompt/core/chat';
 
 import type { ChatViewMessage } from '../types.js';
@@ -10,14 +8,15 @@ import { isPresent } from '../utils.js';
 
 export function toValidApiMessages(
   messages: (ChatViewMessage & { tool_call_id?: string })[],
-): ChatCompletionMessageParam[] {
+): ChatCompletionMessageParamWithId[] {
   return (
     messages
       .map((message, i) => {
         switch (message.role) {
           case 'assistant': {
-            const { content, role, tool_calls } = message;
-            const msg: ChatCompletionAssistantMessageParam = {
+            const { id, content, role, tool_calls } = message;
+            const msg: ChatCompletionMessageParamWithId = {
+              id,
               content: content ?? '',
               role,
             };
@@ -36,21 +35,23 @@ export function toValidApiMessages(
             return msg;
           }
           case 'tool': {
-            const { content, role, tool_call_id } = message;
+            const { id, content, role, tool_call_id } = message;
             if (!tool_call_id) throw new Error('tool_call_id is required');
             return {
+              id,
               content: content ?? '',
               role,
               tool_call_id,
-            } satisfies ChatCompletionToolMessageParam;
+            } satisfies ChatCompletionMessageParamWithId;
           }
           case 'user': {
-            const { content, role, name } = message;
+            const { id, content, role, name } = message;
             return {
+              id,
               content: content ?? '',
               role,
               ...(name ? { name } : {}),
-            } satisfies ChatCompletionMessageParam;
+            } satisfies ChatCompletionMessageParamWithId;
           }
         }
       })
