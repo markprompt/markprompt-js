@@ -167,7 +167,6 @@ const Chat = ({
                       type="button"
                       style={{ border: 'none' }}
                       onClick={() => {
-                        console.log('messageId', message.id);
                         submitFeedback({ vote: '1' }, message.id);
                       }}
                     >
