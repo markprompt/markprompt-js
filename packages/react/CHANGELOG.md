@@ -1,5 +1,13 @@
 # @markprompt/react
 
+## 0.63.3
+
+### Patch Changes
+
+- [#508](https://github.com/markprompt/markprompt-js/pull/508) [`b03658d`](https://github.com/markprompt/markprompt-js/commit/b03658d8bbf2a223b7b5d25fe3d37130bc8dca2b) Thanks [@taeyangcode](https://github.com/taeyangcode)! - Add `clearStorage` option to `useChatStore`
+
+- [#508](https://github.com/markprompt/markprompt-js/pull/508) [`b03658d`](https://github.com/markprompt/markprompt-js/commit/b03658d8bbf2a223b7b5d25fe3d37130bc8dca2b) Thanks [@taeyangcode](https://github.com/taeyangcode)! - feature: `clearStorage` added to `useChatStore`
+
 ## 0.63.1
 
 ### Patch Changes
