@@ -67,6 +67,10 @@ export interface ChatStoreState {
    */
   setHeaders: (headers: { [key: string]: string }) => void;
   /**
+   * Clear local storage and reset the chat store.
+   */
+  clearStorage: () => void;
+  /**
    * Abort handler.
    **/
   abort?: () => void;
@@ -981,6 +985,15 @@ export const createChatStore = ({
             set((state) => {
               state.headers = headers;
               return state;
+            });
+          },
+          clearStorage: () => {
+            set((state) => {
+              state.selectThread(undefined);
+              state.threadIdsByProjectKey = { [projectKey]: [] };
+              state.messagesByThreadId = {};
+              state.toolCallsByToolCallId = {};
+              state.didAcceptDisclaimerByProjectKey = {};
             });
           },
         }),
