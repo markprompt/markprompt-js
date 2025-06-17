@@ -35,9 +35,10 @@ and some example implementations:
   integration.
 - [`with-docusaurus-swizzled`](examples/with-docusaurus-swizzled#readme) — a Docusaurus project with Markprompt and [theme-search-algolia](https://docusaurus.io/docs/api/themes/@docusaurus/theme-search-algolia).
 - [`with-init`](examples/with-init#readme) — a web application based on
-`@markprompt/web` using a global instance of Markprompt.
+  `@markprompt/web` using a global instance of Markprompt.
 - [`with-markprompt-web`](examples/with-markprompt-web#readme) — a web application based on `@markprompt/web` and Vite. based on `@markprompt/react`, Vite and CSS Modules.
 - [`with-next`](examples/with-next#readme) — a web application based on `@markprompt/react`, `@markprompt/web`, and Next.js.
+- [`with-clear-storage`](examples/with-clear-storage/#readme) - a web application based on `@markprompt/react` and the Next.js App Router showcasing an explicit storage reset.
 - [`with-function-calling`](examples/with-function-calling#readme) — a web application based on `@markprompt/react` and Next.js showcasing the use for [OpenAI function calling](https://platform.openai.com/docs/guides/function-calling).
 - [`with-automatic-ticket-creation`](examples/with-automatic-ticket-creation#readme) — a web application based on `@markprompt/web` and Vite showcasing automatic ticket creation.
 
@@ -47,6 +48,16 @@ To run examples from this monorepo:
 
 ```sh
 pnpm turbo dev --filter with-markprompt-web...
+```
+
+## Publish
+
+To publish an updated version:
+
+```sh
+# bump the package's version
+pnpm version
+pnpm publish
 ```
 
 ## Documentation
