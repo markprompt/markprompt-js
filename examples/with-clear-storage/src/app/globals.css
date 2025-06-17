@@ -1,16 +1,9 @@
-@import "tailwindcss";
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.6;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 :root {
@@ -80,20 +73,6 @@ html {
 
 *:not(pre, code, pre *, code *) {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-}
-
-body {
-  margin: 0;
-  font-weight: 400;
-  line-height: 1.6;
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
-body,
-#__next {
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 #search {

@@ -20,7 +20,7 @@ export default function MarkpromptComponent() {
           clearStorage();
           console.debug('> storage cleared');
         }}
-        className="rounded-md  bg-neutral-100 text-neutral-900 w-fit px-2 py-1.5 font-normal text-sm border border-solid border-neutral-200 text-nowrap"
+        className="rounded-md bg-neutral-100 text-neutral-900 w-fit px-2 py-1.5 font-normal text-sm border border-solid border-neutral-200 text-nowrap"
       >
         Clear Storage
       </button>
