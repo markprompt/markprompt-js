@@ -1,5 +1,11 @@
 # @markprompt/react
 
+## 0.63.4
+
+### Patch Changes
+
+- [#510](https://github.com/markprompt/markprompt-js/pull/510) [`aded98c`](https://github.com/markprompt/markprompt-js/commit/aded98ce9a578b9865822edeb85f3dc13c477b51) Thanks [@taeyangcode](https://github.com/taeyangcode)! - fix: `clearStorage` not clearing `messages`, `threadId`
+
 ## 0.63.3
 
 ### Patch Changes
