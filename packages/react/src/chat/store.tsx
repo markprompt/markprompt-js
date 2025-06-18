@@ -11,14 +11,14 @@ import { createStore, useStore, type StoreApi } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import * as AES from './aes.js';
-import { createSupabaseClient } from './supabase.js';
+// import * as AES from './aes.js';
+// import { createSupabaseClient } from './supabase.js';
 import { deepMerge, toValidApiMessages } from './utils.js';
 import type {
   ChatViewMessage,
   ChatViewUserMessage,
   MarkpromptOptions,
-  RealtimeChatMessage,
+  // RealtimeChatMessage,
   ToolCall,
   UserConfigurableOptions,
 } from '../types.js';
@@ -30,7 +30,7 @@ import {
   isStoredError,
 } from '../utils.js';
 
-const EVENT_MESSAGE_TYPE = 'message';
+// const EVENT_MESSAGE_TYPE = 'message';
 
 export type SubmitChatMessage =
   | {
@@ -720,238 +720,210 @@ export const createChatStore = ({
           },
           setupLiveChat: async () => {
             // Close any existing connection first
-            get().closeLiveChat();
-            const liveChatOptions = get().options?.liveChatOptions;
-            const user = get().options?.user;
-
-            if (liveChatOptions?.enabled && user) {
-              // todo: what to do here? is this right?
-              const conversationId = get().threadId ?? self.crypto.randomUUID();
-              get().selectThread(conversationId);
-
-              // todo: catch and handle errors
-              const liveChatStartResponse = await fetch(
-                `${get().apiUrl}/live-chat/sessions?projectKey=${get().projectKey}`,
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    conversationId,
-                  }),
-                },
-              )
-                .then((res) => res.json())
-                .then(
-                  (res) =>
-                    res as {
-                      channelName: string;
-                      key: string;
-                      connectionInfo: {
-                        url: string;
-                        anonKey: string;
-                      };
-                    },
-                );
-
-              try {
-                const supabase = createSupabaseClient(
-                  liveChatStartResponse.connectionInfo.url,
-                  liveChatStartResponse.connectionInfo.anonKey,
-                );
-                const roomName = liveChatStartResponse.channelName;
-
-                // Create a new channel
-                const channel = supabase.channel(roomName);
-                let isConnected = false;
-
-                const fullUser =
-                  'name' in user
-                    ? {
-                        name: user.name,
-                        email: user.email,
-                        type: 'customer' as const,
-                      }
-                    : {
-                        encrypted: user.encrypted,
-                        type: 'customer' as const,
-                      };
-
-                const cryptoKey = await AES.importKeyFromBase64(
-                  liveChatStartResponse.key,
-                );
-
-                // Set up event listeners
-                channel
-                  .on(
-                    'broadcast',
-                    { event: EVENT_MESSAGE_TYPE },
-                    async (payload) => {
-                      const message = payload.payload as RealtimeChatMessage;
-
-                      // Skip if this is a message from the current user - we've already added it locally
-                      // todo: deal with users with the same name. should probably use an ID
-                      if (
-                        ('name' in message.user &&
-                          'name' in user &&
-                          message.user.name === user.name) ||
-                        ('encrypted' in message.user &&
-                          'encrypted' in user &&
-                          message.user.encrypted === user.encrypted)
-                      ) {
-                        return;
-                      }
-
-                      const { iv, ciphertext } = AES.unpackEncrypted(
-                        message.content,
-                      );
-
-                      const decryptedMessage = await AES.decrypt(
-                        ciphertext,
-                        cryptoKey,
-                        iv,
-                      );
-
-                      // Only create messages for other participants (assistants)
-                      const newMessage = {
-                        id: message.id as `${string}-${string}-${string}-${string}-${string}`,
-                        role: 'assistant',
-                        content: decryptedMessage,
-                        state: 'done' as const,
-                        references: [],
-                      } satisfies ChatViewMessage;
-
-                      // Update the store
-                      set((state) => {
-                        state.messages.push(newMessage);
-
-                        if (state.threadId) {
-                          state.messagesByThreadId[state.threadId] = {
-                            lastUpdated: new Date().toISOString(),
-                            messages: state.messages,
-                          };
-                        }
-                      });
-                    },
-                  )
-                  .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
-                    const conversationId = payload.payload.conversationId;
-                    if (conversationId === get().threadId) {
-                      get().closeLiveChat();
-                      const lastMessage = get().messages.at(-1);
-                      if (lastMessage?.role === 'user') {
-                        set((state) => {
-                          state.messages = state.messages.slice(0, -1);
-                        });
-                        get().submitChat([lastMessage], {
-                          internal: {
-                            dontStoreUserMessage: true,
-                          },
-                        });
-                      }
-                    }
-                  })
-                  .subscribe(async (status) => {
-                    if (status === 'SUBSCRIBED') {
-                      isConnected = true;
-                      get().liveChatConnectionCallback?.('connected');
-                      await channel.track(fullUser);
-                    } else {
-                      await channel.untrack(fullUser);
-                    }
-                  });
-
-                // Create the realtime chat interface
-                const realtimeChat = {
-                  sendMessage: async (content: string) => {
-                    if (!channel || !isConnected) return;
-
-                    const messageId = self.crypto.randomUUID();
-
-                    // Create a new message for the current user
-                    const newMessage: ChatViewMessage = {
-                      id: messageId,
-                      role: 'user',
-                      content,
-                      state: 'done' as const,
-                      references: [],
-                    };
-
-                    // Update the store with the user's message
-                    set((state) => {
-                      state.messages.push(newMessage);
-
-                      if (state.threadId) {
-                        state.messagesByThreadId[state.threadId] = {
-                          lastUpdated: new Date().toISOString(),
-                          messages: state.messages,
-                        };
-                      }
-
-                      return state;
-                    });
-
-                    const cryptoKey = await AES.importKeyFromBase64(
-                      liveChatStartResponse.key,
-                    );
-
-                    const { ciphertext, iv } = await AES.encrypt(
-                      content,
-                      cryptoKey,
-                    );
-
-                    const encryptedMessage = AES.packEncrypted(ciphertext, iv);
-
-                    const realtimeMessage: RealtimeChatMessage = {
-                      id: messageId,
-                      content: encryptedMessage,
-                      user: fullUser,
-                      createdAt: new Date().toISOString(),
-                    };
-
-                    await channel.send({
-                      type: 'broadcast',
-                      event: EVENT_MESSAGE_TYPE,
-                      payload: realtimeMessage,
-                    });
-                  },
-                  isConnected: false,
-                  cleanup: () => {
-                    supabase.removeChannel(channel);
-                  },
-                };
-
-                // Update isConnected getter
-                Object.defineProperty(realtimeChat, 'isConnected', {
-                  get: () => isConnected,
-                });
-
-                // Store the realtime chat connection
-                set((state) => {
-                  state.realtimeChat = realtimeChat;
-                  return state;
-                });
-
-                // Set up an interval to monitor connection status
-                const checkConnectionInterval = setInterval(() => {
-                  const chat = get().realtimeChat;
-                  if (chat?.isConnected) {
-                    get().liveChatConnectionCallback?.('connected');
-                  } else {
-                    get().liveChatConnectionCallback?.('disconnected');
-                  }
-                }, 3000);
-
-                // Store the interval for cleanup
-                set((state) => {
-                  state.liveChatConnectionInterval = checkConnectionInterval;
-                  return state;
-                });
-              } catch (error) {
-                console.error('Failed to set up live chat:', error);
-              }
-            }
+            // get().closeLiveChat();
+            // const liveChatOptions = get().options?.liveChatOptions;
+            // const user = get().options?.user;
+            // if (liveChatOptions?.enabled && user) {
+            //   // todo: what to do here? is this right?
+            //   const conversationId = get().threadId ?? self.crypto.randomUUID();
+            //   get().selectThread(conversationId);
+            //   // todo: catch and handle errors
+            //   const liveChatStartResponse = await fetch(
+            //     `${get().apiUrl}/live-chat/sessions?projectKey=${get().projectKey}`,
+            //     {
+            //       method: 'POST',
+            //       headers: {
+            //         'Content-Type': 'application/json',
+            //       },
+            //       body: JSON.stringify({
+            //         conversationId,
+            //       }),
+            //     },
+            //   )
+            //     .then((res) => res.json())
+            //     .then(
+            //       (res) =>
+            //         res as {
+            //           channelName: string;
+            //           key: string;
+            //           connectionInfo: {
+            //             url: string;
+            //             anonKey: string;
+            //           };
+            //         },
+            //     );
+            //   try {
+            //     const supabase = createSupabaseClient(
+            //       liveChatStartResponse.connectionInfo.url,
+            //       liveChatStartResponse.connectionInfo.anonKey,
+            //     );
+            //     const roomName = liveChatStartResponse.channelName;
+            //     // Create a new channel
+            //     const channel = supabase.channel(roomName);
+            //     let isConnected = false;
+            //     const fullUser =
+            //       'name' in user
+            //         ? {
+            //             name: user.name,
+            //             email: user.email,
+            //             type: 'customer' as const,
+            //           }
+            //         : {
+            //             encrypted: user.encrypted,
+            //             type: 'customer' as const,
+            //           };
+            //     const cryptoKey = await AES.importKeyFromBase64(
+            //       liveChatStartResponse.key,
+            //     );
+            //     // Set up event listeners
+            //     channel
+            //       .on(
+            //         'broadcast',
+            //         { event: EVENT_MESSAGE_TYPE },
+            //         async (payload) => {
+            //           const message = payload.payload as RealtimeChatMessage;
+            //           // Skip if this is a message from the current user - we've already added it locally
+            //           // todo: deal with users with the same name. should probably use an ID
+            //           if (
+            //             ('name' in message.user &&
+            //               'name' in user &&
+            //               message.user.name === user.name) ||
+            //             ('encrypted' in message.user &&
+            //               'encrypted' in user &&
+            //               message.user.encrypted === user.encrypted)
+            //           ) {
+            //             return;
+            //           }
+            //           const { iv, ciphertext } = AES.unpackEncrypted(
+            //             message.content,
+            //           );
+            //           const decryptedMessage = await AES.decrypt(
+            //             ciphertext,
+            //             cryptoKey,
+            //             iv,
+            //           );
+            //           // Only create messages for other participants (assistants)
+            //           const newMessage = {
+            //             id: message.id as `${string}-${string}-${string}-${string}-${string}`,
+            //             role: 'assistant',
+            //             content: decryptedMessage,
+            //             state: 'done' as const,
+            //             references: [],
+            //           } satisfies ChatViewMessage;
+            //           // Update the store
+            //           set((state) => {
+            //             state.messages.push(newMessage);
+            //             if (state.threadId) {
+            //               state.messagesByThreadId[state.threadId] = {
+            //                 lastUpdated: new Date().toISOString(),
+            //                 messages: state.messages,
+            //               };
+            //             }
+            //           });
+            //         },
+            //       )
+            //       .on('broadcast', { event: 'assign-to-ai' }, (payload) => {
+            //         const conversationId = payload.payload.conversationId;
+            //         if (conversationId === get().threadId) {
+            //           get().closeLiveChat();
+            //           const lastMessage = get().messages.at(-1);
+            //           if (lastMessage?.role === 'user') {
+            //             set((state) => {
+            //               state.messages = state.messages.slice(0, -1);
+            //             });
+            //             get().submitChat([lastMessage], {
+            //               internal: {
+            //                 dontStoreUserMessage: true,
+            //               },
+            //             });
+            //           }
+            //         }
+            //       })
+            //       .subscribe(async (status) => {
+            //         if (status === 'SUBSCRIBED') {
+            //           isConnected = true;
+            //           get().liveChatConnectionCallback?.('connected');
+            //           await channel.track(fullUser);
+            //         } else {
+            //           await channel.untrack(fullUser);
+            //         }
+            //       });
+            //     // Create the realtime chat interface
+            //     const realtimeChat = {
+            //       sendMessage: async (content: string) => {
+            //         if (!channel || !isConnected) return;
+            //         const messageId = self.crypto.randomUUID();
+            //         // Create a new message for the current user
+            //         const newMessage: ChatViewMessage = {
+            //           id: messageId,
+            //           role: 'user',
+            //           content,
+            //           state: 'done' as const,
+            //           references: [],
+            //         };
+            //         // Update the store with the user's message
+            //         set((state) => {
+            //           state.messages.push(newMessage);
+            //           if (state.threadId) {
+            //             state.messagesByThreadId[state.threadId] = {
+            //               lastUpdated: new Date().toISOString(),
+            //               messages: state.messages,
+            //             };
+            //           }
+            //           return state;
+            //         });
+            //         const cryptoKey = await AES.importKeyFromBase64(
+            //           liveChatStartResponse.key,
+            //         );
+            //         const { ciphertext, iv } = await AES.encrypt(
+            //           content,
+            //           cryptoKey,
+            //         );
+            //         const encryptedMessage = AES.packEncrypted(ciphertext, iv);
+            //         const realtimeMessage: RealtimeChatMessage = {
+            //           id: messageId,
+            //           content: encryptedMessage,
+            //           user: fullUser,
+            //           createdAt: new Date().toISOString(),
+            //         };
+            //         await channel.send({
+            //           type: 'broadcast',
+            //           event: EVENT_MESSAGE_TYPE,
+            //           payload: realtimeMessage,
+            //         });
+            //       },
+            //       isConnected: false,
+            //       cleanup: () => {
+            //         supabase.removeChannel(channel);
+            //       },
+            //     };
+            //     // Update isConnected getter
+            //     Object.defineProperty(realtimeChat, 'isConnected', {
+            //       get: () => isConnected,
+            //     });
+            //     // Store the realtime chat connection
+            //     set((state) => {
+            //       state.realtimeChat = realtimeChat;
+            //       return state;
+            //     });
+            //     // Set up an interval to monitor connection status
+            //     const checkConnectionInterval = setInterval(() => {
+            //       const chat = get().realtimeChat;
+            //       if (chat?.isConnected) {
+            //         get().liveChatConnectionCallback?.('connected');
+            //       } else {
+            //         get().liveChatConnectionCallback?.('disconnected');
+            //       }
+            //     }, 3000);
+            //     // Store the interval for cleanup
+            //     set((state) => {
+            //       state.liveChatConnectionInterval = checkConnectionInterval;
+            //       return state;
+            //     });
+            //   } catch (error) {
+            //     console.error('Failed to set up live chat:', error);
+            //   }
+            // }
           },
           setLiveChatConnectionCallback: (
             callback?: (state: 'connected' | 'disconnected') => void,
