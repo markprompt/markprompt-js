@@ -988,8 +988,8 @@ export const createChatStore = ({
             });
           },
           clearStorage: () => {
+            get().selectThread(undefined);
             set((state) => {
-              state.selectThread(undefined);
               state.threadIdsByProjectKey = { [projectKey]: [] };
               state.messagesByThreadId = {};
               state.toolCallsByToolCallId = {};
