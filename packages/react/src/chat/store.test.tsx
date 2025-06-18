@@ -17,7 +17,7 @@ describe('ChatStore', () => {
   });
 
   describe('clearStorage', () => {
-    it('should clear stored thread and message data', () => {
+    it('should clear local state and session storage', () => {
       store.setState((currentState) => ({
         ...currentState,
         threadId: 'test-thread-1',
@@ -61,13 +61,15 @@ describe('ChatStore', () => {
 
       // verify cleared state
       const clearedState = store.getState();
+      expect(clearedState.threadId).toBeUndefined();
+      expect(clearedState.messages).toEqual([]);
       expect(clearedState.threadIdsByProjectKey[projectKey]).toEqual([]);
       expect(clearedState.messagesByThreadId).toEqual({});
       expect(clearedState.toolCallsByToolCallId).toEqual({});
       expect(clearedState.didAcceptDisclaimerByProjectKey).toEqual({});
     });
 
-    it('should clear localStorage when persistChatHistory is enabled', () => {
+    it('should clear local state and localStorage', () => {
       const persistentStore = createChatStore({
         projectKey,
         persistChatHistory: true,
@@ -75,6 +77,16 @@ describe('ChatStore', () => {
 
       persistentStore.setState((currentState) => ({
         ...currentState,
+        threadId: 'test-thread-2',
+        messages: [
+          {
+            id: crypto.randomUUID(),
+            content: 'test-content-2',
+            role: 'user',
+            state: 'done',
+            references: [],
+          },
+        ],
         threadIdsByProjectKey: {
           ...currentState.threadIdsByProjectKey,
           [projectKey]: ['test-thread-2'],
@@ -82,18 +94,33 @@ describe('ChatStore', () => {
         messagesByThreadId: {
           'test-thread-2': {
             lastUpdated: new Date().toISOString(),
-            messages: [],
+            messages: [
+              {
+                id: crypto.randomUUID(),
+                content: 'test-content-2',
+                role: 'user',
+                state: 'done',
+                references: [],
+              },
+            ],
           },
         },
       }));
 
       // verify set state
       const localStorageKey = 'markprompt';
+      const currentState = persistentStore.getState();
+      expect(currentState.threadId).toBe('test-thread-2');
+      expect(currentState.messages).toHaveLength(1);
       expect(localStorage.getItem(localStorageKey)).toBeTruthy();
 
       // verify clear storage
-      const state = persistentStore.getState();
-      state.clearStorage();
+      currentState.clearStorage();
+
+      // verify cleared state
+      const clearedState = persistentStore.getState();
+      expect(clearedState.threadId).toBeUndefined();
+      expect(clearedState.messages).toEqual([]);
 
       // verify localStorage is updated
       const localStorageData = JSON.parse(
