@@ -3,6 +3,7 @@ export type SourceType =
   | 'motif'
   | 'website'
   | 'file-upload'
+  | 'page-collection'
   | 'api-upload'
   | 'nango'
   | 'salesforce';
