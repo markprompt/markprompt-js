@@ -67,13 +67,13 @@ To use the Markprompt platform as is, please refer to the
 
 ## Community
 
-- [X](https://x.com/markprompt)
+- [X](https://x.com/14__ai)
 
 ## Authors
 
-This library is created by the team behind [Markprompt](https://markprompt.com)
-([@markprompt](https://x.com/markprompt)).
+This library is created by the team behind [14.ai](https://14.ai)
+([@14__ai](https://x.com/14__ai)).
 
 ## License
 
-[MIT](./LICENSE) © [Markprompt](https://markprompt.com)
+[MIT](./LICENSE) © [14.ai](https://14.ai)
