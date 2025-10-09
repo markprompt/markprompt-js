@@ -13,6 +13,6 @@
     "@markprompt/web": "workspace:*"
   },
   "devDependencies": {
-    "vite": "^6.0.3"
+    "vite": "^7.1.9"
   }
 }
